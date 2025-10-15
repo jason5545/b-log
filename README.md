@@ -1,6 +1,6 @@
 # b-log
 
-b-log is a WordPress-inspired, static publishing system for GitHub Pages. Each post lives in Markdown, metadata is stored in a single JSON file, and the front end is rendered with lightweight HTML, CSS, and vanilla JavaScript.
+b-log 是一個雙重用途的內容系統：既是部落格，也是待辦清單。它是一個受 WordPress 啟發的靜態發布系統，專為 GitHub Pages 設計。每篇文章都是 Markdown 檔案，元數據存儲在單一 JSON 檔案中，前端使用輕量級的 HTML、CSS 和原生 JavaScript 渲染。
 
 ## Repository layout
 

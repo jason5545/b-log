@@ -1,9 +1,9 @@
 {
   "version": "https://jsonfeed.org/version/1.1",
-  "title": "b-log",
+  "title": "b-log - 既是部落格，也是待辦清單",
   "home_page_url": "https://jason5545.github.io/b-log/",
   "feed_url": "https://jason5545.github.io/b-log/feed.json",
-  "description": "Simple, AI-assisted notes published with GitHub Pages.",
+  "description": "b-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
       "id": "openai-vs-anthropic-red-lines",
