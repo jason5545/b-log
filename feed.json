@@ -1,0 +1,45 @@
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": "b-log",
+  "home_page_url": "https://jason5545.github.io/b-log/",
+  "feed_url": "https://jason5545.github.io/b-log/feed.json",
+  "description": "Simple, AI-assisted notes published with GitHub Pages.",
+  "items": [
+    {
+      "id": "stack-blueprint",
+      "url": "https://jason5545.github.io/b-log/post.html?slug=stack-blueprint",
+      "title": "Blueprint: Launching b-log on GitHub Pages",
+      "content_text": "Step-by-step checklist for cloning the stack, wiring GitHub Pages, and keeping automation humming.",
+      "date_published": "2025-10-16T00:00:00.000Z",
+      "date_modified": "2025-10-16T00:00:00.000Z",
+      "tags": ["guides", "github-pages", "automation"],
+      "authors": [
+        { "name": "Jason Lee" }
+      ]
+    },
+    {
+      "id": "ai-writing-loop",
+      "url": "https://jason5545.github.io/b-log/post.html?slug=ai-writing-loop",
+      "title": "The AI Writing Loop",
+      "content_text": "A four-step cadence for capturing ideas, letting AI tighten the prose, and shipping without friction.",
+      "date_published": "2025-10-15T00:00:00.000Z",
+      "date_modified": "2025-10-15T00:00:00.000Z",
+      "tags": ["workflow", "ai", "writing"],
+      "authors": [
+        { "name": "Jason Lee" }
+      ]
+    },
+    {
+      "id": "hello-world",
+      "url": "https://jason5545.github.io/b-log/post.html?slug=hello-world",
+      "title": "Hello, world",
+      "content_text": "What lives inside b-log and how to run it like a WordPress theme without the bloat.",
+      "date_published": "2025-10-14T00:00:00.000Z",
+      "date_modified": "2025-10-14T00:00:00.000Z",
+      "tags": ["welcome", "meta", "setup"],
+      "authors": [
+        { "name": "Jason Lee" }
+      ]
+    }
+  ]
+}

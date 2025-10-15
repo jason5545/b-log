@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>b-log - Dispatches on AI craft</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body class="home">
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <h1 class="site-title"><a href="./">b-log</a></h1>
+            <p class="site-tagline">Notes on shipping faster with AI copilots and timeless workflows.</p>
+          </div>
+          <nav class="site-nav">
+            <a href="./" aria-current="page">Home</a>
+            <a href="about.html">About</a>
+            <a href="feed.json">Feed</a>
+            <a href="agent.md">Automation</a>
+          </nav>
+        </div>
+        <div class="site-cta">
+          <p>Publishing stack: Markdown + JSON + GitHub Pages. No plugins, just velocity.</p>
+          <a class="button" href="agent.md">Invite your AI editor</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper layout-grid">
+      <section id="featured" class="hero-card" hidden>
+        <div class="hero-card__media" id="hero-media"></div>
+        <div class="hero-card__body">
+          <p class="hero-card__category" id="hero-category"></p>
+          <h2 class="hero-card__title">
+            <a id="hero-link" href="#"></a>
+          </h2>
+          <p class="hero-card__meta" id="hero-meta"></p>
+          <p class="hero-card__summary" id="hero-summary"></p>
+          <div class="hero-card__actions">
+            <a id="hero-read-more" class="button button--primary" href="#">Continue reading</a>
+            <a id="hero-open-discussion" class="button button--ghost" href="#comments">Discuss</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <section id="posts" class="post-stream" aria-live="polite">
+          <div class="stream-header">
+            <h2 class="stream-title">Latest Dispatches</h2>
+            <p class="stream-subtitle">Fresh experiments in tooling, process, and creative pacing.</p>
+          </div>
+          <ul id="posts-list" class="post-list"></ul>
+          <template id="post-item-template">
+            <li class="post-card">
+              <article>
+                <header class="post-card__header">
+                  <p class="post-card__category"></p>
+                  <h3><a class="post-link" href="#"></a></h3>
+                  <p class="post-meta"></p>
+                </header>
+                <p class="post-summary"></p>
+                <footer class="post-tags"></footer>
+              </article>
+            </li>
+          </template>
+          <p id="posts-empty" class="notice" hidden>No posts yet. Add your first note in <code>content/posts</code>.</p>
+          <p id="posts-error" class="error" hidden>Could not load posts. Check <code>data/posts.json</code>.</p>
+        </section>
+
+        <aside class="sidebar">
+          <section class="widget widget--profile">
+            <h3 class="widget__title">Running the stack</h3>
+            <p>Hi, I'm Jason. I log what happens when you mix deep focus with clever automation. Expect clear playbooks, code snippets, and systems thinking.</p>
+            <p class="widget__cta"><a href="feed.json">Subscribe via JSON Feed -></a></p>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Topics</h3>
+            <ul id="category-list" class="taxonomy-list"></ul>
+            <template id="category-item-template">
+              <li><a href="#" class="taxonomy-link"></a></li>
+            </template>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Tag cloud</h3>
+            <div id="tag-cloud" class="tag-cloud"></div>
+          </section>
+          <section class="widget widget--note">
+            <h3 class="widget__title">Behind the scenes</h3>
+            <p>Every article lives in git. Fork it, open a PR, or let your AI co-author propose edits through <code>agent.md</code>.</p>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML. <a href="agent.md">Automate publishing</a>.</p>
+      </div>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="assets/main.js" type="module"></script>
+</body>
+</html>

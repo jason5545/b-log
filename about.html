@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - b-log</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrapper">
+      <p class="breadcrumb"><a href="./">&lt; Back home</a></p>
+      <h1 class="site-title"><a href="./">b-log</a></h1>
+      <p class="site-tagline">Simple, AI-assisted notes powered by GitHub Pages.</p>
+    </div>
+  </header>
+  <main class="wrapper">
+    <section class="content">
+      <h1>About this site</h1>
+      <p>b-log is a minimal content system that lives entirely inside a GitHub repository. Every post is a Markdown file, a tiny entry in <code>data/posts.json</code>, and nothing else.</p>
+      <h2>Why it works well with AI</h2>
+      <ul>
+        <li>Prompts are simple: "Create a Markdown file in <code>content/posts</code> and update the catalog."</li>
+      <li>No build step or tooling - GitHub Pages publishes static files as-is.</li>
+        <li>Structure stays consistent, so AI agents can extend or refactor without fear.</li>
+      </ul>
+      <h2>How to publish</h2>
+      <ol>
+        <li>Duplicate an entry in <code>data/posts.json</code> with a new <code>slug</code>.</li>
+        <li>Create a Markdown file with the same slug inside <code>content/posts/</code>.</li>
+        <li>Commit, push, and GitHub Pages does the rest.</li>
+      </ol>
+      <p>For automation instructions, see <a href="agent.md">agent.md</a>.</p>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="wrapper">
+      <p>Built on GitHub Pages with a sprinkle of JavaScript.</p>
+    </div>
+  </footer>
+</body>
+</html>

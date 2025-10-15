@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reading - b-log</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body class="post-page">
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="./">Home</a> <span id="breadcrumb-current"></span></p>
+            <h1 class="site-title"><a href="./">b-log</a></h1>
+            <p class="site-tagline">Notes on shipping faster with AI copilots and timeless workflows.</p>
+          </div>
+          <nav class="site-nav">
+            <a href="./">Home</a>
+            <a href="about.html">About</a>
+            <a href="feed.json">Feed</a>
+            <a href="agent.md">Automation</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category"></p>
+            <h1 id="post-title">Loading</h1>
+            <div id="post-meta" class="article-meta"></div>
+          </header>
+          <div id="post-tags" class="article-tags"></div>
+          <div id="post-content" class="article-body"></div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-callout" id="comments">
+              <h2>Join the conversation</h2>
+              <p>Have thoughts or upgrades? Open a GitHub issue and tag this slug.</p>
+              <p><a id="comments-link" href="#" target="_blank" rel="noopener noreferrer">Start a thread</a></p>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML. <a href="agent.md">Automate publishing</a>.</p>
+      </div>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="assets/main.js" type="module"></script>
+</body>
+</html>

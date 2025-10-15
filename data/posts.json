@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "stack-blueprint",
+    "title": "Blueprint: Launching b-log on GitHub Pages",
+    "summary": "Step-by-step checklist for cloning the stack, wiring Pages, and keeping automation humming.",
+    "category": "Playbook",
+    "author": "Jason Lee",
+    "publishedAt": "2025-10-16T00:00:00.000Z",
+    "updatedAt": "2025-10-16T00:00:00.000Z",
+    "readingTime": "3 min",
+    "tags": ["guides", "github-pages", "automation"],
+    "accentColor": "#1d9bf0"
+  },
+  {
+    "slug": "ai-writing-loop",
+    "title": "The AI Writing Loop",
+    "summary": "A four-step cadence for capturing ideas, letting AI tighten the prose, and shipping without friction.",
+    "category": "Workflow",
+    "author": "Jason Lee",
+    "publishedAt": "2025-10-15T00:00:00.000Z",
+    "updatedAt": "2025-10-15T00:00:00.000Z",
+    "readingTime": "2 min",
+    "tags": ["workflow", "ai", "writing"],
+    "accentColor": "#6c5ce7"
+  },
+  {
+    "slug": "hello-world",
+    "title": "Hello, world",
+    "summary": "What lives inside b-log and how to treat it like a WordPress theme minus the bloat.",
+    "category": "Stack Notes",
+    "author": "Jason Lee",
+    "publishedAt": "2025-10-14T00:00:00.000Z",
+    "updatedAt": "2025-10-14T00:00:00.000Z",
+    "readingTime": "3 min",
+    "tags": ["welcome", "meta", "setup"],
+    "accentColor": "#ff7a59"
+  }
+]
