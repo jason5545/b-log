@@ -6,6 +6,18 @@
   "description": "Simple, AI-assisted notes published with GitHub Pages.",
   "items": [
     {
+      "id": "openai-vs-anthropic-red-lines",
+      "url": "https://jason5545.github.io/b-log/post.html?slug=openai-vs-anthropic-red-lines",
+      "title": "AI 政策紅線的哲學差異：OpenAI vs Anthropic 實測",
+      "content_text": "通過真實案例分析 OpenAI 和 Anthropic 在處理灰色地帶技術問題上的根本性哲學差異。",
+      "date_published": "2025-10-15T23:38:00.000Z",
+      "date_modified": "2025-10-15T23:38:00.000Z",
+      "tags": ["AI", "政策", "哲學差異", "OpenAI", "Anthropic"],
+      "authors": [
+        { "name": "Jason Chien" }
+      ]
+    },
+    {
       "id": "stack-blueprint",
       "url": "https://jason5545.github.io/b-log/post.html?slug=stack-blueprint",
       "title": "Blueprint: Launching b-log on GitHub Pages",
@@ -14,7 +26,7 @@
       "date_modified": "2025-10-16T00:00:00.000Z",
       "tags": ["guides", "github-pages", "automation"],
       "authors": [
-        { "name": "Jason Lee" }
+        { "name": "Jason Chien" }
       ]
     },
     {
@@ -26,7 +38,7 @@
       "date_modified": "2025-10-15T00:00:00.000Z",
       "tags": ["workflow", "ai", "writing"],
       "authors": [
-        { "name": "Jason Lee" }
+        { "name": "Jason Chien" }
       ]
     },
     {
@@ -38,7 +50,7 @@
       "date_modified": "2025-10-14T00:00:00.000Z",
       "tags": ["welcome", "meta", "setup"],
       "authors": [
-        { "name": "Jason Lee" }
+        { "name": "Jason Chien" }
       ]
     }
   ]

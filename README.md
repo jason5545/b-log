@@ -23,7 +23,7 @@ Add objects to `data/posts.json` with the following keys:
   "title": "Blueprint: Launching b-log on GitHub Pages",
   "summary": "Short teaser for the homepage stream.",
   "category": "Playbook",
-  "author": "Jason Lee",
+  "author": "Jason Chien",
   "publishedAt": "2025-10-16T00:00:00.000Z",
   "updatedAt": "2025-10-16T00:00:00.000Z",
   "readingTime": "3 min",
