@@ -1,5 +1,17 @@
 [
   {
+    "slug": "openai-contradiction-dangerous-game",
+    "title": "OpenAI的矛盾：一邊降溫一邊加熱的危險遊戲",
+    "summary": "OpenAI在8月讓GPT-5變冷淡以減少情感依賴，10月卻宣布開放情色內容，這兩個決策完全矛盾，揭示了商業利益與用戶福祉的衝突。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-16T12:20:00.000Z",
+    "updatedAt": "2025-10-16T12:20:00.000Z",
+    "readingTime": "15 min",
+    "tags": ["OpenAI", "AI政策", "情色內容", "情感依賴", "商業決策"],
+    "accentColor": "#e74c3c"
+  },
+  {
     "slug": "unified-remote-evo-development-journey",
     "title": "Unified Remote Evo - 從遙控器到多功能輸入裝置的開發之旅",
     "summary": "這是一個關於如何為已停止維護的遙控軟體注入新生命的故事。透過協定研究、技術探索與創新實作，我打造了一個現代化的多功能遙控解決方案。",

@@ -6,6 +6,18 @@
   "description": "b-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "openai-contradiction-dangerous-game",
+      "url": "https://b-log.to/post.html?slug=openai-contradiction-dangerous-game",
+      "title": "OpenAI的矛盾：一邊降溫一邊加熱的危險遊戲",
+      "content_text": "OpenAI在8月讓GPT-5變冷淡以減少情感依賴，10月卻宣布開放情色內容，這兩個決策完全矛盾，揭示了商業利益與用戶福祉的衝突。",
+      "date_published": "2025-10-16T12:20:00.000Z",
+      "date_modified": "2025-10-16T12:20:00.000Z",
+      "tags": ["OpenAI", "AI政策", "情色內容", "情感依賴", "商業決策"],
+      "authors": [
+        { "name": "Jason Chien" }
+      ]
+    },
+    {
       "id": "unified-remote-evo-development-journey",
       "url": "https://b-log.to/post.html?slug=unified-remote-evo-development-journey",
       "title": "Unified Remote Evo - 從遙控器到多功能輸入裝置的開發之旅",
