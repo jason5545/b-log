@@ -1,5 +1,5 @@
-const POSTS_JSON = 'data/posts.json';
-const POSTS_ROOT = 'content/posts/';
+const POSTS_JSON = '/data/posts.json';
+const POSTS_ROOT = '/content/posts/';
 const GITHUB_USERNAME = 'jason5545';
 const GITHUB_REPO = 'b-log';
 
