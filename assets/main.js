@@ -361,10 +361,19 @@ function enhanceCodeBlocks(contentEl) {
   if (!contentEl) return;
   
   const codeBlocks = contentEl.querySelectorAll('pre code');
+  console.log(`Found ${codeBlocks.length} code blocks to enhance`);
+  
   codeBlocks.forEach((codeBlock) => {
     const pre = codeBlock.parentElement;
+    
+    // 檢查是否已經處理過這個程式碼區塊
+    if (pre.parentElement && pre.parentElement.classList.contains('code-container')) {
+      return; // 已經處理過，跳過
+    }
+    
     const codeContainer = document.createElement('div');
     codeContainer.className = 'code-container';
+    codeContainer.style.position = 'relative';
     
     // 檢測程式語言
     const language = detectLanguage(codeBlock.textContent);
@@ -382,6 +391,7 @@ function enhanceCodeBlocks(contentEl) {
     copyBtn.className = 'code-copy-btn';
     copyBtn.textContent = 'Copy';
     copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+    copyBtn.style.display = 'flex'; // 確保按鈕顯示
     codeContainer.appendChild(copyBtn);
     
     // 替換原始結構
