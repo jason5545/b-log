@@ -352,6 +352,171 @@ async function renderMarkdownContent(slug, contentEl) {
   } else {
     contentEl.textContent = markdown;
   }
+  
+  // 增強程式碼區塊
+  enhanceCodeBlocks(contentEl);
+}
+
+function enhanceCodeBlocks(contentEl) {
+  if (!contentEl) return;
+  
+  const codeBlocks = contentEl.querySelectorAll('pre code');
+  codeBlocks.forEach((codeBlock) => {
+    const pre = codeBlock.parentElement;
+    const codeContainer = document.createElement('div');
+    codeContainer.className = 'code-container';
+    
+    // 檢測程式語言
+    const language = detectLanguage(codeBlock.textContent);
+    
+    // 添加語言標籤
+    if (language) {
+      const languageLabel = document.createElement('div');
+      languageLabel.className = 'code-language';
+      languageLabel.textContent = language;
+      codeContainer.appendChild(languageLabel);
+    }
+    
+    // 添加複製按鈕
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'code-copy-btn';
+    copyBtn.textContent = 'Copy';
+    copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+    codeContainer.appendChild(copyBtn);
+    
+    // 替換原始結構
+    pre.parentNode.insertBefore(codeContainer, pre);
+    codeContainer.appendChild(pre);
+    
+    // 添加行號（如果需要）
+    if (shouldAddLineNumbers(pre)) {
+      addLineNumbers(pre);
+    }
+    
+    // 設置複製功能
+    setupCodeCopy(copyBtn, codeBlock);
+    
+    // 應用語法高亮
+    if (window.Prism) {
+      Prism.highlightElement(codeBlock);
+    } else {
+      applyBasicSyntaxHighlighting(codeBlock, language);
+    }
+  });
+}
+
+function detectLanguage(code) {
+  const trimmedCode = code.trim();
+  
+  // 基本的語言檢測
+  if (trimmedCode.includes('<!DOCTYPE') || trimmedCode.includes('<html')) return 'html';
+  if (trimmedCode.includes('import React') || trimmedCode.includes('jsx')) return 'jsx';
+  if (trimmedCode.includes('function') && trimmedCode.includes('{')) return 'javascript';
+  if (trimmedCode.includes('def ') || trimmedCode.includes('import ')) return 'python';
+  if (trimmedCode.includes('public class') || trimmedCode.includes('import java')) return 'java';
+  if (trimmedCode.includes('package') || trimmedCode.includes('func ')) return 'go';
+  if (trimmedCode.includes('fmt.') || trimmedCode.includes('func ')) return 'go';
+  if (trimmedCode.includes('class ') && trimmedCode.includes('def ')) return 'python';
+  if (trimmedCode.includes('const ') && trimmedCode.includes('=>')) return 'javascript';
+  if (trimmedCode.includes('async function') || trimmedCode.includes('await ')) return 'javascript';
+  if (trimmedCode.includes('app.get') || trimmedCode.includes('app.post')) return 'javascript';
+  if (trimmedCode.includes('suspend fun') || trimmedCode.includes('val ')) return 'kotlin';
+  if (trimmedCode.includes('private val') || trimmedCode.includes('OkHttp')) return 'kotlin';
+  
+  // 檢查註解樣式
+  if (trimmedCode.includes('//') && trimmedCode.includes('{')) return 'javascript';
+  if (trimmedCode.includes('#') && trimmedCode.includes('def ')) return 'python';
+  if (trimmedCode.includes('<!--') && trimmedCode.includes('-->')) return 'html';
+  
+  return null;
+}
+
+function shouldAddLineNumbers(pre) {
+  const code = pre.textContent;
+  const lines = code.split('\n').filter(line => line.trim());
+  return lines.length > 3; // 只有超過3行才加行號
+}
+
+function addLineNumbers(pre) {
+  const code = pre.textContent;
+  const lines = code.split('\n');
+  const lineNumbers = document.createElement('div');
+  lineNumbers.className = 'line-numbers';
+  
+  // 生成行號
+  for (let i = 1; i <= lines.length; i++) {
+    const lineNumber = document.createElement('div');
+    lineNumber.textContent = i;
+    lineNumbers.appendChild(lineNumber);
+  }
+  
+  pre.classList.add('line-numbers-wrapper');
+  pre.appendChild(lineNumbers);
+}
+
+function setupCodeCopy(button, codeBlock) {
+  if (!button || !codeBlock) return;
+  
+  button.addEventListener('click', async () => {
+    const code = codeBlock.textContent;
+    const originalText = button.textContent;
+    
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(code);
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+      } else {
+        // 降級方案
+        const textArea = document.createElement('textarea');
+        textArea.value = code;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+      }
+    } catch (error) {
+      button.textContent = 'Failed';
+      setTimeout(() => {
+        button.textContent = originalText;
+      }, 1000);
+      return;
+    }
+    
+    // 2秒後恢復原始文字
+    setTimeout(() => {
+      button.textContent = originalText;
+      button.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+function applyBasicSyntaxHighlighting(codeBlock, language) {
+  if (!codeBlock) return;
+  
+  let code = codeBlock.innerHTML;
+  
+  // HTML 轉義已經處理，現在應用基本的語法高亮
+  code = code.replace(/\b(function|const|let|var|if|else|for|while|return|class|extends|import|export|from|default|async|await|try|catch|finally|throw|new|this|super)\b/g, '<span class="token keyword">$1</span>');
+  code = code.replace(/'([^']*)'/g, '<span class="token string">\'$1\'</span>');
+  code = code.replace(/"([^"]*)"/g, '<span class="token string">"$1"</span>');
+  code = code.replace(/`([^`]*)`/g, '<span class="token string">`$1`</span>');
+  code = code.replace(/\b(\d+)\b/g, '<span class="token number">$1</span>');
+  code = code.replace(/(\/\/.*$)/gm, '<span class="token comment">$1</span>');
+  code = code.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="token comment">$1</span>');
+  code = code.replace(/\b(document|window|console|Array|Object|String|Number|Boolean|Date|RegExp|Math|JSON)\b/g, '<span class="token variable">$1</span>');
+  code = code.replace(/(\+|\-|\*|\/|===|==|!==|!=|<=|>=|<|>|&&|\|\||!|=|;|:|,|\{|\}|\(|\)|\[|\])/g, '<span class="token punctuation">$1</span>');
+  
+  // 特殊處理 JavaScript
+  if (language === 'javascript') {
+    code = code.replace(/\b(app\.|req\.|res\.|db\.|fetch|async|await|Promise)\b/g, '<span class="token function">$1</span>');
+  }
+  
+  codeBlock.innerHTML = code;
 }
 
 function renderShareLinks(post) {

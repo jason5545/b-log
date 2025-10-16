@@ -590,12 +590,195 @@ a:focus {
 }
 
 .article-body pre {
-  background: #0e1328;
-  color: #f5f6ff;
-  padding: 1.2rem;
+  background: #1e1e2e;
+  color: #cdd6f4;
+  padding: 1.5rem;
   border-radius: var(--radius-sm);
   overflow-x: auto;
   font-size: 0.95rem;
+  line-height: 1.5;
+  position: relative;
+  margin: 1.5rem 0;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* 程式碼區塊容器 */
+.article-body .code-container {
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+/* 程式碼語言標籤 */
+.article-body .code-language {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #a6adc8;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 複製按鈕 */
+.article-body .code-copy-btn {
+  position: absolute;
+  top: 0.8rem;
+  right: 4.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #a6adc8;
+  border: none;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.article-body .code-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #cdd6f4;
+  transform: translateY(-1px);
+}
+
+.article-body .code-copy-btn:active {
+  transform: translateY(0);
+}
+
+.article-body .code-copy-btn.copied {
+  background: rgba(166, 227, 161, 0.2);
+  color: #a6e3a1;
+}
+
+/* 行號 */
+.article-body .line-numbers {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3rem;
+  padding: 1.5rem 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  color: #6c7086;
+  text-align: right;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  user-select: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.article-body pre.line-numbers-wrapper {
+  padding-left: 3.5rem;
+}
+
+/* 內行程式碼 */
+.article-body code {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f38ba8;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.3rem;
+  font-size: 0.9em;
+  font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.article-body pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  border: none;
+}
+
+/* 語法高亮 - 基於 Catppuccin 主題 */
+.article-body .token.keyword {
+  color: #cba6f7;
+  font-weight: 600;
+}
+
+.article-body .token.string {
+  color: #a6e3a1;
+}
+
+.article-body .token.number {
+  color: #fab387;
+}
+
+.article-body .token.comment {
+  color: #6c7086;
+  font-style: italic;
+}
+
+.article-body .token.function {
+  color: #89b4fa;
+}
+
+.article-body .token.variable {
+  color: #f2cdcd;
+}
+
+.article-body .token.operator {
+  color: #94e2d5;
+}
+
+.article-body .token.property {
+  color: #f9e2af;
+}
+
+.article-body .token.punctuation {
+  color: #bac2de;
+}
+
+.article-body .token.tag {
+  color: #f38ba8;
+}
+
+.article-body .token.attribute {
+  color: #f9e2af;
+}
+
+.article-body .token.class-name {
+  color: #89dceb;
+}
+
+/* 深色模式調整 */
+@media (prefers-color-scheme: dark) {
+  .article-body pre {
+    background: #11111b;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .article-body .line-numbers {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* 程式碼區塊響應式調整 */
+@media (max-width: 720px) {
+  .article-body pre {
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .article-body .code-language,
+  .article-body .code-copy-btn {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+  
+  .article-body .code-copy-btn {
+    right: 3.8rem;
+  }
 }
 
 .article-footer {
