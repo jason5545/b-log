@@ -73,7 +73,7 @@ async function renderHomepage() {
       const tagsEl = clone.querySelector('.post-tags');
 
       if (linkEl) {
-        linkEl.href = slugToPath(post.slug);
+        linkEl.href = slugToPath(post.slug, post.category);
         linkEl.textContent = post.title || post.slug;
       }
 
@@ -237,7 +237,7 @@ function renderFeaturedPost(post) {
   }
 
   if (heroLink) {
-    heroLink.href = slugToPath(post.slug);
+    heroLink.href = slugToPath(post.slug, post.category);
     heroLink.textContent = post.title || post.slug;
   }
 
@@ -250,11 +250,11 @@ function renderFeaturedPost(post) {
   }
 
   if (heroReadMore) {
-    heroReadMore.href = slugToPath(post.slug);
+    heroReadMore.href = slugToPath(post.slug, post.category);
   }
 
   if (heroDiscuss) {
-    heroDiscuss.href = `${slugToPath(post.slug)}#comments`;
+    heroDiscuss.href = `${slugToPath(post.slug, post.category)}#comments`;
   }
 }
 
@@ -610,7 +610,7 @@ function configureNavLink(element, post, labelPrefix) {
 
   if (post) {
     element.textContent = `${labelPrefix}: ${post.title || post.slug}`;
-    element.href = slugToPath(post.slug);
+    element.href = slugToPath(post.slug, post.category);
     element.classList.remove('is-disabled');
     element.removeAttribute('aria-disabled');
     element.tabIndex = 0;
@@ -668,7 +668,7 @@ function renderRelatedPosts(posts, currentPost) {
 function buildRelatedItem(post) {
   const li = document.createElement('li');
   const link = document.createElement('a');
-  link.href = slugToPath(post.slug);
+  link.href = slugToPath(post.slug, post.category);
   link.textContent = post.title || post.slug;
   li.appendChild(link);
 
@@ -764,7 +764,22 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
-function slugToPath(slug) {
+function slugToPath(slug, category) {
+  // 中文分類到英文的映射（與 generate-redirects.js 保持一致）
+  const categoryMapping = {
+    'AI 分析': 'ai-analysis',
+    '技術開發': 'tech-development',
+    '技術分析': 'tech-analysis',
+    '開發哲學': 'dev-philosophy'
+  };
+
+  // 如果有分類，生成 WordPress 風格的 URL
+  if (category && categoryMapping[category]) {
+    const categorySlug = categoryMapping[category];
+    return `${categorySlug}/${slug}/`;
+  }
+
+  // 向後相容：如果沒有分類或未知分類，使用舊格式
   return `post.html?slug=${encodeURIComponent(slug)}`;
 }
 
