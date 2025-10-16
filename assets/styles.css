@@ -43,7 +43,7 @@
 
 body {
   margin: 0;
-  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-family: "Noto Sans TC", "Segoe UI", system-ui, -apple-system, sans-serif;
   font-size: 16px;
   line-height: 1.7;
   background: var(--bg-gradient);
@@ -547,7 +547,7 @@ a:focus {
 }
 
 .article-meta span::before {
-  content: "??;
+  content: "•";
   margin: 0 0.6rem 0 0.4rem;
 }
 
