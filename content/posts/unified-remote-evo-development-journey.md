@@ -78,7 +78,7 @@ bluetoothLeScanner.startScan(null, scanSettings, scanCallback)
 1. 讀取裝置的 **System ID**(8 bytes)
 2. 根據 **Software Version** 取得對應的明文密碼
 3. 使用 System ID 作為 AES 密鑰加密明文
-4. 發送「取得密文」指令(`0x91`)
+4. 傳送「取得密文」指令(`0x91`)
 5. 比對接收器回傳的密文與本地加密結果
 
 **關鍵程式碼**
@@ -173,7 +173,7 @@ HID 鍵盤只能傳送 ASCII 字元,那中文怎麼辦?我研究了三種方案:
 
 ### 方案 3: IME Direct(CustomIn 報告)(❌ 已移除)
 
-**原理**:透過 EmulStick CustomIn 報告直接發送 UTF-8 文字
+**原理**:透過 EmulStick CustomIn 報告直接傳送 UTF-8 文字
 
 **優點**:
 - ✅ 輸入速度最快(約 50ms / 字)
@@ -278,7 +278,7 @@ Box(modifier = Modifier
                 val newX = (currentX + dragAmount.x).coerceIn(-maxRadius, maxRadius)
                 val newY = (currentY + dragAmount.y).coerceIn(-maxRadius, maxRadius)
 
-                // 發送到控制器
+                // 傳送到控制器
                 onMove(newX / maxRadius, newY / maxRadius)
             },
             onDragEnd = {
@@ -337,7 +337,7 @@ EmulStick Service (0xF800)
 
 ### 2. 創新解決方案
 
-- **中文輸入**:CustomIn 報告直接發送 UTF-8,繞過 HID 限制
+- **中文輸入**:CustomIn 報告直接傳送 UTF-8,繞過 HID 限制
 - **遊戲手把模式**:完整的 Xbox 360 控制器模擬
 - **單指最佳化**:大按鈕、簡潔介面、手勢操作
 
