@@ -215,7 +215,7 @@ fun buildCustomInReport(text: String): List<ByteArray> {
 |------|---------|------------|---------|
 | Big5 Alt 碼 | ~600ms | ~1200ms | ⚠️ 較慢(12x) |
 | Alt+X Unicode | ~170ms | ~340ms | ⚠️ 中等(6.8x) |
-| **IME Direct** | **~50ms** | **~50ms** | ✅ **最快(1x)** |
+| **IME Direct** | **~50ms** | **~50ms** | ❌ **已移除(曾最快)** |
 
 ## 第三個挑戰:遊戲手把模擬
 
