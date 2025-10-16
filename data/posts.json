@@ -1,5 +1,17 @@
 [
   {
+    "slug": "unified-remote-evo-development-journey",
+    "title": "Unified Remote Evo - 從遙控器到多功能輸入裝置的開發之旅",
+    "summary": "這是一個關於如何為已停止維護的遙控軟體注入新生命的故事。透過協定研究、技術探索與創新實作，我打造了一個現代化的多功能遙控解決方案。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-16T06:30:00.000Z",
+    "updatedAt": "2025-10-16T06:30:00.000Z",
+    "readingTime": "25 min",
+    "tags": ["BLE", "協定研究", "Android開發", "無障礙設計", "遙控器"],
+    "accentColor": "#9b59b6"
+  },
+  {
     "slug": "frontend-backend-validation-analysis",
     "title": "前後端驗證缺失:一個內部系統的技術分析",
     "summary": "透過實際案例分析前後端驗證的重要性，探討安全性問題、效能缺陷及解決方案，最終開發出效能提升23倍的自動化工具。",

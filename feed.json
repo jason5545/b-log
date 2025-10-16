@@ -6,6 +6,18 @@
   "description": "b-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "unified-remote-evo-development-journey",
+      "url": "https://b-log.to/post.html?slug=unified-remote-evo-development-journey",
+      "title": "Unified Remote Evo - 從遙控器到多功能輸入裝置的開發之旅",
+      "content_text": "這是一個關於如何為已停止維護的遙控軟體注入新生命的故事。透過協定研究、技術探索與創新實作，我打造了一個現代化的多功能遙控解決方案。",
+      "date_published": "2025-10-16T06:30:00.000Z",
+      "date_modified": "2025-10-16T06:30:00.000Z",
+      "tags": ["BLE", "協定研究", "Android開發", "無障礙設計", "遙控器"],
+      "authors": [
+        { "name": "Jason Chien" }
+      ]
+    },
+    {
       "id": "frontend-backend-validation-analysis",
       "url": "https://b-log.to/post.html?slug=frontend-backend-validation-analysis",
       "title": "前後端驗證缺失:一個內部系統的技術分析",
