@@ -68,8 +68,22 @@ a:focus {
 }
 
 .wrapper {
-  width: min(1400px, 96vw);
+  width: min(1600px, 98vw);
   margin: 0 auto;
+}
+
+/* 超寬螢幕適應 */
+@media (min-width: 1600px) {
+  .wrapper {
+    width: 96vw;
+  }
+}
+
+/* 極寬螢幕適應 */
+@media (min-width: 2400px) {
+  .wrapper {
+    width: 94vw;
+  }
 }
 
 .site-header {
@@ -172,6 +186,12 @@ a:focus {
   padding: 3rem 0 4rem;
 }
 
+@media (min-width: 1400px) {
+  .layout-grid {
+    gap: 3rem;
+  }
+}
+
 .hero-card {
   display: grid;
   grid-template-columns: 1fr;
@@ -189,6 +209,16 @@ a:focus {
   
   .hero-card__media {
     min-height: 320px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .hero-card {
+    grid-template-columns: 1.5fr 1fr;
+  }
+  
+  .hero-card__media {
+    min-height: 380px;
   }
 }
 
@@ -289,6 +319,18 @@ a:focus {
   .content-grid {
     grid-template-columns: 1fr var(--sidebar-width);
     align-items: start;
+  }
+}
+
+@media (min-width: 1600px) {
+  .content-grid {
+    gap: 2.5rem;
+  }
+}
+
+@media (min-width: 2000px) {
+  .content-grid {
+    gap: 3rem;
   }
 }
 
@@ -510,6 +552,20 @@ a:focus {
   }
 }
 
+@media (min-width: 1600px) {
+  .article-layout {
+    gap: 3rem;
+    grid-template-columns: minmax(0, 1fr) 380px;
+  }
+}
+
+@media (min-width: 2000px) {
+  .article-layout {
+    gap: 3.5rem;
+    grid-template-columns: minmax(0, 1fr) 400px;
+  }
+}
+
 .article {
   background: var(--surface);
   border-radius: var(--radius-lg);
@@ -590,8 +646,23 @@ a:focus {
 }
 
 .article-body {
-  padding: 0 clamp(2.2rem, 3vw, 3.5rem) clamp(2.5rem, 5vw, 4rem);
+  padding: 0 clamp(2.2rem, 2.5vw, 3.5rem) clamp(2.5rem, 4vw, 4rem);
   font-size: 1.05rem;
+  max-width: none;
+}
+
+@media (min-width: 1600px) {
+  .article-body {
+    font-size: 1.08rem;
+    line-height: 1.75;
+  }
+}
+
+@media (min-width: 2000px) {
+  .article-body {
+    font-size: 1.12rem;
+    line-height: 1.8;
+  }
 }
 
 .article-body h2,
@@ -601,8 +672,23 @@ a:focus {
   margin-bottom: 1rem;
 }
 
+@media (min-width: 1600px) {
+  .article-body h2,
+  .article-body h3,
+  .article-body h4 {
+    margin-top: 2.5rem;
+    margin-bottom: 1.2rem;
+  }
+}
+
 .article-body p {
   margin: 1.2rem 0;
+}
+
+@media (min-width: 1600px) {
+  .article-body p {
+    margin: 1.4rem 0;
+  }
 }
 
 .article-body pre {
