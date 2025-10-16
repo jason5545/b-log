@@ -1,0 +1,54 @@
+name: 生成重定向頁面
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data/posts.json'
+  workflow_dispatch:  # 允許手動觸發
+
+jobs:
+  generate-redirects:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 檢出程式碼
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 設定 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 執行重定向頁面生成腳本
+        run: node scripts/generate-redirects.js
+
+      - name: 檢查變更
+        id: check_changes
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 提交變更
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add ai-analysis/ tech-development/ tech-analysis/ dev-philosophy/
+          git commit -m "自動生成重定向頁面
+
+          由 GitHub Actions 自動生成
+          觸發原因: posts.json 更新"
+
+      - name: 推送變更
+        if: steps.check_changes.outputs.has_changes == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
