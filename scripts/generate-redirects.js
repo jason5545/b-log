@@ -9,30 +9,29 @@ const categoryMapping = {
   '開發哲學': 'dev-philosophy'
 };
 
-// 生成重定向 HTML 頁面的模板
-function generateRedirectHTML(title, slug) {
-  return `<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title} - b-log</title>
-  <meta http-equiv="refresh" content="0; url=/post.html?slug=${slug}">
-  <link rel="canonical" href="https://b-log.to/post.html?slug=${slug}">
-  <script>
-    // 立即重定向
-    window.location.replace('/post.html?slug=${slug}');
-  </script>
-</head>
-<body>
-  <p>正在重定向至 <a href="/post.html?slug=${slug}">${title}</a>...</p>
-</body>
-</html>`;
+// 生成完整的文章頁面 HTML（複製 post.html 結構）
+function generatePostHTML(title, slug) {
+  // 讀取 post.html 模板
+  const templatePath = path.join(__dirname, '../post.html');
+  let html = fs.readFileSync(templatePath, 'utf8');
+
+  // 調整相對路徑，因為文章頁面在 /category/slug/ 目錄下
+  // 需要往上兩層才能到根目錄
+  html = html.replace(/href="assets\//g, 'href="../../assets/');
+  html = html.replace(/src="assets\//g, 'src="../../assets/');
+  html = html.replace(/href="\.\/"/g, 'href="../../"');
+  html = html.replace(/href="about\.html"/g, 'href="../../about.html"');
+  html = html.replace(/href="feed\.json"/g, 'href="../../feed.json"');
+
+  // 更新初始標題（JavaScript 會動態更新）
+  html = html.replace(/<title>Reading - b-log<\/title>/, `<title>${title} - b-log</title>`);
+
+  return html;
 }
 
 // 主要函數
 function generateRedirects() {
-  console.log('開始生成重定向頁面...\n');
+  console.log('開始生成 WordPress 風格文章頁面...\n');
 
   // 讀取 posts.json
   const postsPath = path.join(__dirname, '../data/posts.json');
@@ -65,16 +64,16 @@ function generateRedirects() {
       fs.mkdirSync(postDir, { recursive: true });
     }
 
-    // 生成 index.html
+    // 生成 index.html（使用完整的文章頁面結構）
     const indexPath = path.join(postDir, 'index.html');
-    const html = generateRedirectHTML(title, slug);
+    const html = generatePostHTML(title, slug);
     fs.writeFileSync(indexPath, html, 'utf8');
 
     console.log(`✅ 已建立：${categorySlug}/${slug}/index.html`);
     createdCount++;
   });
 
-  console.log(`\n完成！共建立 ${createdCount} 個重定向頁面`);
+  console.log(`\n完成！共建立 ${createdCount} 個文章頁面`);
   if (skippedCount > 0) {
     console.log(`⚠️  跳過 ${skippedCount} 個文章`);
   }

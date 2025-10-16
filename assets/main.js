@@ -99,8 +99,22 @@ async function renderHomepage() {
 }
 
 async function renderArticle() {
-  const params = new URLSearchParams(window.location.search);
-  const slug = params.get('slug');
+  // 支援從 URL 路徑解析 slug（WordPress 風格）
+  let slug = null;
+
+  // 首先嘗試從路徑中解析 slug
+  const pathParts = window.location.pathname.split('/').filter(part => part.trim());
+  if (pathParts.length >= 2) {
+    // 路徑格式：/category/slug/ 或 /category/slug
+    slug = pathParts[pathParts.length - 1];
+  }
+
+  // 向後相容：如果從路徑中找不到 slug，嘗試從查詢參數中獲取
+  if (!slug) {
+    const params = new URLSearchParams(window.location.search);
+    slug = params.get('slug');
+  }
+
   const contentEl = document.querySelector('#post-content');
 
   if (!slug) {
