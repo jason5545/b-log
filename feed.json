@@ -6,6 +6,18 @@
   "description": "b-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "understanding-vs-execution-vibe-coding",
+      "url": "https://jason5545.github.io/b-log/post.html?slug=understanding-vs-execution-vibe-coding",
+      "title": "理解與執行的分離:從 Vibe Coding 談起",
+      "content_text": "探討 Theo 的 Type A/B 框架之外的第三種情況，以及 AI 時代下創作歸屬的哲學問題。",
+      "date_published": "2025-10-16T00:52:00.000Z",
+      "date_modified": "2025-10-16T00:52:00.000Z",
+      "tags": ["AI", "開發哲學", "Vibe Coding", "創作歸屬"],
+      "authors": [
+        { "name": "Jason Chien" }
+      ]
+    },
+    {
       "id": "openai-vs-anthropic-red-lines",
       "url": "https://jason5545.github.io/b-log/post.html?slug=openai-vs-anthropic-red-lines",
       "title": "AI 政策紅線的哲學差異：OpenAI vs Anthropic 實測",
