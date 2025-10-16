@@ -471,7 +471,7 @@ function renderRelatedPosts(posts, currentPost) {
 
   const commentsLink = document.querySelector('#comments-link');
   if (commentsLink) {
-    commentsLink.href = `https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}/issues/new?title=${encodeURIComponent(`Comment: ${currentPost.title || currentPost.slug}`)}&labels=discussion`;
+    commentsLink.href = `https://github.com/jason5545/b-log/issues/new?title=${encodeURIComponent(`Comment: ${currentPost.title || currentPost.slug}`)}&labels=discussion`;
   }
 }
 
