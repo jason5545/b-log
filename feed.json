@@ -6,6 +6,18 @@
   "description": "b-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "frontend-backend-validation-analysis",
+      "url": "https://b-log.to/post.html?slug=frontend-backend-validation-analysis",
+      "title": "前後端驗證缺失:一個內部系統的技術分析",
+      "content_text": "透過實際案例分析前後端驗證的重要性，探討安全性問題、效能缺陷及解決方案，最終開發出效能提升23倍的自動化工具。",
+      "date_published": "2025-10-16T03:29:00.000Z",
+      "date_modified": "2025-10-16T03:29:00.000Z",
+      "tags": ["前端驗證", "後端驗證", "安全性", "效能最佳化", "自動化工具"],
+      "authors": [
+        { "name": "Jason Chien" }
+      ]
+    },
+    {
       "id": "understanding-vs-execution-vibe-coding",
       "url": "https://b-log.to/post.html?slug=understanding-vs-execution-vibe-coding",
       "title": "理解與執行的分離:從 Vibe Coding 談起",

@@ -1,5 +1,17 @@
 [
   {
+    "slug": "frontend-backend-validation-analysis",
+    "title": "前後端驗證缺失:一個內部系統的技術分析",
+    "summary": "透過實際案例分析前後端驗證的重要性，探討安全性問題、效能缺陷及解決方案，最終開發出效能提升23倍的自動化工具。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-16T03:29:00.000Z",
+    "updatedAt": "2025-10-16T03:29:00.000Z",
+    "readingTime": "15 min",
+    "tags": ["前端驗證", "後端驗證", "安全性", "效能最佳化", "自動化工具"],
+    "accentColor": "#e67e22"
+  },
+  {
     "slug": "understanding-vs-execution-vibe-coding",
     "title": "理解與執行的分離:從 Vibe Coding 談起",
     "summary": "探討 Theo 的 Type A/B 框架之外的第三種情況，以及 AI 時代下創作歸屬的哲學問題。",
