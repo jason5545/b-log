@@ -158,6 +158,7 @@ async function renderArticle() {
 
   populateTagBadges(tagsEl, post.tags);
   await renderMarkdownContent(slug, contentEl);
+  updatePageMetadata(post);
   renderShareLinks(post);
   renderNavigation(posts, index);
   renderRelatedPosts(posts, post);
@@ -779,4 +780,97 @@ function setupCopyLink(container, url) {
       trigger.textContent = originalLabel;
     }, 2000);
   });
+}
+
+function updatePageMetadata(post) {
+  const baseUrl = 'https://b-log.to/';
+  const postUrl = `${baseUrl}post.html?slug=${post.slug}`;
+  
+  // 更新基本的 title 和 description
+  document.title = post.title ? `${post.title} - b-log` : 'Reading - b-log';
+  
+  // 更新 canonical URL
+  const canonicalEl = document.querySelector('#canonical-url');
+  if (canonicalEl) {
+    canonicalEl.href = postUrl;
+  }
+  
+  // 更新 description
+  const descriptionEl = document.querySelector('meta[name="description"]');
+  if (descriptionEl) {
+    descriptionEl.content = post.summary || 'b-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。';
+  }
+  
+  // 更新 keywords
+  const keywordsEl = document.querySelector('#meta-keywords');
+  if (keywordsEl) {
+    const keywords = Array.isArray(post.tags) ? post.tags.join(', ') : '';
+    keywordsEl.content = keywords;
+  }
+  
+  // 更新 Open Graph metadata
+  updateMetaProperty('og:url', postUrl);
+  updateMetaProperty('og:title', post.title || 'Untitled Post');
+  updateMetaProperty('og:description', post.summary || '');
+  updateMetaProperty('og:image', getPostImage(post, baseUrl));
+  updateMetaProperty('article:author', post.author || 'Jason Chien');
+  updateMetaProperty('article:published_time', post.publishedAt || '');
+  updateMetaProperty('article:modified_time', post.updatedAt || post.publishedAt || '');
+  updateMetaProperty('article:section', post.category || '');
+  
+  // 更新文章標籤 - 每個標籤都需要單獨的 meta property
+  if (Array.isArray(post.tags) && post.tags.length > 0) {
+    // 先移除現有的標籤
+    document.querySelectorAll('meta[property^="article:tag"]').forEach(el => el.remove());
+    
+    // 添加新的標籤
+    post.tags.forEach(tag => {
+      if (tag) {
+        const meta = document.createElement('meta');
+        meta.setAttribute('property', 'article:tag');
+        meta.content = tag;
+        document.head.appendChild(meta);
+      }
+    });
+  }
+  
+  // 更新 Twitter Card metadata
+  updateMetaProperty('twitter:url', postUrl);
+  updateMetaProperty('twitter:title', post.title || 'Untitled Post');
+  updateMetaProperty('twitter:description', post.summary || '');
+  updateMetaProperty('twitter:image', getPostImage(post, baseUrl));
+}
+
+function updateMetaProperty(property, content) {
+  let meta = document.querySelector(`meta[property="${property}"]`);
+  if (!meta) {
+    meta = document.querySelector(`meta[name="${property}"]`);
+  }
+  if (meta) {
+    meta.content = content;
+  }
+}
+
+function getPostImage(post, baseUrl) {
+  // 如果有封面圖片，使用它
+  if (post.coverImage) {
+    // 如果是相對路徑，加上基礎 URL
+    if (post.coverImage.startsWith('/')) {
+      return `${baseUrl}${post.coverImage.substring(1)}`;
+    }
+    // 如果是相對路徑（不以 / 開頭）
+    if (!post.coverImage.startsWith('http')) {
+      return `${baseUrl}${post.coverImage}`;
+    }
+    // 如果是完整 URL，直接使用
+    return post.coverImage;
+  }
+  
+  // 如果沒有封面圖片，使用一個簡單的漸變圖片生成服務
+  const accentColor = post.accentColor || '#556bff';
+  const title = encodeURIComponent(post.title || 'Untitled Post');
+  
+  // 使用第三方服務生成簡單的 OG 圖片
+  // 這裡使用 https://og-image.vercel.app/ 作為例子
+  return `https://og-image.vercel.app/${title}.png?theme=light&md=1&fontSize=100px&images=https%3A%2F%2Fb-log.to%2Ffavicon.ico`;
 }
