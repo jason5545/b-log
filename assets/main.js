@@ -773,14 +773,14 @@ function slugToPath(slug, category) {
     '開發哲學': 'dev-philosophy'
   };
 
-  // 如果有分類，生成 WordPress 風格的 URL
+  // 如果有分類，生成 WordPress 風格的 URL（絕對路徑）
   if (category && categoryMapping[category]) {
     const categorySlug = categoryMapping[category];
-    return `${categorySlug}/${slug}/`;
+    return `/${categorySlug}/${slug}/`;
   }
 
-  // 向後相容：如果沒有分類或未知分類，使用舊格式
-  return `post.html?slug=${encodeURIComponent(slug)}`;
+  // 向後相容：如果沒有分類或未知分類，使用舊格式（絕對路徑）
+  return `/post.html?slug=${encodeURIComponent(slug)}`;
 }
 
 function setupCopyLink(container, url) {
