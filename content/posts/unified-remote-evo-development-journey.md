@@ -168,7 +168,7 @@ HID 鍵盤只能傳送 ASCII 字元,那中文怎麼辦?我研究了三種方案:
 - 單字輸入時間:約 170ms / 字
 - 相比 IME Direct 慢約 3.4 倍
 
-### 方案 3: IME Direct(CustomIn 報告)(✅ 最佳方案!)
+### 方案 3: IME Direct(CustomIn 報告)(❌ 已移除)
 
 **原理**:透過 EmulStick CustomIn 報告直接發送 UTF-8 文字
 
