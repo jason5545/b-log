@@ -411,8 +411,8 @@ function enhanceCodeBlocks(contentEl) {
     copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
     copyBtn.style.display = 'flex'; // 確保按鈕顯示
     codeContainer.appendChild(copyBtn);
-    
-    // 替換原始結構
+
+    // 取代原始結構
     pre.parentNode.insertBefore(codeContainer, pre);
     codeContainer.appendChild(pre);
     
