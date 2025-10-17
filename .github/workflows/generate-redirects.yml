@@ -11,6 +11,8 @@ on:
 jobs:
   generate-redirects:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 授予寫入權限
 
     steps:
       - name: 檢出程式碼
