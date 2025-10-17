@@ -444,6 +444,11 @@ EmulStick Service (0xF800)
 - ✅ BLE XInput 模式:100%
 - ✅ 虛擬手把 UI:100%
 
+**專案連結**:
+- 📦 **GitHub 儲存庫**: [https://github.com/jason5545/unified-remote-evo](https://github.com/jason5545/unified-remote-evo)
+  - 完整原始碼、建置說明和使用文件
+  - 歡迎提交 Issue 和 Pull Request
+
 ## 結語
 
 這個專案從我個人的簡單需求出發,逐步演化為一個功能完整的多模式遙控解決方案。開發過程中遇到的每個技術挑戰,都成為學習和成長的機會。
