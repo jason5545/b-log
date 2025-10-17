@@ -164,9 +164,12 @@ async function renderArticle() {
     metaEl.innerHTML = '';
     const parts = formatMetaParts(post);
     parts.forEach((part) => {
-      const span = document.createElement('span');
-      span.textContent = part;
-      metaEl.appendChild(span);
+      // 確保只添加非空的 meta 部分
+      if (part && part.trim()) {
+        const span = document.createElement('span');
+        span.textContent = part;
+        metaEl.appendChild(span);
+      }
     });
   }
 
@@ -527,19 +530,24 @@ function applyBasicSyntaxHighlighting(codeBlock, language) {
   
   // HTML 轉義已經處理，現在應用基本的語法高亮
   code = code.replace(/\b(function|const|let|var|if|else|for|while|return|class|extends|import|export|from|default|async|await|try|catch|finally|throw|new|this|super)\b/g, '<span class="token keyword">$1</span>');
-  code = code.replace(/'([^']*)'/g, '<span class="token string">\'$1\'</span>');
-  code = code.replace(/"([^"]*)"/g, '<span class="token string">"$1"</span>');
-  code = code.replace(/`([^`]*)`/g, '<span class="token string">`$1`</span>');
+  // 修復字符串正則表達式，確保只匹配非空字符串
+  code = code.replace(/'([^']+)'/g, '<span class="token string">\'$1\'</span>');
+  code = code.replace(/"([^"]+)"/g, '<span class="token string">"$1"</span>');
+  code = code.replace(/`([^`]+)`/g, '<span class="token string">`$1`</span>');
   code = code.replace(/\b(\d+)\b/g, '<span class="token number">$1</span>');
   code = code.replace(/(\/\/.*$)/gm, '<span class="token comment">$1</span>');
   code = code.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="token comment">$1</span>');
   code = code.replace(/\b(document|window|console|Array|Object|String|Number|Boolean|Date|RegExp|Math|JSON)\b/g, '<span class="token variable">$1</span>');
-  code = code.replace(/(\+|\-|\*|\/|===|==|!==|!=|<=|>=|<|>|&&|\|\||!|=|;|:|,|\{|\}|\(|\)|\[|\])/g, '<span class="token punctuation">$1</span>');
+  // 修復標點符號正則表達式，避免匹配空字符串
+  code = code.replace(/(\+{1,2}|\-{1,2}|\*|\/|===|==|!==|!=|<=|>=|<|>|&&|\|\||!|=|;|:|,|\{|\}|\(|\)|\[|\])/g, '<span class="token punctuation">$1</span>');
   
   // 特殊處理 JavaScript
   if (language === 'javascript') {
     code = code.replace(/\b(app\.|req\.|res\.|db\.|fetch|async|await|Promise)\b/g, '<span class="token function">$1</span>');
   }
+  
+  // 清理可能產生的空 span
+  code = code.replace(/<span class="token [^"]*"><\/span>/g, '');
   
   codeBlock.innerHTML = code;
 }
