@@ -529,34 +529,35 @@ function applyBasicSyntaxHighlighting(codeBlock, language) {
   let code = codeBlock.innerHTML;
 
   // 使用佔位符保護註解和字符串內容，避免被進一步處理
+  // 使用特殊的 Unicode 字符作為佔位符，避免被正則表達式匹配
   const protectedContent = [];
   let placeholderIndex = 0;
 
   // 1. 保護並標記註解
   code = code.replace(/(?<!:)(?<!\/)(\/\/.+$)/gm, (match) => {
-    const placeholder = `__COMMENT_${placeholderIndex++}__`;
+    const placeholder = `\u200B\u200C${placeholderIndex++}\u200D\u200B`;
     protectedContent.push({ placeholder, content: `<span class="token comment">${match}</span>` });
     return placeholder;
   });
   code = code.replace(/(\/\*[\s\S]+?\*\/)/g, (match) => {
-    const placeholder = `__COMMENT_${placeholderIndex++}__`;
+    const placeholder = `\u200B\u200C${placeholderIndex++}\u200D\u200B`;
     protectedContent.push({ placeholder, content: `<span class="token comment">${match}</span>` });
     return placeholder;
   });
 
   // 2. 保護並標記字符串
   code = code.replace(/'([^']+)'/g, (match, content) => {
-    const placeholder = `__STRING_${placeholderIndex++}__`;
+    const placeholder = `\u200B\u200C${placeholderIndex++}\u200D\u200B`;
     protectedContent.push({ placeholder, content: `<span class="token string">${match}</span>` });
     return placeholder;
   });
   code = code.replace(/"([^"]+)"/g, (match, content) => {
-    const placeholder = `__STRING_${placeholderIndex++}__`;
+    const placeholder = `\u200B\u200C${placeholderIndex++}\u200D\u200B`;
     protectedContent.push({ placeholder, content: `<span class="token string">${match}</span>` });
     return placeholder;
   });
   code = code.replace(/`([^`]+)`/g, (match, content) => {
-    const placeholder = `__STRING_${placeholderIndex++}__`;
+    const placeholder = `\u200B\u200C${placeholderIndex++}\u200D\u200B`;
     protectedContent.push({ placeholder, content: `<span class="token string">${match}</span>` });
     return placeholder;
   });
