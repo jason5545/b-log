@@ -1038,8 +1038,10 @@ a:focus {
   color: inherit;
 }
 
-.breadcrumb span {
-  margin-left: 0.75rem;
+.breadcrumb span::before {
+  content: ' / ';
+  color: var(--text-muted);
+  opacity: 0.6;
 }
 
 .related-list {
