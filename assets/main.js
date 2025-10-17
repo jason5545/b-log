@@ -239,7 +239,7 @@ async function renderArticle() {
   const tagsEl = document.querySelector('#post-tags');
 
   if (breadcrumbCurrent) {
-    breadcrumbCurrent.textContent = `/ ${post.title || slug}`;
+    breadcrumbCurrent.textContent = ` / ${post.title || slug}`;
   }
 
   applyAccentBackground(heroEl, post);
