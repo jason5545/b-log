@@ -544,7 +544,7 @@ function applyBasicSyntaxHighlighting(codeBlock, language) {
       return highlightLine(beforeComment) + `<span class="token comment">${escapeHtml(comment)}</span>`;
     }
 
-    // 普通代碼行
+    // 普通程式碼行
     return highlightLine(line);
   });
 

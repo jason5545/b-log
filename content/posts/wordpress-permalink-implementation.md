@@ -101,7 +101,7 @@ function parseCurrentPath() {
 
 // 根據解析結果載入內容
 function loadContent(category, slug) {
-  // 轉換分類代碼回中文
+  // 轉換分類程式碼回中文
   const reverseCategoryMap = {
     "ai-analysis": "AI 分析",
     "tech-development": "技術開發",
