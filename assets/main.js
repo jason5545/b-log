@@ -563,40 +563,31 @@ function highlightLine(line) {
   let result = escapeHtml(line);
   const tokens = [];
 
-  // 1. 保護字符串
-  result = result.replace(/(["'`])(?:(?=(\\?))\2.)*?\1/g, (match) => {
+  // 使用特殊標記代替空字符，避免還原時的問題
+  function protect(match, tokenClass) {
     const id = tokens.length;
-    tokens.push(`<span class="token string">${match}</span>`);
-    return `\x00${id}\x00`;
-  });
+    tokens.push(`<span class="token ${tokenClass}">${match}</span>`);
+    return `___TOKEN_${id}___`;
+  }
+
+  // 1. 保護字符串
+  result = result.replace(/(["'`])(?:(?=(\\?))\2.)*?\1/g, (match) => protect(match, 'string'));
 
   // 2. 保護並標記關鍵字
-  result = result.replace(/\b(function|const|let|var|if|else|for|while|return|class|extends|import|export|from|default|async|await|try|catch|finally|throw|new|this|super)\b/g, (match) => {
-    const id = tokens.length;
-    tokens.push(`<span class="token keyword">${match}</span>`);
-    return `\x00${id}\x00`;
-  });
+  result = result.replace(/\b(function|const|let|var|if|else|for|while|return|class|extends|import|export|from|default|async|await|try|catch|finally|throw|new|this|super)\b/g, (match) => protect(match, 'keyword'));
 
   // 3. 保護並標記數字
-  result = result.replace(/\b(\d+)\b/g, (match) => {
-    const id = tokens.length;
-    tokens.push(`<span class="token number">${match}</span>`);
-    return `\x00${id}\x00`;
-  });
+  result = result.replace(/\b(\d+)\b/g, (match) => protect(match, 'number'));
 
   // 4. 保護並標記內建對象
-  result = result.replace(/\b(document|window|console|Array|Object|String|Number|Boolean|Date|RegExp|Math|JSON)\b/g, (match) => {
-    const id = tokens.length;
-    tokens.push(`<span class="token variable">${match}</span>`);
-    return `\x00${id}\x00`;
-  });
+  result = result.replace(/\b(document|window|console|Array|Object|String|Number|Boolean|Date|RegExp|Math|JSON)\b/g, (match) => protect(match, 'variable'));
 
   // 5. 處理運算符和標點（現在所有重要內容都已被保護）
   result = result.replace(/([+\-*/%=<>!&|]{1,3}|[;:,(){}[\]])/g, '<span class="token punctuation">$1</span>');
 
-  // 6. 還原所有被保護的 token
+  // 6. 還原所有被保護的 token（使用簡單的字符串替換）
   tokens.forEach((token, id) => {
-    result = result.replace(new RegExp(`\x00${id}\x00`, 'g'), token);
+    result = result.split(`___TOKEN_${id}___`).join(token);
   });
 
   return result;
