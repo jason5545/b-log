@@ -1,5 +1,17 @@
 [
   {
+    "slug": "wordpress-permalink-implementation",
+    "title": "WordPress 永久連結實作：從概念到實踐",
+    "summary": "分享實作 WordPress 風格永久連結系統的經驗，包括架構設計、自動化流程與 SEO 最佳化策略。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-17T00:30:00.000Z",
+    "updatedAt": "2025-10-17T00:30:00.000Z",
+    "readingTime": "12 min",
+    "tags": ["WordPress", "永久連結", "SEO", "URL設計", "自動化"],
+    "accentColor": "#9b59b6"
+  },
+  {
     "slug": "openai-contradiction-dangerous-game",
     "title": "OpenAI的矛盾：一邊降溫一邊加熱的危險遊戲",
     "summary": "OpenAI在8月讓GPT-5變冷淡以減少情感依賴，10月卻宣布開放情色內容，這兩個決策完全矛盾，揭示了商業利益與用戶福祉的衝突。",
