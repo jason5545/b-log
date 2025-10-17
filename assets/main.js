@@ -535,9 +535,9 @@ function applyBasicSyntaxHighlighting(codeBlock, language) {
   code = code.replace(/"([^"]+)"/g, '<span class="token string">"$1"</span>');
   code = code.replace(/`([^`]+)`/g, '<span class="token string">`$1`</span>');
   code = code.replace(/\b(\d+)\b/g, '<span class="token number">$1</span>');
-  // 修復註解正則表達式，避免匹配 URL 中的 //
-  // 只在非冒號字符後或行首匹配 //，避免匹配 https:// 等 URL
-  code = code.replace(/(^|[^:])(\s*\/\/.+$)/gm, '$1<span class="token comment">$2</span>');
+  // 註解處理：使用 negative lookbehind 避免匹配 URL 中的 //
+  // 確保 // 前面不是 : 或 / (排除 https:// 和 file:///)
+  code = code.replace(/(?<!:)(?<!\/)(\/\/.+$)/gm, '<span class="token comment">$1</span>');
   code = code.replace(/(\/\*[\s\S]+?\*\/)/g, '<span class="token comment">$1</span>');
   code = code.replace(/\b(document|window|console|Array|Object|String|Number|Boolean|Date|RegExp|Math|JSON)\b/g, '<span class="token variable">$1</span>');
   // 修復標點符號正則表達式，避免匹配空字符串
