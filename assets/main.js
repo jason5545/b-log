@@ -560,37 +560,39 @@ function escapeHtml(text) {
 function highlightLine(line) {
   if (!line.trim()) return escapeHtml(line);
 
-  let result = escapeHtml(line);
   const tokens = [];
 
   // 使用字母前綴避免數字正則匹配到佔位符
   function protect(match, tokenClass) {
-    const id = `T${tokens.length}X`; // 格式：T0X, T1X, T2X...
+    const id = `T${tokens.length}X`;
     tokens.push(`<span class="token ${tokenClass}">${match}</span>`);
     return `___${id}___`;
   }
 
-  // 1. 保護字符串
+  // 1. 先保護 < 和 > 符號（在 escapeHtml 之前）
+  let result = line;
+  result = result.replace(/</g, (match) => protect('&lt;', 'punctuation'));
+  result = result.replace(/>/g, (match) => protect('&gt;', 'punctuation'));
+
+  // 2. 轉義其他 HTML 字符
+  result = escapeHtml(result);
+
+  // 3. 保護字符串
   result = result.replace(/(["'`])(?:(?=(\\?))\2.)*?\1/g, (match) => protect(match, 'string'));
 
-  // 2. 保護並標記關鍵字
+  // 4. 保護並標記關鍵字
   result = result.replace(/\b(function|const|let|var|if|else|for|while|return|class|extends|import|export|from|default|async|await|try|catch|finally|throw|new|this|super)\b/g, (match) => protect(match, 'keyword'));
 
-  // 3. 保護並標記數字
+  // 5. 保護並標記數字
   result = result.replace(/\b(\d+)\b/g, (match) => protect(match, 'number'));
 
-  // 4. 保護並標記內建對象
+  // 6. 保護並標記內建對象
   result = result.replace(/\b(document|window|console|Array|Object|String|Number|Boolean|Date|RegExp|Math|JSON)\b/g, (match) => protect(match, 'variable'));
 
-  // 5. 處理運算符和標點（現在所有重要內容都已被保護）
-  // 注意：不包含 <> 因為它們已經被 escapeHtml 轉義為 &lt; &gt;
+  // 7. 處理運算符和標點
   result = result.replace(/([+\-*/%=!&|]{1,3}|[;:,(){}[\]])/g, '<span class="token punctuation">$1</span>');
 
-  // 6. 處理已轉義的 < 和 > 符號
-  result = result.replace(/&lt;/g, '<span class="token punctuation">&lt;</span>');
-  result = result.replace(/&gt;/g, '<span class="token punctuation">&gt;</span>');
-
-  // 7. 還原所有被保護的 token
+  // 8. 還原所有被保護的 token
   tokens.forEach((token, idx) => {
     const id = `T${idx}X`;
     result = result.split(`___${id}___`).join(token);
