@@ -6,6 +6,18 @@
   "description": "b-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "2025-tablet-ecosystem-dilemma",
+      "url": "https://b-log.to/post.html?slug=2025-tablet-ecosystem-dilemma",
+      "title": "2025 平板生態的三重困境：當所有平台都在關上自由之門",
+      "content_text": "2025 年，所有主流平板/手機平台都在收緊控制。從 iPadOS 的軟體閹割到 Android 的 bootloader 鎖死，再到 Windows 的強制雲端帳戶，使用者面臨前所未有的自由度倒退。",
+      "date_published": "2025-10-17T05:44:00.000Z",
+      "date_modified": "2025-10-17T05:44:00.000Z",
+      "tags": ["平板", "iPadOS", "Android", "Windows", "Bootloader", "自由度"],
+      "authors": [
+        { "name": "Jason Chien" }
+      ]
+    },
+    {
       "id": "syntax-highlighting-debugging-journey",
       "url": "https://b-log.to/post.html?slug=syntax-highlighting-debugging-journey",
       "title": "語法突顯系統的深度除錯之旅：四個連鎖問題的修復實錄",

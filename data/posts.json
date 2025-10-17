@@ -1,5 +1,17 @@
 [
   {
+    "slug": "2025-tablet-ecosystem-dilemma",
+    "title": "2025 平板生態的三重困境：當所有平台都在關上自由之門",
+    "summary": "2025 年，所有主流平板/手機平台都在收緊控制。從 iPadOS 的軟體閹割到 Android 的 bootloader 鎖死，再到 Windows 的強制雲端帳戶，使用者面臨前所未有的自由度倒退。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-17T05:44:00.000Z",
+    "updatedAt": "2025-10-17T05:44:00.000Z",
+    "readingTime": "25 min",
+    "tags": ["平板", "iPadOS", "Android", "Windows", "Bootloader", "自由度"],
+    "accentColor": "#e67e22"
+  },
+  {
     "slug": "syntax-highlighting-debugging-journey",
     "title": "語法突顯系統的深度除錯之旅：四個連鎖問題的修復實錄",
     "summary": "從 URL 誤判、巢狀標籤到 HTML 實體符號，記錄一次完整的語法突顯系統除錯過程，探討正則表達式、佔位符機制與處理順序的技術細節。",
