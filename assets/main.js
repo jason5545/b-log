@@ -583,9 +583,14 @@ function highlightLine(line) {
   result = result.replace(/\b(document|window|console|Array|Object|String|Number|Boolean|Date|RegExp|Math|JSON)\b/g, (match) => protect(match, 'variable'));
 
   // 5. 處理運算符和標點（現在所有重要內容都已被保護）
-  result = result.replace(/([+\-*/%=<>!&|]{1,3}|[;:,(){}[\]])/g, '<span class="token punctuation">$1</span>');
+  // 注意：不包含 <> 因為它們已經被 escapeHtml 轉義為 &lt; &gt;
+  result = result.replace(/([+\-*/%=!&|]{1,3}|[;:,(){}[\]])/g, '<span class="token punctuation">$1</span>');
 
-  // 6. 還原所有被保護的 token
+  // 6. 處理已轉義的 < 和 > 符號
+  result = result.replace(/&lt;/g, '<span class="token punctuation">&lt;</span>');
+  result = result.replace(/&gt;/g, '<span class="token punctuation">&gt;</span>');
+
+  // 7. 還原所有被保護的 token
   tokens.forEach((token, idx) => {
     const id = `T${idx}X`;
     result = result.split(`___${id}___`).join(token);
