@@ -135,11 +135,40 @@
       font-size: 1.05rem;
       max-width: 540px;
     }
+    /* 防止 CLS - 為主要容器設定最小高度 */
+    .layout-grid {
+      min-height: 600px;
+    }
+    /* 骨架屏樣式 - 載入時的佔位符 */
+    .post-list:empty::before {
+      content: '';
+      display: block;
+      height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    /* Hero card 預留空間 */
+    .hero-card {
+      min-height: 400px;
+    }
+    /* 防止動態內容造成佈局移動 */
+    .content-grid {
+      min-height: 500px;
+    }
   </style>
 
   <!-- 預載關鍵資源 -->
   <link rel="preload" href="assets/styles.css" as="style">
   <link rel="preload" href="assets/main.js" as="script">
+
+  <!-- 預載字型 - 減少 CLS -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/notosanstc/v35/-nFkOG829Oofr2wohFbTp9i9kwMB1V-BE_.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- 字型載入 - 使用 display=swap 避免阻塞 -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">

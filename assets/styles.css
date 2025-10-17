@@ -63,6 +63,8 @@ body {
   line-height: 1.7;
   background: var(--bg-gradient);
   color: var(--text);
+  /* 防止字型載入導致的 CLS */
+  font-display: swap;
 }
 
 .page-chrome {
@@ -274,6 +276,9 @@ a:focus {
   background: linear-gradient(135deg, rgba(85, 107, 255, 0.7), rgba(120, 74, 255, 0.6));
   background-size: cover;
   background-position: center;
+  /* 防止 CLS - 設定寬高比 */
+  aspect-ratio: 16 / 9;
+  contain: layout style paint;
 }
 
 .hero-card__body {
@@ -387,6 +392,9 @@ a:focus {
   border: 1px solid var(--border);
   box-shadow: var(--shadow-soft);
   padding: clamp(2rem, 3vw, 2.8rem);
+  /* 防止 CLS - 限制重排範圍 */
+  contain: layout style;
+  min-height: 400px;
 }
 
 .stream-header {
@@ -418,6 +426,8 @@ a:focus {
 .post-card {
   padding-bottom: 1.8rem;
   border-bottom: 1px solid var(--border);
+  /* 防止 CLS - 限制重排範圍 */
+  contain: layout style;
 }
 
 .post-card:last-child {
@@ -481,6 +491,8 @@ a:focus {
 .sidebar {
   display: grid;
   gap: 1.6rem;
+  /* 防止 CLS - 限制重排範圍 */
+  contain: layout style;
 }
 
 .widget {
@@ -490,6 +502,8 @@ a:focus {
   border: 1px solid var(--border);
   backdrop-filter: blur(18px);
   box-shadow: var(--shadow-soft);
+  /* 防止 CLS - 限制重排範圍 */
+  contain: layout style;
 }
 
 .widget--profile {
@@ -619,6 +633,8 @@ a:focus {
   border: 1px solid var(--border);
   box-shadow: var(--shadow-soft);
   overflow: hidden;
+  /* 防止 CLS - 限制重排範圍 */
+  contain: layout style;
 }
 
 .article-hero {
@@ -627,6 +643,9 @@ a:focus {
   background-size: cover;
   background-position: center;
   position: relative;
+  /* 防止 CLS - 設定寬高比和 contain */
+  aspect-ratio: 16 / 9;
+  contain: layout style paint;
 }
 
 .article-hero::after {
