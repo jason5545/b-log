@@ -2,13 +2,13 @@
 
 ## 前言
 
-在開發自動化工具的過程\，我研究了某個內部系統的實作方\，發現了一些值得探討的技術問題。本文純粹從技術角度分析這些問\，並整理成學習教材。
+在開發自動化工具的過程中，我研究了某個內部系統的實作方式，發現了一些值得探討的技術問題。本文純粹從技術角度分析這些問題，並整理成學習教材。
 
 ## 問題發現:研究系統架構
 
 ### 原始需求
 
-我需要開發一個自動化工具來提升工作效\，因此需要理解目標系統的運作方式。透過瀏覽器開發者工具(F12)分析網路請求和 DOM 結\，發現系統的驗證機制存在問題。
+我需要開發一個自動化工具來提升工作效率，因此需要理解目標系統的運作方式。透過瀏覽器開發者工具(F12)分析網路請求和 DOM 結構，發現系統的驗證機制存在問題。
 
 ### 系統架構分析
 
@@ -47,10 +47,10 @@ function submitForm() {
 
 **後端實作(推測):**
 ```javascript
-// 後端只接收資\，沒有時間驗證
+// 後端只接收資料，沒有時間驗證
 app.post('/api/orders', (req, res) => {
   const orderData = req.body;
-  // 直接儲\，沒有檢查時間
+  // 直接儲存，沒有檢查時間
   db.orders.insert(orderData);
   res.json({ success: true });
 });
@@ -145,7 +145,7 @@ function validateTime() {
   return true;
 }
 
-// 即時回\，不需等後端
+// 即時回饋，不需等後端
 submitButton.addEventListener('click', () => {
   if (!validateTime()) {
     return; // 阻止無效請求
@@ -185,7 +185,7 @@ app.post('/api/orders', (req, res) => {
     });
   }
   
-  // 4. 通過所有驗\，處理請求
+  // 4. 通過所有驗證，處理請求
   const order = await db.orders.insert(req.body);
   res.json({ success: true, order });
 });
@@ -303,7 +303,7 @@ async function submitOrder() {
   const response = await fetch('/api/orders', {...});
   const { order_id } = await response.json();
   
-  // 可以關閉視\，背景輪詢
+  // 可以關閉視窗，背景輪詢
   pollOrderStatus(order_id);
 }
 ```
@@ -316,7 +316,7 @@ async function submitOrder() {
 前端驗證 = UX 最佳化
 後端驗證 = 安全保證
 
-兩者都要\，但只有後端是可信的
+兩者都要做，但只有後端是可信的
 ```
 
 ### 2. 防禦性程式設計
@@ -530,11 +530,11 @@ class OrderRepository {
 
 ## 結語
 
-透過分析這個內部系\，我學到了許多寶貴的技術經驗:
+透過分析這個內部系統，我學到了許多寶貴的技術經驗:
 
 - 前後端驗證的重要性
 - 效能最佳化的必要性
 - 使用者體驗的價值
 - 防禦性程式設計的原則
 
-這些教訓成為我開發自動化工具時的指導原\，也幫助我做出更好的技術決策。
+這些教訓成為我開發自動化工具時的指導原則，也幫助我做出更好的技術決策。
