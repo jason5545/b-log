@@ -525,32 +525,61 @@ function setupCodeCopy(button, codeBlock) {
 
 function applyBasicSyntaxHighlighting(codeBlock, language) {
   if (!codeBlock) return;
-  
+
   let code = codeBlock.innerHTML;
-  
-  // HTML 轉義已經處理，現在應用基本的語法高亮
+
+  // 使用佔位符保護註解和字符串內容，避免被進一步處理
+  const protectedContent = [];
+  let placeholderIndex = 0;
+
+  // 1. 保護並標記註解
+  code = code.replace(/(?<!:)(?<!\/)(\/\/.+$)/gm, (match) => {
+    const placeholder = `__COMMENT_${placeholderIndex++}__`;
+    protectedContent.push({ placeholder, content: `<span class="token comment">${match}</span>` });
+    return placeholder;
+  });
+  code = code.replace(/(\/\*[\s\S]+?\*\/)/g, (match) => {
+    const placeholder = `__COMMENT_${placeholderIndex++}__`;
+    protectedContent.push({ placeholder, content: `<span class="token comment">${match}</span>` });
+    return placeholder;
+  });
+
+  // 2. 保護並標記字符串
+  code = code.replace(/'([^']+)'/g, (match, content) => {
+    const placeholder = `__STRING_${placeholderIndex++}__`;
+    protectedContent.push({ placeholder, content: `<span class="token string">${match}</span>` });
+    return placeholder;
+  });
+  code = code.replace(/"([^"]+)"/g, (match, content) => {
+    const placeholder = `__STRING_${placeholderIndex++}__`;
+    protectedContent.push({ placeholder, content: `<span class="token string">${match}</span>` });
+    return placeholder;
+  });
+  code = code.replace(/`([^`]+)`/g, (match, content) => {
+    const placeholder = `__STRING_${placeholderIndex++}__`;
+    protectedContent.push({ placeholder, content: `<span class="token string">${match}</span>` });
+    return placeholder;
+  });
+
+  // 3. 處理其他語法元素（現在註解和字符串已被保護）
   code = code.replace(/\b(function|const|let|var|if|else|for|while|return|class|extends|import|export|from|default|async|await|try|catch|finally|throw|new|this|super)\b/g, '<span class="token keyword">$1</span>');
-  // 修復字符串正則表達式，確保只匹配非空字符串
-  code = code.replace(/'([^']+)'/g, '<span class="token string">\'$1\'</span>');
-  code = code.replace(/"([^"]+)"/g, '<span class="token string">"$1"</span>');
-  code = code.replace(/`([^`]+)`/g, '<span class="token string">`$1`</span>');
   code = code.replace(/\b(\d+)\b/g, '<span class="token number">$1</span>');
-  // 註解處理：使用 negative lookbehind 避免匹配 URL 中的 //
-  // 確保 // 前面不是 : 或 / (排除 https:// 和 file:///)
-  code = code.replace(/(?<!:)(?<!\/)(\/\/.+$)/gm, '<span class="token comment">$1</span>');
-  code = code.replace(/(\/\*[\s\S]+?\*\/)/g, '<span class="token comment">$1</span>');
   code = code.replace(/\b(document|window|console|Array|Object|String|Number|Boolean|Date|RegExp|Math|JSON)\b/g, '<span class="token variable">$1</span>');
-  // 修復標點符號正則表達式，避免匹配空字符串
   code = code.replace(/(\+{1,2}|\-{1,2}|\*|\/|===|==|!==|!=|<=|>=|<|>|&&|\|\||!|=|;|:|,|\{|\}|\(|\)|\[|\])/g, '<span class="token punctuation">$1</span>');
   
   // 特殊處理 JavaScript
   if (language === 'javascript') {
     code = code.replace(/\b(app\.|req\.|res\.|db\.|fetch|async|await|Promise)\b/g, '<span class="token function">$1</span>');
   }
-  
+
+  // 4. 還原被保護的註解和字符串
+  protectedContent.forEach(({ placeholder, content }) => {
+    code = code.replace(placeholder, content);
+  });
+
   // 清理可能產生的空 span
   code = code.replace(/<span class="token [^"]*"><\/span>/g, '');
-  
+
   codeBlock.innerHTML = code;
 }
 
