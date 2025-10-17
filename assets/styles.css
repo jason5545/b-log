@@ -1030,18 +1030,51 @@ a:focus {
 
 .breadcrumb {
   margin: 0 0 1rem;
-  font-size: 0.9rem;
-  color: var(--text-muted);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .breadcrumb a {
-  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.breadcrumb a:hover {
+  background: var(--surface);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(85, 107, 255, 0.15);
+  text-decoration: none;
+}
+
+.breadcrumb span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  color: var(--accent-strong);
+  font-weight: 600;
 }
 
 .breadcrumb span::before {
-  content: ' / ';
+  content: '›';
+  margin-right: 0.6rem;
   color: var(--text-muted);
-  opacity: 0.6;
+  opacity: 0.5;
+  font-weight: normal;
 }
 
 .related-list {
