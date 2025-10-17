@@ -15,7 +15,106 @@ async function readUtf8Text(response) {
   }
 }
 
+// 深色模式管理
+const ThemeManager = {
+  STORAGE_KEY: 'theme-preference',
+  THEMES: ['light', 'dark', 'auto'],
+
+  init() {
+    // 從 localStorage 載入偏好，預設為 auto
+    const saved = localStorage.getItem(this.STORAGE_KEY) || 'auto';
+    this.setTheme(saved, false);
+
+    // 監聽系統深色模式變化
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', () => {
+      if (this.getCurrentTheme() === 'auto') {
+        this.applyTheme();
+      }
+    });
+  },
+
+  getCurrentTheme() {
+    return localStorage.getItem(this.STORAGE_KEY) || 'auto';
+  },
+
+  setTheme(theme, save = true) {
+    if (!this.THEMES.includes(theme)) {
+      theme = 'auto';
+    }
+
+    if (save) {
+      localStorage.setItem(this.STORAGE_KEY, theme);
+    }
+
+    this.applyTheme();
+    this.updateToggleButton();
+  },
+
+  applyTheme() {
+    const currentTheme = this.getCurrentTheme();
+    const root = document.documentElement;
+
+    if (currentTheme === 'auto') {
+      // 移除 data-theme 屬性，讓 CSS 的 @media (prefers-color-scheme: dark) 生效
+      root.removeAttribute('data-theme');
+    } else {
+      // 設定 data-theme 屬性
+      root.setAttribute('data-theme', currentTheme);
+    }
+  },
+
+  toggle() {
+    const current = this.getCurrentTheme();
+    const currentIndex = this.THEMES.indexOf(current);
+    const nextIndex = (currentIndex + 1) % this.THEMES.length;
+    const nextTheme = this.THEMES[nextIndex];
+
+    this.setTheme(nextTheme);
+  },
+
+  updateToggleButton() {
+    const button = document.querySelector('.theme-toggle');
+    if (!button) return;
+
+    const currentTheme = this.getCurrentTheme();
+    const icon = button.querySelector('.theme-toggle__icon');
+    const text = button.querySelector('.theme-toggle__text');
+
+    const configs = {
+      light: { icon: '☀️', text: '淺色' },
+      dark: { icon: '🌙', text: '深色' },
+      auto: { icon: '🔄', text: '自動' }
+    };
+
+    const config = configs[currentTheme] || configs.auto;
+
+    if (icon) icon.textContent = config.icon;
+    if (text) text.textContent = config.text;
+  },
+
+  getThemeIcon(theme) {
+    const icons = {
+      light: '☀️',
+      dark: '🌙',
+      auto: '🔄'
+    };
+    return icons[theme] || icons.auto;
+  },
+
+  getThemeText(theme) {
+    const texts = {
+      light: '淺色',
+      dark: '深色',
+      auto: '自動'
+    };
+    return texts[theme] || texts.auto;
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
+  // 初始化深色模式
+  ThemeManager.init();
   const bodyClassList = document.body.classList;
 
   if (bodyClassList.contains('home')) {

@@ -12,9 +12,22 @@
 <body>
   <header class="site-header">
     <div class="wrapper">
-      <p class="breadcrumb"><a href="./">&lt; Back home</a></p>
-      <h1 class="site-title"><a href="./">b-log</a></h1>
-      <p class="site-tagline">既是部落格，也是待辦清單。記錄思考，追蹤進度。</p>
+      <div class="site-header__top">
+        <div>
+          <p class="breadcrumb"><a href="./">&lt; Back home</a></p>
+          <h1 class="site-title"><a href="./">b-log</a></h1>
+          <p class="site-tagline">既是部落格，也是待辦清單。記錄思考，追蹤進度。</p>
+        </div>
+        <nav class="site-nav">
+          <a href="./">Home</a>
+          <a href="about.html" aria-current="page">About</a>
+          <a href="feed.json">Feed</a>
+          <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="切換深色模式">
+            <span class="theme-toggle__icon">🔄</span>
+            <span class="theme-toggle__text">自動</span>
+          </button>
+        </nav>
+      </div>
     </div>
   </header>
   <main class="wrapper">
@@ -40,5 +53,6 @@
       <p>Built on GitHub Pages with a sprinkle of JavaScript.</p>
     </div>
   </footer>
+  <script src="assets/main.js" type="module"></script>
 </body>
 </html>
