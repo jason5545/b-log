@@ -1,5 +1,17 @@
 [
   {
+    "slug": "syntax-highlighting-debugging-journey",
+    "title": "語法突顯系統的深度除錯之旅：四個連鎖問題的修復實錄",
+    "summary": "從 URL 誤判、巢狀標籤到 HTML 實體符號，記錄一次完整的語法突顯系統除錯過程，探討正則表達式、佔位符機制與處理順序的技術細節。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-17T08:30:00.000Z",
+    "updatedAt": "2025-10-17T08:30:00.000Z",
+    "readingTime": "18 min",
+    "tags": ["JavaScript", "除錯", "語法突顯", "正則表達式", "HTML轉義"],
+    "accentColor": "#e67e22"
+  },
+  {
     "slug": "wordpress-permalink-implementation",
     "title": "WordPress 永久連結實作：從概念到實踐",
     "summary": "分享實作 WordPress 風格永久連結系統的經驗，包括架構設計、自動化流程與 SEO 最佳化策略。",

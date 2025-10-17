@@ -6,6 +6,18 @@
   "description": "b-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "syntax-highlighting-debugging-journey",
+      "url": "https://b-log.to/post.html?slug=syntax-highlighting-debugging-journey",
+      "title": "語法突顯系統的深度除錯之旅：四個連鎖問題的修復實錄",
+      "content_text": "從 URL 誤判、巢狀標籤到 HTML 實體符號，記錄一次完整的語法突顯系統除錯過程，探討正則表達式、佔位符機制與處理順序的技術細節。",
+      "date_published": "2025-10-17T08:30:00.000Z",
+      "date_modified": "2025-10-17T08:30:00.000Z",
+      "tags": ["JavaScript", "除錯", "語法突顯", "正則表達式", "HTML轉義"],
+      "authors": [
+        { "name": "Jason Chien" }
+      ]
+    },
+    {
       "id": "wordpress-permalink-implementation",
       "url": "https://b-log.to/post.html?slug=wordpress-permalink-implementation",
       "title": "WordPress 永久連結實作：從概念到實踐",
