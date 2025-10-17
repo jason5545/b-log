@@ -563,11 +563,11 @@ function highlightLine(line) {
   let result = escapeHtml(line);
   const tokens = [];
 
-  // 使用特殊標記代替空字符，避免還原時的問題
+  // 使用字母前綴避免數字正則匹配到佔位符
   function protect(match, tokenClass) {
-    const id = tokens.length;
+    const id = `T${tokens.length}X`; // 格式：T0X, T1X, T2X...
     tokens.push(`<span class="token ${tokenClass}">${match}</span>`);
-    return `___TOKEN_${id}___`;
+    return `___${id}___`;
   }
 
   // 1. 保護字符串
@@ -585,9 +585,10 @@ function highlightLine(line) {
   // 5. 處理運算符和標點（現在所有重要內容都已被保護）
   result = result.replace(/([+\-*/%=<>!&|]{1,3}|[;:,(){}[\]])/g, '<span class="token punctuation">$1</span>');
 
-  // 6. 還原所有被保護的 token（使用簡單的字符串替換）
-  tokens.forEach((token, id) => {
-    result = result.split(`___TOKEN_${id}___`).join(token);
+  // 6. 還原所有被保護的 token
+  tokens.forEach((token, idx) => {
+    const id = `T${idx}X`;
+    result = result.split(`___${id}___`).join(token);
   });
 
   return result;
