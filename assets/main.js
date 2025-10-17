@@ -239,6 +239,17 @@ async function renderArticle() {
   const tagsEl = document.querySelector('#post-tags');
 
   if (breadcrumbCurrent) {
+    const parent = breadcrumbCurrent.parentElement;
+
+    // 創建箭頭分隔符（如果不存在）
+    let separator = parent.querySelector('.breadcrumb-separator');
+    if (!separator) {
+      separator = document.createElement('span');
+      separator.className = 'breadcrumb-separator';
+      separator.textContent = '›';
+      parent.insertBefore(separator, breadcrumbCurrent);
+    }
+
     breadcrumbCurrent.textContent = post.title || slug;
   }
 

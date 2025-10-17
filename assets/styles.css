@@ -1058,7 +1058,7 @@ a:focus {
   text-decoration: none;
 }
 
-.breadcrumb span {
+.breadcrumb span#breadcrumb-current {
   display: inline-flex;
   align-items: center;
   padding: 0.35rem 0.9rem;
@@ -1069,12 +1069,12 @@ a:focus {
   font-weight: 600;
 }
 
-.breadcrumb span::before {
-  content: '›';
-  margin-right: 0.6rem;
+.breadcrumb-separator {
   color: var(--text-muted);
   opacity: 0.5;
+  font-size: 1.1rem;
   font-weight: normal;
+  user-select: none;
 }
 
 .related-list {
