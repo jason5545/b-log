@@ -526,62 +526,71 @@ function setupCodeCopy(button, codeBlock) {
 function applyBasicSyntaxHighlighting(codeBlock, language) {
   if (!codeBlock) return;
 
-  let code = codeBlock.innerHTML;
+  // 獲取純文本內容，避免處理 HTML 實體
+  const code = codeBlock.textContent;
+  const lines = code.split('\n');
 
-  // 使用佔位符保護註解和字符串內容，避免被進一步處理
-  // 使用特殊的 Unicode 字符作為佔位符，避免被正則表達式匹配
-  const protectedContent = [];
-  let placeholderIndex = 0;
+  // 逐行處理，避免跨行匹配問題
+  const highlightedLines = lines.map(line => {
+    // 檢查是否為註解行（優先處理，避免註解內容被進一步處理）
+    if (/^\s*\/\//.test(line)) {
+      return `<span class="token comment">${escapeHtml(line)}</span>`;
+    }
 
-  // 1. 保護並標記註解
-  code = code.replace(/(?<!:)(?<!\/)(\/\/.+$)/gm, (match) => {
-    const placeholder = `\u200B\u200C${placeholderIndex++}\u200D\u200B`;
-    protectedContent.push({ placeholder, content: `<span class="token comment">${match}</span>` });
-    return placeholder;
-  });
-  code = code.replace(/(\/\*[\s\S]+?\*\/)/g, (match) => {
-    const placeholder = `\u200B\u200C${placeholderIndex++}\u200D\u200B`;
-    protectedContent.push({ placeholder, content: `<span class="token comment">${match}</span>` });
-    return placeholder;
-  });
+    // 檢查行內註解
+    const commentMatch = line.match(/^(.+?)(\s*\/\/.*)$/);
+    if (commentMatch) {
+      const [, beforeComment, comment] = commentMatch;
+      return highlightLine(beforeComment) + `<span class="token comment">${escapeHtml(comment)}</span>`;
+    }
 
-  // 2. 保護並標記字符串
-  code = code.replace(/'([^']+)'/g, (match, content) => {
-    const placeholder = `\u200B\u200C${placeholderIndex++}\u200D\u200B`;
-    protectedContent.push({ placeholder, content: `<span class="token string">${match}</span>` });
-    return placeholder;
-  });
-  code = code.replace(/"([^"]+)"/g, (match, content) => {
-    const placeholder = `\u200B\u200C${placeholderIndex++}\u200D\u200B`;
-    protectedContent.push({ placeholder, content: `<span class="token string">${match}</span>` });
-    return placeholder;
-  });
-  code = code.replace(/`([^`]+)`/g, (match, content) => {
-    const placeholder = `\u200B\u200C${placeholderIndex++}\u200D\u200B`;
-    protectedContent.push({ placeholder, content: `<span class="token string">${match}</span>` });
-    return placeholder;
+    // 普通代碼行
+    return highlightLine(line);
   });
 
-  // 3. 處理其他語法元素（現在註解和字符串已被保護）
-  code = code.replace(/\b(function|const|let|var|if|else|for|while|return|class|extends|import|export|from|default|async|await|try|catch|finally|throw|new|this|super)\b/g, '<span class="token keyword">$1</span>');
-  code = code.replace(/\b(\d+)\b/g, '<span class="token number">$1</span>');
-  code = code.replace(/\b(document|window|console|Array|Object|String|Number|Boolean|Date|RegExp|Math|JSON)\b/g, '<span class="token variable">$1</span>');
-  code = code.replace(/(\+{1,2}|\-{1,2}|\*|\/|===|==|!==|!=|<=|>=|<|>|&&|\|\||!|=|;|:|,|\{|\}|\(|\)|\[|\])/g, '<span class="token punctuation">$1</span>');
-  
-  // 特殊處理 JavaScript
-  if (language === 'javascript') {
-    code = code.replace(/\b(app\.|req\.|res\.|db\.|fetch|async|await|Promise)\b/g, '<span class="token function">$1</span>');
-  }
+  codeBlock.innerHTML = highlightedLines.join('\n');
+}
 
-  // 4. 還原被保護的註解和字符串
-  protectedContent.forEach(({ placeholder, content }) => {
-    code = code.replace(placeholder, content);
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function highlightLine(line) {
+  if (!line.trim()) return line;
+
+  let result = escapeHtml(line);
+
+  // 處理字符串（先處理以避免字符串內的內容被高亮）
+  const stringPattern = /(["'`])(?:(?=(\\?))\2.)*?\1/g;
+  const strings = [];
+  result = result.replace(stringPattern, (match) => {
+    const index = strings.length;
+    strings.push(`<span class="token string">${match}</span>`);
+    return `___STRING_${index}___`;
   });
 
-  // 清理可能產生的空 span
-  code = code.replace(/<span class="token [^"]*"><\/span>/g, '');
+  // 處理關鍵字
+  result = result.replace(/\b(function|const|let|var|if|else|for|while|return|class|extends|import|export|from|default|async|await|try|catch|finally|throw|new|this|super)\b/g,
+    '<span class="token keyword">$1</span>');
 
-  codeBlock.innerHTML = code;
+  // 處理數字
+  result = result.replace(/\b(\d+)\b/g, '<span class="token number">$1</span>');
+
+  // 處理內建對象
+  result = result.replace(/\b(document|window|console|Array|Object|String|Number|Boolean|Date|RegExp|Math|JSON)\b/g,
+    '<span class="token variable">$1</span>');
+
+  // 處理運算符和標點
+  result = result.replace(/([+\-*/%=<>!&|]{1,3}|[;:,(){}[\]])/g, '<span class="token punctuation">$1</span>');
+
+  // 還原字符串
+  strings.forEach((str, index) => {
+    result = result.replace(`___STRING_${index}___`, str);
+  });
+
+  return result;
 }
 
 function renderShareLinks(post) {
