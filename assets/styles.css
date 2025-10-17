@@ -1067,6 +1067,22 @@ a:focus {
   border: 1px solid var(--accent);
   color: var(--accent-strong);
   font-weight: 600;
+  max-width: calc(100vw - 180px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .breadcrumb span#breadcrumb-current {
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .breadcrumb span#breadcrumb-current {
+    max-width: 800px;
+  }
 }
 
 .breadcrumb-separator {
