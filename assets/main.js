@@ -537,8 +537,8 @@ function applyBasicSyntaxHighlighting(codeBlock, language) {
       return `<span class="token comment">${escapeHtml(line)}</span>`;
     }
 
-    // 檢查行內註解
-    const commentMatch = line.match(/^(.+?)(\s*\/\/.*)$/);
+    // 檢查行內註解（確保 // 前面不是 : 避免誤判 URL）
+    const commentMatch = line.match(/^(.+?)(?<!:)(\s+\/\/.*)$/);
     if (commentMatch) {
       const [, beforeComment, comment] = commentMatch;
       return highlightLine(beforeComment) + `<span class="token comment">${escapeHtml(comment)}</span>`;
