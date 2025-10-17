@@ -8,7 +8,7 @@
 
 ## 專案起源：為什麼要做這個專案?
 
-這個專案源於我自己的特殊需求：由於我僅右手食指可活動，需要一個能透過 Android 平板遠端控制 PC 的解決方案。原本的 Unified Remote 和 EmulStick 雖然都是不錯的工具，但**兩者都已停止維護和更新**,且缺乏針對像我這樣有身體限制使用者的最佳化。
+這個專案源於我自己的特殊需求：由於我僅右手食指可活動，需要一個能透過 Android 平板遠端控制 PC 的解決方案。原本的 Unified Remote 和 EmulStick 雖然都是不錯的工具，但**兩者都已停止維護和更新**，且缺乏針對像我這樣有身體限制使用者的最佳化。
 
 ### 為什麼這些軟體停止更新很重要?
 
@@ -54,11 +54,11 @@ EmulStick 是一款創新的藍牙接收器，外觀類似小型USB隨身碟。�
 1. **Phase 1 (1.5秒)**:使用 Service UUID 過濾 (`0xF800`)
 2. **Phase 2 (2.5秒)**:無過濾器(與原廠一致)
 
-但實際上 EmulStick 的廣播封包可能不包含 Service UUID,導致 Phase 1 完全無法命中，而 Phase 切換過程中又可能遺失裝置。
+但實際上 EmulStick 的廣播封包可能不包含 Service UUID，導致 Phase 1 完全無法命中，而 Phase 切換過程中又可能遺失裝置。
 
 **解決方案:回歸簡單**
 
-我建立了一個診斷 APP,完全模仿原廠的單段掃描:
+我建立了一個診斷 APP，完全模仿原廠的單段掃描:
 ```kotlin
 // 單段 4 秒掃描，無過濾器
 val scanSettings = ScanSettings.Builder()
@@ -114,7 +114,7 @@ return expectedCipher.contentEquals(cipherFromDongle)
 
 **修正後的滑鼠報告**
 ```kotlin
-// 6 bytes,無 Report ID
+// 6 bytes，無 Report ID
 fun buildMouseReport(
     buttons: Int,
     deltaX: Int,
@@ -337,7 +337,7 @@ EmulStick Service (0xF800)
 
 ### 2. 創新解決方案
 
-- **中文輸入**:CustomIn 報告直接傳送 UTF-8,繞過 HID 限制
+- **中文輸入**：CustomIn 報告直接傳送 UTF-8，繞過 HID 限制
 - **遊戲手把模式**:完整的 Xbox 360 控制器模擬
 - **單指最佳化**:大按鈕、簡潔介面、手勢操作
 
@@ -413,7 +413,7 @@ EmulStick Service (0xF800)
 
 1. **完全模仿原廠架構**:不要過度最佳化，先求能動
 2. **詳細日誌記錄**:診斷 APP 的詳細日誌是成功關鍵
-3. **隔離測試**:建立獨立的診斷 APP,避免複雜邏輯干擾
+3. **隔離測試**：建立獨立的診斷 APP，避免複雜邏輯干擾
 
 ### 避免的陷阱
 
