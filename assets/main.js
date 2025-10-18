@@ -727,8 +727,8 @@ function renderShareLinks(post) {
       external: true,
     },
     {
-      label: 'Share on LinkedIn',
-      href: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(pageUrl.toString())}&title=${encodeURIComponent(post.title || 'New post on b-log')}`,
+      label: 'Share on Facebook',
+      href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl.toString())}`,
       external: true,
     },
     {
