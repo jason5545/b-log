@@ -72,10 +72,12 @@ const CONFIG = {
 
 ```html
 <picture>
-  <source srcset="../img/2015/photo.webp" type="image/webp">
-  <img src="../img/2015/photo.jpg" alt="alt text" loading="lazy">
+  <source srcset="content/img/2015/photo.webp" type="image/webp">
+  <img src="content/img/2015/photo.jpg" alt="alt text" loading="lazy">
 </picture>
 ```
+
+**注意**：由於 Markdown 是在 `post.html`（根目錄）中動態渲染，圖片路徑會自動轉換為相對於根目錄的路徑（`content/img/...`）。
 
 ## 🔧 GitHub Actions 觸發條件
 

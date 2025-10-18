@@ -54,8 +54,13 @@ function convertToPictureTag(match, alt, imagePath, markdownDir) {
   }
 
   // 正規化路徑：將反斜線轉換為正斜線（Web 標準）
-  const normalizedWebpPath = webpPath.replace(/\\/g, '/');
-  const normalizedImagePath = imagePath.replace(/\\/g, '/');
+  // 注意：由於 Markdown 是在 post.html 中動態渲染，路徑需相對於根目錄
+  let normalizedWebpPath = webpPath.replace(/\\/g, '/');
+  let normalizedImagePath = imagePath.replace(/\\/g, '/');
+
+  // 將相對於 Markdown 的路徑（../img/）轉換為相對於根目錄的路徑（content/img/）
+  normalizedWebpPath = normalizedWebpPath.replace(/^\.\.\/img\//, 'content/img/');
+  normalizedImagePath = normalizedImagePath.replace(/^\.\.\/img\//, 'content/img/');
 
   // 生成 <picture> 標籤
   return `<picture>
