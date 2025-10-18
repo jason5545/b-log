@@ -6,6 +6,18 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "cloudinary-chinese-og-image-solution",
+      "url": "https://b-log.to/post.html?slug=cloudinary-chinese-og-image-solution",
+      "title": "解決 Facebook 分享預覽的中文顯示問題：Cloudinary 整合實戰",
+      "content_text": "從發現 og-image.vercel.app 無法顯示中文，到成功整合 Cloudinary + Noto Sans TC 字型，完整記錄解決 Facebook 社交預覽問題的技術細節與踩坑經驗。包含 Cloudinary 設定、字型上傳、URL 優化、踩坑經驗分享，以及完整的自動化流程說明。",
+      "date_published": "2025-10-18T08:00:00.000Z",
+      "date_modified": "2025-10-18T08:00:00.000Z",
+      "tags": ["Cloudinary", "Open Graph", "中文字型", "Facebook", "SEO", "自動化"],
+      "authors": [
+        { "name": "Jason Chien" }
+      ]
+    },
+    {
       "id": "2025-tablet-ecosystem-dilemma",
       "url": "https://b-log.to/post.html?slug=2025-tablet-ecosystem-dilemma",
       "title": "2025 平板生態的三重困境：當所有平台都在關上自由之門",
