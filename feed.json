@@ -12,9 +12,18 @@
       "content_text": "記錄我如何從零打造一個完整的圖片處理自動化系統，解決從格式轉換到路徑相容性的所有挑戰。使用 Sharp + GitHub Actions 實作 WebP 自動轉換，並深度調查解決 WordPress 風格 URL 導致的圖片路徑問題。系統實測節省 12.7% 檔案大小，預期 LCP 改善 15-30%，完整的降級方案確保瀏覽器相容性。",
       "date_published": "2025-10-18T11:00:00.000Z",
       "date_modified": "2025-10-18T11:00:00.000Z",
-      "tags": ["WebP", "GitHub Actions", "圖片最佳化", "路徑相容性", "自動化", "Sharp"],
+      "tags": [
+        "WebP",
+        "GitHub Actions",
+        "圖片最佳化",
+        "路徑相容性",
+        "自動化",
+        "Sharp"
+      ],
       "authors": [
-        { "name": "Jason Chien" }
+        {
+          "name": "Jason Chien"
+        }
       ]
     },
     {
@@ -24,9 +33,18 @@
       "content_text": "從發現 og-image.vercel.app 無法顯示中文，到成功整合 Cloudinary + Noto Sans TC 字型，完整記錄解決 Facebook 社交預覽問題的技術細節與踩坑經驗。包含 Cloudinary 設定、字型上傳、URL 優化、踩坑經驗分享，以及完整的自動化流程說明。",
       "date_published": "2025-10-18T08:00:00.000Z",
       "date_modified": "2025-10-18T08:00:00.000Z",
-      "tags": ["Cloudinary", "Open Graph", "中文字型", "Facebook", "SEO", "自動化"],
+      "tags": [
+        "Cloudinary",
+        "Open Graph",
+        "中文字型",
+        "Facebook",
+        "SEO",
+        "自動化"
+      ],
       "authors": [
-        { "name": "Jason Chien" }
+        {
+          "name": "Jason Chien"
+        }
       ]
     },
     {
@@ -36,9 +54,18 @@
       "content_text": "2025 年，所有主流平板/手機平台都在收緊控制。從 iPadOS 的軟體閹割到 Android 的 bootloader 鎖死，再到 Windows 的強制雲端帳戶，使用者面臨前所未有的自由度倒退。",
       "date_published": "2025-10-17T09:00:00.000Z",
       "date_modified": "2025-10-17T09:00:00.000Z",
-      "tags": ["平板", "iPadOS", "Android", "Windows", "Bootloader", "自由度"],
+      "tags": [
+        "平板",
+        "iPadOS",
+        "Android",
+        "Windows",
+        "Bootloader",
+        "自由度"
+      ],
       "authors": [
-        { "name": "Jason Chien" }
+        {
+          "name": "Jason Chien"
+        }
       ]
     },
     {
@@ -48,9 +75,17 @@
       "content_text": "從 URL 誤判、巢狀標籤到 HTML 實體符號，記錄一次完整的語法突顯系統除錯過程，探討正則表達式、佔位符機制與處理順序的技術細節。",
       "date_published": "2025-10-17T08:30:00.000Z",
       "date_modified": "2025-10-17T08:30:00.000Z",
-      "tags": ["JavaScript", "除錯", "語法突顯", "正則表達式", "HTML轉義"],
+      "tags": [
+        "JavaScript",
+        "除錯",
+        "語法突顯",
+        "正則表達式",
+        "HTML轉義"
+      ],
       "authors": [
-        { "name": "Jason Chien" }
+        {
+          "name": "Jason Chien"
+        }
       ]
     },
     {
@@ -60,9 +95,17 @@
       "content_text": "分享實作 WordPress 風格永久連結系統的經驗，包括架構設計、自動化流程與 SEO 最佳化策略。",
       "date_published": "2025-10-17T00:30:00.000Z",
       "date_modified": "2025-10-17T00:30:00.000Z",
-      "tags": ["WordPress", "永久連結", "SEO", "URL設計", "自動化"],
+      "tags": [
+        "WordPress",
+        "永久連結",
+        "SEO",
+        "URL設計",
+        "自動化"
+      ],
       "authors": [
-        { "name": "Jason Chien" }
+        {
+          "name": "Jason Chien"
+        }
       ]
     },
     {
@@ -72,9 +115,17 @@
       "content_text": "OpenAI在8月讓GPT-5變冷淡以減少情感依賴，10月卻宣布開放情色內容，這兩個決策完全矛盾，揭示了商業利益與用戶福祉的衝突。",
       "date_published": "2025-10-16T12:20:00.000Z",
       "date_modified": "2025-10-16T12:20:00.000Z",
-      "tags": ["OpenAI", "AI政策", "情色內容", "情感依賴", "商業決策"],
+      "tags": [
+        "OpenAI",
+        "AI政策",
+        "情色內容",
+        "情感依賴",
+        "商業決策"
+      ],
       "authors": [
-        { "name": "Jason Chien" }
+        {
+          "name": "Jason Chien"
+        }
       ]
     },
     {
@@ -84,9 +135,17 @@
       "content_text": "這是一個關於如何為已停止維護的遙控軟體注入新生命的故事。透過協定研究、技術探索與創新實作，我打造了一個現代化的多功能遙控解決方案。",
       "date_published": "2025-10-16T06:30:00.000Z",
       "date_modified": "2025-10-16T06:30:00.000Z",
-      "tags": ["BLE", "協定研究", "Android開發", "無障礙設計", "遙控器"],
+      "tags": [
+        "BLE",
+        "協定研究",
+        "Android開發",
+        "無障礙設計",
+        "遙控器"
+      ],
       "authors": [
-        { "name": "Jason Chien" }
+        {
+          "name": "Jason Chien"
+        }
       ]
     },
     {
@@ -96,9 +155,17 @@
       "content_text": "透過實際案例分析前後端驗證的重要性，探討安全性問題、效能缺陷及解決方案，最終開發出效能提升23倍的自動化工具。",
       "date_published": "2025-10-16T03:29:00.000Z",
       "date_modified": "2025-10-16T03:29:00.000Z",
-      "tags": ["前端驗證", "後端驗證", "安全性", "效能最佳化", "自動化工具"],
+      "tags": [
+        "前端驗證",
+        "後端驗證",
+        "安全性",
+        "效能最佳化",
+        "自動化工具"
+      ],
       "authors": [
-        { "name": "Jason Chien" }
+        {
+          "name": "Jason Chien"
+        }
       ]
     },
     {
@@ -108,9 +175,16 @@
       "content_text": "探討 Theo 的 Type A/B 框架之外的第三種情況，以及 AI 時代下創作歸屬的哲學問題。",
       "date_published": "2025-10-16T00:52:00.000Z",
       "date_modified": "2025-10-16T00:52:00.000Z",
-      "tags": ["AI", "開發哲學", "Vibe Coding", "創作歸屬"],
+      "tags": [
+        "AI",
+        "開發哲學",
+        "Vibe Coding",
+        "創作歸屬"
+      ],
       "authors": [
-        { "name": "Jason Chien" }
+        {
+          "name": "Jason Chien"
+        }
       ]
     },
     {
@@ -120,9 +194,38 @@
       "content_text": "通過真實案例分析 OpenAI 和 Anthropic 在處理灰色地帶技術問題上的根本性哲學差異。",
       "date_published": "2025-10-15T23:38:00.000Z",
       "date_modified": "2025-10-15T23:38:00.000Z",
-      "tags": ["AI", "政策", "哲學差異", "OpenAI", "Anthropic"],
+      "tags": [
+        "AI",
+        "政策",
+        "哲學差異",
+        "OpenAI",
+        "Anthropic"
+      ],
       "authors": [
-        { "name": "Jason Chien" }
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
+      "id": "lisa-concert-2017-ssa-ldp",
+      "url": "https://b-log.to/post.html?slug=lisa-concert-2017-ssa-ldp",
+      "title": "2017 LiSA 日本演唱會：相遇的魔法與感動的兩天",
+      "content_text": "時隔兩年，我再次踏上追逐 LiSA 的旅程。這次在日本埼玉超級競技場的兩日場，讓我真正理解「相遇」這件事有多麼珍貴。從小惡魔遊行到天使般的白紗蓬蓬裙，從 believe in myself 慢板的淚流滿面到與 16,625 名觀眾心靈共鳴的 TODAY，三小時的演唱會如同魔法般將我們所有人的心融為一體。還有意外的生日慶祝、小小兵驚喜、以及在 TOWER RECORD 尋找人形立牌的冒險。今日もいい日だっ。",
+      "date_published": "2017-07-12T00:00:00.000Z",
+      "date_modified": "2017-07-12T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "演唱會",
+        "日本",
+        "Little Devil's Parade",
+        "音樂",
+        "旅行"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
       ]
     },
     {
@@ -132,9 +235,17 @@
       "content_text": "這是我人生第一次演唱會體驗。從三月在 YouTube 看到 LiSA 的シルシ現場版開始入坑，到七月終於實現夢想參加台灣首場 full band 演唱會。雖然搶票過程困難重重，但當 LiSA 開口的那一瞬間，整個心都被穿透了。演唱會後的隔天還排除萬難去了西門町見面會，LiSA 上樓時還對我說了 hi。即使身體有限制，我還是做到了，證明了只要有決心，夢想就能實現。",
       "date_published": "2015-07-12T00:00:00.000Z",
       "date_modified": "2015-07-12T00:00:00.000Z",
-      "tags": ["LiSA", "演唱會", "音樂", "回憶", "夢想"],
+      "tags": [
+        "LiSA",
+        "演唱會",
+        "音樂",
+        "回憶",
+        "夢想"
+      ],
       "authors": [
-        { "name": "Jason Chien" }
+        {
+          "name": "Jason Chien"
+        }
       ]
     }
   ]

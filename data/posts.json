@@ -8,7 +8,14 @@
     "publishedAt": "2025-10-18T11:00:00.000Z",
     "updatedAt": "2025-10-18T11:00:00.000Z",
     "readingTime": "20 min",
-    "tags": ["WebP", "GitHub Actions", "圖片最佳化", "路徑相容性", "自動化", "Sharp"],
+    "tags": [
+      "WebP",
+      "GitHub Actions",
+      "圖片最佳化",
+      "路徑相容性",
+      "自動化",
+      "Sharp"
+    ],
     "accentColor": "#9b59b6"
   },
   {
@@ -20,7 +27,14 @@
     "publishedAt": "2025-10-18T08:00:00.000Z",
     "updatedAt": "2025-10-18T08:00:00.000Z",
     "readingTime": "15 min",
-    "tags": ["Cloudinary", "Open Graph", "中文字型", "Facebook", "SEO", "自動化"],
+    "tags": [
+      "Cloudinary",
+      "Open Graph",
+      "中文字型",
+      "Facebook",
+      "SEO",
+      "自動化"
+    ],
     "accentColor": "#9b59b6"
   },
   {
@@ -32,7 +46,14 @@
     "publishedAt": "2025-10-17T09:00:00.000Z",
     "updatedAt": "2025-10-17T09:00:00.000Z",
     "readingTime": "25 min",
-    "tags": ["平板", "iPadOS", "Android", "Windows", "Bootloader", "自由度"],
+    "tags": [
+      "平板",
+      "iPadOS",
+      "Android",
+      "Windows",
+      "Bootloader",
+      "自由度"
+    ],
     "accentColor": "#e67e22"
   },
   {
@@ -44,7 +65,13 @@
     "publishedAt": "2025-10-17T08:30:00.000Z",
     "updatedAt": "2025-10-17T08:30:00.000Z",
     "readingTime": "18 min",
-    "tags": ["JavaScript", "除錯", "語法突顯", "正則表達式", "HTML轉義"],
+    "tags": [
+      "JavaScript",
+      "除錯",
+      "語法突顯",
+      "正則表達式",
+      "HTML轉義"
+    ],
     "accentColor": "#e67e22"
   },
   {
@@ -56,7 +83,13 @@
     "publishedAt": "2025-10-17T00:30:00.000Z",
     "updatedAt": "2025-10-17T00:30:00.000Z",
     "readingTime": "12 min",
-    "tags": ["WordPress", "永久連結", "SEO", "URL設計", "自動化"],
+    "tags": [
+      "WordPress",
+      "永久連結",
+      "SEO",
+      "URL設計",
+      "自動化"
+    ],
     "accentColor": "#9b59b6"
   },
   {
@@ -68,7 +101,13 @@
     "publishedAt": "2025-10-16T12:20:00.000Z",
     "updatedAt": "2025-10-16T12:20:00.000Z",
     "readingTime": "15 min",
-    "tags": ["OpenAI", "AI政策", "情色內容", "情感依賴", "商業決策"],
+    "tags": [
+      "OpenAI",
+      "AI政策",
+      "情色內容",
+      "情感依賴",
+      "商業決策"
+    ],
     "accentColor": "#e74c3c"
   },
   {
@@ -80,7 +119,13 @@
     "publishedAt": "2025-10-16T06:30:00.000Z",
     "updatedAt": "2025-10-16T06:30:00.000Z",
     "readingTime": "25 min",
-    "tags": ["BLE", "協定研究", "Android開發", "無障礙設計", "遙控器"],
+    "tags": [
+      "BLE",
+      "協定研究",
+      "Android開發",
+      "無障礙設計",
+      "遙控器"
+    ],
     "accentColor": "#9b59b6"
   },
   {
@@ -92,7 +137,13 @@
     "publishedAt": "2025-10-16T03:29:00.000Z",
     "updatedAt": "2025-10-16T03:29:00.000Z",
     "readingTime": "15 min",
-    "tags": ["前端驗證", "後端驗證", "安全性", "效能最佳化", "自動化工具"],
+    "tags": [
+      "前端驗證",
+      "後端驗證",
+      "安全性",
+      "效能最佳化",
+      "自動化工具"
+    ],
     "accentColor": "#e67e22"
   },
   {
@@ -104,7 +155,12 @@
     "publishedAt": "2025-10-16T00:52:00.000Z",
     "updatedAt": "2025-10-16T00:52:00.000Z",
     "readingTime": "10 min",
-    "tags": ["AI", "開發哲學", "Vibe Coding", "創作歸屬"],
+    "tags": [
+      "AI",
+      "開發哲學",
+      "Vibe Coding",
+      "創作歸屬"
+    ],
     "accentColor": "#556bff"
   },
   {
@@ -116,7 +172,32 @@
     "publishedAt": "2025-10-15T23:38:00.000Z",
     "updatedAt": "2025-10-15T23:38:00.000Z",
     "readingTime": "8 min",
-    "tags": ["AI", "政策", "哲學差異", "OpenAI", "Anthropic"],
+    "tags": [
+      "AI",
+      "政策",
+      "哲學差異",
+      "OpenAI",
+      "Anthropic"
+    ],
+    "accentColor": "#e74c3c"
+  },
+  {
+    "slug": "lisa-concert-2017-ssa-ldp",
+    "title": "2017 LiSA 日本演唱會：相遇的魔法與感動的兩天",
+    "summary": "時隔兩年再次追逐 LiSA 的旅程，這次在日本埼玉超級競技場。從小惡魔遊行到天使降臨，從 believe in myself 慢板到 TODAY 的感動，記錄與 16,625 名觀眾心靈共鳴的三小時奇蹟。",
+    "category": "生活記事",
+    "author": "Jason Chien",
+    "publishedAt": "2017-07-12T00:00:00.000Z",
+    "updatedAt": "2017-07-12T00:00:00.000Z",
+    "readingTime": "12 min",
+    "tags": [
+      "LiSA",
+      "演唱會",
+      "日本",
+      "Little Devil's Parade",
+      "音樂",
+      "旅行"
+    ],
     "accentColor": "#e74c3c"
   },
   {
@@ -128,7 +209,13 @@
     "publishedAt": "2015-07-12T00:00:00.000Z",
     "updatedAt": "2015-07-12T00:00:00.000Z",
     "readingTime": "10 min",
-    "tags": ["LiSA", "演唱會", "音樂", "回憶", "夢想"],
+    "tags": [
+      "LiSA",
+      "演唱會",
+      "音樂",
+      "回憶",
+      "夢想"
+    ],
     "accentColor": "#e74c3c",
     "coverImage": "/content/img/2015/514520210_24392094240374501_7379293703597388984_n.jpg"
   }
