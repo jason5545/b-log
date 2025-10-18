@@ -147,10 +147,43 @@ async function renderHomepage() {
   if (postsEmptyEl) postsEmptyEl.hidden = true;
   if (postsErrorEl) postsErrorEl.hidden = true;
 
-  const posts = await loadNormalizedPosts();
+  let posts = await loadNormalizedPosts();
+
+  // 讀取 URL 參數以支援篩選功能
+  const params = new URLSearchParams(window.location.search);
+  const filterTag = params.get('tag');
+  const filterCategory = params.get('category');
 
   if (!posts.length) {
     if (postsEmptyEl) postsEmptyEl.hidden = false;
+    return;
+  }
+
+  // 根據 URL 參數篩選文章
+  if (filterTag) {
+    posts = posts.filter(post =>
+      Array.isArray(post.tags) && post.tags.some(tag =>
+        String(tag || '').toLowerCase() === filterTag.toLowerCase()
+      )
+    );
+  }
+
+  if (filterCategory) {
+    posts = posts.filter(post =>
+      post.category && post.category.toLowerCase() === filterCategory.toLowerCase()
+    );
+  }
+
+  // 如果篩選後沒有文章，顯示提示
+  if (!posts.length) {
+    if (postsEmptyEl) {
+      postsEmptyEl.textContent = filterTag
+        ? `沒有找到標籤「${filterTag}」的文章。`
+        : filterCategory
+        ? `沒有找到分類「${filterCategory}」的文章。`
+        : 'No posts yet. Add your first note in content/posts.';
+      postsEmptyEl.hidden = false;
+    }
     return;
   }
 
