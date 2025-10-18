@@ -10,7 +10,10 @@ const categoryMapping = {
 };
 
 // 生成完整的文章頁面 HTML（複製 post.html 結構）
-function generatePostHTML(title, slug) {
+function generatePostHTML(post) {
+  const { slug, title, summary, category, coverImage, accentColor, publishedAt, updatedAt, tags } = post;
+  const categorySlug = categoryMapping[category];
+
   // 讀取 post.html 模板
   const templatePath = path.join(__dirname, '../post.html');
   let html = fs.readFileSync(templatePath, 'utf8');
@@ -23,8 +26,45 @@ function generatePostHTML(title, slug) {
   html = html.replace(/href="about\.html"/g, 'href="../../about.html"');
   html = html.replace(/href="feed\.json"/g, 'href="../../feed.json"');
 
-  // 更新初始標題（JavaScript 會動態更新）
-  html = html.replace(/<title>Reading - b-log<\/title>/, `<title>${title} - b-log</title>`);
+  // 生成完整的 URL
+  const baseUrl = 'https://b-log.to';
+  const fullUrl = `${baseUrl}/${categorySlug}/${slug}/`;
+
+  // 生成 Open Graph 圖片 URL
+  let ogImageUrl;
+  if (coverImage) {
+    ogImageUrl = `${baseUrl}/${coverImage}`;
+  } else {
+    // 使用 og-image.vercel.app 動態生成圖片
+    const encodedTitle = encodeURIComponent(title);
+    const color = (accentColor || '#556bff').replace('#', '');
+    ogImageUrl = `https://og-image.vercel.app/${encodedTitle}.png?theme=light&md=1&fontSize=100px&images=https%3A%2F%2Fb-log.to%2Ffavicon.ico`;
+  }
+
+  // 生成 tags 字串
+  const tagsString = tags ? tags.join(', ') : '';
+
+  // 更新 meta tags
+  html = html.replace(/<title>Reading - \(b\)-log<\/title>/, `<title>${title} - (b)-log</title>`);
+  html = html.replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${summary}"`);
+  html = html.replace(/<link rel="canonical" href="" id="canonical-url">/, `<link rel="canonical" href="${fullUrl}" id="canonical-url">`);
+  html = html.replace(/<meta name="keywords" content="" id="meta-keywords">/, `<meta name="keywords" content="${tagsString}" id="meta-keywords">`);
+
+  // Open Graph
+  html = html.replace(/<meta property="og:url" content="" id="og-url">/, `<meta property="og:url" content="${fullUrl}" id="og-url">`);
+  html = html.replace(/<meta property="og:title" content="Loading - \(b\)-log" id="og-title">/, `<meta property="og:title" content="${title}" id="og-title">`);
+  html = html.replace(/<meta property="og:description" content="" id="og-description">/, `<meta property="og:description" content="${summary}" id="og-description">`);
+  html = html.replace(/<meta property="og:image" content="" id="og-image">/, `<meta property="og:image" content="${ogImageUrl}" id="og-image">`);
+  html = html.replace(/<meta property="article:published_time" content="" id="og-published-time">/, `<meta property="article:published_time" content="${publishedAt}" id="og-published-time">`);
+  html = html.replace(/<meta property="article:modified_time" content="" id="og-modified-time">/, `<meta property="article:modified_time" content="${updatedAt}" id="og-modified-time">`);
+  html = html.replace(/<meta property="article:section" content="" id="og-section">/, `<meta property="article:section" content="${category}" id="og-section">`);
+  html = html.replace(/<meta property="article:tag" content="" id="og-tags">/, `<meta property="article:tag" content="${tagsString}" id="og-tags">`);
+
+  // Twitter
+  html = html.replace(/<meta property="twitter:url" content="" id="twitter-url">/, `<meta property="twitter:url" content="${fullUrl}" id="twitter-url">`);
+  html = html.replace(/<meta property="twitter:title" content="Loading - \(b\)-log" id="twitter-title">/, `<meta property="twitter:title" content="${title}" id="twitter-title">`);
+  html = html.replace(/<meta property="twitter:description" content="" id="twitter-description">/, `<meta property="twitter:description" content="${summary}" id="twitter-description">`);
+  html = html.replace(/<meta property="twitter:image" content="" id="twitter-image">/, `<meta property="twitter:image" content="${ogImageUrl}" id="twitter-image">`);
 
   return html;
 }
@@ -64,9 +104,9 @@ function generateRedirects() {
       fs.mkdirSync(postDir, { recursive: true });
     }
 
-    // 生成 index.html（使用完整的文章頁面結構）
+    // 生成 index.html（使用完整的文章頁面結構，包含 Open Graph meta tags）
     const indexPath = path.join(postDir, 'index.html');
-    const html = generatePostHTML(title, slug);
+    const html = generatePostHTML(post);
     fs.writeFileSync(indexPath, html, 'utf8');
 
     console.log(`✅ 已建立：${categorySlug}/${slug}/index.html`);
