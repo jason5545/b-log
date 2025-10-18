@@ -313,7 +313,7 @@ contentEl.querySelectorAll('img, source').forEach(el => {
 
 ## 效能成果：實測數據
 
-### 檔案大小優化
+### 檔案大小最佳化
 
 實測 3 張演唱會照片的轉換結果：
 
@@ -394,7 +394,7 @@ contentEl.querySelectorAll('img, source').forEach(el => {
 - 保留原始檔案作為降級方案
 - 使用 `loading="lazy"` 改善初始載入
 
-### 進階優化方向
+### 進階最佳化方向
 
 1. **響應式圖片**：
    ```html
