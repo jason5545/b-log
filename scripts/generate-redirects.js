@@ -1,14 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-// 中文分類到英文的映射
-const categoryMapping = {
-  'AI 分析': 'ai-analysis',
-  '技術開發': 'tech-development',
-  '技術分析': 'tech-analysis',
-  '開發哲學': 'dev-philosophy',
-  '生活記事': 'life-stories'
-};
+// 從集中式設定檔載入分類映射
+const categoriesConfigPath = path.join(__dirname, '../config/categories.json');
+const categoriesConfig = JSON.parse(fs.readFileSync(categoriesConfigPath, 'utf8'));
+const categoryMapping = categoriesConfig.categoryMapping;
 
 // 生成完整的文章頁面 HTML（複製 post.html 結構）
 function generatePostHTML(post) {

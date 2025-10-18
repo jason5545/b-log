@@ -2,6 +2,32 @@ const POSTS_JSON = '/data/posts.json';
 const POSTS_ROOT = '/content/posts/';
 const GITHUB_USERNAME = 'jason5545';
 const GITHUB_REPO = 'b-log';
+// 全域變數儲存分類映射（從設定檔載入）
+let categoryMapping = null;
+
+// 載入分類設定
+async function loadCategoryMapping() {
+  if (categoryMapping) return categoryMapping;
+  
+  try {
+    const response = await fetch('/config/categories.json');
+    const config = await response.json();
+    categoryMapping = config.categoryMapping;
+    return categoryMapping;
+  } catch (error) {
+    console.error('無法載入分類設定，使用預設值', error);
+    // 降級方案：使用硬編碼的映射
+    categoryMapping = {
+      'AI 分析': 'ai-analysis',
+      '技術開發': 'tech-development',
+      '技術分析': 'tech-analysis',
+      '開發哲學': 'dev-philosophy',
+      '生活記事': 'life-stories'
+    };
+    return categoryMapping;
+  }
+}
+
 
 // Decode all network responses as UTF-8 to keep non-ASCII content intact.
 async function readUtf8Text(response) {
