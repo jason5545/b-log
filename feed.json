@@ -6,6 +6,18 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "webp-automation-path-compatibility",
+      "url": "https://b-log.to/post.html?slug=webp-automation-path-compatibility",
+      "title": "WebP 自動轉換與路徑相容性：為靜態部落格打造完整的圖片處理流程",
+      "content_text": "記錄我如何從零打造一個完整的圖片處理自動化系統，解決從格式轉換到路徑相容性的所有挑戰。使用 Sharp + GitHub Actions 實作 WebP 自動轉換，並深度調查解決 WordPress 風格 URL 導致的圖片路徑問題。系統實測節省 12.7% 檔案大小，預期 LCP 改善 15-30%，完整的降級方案確保瀏覽器相容性。",
+      "date_published": "2025-10-18T11:00:00.000Z",
+      "date_modified": "2025-10-18T11:00:00.000Z",
+      "tags": ["WebP", "GitHub Actions", "圖片最佳化", "路徑相容性", "自動化", "Sharp"],
+      "authors": [
+        { "name": "Jason Chien" }
+      ]
+    },
+    {
       "id": "cloudinary-chinese-og-image-solution",
       "url": "https://b-log.to/post.html?slug=cloudinary-chinese-og-image-solution",
       "title": "解決 Facebook 分享預覽的中文顯示問題：Cloudinary 整合實戰",
