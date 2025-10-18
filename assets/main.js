@@ -480,7 +480,17 @@ async function renderMarkdownContent(slug, contentEl) {
   } else {
     contentEl.textContent = markdown;
   }
-  
+
+  // 修正圖片路徑：將相對路徑轉換為絕對路徑
+  // 解決 WordPress 風格 URL 的路徑解析問題
+  contentEl.querySelectorAll('img, source').forEach(el => {
+    const attr = el.tagName === 'SOURCE' ? 'srcset' : 'src';
+    const path = el.getAttribute(attr);
+    if (path && path.startsWith('content/')) {
+      el.setAttribute(attr, '/' + path);
+    }
+  });
+
   // 增強程式碼區塊
   enhanceCodeBlocks(contentEl);
 }

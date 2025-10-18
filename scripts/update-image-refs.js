@@ -58,9 +58,10 @@ function convertToPictureTag(match, alt, imagePath, markdownDir) {
   let normalizedWebpPath = webpPath.replace(/\\/g, '/');
   let normalizedImagePath = imagePath.replace(/\\/g, '/');
 
-  // 將相對於 Markdown 的路徑（../img/）轉換為相對於根目錄的路徑（content/img/）
-  normalizedWebpPath = normalizedWebpPath.replace(/^\.\.\/img\//, 'content/img/');
-  normalizedImagePath = normalizedImagePath.replace(/^\.\.\/img\//, 'content/img/');
+  // 將相對於 Markdown 的路徑（../img/）轉換為絕對路徑（/content/img/）
+  // 絕對路徑確保在任何頁面深度都能正確解析
+  normalizedWebpPath = normalizedWebpPath.replace(/^\.\.\/img\//, '/content/img/');
+  normalizedImagePath = normalizedImagePath.replace(/^\.\.\/img\//, '/content/img/');
 
   // 生成 <picture> 標籤
   return `<picture>
