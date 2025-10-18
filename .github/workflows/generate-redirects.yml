@@ -48,7 +48,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add ai-analysis/ tech-development/ tech-analysis/ dev-philosophy/
+          git add ai-analysis/ tech-development/ tech-analysis/ dev-philosophy/ life-stories/
           git commit -m "自動生成重定向頁面
 
           由 GitHub Actions 自動生成
