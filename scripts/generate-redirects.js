@@ -35,10 +35,18 @@ function generatePostHTML(post) {
   if (coverImage) {
     ogImageUrl = `${baseUrl}/${coverImage}`;
   } else {
-    // 使用 og-image.vercel.app 動態生成圖片
+    // 使用 Cloudinary 動態生成圖片（支援中文 Noto Sans TC Bold 字型）
+    const cloudName = 'dynj7181i';
+    const backgroundId = 'og-background_cbst7j';
+    const fontId = 'notosanstc-bold.ttf';
     const encodedTitle = encodeURIComponent(title);
-    const color = (accentColor || '#556bff').replace('#', '');
-    ogImageUrl = `https://og-image.vercel.app/${encodedTitle}.png?theme=light&md=1&fontSize=100px&images=https%3A%2F%2Fb-log.to%2Ffavicon.ico`;
+
+    ogImageUrl = `https://res.cloudinary.com/${cloudName}/image/upload/` +
+      `c_fill,w_1200,h_630/` +                      // 背景尺寸
+      `co_rgb:ffffff,` +                             // 文字顏色：白色
+      `l_text:${fontId}_60_center:${encodedTitle},w_1000,c_fit/` +  // 文字覆蓋（60px，限寬 1000px）
+      `fl_layer_apply,g_center/` +                   // 文字置中
+      `${backgroundId}.png`;                         // 背景圖片
   }
 
   // 生成 tags 字串
