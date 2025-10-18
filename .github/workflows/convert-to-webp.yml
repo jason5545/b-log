@@ -1,0 +1,77 @@
+name: 自動轉換圖片為 WebP
+
+# 觸發條件：當 content/img/ 目錄下的圖片被推送時
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'content/img/**/*.jpg'
+      - 'content/img/**/*.jpeg'
+      - 'content/img/**/*.png'
+
+  # 允許手動觸發
+  workflow_dispatch:
+
+# 設定權限
+permissions:
+  contents: write
+
+jobs:
+  convert-to-webp:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 檢出程式碼
+      - name: 檢出程式碼
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2. 設定 Node.js
+      - name: 設定 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. 安裝 sharp（圖片處理套件）
+      - name: 安裝 sharp
+        run: npm install sharp
+
+      # 4. 轉換圖片為 WebP
+      - name: 轉換圖片為 WebP
+        run: node scripts/convert-to-webp.js
+
+      # 5. 更新 Markdown 文章中的圖片參照
+      - name: 更新 Markdown 圖片參照
+        run: node scripts/update-image-refs.js
+
+      # 6. 檢查是否有變更
+      - name: 檢查變更
+        id: check_changes
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      # 7. 提交並推送變更
+      - name: 提交變更
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add content/img/ content/posts/
+          git commit -m "🖼️ 自動轉換圖片為 WebP 格式
+
+          - 使用 sharp 套件轉換為高品質 WebP
+          - 品質設定：85
+          - 更新 Markdown 文章使用 <picture> 標籤
+          - 保留原始圖片作為降級方案"
+          git push
+
+      # 8. 顯示結果
+      - name: 顯示結果
+        if: steps.check_changes.outputs.has_changes == 'false'
+        run: echo "✅ 沒有需要轉換的圖片"
