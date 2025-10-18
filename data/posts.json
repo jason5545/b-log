@@ -1,5 +1,24 @@
 [
   {
+    "slug": "claude-nerf-analysis",
+    "title": "Claude 真的被 nerf 了嗎？",
+    "summary": "從技術角度分析 Claude Code 的品質問題與用量限制，探討 Anthropic 8-9 月的基礎設施 bug、修復時間表，以及使用方式對 AI 協作開發的關鍵影響。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-18T10:50:00.000Z",
+    "updatedAt": "2025-10-18T10:50:00.000Z",
+    "readingTime": "20 min",
+    "tags": [
+      "Claude",
+      "Anthropic",
+      "AI分析",
+      "用量限制",
+      "技術分析",
+      "開發哲學"
+    ],
+    "accentColor": "#e74c3c"
+  },
+  {
     "slug": "webp-automation-path-compatibility",
     "title": "WebP 自動轉換與路徑相容性：為靜態部落格打造完整的圖片處理流程",
     "summary": "從格式轉換到路徑相容性，記錄如何從零打造自動化圖片處理系統，解決 WordPress 風格 URL 的路徑挑戰，並實現 GitHub Actions 全自動化流程。",

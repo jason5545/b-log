@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "claude-nerf-analysis",
+      "url": "https://b-log.to/post.html?slug=claude-nerf-analysis",
+      "title": "Claude 真的被 nerf 了嗎？",
+      "content_text": "從技術角度分析 Claude Code 的品質問題與用量限制，探討 Anthropic 8-9 月的基礎設施 bug、修復時間表，以及使用方式對 AI 協作開發的關鍵影響。包含路由錯誤、輸出損壞、XLA 編譯器 bug 的詳細分析，以及有效與無效使用方式的對比。",
+      "date_published": "2025-10-18T10:50:00.000Z",
+      "date_modified": "2025-10-18T10:50:00.000Z",
+      "tags": [
+        "Claude",
+        "Anthropic",
+        "AI分析",
+        "用量限制",
+        "技術分析",
+        "開發哲學"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "webp-automation-path-compatibility",
       "url": "https://b-log.to/post.html?slug=webp-automation-path-compatibility",
       "title": "WebP 自動轉換與路徑相容性：為靜態部落格打造完整的圖片處理流程",
