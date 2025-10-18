@@ -610,6 +610,7 @@ a:focus {
 @media (min-width: 1200px) {
   .article-layout {
     grid-template-columns: minmax(0, 1fr) 360px;
+    align-items: start;
   }
 }
 
