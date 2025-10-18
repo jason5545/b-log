@@ -10,8 +10,8 @@
       "url": "https://b-log.to/post.html?slug=claude-nerf-analysis",
       "title": "Claude 真的被 nerf 了嗎？",
       "content_text": "從技術角度分析 Claude Code 的品質問題與用量限制，探討 Anthropic 8-9 月的基礎設施 bug、修復時間表，以及使用方式對 AI 協作開發的關鍵影響。包含路由錯誤、輸出損壞、XLA 編譯器 bug 的詳細分析，以及有效與無效使用方式的對比。",
-      "date_published": "2025-10-18T10:50:00.000Z",
-      "date_modified": "2025-10-18T10:50:00.000Z",
+      "date_published": "2025-10-18T11:05:00.000Z",
+      "date_modified": "2025-10-18T11:05:00.000Z",
       "tags": [
         "Claude",
         "Anthropic",
