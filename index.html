@@ -34,10 +34,9 @@
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#556bff">
 
-  <!-- 資源提示 - 加速外部資源連接 -->
+  <!-- 資源提示 - 只保留字體 CDN -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
   <!-- 關鍵 CSS 內聯 - 首屏渲染 -->
   <style>
@@ -163,20 +162,11 @@
     }
   </style>
 
-  <!-- 預載關鍵資源 -->
-  <link rel="preload" href="assets/styles.css" as="style">
-  <link rel="preload" href="assets/main.js" as="script">
+  <!-- 字型載入 - 簡單直接 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- 預載字型 - 減少 CLS -->
-  <link rel="preload" href="https://fonts.gstatic.com/s/notosanstc/v35/-nFkOG829Oofr2wohFbTp9i9kwMB1V-BE_.woff2" as="font" type="font/woff2" crossorigin>
-
-  <!-- 字型載入 - 使用 display=swap 避免阻塞 -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
-
-  <!-- 完整樣式表 - 非阻塞載入 -->
-  <link rel="stylesheet" href="assets/styles.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="assets/styles.css"></noscript>
+  <!-- 完整樣式表 -->
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body class="home">
   <div class="page-chrome">
@@ -276,8 +266,8 @@
     </footer>
   </div>
 
-  <!-- JavaScript - 延遲載入，不阻塞渲染 -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
-  <script src="assets/main.js" type="module" defer></script>
+  <!-- JavaScript - CSR 核心，同步載入 -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="assets/main.js" type="module"></script>
 </body>
 </html>
