@@ -50,7 +50,7 @@
 - API 簡潔易用
 - 支援完整的 WebP 參數調整
 
-**範例代碼**：
+**範例程式碼**：
 ```javascript
 await sharp(imagePath)
   .webp({
