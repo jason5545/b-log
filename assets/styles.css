@@ -758,6 +758,41 @@ a:focus {
   }
 }
 
+/* 圖片樣式 */
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 2rem auto;
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
+}
+
+.article-body picture {
+  display: block;
+  margin: 2rem 0;
+}
+
+.article-body picture img {
+  margin: 0 auto;
+}
+
+@media (min-width: 1600px) {
+  .article-body img {
+    margin: 2.5rem auto;
+  }
+
+  .article-body picture {
+    margin: 2.5rem 0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .article-body img {
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  }
+}
+
 .article-body pre {
   background: #1e1e2e;
   color: #cdd6f4;
