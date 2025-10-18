@@ -937,7 +937,8 @@ function slugToPath(slug, category) {
     'AI 分析': 'ai-analysis',
     '技術開發': 'tech-development',
     '技術分析': 'tech-analysis',
-    '開發哲學': 'dev-philosophy'
+    '開發哲學': 'dev-philosophy',
+    '生活記事': 'life-stories'
   };
 
   // 如果有分類，生成 WordPress 風格的 URL（絕對路徑）

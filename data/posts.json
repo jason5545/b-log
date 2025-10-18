@@ -106,5 +106,17 @@
     "readingTime": "8 min",
     "tags": ["AI", "政策", "哲學差異", "OpenAI", "Anthropic"],
     "accentColor": "#e74c3c"
+  },
+  {
+    "slug": "lisa-concert-believe-in-myself",
+    "title": "Believe in myself - 獻給在某時某刻聽到這首歌的某個人",
+    "summary": "記錄人生第一次演唱會體驗，從 YouTube 影片開始的追星之旅，到成功參加 LiSA 台灣首場 full band 演唱會的感動故事。即使面對重重困難，依然堅持追夢的勇氣。",
+    "category": "生活記事",
+    "author": "Jason Chien",
+    "publishedAt": "2015-07-12T00:00:00.000Z",
+    "updatedAt": "2015-07-12T00:00:00.000Z",
+    "readingTime": "10 min",
+    "tags": ["LiSA", "演唱會", "音樂", "回憶", "夢想"],
+    "accentColor": "#e74c3c"
   }
 ]

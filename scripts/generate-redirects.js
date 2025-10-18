@@ -6,7 +6,8 @@ const categoryMapping = {
   'AI 分析': 'ai-analysis',
   '技術開發': 'tech-development',
   '技術分析': 'tech-analysis',
-  '開發哲學': 'dev-philosophy'
+  '開發哲學': 'dev-philosophy',
+  '生活記事': 'life-stories'
 };
 
 // 生成完整的文章頁面 HTML（複製 post.html 結構）
