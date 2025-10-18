@@ -162,8 +162,8 @@
     }
   </style>
 
-  <!-- 字型載入 - 簡單直接 -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  <!-- 字型載入 - 不阻塞渲染 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=optional" rel="stylesheet">
 
   <!-- 完整樣式表 -->
   <link rel="stylesheet" href="assets/styles.css">
@@ -267,7 +267,7 @@
   </div>
 
   <!-- JavaScript - CSR 核心，同步載入 -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="assets/marked.min.js"></script>
   <script src="assets/main.js" type="module"></script>
 </body>
 </html>
