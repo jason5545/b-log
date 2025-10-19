@@ -16,7 +16,7 @@ vfio-pci 0000:01:00.1: Unable to change power state from D3cold to D0, device in
 
 D3cold。這個詞在接下來的日子裡會變成我的噩夢。它是 PCIe 裝置的最深層睡眠狀態，理論上應該能被喚醒。但我的顯卡顯然不這麼想。
 
-我開始做功課。BIOS 裡關掉 ASPM，在 GRUB 加上 `pcie_aspm=off pcie_port_pm=off`，把 `d3cold_allowed` 設成 0，禁用所有可能讓顯卡睡著的東西。測試。失敗。再測試。再失敗。
+我開始做功課。BIOS 裡關掉 ASPM，在 GRUB 加上 `pcie_aspm=off pcie_port_pm=off`，把 `d3cold_allowed` 設成 0，停用所有可能讓顯卡睡著的東西。測試。失敗。再測試。再失敗。
 
 然後我注意到一個細節：在裸機 Windows 的時候，HDMI 偶爾會閃一下。當時我以為是螢幕問題，沒多想。現在回頭看，那是第一個線索。
 
