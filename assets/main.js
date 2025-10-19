@@ -138,9 +138,286 @@ const ThemeManager = {
   }
 };
 
+// 生成語音播放器 HTML
+function generateAudioPlayerHTML(audioFile) {
+  return `<div class="audio-player">
+  <audio preload="metadata">
+    <source src="/content/audio/${audioFile}" type="audio/mp4">
+    您的瀏覽器不支援音訊播放。
+  </audio>
+  <div class="audio-controls">
+    <button class="audio-btn play-pause" aria-label="播放/暫停">
+      <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+      <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+      </svg>
+    </button>
+    <div class="audio-progress-container">
+      <input type="range" class="audio-progress" min="0" max="100" value="0" step="0.1" aria-label="播放進度">
+      <div class="audio-time">
+        <span class="current-time">0:00</span>
+        <span class="duration">0:00</span>
+      </div>
+    </div>
+    <div class="audio-speed">
+      <button class="speed-btn" aria-label="播放速度">1.0x</button>
+      <div class="speed-menu" style="display:none">
+        <button data-speed="0.75">0.75x</button>
+        <button data-speed="1.0" class="active">1.0x</button>
+        <button data-speed="1.25">1.25x</button>
+        <button data-speed="1.5">1.5x</button>
+        <button data-speed="2.0">2.0x</button>
+      </div>
+    </div>
+    <div class="audio-volume">
+      <button class="volume-btn" aria-label="音量">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+        </svg>
+      </button>
+      <input type="range" class="volume-slider" min="0" max="100" value="100" aria-label="音量控制">
+    </div>
+  </div>
+</div>`;
+}
+
+// 語音播放器管理
+const AudioPlayerManager = {
+  STORAGE_KEY_PREFIX: 'audio-player-',
+
+  init() {
+    const audioPlayer = document.querySelector('.audio-player');
+    if (!audioPlayer) return;
+
+    const audio = audioPlayer.querySelector('audio');
+    if (!audio) return;
+
+    // 取得播放器元素
+    const playPauseBtn = audioPlayer.querySelector('.play-pause');
+    const playIcon = audioPlayer.querySelector('.play-icon');
+    const pauseIcon = audioPlayer.querySelector('.pause-icon');
+    const progressBar = audioPlayer.querySelector('.audio-progress');
+    const currentTimeEl = audioPlayer.querySelector('.current-time');
+    const durationEl = audioPlayer.querySelector('.duration');
+    const speedBtn = audioPlayer.querySelector('.speed-btn');
+    const speedMenu = audioPlayer.querySelector('.speed-menu');
+    const speedOptions = speedMenu.querySelectorAll('[data-speed]');
+    const volumeBtn = audioPlayer.querySelector('.volume-btn');
+    const volumeSlider = audioPlayer.querySelector('.volume-slider');
+
+    // 取得當前文章的 slug 作為儲存鍵值
+    const urlObj = new URL(window.location.href);
+    const slug = extractSlugFromUrl(urlObj);
+    const storageKey = this.STORAGE_KEY_PREFIX + slug;
+
+    // 從 localStorage 載入播放速度
+    const savedSpeed = localStorage.getItem(storageKey + '-speed');
+    if (savedSpeed) {
+      audio.playbackRate = parseFloat(savedSpeed);
+      speedBtn.textContent = savedSpeed + 'x';
+      speedOptions.forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.speed === savedSpeed);
+      });
+    }
+
+    // 從 localStorage 載入音量
+    const savedVolume = localStorage.getItem('audio-volume');
+    if (savedVolume) {
+      audio.volume = parseFloat(savedVolume);
+      volumeSlider.value = parseFloat(savedVolume) * 100;
+    }
+
+    // 從 localStorage 載入播放進度
+    const savedTime = localStorage.getItem(storageKey + '-time');
+    if (savedTime && parseFloat(savedTime) > 0) {
+      audio.currentTime = parseFloat(savedTime);
+    }
+
+    // 播放/暫停
+    playPauseBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    });
+
+    // 更新播放/暫停圖示
+    audio.addEventListener('play', () => {
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+    });
+
+    audio.addEventListener('pause', () => {
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+    });
+
+    // 更新進度條
+    audio.addEventListener('timeupdate', () => {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      progressBar.value = percent;
+      currentTimeEl.textContent = this.formatTime(audio.currentTime);
+
+      // 每 5 秒儲存一次進度
+      if (Math.floor(audio.currentTime) % 5 === 0) {
+        localStorage.setItem(storageKey + '-time', audio.currentTime.toString());
+      }
+    });
+
+    // 載入後顯示總時長
+    audio.addEventListener('loadedmetadata', () => {
+      durationEl.textContent = this.formatTime(audio.duration);
+    });
+
+    // 如果已經載入，直接顯示
+    if (audio.duration) {
+      durationEl.textContent = this.formatTime(audio.duration);
+    }
+
+    // 拖曳進度條
+    progressBar.addEventListener('input', () => {
+      const time = (progressBar.value / 100) * audio.duration;
+      audio.currentTime = time;
+    });
+
+    // 播放結束時重置進度
+    audio.addEventListener('ended', () => {
+      localStorage.removeItem(storageKey + '-time');
+      progressBar.value = 0;
+    });
+
+    // 速度控制選單
+    speedBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      speedMenu.style.display = speedMenu.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // 點選速度選項
+    speedOptions.forEach(opt => {
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const speed = opt.dataset.speed;
+        audio.playbackRate = parseFloat(speed);
+        speedBtn.textContent = speed + 'x';
+        localStorage.setItem(storageKey + '-speed', speed);
+
+        // 更新選中狀態
+        speedOptions.forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+
+        speedMenu.style.display = 'none';
+      });
+    });
+
+    // 點選其他地方關閉選單
+    document.addEventListener('click', () => {
+      speedMenu.style.display = 'none';
+    });
+
+    // 音量控制
+    volumeSlider.addEventListener('input', () => {
+      const volume = volumeSlider.value / 100;
+      audio.volume = volume;
+      localStorage.setItem('audio-volume', volume.toString());
+
+      // 更新音量圖示
+      this.updateVolumeIcon(volumeBtn, volume);
+    });
+
+    // 音量按鈕切換靜音
+    volumeBtn.addEventListener('click', () => {
+      if (audio.volume > 0) {
+        audio.dataset.previousVolume = audio.volume.toString();
+        audio.volume = 0;
+        volumeSlider.value = 0;
+      } else {
+        const previousVolume = parseFloat(audio.dataset.previousVolume || '1');
+        audio.volume = previousVolume;
+        volumeSlider.value = previousVolume * 100;
+      }
+      this.updateVolumeIcon(volumeBtn, audio.volume);
+    });
+
+    // 初始化音量圖示
+    this.updateVolumeIcon(volumeBtn, audio.volume);
+
+    // 鍵盤快捷鍵
+    document.addEventListener('keydown', (e) => {
+      // 如果焦點在輸入框中，忽略快捷鍵
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return;
+      }
+
+      // 空白鍵：播放/暫停
+      if (e.code === 'Space') {
+        e.preventDefault();
+        playPauseBtn.click();
+      }
+
+      // 左箭頭：倒退 10 秒
+      if (e.code === 'ArrowLeft') {
+        e.preventDefault();
+        audio.currentTime = Math.max(0, audio.currentTime - 10);
+      }
+
+      // 右箭頭：快進 10 秒
+      if (e.code === 'ArrowRight') {
+        e.preventDefault();
+        audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+      }
+
+      // 上箭頭：音量 +10%
+      if (e.code === 'ArrowUp') {
+        e.preventDefault();
+        audio.volume = Math.min(1, audio.volume + 0.1);
+        volumeSlider.value = audio.volume * 100;
+        localStorage.setItem('audio-volume', audio.volume.toString());
+        this.updateVolumeIcon(volumeBtn, audio.volume);
+      }
+
+      // 下箭頭：音量 -10%
+      if (e.code === 'ArrowDown') {
+        e.preventDefault();
+        audio.volume = Math.max(0, audio.volume - 0.1);
+        volumeSlider.value = audio.volume * 100;
+        localStorage.setItem('audio-volume', audio.volume.toString());
+        this.updateVolumeIcon(volumeBtn, audio.volume);
+      }
+    });
+  },
+
+  formatTime(seconds) {
+    if (isNaN(seconds) || !isFinite(seconds)) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  },
+
+  updateVolumeIcon(volumeBtn, volume) {
+    const svg = volumeBtn.querySelector('svg path');
+    if (!svg) return;
+
+    if (volume === 0) {
+      // 靜音圖示
+      svg.setAttribute('d', 'M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z');
+    } else if (volume < 0.5) {
+      // 低音量圖示
+      svg.setAttribute('d', 'M7 9v6h4l5 5V4l-5 5H7z');
+    } else {
+      // 正常音量圖示
+      svg.setAttribute('d', 'M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z');
+    }
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   // 初始化深色模式
   ThemeManager.init();
+  // 初始化語音播放器
+  AudioPlayerManager.init();
   const bodyClassList = document.body.classList;
 
   if (bodyClassList.contains('home')) {
@@ -533,7 +810,16 @@ async function renderMarkdownContent(slug, contentEl) {
     throw new Error(`Markdown fetch failed with status ${response.status}`);
   }
 
-  const markdown = await readUtf8Text(response);
+  let markdown = await readUtf8Text(response);
+
+  // 偵測並替換語音播放器標記
+  const audioMatch = markdown.match(/<!--\s*audio:\s*(.+?)\s*-->/);
+  if (audioMatch) {
+    const audioFile = audioMatch[1];
+    const audioPlayerHTML = generateAudioPlayerHTML(audioFile);
+    markdown = markdown.replace(/<!--\s*audio:\s*.+?\s*-->/, audioPlayerHTML);
+  }
+
   if (window.marked) {
     contentEl.innerHTML = window.marked.parse(markdown);
   } else {

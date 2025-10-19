@@ -1,5 +1,7 @@
 # Claude 真的被 nerf 了嗎？
 
+<!-- audio: Claude_AI_變笨還是被Nerf？深入剖析技術真相、用量限制與「憑感覺編碼」的陷阱.m4a -->
+
 如果你最近逛過 Reddit 的 r/ClaudeAI 或相關論壇，一定看過這類抱怨：
 
 > "Claude Code 完全不能用了"  

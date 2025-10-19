@@ -1316,3 +1316,361 @@ a:focus {
     transition: none !important;
   }
 }
+
+/* ==================== 語音播放器樣式 ==================== */
+
+.audio-player {
+  background: var(--card-background, #fff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.audio-player:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.audio-player audio {
+  display: none;
+}
+
+.audio-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* 播放/暫停按鈕 */
+.audio-btn {
+  background: var(--accent-color, #556bff);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.audio-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(85, 107, 255, 0.3);
+}
+
+.audio-btn:active {
+  transform: scale(0.95);
+}
+
+.audio-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* 進度條容器 */
+.audio-progress-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.audio-progress {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(
+    to right,
+    var(--accent-color, #556bff) 0%,
+    var(--accent-color, #556bff) 0%,
+    var(--border-color, #e0e0e0) 0%,
+    var(--border-color, #e0e0e0) 100%
+  );
+  outline: none;
+  cursor: pointer;
+  transition: height 0.2s ease;
+}
+
+.audio-progress:hover {
+  height: 8px;
+}
+
+.audio-progress::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-color, #556bff);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.audio-progress::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 2px 8px rgba(85, 107, 255, 0.4);
+}
+
+.audio-progress::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-color, #556bff);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.audio-progress::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 2px 8px rgba(85, 107, 255, 0.4);
+}
+
+/* 時間顯示 */
+.audio-time {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-secondary, #666);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 速度控制 */
+.audio-speed {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.speed-btn {
+  background: var(--card-background, #fff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+  color: var(--text-primary, #333);
+}
+
+.speed-btn:hover {
+  background: var(--hover-background, #f5f5f5);
+  border-color: var(--accent-color, #556bff);
+}
+
+.speed-menu {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  right: 0;
+  background: var(--card-background, #fff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  z-index: 10;
+  min-width: 80px;
+}
+
+.speed-menu button {
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  color: var(--text-primary, #333);
+}
+
+.speed-menu button:hover {
+  background: var(--hover-background, #f5f5f5);
+}
+
+.speed-menu button.active {
+  background: var(--accent-color, #556bff);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 音量控制 */
+.audio-volume {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.volume-btn {
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-secondary, #666);
+}
+
+.volume-btn:hover {
+  background: var(--hover-background, #f5f5f5);
+  color: var(--accent-color, #556bff);
+}
+
+.volume-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 80px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border-color, #e0e0e0);
+  outline: none;
+  cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-color, #556bff);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-color, #556bff);
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease;
+}
+
+.volume-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* 深色模式支援 */
+@media (prefers-color-scheme: dark) {
+  .audio-player {
+    background: var(--card-background, #1e1e1e);
+    border-color: var(--border-color, #333);
+  }
+
+  .speed-btn,
+  .speed-menu {
+    background: var(--card-background, #1e1e1e);
+    border-color: var(--border-color, #333);
+    color: var(--text-primary, #e0e0e0);
+  }
+
+  .speed-menu button {
+    color: var(--text-primary, #e0e0e0);
+  }
+
+  .speed-menu button:hover {
+    background: var(--hover-background, #2a2a2a);
+  }
+
+  .volume-btn:hover {
+    background: var(--hover-background, #2a2a2a);
+  }
+}
+
+[data-theme="dark"] .audio-player {
+  background: var(--card-background, #1e1e1e);
+  border-color: var(--border-color, #333);
+}
+
+[data-theme="dark"] .speed-btn,
+[data-theme="dark"] .speed-menu {
+  background: var(--card-background, #1e1e1e);
+  border-color: var(--border-color, #333);
+  color: var(--text-primary, #e0e0e0);
+}
+
+[data-theme="dark"] .speed-menu button {
+  color: var(--text-primary, #e0e0e0);
+}
+
+[data-theme="dark"] .speed-menu button:hover {
+  background: var(--hover-background, #2a2a2a);
+}
+
+[data-theme="dark"] .volume-btn:hover {
+  background: var(--hover-background, #2a2a2a);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .audio-controls {
+    flex-wrap: wrap;
+  }
+
+  .audio-progress-container {
+    order: 3;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .audio-volume {
+    order: 2;
+  }
+
+  .volume-slider {
+    width: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .audio-player {
+    padding: 1rem;
+  }
+
+  .audio-controls {
+    gap: 0.75rem;
+  }
+
+  .audio-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .audio-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .volume-slider {
+    display: none;
+  }
+}
