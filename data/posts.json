@@ -239,7 +239,8 @@
       "OpenAI",
       "Anthropic"
     ],
-    "accentColor": "#e74c3c"
+    "accentColor": "#e74c3c",
+    "hasAudio": true
   },
   {
     "slug": "lisa-concert-2017-ssa-ldp",
