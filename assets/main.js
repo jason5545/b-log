@@ -1131,12 +1131,86 @@ function getPostImage(post, baseUrl) {
     // 如果是完整 URL，直接使用
     return post.coverImage;
   }
-  
+
   // 如果沒有封面圖片，使用一個簡單的漸變圖片生成服務
   const accentColor = post.accentColor || '#556bff';
   const title = encodeURIComponent(post.title || 'Untitled Post');
-  
+
   // 使用第三方服務生成簡單的 OG 圖片
   // 這裡使用 https://og-image.vercel.app/ 作為例子
   return `https://og-image.vercel.app/${title}.png?theme=light&md=1&fontSize=100px&images=https%3A%2F%2Fb-log.to%2Ffavicon.ico`;
 }
+
+// ============================================================
+// View Transition API 支援
+// ============================================================
+
+/**
+ * 為文章卡片添加 view-transition-name
+ * 這樣在導航時可以有流暢的過渡效果
+ */
+function setupViewTransitionNames() {
+  // 為首頁的精選文章添加固定的 transition name
+  const featuredTitle = document.querySelector('#hero-link');
+  if (featuredTitle) {
+    featuredTitle.style.viewTransitionName = 'featured-title';
+  }
+
+  // 為首頁的文章卡片添加唯一的 transition name（基於 slug）
+  document.querySelectorAll('.post-card').forEach((card, index) => {
+    const link = card.querySelector('.post-link');
+    if (link) {
+      const url = new URL(link.href, window.location.origin);
+      const slug = extractSlugFromUrl(url);
+      if (slug) {
+        card.style.viewTransitionName = `post-card-${slug}`;
+      } else {
+        card.style.viewTransitionName = `post-card-${index}`;
+      }
+    }
+  });
+
+  // 為文章頁面的標題添加 transition name
+  const postTitle = document.querySelector('#post-title');
+  if (postTitle) {
+    const urlObj = new URL(window.location.href);
+    const slug = extractSlugFromUrl(urlObj);
+    if (slug) {
+      postTitle.style.viewTransitionName = `post-title-${slug}`;
+    }
+  }
+
+  // 為文章頁面的 hero 區域添加 transition name
+  const postHero = document.querySelector('#post-hero');
+  if (postHero) {
+    const urlObj = new URL(window.location.href);
+    const slug = extractSlugFromUrl(urlObj);
+    if (slug) {
+      postHero.style.viewTransitionName = `post-hero-${slug}`;
+    }
+  }
+}
+
+/**
+ * 從 URL 提取 slug
+ */
+function extractSlugFromUrl(urlObj) {
+  // 從查詢參數提取
+  const params = new URLSearchParams(urlObj.search);
+  let slug = params.get('slug');
+
+  // 從路徑提取（WordPress 風格）
+  if (!slug) {
+    const pathParts = urlObj.pathname.split('/').filter(p => p && p !== 'index.html' && p !== 'post.html');
+    if (pathParts.length >= 2) {
+      slug = pathParts[pathParts.length - 1];
+    }
+  }
+
+  return slug;
+}
+
+// 在頁面載入完成後設定 View Transition Names
+document.addEventListener('DOMContentLoaded', () => {
+  setupViewTransitionNames();
+});

@@ -1148,3 +1148,171 @@ a:focus {
     padding: 1.6rem;
   }
 }
+
+/* ============================================================
+   View Transition API 動畫配置
+   ============================================================ */
+
+/* 預設的頁面過渡動畫 */
+::view-transition-old(root) {
+  animation: fade-out 0.3s ease-out;
+}
+
+::view-transition-new(root) {
+  animation: fade-in 0.4s ease-in;
+}
+
+/* 淡出動畫 */
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* 淡入 + 向上滑動動畫 */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 為文章卡片添加更平滑的過渡效果 */
+::view-transition-old(*[style*="view-transition-name: post-card-"]),
+::view-transition-new(*[style*="view-transition-name: post-card-"]) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(*[style*="view-transition-name: post-card-"]) {
+  animation-name: card-fade-out;
+}
+
+::view-transition-new(*[style*="view-transition-name: post-card-"]) {
+  animation-name: card-fade-in;
+}
+
+/* 文章卡片淡出動畫（縮小 + 淡出） */
+@keyframes card-fade-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* 文章卡片淡入動畫（放大 + 淡入） */
+@keyframes card-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 為文章標題添加特殊過渡效果 */
+::view-transition-old(*[style*="view-transition-name: post-title-"]),
+::view-transition-new(*[style*="view-transition-name: post-title-"]) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(*[style*="view-transition-name: post-title-"]) {
+  animation-name: title-fade-out;
+}
+
+::view-transition-new(*[style*="view-transition-name: post-title-"]) {
+  animation-name: title-fade-in;
+}
+
+/* 文章標題動畫 */
+@keyframes title-fade-out {
+  from {
+    opacity: 1;
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    filter: blur(4px);
+  }
+}
+
+@keyframes title-fade-in {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* 為精選文章添加特殊效果 */
+::view-transition-old(*[style*="view-transition-name: featured-title"]),
+::view-transition-new(*[style*="view-transition-name: featured-title"]) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 為 hero 區域添加背景過渡 */
+::view-transition-old(*[style*="view-transition-name: post-hero-"]),
+::view-transition-new(*[style*="view-transition-name: post-hero-"]) {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(*[style*="view-transition-name: post-hero-"]) {
+  animation-name: hero-fade-out;
+}
+
+::view-transition-new(*[style*="view-transition-name: post-hero-"]) {
+  animation-name: hero-fade-in;
+}
+
+/* Hero 區域動畫 */
+@keyframes hero-fade-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes hero-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 尊重使用者的動畫偏好設定 */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+    transition: none !important;
+  }
+}
