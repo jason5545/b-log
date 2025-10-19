@@ -794,6 +794,7 @@ a:focus {
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
+  margin-top: -1.2rem;
   margin-bottom: 1.5rem;
 }
 
