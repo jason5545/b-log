@@ -241,7 +241,9 @@ const AudioPlayerManager = {
     // 播放/暫停
     playPauseBtn.addEventListener('click', () => {
       if (audio.paused) {
-        audio.play();
+        audio.play().catch(error => {
+          console.error('播放失敗：', error);
+        });
       } else {
         audio.pause();
       }
@@ -440,7 +442,9 @@ const AudioPlayerManager = {
         }
 
         // 自動播放
-        audio.play();
+        audio.play().catch(error => {
+          console.error('自動播放失敗：', error);
+        });
       } else {
         // 所有片段播放完畢
         console.log('📻 播放清單結束');
