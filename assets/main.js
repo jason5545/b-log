@@ -614,6 +614,18 @@ async function renderHomepage() {
       if (linkEl) {
         linkEl.href = slugToPath(post.slug, post.category);
         linkEl.textContent = post.title || post.slug;
+
+        // 如果文章有語音版，添加語音圖示
+        if (post.hasAudio) {
+          const audioIcon = document.createElement('span');
+          audioIcon.className = 'audio-indicator';
+          audioIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
+          </svg>`;
+          audioIcon.setAttribute('aria-label', '有語音版');
+          audioIcon.setAttribute('title', '此文章有語音版');
+          linkEl.parentElement.insertBefore(audioIcon, linkEl.nextSibling);
+        }
       }
 
       if (categoryEl) {
@@ -796,6 +808,18 @@ function renderFeaturedPost(post) {
   if (heroLink) {
     heroLink.href = slugToPath(post.slug, post.category);
     heroLink.textContent = post.title || post.slug;
+
+    // 如果文章有語音版，添加語音圖示
+    if (post.hasAudio) {
+      const audioIcon = document.createElement('span');
+      audioIcon.className = 'audio-indicator audio-indicator--hero';
+      audioIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
+      </svg>`;
+      audioIcon.setAttribute('aria-label', '有語音版');
+      audioIcon.setAttribute('title', '此文章有語音版');
+      heroLink.parentElement.insertBefore(audioIcon, heroLink.nextSibling);
+    }
   }
 
   if (heroMeta) {

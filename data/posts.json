@@ -54,7 +54,8 @@
       "技術分析",
       "開發哲學"
     ],
-    "accentColor": "#e74c3c"
+    "accentColor": "#e74c3c",
+    "hasAudio": true
   },
   {
     "slug": "webp-automation-path-compatibility",
@@ -111,7 +112,8 @@
       "Bootloader",
       "自由度"
     ],
-    "accentColor": "#e67e22"
+    "accentColor": "#e67e22",
+    "hasAudio": true
   },
   {
     "slug": "syntax-highlighting-debugging-journey",
@@ -218,7 +220,8 @@
       "Vibe Coding",
       "創作歸屬"
     ],
-    "accentColor": "#556bff"
+    "accentColor": "#556bff",
+    "hasAudio": true
   },
   {
     "slug": "openai-vs-anthropic-red-lines",

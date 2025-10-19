@@ -488,6 +488,69 @@ a:focus {
   letter-spacing: 0.08em;
 }
 
+/* 語音版圖示 */
+.audio-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.5rem;
+  color: var(--accent);
+  opacity: 0.85;
+  transition: all 0.2s ease;
+  cursor: help;
+  vertical-align: middle;
+}
+
+.audio-indicator svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  filter: drop-shadow(0 1px 2px rgba(85, 107, 255, 0.2));
+}
+
+.audio-indicator:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* 精選文章的語音圖示（較大） */
+.audio-indicator--hero svg {
+  width: 1.8rem;
+  height: 1.8rem;
+  filter: drop-shadow(0 2px 4px rgba(85, 107, 255, 0.3));
+}
+
+/* 深色模式支援 */
+@media (prefers-color-scheme: dark) {
+  .audio-indicator svg {
+    filter: drop-shadow(0 1px 3px rgba(85, 107, 255, 0.4));
+  }
+
+  .audio-indicator--hero svg {
+    filter: drop-shadow(0 2px 6px rgba(85, 107, 255, 0.5));
+  }
+}
+
+[data-theme="dark"] .audio-indicator svg {
+  filter: drop-shadow(0 1px 3px rgba(85, 107, 255, 0.4));
+}
+
+[data-theme="dark"] .audio-indicator--hero svg {
+  filter: drop-shadow(0 2px 6px rgba(85, 107, 255, 0.5));
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .audio-indicator svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .audio-indicator--hero svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+}
+
 .sidebar {
   display: grid;
   gap: 1.6rem;
