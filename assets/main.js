@@ -759,6 +759,19 @@ async function renderArticle() {
       audioIcon.setAttribute('aria-label', '有語音版');
       audioIcon.setAttribute('title', '此文章有語音版');
       titleEl.appendChild(audioIcon);  // 改為加到 h1 內部
+
+      // 偵測標題是否因為音訊圖示而換行，如果換行則自動縮小圖示
+      setTimeout(() => {
+        const titleHeight = titleEl.offsetHeight;
+        const lineHeight = parseFloat(getComputedStyle(titleEl).lineHeight);
+        const fontSize = parseFloat(getComputedStyle(titleEl).fontSize);
+        const computedLineHeight = isNaN(lineHeight) ? fontSize * 1.2 : lineHeight;
+
+        // 如果標題高度超過單行高度（表示換行了），則縮小音訊圖示
+        if (titleHeight > computedLineHeight * 1.3) {
+          audioIcon.classList.add('audio-indicator--compact');
+        }
+      }, 0);
     }
   }
 

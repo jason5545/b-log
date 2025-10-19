@@ -534,6 +534,16 @@ a:focus {
   vertical-align: middle;
 }
 
+/* 緊湊模式：當標題過長導致換行時自動套用 */
+.audio-indicator--compact {
+  margin-left: 0.4rem !important;
+}
+
+.audio-indicator--compact svg {
+  width: 1.3rem !important;
+  height: 1.3rem !important;
+}
+
 /* 深色模式支援 */
 @media (prefers-color-scheme: dark) {
   .audio-indicator svg {
