@@ -232,12 +232,6 @@ const AudioPlayerManager = {
       volumeSlider.value = parseFloat(savedVolume) * 100;
     }
 
-    // 從 localStorage 載入播放進度
-    const savedTime = localStorage.getItem(storageKey + '-time');
-    if (savedTime && parseFloat(savedTime) > 0) {
-      audio.currentTime = parseFloat(savedTime);
-    }
-
     // 播放/暫停
     playPauseBtn.addEventListener('click', () => {
       if (audio.paused) {
@@ -260,21 +254,40 @@ const AudioPlayerManager = {
       pauseIcon.style.display = 'none';
     });
 
+    // 使用節流機制儲存進度
+    let lastSaveTime = 0;
+    const SAVE_INTERVAL = 5000; // 5 秒
+    let isSeeking = false;
+
     // 更新進度條
     audio.addEventListener('timeupdate', () => {
       const percent = (audio.currentTime / audio.duration) * 100;
       progressBar.value = percent;
       currentTimeEl.textContent = this.formatTime(audio.currentTime);
 
-      // 每 5 秒儲存一次進度
-      if (Math.floor(audio.currentTime) % 5 === 0) {
-        localStorage.setItem(storageKey + '-time', audio.currentTime.toString());
+      // 只在非拖曳狀態下儲存進度（使用節流機制）
+      if (!isSeeking) {
+        const now = Date.now();
+        if (now - lastSaveTime >= SAVE_INTERVAL) {
+          localStorage.setItem(storageKey + '-time', audio.currentTime.toString());
+          lastSaveTime = now;
+        }
       }
     });
 
-    // 載入後顯示總時長
+    // 載入後顯示總時長並恢復播放進度
     audio.addEventListener('loadedmetadata', () => {
       durationEl.textContent = this.formatTime(audio.duration);
+
+      // 在元數據載入完成後恢復播放進度
+      const savedTime = localStorage.getItem(storageKey + '-time');
+      if (savedTime && parseFloat(savedTime) > 0) {
+        const time = parseFloat(savedTime);
+        // 確保不超過音訊長度
+        if (time < audio.duration) {
+          audio.currentTime = time;
+        }
+      }
     });
 
     // 如果已經載入，直接顯示
@@ -288,10 +301,24 @@ const AudioPlayerManager = {
       audio.currentTime = time;
     });
 
-    // 播放結束時重置進度
+    // 拖曳開始時停止儲存
+    audio.addEventListener('seeking', () => {
+      isSeeking = true;
+    });
+
+    // 拖曳結束時立即儲存新位置
+    audio.addEventListener('seeked', () => {
+      isSeeking = false;
+      localStorage.setItem(storageKey + '-time', audio.currentTime.toString());
+      lastSaveTime = Date.now(); // 更新最後儲存時間
+    });
+
+    // 播放結束時重置進度（只在非播放清單模式下）
     audio.addEventListener('ended', () => {
-      localStorage.removeItem(storageKey + '-time');
-      progressBar.value = 0;
+      if (!audioPlayer.classList.contains('playlist-mode')) {
+        localStorage.removeItem(storageKey + '-time');
+        progressBar.value = 0;
+      }
     });
 
     // 速度控制選單
@@ -414,6 +441,9 @@ const AudioPlayerManager = {
 
     console.log(`📻 偵測到播放清單：${playlist.length} 個片段`);
 
+    // 標記為播放清單模式
+    audioPlayer.classList.add('playlist-mode');
+
     // 顯示播放清單資訊
     playlistInfoEl.style.display = 'block';
     totalPartsEl.textContent = playlist.length;
@@ -426,8 +456,10 @@ const AudioPlayerManager = {
     this.loadPart(audio, playlist[currentPartIndex]);
 
     // 播放結束時自動播放下一個片段
-    const originalEndedHandler = audio.onended;
     audio.addEventListener('ended', () => {
+      // 只在播放清單模式下處理
+      if (!audioPlayer.classList.contains('playlist-mode')) return;
+
       currentPartIndex++;
 
       if (currentPartIndex < playlist.length) {
@@ -448,10 +480,8 @@ const AudioPlayerManager = {
       } else {
         // 所有片段播放完畢
         console.log('📻 播放清單結束');
+        audioPlayer.classList.remove('playlist-mode');
         localStorage.removeItem(storageKey + '-time');
-        if (originalEndedHandler) {
-          originalEndedHandler.call(audio);
-        }
       }
     });
   },
