@@ -74,6 +74,26 @@ function generatePostHTML(post) {
   return html;
 }
 
+// 生成重定向頁面 HTML
+function generateRedirectHTML(newCategorySlug, slug) {
+  return `<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=/${newCategorySlug}/${slug}/">
+    <meta name="robots" content="noindex">
+    <link rel="canonical" href="https://b-log.to/${newCategorySlug}/${slug}/">
+    <title>重定向中...</title>
+    <script>
+        window.location.replace('/${newCategorySlug}/${slug}/');
+    </script>
+</head>
+<body>
+    <p>頁面已移動至 <a href="/${newCategorySlug}/${slug}/">新位置</a>...</p>
+</body>
+</html>`;
+}
+
 // 主要函數
 function generateRedirects() {
   console.log('開始生成 WordPress 風格文章頁面...\n');
@@ -83,11 +103,12 @@ function generateRedirects() {
   const posts = JSON.parse(fs.readFileSync(postsPath, 'utf8'));
 
   let createdCount = 0;
+  let redirectCount = 0;
   let skippedCount = 0;
 
   // 為每篇文章生成重定向頁面
   posts.forEach(post => {
-    const { slug, title, category } = post;
+    const { slug, title, category, previousCategory } = post;
     const categorySlug = categoryMapping[category];
 
     if (!categorySlug) {
@@ -116,9 +137,35 @@ function generateRedirects() {
 
     console.log(`✅ 已建立：${categorySlug}/${slug}/index.html`);
     createdCount++;
+
+    // 如果存在 previousCategory，在舊分類目錄建立重定向頁面
+    if (previousCategory) {
+      const previousCategorySlug = categoryMapping[previousCategory];
+
+      if (previousCategorySlug && previousCategorySlug !== categorySlug) {
+        const oldCategoryDir = path.join(__dirname, '..', previousCategorySlug);
+        const oldPostDir = path.join(oldCategoryDir, slug);
+
+        // 建立舊目錄（如果不存在）
+        if (!fs.existsSync(oldPostDir)) {
+          fs.mkdirSync(oldPostDir, { recursive: true });
+        }
+
+        // 生成重定向頁面
+        const redirectPath = path.join(oldPostDir, 'index.html');
+        const redirectHTML = generateRedirectHTML(categorySlug, slug);
+        fs.writeFileSync(redirectPath, redirectHTML, 'utf8');
+
+        console.log(`🔀 已建立重定向：${previousCategorySlug}/${slug}/ → ${categorySlug}/${slug}/`);
+        redirectCount++;
+      }
+    }
   });
 
   console.log(`\n完成！共建立 ${createdCount} 個文章頁面`);
+  if (redirectCount > 0) {
+    console.log(`🔀 建立 ${redirectCount} 個重定向頁面`);
+  }
   if (skippedCount > 0) {
     console.log(`⚠️  跳過 ${skippedCount} 個文章`);
   }
