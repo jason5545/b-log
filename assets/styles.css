@@ -519,6 +519,18 @@ a:focus {
   filter: drop-shadow(0 2px 4px rgba(85, 107, 255, 0.3));
 }
 
+/* 文章頁面的語音圖示（最大） */
+.audio-indicator--article {
+  margin-left: 1rem;
+  display: inline-block;
+}
+
+.audio-indicator--article svg {
+  width: 2.2rem;
+  height: 2.2rem;
+  filter: drop-shadow(0 2px 6px rgba(85, 107, 255, 0.35));
+}
+
 /* 深色模式支援 */
 @media (prefers-color-scheme: dark) {
   .audio-indicator svg {
@@ -528,6 +540,10 @@ a:focus {
   .audio-indicator--hero svg {
     filter: drop-shadow(0 2px 6px rgba(85, 107, 255, 0.5));
   }
+
+  .audio-indicator--article svg {
+    filter: drop-shadow(0 2px 8px rgba(85, 107, 255, 0.6));
+  }
 }
 
 [data-theme="dark"] .audio-indicator svg {
@@ -536,6 +552,10 @@ a:focus {
 
 [data-theme="dark"] .audio-indicator--hero svg {
   filter: drop-shadow(0 2px 6px rgba(85, 107, 255, 0.5));
+}
+
+[data-theme="dark"] .audio-indicator--article svg {
+  filter: drop-shadow(0 2px 8px rgba(85, 107, 255, 0.6));
 }
 
 /* 響應式設計 */
@@ -548,6 +568,15 @@ a:focus {
   .audio-indicator--hero svg {
     width: 1.4rem;
     height: 1.4rem;
+  }
+
+  .audio-indicator--article {
+    margin-left: 0.5rem;
+  }
+
+  .audio-indicator--article svg {
+    width: 1.6rem;
+    height: 1.6rem;
   }
 }
 
