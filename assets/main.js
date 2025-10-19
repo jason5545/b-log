@@ -956,6 +956,18 @@ async function renderMarkdownContent(slug, contentEl) {
 
   let markdown = await readUtf8Text(response);
 
+  // 移除第一行的 H1 標題（避免與頁面標題欄重複）
+  const lines = markdown.split('\n');
+  if (lines[0].trim().startsWith('#')) {
+    // 移除第一行標題
+    lines.shift();
+    // 移除標題後的空白行
+    while (lines.length > 0 && lines[0].trim() === '') {
+      lines.shift();
+    }
+    markdown = lines.join('\n');
+  }
+
   // 偵測並替換語音播放器標記
   const audioMatch = markdown.match(/<!--\s*audio:\s*(.+?)\s*-->/);
   if (audioMatch) {
