@@ -140,7 +140,7 @@ const ThemeManager = {
 
 // 生成語音播放器 HTML
 function generateAudioPlayerHTML(audioFile) {
-  return `<div class="audio-player">
+  return `<div class="audio-player" data-audio-file="${audioFile}">
   <audio preload="metadata">
     <source src="/content/audio/${audioFile}" type="audio/mp4">
     您的瀏覽器不支援音訊播放。
@@ -159,6 +159,9 @@ function generateAudioPlayerHTML(audioFile) {
       <div class="audio-time">
         <span class="current-time">0:00</span>
         <span class="duration">0:00</span>
+      </div>
+      <div class="playlist-info" style="display:none; font-size:0.75rem; color:var(--text-secondary, #666); margin-top:0.25rem;">
+        片段 <span class="current-part">1</span> / <span class="total-parts">1</span>
       </div>
     </div>
     <div class="audio-speed">
@@ -387,6 +390,66 @@ const AudioPlayerManager = {
         this.updateVolumeIcon(volumeBtn, audio.volume);
       }
     });
+
+    // 初始化播放清單支援
+    this.initPlaylist(audioPlayer, audio, storageKey);
+  },
+
+  // 初始化播放清單（異步）
+  async initPlaylist(audioPlayer, audio, storageKey) {
+    const audioFile = audioPlayer.dataset.audioFile;
+    if (!audioFile) return;
+
+    const playlistInfoEl = audioPlayer.querySelector('.playlist-info');
+    const currentPartEl = audioPlayer.querySelector('.current-part');
+    const totalPartsEl = audioPlayer.querySelector('.total-parts');
+
+    // 偵測播放清單
+    const playlist = await this.detectPlaylist(audioFile);
+
+    // 如果只有一個檔案，不需要播放清單模式
+    if (playlist.length === 1) return;
+
+    console.log(`📻 偵測到播放清單：${playlist.length} 個片段`);
+
+    // 顯示播放清單資訊
+    playlistInfoEl.style.display = 'block';
+    totalPartsEl.textContent = playlist.length;
+
+    // 播放清單狀態
+    let currentPartIndex = 0;
+    currentPartEl.textContent = currentPartIndex + 1;
+
+    // 載入第一個片段
+    this.loadPart(audio, playlist[currentPartIndex]);
+
+    // 播放結束時自動播放下一個片段
+    const originalEndedHandler = audio.onended;
+    audio.addEventListener('ended', () => {
+      currentPartIndex++;
+
+      if (currentPartIndex < playlist.length) {
+        console.log(`📻 自動播放下一個片段：${currentPartIndex + 1}/${playlist.length}`);
+        currentPartEl.textContent = currentPartIndex + 1;
+        this.loadPart(audio, playlist[currentPartIndex]);
+
+        // 保持播放速度
+        const savedSpeed = localStorage.getItem(storageKey + '-speed');
+        if (savedSpeed) {
+          audio.playbackRate = parseFloat(savedSpeed);
+        }
+
+        // 自動播放
+        audio.play();
+      } else {
+        // 所有片段播放完畢
+        console.log('📻 播放清單結束');
+        localStorage.removeItem(storageKey + '-time');
+        if (originalEndedHandler) {
+          originalEndedHandler.call(audio);
+        }
+      }
+    });
   },
 
   formatTime(seconds) {
@@ -410,6 +473,43 @@ const AudioPlayerManager = {
       // 正常音量圖示
       svg.setAttribute('d', 'M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z');
     }
+  },
+
+  // 偵測播放清單（嘗試載入分割檔案）
+  async detectPlaylist(audioFile) {
+    const basename = audioFile.replace(/\.[^/.]+$/, ''); // 移除副檔名
+    const ext = audioFile.match(/\.[^/.]+$/)[0]; // 取得副檔名
+
+    const playlist = [];
+    let partIndex = 0;
+
+    // 嘗試載入 part0, part1, part2, ...
+    while (partIndex < 20) { // 最多嘗試 20 個片段
+      const partFile = `${basename}-part${partIndex}${ext}`;
+      const partUrl = `/content/audio/${partFile}`;
+
+      try {
+        const response = await fetch(partUrl, { method: 'HEAD' });
+        if (response.ok) {
+          playlist.push(partFile);
+          partIndex++;
+        } else {
+          break;
+        }
+      } catch (error) {
+        break;
+      }
+    }
+
+    // 如果找到分割檔案，返回播放清單；否則返回原始檔案
+    return playlist.length > 0 ? playlist : [audioFile];
+  },
+
+  // 載入特定片段
+  loadPart(audio, partFile) {
+    const source = audio.querySelector('source');
+    source.src = `/content/audio/${partFile}`;
+    audio.load();
   }
 };
 
