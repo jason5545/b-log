@@ -35,7 +35,8 @@
       "品質",
       "工作流程"
     ],
-    "accentColor": "#e74c3c"
+    "accentColor": "#e74c3c",
+    "hasAudio": true
   },
   {
     "slug": "claude-nerf-analysis",
