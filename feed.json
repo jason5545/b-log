@@ -27,6 +27,26 @@
       ]
     },
     {
+      "id": "gpu-passthrough-troubleshooting",
+      "url": "https://b-log.to/post.html?slug=gpu-passthrough-troubleshooting",
+      "title": "當你的顯卡在虛擬機裡消失了：一次技術偵探之旅",
+      "content_text": "這是我在 Proxmox VE 虛擬機中遇到 RTX 4070 Ti Super 顯卡消失問題的完整故障排除紀錄。從 9月11日開始，每次在 Microsoft Flight Simulator 中飛行超過六十分鐘後暫停，顯卡就會從 PCI 裝置樹上消失。我經歷了從 D3cold 電源狀態問題的深入研究、PCIe 訊號品質測試（Gen4 穩定度只有 88.7%）、到光華商場的實體測試。最後在一個多月後發現，真正的罪魁禍首竟然只是 PCIe Riser 延長線的接觸不良。這個故事告訴我們，複雜的症狀不一定需要複雜的解決方案，有時候答案就是「擦乾淨重新插」這麼簡單。",
+      "date_published": "2025-10-19T10:57:00.000Z",
+      "date_modified": "2025-10-19T10:57:00.000Z",
+      "tags": [
+        "GPU Passthrough",
+        "Proxmox",
+        "VFIO",
+        "硬體故障排除",
+        "PCIe"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "ai-collaboration-vs-generation",
       "url": "https://b-log.to/post.html?slug=ai-collaboration-vs-generation",
       "title": "「AI 出來的東西都是錯誤百出」?讓我們談談協作與生成的差異",
