@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const os = require('os');
 
 const AUDIO_DIR = path.join(__dirname, '../content/audio');
 const MAX_SIZE_MB = 50;
@@ -8,12 +9,58 @@ const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 const SEGMENT_DURATION_MINUTES = 10; // 每段 10 分鐘
 
 /**
+ * 尋找 ffmpeg 和 ffprobe 的路徑
+ */
+function findFFmpeg() {
+  // 常見的 ffmpeg 安裝位置
+  const possiblePaths = [
+    // WinGet 安裝路徑
+    path.join(os.homedir(), 'AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.0-full_build/bin'),
+    // 標準安裝路徑
+    'C:/ffmpeg/bin',
+    'C:/Program Files/ffmpeg/bin',
+    'C:/Program Files (x86)/ffmpeg/bin',
+  ];
+
+  // 首先嘗試從 PATH 執行
+  try {
+    execSync('ffmpeg -version', { stdio: 'ignore' });
+    return { ffmpeg: 'ffmpeg', ffprobe: 'ffprobe' };
+  } catch (error) {
+    // PATH 中找不到，嘗試絕對路徑
+    for (const dir of possiblePaths) {
+      const ffmpegPath = path.join(dir, 'ffmpeg.exe');
+      const ffprobePath = path.join(dir, 'ffprobe.exe');
+
+      if (fs.existsSync(ffmpegPath) && fs.existsSync(ffprobePath)) {
+        console.log(`✅ 找到 ffmpeg：${ffmpegPath}`);
+        return {
+          ffmpeg: `"${ffmpegPath}"`,
+          ffprobe: `"${ffprobePath}"`
+        };
+      }
+    }
+  }
+
+  throw new Error('找不到 ffmpeg！請執行：winget install Gyan.FFmpeg');
+}
+
+// 全域 ffmpeg 路徑
+let FFMPEG_PATHS;
+try {
+  FFMPEG_PATHS = findFFmpeg();
+} catch (error) {
+  console.error(`❌ ${error.message}`);
+  process.exit(1);
+}
+
+/**
  * 取得音訊檔案的時長（秒）
  */
 function getAudioDuration(filePath) {
   try {
     const output = execSync(
-      `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${filePath}"`,
+      `${FFMPEG_PATHS.ffprobe} -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${filePath}"`,
       { encoding: 'utf8' }
     );
     return parseFloat(output.trim());
@@ -69,7 +116,7 @@ function splitAudioFile(filePath) {
     console.log(`\n🔧 執行分割...`);
 
     execSync(
-      `ffmpeg -i "${filePath}" -f segment -segment_time ${segmentDuration} -c copy -reset_timestamps 1 "${outputPattern}"`,
+      `${FFMPEG_PATHS.ffmpeg} -i "${filePath}" -f segment -segment_time ${segmentDuration} -c copy -reset_timestamps 1 "${outputPattern}"`,
       { stdio: 'inherit' }
     );
 
