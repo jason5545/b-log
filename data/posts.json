@@ -1,5 +1,24 @@
 [
   {
+    "slug": "audio-player-promise-error-fix",
+    "title": "修復音訊播放器點擊無反應：Promise 錯誤處理的重要性",
+    "summary": "記錄修復音訊播放器 bug 的完整過程，從 Chrome MCP 除錯到發現 Promise 錯誤處理缺失，探討 JavaScript 異步操作的常見陷阱與最佳實踐。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-19T14:30:00.000Z",
+    "updatedAt": "2025-10-19T14:30:00.000Z",
+    "readingTime": "8 min",
+    "tags": [
+      "JavaScript",
+      "Promise",
+      "音訊播放器",
+      "除錯",
+      "錯誤處理",
+      "Chrome MCP"
+    ],
+    "accentColor": "#556bff"
+  },
+  {
     "slug": "ai-collaboration-vs-generation",
     "title": "「AI 出來的東西都是錯誤百出」?讓我們談談協作與生成的差異",
     "summary": "探討單向生成與雙向協作的關鍵差異，分析當「理解」和「驗證」掌握在有能力的人手中時，AI 如何成為強大的表達工具而非品質障礙。",

@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "audio-player-promise-error-fix",
+      "url": "https://b-log.to/post.html?slug=audio-player-promise-error-fix",
+      "title": "修復音訊播放器點擊無反應：Promise 錯誤處理的重要性",
+      "content_text": "記錄我修復音訊播放器 bug 的完整過程，從使用 Chrome MCP 進行遠端除錯，到發現 audio.play() 缺少 Promise 錯誤處理的根本原因。探討 JavaScript 異步操作中 Promise rejection 的常見陷阱、瀏覽器自動播放政策、以及為什麼所有返回 Promise 的方法都必須處理錯誤。包含詳細的除錯步驟、程式碼範例和技術要點總結。",
+      "date_published": "2025-10-19T14:30:00.000Z",
+      "date_modified": "2025-10-19T14:30:00.000Z",
+      "tags": [
+        "JavaScript",
+        "Promise",
+        "音訊播放器",
+        "除錯",
+        "錯誤處理",
+        "Chrome MCP"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "ai-collaboration-vs-generation",
       "url": "https://b-log.to/post.html?slug=ai-collaboration-vs-generation",
       "title": "「AI 出來的東西都是錯誤百出」?讓我們談談協作與生成的差異",
