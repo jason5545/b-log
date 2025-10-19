@@ -12,7 +12,7 @@
 
 ---
 
-## 第一重困境：iPad Pro 的硬體過剩與軟體閹割
+## 第一重困境：iPad Pro 的硬體過剩與軟體功能限制
 
 ### M5 晶片：強大到令人尷尬
 
@@ -60,9 +60,9 @@ iPadOS 26 確實帶來重大改進：
 - 專業印表機：很多不支援
 - 其他專業裝置：運氣問題
 
-### Pro 軟體的閹割現實
+### Pro 軟體的功能限制現實
 
-#### Final Cut Pro iPad：最嚴重的閹割
+#### Final Cut Pro iPad：最嚴重的功能縮水
 
 **缺少的核心功能：**
 - 無法與 Mac 完整雙向同步（只能 iPad→Mac，不能 Mac→iPad）
@@ -271,7 +271,7 @@ Windows 11 的平板體驗就像「有人改了螢幕 DPI」，而不是真正�
 ### iPad Pro 的困境
 - ✅ 硬體過剩（M5 效能超越許多筆電）
 - ❌ 軟體限制（無法執行完整開發環境）
-- ❌ Pro 軟體閹割（Final Cut Pro、Logic Pro）
+- ❌ Pro 軟體功能受限（Final Cut Pro、Logic Pro）
 - ❌ DriverKit 空頭支票（兩年多了仍無實際支援）
 
 ### 三星 + Android 的困境
