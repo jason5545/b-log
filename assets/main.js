@@ -719,7 +719,7 @@ async function renderArticle() {
   if (titleEl) {
     titleEl.textContent = post.title || slug;
 
-    // 如果文章有語音版，添加語音圖示
+    // 如果文章有語音版，添加語音圖示（加到標題內部）
     if (post.hasAudio) {
       const audioIcon = document.createElement('span');
       audioIcon.className = 'audio-indicator audio-indicator--article';
@@ -728,7 +728,7 @@ async function renderArticle() {
       </svg>`;
       audioIcon.setAttribute('aria-label', '有語音版');
       audioIcon.setAttribute('title', '此文章有語音版');
-      titleEl.parentElement.appendChild(audioIcon);
+      titleEl.appendChild(audioIcon);  // 改為加到 h1 內部
     }
   }
 
