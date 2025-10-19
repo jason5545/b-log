@@ -521,15 +521,15 @@ a:focus {
 
 /* 文章頁面的語音圖示（最大） */
 .audio-indicator--article {
-  margin-left: 1rem;
+  margin-left: clamp(0.5rem, 2vw, 1rem);
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
 }
 
 .audio-indicator--article svg {
-  width: 2.2rem;
-  height: 2.2rem;
+  width: clamp(1.4rem, 3vw, 2.2rem);
+  height: clamp(1.4rem, 3vw, 2.2rem);
   filter: drop-shadow(0 2px 6px rgba(85, 107, 255, 0.35));
   vertical-align: middle;
 }
@@ -574,12 +574,24 @@ a:focus {
   }
 
   .audio-indicator--article {
-    margin-left: 0.5rem;
+    margin-left: 0.4rem;
   }
 
   .audio-indicator--article svg {
-    width: 1.6rem;
-    height: 1.6rem;
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+}
+
+/* 極窄螢幕進一步縮小音訊圖示 */
+@media (max-width: 480px) {
+  .audio-indicator--article {
+    margin-left: 0.3rem;
+  }
+
+  .audio-indicator--article svg {
+    width: 1.2rem;
+    height: 1.2rem;
   }
 }
 
