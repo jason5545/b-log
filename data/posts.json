@@ -1,5 +1,23 @@
 [
   {
+    "slug": "does-microsoft-care-piracy",
+    "title": "微軟真的在乎你盜版嗎？",
+    "summary": "從 GitHub 上的破解工具到 LTT 公開使用未啟用 Windows，微軟似乎對個人盜版睜一隻眼閉一隻眼。但當你想跳過微軟帳戶登入時，他們卻異常執著。揭開微軟「盜版容忍策略」背後的商業邏輯。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-20T00:00:00.000Z",
+    "updatedAt": "2025-10-20T00:00:00.000Z",
+    "readingTime": "15 min",
+    "tags": [
+      "微軟",
+      "商業策略",
+      "盜版",
+      "Windows",
+      "市場策略"
+    ],
+    "accentColor": "#0078d4"
+  },
+  {
     "slug": "gpu-passthrough-troubleshooting",
     "title": "當你的顯卡在虛擬機裡消失了：一次技術偵探之旅",
     "summary": "一個關於 RTX 4070 Ti Super 在 Proxmox VE 虛擬機中消失的故障排除之旅。從 D3cold 電源狀態問題到 PCIe 訊號品質測試，最後發現真正的罪魁禍首竟然只是接觸不良。",

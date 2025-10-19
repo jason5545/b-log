@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "does-microsoft-care-piracy",
+      "url": "https://b-log.to/post.html?slug=does-microsoft-care-piracy",
+      "title": "微軟真的在乎你盜版嗎？",
+      "content_text": "我發現微軟對個人盜版的態度非常有趣：GitHub 上的 KMS 啟用工具和破解腳本依然存在，LTT 公開使用未啟用的 Windows 也沒事，ChatGPT 甚至曾經會吐出 Windows 金鑰。但當你想跳過微軟帳戶登入時，他們卻異常執著，不斷封鎖繞過方法，甚至連馬斯克都抱怨過。我分析了微軟背後的商業邏輯：他們用盜版養成使用者習慣，真正的收入來自企業授權。但他們更在乎的是使用者資料和生態系綁定，這比授權費更有價值。不過微軟沒料到年輕世代技能斷層，越來越多人根本不碰電腦，「盜版養習慣」策略可能正在失效。",
+      "date_published": "2025-10-20T00:00:00.000Z",
+      "date_modified": "2025-10-20T00:00:00.000Z",
+      "tags": [
+        "微軟",
+        "商業策略",
+        "盜版",
+        "Windows",
+        "市場策略"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "gpu-passthrough-troubleshooting",
       "url": "https://b-log.to/post.html?slug=gpu-passthrough-troubleshooting",
       "title": "當你的顯卡在虛擬機裡消失了：一次技術偵探之旅",
