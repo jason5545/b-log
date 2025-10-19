@@ -175,6 +175,138 @@ Chrome、Firefox、Safari 等現代瀏覽器都實施嚴格的自動播放政策
 
 ✅ 播放器現已完全正常運作！
 
+## 後續修復：自動略過內容問題（2025-10-19）
+
+在 Promise 錯誤處理修復後，又發現了一個更隱蔽的問題：播放時會自動略過一些內容，但進度條顯示正常，原始檔案也正常。這個問題源於多個時序競爭條件（race condition）和事件處理器衝突。
+
+### 發現的核心問題
+
+經過深度分析（commit `dde7489`），找出了 5 個相互關聯的問題：
+
+**1. 播放進度恢復時機錯誤**（高嚴重性）
+```javascript
+// ❌ 錯誤：在音訊元數據載入前就設定 currentTime
+const savedTime = localStorage.getItem(storageKey + '-time');
+if (savedTime && parseFloat(savedTime) > 0) {
+  audio.currentTime = parseFloat(savedTime);  // 太早設定！
+}
+```
+
+如果在 `loadedmetadata` 事件觸發前設定 `currentTime`，可能會失效或產生競爭條件，導致播放進度跳過或重置。
+
+**2. 進度儲存觸發條件不可靠**（中嚴重性）
+```javascript
+// ❌ 錯誤：使用 % 5 判斷觸發時機
+if (Math.floor(audio.currentTime) % 5 === 0) {
+  localStorage.setItem(storageKey + '-time', audio.currentTime.toString());
+}
+```
+
+`timeupdate` 事件並非每秒精確觸發一次（通常是每 250ms），使用 `% 5 === 0` 判斷可能永遠不會觸發，尤其是在播放速度改變時。
+
+**3. 播放清單片段切換衝突**（高嚴重性）
+
+播放清單模式下，`loadPart()` 會呼叫 `audio.load()`，這會觸發 `loadedmetadata` 事件，但此時播放進度可能已經被設定，導致進度被重置或跳到錯誤位置。
+
+**4. ended 事件處理器重複綁定**（中嚴重性）
+
+`init()` 中已經綁定了 `ended` 事件，`initPlaylist()` 又綁定了另一個處理器，兩者可能互相衝突，導致播放清單模式下行為異常。
+
+**5. 缺少 seeking/seeked 事件處理**（低嚴重性）
+
+拖曳進度條時會觸發 `timeupdate` 事件，可能導致儲存錯誤的播放進度。
+
+### 修復方案
+
+**修復 1：正確的播放進度恢復時機**
+```javascript
+// ✅ 正確：在元數據載入完成後恢復播放進度
+audio.addEventListener('loadedmetadata', () => {
+  durationEl.textContent = this.formatTime(audio.duration);
+
+  const savedTime = localStorage.getItem(storageKey + '-time');
+  if (savedTime && parseFloat(savedTime) > 0) {
+    const time = parseFloat(savedTime);
+    if (time < audio.duration) {
+      audio.currentTime = time;  // 確保音訊已載入
+    }
+  }
+});
+```
+
+**修復 2：改用時間戳記節流機制**
+```javascript
+// ✅ 正確：使用節流避免過度儲存
+let lastSaveTime = 0;
+const SAVE_INTERVAL = 5000; // 5 秒
+
+audio.addEventListener('timeupdate', () => {
+  // ... 更新 UI ...
+
+  if (!isSeeking) {
+    const now = Date.now();
+    if (now - lastSaveTime >= SAVE_INTERVAL) {
+      localStorage.setItem(storageKey + '-time', audio.currentTime.toString());
+      lastSaveTime = now;
+    }
+  }
+});
+```
+
+**修復 3：新增 seeking/seeked 事件處理**
+```javascript
+// ✅ 正確：拖曳時暫停儲存，拖曳完成後立即儲存
+let isSeeking = false;
+
+audio.addEventListener('seeking', () => {
+  isSeeking = true;
+});
+
+audio.addEventListener('seeked', () => {
+  isSeeking = false;
+  localStorage.setItem(storageKey + '-time', audio.currentTime.toString());
+  lastSaveTime = Date.now();
+});
+```
+
+**修復 4：使用 CSS class 標記播放清單模式**
+```javascript
+// ✅ 正確：統一處理 ended 事件
+audio.addEventListener('ended', () => {
+  if (!audioPlayer.classList.contains('playlist-mode')) {
+    localStorage.removeItem(storageKey + '-time');
+    progressBar.value = 0;
+  }
+});
+
+// 在 initPlaylist() 中
+audioPlayer.classList.add('playlist-mode');
+audio.addEventListener('ended', () => {
+  if (!audioPlayer.classList.contains('playlist-mode')) return;
+  // ... 播放清單邏輯 ...
+});
+```
+
+### 技術要點
+
+1. **時序競爭條件（Race Condition）**：異步操作必須確保正確的執行順序，尤其是媒體元素的載入和狀態設定。
+
+2. **節流（Throttling）vs 去抖（Debouncing）**：對於高頻事件（如 `timeupdate`），使用時間戳記節流比條件判斷更可靠。
+
+3. **事件處理器管理**：避免重複綁定同一事件，使用狀態標記（如 CSS class）區分不同模式。
+
+4. **狀態同步**：拖曳進度條時需要暫停自動儲存，避免儲存中間狀態。
+
+### 測試場景
+
+修復後應測試以下場景：
+- ✅ 首次播放（無儲存進度）
+- ✅ 恢復播放（有儲存進度）
+- ✅ 拖曳進度條
+- ✅ 播放速度變更
+- ✅ 播放清單模式（多個片段）
+- ✅ 頁面重新載入
+
 ## 結語
 
 這個看似簡單的 bug 揭示了一個重要教訓：**JavaScript 的 Promise 機制要求開發者主動處理錯誤**。在異步操作日益普遍的現代 Web 開發中，忽略 Promise rejection 就像忽略 try-catch 一樣危險。
