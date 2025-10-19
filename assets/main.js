@@ -721,6 +721,10 @@ async function renderArticle() {
 
   populateTagBadges(tagsEl, post.tags);
   await renderMarkdownContent(slug, contentEl);
+
+  // 重新初始化語音播放器（因為播放器 HTML 是動態生成的）
+  AudioPlayerManager.init();
+
   updatePageMetadata(post);
   renderShareLinks(post);
   renderNavigation(posts, index);
