@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -37,9 +37,11 @@
   <!-- 啟用 View Transition API（跨文件過渡） -->
   <meta name="view-transition" content="same-origin">
 
-  <!-- 資源提示 - 只保留字體 CDN -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- 預載本地字型 - 優化 FCP/LCP -->
+  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-latin-400.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-latin-700.woff2" crossorigin>
+  <!-- 載入本地字型樣式 -->
+  <link rel="stylesheet" href="/assets/css/fonts.css">
 
   <!-- 關鍵 CSS 內聯 - 首屏渲染 -->
   <style>
@@ -165,9 +167,6 @@
     }
   </style>
 
-  <!-- 字型載入 - 不阻塞渲染 -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=optional" rel="stylesheet">
-
   <!-- 完整樣式表 -->
   <link rel="stylesheet" href="assets/styles.css">
 </head>
@@ -269,8 +268,10 @@
     </footer>
   </div>
 
-  <!-- JavaScript - CSR 核心，同步載入 -->
-  <script src="assets/marked.min.js"></script>
-  <script src="assets/main.js" type="module"></script>
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="assets/marked.min.js" defer></script>
+  <script src="assets/main.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
 </body>
 </html>
