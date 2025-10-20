@@ -1,0 +1,22 @@
+@font-face{
+  font-family:"Inter";
+  src:url("/assets/fonts/inter-latin-400.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:optional;
+}
+@font-face{
+  font-family:"Inter";
+  src:url("/assets/fonts/inter-latin-700.woff2") format("woff2");
+  font-weight:700;
+  font-style:normal;
+  font-display:optional;
+}
+
+/* Global family: Inter for ASCII/latin; Chinese uses fast system fonts */
+:root{
+  --sans-tc: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+             "PingFang TC","Microsoft JhengHei","Noto Sans TC",
+             "Heiti TC","Helvetica Neue",Arial,Helvetica,sans-serif;
+}
+html[lang="zh-Hant-TW"] body{ font-family:"Inter", var(--sans-tc); }

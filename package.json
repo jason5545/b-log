@@ -1,4 +1,10 @@
 {
+  "name": "b-log",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fetch:fonts": "node scripts/fetch-fonts.mjs"
+  },
   "dependencies": {
     "sharp": "^0.34.4"
   }
