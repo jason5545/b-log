@@ -1,5 +1,24 @@
 [
   {
+    "slug": "pagespeed-optimization-csr-blog",
+    "title": "從 50 分到 100 分：CSR 部落格的 PageSpeed 最佳化之路",
+    "summary": "記錄如何將 CSR 部落格從 PageSpeed 50 分優化到 100 分的過程，發現盲目套用 SSR/SSG 最佳實踐反而適得其反，最終透過自行託管輕量字體和使用系統字體達成完美分數。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-21T00:00:00.000Z",
+    "updatedAt": "2025-10-21T00:00:00.000Z",
+    "readingTime": "18 min",
+    "tags": [
+      "PageSpeed",
+      "CSR",
+      "效能最佳化",
+      "字體最佳化",
+      "Web Vitals"
+    ],
+    "accentColor": "#4caf50",
+    "coverImage": "/content/img/2025/Screenshot_20251021_091442_Quetta.webp"
+  },
+  {
     "slug": "does-microsoft-care-piracy",
     "title": "微軟真的在乎你盜版嗎？",
     "summary": "從 GitHub 上的破解工具到 LTT 公開使用未啟用 Windows，微軟似乎對個人盜版睜一隻眼閉一隻眼。但當你想跳過微軟帳戶登入時，他們卻異常執著。揭開微軟「盜版容忍策略」背後的商業邏輯。",

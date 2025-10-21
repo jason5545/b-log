@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "pagespeed-optimization-csr-blog",
+      "url": "https://b-log.to/post.html?slug=pagespeed-optimization-csr-blog",
+      "title": "從 50 分到 100 分：CSR 部落格的 PageSpeed 最佳化之路",
+      "content_text": "最近在最佳化自己的部落格時，遇到了荒謬的狀況：套用業界最佳實踐後，PageSpeed 分數從 70+ 分反而掉到 50 分。我深入分析後發現，SSR/SSG 的最佳化策略不適用於 CSR 架構。在 CSR 中，JavaScript 執行時間直接等於 LCP 時間，任何拖慢 JS 載入的動作（如 preload 字體）都會傷害效能。我最終採用自行託管輕量 Inter 字體（僅 15KB）配合系統中文字體的策略，移除所有外部請求，成功達成行動版和桌面版都是 100 分的成績。這個過程讓我體會到：懂得何時打破規則，才是真正的專業。",
+      "date_published": "2025-10-21T00:00:00.000Z",
+      "date_modified": "2025-10-21T00:00:00.000Z",
+      "tags": [
+        "PageSpeed",
+        "CSR",
+        "效能最佳化",
+        "字體最佳化",
+        "Web Vitals"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2025/Screenshot_20251021_091442_Quetta.webp"
+    },
+    {
       "id": "does-microsoft-care-piracy",
       "url": "https://b-log.to/post.html?slug=does-microsoft-care-piracy",
       "title": "微軟真的在乎你盜版嗎？",
