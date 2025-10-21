@@ -1943,6 +1943,45 @@ a:focus {
   background: var(--hover-background, #2a2a2a);
 }
 
+/* NotebookLM 標記 */
+.audio-attribution {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color, #e0e0e0);
+  font-size: 0.75rem;
+  color: var(--text-secondary, #666);
+  text-align: center;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.audio-attribution:hover {
+  opacity: 1;
+}
+
+.audio-attribution a {
+  color: var(--accent-color, #556bff);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.audio-attribution a:hover {
+  text-decoration: underline;
+  color: var(--accent-strong, #3644d8);
+}
+
+/* 深色模式支援 */
+@media (prefers-color-scheme: dark) {
+  .audio-attribution {
+    border-top-color: var(--border-color, #333);
+  }
+}
+
+[data-theme="dark"] .audio-attribution {
+  border-top-color: var(--border-color, #333);
+}
+
 /* 響應式設計 */
 @media (max-width: 768px) {
   .audio-controls {
@@ -1985,5 +2024,11 @@ a:focus {
 
   .volume-slider {
     display: none;
+  }
+
+  .audio-attribution {
+    font-size: 0.7rem;
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
   }
 }
