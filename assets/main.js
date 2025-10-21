@@ -393,6 +393,9 @@ function generateAudioPlayerHTML(audioFile) {
       <input type="range" class="volume-slider" min="0" max="100" value="100" aria-label="音量控制">
     </div>
   </div>
+  <div class="audio-attribution">
+    Powered by <a href="https://notebooklm.google/" target="_blank" rel="noopener noreferrer">NotebookLM</a>. You may check facts.
+  </div>
 </div>`;
 }
 
