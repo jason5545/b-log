@@ -224,7 +224,8 @@
       "情感依賴",
       "商業決策"
     ],
-    "accentColor": "#e74c3c"
+    "accentColor": "#e74c3c",
+    "hasAudio": true
   },
   {
     "slug": "unified-remote-evo-development-journey",
