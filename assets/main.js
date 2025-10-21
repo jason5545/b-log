@@ -402,6 +402,7 @@ function generateAudioPlayerHTML(audioFile) {
 // 語音播放器管理
 const AudioPlayerManager = {
   STORAGE_KEY_PREFIX: 'audio-player-',
+  eventHandlers: new Map(), // 儲存事件處理器引用以便清理
 
   init() {
     const audioPlayer = document.querySelector('.audio-player');
@@ -409,6 +410,13 @@ const AudioPlayerManager = {
 
     const audio = audioPlayer.querySelector('audio');
     if (!audio) return;
+
+    // 如果已經初始化過，先清理
+    if (audioPlayer.dataset.initialized === 'true') {
+      this.cleanup();
+    }
+
+    audioPlayer.dataset.initialized = 'true';
 
     // 取得播放器元素
     const playPauseBtn = audioPlayer.querySelector('.play-pause');
@@ -449,11 +457,26 @@ const AudioPlayerManager = {
     playPauseBtn.addEventListener('click', () => {
       if (audio.paused) {
         audio.play().catch(error => {
-          console.error('播放失敗：', error);
+          console.error('[AudioPlayer] 播放失敗：', error);
+          this.showError(audioPlayer, '無法播放音訊，請檢查網路連線或稍後再試。');
         });
       } else {
         audio.pause();
       }
+    });
+
+    // 音訊載入錯誤處理
+    audio.addEventListener('error', (e) => {
+      const errorMessages = {
+        1: '音訊載入被中斷',
+        2: '網路錯誤，無法載入音訊',
+        3: '音訊格式不支援或檔案損壞',
+        4: '音訊來源不可用'
+      };
+      const errorCode = audio.error ? audio.error.code : 0;
+      const errorMessage = errorMessages[errorCode] || '音訊播放發生未知錯誤';
+      console.error('[AudioPlayer] 音訊錯誤：', errorMessage, e);
+      this.showError(audioPlayer, errorMessage);
     });
 
     // 更新播放/暫停圖示
@@ -477,6 +500,9 @@ const AudioPlayerManager = {
       const percent = (audio.currentTime / audio.duration) * 100;
       progressBar.value = percent;
       currentTimeEl.textContent = this.formatTime(audio.currentTime);
+
+      // 更新進度條視覺效果（填充顏色）
+      this.updateProgressBar(progressBar, percent);
 
       // 只在非拖曳狀態下儲存進度（使用節流機制）
       if (!isSeeking) {
@@ -512,6 +538,8 @@ const AudioPlayerManager = {
     progressBar.addEventListener('input', () => {
       const time = (progressBar.value / 100) * audio.duration;
       audio.currentTime = time;
+      // 即時更新進度條視覺效果
+      this.updateProgressBar(progressBar, progressBar.value);
     });
 
     // 拖曳開始時停止儲存
@@ -558,9 +586,11 @@ const AudioPlayerManager = {
     });
 
     // 點選其他地方關閉選單
-    document.addEventListener('click', () => {
+    const closeMenuHandler = () => {
       speedMenu.style.display = 'none';
-    });
+    };
+    document.addEventListener('click', closeMenuHandler);
+    this.eventHandlers.set('closeMenu', closeMenuHandler);
 
     // 音量控制
     volumeSlider.addEventListener('input', () => {
@@ -590,7 +620,7 @@ const AudioPlayerManager = {
     this.updateVolumeIcon(volumeBtn, audio.volume);
 
     // 鍵盤快捷鍵
-    document.addEventListener('keydown', (e) => {
+    const keydownHandler = (e) => {
       // 如果焦點在輸入框中，忽略快捷鍵
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
         return;
@@ -631,7 +661,18 @@ const AudioPlayerManager = {
         localStorage.setItem('audio-volume', audio.volume.toString());
         this.updateVolumeIcon(volumeBtn, audio.volume);
       }
-    });
+    };
+    document.addEventListener('keydown', keydownHandler);
+    this.eventHandlers.set('keydown', keydownHandler);
+
+    // 頁面卸載時強制儲存進度
+    const beforeUnloadHandler = () => {
+      if (!isNaN(audio.currentTime) && audio.currentTime > 0) {
+        localStorage.setItem(storageKey + '-time', audio.currentTime.toString());
+      }
+    };
+    window.addEventListener('beforeunload', beforeUnloadHandler);
+    this.eventHandlers.set('beforeunload', beforeUnloadHandler);
 
     // 初始化播放清單支援
     this.initPlaylist(audioPlayer, audio, storageKey);
@@ -647,7 +688,14 @@ const AudioPlayerManager = {
     const totalPartsEl = audioPlayer.querySelector('.total-parts');
 
     // 偵測播放清單
-    const playlist = await this.detectPlaylist(audioFile);
+    let playlist;
+    try {
+      playlist = await this.detectPlaylist(audioFile);
+    } catch (error) {
+      console.error('[AudioPlayer] 播放清單初始化失敗：', error);
+      // 降級到單一檔案模式
+      playlist = [audioFile];
+    }
 
     // 如果只有一個檔案，不需要播放清單模式
     if (playlist.length === 1) return;
@@ -706,6 +754,18 @@ const AudioPlayerManager = {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   },
 
+  // 更新進度條視覺效果
+  updateProgressBar(progressBar, percent) {
+    const clampedPercent = Math.max(0, Math.min(100, percent));
+    progressBar.style.background = `linear-gradient(
+      to right,
+      var(--accent-color, #556bff) 0%,
+      var(--accent-color, #556bff) ${clampedPercent}%,
+      var(--border-color, #e0e0e0) ${clampedPercent}%,
+      var(--border-color, #e0e0e0) 100%
+    )`;
+  },
+
   updateVolumeIcon(volumeBtn, volume) {
     const svg = volumeBtn.querySelector('svg path');
     if (!svg) return;
@@ -727,28 +787,68 @@ const AudioPlayerManager = {
     const basename = audioFile.replace(/\.[^/.]+$/, ''); // 移除副檔名
     const ext = audioFile.match(/\.[^/.]+$/)[0]; // 取得副檔名
 
-    const playlist = [];
-    let partIndex = 0;
+    // 使用二分搜尋法快速找到最後一個存在的片段
+    const MAX_PARTS = 20;
 
-    // 嘗試載入 part0, part1, part2, ...
-    while (partIndex < 20) { // 最多嘗試 20 個片段
-      const partFile = `${basename}-part${partIndex}${ext}`;
-      const partUrl = `/content/audio/${partFile}`;
+    // 先檢查 part0 是否存在
+    const firstPartFile = `${basename}-part0${ext}`;
+    const firstPartUrl = `/content/audio/${firstPartFile}`;
 
-      try {
-        const response = await fetch(partUrl, { method: 'HEAD' });
-        if (response.ok) {
-          playlist.push(partFile);
-          partIndex++;
+    try {
+      const firstResponse = await fetch(firstPartUrl, { method: 'HEAD' });
+      if (!firstResponse.ok) {
+        // 如果 part0 不存在，返回原始檔案
+        return [audioFile];
+      }
+    } catch (error) {
+      console.warn('[AudioPlayer] 播放清單偵測失敗：', error);
+      return [audioFile];
+    }
+
+    // 使用並行請求快速偵測所有片段（批次處理）
+    const checkBatch = async (startIndex, endIndex) => {
+      const promises = [];
+      for (let i = startIndex; i <= endIndex; i++) {
+        const partFile = `${basename}-part${i}${ext}`;
+        const partUrl = `/content/audio/${partFile}`;
+        promises.push(
+          fetch(partUrl, { method: 'HEAD' })
+            .then(response => ({ index: i, exists: response.ok, file: partFile }))
+            .catch(() => ({ index: i, exists: false, file: partFile }))
+        );
+      }
+      return Promise.all(promises);
+    };
+
+    // 分批檢查（每批 5 個，避免過多並行請求）
+    const BATCH_SIZE = 5;
+    const playlist = [firstPartFile];
+
+    for (let batchStart = 1; batchStart < MAX_PARTS; batchStart += BATCH_SIZE) {
+      const batchEnd = Math.min(batchStart + BATCH_SIZE - 1, MAX_PARTS - 1);
+      const results = await checkBatch(batchStart, batchEnd);
+
+      // 按索引排序
+      results.sort((a, b) => a.index - b.index);
+
+      // 檢查是否有連續的片段
+      let foundGap = false;
+      for (const result of results) {
+        if (result.exists) {
+          playlist.push(result.file);
         } else {
+          foundGap = true;
           break;
         }
-      } catch (error) {
+      }
+
+      // 如果發現間隙，停止搜尋
+      if (foundGap) {
         break;
       }
     }
 
-    // 如果找到分割檔案，返回播放清單；否則返回原始檔案
+    console.log(`[AudioPlayer] 偵測到 ${playlist.length} 個音訊片段`);
     return playlist.length > 0 ? playlist : [audioFile];
   },
 
@@ -757,6 +857,42 @@ const AudioPlayerManager = {
     const source = audio.querySelector('source');
     source.src = `/content/audio/${partFile}`;
     audio.load();
+  },
+
+  // 清理事件監聽器
+  cleanup() {
+    // 移除所有事件監聽器
+    this.eventHandlers.forEach((handler, key) => {
+      if (key === 'closeMenu') {
+        document.removeEventListener('click', handler);
+      } else if (key === 'keydown') {
+        document.removeEventListener('keydown', handler);
+      } else if (key === 'beforeunload') {
+        window.removeEventListener('beforeunload', handler);
+      }
+    });
+    this.eventHandlers.clear();
+    console.log('[AudioPlayer] 清理完成');
+  },
+
+  // 顯示錯誤訊息
+  showError(audioPlayer, message) {
+    // 檢查是否已有錯誤訊息
+    let errorEl = audioPlayer.querySelector('.audio-error');
+    if (!errorEl) {
+      errorEl = document.createElement('div');
+      errorEl.className = 'audio-error';
+      audioPlayer.appendChild(errorEl);
+    }
+    errorEl.textContent = message;
+    errorEl.style.display = 'block';
+
+    // 3 秒後自動隱藏
+    setTimeout(() => {
+      if (errorEl) {
+        errorEl.style.display = 'none';
+      }
+    }, 5000);
   }
 };
 

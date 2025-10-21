@@ -1971,15 +1971,53 @@ a:focus {
   color: var(--accent-strong, #3644d8);
 }
 
+/* 音訊錯誤訊息 */
+.audio-error {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  display: none;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* 深色模式支援 */
 @media (prefers-color-scheme: dark) {
   .audio-attribution {
     border-top-color: var(--border-color, #333);
   }
+
+  .audio-error {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #ef4444;
+  }
 }
 
 [data-theme="dark"] .audio-attribution {
   border-top-color: var(--border-color, #333);
+}
+
+[data-theme="dark"] .audio-error {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #ef4444;
 }
 
 /* 響應式設計 */
