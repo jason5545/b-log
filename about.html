@@ -255,5 +255,7 @@
   <script src="assets/main.js" type="module" defer></script>
   <!-- Service Worker 註冊 - 延長字型快取 -->
   <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "YOUR_CLOUDFLARE_ANALYTICS_TOKEN"}'></script>
 </body>
 </html>
