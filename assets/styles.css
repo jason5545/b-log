@@ -415,9 +415,89 @@ a:focus {
   font-size: 0.95rem;
 }
 
-/* 搜尋容器 */
-.search-container {
-  margin: 1.5rem 0 2rem;
+/* Header 搜尋功能 */
+.search-toggle-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-toggle-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.search-toggle-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-soft);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: var(--radius-sm);
+}
+
+.search-toggle-btn:hover::before {
+  opacity: 1;
+}
+
+.search-toggle-btn:hover {
+  color: var(--accent);
+  transform: scale(1.05);
+}
+
+.search-toggle-btn.active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.search-toggle-btn.active::before {
+  opacity: 1;
+}
+
+.search-toggle-icon {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-toggle-btn:hover .search-toggle-icon {
+  transform: rotate(-10deg) scale(1.1);
+}
+
+.search-toggle-btn.active .search-toggle-icon {
+  transform: rotate(90deg);
+}
+
+/* 搜尋框容器 */
+.search-box {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+}
+
+.search-box.expanded {
+  width: 320px;
+  opacity: 1;
 }
 
 .search-input-wrapper {
@@ -425,26 +505,31 @@ a:focus {
   display: flex;
   align-items: center;
   width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
 }
 
 .search-icon {
   position: absolute;
   left: 1rem;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   color: var(--text-muted);
   pointer-events: none;
+  z-index: 1;
 }
 
 .search-input {
   width: 100%;
-  padding: 0.875rem 3rem 0.875rem 3rem;
-  font-size: 1rem;
+  padding: 0.75rem 2.75rem 0.75rem 2.75rem;
+  font-size: 0.95rem;
   font-family: inherit;
   color: var(--text);
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
   outline: none;
   transition: all 0.2s ease;
 }
@@ -455,20 +540,20 @@ a:focus {
 }
 
 .search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-soft);
+  outline: none;
 }
 
-.search-input:hover {
+.search-input-wrapper:focus-within {
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow-soft);
 }
 
 /* 清除按鈕 */
 .search-clear {
   position: absolute;
-  right: 0.75rem;
-  width: 32px;
-  height: 32px;
+  right: 0.5rem;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -479,28 +564,50 @@ a:focus {
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 0;
+  z-index: 1;
 }
 
 .search-clear:hover {
   background: var(--accent-soft);
   color: var(--accent);
+  transform: rotate(90deg);
 }
 
 .search-clear:active {
-  transform: scale(0.95);
+  transform: scale(0.9) rotate(90deg);
 }
 
 .search-clear svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 /* 搜尋結果計數 */
 .search-results-count {
-  margin: 0.75rem 0 0;
+  margin: 0.5rem 0 1rem;
   font-size: 0.9rem;
   color: var(--text-muted);
   font-weight: 500;
+}
+
+/* 響應式設計 - 平板和手機 */
+@media (max-width: 768px) {
+  .search-box.expanded {
+    width: 280px;
+  }
+
+  /* 在小螢幕上，搜尋框從右側滑入並覆蓋其他導航項目 */
+  .search-box {
+    position: fixed;
+    top: 4.5rem;
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+  }
+
+  .search-box.expanded {
+    width: auto;
+  }
 }
 
 .post-list {

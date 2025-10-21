@@ -146,10 +146,12 @@ const ThemeManager = {
  * 初始化搜尋功能
  */
 function initSearch() {
+  const searchToggleBtn = document.querySelector('.search-toggle-btn');
+  const searchBox = document.querySelector('.search-box');
   const searchInput = document.querySelector('#search-input');
   const searchClear = document.querySelector('#search-clear');
 
-  if (!searchInput) return;
+  if (!searchInput || !searchToggleBtn || !searchBox) return;
 
   // 從 URL 載入搜尋查詢
   const params = new URLSearchParams(window.location.search);
@@ -157,7 +159,15 @@ function initSearch() {
   if (searchQuery) {
     searchInput.value = searchQuery;
     if (searchClear) searchClear.hidden = false;
+    // 如果有搜尋查詢，自動展開搜尋框
+    openSearchBox();
   }
+
+  // 搜尋按鈕點擊事件
+  searchToggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleSearchBox();
+  });
 
   // 使用 debounce 避免過度觸發
   let debounceTimer;
@@ -192,7 +202,65 @@ function initSearch() {
       clearTimeout(debounceTimer);
       updateSearchParams(searchInput.value.trim());
     }
+
+    // ESC 鍵關閉搜尋框
+    if (e.key === 'Escape') {
+      closeSearchBox();
+    }
   });
+
+  // 點擊外部關閉搜尋框
+  document.addEventListener('click', (e) => {
+    if (!searchBox.contains(e.target) && !searchToggleBtn.contains(e.target)) {
+      // 如果沒有搜尋內容，關閉搜尋框
+      if (!searchInput.value.trim()) {
+        closeSearchBox();
+      }
+    }
+  });
+
+  // 搜尋框內部點擊不關閉
+  searchBox.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  // 展開/收合搜尋框的函數
+  function toggleSearchBox() {
+    const isExpanded = searchToggleBtn.getAttribute('aria-expanded') === 'true';
+    if (isExpanded) {
+      closeSearchBox();
+    } else {
+      openSearchBox();
+    }
+  }
+
+  function openSearchBox() {
+    searchBox.hidden = false;
+    searchToggleBtn.setAttribute('aria-expanded', 'true');
+    searchToggleBtn.classList.add('active');
+
+    // 觸發重排以確保動畫生效
+    requestAnimationFrame(() => {
+      searchBox.classList.add('expanded');
+      // 延遲聚焦，等待動畫完成
+      setTimeout(() => {
+        searchInput.focus();
+      }, 150);
+    });
+  }
+
+  function closeSearchBox() {
+    searchBox.classList.remove('expanded');
+    searchToggleBtn.setAttribute('aria-expanded', 'false');
+    searchToggleBtn.classList.remove('active');
+
+    // 等待動畫完成後再隱藏
+    setTimeout(() => {
+      if (!searchBox.classList.contains('expanded')) {
+        searchBox.hidden = true;
+      }
+    }, 300);
+  }
 }
 
 /**
