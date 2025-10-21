@@ -183,6 +183,46 @@
             <a href="./" aria-current="page">Home</a>
             <a href="about.html">About</a>
             <a href="feed.json">Feed</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="切換深色模式">
               <span class="theme-toggle__icon">🔄</span>
               <span class="theme-toggle__text">自動</span>
@@ -217,7 +257,9 @@
           <div class="stream-header">
             <h2 class="stream-title">Latest Dispatches</h2>
             <p class="stream-subtitle">Fresh experiments in tooling, process, and creative pacing.</p>
+            <p id="search-results-count" class="search-results-count" hidden></p>
           </div>
+
           <ul id="posts-list" class="post-list"></ul>
           <template id="post-item-template">
             <li class="post-card">

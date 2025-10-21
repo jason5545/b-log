@@ -138,6 +138,206 @@ const ThemeManager = {
   }
 };
 
+// ============================================================
+// 搜尋功能
+// ============================================================
+
+/**
+ * 初始化搜尋功能
+ */
+function initSearch() {
+  const searchToggleBtn = document.querySelector('.search-toggle-btn');
+  const searchBox = document.querySelector('.search-box');
+  const searchInput = document.querySelector('#search-input');
+  const searchClear = document.querySelector('#search-clear');
+
+  if (!searchInput || !searchToggleBtn || !searchBox) return;
+
+  // 從 URL 載入搜尋查詢
+  const params = new URLSearchParams(window.location.search);
+  const searchQuery = params.get('search');
+  if (searchQuery) {
+    searchInput.value = searchQuery;
+    if (searchClear) searchClear.hidden = false;
+    // 如果有搜尋查詢，自動展開搜尋框
+    openSearchBox();
+  }
+
+  // 搜尋按鈕點擊事件
+  searchToggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleSearchBox();
+  });
+
+  // 使用 debounce 避免過度觸發
+  let debounceTimer;
+  searchInput.addEventListener('input', (e) => {
+    const value = e.target.value.trim();
+
+    // 顯示/隱藏清除按鈕
+    if (searchClear) {
+      searchClear.hidden = !value;
+    }
+
+    // Debounce 搜尋
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      updateSearchParams(value);
+    }, 300);
+  });
+
+  // 清除按鈕
+  if (searchClear) {
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      searchClear.hidden = true;
+      updateSearchParams('');
+      searchInput.focus();
+    });
+  }
+
+  // Enter 鍵立即搜尋
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      clearTimeout(debounceTimer);
+      updateSearchParams(searchInput.value.trim());
+    }
+
+    // ESC 鍵關閉搜尋框
+    if (e.key === 'Escape') {
+      closeSearchBox();
+    }
+  });
+
+  // 點擊外部關閉搜尋框
+  document.addEventListener('click', (e) => {
+    if (!searchBox.contains(e.target) && !searchToggleBtn.contains(e.target)) {
+      // 如果沒有搜尋內容，關閉搜尋框
+      if (!searchInput.value.trim()) {
+        closeSearchBox();
+      }
+    }
+  });
+
+  // 搜尋框內部點擊不關閉
+  searchBox.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  // 展開/收合搜尋框的函數
+  function toggleSearchBox() {
+    const isExpanded = searchToggleBtn.getAttribute('aria-expanded') === 'true';
+    if (isExpanded) {
+      closeSearchBox();
+    } else {
+      openSearchBox();
+    }
+  }
+
+  function openSearchBox() {
+    searchBox.hidden = false;
+    searchToggleBtn.setAttribute('aria-expanded', 'true');
+    searchToggleBtn.classList.add('active');
+
+    // 觸發重排以確保動畫生效
+    requestAnimationFrame(() => {
+      searchBox.classList.add('expanded');
+      // 延遲聚焦，等待動畫完成
+      setTimeout(() => {
+        searchInput.focus();
+      }, 150);
+    });
+  }
+
+  function closeSearchBox() {
+    searchBox.classList.remove('expanded');
+    searchToggleBtn.setAttribute('aria-expanded', 'false');
+    searchToggleBtn.classList.remove('active');
+
+    // 等待動畫完成後再隱藏
+    setTimeout(() => {
+      if (!searchBox.classList.contains('expanded')) {
+        searchBox.hidden = true;
+      }
+    }, 300);
+  }
+}
+
+/**
+ * 更新 URL 參數並重新渲染
+ */
+function updateSearchParams(searchQuery) {
+  const params = new URLSearchParams(window.location.search);
+
+  if (searchQuery) {
+    params.set('search', searchQuery);
+  } else {
+    params.delete('search');
+  }
+
+  // 更新 URL（不重新載入頁面）
+  const newUrl = params.toString()
+    ? `${window.location.pathname}?${params.toString()}`
+    : window.location.pathname;
+
+  window.history.pushState({}, '', newUrl);
+
+  // 重新渲染頁面
+  renderHomepage().catch((error) => {
+    console.error('[search] failed to render', error);
+  });
+}
+
+/**
+ * 根據搜尋查詢過濾文章
+ */
+function filterPostsBySearch(posts, searchQuery) {
+  if (!searchQuery || !searchQuery.trim()) return posts;
+
+  const query = searchQuery.toLowerCase().trim();
+
+  return posts.filter(post => {
+    // 搜尋標題
+    if (post.title && post.title.toLowerCase().includes(query)) {
+      return true;
+    }
+
+    // 搜尋摘要
+    if (post.summary && post.summary.toLowerCase().includes(query)) {
+      return true;
+    }
+
+    // 搜尋分類
+    if (post.category && post.category.toLowerCase().includes(query)) {
+      return true;
+    }
+
+    // 搜尋標籤
+    if (Array.isArray(post.tags)) {
+      return post.tags.some(tag =>
+        String(tag || '').toLowerCase().includes(query)
+      );
+    }
+
+    return false;
+  });
+}
+
+/**
+ * 更新搜尋結果計數
+ */
+function updateSearchResultsCount(count, searchQuery) {
+  const countEl = document.querySelector('#search-results-count');
+  if (!countEl) return;
+
+  if (searchQuery && searchQuery.trim()) {
+    countEl.textContent = `找到 ${count} 篇文章`;
+    countEl.hidden = false;
+  } else {
+    countEl.hidden = true;
+  }
+}
+
 // 生成語音播放器 HTML
 function generateAudioPlayerHTML(audioFile) {
   return `<div class="audio-player" data-audio-file="${audioFile}">
@@ -555,6 +755,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const bodyClassList = document.body.classList;
 
   if (bodyClassList.contains('home')) {
+    // 初始化搜尋功能
+    initSearch();
+
     renderHomepage().catch((error) => {
       console.error('[home] failed to render', error);
       const errorEl = document.querySelector('#posts-error');
@@ -590,6 +793,7 @@ async function renderHomepage() {
   const params = new URLSearchParams(window.location.search);
   const filterTag = params.get('tag');
   const filterCategory = params.get('category');
+  const searchQuery = params.get('search');
 
   if (!posts.length) {
     if (postsEmptyEl) postsEmptyEl.hidden = false;
@@ -611,10 +815,20 @@ async function renderHomepage() {
     );
   }
 
+  // 搜尋功能
+  if (searchQuery) {
+    posts = filterPostsBySearch(posts, searchQuery);
+  }
+
+  // 更新搜尋結果計數
+  updateSearchResultsCount(posts.length, searchQuery);
+
   // 如果篩選後沒有文章，顯示提示
   if (!posts.length) {
     if (postsEmptyEl) {
-      postsEmptyEl.textContent = filterTag
+      postsEmptyEl.textContent = searchQuery
+        ? `沒有找到包含「${searchQuery}」的文章。`
+        : filterTag
         ? `沒有找到標籤「${filterTag}」的文章。`
         : filterCategory
         ? `沒有找到分類「${filterCategory}」的文章。`
