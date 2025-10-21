@@ -869,6 +869,12 @@ async function renderHomepage() {
         linkEl.href = slugToPath(post.slug, post.category);
         linkEl.textContent = post.title || post.slug;
 
+        // 先清除已存在的音訊圖示（防禦性編程，雖然列表已被清空）
+        const existingAudioIcon = linkEl.parentElement.querySelector('.audio-indicator');
+        if (existingAudioIcon) {
+          existingAudioIcon.remove();
+        }
+
         // 如果文章有語音版，添加語音圖示
         if (post.hasAudio) {
           const audioIcon = document.createElement('span');
@@ -1087,6 +1093,12 @@ function renderFeaturedPost(post) {
   if (heroLink) {
     heroLink.href = slugToPath(post.slug, post.category);
     heroLink.textContent = post.title || post.slug;
+
+    // 先清除已存在的音訊圖示（避免重複渲染時累積）
+    const existingAudioIcon = heroLink.parentElement.querySelector('.audio-indicator');
+    if (existingAudioIcon) {
+      existingAudioIcon.remove();
+    }
 
     // 如果文章有語音版，添加語音圖示
     if (post.hasAudio) {
