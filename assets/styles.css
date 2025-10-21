@@ -415,6 +415,94 @@ a:focus {
   font-size: 0.95rem;
 }
 
+/* 搜尋容器 */
+.search-container {
+  margin: 1.5rem 0 2rem;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.875rem 3rem 0.875rem 3rem;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.search-input:hover {
+  border-color: var(--accent);
+}
+
+/* 清除按鈕 */
+.search-clear {
+  position: absolute;
+  right: 0.75rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.search-clear:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.search-clear:active {
+  transform: scale(0.95);
+}
+
+.search-clear svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* 搜尋結果計數 */
+.search-results-count {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
 .post-list {
   list-style: none;
   padding: 0;
