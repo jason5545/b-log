@@ -2,7 +2,7 @@
   {
     "slug": "pagespeed-optimization-csr-blog",
     "title": "從 50 分到 100 分：CSR 部落格的 PageSpeed 最佳化之路",
-    "summary": "記錄如何將 CSR 部落格從 PageSpeed 50 分優化到 100 分的過程，發現盲目套用 SSR/SSG 最佳實踐反而適得其反，最終透過自行託管輕量字體和使用系統字體達成完美分數。",
+    "summary": "記錄如何將 CSR 部落格從 PageSpeed 50 分最佳化到 100 分的過程，發現盲目套用 SSR/SSG 最佳實踐反而適得其反，最終透過自行託管輕量字體和使用系統字體達成完美分數。",
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2025-10-21T00:00:00.000Z",

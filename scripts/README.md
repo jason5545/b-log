@@ -134,7 +134,7 @@ https://b-log.to/post.html?slug=openai-contradiction-dangerous-game
 2. **SEO 友好**：WordPress 風格的 URL 更簡潔、更容易被搜尋引擎索引
 3. **自動化維護**：完全自動化，無需手動干預
 
-### ⚡ 效能優化
+### ⚡ 效能最佳化
 
 - **即時重定向**：使用 JavaScript `window.location.replace()` 實現毫秒級重定向
 - **Meta refresh 備用**：確保在 JavaScript 不可用時也能正常重定向
