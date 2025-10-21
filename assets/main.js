@@ -151,7 +151,16 @@ function initSearch() {
   const searchInput = document.querySelector('#search-input');
   const searchClear = document.querySelector('#search-clear');
 
-  if (!searchInput || !searchToggleBtn || !searchBox) return;
+  if (!searchInput || !searchToggleBtn || !searchBox) {
+    console.warn('[Search] Missing elements:', {
+      searchInput: !!searchInput,
+      searchToggleBtn: !!searchToggleBtn,
+      searchBox: !!searchBox
+    });
+    return;
+  }
+
+  console.log('[Search] Initialized successfully');
 
   // 從 URL 載入搜尋查詢
   const params = new URLSearchParams(window.location.search);
@@ -165,6 +174,7 @@ function initSearch() {
 
   // 搜尋按鈕點擊事件
   searchToggleBtn.addEventListener('click', (e) => {
+    console.log('[Search] Toggle button clicked');
     e.stopPropagation();
     toggleSearchBox();
   });
