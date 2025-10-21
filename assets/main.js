@@ -543,6 +543,8 @@ const AudioPlayerManager = {
       audio.currentTime = time;
       // 即時更新進度條視覺效果
       this.updateProgressBar(progressBar, progressBar.value);
+      // 即時更新時間顯示
+      currentTimeEl.textContent = this.formatTime(time);
     });
 
     // 拖曳開始時停止儲存
