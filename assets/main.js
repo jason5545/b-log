@@ -518,13 +518,16 @@ const AudioPlayerManager = {
     audio.addEventListener('loadedmetadata', () => {
       durationEl.textContent = this.formatTime(audio.duration);
 
-      // 在元數據載入完成後恢復播放進度
-      const savedTime = localStorage.getItem(storageKey + '-time');
-      if (savedTime && parseFloat(savedTime) > 0) {
-        const time = parseFloat(savedTime);
-        // 確保不超過音訊長度
-        if (time < audio.duration) {
-          audio.currentTime = time;
+      // 只在非播放清單模式下恢復播放進度
+      // 播放清單模式會在切換片段時觸發此事件,不應該恢復舊進度
+      if (!audioPlayer.classList.contains('playlist-mode')) {
+        const savedTime = localStorage.getItem(storageKey + '-time');
+        if (savedTime && parseFloat(savedTime) > 0) {
+          const time = parseFloat(savedTime);
+          // 確保不超過音訊長度
+          if (time < audio.duration) {
+            audio.currentTime = time;
+          }
         }
       }
     });
@@ -713,11 +716,15 @@ const AudioPlayerManager = {
     let currentPartIndex = 0;
     currentPartEl.textContent = currentPartIndex + 1;
 
-    // 載入第一個片段
-    this.loadPart(audio, playlist[currentPartIndex]);
+    // 載入第一個片段(只有當原始音訊源與第一個片段不同時才重新載入)
+    const currentSrc = audio.querySelector('source').src;
+    const firstPartSrc = `/content/audio/${playlist[currentPartIndex]}`;
+    if (!currentSrc.endsWith(playlist[currentPartIndex])) {
+      await this.loadPart(audio, playlist[currentPartIndex]);
+    }
 
     // 播放結束時自動播放下一個片段
-    audio.addEventListener('ended', () => {
+    const endedHandler = async () => {
       // 只在播放清單模式下處理
       if (!audioPlayer.classList.contains('playlist-mode')) return;
 
@@ -726,7 +733,9 @@ const AudioPlayerManager = {
       if (currentPartIndex < playlist.length) {
         console.log(`📻 自動播放下一個片段：${currentPartIndex + 1}/${playlist.length}`);
         currentPartEl.textContent = currentPartIndex + 1;
-        this.loadPart(audio, playlist[currentPartIndex]);
+
+        // 等待片段載入完成
+        await this.loadPart(audio, playlist[currentPartIndex]);
 
         // 保持播放速度
         const savedSpeed = localStorage.getItem(storageKey + '-speed');
@@ -744,7 +753,9 @@ const AudioPlayerManager = {
         audioPlayer.classList.remove('playlist-mode');
         localStorage.removeItem(storageKey + '-time');
       }
-    });
+    };
+
+    audio.addEventListener('ended', endedHandler);
   },
 
   formatTime(seconds) {
@@ -852,11 +863,34 @@ const AudioPlayerManager = {
     return playlist.length > 0 ? playlist : [audioFile];
   },
 
-  // 載入特定片段
+  // 載入特定片段(返回 Promise,等待載入完成)
   loadPart(audio, partFile) {
-    const source = audio.querySelector('source');
-    source.src = `/content/audio/${partFile}`;
-    audio.load();
+    return new Promise((resolve, reject) => {
+      const source = audio.querySelector('source');
+      source.src = `/content/audio/${partFile}`;
+
+      // 監聽載入完成事件
+      const onLoadedMetadata = () => {
+        audio.removeEventListener('loadedmetadata', onLoadedMetadata);
+        audio.removeEventListener('error', onError);
+        console.log(`✅ 片段載入完成：${partFile}`);
+        resolve();
+      };
+
+      // 監聽載入錯誤事件
+      const onError = (e) => {
+        audio.removeEventListener('loadedmetadata', onLoadedMetadata);
+        audio.removeEventListener('error', onError);
+        console.error(`❌ 片段載入失敗：${partFile}`, e);
+        reject(new Error(`Failed to load audio part: ${partFile}`));
+      };
+
+      audio.addEventListener('loadedmetadata', onLoadedMetadata, { once: true });
+      audio.addEventListener('error', onError, { once: true });
+
+      // 開始載入
+      audio.load();
+    });
   },
 
   // 清理事件監聽器
