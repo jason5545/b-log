@@ -1950,8 +1950,11 @@ function setupCopyLink(container, url) {
 
 function updatePageMetadata(post) {
   const baseUrl = 'https://b-log.to/';
-  const postUrl = `${baseUrl}post.html?slug=${post.slug}`;
-  
+  // 使用 WordPress 風格的 URL，指向預渲染的靜態頁面
+  // 這樣社群平台爬蟲才能看到正確的 meta 標籤（爬蟲不執行 JavaScript）
+  const postPath = slugToPath(post.slug, post.category);
+  const postUrl = `${baseUrl}${postPath.startsWith('/') ? postPath.substring(1) : postPath}`;
+
   // 更新基本的 title 和 description
   document.title = post.title ? `${post.title} - b-log` : 'Reading - b-log';
   
