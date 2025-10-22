@@ -15,23 +15,28 @@ const { categoryMapping } = JSON.parse(fs.readFileSync(categoriesPath, 'utf8'));
 
 // 生成 sitemap XML
 function generateSitemap() {
-  const now = new Date().toISOString();
+  // 使用最新文章的發布/更新日期作為靜態頁面的 lastmod
+  // 這樣只有在真正有內容更新時，sitemap 才會改變
+  const latestPostDate = posts.reduce((latest, post) => {
+    const postDate = post.updatedAt || post.publishedAt;
+    return postDate > latest ? postDate : latest;
+  }, '');
 
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
-  // 首頁
+  // 首頁 - 使用最新文章的日期
   xml += '  <url>\n';
   xml += `    <loc>${BASE_URL}/</loc>\n`;
-  xml += `    <lastmod>${now}</lastmod>\n`;
+  xml += `    <lastmod>${latestPostDate}</lastmod>\n`;
   xml += '    <changefreq>daily</changefreq>\n';
   xml += '    <priority>1.0</priority>\n';
   xml += '  </url>\n';
 
-  // 關於頁面
+  // 關於頁面 - 使用最新文章的日期
   xml += '  <url>\n';
   xml += `    <loc>${BASE_URL}/about.html</loc>\n`;
-  xml += `    <lastmod>${now}</lastmod>\n`;
+  xml += `    <lastmod>${latestPostDate}</lastmod>\n`;
   xml += '    <changefreq>monthly</changefreq>\n';
   xml += '    <priority>0.8</priority>\n';
   xml += '  </url>\n';
