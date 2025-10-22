@@ -1,0 +1,63 @@
+name: 生成 Sitemap
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data/posts.json'
+      - 'scripts/generate-sitemap.js'
+  workflow_run:
+    workflows: ["生成重定向頁面"]
+    types:
+      - completed
+  workflow_dispatch:  # 允許手動觸發
+
+jobs:
+  generate-sitemap:
+    runs-on: ubuntu-latest
+    # 只在重定向頁面生成成功時執行（如果是由 workflow_run 觸發的話）
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      contents: write  # 授予寫入權限
+
+    steps:
+      - name: 檢出程式碼
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 設定 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 執行 sitemap 生成腳本
+        run: node scripts/generate-sitemap.js
+
+      - name: 檢查變更
+        id: check_changes
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 提交變更
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add sitemap.xml
+          git commit -m "自動生成 sitemap.xml
+
+          由 GitHub Actions 自動生成
+          觸發原因: posts.json 或重定向頁面更新"
+
+      - name: 推送變更
+        if: steps.check_changes.outputs.has_changes == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
