@@ -937,6 +937,11 @@ document.addEventListener('DOMContentLoaded', () => {
   ThemeManager.init();
   // 初始化語音播放器
   AudioPlayerManager.init();
+  // 載入分類映射
+  loadCategoryMapping().catch((error) => {
+    console.warn('[init] failed to load category mapping', error);
+  });
+
   const bodyClassList = document.body.classList;
 
   if (bodyClassList.contains('home')) {
@@ -1901,18 +1906,21 @@ function clamp(value, min, max) {
 }
 
 function slugToPath(slug, category) {
-  // 中文分類到英文的映射（與 generate-redirects.js 保持一致）
-  const categoryMapping = {
+  // 使用全局的 categoryMapping（從 config/categories.json 載入）
+  // 如果還沒載入，使用完整的預設映射作為 fallback
+  const mapping = categoryMapping || {
     'AI 分析': 'ai-analysis',
     '技術開發': 'tech-development',
     '技術分析': 'tech-analysis',
     '開發哲學': 'dev-philosophy',
-    '生活記事': 'life-stories'
+    '生活記事': 'life-stories',
+    '商業觀察': 'business-insights',
+    '文化觀察': 'cultural-insights'
   };
 
   // 如果有分類，生成 WordPress 風格的 URL（絕對路徑）
-  if (category && categoryMapping[category]) {
-    const categorySlug = categoryMapping[category];
+  if (category && mapping[category]) {
+    const categorySlug = mapping[category];
     return `/${categorySlug}/${slug}/`;
   }
 
