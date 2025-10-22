@@ -1685,15 +1685,19 @@ function renderShareLinks(post) {
   const pageUrl = new URL(window.location.href);
   pageUrl.hash = '';
 
+  // 在數組定義前保存這些值，避免 minify 後的變量遮蔽問題
+  const postTitle = post.title || 'New post on b-log';
+  const urlString = pageUrl.toString();
+
   const shareItems = [
     {
       label: 'Share on X',
-      href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title || 'New post on b-log')}&url=${encodeURIComponent(pageUrl.toString())}`,
+      href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(postTitle)}&url=${encodeURIComponent(urlString)}`,
       external: true,
     },
     {
       label: 'Share on Facebook',
-      href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl.toString())}`,
+      href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(urlString)}`,
       external: true,
     },
     {
@@ -1721,7 +1725,7 @@ function renderShareLinks(post) {
     shareEl.appendChild(link);
   });
 
-  setupCopyLink(shareEl, pageUrl.toString());
+  setupCopyLink(shareEl, urlString);
 }
 
 function renderNavigation(posts, index) {
