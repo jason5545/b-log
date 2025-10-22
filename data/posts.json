@@ -1,5 +1,24 @@
 [
   {
+    "slug": "vtuber-shipping-culture-silence-cost",
+    "title": "當 Shipping 玩成真：VTuber 圈的厄介文化與沉默的代價",
+    "summary": "當 VTuber 圈的 shipping 文化從玩笑變成真情，當 85% 的沉默觀眾讓 5% 的聲音主導全局。透過 Anny/Vedal 事件，探討厄介粉絲、群體動力學，以及沉默的代價。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-19T00:00:00.000Z",
+    "updatedAt": "2025-10-19T00:00:00.000Z",
+    "readingTime": "15 min",
+    "tags": [
+      "VTuber",
+      "Shipping文化",
+      "厄介粉絲",
+      "群體動力學",
+      "沉默的代價",
+      "擬社會關係"
+    ],
+    "accentColor": "#9b59b6"
+  },
+  {
     "slug": "pagespeed-optimization-csr-blog",
     "title": "從 50 分到 100 分：CSR 部落格的 PageSpeed 最佳化之路",
     "summary": "記錄如何將 CSR 部落格從 PageSpeed 50 分最佳化到 100 分的過程，發現盲目套用 SSR/SSG 最佳實踐反而適得其反，最終透過自行託管輕量字體和使用系統字體達成完美分數。",
