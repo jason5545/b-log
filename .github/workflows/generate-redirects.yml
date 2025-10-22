@@ -16,10 +16,7 @@ jobs:
   generate-redirects:
     runs-on: ubuntu-latest
     # 只在 Pages build 成功時執行（如果是由 workflow_run 觸發的話）
-    # 並且排除由 bot 觸發的 workflow，避免 trigger loop
-    if: |
-      github.actor != 'github-actions[bot]' &&
-      (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: write  # 授予寫入權限
 
@@ -28,16 +25,31 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 2  # 需要獲取至少 2 個 commit 來檢查歷史
+
+      - name: 檢查是否需要執行
+        id: should_run
+        run: |
+          LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+          if [[ "$LAST_COMMIT_MSG" == *"自動生成重定向頁面"* ]]; then
+            echo "最近的 commit 已經是自動生成重定向頁面，跳過執行"
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          else
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: 設定 Node.js
+        if: steps.should_run.outputs.should_run == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: 執行重定向頁面生成腳本
+        if: steps.should_run.outputs.should_run == 'true'
         run: node scripts/generate-redirects.js
 
       - name: 檢查變更
+        if: steps.should_run.outputs.should_run == 'true'
         id: check_changes
         run: |
           if [[ -n $(git status --porcelain) ]]; then
@@ -47,7 +59,7 @@ jobs:
           fi
 
       - name: 提交變更
-        if: steps.check_changes.outputs.has_changes == 'true'
+        if: steps.should_run.outputs.should_run == 'true' && steps.check_changes.outputs.has_changes == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -58,7 +70,7 @@ jobs:
           觸發原因: posts.json 更新"
 
       - name: 推送變更
-        if: steps.check_changes.outputs.has_changes == 'true'
+        if: steps.should_run.outputs.should_run == 'true' && steps.check_changes.outputs.has_changes == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
