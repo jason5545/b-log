@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "proxmox-usb-passthrough-crash",
+      "url": "https://b-log.to/post.html?slug=proxmox-usb-passthrough-crash",
+      "title": "刷錯韌體，把整台 Proxmox 搞當機了",
+      "content_text": "在 PVE 上把 T-Dongle S3 直通給 Windows VM，結果刷機時把整包韌體（含 bootloader）寫到錯的位址（0x10000），板子開機後開始瘋狂 reset，USB 不停重新枚舉。整台 PVE 直接被拖到像當機一樣。拔掉板子就好了，後來用手機把它刷回來。重點是：USB passthrough 並沒有完全隔離。VM 只拿到裝置控制權，底層的 xHCI 控制器還是宿主在管。裝置一亂，整條 USB bus 都會受影響。這次踩坑的重點：1. USB passthrough 沒有完全隔離，VM 拿裝置控制權，Host 還是管 xHCI 控制器，裝置出事會影響整個 USB bus。2. T-Dongle S3 有雙 USB，CH340（UART）+ ESP32-S3 原生 USB（OTG），燒錄用 /dev/ttyUSB0（CH340），不要用 /dev/ttyACM0。3. 韌體位址要對，整包 → 0x0000，app-only → 0x10000，錯了會 bootloop → USB 風暴 → 宿主掛。",
+      "date_published": "2025-10-23T01:00:00.000Z",
+      "date_modified": "2025-10-23T01:00:00.000Z",
+      "tags": [
+        "Proxmox",
+        "USB Passthrough",
+        "ESP32-S3",
+        "故障排除",
+        "虛擬化",
+        "硬體除錯"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "rhetoric-action-divergence",
       "url": "https://b-log.to/post.html?slug=rhetoric-action-divergence",
       "title": "當言論與行動背道而馳：一個政治倫理的思考實驗",

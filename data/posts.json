@@ -1,5 +1,24 @@
 [
   {
+    "slug": "proxmox-usb-passthrough-crash",
+    "title": "刷錯韌體，把整台 Proxmox 搞當機了",
+    "summary": "在 PVE 上直通 T-Dongle S3 給 Windows VM，結果刷機時把韌體寫到錯誤位址導致 USB 風暴，整台 PVE 被拖到當機。探討 USB passthrough 的隔離限制、雙 USB 設計的挑戰，以及如何避免類似災難。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-23T01:00:00.000Z",
+    "updatedAt": "2025-10-23T01:00:00.000Z",
+    "readingTime": "20 min",
+    "tags": [
+      "Proxmox",
+      "USB Passthrough",
+      "ESP32-S3",
+      "故障排除",
+      "虛擬化",
+      "硬體除錯"
+    ],
+    "accentColor": "#3498db"
+  },
+  {
     "slug": "rhetoric-action-divergence",
     "title": "當言論與行動背道而馳：一個政治倫理的思考實驗",
     "summary": "當某人一邊享受民主體制的福利，一邊支持終結這個體制時，我們該如何理解這種矛盾？從個人到媒體，探討言行一致性、道德資格，以及「用腳投票」的真實意義。",
