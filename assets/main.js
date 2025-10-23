@@ -937,6 +937,11 @@ document.addEventListener('DOMContentLoaded', () => {
   ThemeManager.init();
   // 初始化語音播放器
   AudioPlayerManager.init();
+  // 載入分類映射
+  loadCategoryMapping().catch((error) => {
+    console.warn('[init] failed to load category mapping', error);
+  });
+
   const bodyClassList = document.body.classList;
 
   if (bodyClassList.contains('home')) {
@@ -1685,15 +1690,19 @@ function renderShareLinks(post) {
   const pageUrl = new URL(window.location.href);
   pageUrl.hash = '';
 
+  // 在數組定義前保存這些值，避免 minify 後的變量遮蔽問題
+  const postTitle = post.title || 'New post on b-log';
+  const urlString = pageUrl.toString();
+
   const shareItems = [
     {
       label: 'Share on X',
-      href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title || 'New post on b-log')}&url=${encodeURIComponent(pageUrl.toString())}`,
+      href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(postTitle)}&url=${encodeURIComponent(urlString)}`,
       external: true,
     },
     {
       label: 'Share on Facebook',
-      href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl.toString())}`,
+      href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(urlString)}`,
       external: true,
     },
     {
@@ -1721,7 +1730,7 @@ function renderShareLinks(post) {
     shareEl.appendChild(link);
   });
 
-  setupCopyLink(shareEl, pageUrl.toString());
+  setupCopyLink(shareEl, urlString);
 }
 
 function renderNavigation(posts, index) {
@@ -1897,18 +1906,21 @@ function clamp(value, min, max) {
 }
 
 function slugToPath(slug, category) {
-  // 中文分類到英文的映射（與 generate-redirects.js 保持一致）
-  const categoryMapping = {
+  // 使用全局的 categoryMapping（從 config/categories.json 載入）
+  // 如果還沒載入，使用完整的預設映射作為 fallback
+  const mapping = categoryMapping || {
     'AI 分析': 'ai-analysis',
     '技術開發': 'tech-development',
     '技術分析': 'tech-analysis',
     '開發哲學': 'dev-philosophy',
-    '生活記事': 'life-stories'
+    '生活記事': 'life-stories',
+    '商業觀察': 'business-insights',
+    '文化觀察': 'cultural-insights'
   };
 
   // 如果有分類，生成 WordPress 風格的 URL（絕對路徑）
-  if (category && categoryMapping[category]) {
-    const categorySlug = categoryMapping[category];
+  if (category && mapping[category]) {
+    const categorySlug = mapping[category];
     return `/${categorySlug}/${slug}/`;
   }
 
@@ -1946,8 +1958,11 @@ function setupCopyLink(container, url) {
 
 function updatePageMetadata(post) {
   const baseUrl = 'https://b-log.to/';
-  const postUrl = `${baseUrl}post.html?slug=${post.slug}`;
-  
+  // 使用 WordPress 風格的 URL，指向預渲染的靜態頁面
+  // 這樣社群平台爬蟲才能看到正確的 meta 標籤（爬蟲不執行 JavaScript）
+  const postPath = slugToPath(post.slug, post.category);
+  const postUrl = `${baseUrl}${postPath.startsWith('/') ? postPath.substring(1) : postPath}`;
+
   // 更新基本的 title 和 description
   document.title = post.title ? `${post.title} - b-log` : 'Reading - b-log';
   
