@@ -1,0 +1,23 @@
+# robots.txt for b-log.to
+User-agent: *
+Allow: /
+
+# 主要内容页面
+Allow: /*/
+
+# 排除查询参数版本的文章页面（使用新的目录结构）
+Disallow: /post.html?*
+Disallow: /*?search=*
+
+# Sitemap
+Sitemap: https://b-log.to/sitemap.xml
+
+# 常见爬虫配置
+# 允许所有分类目录
+Allow: /ai-analysis/
+Allow: /tech-analysis/
+Allow: /tech-development/
+Allow: /dev-philosophy/
+Allow: /business-insights/
+Allow: /cultural-insights/
+Allow: /life-stories/
