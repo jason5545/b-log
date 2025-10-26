@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "hardware-price-reversal-lesson",
+      "url": "https://b-log.to/post.html?slug=hardware-price-reversal-lesson",
+      "title": "「晚買享折扣」？我用 5000 元的代價學到的一課",
+      "content_text": "2024 年，當我花 NT$7,700 買下 96GB DDR5 記憶體時，心裡其實有點猶豫：「會不會買太貴了？」一年後的今天，同樣的記憶體要價 NT$11,499，漲幅 49%。我記錄了硬體價格大幅上漲的經歷，當時花費 NT$20,396 的配置，現在要 NT$25,297，價差約 5000 元。OpenAI 一家公司就簽下每月 90 萬片 DRAM 晶圓的訂單，佔全球產能 40%。AI 需求徹底改寫了硬體市場規律，「晚買享折扣」的信仰失效。我學到三個教訓：沒有永遠的規律、需求確定時別賭價格會跌、閒置硬體也是資產。我的建議：別賭未來會更便宜。如果現在系統已經不夠用，該升級就升級。等待的機會成本，可能比你省下的錢更高。",
+      "date_published": "2025-10-27T00:00:00.000Z",
+      "date_modified": "2025-10-27T00:00:00.000Z",
+      "tags": [
+        "硬體價格",
+        "AI產業",
+        "記憶體",
+        "SSD",
+        "市場週期",
+        "採購策略"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "proxmox-usb-passthrough-crash",
       "url": "https://b-log.to/post.html?slug=proxmox-usb-passthrough-crash",
       "title": "刷錯韌體，把整台 Proxmox 搞當機了",

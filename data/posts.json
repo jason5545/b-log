@@ -1,5 +1,24 @@
 [
   {
+    "slug": "hardware-price-reversal-lesson",
+    "title": "「晚買享折扣」？我用 5000 元的代價學到的一課",
+    "summary": "記錄 2024 年購買電腦硬體後一年內價格大幅上漲的經歷。當時花費 NT$20,396，相同配置現在售價 NT$25,297，漲幅約 5000 元。探討 AI 需求如何改寫硬體市場規律，以及「晚買享折扣」信仰失效的三個教訓。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2025-10-27T00:00:00.000Z",
+    "updatedAt": "2025-10-27T00:00:00.000Z",
+    "readingTime": "10 min",
+    "tags": [
+      "硬體價格",
+      "AI產業",
+      "記憶體",
+      "SSD",
+      "市場週期",
+      "採購策略"
+    ],
+    "accentColor": "#e67e22"
+  },
+  {
     "slug": "proxmox-usb-passthrough-crash",
     "title": "刷錯韌體，把整台 Proxmox 搞當機了",
     "summary": "在 PVE 上直通 T-Dongle S3 給 Windows VM，結果刷機時把韌體寫到錯誤位址導致 USB 風暴，整台 PVE 被拖到當機。探討 USB passthrough 的隔離限制、雙 USB 設計的挑戰，以及如何避免類似災難。",
