@@ -27,40 +27,27 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 5  # 獲取最近 5 個 commit 來檢查歷史
 
-      - name: 檢查是否需要執行
-        id: should_run
-        run: |
-          # 檢查最近 3 個 commits，看是否已經有自動生成的重定向頁面
-          RECENT_COMMITS=$(git log -3 --pretty=%B)
-          if echo "$RECENT_COMMITS" | grep -q "自動生成重定向頁面"; then
-            echo "最近的 commits 中已經有自動生成重定向頁面，跳過執行"
-            echo "should_run=false" >> $GITHUB_OUTPUT
-          else
-            echo "should_run=true" >> $GITHUB_OUTPUT
-          fi
-
       - name: 設定 Node.js
-        if: steps.should_run.outputs.should_run == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: 執行重定向頁面生成腳本
-        if: steps.should_run.outputs.should_run == 'true'
         run: node scripts/generate-redirects.js
 
       - name: 檢查變更
-        if: steps.should_run.outputs.should_run == 'true'
         id: check_changes
         run: |
           if [[ -n $(git status --porcelain) ]]; then
             echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "發現新的頁面需要生成"
           else
             echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "所有頁面都已存在，無需更新"
           fi
 
       - name: 提交變更
-        if: steps.should_run.outputs.should_run == 'true' && steps.check_changes.outputs.has_changes == 'true'
+        if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -71,7 +58,7 @@ jobs:
           觸發原因: posts.json 更新"
 
       - name: 推送變更
-        if: steps.should_run.outputs.should_run == 'true' && steps.check_changes.outputs.has_changes == 'true'
+        if: steps.check_changes.outputs.has_changes == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
