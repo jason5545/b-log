@@ -336,7 +336,7 @@ Log.Logger = new LoggerConfiguration()
 如果你也是單指使用者，或者你也對這類技術感興趣，歡迎到 [GitHub](https://github.com/jason5545/Touchpad-Advanced-Tool) 看看。程式碼完全開源，也歡迎提出改進建議。
 
 **技術統計**：
-- 開發時間：約 3 週
+- 開發時間：約 3 天
 - 程式碼行數：約 5,200 行
 - 使用技術：C# / .NET 8.0 / WPF / ModernWpf
 - 架構模式：MVVM + DI
