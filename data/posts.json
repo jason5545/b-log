@@ -1,5 +1,24 @@
 [
   {
+    "slug": "touchpad-advanced-tool",
+    "title": "觸控板進階工具：我如何用 C# 找回失去的單指捲動功能",
+    "summary": "當 Microsoft 以「現代化」為名移除精確式觸控板的邊緣捲動功能後，我決定自己寫一個。從 Raw Input API 到慣性捲動，從事件區分到狀態機，記錄完整的技術實作過程與踩坑經驗。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2025-11-07T00:00:00.000Z",
+    "updatedAt": "2025-11-07T00:00:00.000Z",
+    "readingTime": "15 min",
+    "tags": [
+      "C#",
+      "WPF",
+      "Raw Input API",
+      "無障礙",
+      "觸控板",
+      "Windows"
+    ],
+    "accentColor": "#9b59b6"
+  },
+  {
     "slug": "modernization-vs-accessibility",
     "title": "當「現代化」成為無障礙的退步：精確式觸控板取消邊緣捲動功能",
     "summary": "探討 Microsoft 精確式觸控板移除邊緣捲動功能的決策背後邏輯。從單指使用者的實際需求出發，分析大廠在「現代化」「統一體驗」名義下如何犧牲少數人的無障礙功能。揭示組織內部的矛盾：無障礙部門開發創新產品，產品團隊卻移除基本功能。",
