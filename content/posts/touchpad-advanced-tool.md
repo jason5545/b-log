@@ -52,7 +52,7 @@ services.AddSingleton<ITouchpadTracker, TouchpadTracker>();
 services.AddSingleton<IScrollConverter, ScrollConverter>();
 ```
 
-這種設計讓我能夠輕鬆替換或測試個別元件，而不會影響整體系統。
+這種設計讓我能夠輕鬆取代或測試個別元件，而不會影響整體系統。
 
 ## 關鍵技術難題
 
