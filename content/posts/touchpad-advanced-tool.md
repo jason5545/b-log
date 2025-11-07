@@ -245,7 +245,7 @@ private void UpdateGestureState(Contact contact)
 
 ## 一些實作細節
 
-### 智能初始偏移
+### 智慧初始偏移
 
 觸控板有個問題：**第一個座標事件的移動量永遠是 0**。
 
