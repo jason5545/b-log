@@ -1,5 +1,25 @@
 [
   {
+    "slug": "constraints-value-disabled-engineer",
+    "title": "在限制中尋找價值：一個身障工程師的心理地圖",
+    "summary": "記錄我與 AI 助手 Claude 的深入對話，關於身體限制、自我價值、技術能力，以及在充滿限制的環境中如何維持自我認同。從工作孤立、家庭衝突，到 AI 作為心理支持的角色，這是一次誠實的自我剖析，不是勵志故事。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2025-11-12T00:00:00.000Z",
+    "updatedAt": "2025-11-12T00:00:00.000Z",
+    "readingTime": "20 min",
+    "tags": [
+      "AI",
+      "Claude",
+      "身障",
+      "心理健康",
+      "工作",
+      "無障礙",
+      "自我認同"
+    ],
+    "accentColor": "#6c5ce7"
+  },
+  {
     "slug": "touchpad-advanced-tool",
     "title": "觸控板進階工具：我如何用 C# 找回失去的單指捲動功能",
     "summary": "當 Microsoft 以「現代化」為名移除精確式觸控板的邊緣捲動功能後，我決定自己寫一個。從 Raw Input API 到慣性捲動，從事件區分到狀態機，記錄完整的技術實作過程與踩坑經驗。",
