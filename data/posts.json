@@ -1,5 +1,25 @@
 [
   {
+    "slug": "tablet-to-laptop-journey",
+    "title": "從平板換回筆電的旅程：當身體狀況遇上生態問題",
+    "summary": "記錄從平板換回筆電的決策過程。從力氣退化選擇平板，到發現 Android 開發環境限制，最終選擇 ThinkPad P15 Gen 2 的完整經歷。探討平板生態困境、輸入法效率、AI 輔助開發，以及單指使用者的工具選擇哲學。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-11-13T00:00:00.000Z",
+    "updatedAt": "2025-11-13T00:00:00.000Z",
+    "readingTime": "18 min",
+    "tags": [
+      "平板",
+      "筆電",
+      "ThinkPad",
+      "開發環境",
+      "無障礙",
+      "輸入法",
+      "AI 輔助開發"
+    ],
+    "accentColor": "#2c3e50"
+  },
+  {
     "slug": "constraints-value-disabled-engineer",
     "title": "在限制中尋找價值：一個身障工程師的心理地圖",
     "summary": "記錄我與 AI 助手 Claude 的深入對話，關於身體限制、自我價值、技術能力，以及在充滿限制的環境中如何維持自我認同。從工作上的疏離、家庭衝突，到 AI 作為心理支持的角色，這是一次誠實的自我剖析，不是勵志故事。",
