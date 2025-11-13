@@ -1360,6 +1360,9 @@ a:focus {
   background: var(--surface-muted);
   display: grid;
   gap: 1.4rem;
+  /* 防止 CLS - 為動態載入的內容預留空間 */
+  min-height: 400px;
+  contain: layout style;
 }
 
 .article-share {
@@ -1367,6 +1370,8 @@ a:focus {
   flex-wrap: wrap;
   gap: 0.6rem;
   font-size: 0.95rem;
+  /* 防止 CLS - 為動態生成的分享連結預留空間 */
+  min-height: 48px;
 }
 
 .article-share a {
