@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>從平板換回筆電的旅程：當身體狀況遇上生態問題 - (b)-log</title>
+  
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="記錄從平板換回筆電的決策過程。從力氣退化選擇平板，到發現 Android 開發環境限制，最終選擇 ThinkPad P15 Gen 2 的完整經歷。探討平板生態困境、輸入法效率、AI 輔助開發，以及單指使用者的工具選擇哲學。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-analysis/tablet-to-laptop-journey/" id="canonical-url">
+  
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-analysis/tablet-to-laptop-journey/" id="og-url">
+  <meta property="og:title" content="從平板換回筆電的旅程：當身體狀況遇上生態問題" id="og-title">
+  <meta property="og:description" content="記錄從平板換回筆電的決策過程。從力氣退化選擇平板，到發現 Android 開發環境限制，最終選擇 ThinkPad P15 Gen 2 的完整經歷。探討平板生態困境、輸入法效率、AI 輔助開發，以及單指使用者的工具選擇哲學。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%BE%9E%E5%B9%B3%E6%9D%BF%E6%8F%9B%E5%9B%9E%E7%AD%86%E9%9B%BB%E7%9A%84%E6%97%85%E7%A8%8B%EF%BC%9A%E7%95%B6%E8%BA%AB%E9%AB%94%E7%8B%80%E6%B3%81%E9%81%87%E4%B8%8A%E7%94%9F%E6%85%8B%E5%95%8F%E9%A1%8C,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2025-11-13T00:00:00.000Z" id="og-published-time">
+  <meta property="article:modified_time" content="2025-11-13T00:00:00.000Z" id="og-modified-time">
+  <meta property="article:section" content="技術分析" id="og-section">
+  <meta property="article:tag" content="平板, 筆電, ThinkPad, 開發環境, 無障礙, 輸入法, AI 輔助開發" id="og-tags">
+  
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-analysis/tablet-to-laptop-journey/" id="twitter-url">
+  <meta property="twitter:title" content="從平板換回筆電的旅程：當身體狀況遇上生態問題" id="twitter-title">
+  <meta property="twitter:description" content="記錄從平板換回筆電的決策過程。從力氣退化選擇平板，到發現 Android 開發環境限制，最終選擇 ThinkPad P15 Gen 2 的完整經歷。探討平板生態困境、輸入法效率、AI 輔助開發，以及單指使用者的工具選擇哲學。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%BE%9E%E5%B9%B3%E6%9D%BF%E6%8F%9B%E5%9B%9E%E7%AD%86%E9%9B%BB%E7%9A%84%E6%97%85%E7%A8%8B%EF%BC%9A%E7%95%B6%E8%BA%AB%E9%AB%94%E7%8B%80%E6%B3%81%E9%81%87%E4%B8%8A%E7%94%9F%E6%85%8B%E5%95%8F%E9%A1%8C,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+  
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="平板, 筆電, ThinkPad, 開發環境, 無障礙, 輸入法, AI 輔助開發" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#556bff">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- 預載本地字型 - 最佳化 FCP/LCP -->
+  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-latin-400.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-latin-700.woff2" crossorigin>
+  <!-- 載入本地字型樣式 -->
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+
+  <!-- 關鍵 CSS 內聯 - 首屏渲染 -->
+  <style>
+    /* 核心變數和基礎樣式 */
+    :root {
+      color-scheme: light dark;
+      --bg-gradient: linear-gradient(140deg, #eef1ff 0%, #fefefe 60%, #f4f7ff 100%);
+      --bg-dark-gradient: #000000;
+      --surface: rgba(255, 255, 255, 0.88);
+      --surface-muted: rgba(255, 255, 255, 0.6);
+      --surface-dark: rgba(18, 18, 18, 0.95);
+      --surface-dark-muted: rgba(30, 30, 30, 0.8);
+      --text: #111322;
+      --text-muted: #5d6476;
+      --text-inverse: #f7f8ff;
+      --accent: #556bff;
+      --accent-soft: rgba(85, 107, 255, 0.12);
+      --accent-strong: #3644d8;
+      --border: rgba(17, 19, 34, 0.08);
+      --shadow-soft: 0 18px 50px -24px rgba(15, 21, 46, 0.55);
+      --shadow-strong: 0 22px 60px -18px rgba(26, 33, 71, 0.45);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --sidebar-width: 320px;
+    }
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg-gradient: var(--bg-dark-gradient);
+      --surface: var(--surface-dark);
+      --surface-muted: var(--surface-dark-muted);
+      --text: #e5e7f6;
+      --text-muted: #9ca7c7;
+      --border: rgba(229, 231, 246, 0.08);
+      --shadow-soft: 0 18px 40px -20px rgba(0, 0, 0, 0.9);
+      --shadow-strong: 0 28px 80px -30px rgba(0, 0, 0, 0.95);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --bg-gradient: var(--bg-dark-gradient);
+        --surface: var(--surface-dark);
+        --surface-muted: var(--surface-dark-muted);
+        --text: #e5e7f6;
+        --text-muted: #9ca7c7;
+        --border: rgba(229, 231, 246, 0.08);
+        --shadow-soft: 0 18px 40px -20px rgba(0, 0, 0, 0.9);
+        --shadow-strong: 0 28px 80px -30px rgba(0, 0, 0, 0.95);
+      }
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      background: var(--bg-gradient);
+      color: var(--text);
+    }
+    .page-chrome {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: saturate(120%) blur(60px);
+    }
+    .wrapper {
+      width: min(1600px, 98vw);
+      margin: 0 auto;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    /* Article page 首屏樣式 */
+    .site-header {
+      padding: 3.5rem 0 2.5rem;
+      position: relative;
+    }
+    .site-title {
+      margin: 0;
+      font-size: clamp(2.6rem, 6vw, 3.4rem);
+      letter-spacing: -0.04em;
+    }
+    .site-tagline {
+      margin: 0.35rem 0 0;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 540px;
+    }
+    .article {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.css">
+</head>
+<body class="post-page">
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">結合深度思考與實踐追蹤，用 AI 輔助加速從想法到實現的每一步。</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../feed.json">Feed</a>
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="切換深色模式">
+              <span class="theme-toggle__icon">🔄</span>
+              <span class="theme-toggle__text">自動</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category"></p>
+            <h1 id="post-title">Loading</h1>
+            <div id="post-meta" class="article-meta"></div>
+          </header>
+          <div id="post-tags" class="article-tags"></div>
+          <div id="post-content" class="article-body"></div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-callout" id="comments">
+              <h2>Join the conversation</h2>
+              <p>Have thoughts or upgrades? Open a GitHub issue and tag this slug.</p>
+              <p><a id="comments-link" href="#" target="_blank" rel="noopener noreferrer">Start a thread</a></p>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4654c3d3db9e4f21b3640178e6f5bd09"}'></script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
