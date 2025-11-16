@@ -1,5 +1,26 @@
 [
   {
+    "slug": "traceroute-hostname-misleading",
+    "title": "當 Traceroute 的主機名稱騙了你：一次有趣的網路診斷經驗",
+    "summary": "從 traceroute 顯示香港代碼卻只有 1-7ms 延遲的案例，探討為何不能只靠主機名稱判斷伺服器位置。深入分析 Google GGC、Anycast 技術，以及 Cloudflare 與中華電信 peering 爭議如何影響台灣網路生態。延遲才是最誠實的指標。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-11-16T00:00:00.000Z",
+    "updatedAt": "2025-11-16T00:00:00.000Z",
+    "readingTime": "15 min",
+    "tags": [
+      "網路診斷",
+      "CDN",
+      "Traceroute",
+      "延遲分析",
+      "Google",
+      "Cloudflare",
+      "ISP",
+      "Anycast"
+    ],
+    "accentColor": "#3498db"
+  },
+  {
     "slug": "virtual-items-real-money-rmt",
     "title": "當虛擬道具變成真實收入:一個技術人對遊戲經濟的觀察",
     "summary": "從 RMT (真實貨幣交易) 市場探討遊戲的本質。一開始以為是「效率最佳化」，但寫完發現：RMT 不是跳過痛苦享受遊戲，而是跳過遊戲本身。分析遊戲如何從娛樂活動變成社交貨幣與身份象徵、玩家真正的付費動機、以及為何 AI 輔助開發的類比根本不成立。誠實面對 RMT 的本質與市場存在的真實原因。",
