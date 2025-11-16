@@ -161,6 +161,12 @@
     .hero-card {
       min-height: 400px;
     }
+    /* Keep hero card in the layout even when hidden to avoid large CLS */
+    .hero-card[hidden] {
+      display: block;
+      opacity: 0;
+      pointer-events: none;
+    }
     /* 防止動態內容造成佈局移動 */
     .content-grid {
       min-height: 500px;
