@@ -1,5 +1,25 @@
 [
   {
+    "slug": "proxmox-lxc-dns-fix",
+    "title": "Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼",
+    "summary": "所有 LXC 容器的 DNS 設定會自己跑掉，過一陣子就壞掉。追查發現是容器裡的 dhclient 在 DHCP 續租時偷偷改寫 DNS。記錄從手動修復到完全自動化的完整過程，包括 host、現有容器、未來新容器的三層解決方案。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-11-16T00:00:00.000Z",
+    "updatedAt": "2025-11-16T00:00:00.000Z",
+    "readingTime": "12 min",
+    "tags": [
+      "Proxmox",
+      "LXC",
+      "DNS",
+      "dhclient",
+      "網路設定",
+      "系統管理",
+      "resolv.conf"
+    ],
+    "accentColor": "#27ae60"
+  },
+  {
     "slug": "traceroute-hostname-misleading",
     "title": "當 Traceroute 的主機名稱騙了你：一次有趣的網路診斷經驗",
     "summary": "從 traceroute 顯示香港代碼卻只有 1-7ms 延遲的案例，探討為何不能只靠主機名稱判斷伺服器位置。深入分析 Google GGC、Anycast 技術，以及 Cloudflare 與中華電信 peering 爭議如何影響台灣網路生態。延遲才是最誠實的指標。",
@@ -19,26 +39,6 @@
       "Anycast"
     ],
     "accentColor": "#3498db"
-  },
-  {
-    "slug": "proxmox-lxc-dns-fix",
-    "title": "Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼",
-    "summary": "所有 LXC 容器的 DNS 設定會自己跑掉，過一陣子就壞掉。追查發現是容器裡的 dhclient 在 DHCP 續租時偷偷改寫 DNS。記錄從手動修復到完全自動化的完整過程，包括 host、現有容器、未來新容器的三層解決方案。",
-    "category": "技術分析",
-    "author": "Jason Chien",
-    "publishedAt": "2025-11-16T00:00:00.000Z",
-    "updatedAt": "2025-11-16T00:00:00.000Z",
-    "readingTime": "12 min",
-    "tags": [
-      "Proxmox",
-      "LXC",
-      "DNS",
-      "dhclient",
-      "網路設定",
-      "系統管理",
-      "resolv.conf"
-    ],
-    "accentColor": "#27ae60"
   },
   {
     "slug": "virtual-items-real-money-rmt",
