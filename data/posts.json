@@ -21,6 +21,26 @@
     "accentColor": "#3498db"
   },
   {
+    "slug": "proxmox-lxc-dns-fix",
+    "title": "在 Proxmox 上被 DNS 搞瘋的一天：我怎麼幫所有 LXC 容器「定住」 `/etc/resolv.conf`",
+    "summary": "所有 LXC 容器的 DNS 設定會自己跑掉，過一陣子就壞掉。追查發現是容器裡的 dhclient 在 DHCP 續租時偷偷改寫 DNS。記錄從手動修復到完全自動化的完整過程，包括 host、容器、未來新容器的三層解決方案，讓 DNS 從「每天惹事的鬼」變成「完全忘記它存在」。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-11-16T00:00:00.000Z",
+    "updatedAt": "2025-11-16T00:00:00.000Z",
+    "readingTime": "12 min",
+    "tags": [
+      "Proxmox",
+      "LXC",
+      "DNS",
+      "dhclient",
+      "網路設定",
+      "系統管理",
+      "resolv.conf"
+    ],
+    "accentColor": "#27ae60"
+  },
+  {
     "slug": "virtual-items-real-money-rmt",
     "title": "當虛擬道具變成真實收入:一個技術人對遊戲經濟的觀察",
     "summary": "從 RMT (真實貨幣交易) 市場探討遊戲的本質。一開始以為是「效率最佳化」，但寫完發現：RMT 不是跳過痛苦享受遊戲，而是跳過遊戲本身。分析遊戲如何從娛樂活動變成社交貨幣與身份象徵、玩家真正的付費動機、以及為何 AI 輔助開發的類比根本不成立。誠實面對 RMT 的本質與市場存在的真實原因。",
