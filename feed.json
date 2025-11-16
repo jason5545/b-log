@@ -6,6 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "proxmox-lxc-dns-fix",
+      "url": "https://b-log.to/post.html?slug=proxmox-lxc-dns-fix",
+      "title": "Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼",
+      "content_text": "最近我在 Proxmox 節點上被一個看似小事但超煩的問題搞了好一陣子：所有 LXC 容器的 DNS 設定會自己跑掉。一開始只注意到某個容器會突然無法解析網域名稱，進去看 /etc/resolv.conf 每次壞掉時都變成指向內網 gateway 10.0.0.1，但我想要的是 8.8.8.8 和 1.1.1.1。當下的土法煉鋼解法就是用 pct exec 直接改，DNS 會立刻恢復正常，但過一陣子（通常是 DHCP lease 更新）又壞掉。更慘的是，我後來發現不只一個容器，所有 LXC 都有這個問題。我從幾個方向調查可能會動 /etc/resolv.conf 的角色：Proxmox 自己、容器裡的 dhclient、systemd-resolved、VPN 工具等。檢查每個容器的 Proxmox 設定、容器裡的 /etc/resolv.conf、以及 DNS 相關 process 後，我下結論：真正偷改 /etc/resolv.conf 的是容器裡的 dhclient，每次 DHCP 續租就重寫 DNS 改成 gateway 提供的 10.0.0.1。我給自己訂了幾個目標：所有現有容器統一用 8.8.8.8 和 1.1.1.1、Proxmox host 本身也固定用這兩個 DNS、任何 DHCP 更新都不能再改寫 /etc/resolv.conf、未來新建立容器預設就繼承這樣的 DNS。解決方案分三層：第一步把 Proxmox host 的 DNS 鎖起來，建立 dhclient hook 阻止它動 DNS。原理很簡單：dhclient 在更新租約時會呼叫 make_resolv_conf()，我用 hook 覆寫這個 function 讓它變成「啥也不做」，從此之後 host 的 /etc/resolv.conf 不會再被 DHCP 改寫。第二步把所有容器的 /etc/resolv.conf 統一成同一版，在 host 上直接跑一個 loop 不用重開容器。第三步在容器裡也讓 dhclient 永久失去改 DNS 的權限，做法跟 host 類似，在每一個容器裡放 dhclient-enter-hooks.d/nodnsupdate。然後直接強制 DHCP 更新來驗證，Before 是我設定好的 DNS，DHCP 過程跑完後 After 還是同一個內容，代表 container 裡的 dhclient 也失去修改 DNS 的能力了。最後驗證所有東西真的穩了：Host 上檢查 DNS、每個容器檢查 /etc/resolv.conf、抽幾台實測 DNS，所有容器都能正常解析 google.com，DNS 問題正式解決。未來新建立的容器會自動繼承這個設定：Host DNS 已固定，Proxmox 建立新容器時如果沒有手動指定 -nameserver，PVE 會用 host 的 /etc/resolv.conf 當模板。如果配合模板把 nodnsupdate 也做進去，可以先用一個乾淨容器設好 nodnsupdate 再轉成 template，之後 clone 出來的容器就自帶不允許 dhclient 改 DNS 的特性。這樣一來 host、現有容器、未來容器就會自然收斂到同一套 DNS 設計，不太會再出現過一陣子就壞掉的情況。我從這次踩坑學到幾件事：不要只怪 Proxmox，PVE 只是在開機時幫你寫一段 /etc/resolv.conf，真正會偷偷改掉的往往是容器裡的 DHCP client 或 systemd。Host DNS 是預設模板但不是全部，沒設定 nameserver 的容器會跟 host 走，但容器裡只要有 dhclient 或 systemd-resolved 在動照樣可以把你的設定洗掉。dhclient-enter-hooks.d/nodnsupdate 非常好用，幾行 shell 就能把 /etc/resolv.conf 從 DHCP 手上救回來讓你真正掌控 DNS。一致性會讓生活簡單很多，讓 host 和所有容器用同一組 DNS 而且順序一致，之後 debug 網路問題會輕鬆不少。對我來說做完這三件事之後，DNS 終於穩定了，再也不用每天手動修。",
+      "date_published": "2025-11-16T00:00:00.000Z",
+      "date_modified": "2025-11-16T00:00:00.000Z",
+      "tags": [
+        "Proxmox",
+        "LXC",
+        "DNS",
+        "dhclient",
+        "網路設定",
+        "系統管理",
+        "resolv.conf"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "traceroute-hostname-misleading",
       "url": "https://b-log.to/post.html?slug=traceroute-hostname-misleading",
       "title": "當 Traceroute 的主機名稱騙了你：一次有趣的網路診斷經驗",
@@ -21,28 +43,6 @@
         "Cloudflare",
         "ISP",
         "Anycast"
-      ],
-      "authors": [
-        {
-          "name": "Jason Chien"
-        }
-      ]
-    },
-    {
-      "id": "proxmox-lxc-dns-fix",
-      "url": "https://b-log.to/post.html?slug=proxmox-lxc-dns-fix",
-      "title": "Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼",
-      "content_text": "最近我在 Proxmox 節點上被一個看似小事但超煩的問題搞了好一陣子：所有 LXC 容器的 DNS 設定會自己跑掉。一開始只注意到某個容器會突然無法解析網域名稱，進去看 /etc/resolv.conf 每次壞掉時都變成指向內網 gateway 10.0.0.1，但我想要的是 8.8.8.8 和 1.1.1.1。當下的土法煉鋼解法就是用 pct exec 直接改，DNS 會立刻恢復正常，但過一陣子（通常是 DHCP lease 更新）又壞掉。更慘的是，我後來發現不只一個容器，所有 LXC 都有這個問題。我從幾個方向調查可能會動 /etc/resolv.conf 的角色：Proxmox 自己、容器裡的 dhclient、systemd-resolved、VPN 工具等。檢查每個容器的 Proxmox 設定、容器裡的 /etc/resolv.conf、以及 DNS 相關 process 後，我下結論：真正偷改 /etc/resolv.conf 的是容器裡的 dhclient，每次 DHCP 續租就重寫 DNS 改成 gateway 提供的 10.0.0.1。我給自己訂了幾個目標：所有現有容器統一用 8.8.8.8 和 1.1.1.1、Proxmox host 本身也固定用這兩個 DNS、任何 DHCP 更新都不能再改寫 /etc/resolv.conf、未來新建立容器預設就繼承這樣的 DNS。解決方案分三層：第一步把 Proxmox host 的 DNS 鎖起來，建立 dhclient hook 阻止它動 DNS。原理很簡單：dhclient 在更新租約時會呼叫 make_resolv_conf()，我用 hook 覆寫這個 function 讓它變成「啥也不做」，從此之後 host 的 /etc/resolv.conf 不會再被 DHCP 改寫。第二步把所有容器的 /etc/resolv.conf 統一成同一版，在 host 上直接跑一個 loop 不用重開容器。第三步在容器裡也讓 dhclient 永久失去改 DNS 的權限，做法跟 host 類似，在每一個容器裡放 dhclient-enter-hooks.d/nodnsupdate。然後直接強制 DHCP 更新來驗證，Before 是我設定好的 DNS，DHCP 過程跑完後 After 還是同一個內容，代表 container 裡的 dhclient 也失去修改 DNS 的能力了。最後驗證所有東西真的穩了：Host 上檢查 DNS、每個容器檢查 /etc/resolv.conf、抽幾台實測 DNS，所有容器都能正常解析 google.com，DNS 問題正式解決。未來新建立的容器會自動繼承這個設定：Host DNS 已固定，Proxmox 建立新容器時如果沒有手動指定 -nameserver，PVE 會用 host 的 /etc/resolv.conf 當模板。如果配合模板把 nodnsupdate 也做進去，可以先用一個乾淨容器設好 nodnsupdate 再轉成 template，之後 clone 出來的容器就自帶不允許 dhclient 改 DNS 的特性。這樣一來 host、現有容器、未來容器就會自然收斂到同一套 DNS 設計，不太會再出現過一陣子就壞掉的情況。我從這次踩坑學到幾件事：不要只怪 Proxmox，PVE 只是在開機時幫你寫一段 /etc/resolv.conf，真正會偷偷改掉的往往是容器裡的 DHCP client 或 systemd。Host DNS 是預設模板但不是全部，沒設定 nameserver 的容器會跟 host 走，但容器裡只要有 dhclient 或 systemd-resolved 在動照樣可以把你的設定洗掉。dhclient-enter-hooks.d/nodnsupdate 非常好用，幾行 shell 就能把 /etc/resolv.conf 從 DHCP 手上救回來讓你真正掌控 DNS。一致性會讓生活簡單很多，讓 host 和所有容器用同一組 DNS 而且順序一致，之後 debug 網路問題會輕鬆不少。對我來說做完這三件事之後，DNS 終於穩定了，再也不用每天手動修。",
-      "date_published": "2025-11-16T00:00:00.000Z",
-      "date_modified": "2025-11-16T00:00:00.000Z",
-      "tags": [
-        "Proxmox",
-        "LXC",
-        "DNS",
-        "dhclient",
-        "網路設定",
-        "系統管理",
-        "resolv.conf"
       ],
       "authors": [
         {
