@@ -13,13 +13,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://b-log.to/tech-analysis/traceroute-hostname-misleading/</loc>
+    <loc>https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/</loc>
     <lastmod>2025-11-16T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/</loc>
+    <loc>https://b-log.to/tech-analysis/traceroute-hostname-misleading/</loc>
     <lastmod>2025-11-16T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
