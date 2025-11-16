@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>在 Proxmox 上被 DNS 搞瘋的一天：我怎麼幫所有 LXC 容器「定住」 `/etc/resolv.conf` - (b)-log</title>
+  <title>Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼 - (b)-log</title>
   
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="所有 LXC 容器的 DNS 設定會自己跑掉，過一陣子就壞掉。追查發現是容器裡的 dhclient 在 DHCP 續租時偷偷改寫 DNS。記錄從手動修復到完全自動化的完整過程，包括 host、容器、未來新容器的三層解決方案，讓 DNS 從「每天惹事的鬼」變成「完全忘記它存在」。">
+  <meta name="description" content="所有 LXC 容器的 DNS 設定會自己跑掉，過一陣子就壞掉。追查發現是容器裡的 dhclient 在 DHCP 續租時偷偷改寫 DNS。記錄從手動修復到完全自動化的完整過程，包括 host、現有容器、未來新容器的三層解決方案。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/" id="canonical-url">
   
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/" id="og-url">
-  <meta property="og:title" content="在 Proxmox 上被 DNS 搞瘋的一天：我怎麼幫所有 LXC 容器「定住」 `/etc/resolv.conf`" id="og-title">
-  <meta property="og:description" content="所有 LXC 容器的 DNS 設定會自己跑掉，過一陣子就壞掉。追查發現是容器裡的 dhclient 在 DHCP 續租時偷偷改寫 DNS。記錄從手動修復到完全自動化的完整過程，包括 host、容器、未來新容器的三層解決方案，讓 DNS 從「每天惹事的鬼」變成「完全忘記它存在」。" id="og-description">
-  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%9C%A8%20Proxmox%20%E4%B8%8A%E8%A2%AB%20DNS%20%E6%90%9E%E7%98%8B%E7%9A%84%E4%B8%80%E5%A4%A9%EF%BC%9A%E6%88%91%E6%80%8E%E9%BA%BC%E5%B9%AB%E6%89%80%E6%9C%89%20LXC%20%E5%AE%B9%E5%99%A8%E3%80%8C%E5%AE%9A%E4%BD%8F%E3%80%8D%20%60%2Fetc%2Fresolv.conf%60,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:title" content="Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼" id="og-title">
+  <meta property="og:description" content="所有 LXC 容器的 DNS 設定會自己跑掉，過一陣子就壞掉。追查發現是容器裡的 dhclient 在 DHCP 續租時偷偷改寫 DNS。記錄從手動修復到完全自動化的完整過程，包括 host、現有容器、未來新容器的三層解決方案。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:Proxmox%20LXC%20%E7%9A%84%20DNS%20%E4%B8%80%E7%9B%B4%E8%B7%91%E6%8E%89%EF%BC%9Adhclient%20%E5%9C%A8%E6%90%9E%E9%AC%BC,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="(b)-log">
@@ -29,9 +29,9 @@
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/" id="twitter-url">
-  <meta property="twitter:title" content="在 Proxmox 上被 DNS 搞瘋的一天：我怎麼幫所有 LXC 容器「定住」 `/etc/resolv.conf`" id="twitter-title">
-  <meta property="twitter:description" content="所有 LXC 容器的 DNS 設定會自己跑掉，過一陣子就壞掉。追查發現是容器裡的 dhclient 在 DHCP 續租時偷偷改寫 DNS。記錄從手動修復到完全自動化的完整過程，包括 host、容器、未來新容器的三層解決方案，讓 DNS 從「每天惹事的鬼」變成「完全忘記它存在」。" id="twitter-description">
-  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%9C%A8%20Proxmox%20%E4%B8%8A%E8%A2%AB%20DNS%20%E6%90%9E%E7%98%8B%E7%9A%84%E4%B8%80%E5%A4%A9%EF%BC%9A%E6%88%91%E6%80%8E%E9%BA%BC%E5%B9%AB%E6%89%80%E6%9C%89%20LXC%20%E5%AE%B9%E5%99%A8%E3%80%8C%E5%AE%9A%E4%BD%8F%E3%80%8D%20%60%2Fetc%2Fresolv.conf%60,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:title" content="Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼" id="twitter-title">
+  <meta property="twitter:description" content="所有 LXC 容器的 DNS 設定會自己跑掉，過一陣子就壞掉。追查發現是容器裡的 dhclient 在 DHCP 續租時偷偷改寫 DNS。記錄從手動修復到完全自動化的完整過程，包括 host、現有容器、未來新容器的三層解決方案。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:Proxmox%20LXC%20%E7%9A%84%20DNS%20%E4%B8%80%E7%9B%B4%E8%B7%91%E6%8E%89%EF%BC%9Adhclient%20%E5%9C%A8%E6%90%9E%E9%AC%BC,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
   
   <!-- 額外的 metadata -->
