@@ -1,6 +1,6 @@
 # Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼
 
-Proxmox 上所有 LXC 容器的 DNS 會自己改掉，手動修好後過一陣子又壞。查了很久才發現是 dhclient 在 DHCP 續租時偷偷改 DNS。記錄一下完整的排查和解決過程。
+Proxmox 上所有 LXC 容器的 DNS 會自己改掉，手動修好後過一陣子又壞。查了很久才發現是 dhclient 在 DHCP 續租時偷偷改 DNS。
 
 ---
 
@@ -118,14 +118,12 @@ chmod +x /etc/dhcp/dhclient-enter-hooks.d/nodnsupdate
 
 `dhclient` 更新租約時會呼叫 `make_resolv_conf()`，用 hook 把它改成空函式，就不會動 DNS 了。
 
-驗證：
-
 ```bash
 cat /etc/resolv.conf
 ping -c 2 google.com
 ```
 
-Host 端穩定了。
+搞定。
 
 ---
 
@@ -141,7 +139,7 @@ for CT in $CT_LIST; do
 done
 ```
 
-確認：
+看一下：
 
 ```bash
 pct exec 106 -- cat /etc/resolv.conf
@@ -178,14 +176,14 @@ Before 是 `8.8.8.8` / `1.1.1.1`，DHCP 跑完後 After 還是一樣。搞定。
 
 ## 驗證
 
-**Host**：
+先看 Host：
 
 ```bash
 cat /etc/resolv.conf
 ping -c 2 google.com
 ```
 
-**所有容器**：
+再看所有容器：
 
 ```bash
 for CT in 104 105 106 107 108 111; do
@@ -200,7 +198,7 @@ nameserver 8.8.8.8
 nameserver 1.1.1.1
 ```
 
-**實測**：
+試著 ping 看看：
 
 ```bash
 pct exec 104 -- ping -c 2 google.com
@@ -208,7 +206,7 @@ pct exec 106 -- ping -c 2 google.com
 pct exec 108 -- ping -c 2 google.com
 ```
 
-所有容器都能正常解析。
+都能正常解析。
 
 ---
 
@@ -222,6 +220,6 @@ Host 的 DNS 固定後，建立新 LXC 時如果沒指定 `-nameserver`，PVE �
 
 做完這些，DNS 終於穩了。
 
-這次踩坑發現，Proxmox 其實沒做什麼壞事，PVE 只是開機時寫一段 `/etc/resolv.conf`。真正會偷改 DNS 的是容器裡的 DHCP client。就算 Host 的 DNS 設定會被新容器繼承，但容器裡只要有 `dhclient` 或 `systemd-resolved` 在跑，一樣會被改掉。
+這次踩坑發現，Proxmox 其實沒做什麼壞事，PVE 只是開機時寫一段 `/etc/resolv.conf`。真正會偷改 DNS 的是容器裡的 DHCP client。Host 的 DNS 設定雖然會被新容器繼承，但容器裡有 `dhclient` 或 `systemd-resolved` 在跑的話，還是會被改掉。
 
-`nodnsupdate` hook 很實用，幾行 shell 就能阻止 DHCP 改寫 `/etc/resolv.conf`。之後所有容器都用同一組 DNS，debug 網路問題也輕鬆很多。
+用 `nodnsupdate` hook 就能阻止 DHCP 改寫 `/etc/resolv.conf`，幾行 shell 而已。之後所有容器都用同一組 DNS，debug 網路問題也輕鬆很多。
