@@ -6,7 +6,7 @@
   <title>Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼 - (b)-log</title>
   
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="所有 LXC 容器的 DNS 設定會自己跑掉，過一陣子就壞掉。追查發現是容器裡的 dhclient 在 DHCP 續租時偷偷改寫 DNS。記錄從手動修復到完全自動化的完整過程，包括 host、現有容器、未來新容器的三層解決方案。">
+  <meta name="description" content="Proxmox 上所有 LXC 容器的 DNS 會自己改掉，過一陣子就壞掉。查很久才發現是 dhclient 在 DHCP 續租時重寫 DNS。記錄從手動修到完全自動化的完整過程：怎麼固定 host 的 DNS、統一所有容器、讓未來新容器也自動繼承。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/" id="canonical-url">
   
@@ -14,7 +14,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/" id="og-url">
   <meta property="og:title" content="Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼" id="og-title">
-  <meta property="og:description" content="所有 LXC 容器的 DNS 設定會自己跑掉，過一陣子就壞掉。追查發現是容器裡的 dhclient 在 DHCP 續租時偷偷改寫 DNS。記錄從手動修復到完全自動化的完整過程，包括 host、現有容器、未來新容器的三層解決方案。" id="og-description">
+  <meta property="og:description" content="Proxmox 上所有 LXC 容器的 DNS 會自己改掉，過一陣子就壞掉。查很久才發現是 dhclient 在 DHCP 續租時重寫 DNS。記錄從手動修到完全自動化的完整過程：怎麼固定 host 的 DNS、統一所有容器、讓未來新容器也自動繼承。" id="og-description">
   <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:Proxmox%20LXC%20%E7%9A%84%20DNS%20%E4%B8%80%E7%9B%B4%E8%B7%91%E6%8E%89%EF%BC%9Adhclient%20%E5%9C%A8%E6%90%9E%E9%AC%BC,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -30,7 +30,7 @@
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/" id="twitter-url">
   <meta property="twitter:title" content="Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼" id="twitter-title">
-  <meta property="twitter:description" content="所有 LXC 容器的 DNS 設定會自己跑掉，過一陣子就壞掉。追查發現是容器裡的 dhclient 在 DHCP 續租時偷偷改寫 DNS。記錄從手動修復到完全自動化的完整過程，包括 host、現有容器、未來新容器的三層解決方案。" id="twitter-description">
+  <meta property="twitter:description" content="Proxmox 上所有 LXC 容器的 DNS 會自己改掉，過一陣子就壞掉。查很久才發現是 dhclient 在 DHCP 續租時重寫 DNS。記錄從手動修到完全自動化的完整過程：怎麼固定 host 的 DNS、統一所有容器、讓未來新容器也自動繼承。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:Proxmox%20LXC%20%E7%9A%84%20DNS%20%E4%B8%80%E7%9B%B4%E8%B7%91%E6%8E%89%EF%BC%9Adhclient%20%E5%9C%A8%E6%90%9E%E9%AC%BC,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
   
