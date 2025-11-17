@@ -220,14 +220,8 @@ Host 的 DNS 固定後，建立新 LXC 時如果沒指定 `-nameserver`，PVE �
 
 ---
 
-## 後記
+做完這些，DNS 終於穩了。
 
-別只怪 Proxmox。PVE 只是開機時寫一段 `/etc/resolv.conf`，會偷改的是容器裡的 DHCP client。
+這次踩坑發現，Proxmox 其實沒做什麼壞事，PVE 只是開機時寫一段 `/etc/resolv.conf`。真正會偷改 DNS 的是容器裡的 DHCP client。就算 Host 的 DNS 設定會被新容器繼承，但容器裡只要有 `dhclient` 或 `systemd-resolved` 在跑，一樣會被改掉。
 
-Host 的 DNS 雖然是預設模板，但容器裡只要有 `dhclient` 或 `systemd-resolved` 在跑，還是會把設定改掉。
-
-`nodnsupdate` hook 很好用，幾行 shell 就能把 `/etc/resolv.conf` 從 DHCP 手上搶回來。
-
-讓 host 和所有容器用同一組 DNS（順序也一致），之後 debug 網路問題會輕鬆很多。
-
-做完這三件事，DNS 就穩定了。
+`nodnsupdate` hook 很實用，幾行 shell 就能把 `/etc/resolv.conf` 從 DHCP 手上搶回來。之後所有容器都用同一組 DNS，debug 網路問題也輕鬆很多。
