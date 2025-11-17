@@ -214,7 +214,7 @@ pct exec 108 -- ping -c 2 google.com
 
 Host 的 DNS 固定後，建立新 LXC 時如果沒指定 `-nameserver`，PVE 會用 host 的 `/etc/resolv.conf` 當模板。新容器一開始就會是 `8.8.8.8` / `1.1.1.1`。
 
-如果要更徹底，可以用 template：先在一個乾淨容器裡設好 `nodnsupdate`，轉成 template。之後 clone 出來的容器就自帶這個設定。
+如果要更徹底，可以用 template：先在一個乾淨容器裡設好 `nodnsupdate`，轉成 template。之後 clone 出來的容器就內建這個設定。
 
 ---
 
