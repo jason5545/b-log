@@ -1,5 +1,9 @@
 # Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼
 
+Proxmox 上所有 LXC 容器的 DNS 會自己改掉，手動修好後過一陣子又壞。查了很久才發現是 dhclient 在 DHCP 續租時偷偷改 DNS。記錄一下完整的排查和解決過程。
+
+---
+
 CT 106 突然 ping 不到 google.com。進去看 `/etc/resolv.conf`，DNS 又變成 `10.0.0.1` 了。
 
 ```bash
