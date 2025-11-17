@@ -2,7 +2,7 @@
   {
     "slug": "proxmox-lxc-dns-fix",
     "title": "Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼",
-    "summary": "Proxmox 上所有 LXC 容器的 DNS 會自己改掉，過一陣子就壞掉。查很久才發現是 dhclient 在 DHCP 續租時重寫 DNS。記錄從手動修到完全自動化的完整過程：怎麼固定 host 的 DNS、統一所有容器、讓未來新容器也自動繼承。",
+    "summary": "所有 LXC 容器的 DNS 會自己改掉，手動修好後過一陣子又壞。查了很久發現是 dhclient 在 DHCP 續租時偷偷改 DNS。記錄怎麼用 dhclient hook 把 host 和所有容器的 DNS 鎖住，讓它再也改不掉。",
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-11-16T00:00:00.000Z",
