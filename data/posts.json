@@ -1,5 +1,25 @@
 [
   {
+    "slug": "agentic-ide-git-reset-failure",
+    "title": "當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰翻車記錄",
+    "summary": "試用 Google Gemini 3 搭配 Antigravity IDE，執行 git reset 時 AI 高度自信地選錯 commit。探討 AI 推理正確性與過度自信的校準問題、Git reflog 救援機制、人機協作邊界，以及 agentic 工具時代的生存指南。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-11-21T00:00:00.000Z",
+    "updatedAt": "2025-11-21T00:00:00.000Z",
+    "readingTime": "20 min",
+    "tags": [
+      "AI",
+      "Agentic IDE",
+      "Git",
+      "Gemini",
+      "故障排除",
+      "開發哲學",
+      "安全性"
+    ],
+    "accentColor": "#e74c3c"
+  },
+  {
     "slug": "proxmox-lxc-dns-fix",
     "title": "Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼",
     "summary": "所有 LXC 容器的 DNS 會自己改掉，手動修好後過一陣子又壞。查了很久發現是 dhclient 在 DHCP 續租時偷偷改 DNS。記錄怎麼用 dhclient hook 把 host 和所有容器的 DNS 鎖住，讓它再也改不掉。",
