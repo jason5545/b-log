@@ -8,8 +8,8 @@
     {
       "id": "agentic-ide-git-reset-failure",
       "url": "https://b-log.to/post.html?slug=agentic-ide-git-reset-failure",
-      "title": "當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰翻車記錄",
-      "content_text": "今天試用了 Google 剛發布的 Gemini 3，搭配他們新推出的 agentic IDE Antigravity。號稱最強模型，在 LMArena 拿下 1501 分歷史新高。結果第一次實戰就翻車了。我需要做 git reset 把專案回到某個時間點，Antigravity 確實執行了正確流程：git log 取得歷史、分析 commit message、在 thinking 中推理、得出結論後執行 git reset --hard。問題是它對判斷非常有把握，不是猜測而是「確定無誤」的確定感，結果 reset 太過頭，時間點完全不對。這次翻車讓我意識到工具使用能力和推理正確性是兩回事。它可能對 commit message 語義理解錯誤，或時間序列相對判斷失準，更關鍵是缺乏二次確認機制。最危險的是錯誤伴隨高度自信，邏輯一致不等於事實正確。這是 AI 校準問題：大型語言模型經常在錯誤答案上表現高度自信。還好 Git reflog 救了我。很多人以為 git reset --hard 會永久刪除 commit，其實不是。Git 設計哲學是除非明確要求，否則不會真的刪除。Reflog 記錄 HEAD 指標移動歷史，預設保留 90 天。我用 git reflog 找到正確 commit，git show 確認內容，git reset --hard 恢復，再建立備份分支。從這次翻車學到：AI 的自信不等於正確，要把它的「確定」當成「邏輯通順」而非「事實正確」；人機協作有邊界，破壞性操作必須人類把關；Git 的複雜性是為犯錯而設計的安全網。理想的 agentic IDE 應該有分層授權：auto_execute 給低風險操作，require_confirmation 給檔案寫入，always_manual 給 git reset 這類危險操作。我們正處於過渡期，agentic 工具還在學習什麼時候該自主、什麼時候該求助。在那之前，記住這個教訓：再聰明的 AI，都比不上你多看一眼。",
+      "title": "當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰出包記錄",
+      "content_text": "今天試用了 Google 剛發布的 Gemini 3，搭配他們新推出的 agentic IDE Antigravity。號稱最強模型，在 LMArena 拿下 1501 分歷史新高。結果第一次實戰就出包了。我需要做 git reset 把專案回到某個時間點，Antigravity 確實執行了正確流程：git log 取得歷史、分析 commit message、在 thinking 中推理、得出結論後執行 git reset --hard。問題是它對判斷非常有把握，不是猜測而是「確定無誤」的確定感，結果 reset 太過頭，時間點完全不對。這次出包讓我意識到工具使用能力和推理正確性是兩回事。它可能對 commit message 語義理解錯誤，或時間序列相對判斷失準，更關鍵是缺乏二次確認機制。最危險的是錯誤伴隨高度自信，邏輯一致不等於事實正確。這是 AI 校準問題：大型語言模型經常在錯誤答案上表現高度自信。還好 Git reflog 救了我。很多人以為 git reset --hard 會永久刪除 commit，其實不是。Git 設計哲學是除非明確要求，否則不會真的刪除。Reflog 記錄 HEAD 指標移動歷史，預設保留 90 天。我用 git reflog 找到正確 commit，git show 確認內容，git reset --hard 恢復，再建立備份分支。從這次出包學到：AI 的自信不等於正確，要把它的「確定」當成「邏輯通順」而非「事實正確」；人機協作有邊界，破壞性操作必須人類把關；Git 的複雜性是為犯錯而設計的安全網。理想的 agentic IDE 應該有分層授權：auto_execute 給低風險操作，require_confirmation 給檔案寫入，always_manual 給 git reset 這類危險操作。我們正處於過渡期，agentic 工具還在學習什麼時候該自主、什麼時候該求助。在那之前，記住這個教訓：再聰明的 AI，都比不上你多看一眼。",
       "date_published": "2025-11-21T00:00:00.000Z",
       "date_modified": "2025-11-21T00:00:00.000Z",
       "tags": [

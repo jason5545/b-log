@@ -1,7 +1,7 @@
 [
   {
     "slug": "agentic-ide-git-reset-failure",
-    "title": "當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰翻車記錄",
+    "title": "當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰出包記錄",
     "summary": "試用 Google Gemini 3 搭配 Antigravity IDE，執行 git reset 時 AI 高度自信地選錯 commit。探討 AI 推理正確性與過度自信的校準問題、Git reflog 救援機制、人機協作邊界，以及 agentic 工具時代的生存指南。",
     "category": "AI 分析",
     "author": "Jason Chien",
