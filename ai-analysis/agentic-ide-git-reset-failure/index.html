@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰翻車記錄 - (b)-log</title>
+  <title>當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰出包記錄 - (b)-log</title>
   
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="試用 Google Gemini 3 搭配 Antigravity IDE，執行 git reset 時 AI 高度自信地選錯 commit。探討 AI 推理正確性與過度自信的校準問題、Git reflog 救援機制、人機協作邊界，以及 agentic 工具時代的生存指南。">
@@ -13,9 +13,9 @@
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/ai-analysis/agentic-ide-git-reset-failure/" id="og-url">
-  <meta property="og:title" content="當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰翻車記錄" id="og-title">
+  <meta property="og:title" content="當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰出包記錄" id="og-title">
   <meta property="og:description" content="試用 Google Gemini 3 搭配 Antigravity IDE，執行 git reset 時 AI 高度自信地選錯 commit。探討 AI 推理正確性與過度自信的校準問題、Git reflog 救援機制、人機協作邊界，以及 agentic 工具時代的生存指南。" id="og-description">
-  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%E6%9C%80%E6%96%B0%E7%9A%84%20AI%20%E6%8A%8A%E4%BD%A0%E7%9A%84%20Git%20Reset%20%E5%88%B0%E9%8C%AF%E8%AA%A4%E7%9A%84%E6%99%82%E9%96%93%E9%BB%9E%EF%BC%9A%E4%B8%80%E6%AC%A1%20Agentic%20IDE%20%E7%9A%84%E5%AF%A6%E6%88%B0%E7%BF%BB%E8%BB%8A%E8%A8%98%E9%8C%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%E6%9C%80%E6%96%B0%E7%9A%84%20AI%20%E6%8A%8A%E4%BD%A0%E7%9A%84%20Git%20Reset%20%E5%88%B0%E9%8C%AF%E8%AA%A4%E7%9A%84%E6%99%82%E9%96%93%E9%BB%9E%EF%BC%9A%E4%B8%80%E6%AC%A1%20Agentic%20IDE%20%E7%9A%84%E5%AF%A6%E6%88%B0%E5%87%BA%E5%8C%85%E8%A8%98%E9%8C%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="(b)-log">
@@ -29,9 +29,9 @@
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/ai-analysis/agentic-ide-git-reset-failure/" id="twitter-url">
-  <meta property="twitter:title" content="當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰翻車記錄" id="twitter-title">
+  <meta property="twitter:title" content="當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰出包記錄" id="twitter-title">
   <meta property="twitter:description" content="試用 Google Gemini 3 搭配 Antigravity IDE，執行 git reset 時 AI 高度自信地選錯 commit。探討 AI 推理正確性與過度自信的校準問題、Git reflog 救援機制、人機協作邊界，以及 agentic 工具時代的生存指南。" id="twitter-description">
-  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%E6%9C%80%E6%96%B0%E7%9A%84%20AI%20%E6%8A%8A%E4%BD%A0%E7%9A%84%20Git%20Reset%20%E5%88%B0%E9%8C%AF%E8%AA%A4%E7%9A%84%E6%99%82%E9%96%93%E9%BB%9E%EF%BC%9A%E4%B8%80%E6%AC%A1%20Agentic%20IDE%20%E7%9A%84%E5%AF%A6%E6%88%B0%E7%BF%BB%E8%BB%8A%E8%A8%98%E9%8C%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%E6%9C%80%E6%96%B0%E7%9A%84%20AI%20%E6%8A%8A%E4%BD%A0%E7%9A%84%20Git%20Reset%20%E5%88%B0%E9%8C%AF%E8%AA%A4%E7%9A%84%E6%99%82%E9%96%93%E9%BB%9E%EF%BC%9A%E4%B8%80%E6%AC%A1%20Agentic%20IDE%20%E7%9A%84%E5%AF%A6%E6%88%B0%E5%87%BA%E5%8C%85%E8%A8%98%E9%8C%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
   
   <!-- 額外的 metadata -->
