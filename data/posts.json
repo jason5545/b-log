@@ -1,5 +1,23 @@
 [
   {
+    "slug": "payment-gateway-bank-declined-authorization",
+    "title": "當網頁說「銀行拒刷」，但銀行說你付了三次",
+    "summary": "買東西付款時網頁顯示「銀行拒刷」，但打開信用卡 App 卻有三筆授權紀錄。從技術角度分析這個典型的「前端誤判」問題：payment gateway 回傳訊號出錯導致網站判定失敗，但銀行端授權早已通過。包含處理 SOP、開發者解決方案，以及「理性知道沒事」和「確定沒事」之間的焦慮。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-11-22T00:00:00.000Z",
+    "updatedAt": "2025-11-22T00:00:00.000Z",
+    "readingTime": "12 min",
+    "tags": [
+      "Payment Gateway",
+      "故障排除",
+      "電商",
+      "信用卡",
+      "技術分析"
+    ],
+    "accentColor": "#f39c12"
+  },
+  {
     "slug": "agentic-ide-git-reset-failure",
     "title": "當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰出包記錄",
     "summary": "試用 Google Gemini 3 搭配 Antigravity IDE，執行 git reset 時 AI 高度自信地選錯 commit。探討 AI 推理正確性與過度自信的校準問題、Git reflog 救援機制、人機協作邊界，以及 agentic 工具時代的生存指南。",
