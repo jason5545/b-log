@@ -1,12 +1,12 @@
 [
   {
     "slug": "payment-gateway-bank-declined-authorization",
-    "title": "當網頁說「銀行拒刷」，但銀行說你付了三次",
+    "title": "當網頁說「銀行拒刷」，但銀行說你付了四次",
     "summary": "買東西付款時網頁顯示「銀行拒刷」，但打開信用卡 App 卻有三筆授權紀錄。從技術角度分析這個典型的「前端誤判」問題：payment gateway 回傳訊號出錯導致網站判定失敗，但銀行端授權早已通過。包含處理 SOP、開發者解決方案，以及「理性知道沒事」和「確定沒事」之間的焦慮。",
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-11-22T00:00:00.000Z",
-    "updatedAt": "2025-11-22T00:00:00.000Z",
+    "updatedAt": "2025-11-25T00:00:00.000Z",
     "readingTime": "12 min",
     "tags": [
       "Payment Gateway",
