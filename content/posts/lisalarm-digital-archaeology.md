@@ -194,6 +194,8 @@ suspend fun unlockRandomContent(): UnlockResult {
 
 但最重要的目標已經達成：**讓這些珍貴的素材能在現代 Android 系統上繼續使用。**
 
+![重寫後的 LiSALARM APP 截圖](/content/img/2025/Screenshot_2025-11-24-16-43-21-161_com.jp.sma.lisalarm.jpg)
+
 ## 這不只是技術專案
 
 對我來說，這個專案的意義不只是「把舊 APP 改成能用」。
