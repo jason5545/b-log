@@ -6,6 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "lisalarm-digital-archaeology",
+      "url": "https://b-log.to/post.html?slug=lisalarm-digital-archaeology",
+      "title": "為愛發電的數位考古：重寫 LiSA 官方鬧鐘 APP",
+      "content_text": "2016 年 LiSA 官方推出了一款主題鬧鐘 APP「LiSALARM」，內含 70 張專屬照片和 38 個語音音效。作為從 2015 年就開始追星的 LiSAッ子，我當然第一時間就買了。但某次系統更新後，鬧鐘再也無法正常運作，而且這款 APP 已經從 Play Store 下架，官方也沒有任何更新計畫。身為工程師，我從 Google 購買記錄裡挖出原版 APK 研究為什麼它會失效。分析後發現一堆「時代的眼淚」：過時的螢幕解鎖 API、沒有通知頻道、沒有動態權限請求、沒有前景服務。與其修補一艘破船，我決定用現代技術重寫：Jetpack Compose + Material 3 做 UI、Room + Flow 做資料層、MVVM + Clean Architecture 做架構、AlarmManager + ForegroundService 做鬧鐘核心。我的開發方式是負責架構設計和技術決策，具體程式碼實作依賴 AI 協助。核心功能都完成了：鬧鐘列表與開關、時間與重複日期設定、照片與音效選擇、解鎖系統與藝廊。這個專案不會開源，因為 LiSA 的照片和音效有版權。但對我來說，這不只是技術專案，而是一個為愛發電的數位保存計畫。這 70 張照片和 38 個音效是那個時代留下的痕跡，如果不做這件事，它們就會永遠消失。現在每天早上依然能被 LiSA 的聲音叫醒，技術棧變了，但那份喜歡的心沒變。",
+      "date_published": "2025-11-25T00:00:00.000Z",
+      "date_modified": "2025-11-25T00:00:00.000Z",
+      "tags": [
+        "Android",
+        "Kotlin",
+        "Jetpack Compose",
+        "LiSA",
+        "數位保存",
+        "逆向工程",
+        "AI 輔助開發"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "payment-gateway-bank-declined-authorization",
       "url": "https://b-log.to/post.html?slug=payment-gateway-bank-declined-authorization",
       "title": "當網頁說「銀行拒刷」，但銀行說你付了四次",
