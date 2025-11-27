@@ -1,5 +1,23 @@
 [
   {
+    "slug": "fake-buyer-scam-personal-data",
+    "title": "賣東西也能被騙個資？假買家如何偷走你的身分證和帳戶",
+    "summary": "從「假買家騙個資開人頭帳戶」的新型詐騙出發，分析詐騙氾濫的三大原因：技術門檻降低、機率遊戲本質、情境設計專業化。連 Linus Tech Tips 都中招兩次，證明這不是「數位素養不足」那麼簡單，而是認知負荷問題。探討良善價值如何在防詐環境中承擔額外證明成本。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2025-11-27T00:00:00.000Z",
+    "updatedAt": "2025-11-27T00:00:00.000Z",
+    "readingTime": "10 min",
+    "tags": [
+      "詐騙",
+      "社會觀察",
+      "認知負荷",
+      "網路安全",
+      "Linus Tech Tips"
+    ],
+    "accentColor": "#e67e22"
+  },
+  {
     "slug": "lisalarm-digital-archaeology",
     "title": "為愛發電的數位考古：重寫 LiSA 官方鬧鐘 APP",
     "summary": "2016 年買的 LiSA 官方鬧鐘 APP，在 Android 系統更新後完全失效且已下架。身為工程師，我決定用現代技術（Jetpack Compose、Room、MVVM）重寫它，保存那 70 張專屬照片和 38 個語音音效。這是一個為愛發電的數位保存計畫。",
