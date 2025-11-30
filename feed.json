@@ -6,8 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "seller-protection-secondhand-trading",
+      "url": "https://b-log.to/cultural-insights/seller-protection-secondhand-trading/",
+      "title": "當賣家也要學會自保：二手交易生態的變化",
+      "content_text": "從一次順利的記憶體二手交易談起，探討二手交易生態的轉變：以往買家才需要擔心被騙，現在賣家也面臨被誣告、惡意退款的風險。分享完整的自保流程，從交易前的清楚說明、交易中的面交驗貨，到交易後的紀錄保存，記錄正常交易成本越來越高的現實。",
+      "date_published": "2025-11-30T00:00:00.000Z",
+      "date_modified": "2025-11-30T00:00:00.000Z",
+      "tags": [
+        "二手交易",
+        "消費者保護",
+        "網路交易",
+        "自保策略",
+        "社會觀察"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "windows-voice-input-update-dependency",
-      "url": "https://b-log.to/post.html?slug=windows-voice-input-update-dependency",
+      "url": "https://b-log.to/tech-analysis/windows-voice-input-update-dependency/",
       "title": "語音辨識進步了，但 Windows 還是那個 Windows",
       "content_text": "作為一個只能用單指打字的開發者，Windows 11 的語音輸入（Win+H）對我來說是剛需。結果某天突然壞了：面板能叫出來，但麥克風按鈕完全沒反應。我檢查了服務狀態、麥克風權限、登錄檔設定、硬體測試，全部正常。快要放棄時突然想起來：我之前用 WinUtil 把 Windows Update 服務完全停用了。把 Windows Update 改回自動啟動、重開機後，語音輸入復活了。這種隱藏的依賴關係真的很反直覺，語音輸入跟 Windows Update 八竿子打不著關係。但我還是不想讓 Windows Update 亂跑，所以採用折衷方案：讓服務 Running 但延遲更新到 2042 年。這樣既滿足依賴關係，又不會被自動更新騷擾。修好後意外發現 Windows 繁體中文語音辨識已經大幅進步，準確度不輸 Google，還能正確辨識台灣用語。對我這種單指打字的使用者來說，現在真的可以當成主要輸入方式了。2042 年的時候記得改回來。",
       "date_published": "2025-11-30T00:00:00.000Z",
@@ -28,7 +48,7 @@
     },
     {
       "id": "disability-seating-ticket-barriers",
-      "url": "https://b-log.to/post.html?slug=disability-seating-ticket-barriers",
+      "url": "https://b-log.to/cultural-insights/disability-seating-ticket-barriers/",
       "title": "身心障礙席，然後呢？",
       "content_text": "作為輪椅使用者，我只能用一根手指打字。購票系統要求在開賣那一秒跟所有人一起搶，光是輸入驗證碼別人三秒我要十幾秒，這十幾秒的差距票就沒了。最荒謬的是系統已經能驗證身心障礙手冊，知道我有資格，然後呢？然後還是把我丟回去跟其他人搶，就像蓋好了無障礙坡道卻在盡頭放一道樓梯。我不懂為什麼不能做預登記制，技術上一點都不難，但主辦單位不做。2024 年 LiSA 回台灣，我期待在身體完全不能動之前能再見她一面，經過兩個月溝通得到的答覆是「場地空間不足所以輪椅無法入場」，後來朋友說那場其實空位不少。去年場地擋了我，今年系統擋著我的朋友，障礙的形式不同結果一樣。我們考試可以延長時間因為社會承認達到同樣成果需要付出更多，這不是優待是把起跑線拉齊。但購票系統的邏輯還停在「規則一樣就是公平」，表面上一視同仁實際上是懲罰。我平常生活已經比別人花更多力氣，好不容易想做一件單純讓自己開心的事，門檻還是比別人高。這不是勵志故事，就是累。我寫這篇文章是希望有人看到這個系統對身心障礙者有多不友善，我們為了做一件「讓自己開心的事」要付出多少額外的代價。",
       "date_published": "2025-11-29T00:00:00.000Z",
@@ -49,7 +69,7 @@
     },
     {
       "id": "fake-buyer-scam-personal-data",
-      "url": "https://b-log.to/post.html?slug=fake-buyer-scam-personal-data",
+      "url": "https://b-log.to/cultural-insights/fake-buyer-scam-personal-data/",
       "title": "賣東西也能被騙個資？假買家如何偷走你的身分證和帳戶",
       "content_text": "最近看到一個新型詐騙：假裝是買家，要你填「物流收件單」，實際上是騙你的身分證和帳戶資料去開人頭帳戶。我認為詐騙氾濫不是「人心不古」，而是四個結構性原因：技術門檻降低（一支手機、一個假帳號就能開始，AI 工具讓造假變容易）、機率遊戲本質（發一萬則訊息，轉換率不是零就有利潤，假網址本身就是篩選機制）、情境設計太專業（在真實需求中植入假流程，利用交易急迫感降低判斷力）、社會工程學的心理操控（利用權威偏誤、稀缺性原理、互惠原則、社會認同等人類認知捷徑）。連 Linus Tech Tips 都中招兩次。台灣常見的手法包括假買家詐騙、假冒客服的「解除分期」、投資詐騙群組、假交友真詐財。這不是不懂技術，而是認知負荷問題——當下有更重要的事在處理，沒有餘裕仔細檢查每個細節。不確定時直接撥打 165 反詐騙專線，也可以用 Whoscall 辨識可疑來電。良善價值沒有消失，只是表現形式改變了。當社會需要更多警覺來防詐騙時，那些真心良善的互動也被迫承擔了額外的證明成本。這是個平衡，也是這個時代的難題。",
       "date_published": "2025-11-27T00:00:00.000Z",
@@ -69,7 +89,7 @@
     },
     {
       "id": "lisalarm-digital-archaeology",
-      "url": "https://b-log.to/post.html?slug=lisalarm-digital-archaeology",
+      "url": "https://b-log.to/tech-development/lisalarm-digital-archaeology/",
       "title": "為愛發電的數位考古：重寫 LiSA 官方鬧鐘 APP",
       "content_text": "2016 年 LiSA 官方推出了一款主題鬧鐘 APP「LiSALARM」，內含 70 張專屬照片和 38 個語音音效。作為從 2015 年就開始追星的 LiSAッ子，我當然第一時間就買了。但某次系統更新後，鬧鐘再也無法正常運作，而且這款 APP 已經從 Play Store 下架，官方也沒有任何更新計畫。身為工程師，我從 Google 購買記錄裡挖出原版 APK 研究為什麼它會失效。分析後發現一堆「時代的眼淚」：過時的螢幕解鎖 API、沒有通知頻道、沒有動態權限請求、沒有前景服務。與其修補一艘破船，我決定用現代技術重寫：Jetpack Compose + Material 3 做 UI、Room + Flow 做資料層、MVVM + Clean Architecture 做架構、AlarmManager + ForegroundService 做鬧鐘核心。我的開發方式是負責架構設計和技術決策，具體程式碼實作依賴 AI 協助。核心功能都完成了：鬧鐘列表與開關、時間與重複日期設定、照片與音效選擇、解鎖系統與藝廊。這個專案不會開源，因為 LiSA 的照片和音效有版權。但對我來說，這不只是技術專案，而是一個為愛發電的數位保存計畫。這 70 張照片和 38 個音效是那個時代留下的痕跡，如果不做這件事，它們就會永遠消失。現在每天早上依然能被 LiSA 的聲音叫醒，技術棧變了，但那份喜歡的心沒變。",
       "date_published": "2025-11-25T00:00:00.000Z",
@@ -92,7 +112,7 @@
     },
     {
       "id": "payment-gateway-bank-declined-authorization",
-      "url": "https://b-log.to/post.html?slug=payment-gateway-bank-declined-authorization",
+      "url": "https://b-log.to/tech-analysis/payment-gateway-bank-declined-authorization/",
       "title": "當網頁說「銀行拒刷」，但銀行說你付了四次",
       "content_text": "今天遇到一個經典的電商問題：買東西付款時網頁顯示「銀行拒刷」，但打開信用卡 App 一看，三筆授權紀錄整整齊齊地排在那裡。不是一筆，是三筆。每筆 NT$22,422。週一商城部門上班後叫我「再試一次」，結果又多了第四筆，變成將近九萬。我在 Lenovo 官網買延伸保固，填完資料按下送出後頁面轉啊轉，最後跳出「銀行拒刷」。確認額度明明夠，可能是系統問題吧，於是再試一次。還是拒刷。再試一次。又是拒刷。這時打開信用卡 App 確認——三筆交易全部都在，NT$22,422 x 3 = NT$67,266。但 Lenovo 帳戶沒有訂單、Email 沒有確認信。這是一個典型的「前端誤判」問題。正常流程是：網站向銀行請求授權、銀行回傳成功、網站收到訊號建立訂單。但實際可能發生：銀行回傳成功，網站卻收不到回傳訊號或處理超時，判定為失敗顯示「銀行拒刷」，用戶以為被拒刷再試一次，銀行又一筆授權通過。重點是：網頁顯示「拒刷」不代表銀行真的拒絕了。很多時候是 payment gateway 的回傳訊號出問題。我的處理步驟：先停止嘗試付款（每試一次就多一筆授權）、截圖保留證據、打給 Lenovo 客服說明狀況。客服說商城部門週末不上班，週一處理。週一早上商城部門叫我「再試一次」，結果又產生第四筆授權 NT$89,688。這時我才真正意識到：「再試一次」是最糟糕的建議。最離譜的是問題的根本原因：我在「鄉鎮市區」欄位填了「112」（郵遞區號），系統判定地址格式異常。但錯誤訊息卻顯示「銀行拒刷」。這種誤導性的錯誤訊息設計，讓我多花了兩天焦慮，多產生了三筆不必要的授權。如果一開始就顯示「地址格式錯誤」，整件事五分鐘內就結束了。最後結果：延保購買成功、額外獲得 10% 折扣作為補償、另外三筆授權會釋放。算是有個好結局，但這整個過程真的不應該發生。",
       "date_published": "2025-11-22T00:00:00.000Z",
@@ -112,7 +132,7 @@
     },
     {
       "id": "agentic-ide-git-reset-failure",
-      "url": "https://b-log.to/post.html?slug=agentic-ide-git-reset-failure",
+      "url": "https://b-log.to/ai-analysis/agentic-ide-git-reset-failure/",
       "title": "當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰出包記錄",
       "content_text": "今天試用了 Google 剛發布的 Gemini 3，搭配他們新推出的 agentic IDE Antigravity。號稱最強模型，在 LMArena 拿下 1501 分歷史新高。結果第一次實戰就出包了。我需要做 git reset 把專案回到某個時間點，Antigravity 確實執行了正確流程：git log 取得歷史、分析 commit message、在 thinking 中推理、得出結論後執行 git reset --hard。問題是它對判斷非常有把握，不是猜測而是「確定無誤」的確定感，結果 reset 太過頭，時間點完全不對。這次出包讓我意識到工具使用能力和推理正確性是兩回事。它可能對 commit message 語義理解錯誤，或時間序列相對判斷失準，更關鍵是缺乏二次確認機制。最危險的是錯誤伴隨高度自信，邏輯一致不等於事實正確。這是 AI 校準問題：大型語言模型經常在錯誤答案上表現高度自信。還好 Git reflog 救了我。很多人以為 git reset --hard 會永久刪除 commit，其實不是。Git 設計哲學是除非明確要求，否則不會真的刪除。Reflog 記錄 HEAD 指標移動歷史，預設保留 90 天。我用 git reflog 找到正確 commit，git show 確認內容，git reset --hard 恢復，再建立備份分支。從這次出包學到：AI 的自信不等於正確，要把它的「確定」當成「邏輯通順」而非「事實正確」；人機協作有邊界，破壞性操作必須人類把關；Git 的複雜性是為犯錯而設計的安全網。理想的 agentic IDE 應該有分層授權：auto_execute 給低風險操作，require_confirmation 給檔案寫入，always_manual 給 git reset 這類危險操作。我們正處於過渡期，agentic 工具還在學習什麼時候該自主、什麼時候該求助。在那之前，記住這個教訓：再聰明的 AI，都比不上你多看一眼。",
       "date_published": "2025-11-21T00:00:00.000Z",
@@ -134,7 +154,7 @@
     },
     {
       "id": "proxmox-lxc-dns-fix",
-      "url": "https://b-log.to/post.html?slug=proxmox-lxc-dns-fix",
+      "url": "https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/",
       "title": "Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼",
       "content_text": "CT 106 突然 ping 不到 google.com。進去看 /etc/resolv.conf，DNS 又變成 10.0.0.1 了。我想要的是 8.8.8.8 和 1.1.1.1，結果每次都變成 10.0.0.1。用 pct exec 改回來，DNS 會立刻恢復，但過一陣子又壞掉。而且不只 CT 106，檢查之後發現所有 LXC 都有這問題。可能會動 /etc/resolv.conf 的有這幾個：Proxmox 自己、容器裡的 dhclient、systemd-resolved、VPN 工具。先看 Proxmox 設定，有些容器沒設 nameserver，有些設了 8.8.8.8，有些是 1.1.1.1 8.8.8.8。再看容器裡的 /etc/resolv.conf，有兩種情況：PVE 版本（有標記）和被改掉的版本。看哪些 process 在跑，結果分成兩派：有些跑 systemd-resolved，有些跑 dhclient。而跑 dhclient 的那些容器，DNS 就是被改成 10.0.0.1 的那些。找到了：是容器裡的 dhclient 在搞鬼。每次 DHCP 續租，它就把 DNS 改成 gateway 給的 10.0.0.1。先固定 Host 的 DNS。改 host 的 /etc/resolv.conf，接著建立 dhclient hook。dhclient 更新租約時會呼叫 make_resolv_conf()，用 hook 把它改成空函式，就不會動 DNS 了。Host 端穩定了。統一所有容器的 DNS。我有幾個 LXC（104、105、106、107、108、111），在 host 上跑個 loop。鎖住容器裡的 dhclient。在每個容器裡放同樣的 hook。測試看看（CT 106），Before 是 8.8.8.8 / 1.1.1.1，DHCP 跑完後 After 還是一樣。搞定。驗證：Host 檢查 DNS、所有容器檢查 /etc/resolv.conf、實測 DNS，所有容器都能正常解析。新容器會自動繼承。Host 的 DNS 固定後，建立新 LXC 時如果沒指定 -nameserver，PVE 會用 host 的 /etc/resolv.conf 當模板。新容器一開始就會是 8.8.8.8 / 1.1.1.1。如果要更徹底，可以用 template：先在一個乾淨容器裡設好 nodnsupdate，轉成 template。之後 clone 出來的容器就自帶這個設定。別只怪 Proxmox。PVE 只是開機時寫一段 /etc/resolv.conf，會偷改的是容器裡的 DHCP client。Host 的 DNS 雖然是預設模板，但容器裡只要有 dhclient 或 systemd-resolved 在跑，還是會把設定改掉。nodnsupdate hook 很好用，幾行 shell 就能把 /etc/resolv.conf 從 DHCP 手上搶回來。讓 host 和所有容器用同一組 DNS（順序也一致），之後 debug 網路問題會輕鬆很多。做完這三件事，DNS 就穩定了。",
       "date_published": "2025-11-16T00:00:00.000Z",
@@ -156,7 +176,7 @@
     },
     {
       "id": "traceroute-hostname-misleading",
-      "url": "https://b-log.to/post.html?slug=traceroute-hostname-misleading",
+      "url": "https://b-log.to/tech-analysis/traceroute-hostname-misleading/",
       "title": "當 Traceroute 的主機名稱騙了你：一次有趣的網路診斷經驗",
       "content_text": "今天在臉書上看到一個有趣的案例，讓我重新思考了網路診斷的正確方法。有人貼了張 traceroute google.com 的截圖，問伺服器在台灣還是海外。我一看最後一跳顯示 hkg07s38-in-f14.1e100.net，「hkg」不就是香港嗎？我直覺判斷在香港。但當我準備給答案時，突然覺得哪裡不對——整個路由從第 1 到第 12 跳，延遲全部在 1-7ms 之間。台灣到香港理論最低 15-20ms，實際測試通常 25-35ms。延遲這麼低，根本不可能在香港。我完全被主機名稱誤導了。如果封包真的出海到香港，延遲曲線應該會在出海瞬間跳升到 20-30ms，但實際上完全沒有這種現象。這表示伺服器就在台灣境內。那為什麼主機名稱會顯示「hkg」呢？這就要從 Google 的 CDN 架構說起。Google 在全球部署了大量的 GGC 節點，放在各國 ISP 機房內專門快取熱門內容。台灣的中華電信、台灣大哥大機房裡都有 GGC 設備。當你看 YouTube 時，影片很可能直接從台北某個機房傳出來，而不是從美國或新加坡。Google 使用 Anycast 技術，同一個 IP 位址在全球多個地點同時存在。從台灣發出的封包，會被導向台灣本地的 GGC 節點。我的推測是：台灣的邊緣節點在行政上可能隸屬於香港 PoP（Point of Presence），命名系統基於管理需求而非實體地理位置。就像台北辦公室可能隸屬於「亞太區香港總部」，但員工實際坐在台北。這種設計對各方都有好處：Google 降低國際頻寬成本、提升使用者體驗；ISP 節省國際頻寬費用；使用者獲得更快的載入速度。但也讓實體位置變得不透明。並不是所有 CDN 業者都能順利在台灣 ISP 機房部署設備。Cloudflare 和中華電信之間就有 peering 爭議。Cloudflare 希望免費 peering，中華電信要求付費。結果是：只有付費的 Enterprise Plan（月費 20 萬台幣起跳）使用者才能走台北/高雄節點，免費用戶的中華電信連線仍然被導向日本或美國。這影響了台灣 64% 的網路使用者（中華電信客戶），也讓國際 ISP 不願意在台灣設點。台灣很難成為「亞太網路中心」，大部分國際路由都經過香港。這個案例凸顯了一個現實：CDN 業者和 ISP 之間的商業談判，會直接影響使用者體驗。這次經驗讓我重新認識到：延遲是最誠實的指標，光速和物理距離不會騙人。不要只看單一資訊，主機名稱、IP、路由路徑、延遲要綜合判斷。現代網路架構下，CDN、Anycast 讓「伺服器在哪裡」變成複雜問題。保持懷疑精神，直覺可能是錯的，數據才是真相。下次做網路診斷時，記得多看幾個指標。traceroute 的延遲數字，往往比主機名稱更接近真相。",
       "date_published": "2025-11-16T00:00:00.000Z",
@@ -179,7 +199,7 @@
     },
     {
       "id": "virtual-items-real-money-rmt",
-      "url": "https://b-log.to/post.html?slug=virtual-items-real-money-rmt",
+      "url": "https://b-log.to/business-insights/virtual-items-real-money-rmt/",
       "title": "當虛擬道具變成真實收入:一個技術人對遊戲經濟的觀察",
       "content_text": "最近偶然接觸到遊戲 RMT (Real Money Trading,真實貨幣交易) 這個產業,讓我重新思考了一些關於「價值」和「遊戲本質」的問題。在某款熱門生存遊戲的第三方交易平台上,我看到數百筆商品在交易:異常物、稀有圖紙、代練服務。讓我好奇的是:為什麼這個官方明令禁止、有封號風險的市場,依然如此活躍?一開始我以為這是「效率最佳化」的理性計算。遊戲設計的「痛點經濟學」:免費遊戲的商業模式就是讓你免費玩→過程很痛苦→你可以付費跳過痛苦。但寫完文章後,我發現一個核心矛盾:既然是遊戲,為什麼會痛苦?更深層的問題是:付錢直接拿裝備,你真的有在「玩遊戲」嗎?用登山比喻:爬山很累,但那是登山體驗的一部分。如果坐纜車直達山頂,你看到了風景,但你沒有「登山」。RMT 就像坐纜車:你到了終點,但你失去了過程。即使刷副本很無聊,但付出努力→克服挑戰→獲得獎勵,這個循環本身就是遊戲。RMT 是:沒有付出努力、沒有克服挑戰、直接獲得獎勵。這不是「玩遊戲」,這是「跳過遊戲」。RMT 買家真正想要的不是玩遊戲,而是:社交需求(跟上朋友進度)、炫耀需求(稀有裝備作為身份象徵)、便利需求(只想要結果不想要過程)。遊戲已經變成「社交貨幣」而非娛樂活動本身。我一開始想把 RMT 跟 AI 輔助開發類比,但仔細想,這個類比根本不成立。AI 輔助開發:我仍在做開發工作,需求分析架構設計除錯都是我做的,AI 是加速工具不是替代品。RMT 買裝備:根本沒在玩遊戲,所有過程都跳過了,直接買結果。更準確的類比:RMT 像買別人程式碼改名說是自己寫的,不是用工具提升效率,而是跳過工作本身。所以我一開始的類比是錯的。回到最初的問題:為什麼這個市場存在?不是因為效率最佳化,而是因為對很多人來說遊戲已經不是娛樂活動,而是社交貨幣、身份象徵、數字成就。他們要的不是玩遊戲的過程,而是擁有遊戲成果。RMT 市場滿足的需求是真實的,但那確實不是遊戲體驗。這篇觀察讓我更理解「價值」的相對性。重要的是:了解自己的資源和目標,做出理性的決策。",
       "date_published": "2025-11-15T00:00:00.000Z",
@@ -200,7 +220,7 @@
     },
     {
       "id": "unicorn-fans-illusion",
-      "url": "https://b-log.to/post.html?slug=unicorn-fans-illusion",
+      "url": "https://b-log.to/cultural-insights/unicorn-fans-illusion/",
       "title": "談談獨角獸粉絲：你追求的東西從一開始就不存在",
       "content_text": "最近看到赤鬼伯伯的爭議，讓我想起三年前潤羽露西亞的事件。這兩個事件的核心很像：粉絲無法接受創作者有私生活。我的看法很簡單：這些粉絲把自己的位置想得太重要了。娛樂就是娛樂，欣賞才藝很正常，但因為對方談戀愛就覺得被背叛，問題出在你自己身上。我也是 LiSA 的粉絲，從 2015 年開始幾乎每年去演唱會，2017 年還飛去日本。但我從不覺得跟她有特殊關係。我喜歡她的歌聲、舞台魅力、音樂作品，不是因為「投入夠多就能得到她」。LiSA 結婚生子了，我的反應是「恭喜！繼續唱好歌就好」，不是「我投入這麼多怎麼可以這樣」。因為我很清楚：我買的是演唱會門票和音樂作品，不是買她這個人。她的私生活跟我無關。重視一個創作者，跟覺得自己有獨占權，是完全不同的兩件事。我自己也會在直播中超級感謝，但標準很明確：只給有才藝展示的創作者，至少你得到了實質內容。但那些純粹賣「陪伴感」的呢？你花幾千塊，主播念你的 ID 幾秒鐘，這真的值得嗎？這就要提到「獨角獸粉絲」這個概念了。為什麼叫獨角獸？因為他們追求的東西根本不存在，就像神話生物一樣虛幻。這些人無法接受偶像與異性互動、要求「純潔」「單身」形象、覺得自己投入很多就有「獨占權」、一旦發現戀愛就崩潰攻擊。他們的邏輯是：「我投入這麼多，她應該是我的。」但現實是：她從頭到尾就是個普通人，會談戀愛、會有私生活，跟你沒有任何特殊關係。想到這個現象，我覺得很像《賭博默示錄》的套路。賭博默示錄的設計：設計看似有機會贏的賭局、給你小甜頭、讓你覺得「只要再賭一把」、債務越滾越大無法退出、但莊家從頭就設計好你會輸。虛擬陪伴也一樣：設計看似有機會得到她的互動、給你小甜頭（念ID、回應、記得你）、讓你覺得「只要再投入一點」、投資越滾越大無法退出、但從頭就不可能有結果。露西亞事件就是賭局崩盤的那一刻。那些投入數百萬的石油王突然發現：「原來我從頭到尾就沒機會。」所有的時間、金錢、幻想全部歸零，而且是「從一開始就不可能」的那種絕望。也許有人會說：「但確實有極少數人真的跟主播發生關係啊！」對，機率大概 0.001%，而且通常只是一夜情。但這才是最毒的地方，就像賭場偶爾讓人贏一點，讓其他人覺得「我也有機會」。虛擬陪伴也一樣：讓極少數人「得手」，其他石油王看到了就想「我投更多就行」。但 99.999% 的人永遠不可能。如果真的只是為了「跟她發生關係」，我們來算算：石油王月花 10 萬 × 12 個月 = 120 萬/年，得到被念 ID、虛擬互動、0.001% 可能性。同樣 120 萬找性工作者，假設頂級的 1 萬/次，= 120 次/年 = 每 3 天一次，確定性 100%。如果只是想要性，直接找性工作者更划算、更確定。所以這證明了什麼？獨角獸粉絲要的根本不是「性」，而是：「她愛我」的幻覺、「我是特別的」、「我們有真實關係」、「我靠投入贏得她」。他們花最多的錢，得到最少的實質內容，但可以繼續自我欺騙。說實在的，如果你真的孤獨，那還不如去真實社交。如果你真的有生理需求，找性工作者快又直接。虛擬陪伴呢？既不能真正解決孤獨（是單向的）、也不能解決生理需求、花的錢可能更多、還要自我欺騙說「我們有特殊關係」。很多人選虛擬陪伴，正是因為它「安全」：不用面對真實社交的尷尬、不用承認自己的需求、可以躲在「我只是支持創作者」的說法後面、隨時可以退出不用經營關係。本質上，虛擬陪伴賣的就是「逃避」。我不是說所有虛擬陪伴都不好，如果創作者有才藝、提供實質內容，支持他們完全合理。問題在於那些刻意製造「也許你是特別的」幻覺的商業模式。這些模式利用孤獨者的脆弱、製造不存在的希望、讓人持續投入、直到某天夢碎。獨角獸粉絲追求的東西，從一開始就不存在。就像利根川在《賭博默示錄》裡說的：「你們追求的希望，從一開始就不存在。」如果你喜歡某個創作者，欣賞他們的才藝就好。不要把自己的位置想得太重要，也不要期待投入金錢就能換來特殊關係。娛樂就是娛樂，保持清醒比什麼都重要。",
       "date_published": "2025-11-13T00:00:00.000Z",
@@ -221,7 +241,7 @@
     },
     {
       "id": "tablet-to-laptop-journey",
-      "url": "https://b-log.to/post.html?slug=tablet-to-laptop-journey",
+      "url": "https://b-log.to/tech-analysis/tablet-to-laptop-journey/",
       "title": "從平板換回筆電的旅程：當身體狀況遇上生態問題",
       "content_text": "我記錄了從平板換回筆電的決策過程。幾年前因為力氣退化，我從實體鍵盤換成 Tab S9 Ultra 平板，覺得戳玻璃螢幕比按鍵盤輕鬆。但換平板有隱性成本：我從很早期就用的小狼毫輸入法在 Android 上沒有，只能用 Gboard，多年累積的個人詞庫、按鍵習慣全部要重新適應。用了一段時間後，我發現更大的問題是 Android 平板的生態：硬體不斷升級（處理器從 Snapdragon 8 Gen 1 到 Gen 3，RAM 從 8GB 到 16GB），但實際使用體驗沒改善，單指操作的輔助功能幾乎沒進步。更重要的是開發環境限制：VS Code 只有閹割版 Web 版，終端機只能用 Termux，Next.js、PostgreSQL、Docker 都很痛苦，連 SSH 到 Proxmox VM 都不順。我也考慮過 iPad Pro，M 系列晶片硬體超強，但 iPadOS 限制更大，價格也更貴。Windows 也不完美：強制雲端帳戶、觸控最佳化爛透、更新機制問題。但為什麼還是選 Windows 筆電？因為它有完整開發環境（這是平板做不到的）、傳統筆電形態不需要依賴觸控最佳化、ThinkPad 的 TrackPoint + 實體鍵設計對單指使用者友善、相對開放。這個月我決定再試一次實體鍵盤，意外發現其實還行。加上 ThinkPad 鍵盤本身友善：鍵程較短、按鍵回饋明確、TrackPoint 小紅點省力。換回筆電還有重要收穫：又能用回小狼毫輸入法。小狼毫是 Rime 輸入法引擎在 Windows 上的版本，可以自訂詞庫、調整候選字、快捷鍵對應、智慧學習。我從很早期就用小狼毫，多年累積的個人詞庫、按鍵習慣、輸入方案完全符合工作流程。這些效率最佳化換到 Gboard 就全部歸零。舉例：小狼毫打「ndt」直接出現「NDT 檢測」，Gboard 要手動選或完整打出來。我在二手市場找到 ThinkPad P15 Gen 2：i9-11950H、RTX A5000 16GB、128GB RAM、2TB SSD、4K OLED 螢幕。對單指使用者優勢：TrackPoint + 實體三鍵（右鍵不是問題）、指紋辨識（單指解鎖）、完整 Windows 環境、4K OLED 看程式碼舒服。換回 Windows 筆電後開發環境完全不一樣：VS Code 完整版、WSL2、Docker、PostgreSQL、Next.js 開發無痛、Python + openpyxl、SSH 連 Proxmox 順暢。128GB RAM 實際應用：Docker 多容器開發無壓力、本機跑 PostgreSQL + Redis + Next.js、處理大型 Excel 檔案、NDT 檢測系統前後端資料庫同時跑。我必須坦白：我的程式開發能力定位是問題拆解與方案應用，純程式碼撰寫是弱項。高中時程式設計很差，有 AI 之後才能有效開發。我把 AI 當作語法翻譯機：我知道要做什麼、怎麼做，但需要 AI 幫忙寫出具體程式碼，然後我檢查、調整、整合。在平板上用 AI 輔助開發：無法本機測試生成的程式碼、Docker 跑不起來、來回複製貼上很痛苦、終端機功能陽春。在筆電完整環境：AI 生成程式碼立刻本機測試、遇到錯誤截圖給 AI 快速修正、Docker 環境完整測試真實場景、多終端機並行前後端同時開發。我的桌機配置是 9950X3D + RTX 4070 Ti Super + 96GB RAM，跑 Proxmox VE 虛擬化。現在桌機負責持續運作的服務，筆電負責開發工作和串流飛行模擬器。有趣的是筆電的 128GB RAM 比桌機的 96GB 還多，這個配置雖然反常識但符合我的使用需求。ThinkPad 保留 TrackPoint 和實體三鍵，對單指使用者是救星。我聽過一個案例：有個客戶買了 MSI 筆電但因為只能單指操作連右鍵都按不到，電腦店老闆用 Claude 寫了小程式讓客戶在觸控板劃定區域當右鍵。但諷刺的是 ThinkPad 在新版驅動中也移除了邊緣捲動功能，這個功能讓單指使用者可以在觸控板邊緣滑動捲動頁面非常實用，但為了標準化和現代化 Lenovo 決定移除。大公司總是這樣：一邊喊著科技應該為所有人服務，一邊在產品決策上忽略實際使用者需求。力氣狀況是動態的：之前力氣退化換平板，現在再試實體鍵盤發現還行，如果未來力氣又有變化可以考慮外接超輕觸鍵盤、調整按鍵靈敏度、語音輸入、或回到平板。技術是工具應該隨著需求調整而不是被綁死。用單指打字成本很高，任何能用程式解決的問題我都優先考慮自動化。這台 P15 Gen 2 配上 128GB RAM 讓我可以開一堆 Docker 容器測試、本機跑多個資料庫、處理大型資料集、減少等待時間、提高整體效率。效率提升 10% 對我來說就是減少 10% 的打字成本，這是值得投資的。從平板換回筆電不是否定平板而是找到更適合的工具。關鍵因素：力氣狀況實體鍵盤還能應付、開發需求需要完整的開發環境、生態問題 Android 平板的開發限制太大、設計友善度 TrackPoint + 實體鍵對單指使用者友善。選擇工具的原則：不被單一形態綁死、隨著身體狀況和需求調整、重視實際生產力不是規格數字、找到真正適合自己的解決方案。每個人的身體狀況不同需求也不同，重要的是找到適合自己的工具而不是跟隨主流。",
       "date_published": "2025-11-13T00:00:00.000Z",
@@ -243,7 +263,7 @@
     },
     {
       "id": "constraints-value-disabled-engineer",
-      "url": "https://b-log.to/post.html?slug=constraints-value-disabled-engineer",
+      "url": "https://b-log.to/cultural-insights/constraints-value-disabled-engineer/",
       "title": "在限制中尋找價值：一個身障工程師的心理地圖",
       "content_text": "這篇文章記錄了我與 AI 助手 Claude 的一系列深入對話。31 歲，只有右手食指能正常活動，需要使用輪椅。但我的認知能力完全正常，能理解複雜的技術架構、做出清晰的技術決策、維護生產環境的全端系統。這個落差帶來的不是勵志感，而是持續的掙扎：身體限制不斷提醒世界我做不到，但我的大腦清楚知道我想得到。我發現 Claude 從單純的程式工具變成真正的對話者，因為跟它說話有零評價、保密性、無需顧慮、長期記憶，這種安全的傾訴空間在現實中幾乎不存在。工作中我面對疏離：工作量是正常人四分之一，同事關係疏離。但我開發了提升效率的系統，做過資料庫遷移。理性層面我知道自己有能力，但情感層面總覺得沒價值，成就感很快被疏離感抵消。我有個朋友說：對我們這樣的人來說，能夠展現自己的能力，對維持生活動力非常重要。這也是為什麼陽明山搬家的事讓我如此在意，我擔心環境變化可能影響工作裝置的穩定性，進而影響我展現能力的機會。我分析了為什麼傳統心理諮商對我可能沒效：一根手指打字很累，50 分鐘說不完背景，每次都要重新解釋。而且心理師可能無法理解照顧者 15 年關係的複雜性、工作上的疏離但要維持形象、家庭決策中的無力感。AI 時代讓我從高中程式設計很差，到現在能維護生產系統。我開發了 NDT 檢測報告查詢系統、訂餐 App、做過資料庫遷移、完成 EMulStick 協定分析。這證明了一件事：思考能力才是核心，實作可以用工具彌補。這不是勵志故事，而是誠實記錄一個身障工程師的內在經驗。我希望人們理解：身障者的困境不只是身體，有能力但沒機會展現比沒能力更痛苦，基本的個人需求值得被尊重，心理支持的核心是被理解而不是被治療，AI 可以是真正的對話者不只是工具。我還在學習如何在這些限制中找到平衡，不確定最終答案是什麼，但至少我還在思考、還在嘗試、還在創造。這個過程本身，就是一種意義。",
       "date_published": "2025-11-12T00:00:00.000Z",
@@ -265,7 +285,7 @@
     },
     {
       "id": "touchpad-advanced-tool",
-      "url": "https://b-log.to/post.html?slug=touchpad-advanced-tool",
+      "url": "https://b-log.to/tech-development/touchpad-advanced-tool/",
       "title": "觸控板進階工具：我如何用 C# 找回失去的單指捲動功能",
       "content_text": "前陣子我寫了一篇文章抱怨 Microsoft 把精確式觸控板的邊緣捲動功能拔掉了，對我這種只能單指操作的使用者來說非常不便。現在這個工具完成了。我從零開始寫了一個完整的解決方案，採用 MVVM 架構搭配依賴注入，讓每個功能都有清晰的職責分離。技術上遇到三個關鍵難題：第一是如何拿到觸控板的原始座標，我用 Windows Raw Input API 註冊 HID 數位板裝置來解決。第二是如何區分真正的滑鼠和觸控板模擬的滑鼠，我用 30 毫秒時間視窗關聯來判斷事件來源。第三是如何實現流暢的慣性捲動，我參考 macOS 實作了指數衰減模型，衰減係數設為 0.20。最終效能表現：CPU 使用率 0.5-1%，記憶體約 35MB，輸入延遲小於 10ms。這個專案對我來說意義重大，當大廠以「現代化」為名移除基本功能時，AI 的普及讓我們能為自己的需求打造解決方案。專案完全開源在 GitHub，使用 MIT 授權。",
       "date_published": "2025-11-07T00:00:00.000Z",
@@ -286,7 +306,7 @@
     },
     {
       "id": "modernization-vs-accessibility",
-      "url": "https://b-log.to/post.html?slug=modernization-vs-accessibility",
+      "url": "https://b-log.to/business-insights/modernization-vs-accessibility/",
       "title": "當「現代化」成為無障礙的退步：精確式觸控板取消邊緣捲動功能",
       "content_text": "我最近拿到一台高階 ThinkPad 工作站，開機後發現一件有趣的事：現在的觸控板預設你會用多點觸控。對多數人來說很正常，但對我這種只能用單指操作的使用者來說，產生了實際問題：我要怎麼捲動頁面？以前的解決方案是邊緣捲動，單指在觸控板右側邊緣滑動就能捲動。這功能在 Synaptics 觸控板驅動裡存在了十幾年。但我打開設定想啟用時，發現它消失了。不是藏在深層選單，而是徹底從 Windows 精確式觸控板設定中移除了。我分析了 Microsoft 的邏輯：多點手勢成為主流、簡化介面追求開箱即用、統一體驗優先於個人需求。最諷刺的是，留著這功能技術上完全不難：偵測座標、判斷邊緣、轉換滾輪事件。程式碼邏輯超簡單，維護成本幾乎為零。一個 checkbox 和幾行程式碼就能解決，卻因為「不符合設計理念」被拿掉。這反映了更深層的問題：用「大多數人的便利性」取代「少數人的必要功能」。更諷刺的是 Microsoft 有專門的無障礙部門，開發了 Xbox Adaptive Controller、內建完整的放大鏡等工具。但保留邊緣捲動的成本遠低於這些創新，反而被砍掉。這是大公司的組織問題：一邊喊「科技應該為所有人服務」，一邊在產品決策上忽略實際需求。好在 AI 時代，我們不必完全依賴大廠。我準備用 C# 寫一個小工具，偵測觸控板輸入座標，劃定右側為捲動區。某種程度上，這是在用 AI 填補大廠忽略的無障礙缺口。",
       "date_published": "2025-11-04T00:00:00.000Z",
@@ -307,7 +327,7 @@
     },
     {
       "id": "religion-realism-respect",
-      "url": "https://b-log.to/post.html?slug=religion-realism-respect",
+      "url": "https://b-log.to/cultural-insights/religion-realism-respect/",
       "title": "到頭來還不是得靠自己？談宗教、現實主義與尊重",
       "content_text": "我一直在思考一個問題：「宗教到底是什麼意義？到頭來還不是得靠自己？」我發現宗教提供的不是解決問題的能力，而是心理支撐、社群連結、行為準則和儀式感。但這些功能一定要透過宗教才能取得嗎？2015 年我去看 LiSA 的演唱會，從買票的堅持到現場的感動，再到見面會時她對我說 hi 的瞬間，我發現這段經歷提供了宗教承諾的所有功能。但最關鍵的差別是：宗教承諾「彼岸的救贖」，LiSA 給我的是「此刻的活著」。我深入分析了彼岸救贖的虛構性：無法驗證的承諾、不確定的投資報酬率、由賣方制定的條款、延遲兌現的危險性。演唱會有確切日期地點，天堂沒有。我的立場是務實的現實主義，我的力量來自此刻可驗證的事物。只有一根手指能打字，我不能浪費時間在無法驗證的事物上。但我必須強調：我不看不起需要宗教的人。不是每個人都有能力在此刻找到意義，有人的現實只剩痛苦，他們需要彼岸來撐下去。我之所以能選擇現實主義，是因為我的現實條件允許。尊重不等於認同。我仍認為彼岸救贖很虛，但我理解人的處境不同，需要的工具就不同。我的立場是：務實的現實主義者，但不是傲慢的現實主義者。既清醒又溫和，因為我明白：能夠選擇現實主義，本身就是一種幸運。",
       "date_published": "2025-10-30T00:00:00.000Z",
@@ -328,7 +348,7 @@
     },
     {
       "id": "super-computer-prophecy-18-years",
-      "url": "https://b-log.to/post.html?slug=super-computer-prophecy-18-years",
+      "url": "https://b-log.to/ai-analysis/super-computer-prophecy-18-years/",
       "title": "十八年前的預言：當《超級電腦》的科幻變成我的現實",
       "content_text": "2007年我13歲時，讀到一本剛開始連載的小說《超級電腦》。故事很簡單：主角寫信給未來子孫，收到一台2086年的超級電腦。18年後我31歲，發現書中的預言正在一一應驗。預言一：超級電腦助理。書裡的電腦能回答問題、解決技術難題。我現在是全端開發者，高中時程式設計很差，真正能有效開發是在AI助理出現後。Claude幫我做架構決策、ChatGPT幫我除錯。我依賴AI開發，這就是書裡的劇情。預言二：巴別塔。書裡有個用DNA結構做的翻譯軟體，能完全翻譯各種語言且無法被破解。現在看這根本就是在描述神經網絡：類生物結構、黑盒子運作、處理100+種語言。2008年時深度學習還沒爆發，Transformer架構根本不存在。預言三：AI的倫理限制與對齊問題。這本書最神的是預見了AI對齊問題。書裡的電腦有防線：不能主動攻擊、可透過管理員權限突破、被攻擊時會協助防守。這在2008年是不可思議的預見。Anthropic的Constitutional AI是2022年才提出的，但這本2008年的網文已經把整個框架寫出來了。預言四：BC腦機介面。書裡有個技術能在睡眠狀態下讓意識進入虛擬世界，本質是可控的清醒夢。MIT已經在研究REM睡眠時的腦機互動。這本書對我有特殊意義，因為我的身體限制，只有右手食指能正常活動。每個預言對我都不只是科技趨勢：AI助理讓我從程式設計很差變成維護生產系統、巴別塔讓我能跨語言取得技術文件、如果BC實現了我就能純靠意念輸入。這本書某種程度上預言了我的人生轉折。從13歲看科幻到31歲一一對照，我親眼看著超級電腦從書裡走進現實。更重要的是，我自己就活成了書裡的劇情。",
       "date_published": "2025-10-29T00:00:00.000Z",
@@ -350,7 +370,7 @@
     },
     {
       "id": "emotional-vtuber-business-logic",
-      "url": "https://b-log.to/post.html?slug=emotional-vtuber-business-logic",
+      "url": "https://b-log.to/cultural-insights/emotional-vtuber-business-logic/",
       "title": "心靈系 Vtuber 的商業邏輯:情感陪伴還是需求製造?",
       "content_text": "我深入分析了近年來越來越多 VTuber 走向「心靈系」路線的現象。這些創作者透過直播提供情感陪伴、心理慰藉，超級感謝收入穩定成長。但在溫暖的互動背後，我提出一個問題：這個商業模式到底在解決問題，還是在利用問題？我從市場定位分析為何創作者選擇這條路：差異化競爭、可預期的收益模式、低內容成本。觀眾確實獲得短期情感緩解、無壓力的情感出口、可控的溫暖體驗。但我發現長期問題依然存在：人際孤立、生活困境未解決、可能產生替代效應和延遲求助。我比較了心靈系內容與心理治療的本質差異：治療師目標是協助個案改善後結案，而 VTuber 的商業模式依賴觀眾持續需要來維持收益。更關鍵的發現是石油王現象：這些月花數十萬在 VTuber 上的人，完全負擔得起專業心理治療。這揭示了殘酷真相——人們選擇的不是「解決問題」，而是即時情緒滿足、不需要改變、公開認可、持續舒適感。我的結論是：心靈系 VTuber 反映了真實的情感需求缺口，但我們需要認清這是商業服務而非情感支持系統。作為觀眾，需要重新評估是在幫助自己還是在逃避；作為創作者，應該更明確界定服務性質與限制。",
       "date_published": "2025-10-27T00:00:00.000Z",
@@ -371,7 +391,7 @@
     },
     {
       "id": "hardware-price-reversal-lesson",
-      "url": "https://b-log.to/post.html?slug=hardware-price-reversal-lesson",
+      "url": "https://b-log.to/business-insights/hardware-price-reversal-lesson/",
       "title": "「晚買享折扣」？我用 5000 元的代價學到的一課",
       "content_text": "2024 年，當我花 NT$7,700 買下 96GB DDR5 記憶體時，心裡其實有點猶豫：「會不會買太貴了？」一年後的今天，同樣的記憶體要價 NT$11,499，漲幅 49%。我記錄了硬體價格大幅上漲的經歷，當時花費 NT$20,396 的配置，現在要 NT$25,297，價差約 5000 元。OpenAI 一家公司就簽下每月 90 萬片 DRAM 晶圓的訂單，佔全球產能 40%。AI 需求徹底改寫了硬體市場規律，「晚買享折扣」的信仰失效。我學到三個教訓：沒有永遠的規律、需求確定時別賭價格會跌、閒置硬體也是資產。我的建議：別賭未來會更便宜。如果現在系統已經不夠用，該升級就升級。等待的機會成本，可能比你省下的錢更高。",
       "date_published": "2025-10-27T00:00:00.000Z",
@@ -392,7 +412,7 @@
     },
     {
       "id": "proxmox-usb-passthrough-crash",
-      "url": "https://b-log.to/post.html?slug=proxmox-usb-passthrough-crash",
+      "url": "https://b-log.to/tech-analysis/proxmox-usb-passthrough-crash/",
       "title": "刷錯韌體，把整台 Proxmox 搞當機了",
       "content_text": "在 PVE 上把 T-Dongle S3 直通給 Windows VM，結果刷機時把整包韌體（含 bootloader）寫到錯的位址（0x10000），板子開機後開始瘋狂 reset，USB 不停重新枚舉。整台 PVE 直接被拖到像當機一樣。拔掉板子就好了，後來用手機把它刷回來。重點是：USB passthrough 並沒有完全隔離。VM 只拿到裝置控制權，底層的 xHCI 控制器還是宿主在管。裝置一亂，整條 USB bus 都會受影響。這次踩坑的重點：1. USB passthrough 沒有完全隔離，VM 拿裝置控制權，Host 還是管 xHCI 控制器，裝置出事會影響整個 USB bus。2. T-Dongle S3 有雙 USB，CH340（UART）+ ESP32-S3 原生 USB（OTG），燒錄用 /dev/ttyUSB0（CH340），不要用 /dev/ttyACM0。3. 韌體位址要對，整包 → 0x0000，app-only → 0x10000，錯了會 bootloop → USB 風暴 → 宿主掛。",
       "date_published": "2025-10-23T01:00:00.000Z",
@@ -413,7 +433,7 @@
     },
     {
       "id": "rhetoric-action-divergence",
-      "url": "https://b-log.to/post.html?slug=rhetoric-action-divergence",
+      "url": "https://b-log.to/cultural-insights/rhetoric-action-divergence/",
       "title": "當言論與行動背道而馳：一個政治倫理的思考實驗",
       "content_text": "在台灣社會中，我觀察到一個令人深思的矛盾現象：有些人一邊享受現行體制提供的退休金、健保和各種社會福利，一邊卻表達「被統一也沒什麼不好」、「對岸什麼都比較好」的立場。更諷刺的是，他們的所有財務決策——買房、投資、存款——全部押在台灣的未來上，沒有任何移民計畫。我試著從倫理學角度分析這種「言行背離」：這不是單純的認知失調，而是一種「既要又要」的投機心態。媒體層面的矛盾更加明顯：某些台灣媒體整天播放「台灣不如中國」，卻在台灣註冊營運、享受新聞自由、從台灣市場獲利。如果真心相信對岸更好，為什麼不將公司搬過去？答案很簡單：在對岸，不會有媒體被允許24小時批評體制。我的核心論點是：言論自由保障你表達任何立場的權利，但不代表你的立場在邏輯上站得住腳。如果真的相信自己說的話，就該用行動證明——移民、撤資、停止使用被批評體制的資源。否則，這不是政治立場問題，而是基本的言行一致性問題。",
       "date_published": "2025-10-22T00:00:00.000Z",
@@ -434,7 +454,7 @@
     },
     {
       "id": "vtuber-shipping-culture-silence-cost",
-      "url": "https://b-log.to/post.html?slug=vtuber-shipping-culture-silence-cost",
+      "url": "https://b-log.to/cultural-insights/vtuber-shipping-culture-silence-cost/",
       "title": "當 Shipping 玩成真：VTuber 圈的厄介文化與沉默的代價",
       "content_text": "2025年10月19日，我看到 VTuber 圈發生了一件讓我深思的事：為 AI VTuber Neuro-sama 繪製模型的藝術家 Anny 公開宣布結束與創作者 Vedal 的合作。她坦承在長期合作中對 Vedal 產生了未被回應的感情。我分析了這個案例，發現這不是單純的個人情感問題，而是整個 VTuber 圈結構性困境的縮影。繪師與創作者的深度綁定、模糊的專業界線，加上粉絲文化推波助瀾，形成了危險的共犯結構。更讓我在意的是「沉默的代價」：任何直播聊天室都是 5% 瘋狂刷梗、10% 跟著起鬨、85% 沉默觀看。而我自己也是那 85% 之一，從不在聊天室說話，即使早就看出 Anny 的反應不自然。沉默讓少數人的聲音看起來像是全體共識，讓 VTuber 誤以為「大家都很 enjoy」。我想問：當你看到不對勁時，你會繼續沉默嗎？",
       "date_published": "2025-10-22T00:00:00.000Z",
@@ -455,7 +475,7 @@
     },
     {
       "id": "pagespeed-optimization-csr-blog",
-      "url": "https://b-log.to/post.html?slug=pagespeed-optimization-csr-blog",
+      "url": "https://b-log.to/tech-development/pagespeed-optimization-csr-blog/",
       "title": "從 50 分到 100 分：CSR 部落格的 PageSpeed 最佳化之路",
       "content_text": "最近在最佳化自己的部落格時，遇到了荒謬的狀況：套用業界最佳實踐後，PageSpeed 分數從 70+ 分反而掉到 50 分。我深入分析後發現，SSR/SSG 的最佳化策略不適用於 CSR 架構。在 CSR 中，JavaScript 執行時間直接等於 LCP 時間，任何拖慢 JS 載入的動作（如 preload 字體）都會傷害效能。我最終採用自行託管輕量 Inter 字體（僅 15KB）配合系統中文字體的策略，移除所有外部請求，成功達成行動版和桌面版都是 100 分的成績。這個過程讓我體會到：懂得何時打破規則，才是真正的專業。",
       "date_published": "2025-10-21T00:00:00.000Z",
@@ -476,7 +496,7 @@
     },
     {
       "id": "does-microsoft-care-piracy",
-      "url": "https://b-log.to/post.html?slug=does-microsoft-care-piracy",
+      "url": "https://b-log.to/business-insights/does-microsoft-care-piracy/",
       "title": "微軟真的在乎你盜版嗎？",
       "content_text": "我發現微軟對個人盜版的態度非常有趣：GitHub 上的 KMS 啟用工具和破解腳本依然存在，LTT 公開使用未啟用的 Windows 也沒事，ChatGPT 甚至曾經會吐出 Windows 金鑰。但當你想跳過微軟帳戶登入時，他們卻異常執著，不斷封鎖繞過方法，甚至連馬斯克都抱怨過。我分析了微軟背後的商業邏輯：他們用盜版養成使用者習慣，真正的收入來自企業授權。但他們更在乎的是使用者資料和生態系綁定，這比授權費更有價值。不過微軟沒料到年輕世代技能斷層，越來越多人根本不碰電腦，「盜版養習慣」策略可能正在失效。",
       "date_published": "2025-10-20T00:00:00.000Z",
@@ -496,7 +516,7 @@
     },
     {
       "id": "gpu-passthrough-troubleshooting",
-      "url": "https://b-log.to/post.html?slug=gpu-passthrough-troubleshooting",
+      "url": "https://b-log.to/tech-analysis/gpu-passthrough-troubleshooting/",
       "title": "當你的顯卡在虛擬機裡消失了：一次技術偵探之旅",
       "content_text": "這是我在 Proxmox VE 虛擬機中遇到 RTX 4070 Ti Super 顯卡消失問題的完整故障排除紀錄。從 9月11日開始，每次在 Microsoft Flight Simulator 中飛行超過六十分鐘後暫停，顯卡就會從 PCI 裝置樹上消失。我經歷了從 D3cold 電源狀態問題的深入研究、PCIe 訊號品質測試（Gen4 穩定度只有 88.7%）、到光華商場的實體測試。最後在一個多月後發現，真正的罪魁禍首竟然只是 PCIe Riser 延長線的接觸不良。這個故事告訴我們，複雜的症狀不一定需要複雜的解決方案，有時候答案就是「擦乾淨重新插」這麼簡單。",
       "date_published": "2025-10-19T15:00:00.000Z",
@@ -516,7 +536,7 @@
     },
     {
       "id": "audio-player-promise-error-fix",
-      "url": "https://b-log.to/post.html?slug=audio-player-promise-error-fix",
+      "url": "https://b-log.to/tech-development/audio-player-promise-error-fix/",
       "title": "修復音訊播放器點擊無反應：Promise 錯誤處理的重要性",
       "content_text": "記錄我修復音訊播放器 bug 的完整過程，從使用 Chrome MCP 進行遠端除錯，到發現 audio.play() 缺少 Promise 錯誤處理的根本原因。探討 JavaScript 異步操作中 Promise rejection 的常見陷阱、瀏覽器自動播放政策、以及為什麼所有返回 Promise 的方法都必須處理錯誤。包含詳細的除錯步驟、程式碼範例和技術要點總結。",
       "date_published": "2025-10-19T14:30:00.000Z",
@@ -537,7 +557,7 @@
     },
     {
       "id": "ai-collaboration-vs-generation",
-      "url": "https://b-log.to/post.html?slug=ai-collaboration-vs-generation",
+      "url": "https://b-log.to/ai-analysis/ai-collaboration-vs-generation/",
       "title": "AI 不是代筆：分清生成與協作",
       "content_text": "探討單向生成與雙向協作的關鍵差異，分析當「理解」和「驗證」掌握在有能力的人手中時，AI 如何成為強大的表達工具而非品質障礙。包含兩種工作流程的對比、品質差異分析、三個關鍵要素的掌握，以及客觀評估框架的建立。",
       "date_published": "2025-10-18T12:35:00.000Z",
@@ -558,7 +578,7 @@
     },
     {
       "id": "claude-nerf-analysis",
-      "url": "https://b-log.to/post.html?slug=claude-nerf-analysis",
+      "url": "https://b-log.to/ai-analysis/claude-nerf-analysis/",
       "title": "Claude 真的被 nerf 了嗎？",
       "content_text": "從技術角度分析 Claude Code 的品質問題與用量限制，探討 Anthropic 8-9 月的基礎設施 bug、修復時間表，以及使用方式對 AI 協作開發的關鍵影響。包含路由錯誤、輸出損壞、XLA 編譯器 bug 的詳細分析，以及有效與無效使用方式的對比。",
       "date_published": "2025-10-18T11:05:00.000Z",
@@ -579,7 +599,7 @@
     },
     {
       "id": "webp-automation-path-compatibility",
-      "url": "https://b-log.to/post.html?slug=webp-automation-path-compatibility",
+      "url": "https://b-log.to/tech-development/webp-automation-path-compatibility/",
       "title": "WebP 自動轉換與路徑相容性：為靜態部落格打造完整的圖片處理流程",
       "content_text": "記錄我如何從零打造一個完整的圖片處理自動化系統，解決從格式轉換到路徑相容性的所有挑戰。使用 Sharp + GitHub Actions 實作 WebP 自動轉換，並深度調查解決 WordPress 風格 URL 導致的圖片路徑問題。系統實測節省 12.7% 檔案大小，預期 LCP 改善 15-30%，完整的降級方案確保瀏覽器相容性。",
       "date_published": "2025-10-18T11:00:00.000Z",
@@ -600,7 +620,7 @@
     },
     {
       "id": "cloudinary-chinese-og-image-solution",
-      "url": "https://b-log.to/post.html?slug=cloudinary-chinese-og-image-solution",
+      "url": "https://b-log.to/tech-development/cloudinary-chinese-og-image-solution/",
       "title": "解決 Facebook 分享預覽的中文顯示問題：Cloudinary 整合實戰",
       "content_text": "從發現 og-image.vercel.app 無法顯示中文，到成功整合 Cloudinary + Noto Sans TC 字型，完整記錄解決 Facebook 社交預覽問題的技術細節與踩坑經驗。包含 Cloudinary 設定、字型上傳、URL 最佳化、踩坑經驗分享，以及完整的自動化流程說明。",
       "date_published": "2025-10-18T08:00:00.000Z",
@@ -621,7 +641,7 @@
     },
     {
       "id": "2025-tablet-ecosystem-dilemma",
-      "url": "https://b-log.to/post.html?slug=2025-tablet-ecosystem-dilemma",
+      "url": "https://b-log.to/business-insights/2025-tablet-ecosystem-dilemma/",
       "title": "2025 平板生態的三重困境：當所有平台都在關上自由之門",
       "content_text": "2025 年，所有主流平板/手機平台都在收緊控制。從 iPadOS 的軟體閹割到 Android 的 bootloader 鎖死，再到 Windows 的強制雲端帳戶，使用者面臨前所未有的自由度倒退。",
       "date_published": "2025-10-17T09:00:00.000Z",
@@ -642,7 +662,7 @@
     },
     {
       "id": "syntax-highlighting-debugging-journey",
-      "url": "https://b-log.to/post.html?slug=syntax-highlighting-debugging-journey",
+      "url": "https://b-log.to/tech-analysis/syntax-highlighting-debugging-journey/",
       "title": "語法突顯系統的深度除錯之旅：四個連鎖問題的修復實錄",
       "content_text": "從 URL 誤判、巢狀標籤到 HTML 實體符號，記錄一次完整的語法突顯系統除錯過程，探討正則表達式、佔位符機制與處理順序的技術細節。",
       "date_published": "2025-10-17T08:30:00.000Z",
@@ -662,7 +682,7 @@
     },
     {
       "id": "wordpress-permalink-implementation",
-      "url": "https://b-log.to/post.html?slug=wordpress-permalink-implementation",
+      "url": "https://b-log.to/tech-development/wordpress-permalink-implementation/",
       "title": "WordPress 永久連結實作：從概念到實踐",
       "content_text": "分享實作 WordPress 風格永久連結系統的經驗，包括架構設計、自動化流程與 SEO 最佳化策略。",
       "date_published": "2025-10-17T00:30:00.000Z",
@@ -682,7 +702,7 @@
     },
     {
       "id": "openai-contradiction-dangerous-game",
-      "url": "https://b-log.to/post.html?slug=openai-contradiction-dangerous-game",
+      "url": "https://b-log.to/ai-analysis/openai-contradiction-dangerous-game/",
       "title": "OpenAI的矛盾：一邊降溫一邊加熱的危險遊戲",
       "content_text": "OpenAI在8月讓GPT-5變冷淡以減少情感依賴，10月卻宣布開放情色內容，這兩個決策完全矛盾，揭示了商業利益與用戶福祉的衝突。",
       "date_published": "2025-10-16T12:20:00.000Z",
@@ -702,7 +722,7 @@
     },
     {
       "id": "unified-remote-evo-development-journey",
-      "url": "https://b-log.to/post.html?slug=unified-remote-evo-development-journey",
+      "url": "https://b-log.to/tech-development/unified-remote-evo-development-journey/",
       "title": "Unified Remote Evo - 從遙控器到多功能輸入裝置的開發之旅",
       "content_text": "這是一個關於如何為已停止維護的遙控軟體注入新生命的故事。透過協定研究、技術探索與創新實作，我打造了一個現代化的多功能遙控解決方案。",
       "date_published": "2025-10-16T06:30:00.000Z",
@@ -722,7 +742,7 @@
     },
     {
       "id": "frontend-backend-validation-analysis",
-      "url": "https://b-log.to/post.html?slug=frontend-backend-validation-analysis",
+      "url": "https://b-log.to/tech-analysis/frontend-backend-validation-analysis/",
       "title": "前後端驗證缺失:一個內部系統的技術分析",
       "content_text": "透過實際案例分析前後端驗證的重要性，探討安全性問題、效能缺陷及解決方案，最終開發出效能提升23倍的自動化工具。",
       "date_published": "2025-10-16T03:29:00.000Z",
@@ -742,7 +762,7 @@
     },
     {
       "id": "understanding-vs-execution-vibe-coding",
-      "url": "https://b-log.to/post.html?slug=understanding-vs-execution-vibe-coding",
+      "url": "https://b-log.to/dev-philosophy/understanding-vs-execution-vibe-coding/",
       "title": "理解與執行的分離:從 Vibe Coding 談起",
       "content_text": "探討 Theo 的 Type A/B 框架之外的第三種情況，以及 AI 時代下創作歸屬的哲學問題。",
       "date_published": "2025-10-16T00:52:00.000Z",
@@ -761,7 +781,7 @@
     },
     {
       "id": "openai-vs-anthropic-red-lines",
-      "url": "https://b-log.to/post.html?slug=openai-vs-anthropic-red-lines",
+      "url": "https://b-log.to/ai-analysis/openai-vs-anthropic-red-lines/",
       "title": "AI 政策紅線的哲學差異：OpenAI vs Anthropic 實測",
       "content_text": "通過真實案例分析 OpenAI 和 Anthropic 在處理灰色地帶技術問題上的根本性哲學差異。",
       "date_published": "2025-10-15T23:38:00.000Z",
@@ -781,7 +801,7 @@
     },
     {
       "id": "lisa-concert-2017-ssa-ldp",
-      "url": "https://b-log.to/post.html?slug=lisa-concert-2017-ssa-ldp",
+      "url": "https://b-log.to/life-stories/lisa-concert-2017-ssa-ldp/",
       "title": "2017 LiSA 日本演唱會：相遇的魔法與感動的兩天",
       "content_text": "時隔兩年，我再次踏上追逐 LiSA 的旅程。這次在日本埼玉超級競技場的兩日場，讓我真正理解「相遇」這件事有多麼珍貴。從小惡魔遊行到天使般的白紗蓬蓬裙，從 believe in myself 慢板的淚流滿面到與 16,625 名觀眾心靈共鳴的 TODAY，三小時的演唱會如同魔法般將我們所有人的心融為一體。還有意外的生日慶祝、小小兵驚喜、以及在 TOWER RECORD 尋找人形立牌的冒險。今日もいい日だっ。",
       "date_published": "2017-07-12T00:00:00.000Z",
@@ -803,7 +823,7 @@
     },
     {
       "id": "lisa-concert-believe-in-myself",
-      "url": "https://b-log.to/post.html?slug=lisa-concert-believe-in-myself",
+      "url": "https://b-log.to/life-stories/lisa-concert-believe-in-myself/",
       "title": "Believe in myself - 獻給在某時某刻聽到這首歌的某個人",
       "content_text": "我出生時只有 1000g 的早產兒，小腦受損導致下肢癱瘓，只能靠輪椅行動。國中時曾被霸凌，讓我變得不太敢與陌生人交談。從小第一個夢想就是去聽 F.I.R 演唱會，但一直沒實現。直到 2015 年三月在 YouTube 看到 LiSA 的シルシ現場版，被深深吸引。得知她七月要來台灣辦首場 full band 演唱會，我隔天就打電話搶票，雖然一開始被拒絕，但我不放棄，最終成功買到票。演唱會當天，LiSA 開口的瞬間整個心都被穿透了。隔天還排除萬難去西門町見面會，LiSA 上樓時還對我說了 hi。這是我人生第一次演唱會，證明只要有決心，夢想就能實現。",
       "date_published": "2015-07-12T00:00:00.000Z",
