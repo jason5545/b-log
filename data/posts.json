@@ -1,5 +1,24 @@
 [
   {
+    "slug": "windows-voice-input-update-dependency",
+    "title": "語音辨識進步了，但 Windows 還是那個 Windows",
+    "summary": "Windows 11 語音輸入突然失效，排查服務、權限、登錄檔都沒用，結果發現是 Windows Update 被停用導致的隱藏依賴問題。記錄完整的排查過程、最終解決方案（延遲更新到 2042 年），以及意外發現 Windows 繁體中文語音辨識已大幅進步。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-11-30T00:00:00Z",
+    "updatedAt": "2025-11-30T00:00:00Z",
+    "readingTime": "10 min",
+    "tags": [
+      "Windows",
+      "語音輸入",
+      "故障排除",
+      "Windows Update",
+      "無障礙",
+      "WinUtil"
+    ],
+    "accentColor": "#0078d4"
+  },
+  {
     "slug": "disability-seating-ticket-barriers",
     "title": "身心障礙席，然後呢？",
     "summary": "作為輪椅使用者，購票系統的「公平」對我來說是懲罰。從一根手指打字的搶票困境，到 2024 年被「場地空間不足」拒於門外，揭露數位化時代的無障礙假象：系統能驗證身分卻不提供合理調整，就像蓋好了坡道卻在盡頭放一道樓梯。不是勵志故事，就是累。",

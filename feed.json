@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "windows-voice-input-update-dependency",
+      "url": "https://b-log.to/post.html?slug=windows-voice-input-update-dependency",
+      "title": "語音辨識進步了，但 Windows 還是那個 Windows",
+      "content_text": "作為一個只能用單指打字的開發者，Windows 11 的語音輸入（Win+H）對我來說是剛需。結果某天突然壞了：面板能叫出來，但麥克風按鈕完全沒反應。我檢查了服務狀態、麥克風權限、登錄檔設定、硬體測試，全部正常。快要放棄時突然想起來：我之前用 WinUtil 把 Windows Update 服務完全停用了。把 Windows Update 改回自動啟動、重開機後，語音輸入復活了。這種隱藏的依賴關係真的很反直覺，語音輸入跟 Windows Update 八竿子打不著關係。但我還是不想讓 Windows Update 亂跑，所以採用折衷方案：讓服務 Running 但延遲更新到 2042 年。這樣既滿足依賴關係，又不會被自動更新騷擾。修好後意外發現 Windows 繁體中文語音辨識已經大幅進步，準確度不輸 Google，還能正確辨識台灣用語。對我這種單指打字的使用者來說，現在真的可以當成主要輸入方式了。2042 年的時候記得改回來。",
+      "date_published": "2025-11-30T00:00:00.000Z",
+      "date_modified": "2025-11-30T00:00:00.000Z",
+      "tags": [
+        "Windows",
+        "語音輸入",
+        "故障排除",
+        "Windows Update",
+        "無障礙",
+        "WinUtil"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "disability-seating-ticket-barriers",
       "url": "https://b-log.to/post.html?slug=disability-seating-ticket-barriers",
       "title": "身心障礙席，然後呢？",
