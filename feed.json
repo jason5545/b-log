@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "seller-protection-secondhand-trading",
+      "url": "https://b-log.to/cultural-insights/seller-protection-secondhand-trading/",
+      "title": "當賣家也要學會自保：二手交易生態的變化",
+      "content_text": "從一次順利的記憶體二手交易談起，探討二手交易生態的轉變：以往買家才需要擔心被騙，現在賣家也面臨被誣告、惡意退款的風險。分享完整的自保流程，從交易前的清楚說明、交易中的面交驗貨，到交易後的紀錄保存，記錄正常交易成本越來越高的現實。",
+      "date_published": "2025-11-30T00:00:00.000Z",
+      "date_modified": "2025-11-30T00:00:00.000Z",
+      "tags": [
+        "二手交易",
+        "消費者保護",
+        "網路交易",
+        "自保策略",
+        "社會觀察"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "windows-voice-input-update-dependency",
       "url": "https://b-log.to/post.html?slug=windows-voice-input-update-dependency",
       "title": "語音辨識進步了，但 Windows 還是那個 Windows",
