@@ -1,5 +1,23 @@
 [
   {
+    "slug": "seller-protection-secondhand-trading",
+    "title": "當賣家也要學會自保：二手交易生態的變化",
+    "summary": "從一次順利的記憶體二手交易談起，探討二手交易生態的轉變：以往買家才需要擔心被騙，現在賣家也面臨被誣告、惡意退款的風險。分享完整的自保流程，從交易前的清楚說明、交易中的面交驗貨，到交易後的紀錄保存，記錄正常交易成本越來越高的現實。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2025-11-30T00:00:00Z",
+    "updatedAt": "2025-11-30T00:00:00Z",
+    "readingTime": "10 min",
+    "tags": [
+      "二手交易",
+      "消費者保護",
+      "網路交易",
+      "自保策略",
+      "社會觀察"
+    ],
+    "accentColor": "#16a085"
+  },
+  {
     "slug": "windows-voice-input-update-dependency",
     "title": "語音辨識進步了，但 Windows 還是那個 Windows",
     "summary": "Windows 11 語音輸入突然失效，排查服務、權限、登錄檔都沒用，結果發現是 Windows Update 被停用導致的隱藏依賴問題。記錄完整的排查過程、最終解決方案（延遲更新到 2042 年），以及意外發現 Windows 繁體中文語音辨識已大幅進步。",
