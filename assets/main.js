@@ -1477,6 +1477,9 @@ async function renderMarkdownContent(slug, contentEl) {
 
   // 增強程式碼區塊
   enhanceCodeBlocks(contentEl);
+
+  // 增強表格（響應式包裝）
+  enhanceTables(contentEl);
 }
 
 function enhanceCodeBlocks(contentEl) {
@@ -1624,6 +1627,24 @@ function setupCodeCopy(button, codeBlock) {
       button.textContent = originalText;
       button.classList.remove('copied');
     }, 2000);
+  });
+}
+
+function enhanceTables(contentEl) {
+  if (!contentEl) return;
+
+  const tables = contentEl.querySelectorAll('table');
+  tables.forEach((table) => {
+    // 檢查是否已經包裝過
+    if (table.parentElement && table.parentElement.classList.contains('table-wrapper')) {
+      return;
+    }
+
+    // 建立 wrapper 並包裝表格
+    const wrapper = document.createElement('div');
+    wrapper.className = 'table-wrapper';
+    table.parentNode.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
   });
 }
 

@@ -1133,6 +1133,158 @@ a:focus {
   }
 }
 
+/* 引用區塊樣式 */
+.article-body blockquote {
+  margin: 1.5rem 0;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-style: italic;
+  color: var(--text);
+  position: relative;
+}
+
+.article-body blockquote::before {
+  content: '"';
+  position: absolute;
+  top: -0.5rem;
+  left: 0.75rem;
+  font-size: 3rem;
+  font-family: Georgia, serif;
+  color: var(--accent);
+  opacity: 0.3;
+  line-height: 1;
+}
+
+.article-body blockquote p {
+  margin: 0;
+}
+
+.article-body blockquote p + p {
+  margin-top: 0.75rem;
+}
+
+/* 巢狀引用 */
+.article-body blockquote blockquote {
+  margin: 1rem 0 0;
+  border-left-color: var(--accent-strong);
+  background: rgba(85, 107, 255, 0.08);
+}
+
+/* 深色模式引用區塊 */
+@media (prefers-color-scheme: dark) {
+  .article-body blockquote {
+    background: rgba(85, 107, 255, 0.1);
+  }
+
+  .article-body blockquote blockquote {
+    background: rgba(85, 107, 255, 0.15);
+  }
+}
+
+[data-theme="dark"] .article-body blockquote {
+  background: rgba(85, 107, 255, 0.1);
+}
+
+[data-theme="dark"] .article-body blockquote blockquote {
+  background: rgba(85, 107, 255, 0.15);
+}
+
+/* 表格樣式 */
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+}
+
+.article-body thead {
+  background: var(--accent);
+  color: #fff;
+}
+
+.article-body th {
+  padding: 0.875rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.article-body td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.article-body tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 斑馬紋 */
+.article-body tbody tr:nth-child(even) {
+  background: var(--accent-soft);
+}
+
+/* hover 效果 */
+.article-body tbody tr {
+  transition: background 0.2s ease;
+}
+
+.article-body tbody tr:hover {
+  background: rgba(85, 107, 255, 0.12);
+}
+
+/* 響應式表格 - 橫向滾動 */
+.article-body .table-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border-radius: var(--radius-sm);
+}
+
+.article-body .table-wrapper table {
+  margin: 0;
+  min-width: 500px;
+}
+
+/* 深色模式表格 */
+@media (prefers-color-scheme: dark) {
+  .article-body table {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .article-body thead {
+    background: var(--accent-strong);
+  }
+
+  .article-body tbody tr:nth-child(even) {
+    background: rgba(85, 107, 255, 0.08);
+  }
+
+  .article-body tbody tr:hover {
+    background: rgba(85, 107, 255, 0.15);
+  }
+}
+
+[data-theme="dark"] .article-body table {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .article-body thead {
+  background: var(--accent-strong);
+}
+
+[data-theme="dark"] .article-body tbody tr:nth-child(even) {
+  background: rgba(85, 107, 255, 0.08);
+}
+
+[data-theme="dark"] .article-body tbody tr:hover {
+  background: rgba(85, 107, 255, 0.15);
+}
+
 /* 圖片樣式 */
 .article-body img {
   max-width: 100%;
