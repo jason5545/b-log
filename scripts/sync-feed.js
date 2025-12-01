@@ -73,21 +73,38 @@ function main() {
     });
   }
 
-  // 建立 posts 的 slug -> category 映射
-  const postCategoryMap = {};
-  posts.forEach(post => {
-    postCategoryMap[post.slug] = post.category;
-  });
+  // 建立 posts 的 slug -> post 映射
+  const postMap = new Map(posts.map(post => [post.slug, post]));
 
-  // 檢查並更新所有 URL 格式
+  // 檢查並更新所有 metadata
   feed.items.forEach(item => {
-    const category = postCategoryMap[item.id];
-    if (category) {
-      const correctUrl = generateUrl(item.id, category);
-      if (item.url !== correctUrl) {
-        console.log(`  URL 更新: ${item.id}`);
-        item.url = correctUrl;
-        urlUpdated++;
+    const post = postMap.get(item.id);
+    if (post) {
+      const newItem = createFeedItem(post);
+      let itemChanged = false;
+
+      // 比較並更新關鍵欄位
+      const keysToCheck = ['url', 'title', 'content_text', 'image', 'tags', 'date_modified'];
+      
+      keysToCheck.forEach(key => {
+        // 簡單比較，如果是物件/陣列則轉字串比較
+        const val1 = JSON.stringify(item[key]);
+        const val2 = JSON.stringify(newItem[key]);
+        
+        if (val1 !== val2) {
+          // 如果新值是 undefined (例如 image 被移除)，則刪除該欄位
+          if (newItem[key] === undefined) {
+            delete item[key];
+          } else {
+            item[key] = newItem[key];
+          }
+          itemChanged = true;
+        }
+      });
+
+      if (itemChanged) {
+        console.log(`  Metadata 更新: ${item.id}`);
+        urlUpdated++; // 借用這個變數計數
       }
     }
   });
