@@ -1,8 +1,8 @@
-# 解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤恢復中的陷阱
+# 解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤還原中的陷阱
 
 ## 前言
 
-最近在批次處理大量 PDF 文件的 OCR 工作時，遇到了一個非常棘手的問題：明明原始 PDF 頁面方向正常，OCR 處理後某些頁面卻莫名其妙地旋轉了。這個問題困擾了我好一陣子，最後發現罪魁禍首竟然是 pdftk 的書籤恢復功能。在此記錄整個除錯過程，希望能幫助遇到相同問題的人。
+最近在批次處理大量 PDF 文件的 OCR 工作時，遇到了一個非常棘手的問題：明明原始 PDF 頁面方向正常，OCR 處理後某些頁面卻莫名其妙地旋轉了。這個問題困擾了我好一陣子，最後發現罪魁禍首竟然是 pdftk 的書籤還原功能。在此記錄整個除錯過程，希望能幫助遇到相同問題的人。
 
 ## 背景
 
@@ -11,7 +11,7 @@
 1. 使用 `pdftk dump_data` 提取原始書籤
 2. 使用 `ocrmypdf` 進行 OCR 處理
 3. 使用 `ghostscript` 壓縮檔案
-4. 使用 `pdftk update_info` 恢復書籤
+4. 使用 `pdftk update_info` 還原書籤
 
 OCR 的參數設定如下：
 
@@ -57,7 +57,7 @@ PageMediaRotation: 270
 
 ### 第二步：檢查 OCR 後的輸出
 
-對 OCR 處理後（但尚未恢復書籤）的 PDF 進行檢查：
+對 OCR 處理後（但尚未還原書籤）的 PDF 進行檢查：
 
 ```bash
 pdftk ocr_output.pdf dump_data | grep -E "PageMediaRotation"
@@ -77,7 +77,7 @@ PageMediaRotation: 0
 
 ### 第三步：發現真正的問題
 
-接下來檢查恢復書籤後的 PDF：
+接下來檢查還原書籤後的 PDF：
 
 ```bash
 pdftk final_with_bookmarks.pdf dump_data | grep -E "PageMediaRotation"
@@ -95,13 +95,13 @@ PageMediaRotation: 270
 
 **第 4、5 頁的 rotation 又變回 270 了！**
 
-這時我才恍然大悟：`pdftk dump_data` 輸出的不只是書籤資訊，還包含了 `PageMedia` 資訊（包括 rotation）。當我使用 `pdftk update_info` 恢復書籤時，它同時也把原始的 `PageMediaRotation: 270` 寫回去了。
+這時我才恍然大悟：`pdftk dump_data` 輸出的不只是書籤資訊，還包含了 `PageMedia` 資訊（包括 rotation）。當我使用 `pdftk update_info` 還原書籤時，它同時也把原始的 `PageMediaRotation: 270` 寫回去了。
 
 但此時 PDF 的實際內容已經是正確方向的（因為 ocrmypdf 已經處理過），再加上 rotation metadata 就導致頁面被「二次旋轉」，造成顯示異常。
 
 ## 解決方案
 
-解決方法很簡單：**在恢復書籤時，過濾掉 PageMedia 相關的資訊，只保留 Info 和 Bookmark 資料**。
+解決方法很簡單：**在還原書籤時，過濾掉 PageMedia 相關的資訊，只保留 Info 和 Bookmark 資料**。
 
 原本的書籤提取方式：
 
@@ -130,7 +130,7 @@ pdftk input.pdf dump_data | grep -E "^(InfoBegin|InfoKey:|InfoValue:|NumberOfPag
 #!/bin/bash
 
 # OCR 處理 PDF
-# 書籤恢復時過濾 PageMedia 避免旋轉問題
+# 書籤還原時過濾 PageMedia 避免旋轉問題
 
 process_pdf() {
     local input="$1"
@@ -156,7 +156,7 @@ process_pdf() {
        -sOutputFile=/tmp/compressed.pdf \
        /tmp/ocr_output.pdf
 
-    # 步驟 4: 恢復書籤
+    # 步驟 4: 還原書籤
     if grep -q "BookmarkTitle" /tmp/bookmarks.txt; then
         pdftk /tmp/compressed.pdf update_info /tmp/bookmarks.txt output "$output"
     else

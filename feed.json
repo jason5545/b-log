@@ -8,8 +8,8 @@
     {
       "id": "pdf-ocr-rotation-pdftk-trap",
       "url": "https://b-log.to/tech-analysis/pdf-ocr-rotation-pdftk-trap/",
-      "title": "解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤恢復中的陷阱",
-      "content_text": "批次處理 PDF OCR 時發現頁面旋轉異常，原因是 pdftk dump_data 輸出包含 PageMediaRotation，恢復書籤時把原始的旋轉資訊寫回去，導致已被 ocrmypdf「烤入」正確方向的頁面被二次旋轉。解決方法是用 grep 過濾只保留 Info 和 Bookmark 資料。",
+      "title": "解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤還原中的陷阱",
+      "content_text": "批次處理 PDF OCR 時發現頁面旋轉異常，原因是 pdftk dump_data 輸出包含 PageMediaRotation，還原書籤時把原始的旋轉資訊寫回去，導致已被 ocrmypdf「烤入」正確方向的頁面被二次旋轉。解決方法是用 grep 過濾只保留 Info 和 Bookmark 資料。",
       "date_published": "2025-12-01T00:00:00.000Z",
       "date_modified": "2025-12-01T00:00:00.000Z",
       "tags": [
