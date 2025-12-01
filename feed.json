@@ -447,7 +447,7 @@
         "ESP32-S3",
         "故障排除",
         "虛擬化",
-        "硬體除錯"
+        "硬體偵錯"
       ],
       "authors": [
         {
@@ -562,14 +562,14 @@
       "id": "audio-player-promise-error-fix",
       "url": "https://b-log.to/tech-development/audio-player-promise-error-fix/",
       "title": "修復音訊播放器點擊無反應：Promise 錯誤處理的重要性",
-      "content_text": "記錄修復音訊播放器 bug 的完整過程，從 Chrome MCP 除錯到發現 Promise 錯誤處理缺失，探討 JavaScript 異步操作的常見陷阱與最佳實踐。",
+      "content_text": "記錄修復音訊播放器 bug 的完整過程，從 Chrome MCP 偵錯到發現 Promise 錯誤處理缺失，探討 JavaScript 異步操作的常見陷阱與最佳實踐。",
       "date_published": "2025-10-19T14:30:00.000Z",
       "date_modified": "2025-10-19T14:30:00.000Z",
       "tags": [
         "JavaScript",
         "Promise",
         "音訊播放器",
-        "除錯",
+        "偵錯",
         "錯誤處理",
         "Chrome MCP"
       ],
@@ -688,13 +688,13 @@
     {
       "id": "syntax-highlighting-debugging-journey",
       "url": "https://b-log.to/tech-analysis/syntax-highlighting-debugging-journey/",
-      "title": "語法突顯系統的深度除錯之旅：四個連鎖問題的修復實錄",
-      "content_text": "從 URL 誤判、巢狀標籤到 HTML 實體符號，記錄一次完整的語法突顯系統除錯過程，探討正則表達式、佔位符機制與處理順序的技術細節。",
+      "title": "語法突顯系統的深度偵錯之旅：四個連鎖問題的修復實錄",
+      "content_text": "從 URL 誤判、巢狀標籤到 HTML 實體符號，記錄一次完整的語法突顯系統偵錯過程，探討正則表達式、佔位符機制與處理順序的技術細節。",
       "date_published": "2025-10-17T08:30:00.000Z",
       "date_modified": "2025-10-17T08:30:00.000Z",
       "tags": [
         "JavaScript",
-        "除錯",
+        "偵錯",
         "語法突顯",
         "正則表達式",
         "HTML轉義"
