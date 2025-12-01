@@ -233,7 +233,7 @@ tokens.forEach((token, idx) => {
 
 **為什麼 `split().join()` 更安全？**
 - 字串字面匹配，沒有正則的複雜性
-- 不會有轉義問題
+- 不會有轉譯問題
 - 效能更好
 
 ## 問題四：HTML 實體符號顯示錯誤
@@ -248,7 +248,7 @@ tokens.forEach((token, idx) => {
 
 ```javascript
 function highlightLine(line) {
-  // 1. 先進行 HTML 轉義
+  // 1. 先進行 HTML 轉譯
   let result = escapeHtml(line); // < 變成 &lt;
 
   // 2. 處理標點符號
@@ -261,7 +261,7 @@ function highlightLine(line) {
 
 ### 第一次嘗試
 
-在標點符號處理後，單獨處理已轉義的符號：
+在標點符號處理後，單獨處理已轉譯的符號：
 
 ```javascript
 result = result.replace(/&lt;/g, '<span class="token punctuation">&lt;</span>');
@@ -272,7 +272,7 @@ result = result.replace(/&gt;/g, '<span class="token punctuation">&gt;</span>');
 
 ### 最終解決方案
 
-調整處理順序，在 HTML 轉義之前保護 `<>` 符號：
+調整處理順序，在 HTML 轉譯之前保護 `<>` 符號：
 
 ```javascript
 function highlightLine(line) {
@@ -290,7 +290,7 @@ function highlightLine(line) {
   result = result.replace(/</g, (match) => protect('&lt;', 'punctuation'));
   result = result.replace(/>/g, (match) => protect('&gt;', 'punctuation'));
 
-  // 2. 轉義其他 HTML 字元
+  // 2. 轉譯其他 HTML 字元
   result = escapeHtml(result);
 
   // 3. 處理其他 tokens...
@@ -307,7 +307,7 @@ function highlightLine(line) {
 
 **關鍵最佳化**：
 1. 在 `escapeHtml` 之前就將 `<>` 轉換為帶樣式的 `&lt;` `&gt;` token
-2. 這樣既完成了 HTML 轉義，又套用了樣式
+2. 這樣既完成了 HTML 轉譯，又套用了樣式
 3. 避免了二次處理的複雜性
 
 ## 完整的處理流程
@@ -332,7 +332,7 @@ function highlightLine(line) {
   result = result.replace(/</g, () => protect('&lt;', 'punctuation'));
   result = result.replace(/>/g, () => protect('&gt;', 'punctuation'));
 
-  // 第二階段：轉義其他 HTML 字元
+  // 第二階段：轉譯其他 HTML 字元
   result = escapeHtml(result);
 
   // 第三階段：保護字串
@@ -383,10 +383,10 @@ function highlightLine(line) {
 
 ```
 正確順序：
-保護特殊符號 → HTML 轉義 → 保護 tokens → 處理標點 → 還原 tokens
+保護特殊符號 → HTML 轉譯 → 保護 tokens → 處理標點 → 還原 tokens
 
 錯誤順序：
-HTML 轉義 → 處理所有內容 → 導致巢狀標籤問題
+HTML 轉譯 → 處理所有內容 → 導致巢狀標籤問題
 ```
 
 ### 3. 佔位符設計原則
@@ -406,7 +406,7 @@ HTML 轉義 → 處理所有內容 → 導致巢狀標籤問題
 ### 4. 字串取代方法選擇
 
 ```javascript
-// ❌ 使用正則可能有轉義問題
+// ❌ 使用正則可能有轉譯問題
 result = result.replace(new RegExp(placeholder, 'g'), token);
 
 // ✅ 使用 split/join 更安全
@@ -516,6 +516,6 @@ describe('highlightLine', () => {
 3. **佔位符機制的強大**：透過臨時標記保護內容，可以優雅地解決巢狀處理問題
 4. **測試驅動開發**：建立具體的測試案例，能快速驗證修復效果
 
-語法突顯看似簡單，實則涉及正則表達式、HTML 轉義、字串處理等多個面向。透過系統化的分析和逐步修復，我們最終建立了一個穩定可靠的語法突顯系統。
+語法突顯看似簡單，實則涉及正則表達式、HTML 轉譯、字串處理等多個面向。透過系統化的分析和逐步修復，我們最終建立了一個穩定可靠的語法突顯系統。
 
 希望這篇文章能幫助遇到類似問題的開發者，也歡迎分享你的偵錯經驗！

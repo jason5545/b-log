@@ -1702,7 +1702,7 @@ function highlightLine(line) {
   result = result.replace(/</g, (match) => protect('&lt;', 'punctuation'));
   result = result.replace(/>/g, (match) => protect('&gt;', 'punctuation'));
 
-  // 2. 轉義其他 HTML 字符
+  // 2. 轉譯其他 HTML 字符
   result = escapeHtml(result);
 
   // 3. 保護字符串
