@@ -118,7 +118,7 @@ $ git reflog
 $ git show m9n8o7p
 # 檢查 commit message 和 diff，確認這才是我要的
 
-# 3. 恢復
+# 3. 還原
 $ git reset --hard m9n8o7p
 HEAD is now at m9n8o7p 原本的最新 commit
 

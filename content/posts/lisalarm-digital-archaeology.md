@@ -116,7 +116,7 @@ Presentation (UI) ← ViewModel ← UseCase ← Repository ← Data Source
 1. **AlarmManager** 設定精確時間觸發
 2. **前景服務** 保持音效播放
 3. **全螢幕通知** 在鎖定螢幕上顯示鬧鐘畫面
-4. **WorkManager** 處理開機後的鬧鐘恢復
+4. **WorkManager** 處理開機後的鬧鐘還原
 
 ```kotlin
 // 設定全螢幕通知，在鎖定螢幕上顯示
@@ -185,7 +185,7 @@ suspend fun unlockRandomContent(): UnlockResult {
 ✅ 照片與音效選擇
 ✅ 鬧鐘觸發與音效播放
 ✅ 解鎖系統與藝廊
-✅ 開機自動恢復
+✅ 開機自動還原
 
 錦上添花的功能也完成了：
 

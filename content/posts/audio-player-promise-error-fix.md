@@ -183,7 +183,7 @@ Chrome、Firefox、Safari 等現代瀏覽器都實施嚴格的自動播放政策
 
 經過深度分析（commit `dde7489`），找出了 5 個相互關聯的問題：
 
-**1. 播放進度恢復時機錯誤**（高嚴重性）
+**1. 播放進度還原時機錯誤**（高嚴重性）
 ```javascript
 // ❌ 錯誤：在音訊元數據載入前就設定 currentTime
 const savedTime = localStorage.getItem(storageKey + '-time');
@@ -218,9 +218,9 @@ if (Math.floor(audio.currentTime) % 5 === 0) {
 
 ### 修復方案
 
-**修復 1：正確的播放進度恢復時機**
+**修復 1：正確的播放進度還原時機**
 ```javascript
-// ✅ 正確：在元數據載入完成後恢復播放進度
+// ✅ 正確：在元數據載入完成後還原播放進度
 audio.addEventListener('loadedmetadata', () => {
   durationEl.textContent = this.formatTime(audio.duration);
 
@@ -301,7 +301,7 @@ audio.addEventListener('ended', () => {
 
 修復後應測試以下場景：
 - ✅ 首次播放（無儲存進度）
-- ✅ 恢復播放（有儲存進度）
+- ✅ 還原播放（有儲存進度）
 - ✅ 拖曳進度條
 - ✅ 播放速度變更
 - ✅ 播放清單模式（多個片段）
