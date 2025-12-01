@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤恢復中的陷阱 - (b)-log</title>
+  <title>解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤還原中的陷阱 - (b)-log</title>
   
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="批次處理 PDF OCR 時發現頁面旋轉異常，原因是 pdftk dump_data 輸出包含 PageMediaRotation，恢復書籤時把原始的旋轉資訊寫回去，導致已被 ocrmypdf「烤入」正確方向的頁面被二次旋轉。解決方法是用 grep 過濾只保留 Info 和 Bookmark 資料。">
+  <meta name="description" content="批次處理 PDF OCR 時發現頁面旋轉異常，原因是 pdftk dump_data 輸出包含 PageMediaRotation，還原書籤時把原始的旋轉資訊寫回去，導致已被 ocrmypdf「烤入」正確方向的頁面被二次旋轉。解決方法是用 grep 過濾只保留 Info 和 Bookmark 資料。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/pdf-ocr-rotation-pdftk-trap/" id="canonical-url">
   
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/pdf-ocr-rotation-pdftk-trap/" id="og-url">
-  <meta property="og:title" content="解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤恢復中的陷阱" id="og-title">
-  <meta property="og:description" content="批次處理 PDF OCR 時發現頁面旋轉異常，原因是 pdftk dump_data 輸出包含 PageMediaRotation，恢復書籤時把原始的旋轉資訊寫回去，導致已被 ocrmypdf「烤入」正確方向的頁面被二次旋轉。解決方法是用 grep 過濾只保留 Info 和 Bookmark 資料。" id="og-description">
-  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%A7%A3%E6%B1%BA%20PDF%20OCR%20%E5%BE%8C%E9%A0%81%E9%9D%A2%E6%97%8B%E8%BD%89%E7%95%B0%E5%B8%B8%E7%9A%84%E5%95%8F%E9%A1%8C%EF%BC%9A%E4%B8%80%E5%80%8B%E9%9A%B1%E8%97%8F%E5%9C%A8%20pdftk%20%E6%9B%B8%E7%B1%A4%E6%81%A2%E5%BE%A9%E4%B8%AD%E7%9A%84%E9%99%B7%E9%98%B1,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:title" content="解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤還原中的陷阱" id="og-title">
+  <meta property="og:description" content="批次處理 PDF OCR 時發現頁面旋轉異常，原因是 pdftk dump_data 輸出包含 PageMediaRotation，還原書籤時把原始的旋轉資訊寫回去，導致已被 ocrmypdf「烤入」正確方向的頁面被二次旋轉。解決方法是用 grep 過濾只保留 Info 和 Bookmark 資料。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%A7%A3%E6%B1%BA%20PDF%20OCR%20%E5%BE%8C%E9%A0%81%E9%9D%A2%E6%97%8B%E8%BD%89%E7%95%B0%E5%B8%B8%E7%9A%84%E5%95%8F%E9%A1%8C%EF%BC%9A%E4%B8%80%E5%80%8B%E9%9A%B1%E8%97%8F%E5%9C%A8%20pdftk%20%E6%9B%B8%E7%B1%A4%E9%82%84%E5%8E%9F%E4%B8%AD%E7%9A%84%E9%99%B7%E9%98%B1,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="(b)-log">
@@ -29,9 +29,9 @@
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/pdf-ocr-rotation-pdftk-trap/" id="twitter-url">
-  <meta property="twitter:title" content="解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤恢復中的陷阱" id="twitter-title">
-  <meta property="twitter:description" content="批次處理 PDF OCR 時發現頁面旋轉異常，原因是 pdftk dump_data 輸出包含 PageMediaRotation，恢復書籤時把原始的旋轉資訊寫回去，導致已被 ocrmypdf「烤入」正確方向的頁面被二次旋轉。解決方法是用 grep 過濾只保留 Info 和 Bookmark 資料。" id="twitter-description">
-  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%A7%A3%E6%B1%BA%20PDF%20OCR%20%E5%BE%8C%E9%A0%81%E9%9D%A2%E6%97%8B%E8%BD%89%E7%95%B0%E5%B8%B8%E7%9A%84%E5%95%8F%E9%A1%8C%EF%BC%9A%E4%B8%80%E5%80%8B%E9%9A%B1%E8%97%8F%E5%9C%A8%20pdftk%20%E6%9B%B8%E7%B1%A4%E6%81%A2%E5%BE%A9%E4%B8%AD%E7%9A%84%E9%99%B7%E9%98%B1,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:title" content="解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤還原中的陷阱" id="twitter-title">
+  <meta property="twitter:description" content="批次處理 PDF OCR 時發現頁面旋轉異常，原因是 pdftk dump_data 輸出包含 PageMediaRotation，還原書籤時把原始的旋轉資訊寫回去，導致已被 ocrmypdf「烤入」正確方向的頁面被二次旋轉。解決方法是用 grep 過濾只保留 Info 和 Bookmark 資料。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%A7%A3%E6%B1%BA%20PDF%20OCR%20%E5%BE%8C%E9%A0%81%E9%9D%A2%E6%97%8B%E8%BD%89%E7%95%B0%E5%B8%B8%E7%9A%84%E5%95%8F%E9%A1%8C%EF%BC%9A%E4%B8%80%E5%80%8B%E9%9A%B1%E8%97%8F%E5%9C%A8%20pdftk%20%E6%9B%B8%E7%B1%A4%E9%82%84%E5%8E%9F%E4%B8%AD%E7%9A%84%E9%99%B7%E9%98%B1,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
   
   <!-- 額外的 metadata -->
