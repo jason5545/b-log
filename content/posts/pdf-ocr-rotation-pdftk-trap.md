@@ -195,6 +195,20 @@ process_pdf() {
    - 如果輸入檔包含 PageMedia 資訊，會一併寫入
    - 這可能導致與實際內容不符的 rotation 被寫入
 
+## 為什麼混用工具會出問題？
+
+這個問題的根本原因是**混用不同工具**，而每個工具對 metadata 的處理邏輯不同：
+
+| 工具 | 行為 |
+|------|------|
+| PDFelement | 旋轉時只改 metadata，保留原始像素 |
+| ocrmypdf | OCR 時「烤入」旋轉，重置 metadata 為 0 |
+| pdftk | 還原書籤時連 PageMediaRotation 也一起寫回 |
+
+如果全程使用同一個工具（例如 Wondershare PDFelement 從掃描、旋轉、OCR 到壓縮），它內部會保持一致性，知道自己的 metadata 狀態，應該不會出現這種問題。
+
+但當你像我一樣，用 PDFelement 編輯、ocrmypdf 做 OCR、pdftk 還原書籤時，每個工具各自為政，metadata 的不同步就會導致意外的結果。
+
 ## 結語
 
 這個問題的根本原因是 `pdftk` 的 `dump_data` 和 `update_info` 功能設計上是處理所有 PDF metadata，而不只是書籤。在大多數情況下這不會造成問題，但當 PDF 經過 OCR 處理（內容被重新渲染）後，原始的 rotation metadata 就不再適用了。
