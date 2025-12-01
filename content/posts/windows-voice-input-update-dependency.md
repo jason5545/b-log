@@ -127,7 +127,7 @@ New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
 
 修好語音輸入後，實際使用了一陣子，發現一件很驚喜的事：
 
-**Windows 語音輸入的繁體中文辨識率已經不輸 Google 了。**
+**Windows 語音輸入的繁體中文辨識率已經不輸 Gboard 了。**
 
 我記得幾年前試用時，Windows 的中文辨識還很糟糕，常常辨識錯誤或是完全聽不懂。但現在：
 
@@ -138,11 +138,11 @@ New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
 
 對比：
 
-| 功能 | Windows 語音輸入 | Google 語音輸入 |
+| 功能 | Windows 語音輸入 | Gboard 語音輸入 |
 |------|------------------|------------------|
 | 繁體中文準確度 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
 | 標點符號處理 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| 整合度 | ⭐⭐⭐⭐⭐ (系統原生) | ⭐⭐⭐ (需要瀏覽器) |
+| 整合度 | ⭐⭐⭐⭐⭐ (系統原生) | ⭐⭐⭐ (僅限行動裝置) |
 | 隱私性 | ⭐⭐⭐ (微軟雲端) | ⭐⭐⭐ (Google 雲端) |
 | 啟動速度 | ⭐⭐⭐⭐⭐ (Win+H) | ⭐⭐⭐⭐ |
 
