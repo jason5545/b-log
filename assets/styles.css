@@ -1213,16 +1213,14 @@ a:focus {
   text-align: left;
   font-weight: 600;
   letter-spacing: 0.02em;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .article-body td {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border);
+  border: 1px solid var(--border);
 }
 
-.article-body tbody tr:last-child td {
-  border-bottom: none;
-}
 
 /* 斑馬紋 */
 .article-body tbody tr:nth-child(even) {
