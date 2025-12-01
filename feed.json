@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "pdf-ocr-rotation-pdftk-trap",
+      "url": "https://b-log.to/tech-analysis/pdf-ocr-rotation-pdftk-trap/",
+      "title": "解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤恢復中的陷阱",
+      "content_text": "批次處理 PDF OCR 時發現頁面旋轉異常，原因是 pdftk dump_data 輸出包含 PageMediaRotation，恢復書籤時把原始的旋轉資訊寫回去，導致已被 ocrmypdf「烤入」正確方向的頁面被二次旋轉。解決方法是用 grep 過濾只保留 Info 和 Bookmark 資料。",
+      "date_published": "2025-12-01T00:00:00.000Z",
+      "date_modified": "2025-12-01T00:00:00.000Z",
+      "tags": [
+        "PDF",
+        "OCR",
+        "pdftk",
+        "ocrmypdf",
+        "故障排除",
+        "bash"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "seller-protection-secondhand-trading",
       "url": "https://b-log.to/cultural-insights/seller-protection-secondhand-trading/",
       "title": "當賣家也要學會自保：二手交易生態的變化",
