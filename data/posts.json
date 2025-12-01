@@ -707,7 +707,8 @@
       "創作歸屬"
     ],
     "accentColor": "#556bff",
-    "hasAudio": true
+    "hasAudio": true,
+    "coverImage": "/content/img/2025/understanding-execution-cover.png"
   },
   {
     "slug": "openai-vs-anthropic-red-lines",
