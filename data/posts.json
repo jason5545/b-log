@@ -748,7 +748,8 @@
       "Anthropic"
     ],
     "accentColor": "#e74c3c",
-    "hasAudio": true
+    "hasAudio": true,
+    "coverImage": "/content/img/2025/ai-policy-red-lines-cover.png"
   },
   {
     "slug": "lisa-concert-2017-ssa-ldp",
