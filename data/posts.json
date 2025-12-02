@@ -674,7 +674,8 @@
       "商業決策"
     ],
     "accentColor": "#e74c3c",
-    "hasAudio": true
+    "hasAudio": true,
+    "coverImage": "/content/img/2025/openai-contradiction-cover.png"
   },
   {
     "slug": "unified-remote-evo-development-journey",
