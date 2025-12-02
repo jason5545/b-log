@@ -3,39 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼 - (b)-log</title>
+  <title>生日這天，我只是想做一張自己的大頭貼 - (b)-log</title>
   
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="所有 LXC 容器的 DNS 會自己改掉，手動修好後過一陣子又壞。查了很久發現是 dhclient 在 DHCP 續租時偷偷改 DNS。記錄怎麼用 dhclient hook 把 host 和所有容器的 DNS 鎖住，讓它再也改不掉。">
+  <meta name="description" content="生日想用 AI 繪圖工具做一張自己的大頭貼，輸入「Ghibli」卻被版權過濾擋下。探討一刀切限制的不合理、繞路的技術、Constitutional AI 與關鍵詞過濾的差異，以及 2025 年數位創作的現實：限制永遠存在，繞路的能力本身就是一種價值。">
   <meta name="author" content="Jason Chien">
-  <link rel="canonical" href="https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/" id="canonical-url">
+  <link rel="canonical" href="https://b-log.to/cultural-insights/birthday-avatar-ai-barrier/" id="canonical-url">
   
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/" id="og-url">
-  <meta property="og:title" content="Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼" id="og-title">
-  <meta property="og:description" content="所有 LXC 容器的 DNS 會自己改掉，手動修好後過一陣子又壞。查了很久發現是 dhclient 在 DHCP 續租時偷偷改 DNS。記錄怎麼用 dhclient hook 把 host 和所有容器的 DNS 鎖住，讓它再也改不掉。" id="og-description">
-  <meta property="og:image" content="https://b-log.to//content/img/2025/proxmox-lxc-dns-cover.png" id="og-image">
+  <meta property="og:url" content="https://b-log.to/cultural-insights/birthday-avatar-ai-barrier/" id="og-url">
+  <meta property="og:title" content="生日這天，我只是想做一張自己的大頭貼" id="og-title">
+  <meta property="og:description" content="生日想用 AI 繪圖工具做一張自己的大頭貼，輸入「Ghibli」卻被版權過濾擋下。探討一刀切限制的不合理、繞路的技術、Constitutional AI 與關鍵詞過濾的差異，以及 2025 年數位創作的現實：限制永遠存在，繞路的能力本身就是一種價值。" id="og-description">
+  <meta property="og:image" content="https://b-log.to//content/img/2025/birthday-avatar-cover.png" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="(b)-log">
   <meta property="og:locale" content="zh_TW">
   <meta property="article:author" content="Jason Chien" id="og-author">
-  <meta property="article:published_time" content="2025-11-16T00:00:00Z" id="og-published-time">
-  <meta property="article:modified_time" content="2025-11-16T00:00:00Z" id="og-modified-time">
-  <meta property="article:section" content="技術分析" id="og-section">
-  <meta property="article:tag" content="Proxmox, LXC, DNS, dhclient, 網路設定, 系統管理, resolv.conf" id="og-tags">
+  <meta property="article:published_time" content="2025-12-02T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2025-12-02T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="文化觀察" id="og-section">
+  <meta property="article:tag" content="AI 繪圖, 版權, 數位落差, Constitutional AI, 平台限制, 生日" id="og-tags">
   
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/" id="twitter-url">
-  <meta property="twitter:title" content="Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼" id="twitter-title">
-  <meta property="twitter:description" content="所有 LXC 容器的 DNS 會自己改掉，手動修好後過一陣子又壞。查了很久發現是 dhclient 在 DHCP 續租時偷偷改 DNS。記錄怎麼用 dhclient hook 把 host 和所有容器的 DNS 鎖住，讓它再也改不掉。" id="twitter-description">
-  <meta property="twitter:image" content="https://b-log.to//content/img/2025/proxmox-lxc-dns-cover.png" id="twitter-image">
+  <meta property="twitter:url" content="https://b-log.to/cultural-insights/birthday-avatar-ai-barrier/" id="twitter-url">
+  <meta property="twitter:title" content="生日這天，我只是想做一張自己的大頭貼" id="twitter-title">
+  <meta property="twitter:description" content="生日想用 AI 繪圖工具做一張自己的大頭貼，輸入「Ghibli」卻被版權過濾擋下。探討一刀切限制的不合理、繞路的技術、Constitutional AI 與關鍵詞過濾的差異，以及 2025 年數位創作的現實：限制永遠存在，繞路的能力本身就是一種價值。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to//content/img/2025/birthday-avatar-cover.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
   
   <!-- 額外的 metadata -->
-  <meta name="keywords" content="Proxmox, LXC, DNS, dhclient, 網路設定, 系統管理, resolv.conf" id="meta-keywords">
+  <meta name="keywords" content="AI 繪圖, 版權, 數位落差, Constitutional AI, 平台限制, 生日" id="meta-keywords">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#556bff">
 
