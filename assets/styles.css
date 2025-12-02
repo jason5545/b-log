@@ -2287,3 +2287,337 @@ a:focus {
     padding-top: 0.5rem;
   }
 }
+
+/* ============================================
+   12 月生日特輯主題
+   僅在 12 月顯示，慶祝部落格作者生日
+   ============================================ */
+
+/* 生日主題 - 預設隱藏，由 JS 控制顯示 */
+.birthday-theme {
+  display: none;
+}
+
+.birthday-theme.is-active {
+  display: block;
+}
+
+/* 生日橫幅 - LiSA 代表色（粉紅色系）*/
+.birthday-banner {
+  background: linear-gradient(135deg, #ff6b9d 0%, #e91e63 25%, #ff4081 50%, #ff6b9d 75%, #e91e63 100%);
+  background-size: 300% 300%;
+  animation: birthday-gradient 8s ease infinite;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(233, 30, 99, 0.4);
+}
+
+@keyframes birthday-gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.birthday-banner::before {
+  content: '🎂';
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  animation: birthday-bounce 2s ease-in-out infinite;
+}
+
+.birthday-banner::after {
+  content: '🎉';
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  animation: birthday-bounce 2s ease-in-out infinite 0.5s;
+}
+
+@keyframes birthday-bounce {
+  0%, 100% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.2); }
+}
+
+.birthday-banner__text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.birthday-banner__close {
+  position: absolute;
+  right: 3.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.birthday-banner__close:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* 十週年紀念區塊 - LiSA 粉紅色系 */
+.anniversary-section {
+  background: linear-gradient(135deg, rgba(233, 30, 99, 0.08) 0%, rgba(255, 64, 129, 0.08) 100%);
+  border: 2px solid rgba(233, 30, 99, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.anniversary-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 64, 129, 0.1) 0%, transparent 70%);
+  animation: anniversary-glow 10s ease-in-out infinite;
+}
+
+@keyframes anniversary-glow {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(10%, 10%); }
+}
+
+.anniversary-section__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #e91e63, #ff4081);
+  color: #fff;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+}
+
+.anniversary-section__title {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: var(--text);
+  position: relative;
+  z-index: 1;
+}
+
+.anniversary-section__subtitle {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.anniversary-section__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #e91e63, #c2185b);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.anniversary-section__link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
+  text-decoration: none;
+}
+
+/* 年度回顧統計區塊 */
+.yearly-stats {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+.yearly-stats__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.yearly-stats__icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.25rem;
+}
+
+.yearly-stats__title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.yearly-stats__year {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.yearly-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.yearly-stats__item {
+  text-align: center;
+  padding: 1rem;
+  background: var(--accent-soft);
+  border-radius: var(--radius-sm);
+  transition: transform 0.2s ease;
+}
+
+.yearly-stats__item:hover {
+  transform: scale(1.02);
+}
+
+.yearly-stats__number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+  line-height: 1.2;
+}
+
+.yearly-stats__label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.yearly-stats__categories {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.yearly-stats__categories-title {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 0.75rem;
+}
+
+.yearly-stats__category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.yearly-stats__category {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.75rem;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+.yearly-stats__category-count {
+  background: var(--accent);
+  color: #fff;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* 深色模式調整 - LiSA 粉紅色系 */
+[data-theme="dark"] .birthday-banner {
+  box-shadow: 0 4px 20px rgba(233, 30, 99, 0.5);
+}
+
+[data-theme="dark"] .anniversary-section {
+  background: linear-gradient(135deg, rgba(233, 30, 99, 0.15) 0%, rgba(255, 64, 129, 0.12) 100%);
+  border-color: rgba(233, 30, 99, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .birthday-banner {
+    box-shadow: 0 4px 20px rgba(233, 30, 99, 0.5);
+  }
+
+  :root:not([data-theme="light"]) .anniversary-section {
+    background: linear-gradient(135deg, rgba(233, 30, 99, 0.15) 0%, rgba(255, 64, 129, 0.12) 100%);
+    border-color: rgba(233, 30, 99, 0.35);
+  }
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+  .birthday-banner {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .birthday-banner::before,
+  .birthday-banner::after {
+    display: none;
+  }
+
+  .birthday-banner__close {
+    right: 0.5rem;
+  }
+
+  .anniversary-section {
+    padding: 1.5rem;
+  }
+
+  .anniversary-section__title {
+    font-size: 1.3rem;
+  }
+
+  .yearly-stats__grid {
+    gap: 0.75rem;
+  }
+
+  .yearly-stats__number {
+    font-size: 1.5rem;
+  }
+}

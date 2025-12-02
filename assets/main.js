@@ -166,6 +166,160 @@ const ThemeManager = {
 window.ThemeManager = ThemeManager;
 
 // ============================================================
+// 12 月生日特輯主題
+// ============================================================
+
+const BirthdayTheme = {
+  STORAGE_KEY: 'birthday-banner-closed',
+  BIRTHDAY_MONTH: 12, // 12 月
+
+  init() {
+    const currentMonth = new Date().getMonth() + 1; // JavaScript 月份從 0 開始
+
+    // 只在 12 月顯示
+    if (currentMonth !== this.BIRTHDAY_MONTH) {
+      return;
+    }
+
+    // 啟用生日主題
+    this.activateTheme();
+
+    // 計算並顯示年度統計
+    this.calculateYearlyStats();
+  },
+
+  activateTheme() {
+    // 顯示所有生日主題元素
+    document.querySelectorAll('.birthday-theme').forEach(el => {
+      el.classList.add('is-active');
+      el.hidden = false;
+    });
+
+    // 檢查橫幅是否已被關閉
+    const bannerClosed = localStorage.getItem(this.STORAGE_KEY);
+    if (bannerClosed === 'true') {
+      const banner = document.getElementById('birthday-banner');
+      if (banner) {
+        banner.hidden = true;
+        banner.classList.remove('is-active');
+      }
+    }
+  },
+
+  closeBanner() {
+    const banner = document.getElementById('birthday-banner');
+    if (banner) {
+      banner.hidden = true;
+      banner.classList.remove('is-active');
+      localStorage.setItem(this.STORAGE_KEY, 'true');
+    }
+  },
+
+  async calculateYearlyStats() {
+    try {
+      const posts = await loadNormalizedPosts();
+      const currentYear = new Date().getFullYear();
+
+      // 篩選今年的文章
+      const yearlyPosts = posts.filter(post => {
+        const publishedDate = new Date(post.publishedAt);
+        return publishedDate.getFullYear() === currentYear;
+      });
+
+      // 計算統計數據
+      const totalPosts = yearlyPosts.length;
+      const audioPosts = yearlyPosts.filter(post => post.hasAudio).length;
+
+      // 計算分類統計
+      const categoryStats = {};
+      yearlyPosts.forEach(post => {
+        const category = post.category || '未分類';
+        categoryStats[category] = (categoryStats[category] || 0) + 1;
+      });
+
+      const totalCategories = Object.keys(categoryStats).length;
+
+      // 預估字數（閱讀時間 * 200 字/分鐘）
+      let totalWords = 0;
+      yearlyPosts.forEach(post => {
+        if (post.readingTime) {
+          const minutes = parseInt(post.readingTime) || 0;
+          totalWords += minutes * 200;
+        }
+      });
+
+      // 更新 DOM
+      this.updateStatsDOM({
+        totalPosts,
+        totalWords,
+        audioPosts,
+        totalCategories,
+        categoryStats,
+        currentYear
+      });
+    } catch (error) {
+      console.error('[BirthdayTheme] Failed to calculate yearly stats:', error);
+    }
+  },
+
+  updateStatsDOM(stats) {
+    // 更新年份
+    const yearEl = document.querySelector('.yearly-stats__year');
+    if (yearEl) {
+      yearEl.textContent = stats.currentYear;
+    }
+
+    // 更新數字
+    const totalPostsEl = document.getElementById('stats-total-posts');
+    if (totalPostsEl) {
+      totalPostsEl.textContent = stats.totalPosts;
+    }
+
+    const totalWordsEl = document.getElementById('stats-total-words');
+    if (totalWordsEl) {
+      // 格式化字數（使用 k 表示千）
+      const formattedWords = stats.totalWords >= 1000
+        ? (stats.totalWords / 1000).toFixed(1) + 'k'
+        : stats.totalWords;
+      totalWordsEl.textContent = formattedWords;
+    }
+
+    const audioPostsEl = document.getElementById('stats-audio-posts');
+    if (audioPostsEl) {
+      audioPostsEl.textContent = stats.audioPosts;
+    }
+
+    const categoriesEl = document.getElementById('stats-categories');
+    if (categoriesEl) {
+      categoriesEl.textContent = stats.totalCategories;
+    }
+
+    // 更新分類列表
+    const categoryListEl = document.getElementById('stats-category-list');
+    if (categoryListEl) {
+      categoryListEl.innerHTML = '';
+
+      // 按文章數量排序
+      const sortedCategories = Object.entries(stats.categoryStats)
+        .sort((a, b) => b[1] - a[1]);
+
+      sortedCategories.forEach(([category, count]) => {
+        const categoryEl = document.createElement('span');
+        categoryEl.className = 'yearly-stats__category';
+        categoryEl.innerHTML = `
+          ${category}
+          <span class="yearly-stats__category-count">${count}</span>
+        `;
+        categoryListEl.appendChild(categoryEl);
+      });
+    }
+  }
+};
+
+// 暴露到全域
+window.BirthdayTheme = BirthdayTheme;
+
+// ============================================================
 // 搜尋功能
 // ============================================================
 
@@ -974,6 +1128,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (bodyClassList.contains('home')) {
     // 初始化搜尋功能
     initSearch();
+    // 初始化 12 月生日特輯
+    BirthdayTheme.init();
 
     renderHomepage().catch((error) => {
       console.error('[home] failed to render', error);

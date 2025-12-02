@@ -254,7 +254,32 @@
       </div>
     </header>
 
+    <!-- 12 月生日特輯橫幅 -->
+    <div id="birthday-banner" class="birthday-theme birthday-banner" hidden>
+      <span class="birthday-banner__text">
+        🎊 12 月是部落格作者的生日月！感謝一路以來的陪伴 🎊
+      </span>
+      <button class="birthday-banner__close" aria-label="關閉橫幅" onclick="BirthdayTheme.closeBanner()">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
     <main class="wrapper layout-grid">
+      <!-- 十週年紀念區塊（2015-2025）-->
+      <section id="anniversary-section" class="birthday-theme anniversary-section" hidden>
+        <span class="anniversary-section__badge">✨ 十週年紀念</span>
+        <h2 class="anniversary-section__title">Believe in myself</h2>
+        <p class="anniversary-section__subtitle">
+          2015 年 7 月，一個輪椅上的少年第一次踏入演唱會現場。十年後的今天，這個故事依然在繼續。
+        </p>
+        <a id="anniversary-link" class="anniversary-section__link" href="/life-stories/lisa-concert-believe-in-myself/">
+          閱讀這篇生命故事 →
+        </a>
+      </section>
+
       <section id="featured" class="hero-card" hidden>
         <div class="hero-card__media" id="hero-media"></div>
         <div class="hero-card__body">
@@ -298,6 +323,36 @@
         </section>
 
         <aside class="sidebar">
+          <!-- 年度回顧統計區塊 -->
+          <section id="yearly-stats" class="birthday-theme widget yearly-stats" hidden>
+            <div class="yearly-stats__header">
+              <div class="yearly-stats__icon">📊</div>
+              <h3 class="yearly-stats__title"><span class="yearly-stats__year">2025</span> 年度回顧</h3>
+            </div>
+            <div class="yearly-stats__grid">
+              <div class="yearly-stats__item">
+                <span id="stats-total-posts" class="yearly-stats__number">0</span>
+                <span class="yearly-stats__label">篇文章</span>
+              </div>
+              <div class="yearly-stats__item">
+                <span id="stats-total-words" class="yearly-stats__number">0</span>
+                <span class="yearly-stats__label">預估字數</span>
+              </div>
+              <div class="yearly-stats__item">
+                <span id="stats-audio-posts" class="yearly-stats__number">0</span>
+                <span class="yearly-stats__label">語音版</span>
+              </div>
+              <div class="yearly-stats__item">
+                <span id="stats-categories" class="yearly-stats__number">0</span>
+                <span class="yearly-stats__label">個分類</span>
+              </div>
+            </div>
+            <div class="yearly-stats__categories">
+              <p class="yearly-stats__categories-title">分類分佈</p>
+              <div id="stats-category-list" class="yearly-stats__category-list"></div>
+            </div>
+          </section>
+
           <section class="widget widget--profile">
             <h3 class="widget__title">Running the stack</h3>
             <p>Hi, I'm Jason. (b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。</p>
