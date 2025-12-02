@@ -539,7 +539,8 @@
       "硬體故障排除",
       "PCIe"
     ],
-    "accentColor": "#3498db"
+    "accentColor": "#3498db",
+    "coverImage": "/content/img/2025/gpu-passthrough-cover.png"
   },
   {
     "slug": "audio-player-promise-error-fix",
