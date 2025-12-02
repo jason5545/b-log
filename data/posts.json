@@ -618,7 +618,8 @@
       "自由度"
     ],
     "accentColor": "#e67e22",
-    "hasAudio": true
+    "hasAudio": true,
+    "coverImage": "/content/img/2025/tablet-ecosystem-cover.png"
   },
   {
     "slug": "syntax-highlighting-debugging-journey",
