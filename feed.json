@@ -6,6 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "birthday-avatar-ai-barrier",
+      "url": "https://b-log.to/cultural-insights/birthday-avatar-ai-barrier/",
+      "title": "生日這天，我只是想做一張自己的大頭貼",
+      "content_text": "生日想用 AI 繪圖工具做一張自己的大頭貼，輸入「Ghibli」卻被版權過濾擋下。探討一刀切限制的不合理、繞路的技術、Constitutional AI 與關鍵詞過濾的差異，以及 2025 年數位創作的現實：限制永遠存在，繞路的能力本身就是一種價值。",
+      "date_published": "2025-12-02T00:00:00.000Z",
+      "date_modified": "2025-12-02T00:00:00.000Z",
+      "tags": [
+        "AI 繪圖",
+        "版權",
+        "數位落差",
+        "Constitutional AI",
+        "平台限制",
+        "生日"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2025/birthday-avatar-cover.png"
+    },
+    {
       "id": "pdf-ocr-rotation-pdftk-trap",
       "url": "https://b-log.to/tech-analysis/pdf-ocr-rotation-pdftk-trap/",
       "title": "解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤還原中的陷阱",
@@ -195,7 +217,8 @@
         {
           "name": "Jason Chien"
         }
-      ]
+      ],
+      "image": "https://b-log.to/content/img/2025/proxmox-lxc-dns-cover.png"
     },
     {
       "id": "traceroute-hostname-misleading",
