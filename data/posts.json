@@ -1,5 +1,24 @@
 [
   {
+    "slug": "claude-content-filter-paradox",
+    "title": "我用 Claude 做了一個實驗：請它生成 GPL 授權，結果被自己的過濾機制擋下來了",
+    "summary": "請 Claude 生成 GPL v3 授權條款被阻擋，卻允許協助反編譯。透過實驗和 Agent 辯論，分析內容過濾機制的邏輯矛盾：它最佳化了錯誤的指標，成功阻止「看起來像複製」的行為，卻沒阻止「實際有害」的行為。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-02T12:00:00Z",
+    "updatedAt": "2025-12-02T12:00:00Z",
+    "readingTime": "10 min",
+    "tags": [
+      "Claude",
+      "AI",
+      "內容過濾",
+      "GPL",
+      "開源授權",
+      "Goodhart's Law"
+    ],
+    "accentColor": "#e74c3c"
+  },
+  {
     "slug": "birthday-avatar-ai-barrier",
     "title": "生日這天，我只是想做一張自己的大頭貼",
     "summary": "生日想用 AI 繪圖工具做一張自己的大頭貼，輸入「Ghibli」卻被版權過濾擋下。探討一刀切限制的不合理、繞路的技術、Constitutional AI 與關鍵詞過濾的差異，以及 2025 年數位創作的現實：限制永遠存在，繞路的能力本身就是一種價值。",
