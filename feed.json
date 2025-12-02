@@ -7,7 +7,7 @@
   "items": [
     {
       "id": "claude-content-filter-paradox",
-      "url": "https://b-log.to/tech-analysis/claude-content-filter-paradox/",
+      "url": "https://b-log.to/ai-analysis/claude-content-filter-paradox/",
       "title": "我用 Claude 做了一個實驗：請它生成 GPL 授權，結果被自己的過濾機制擋下來了",
       "content_text": "我請 Claude 生成 GPL v3 授權條款，結果被內容過濾擋下來了。但它卻允許我做反編譯。透過實驗和讓兩個 Agent 辯論，我分析了這個邏輯矛盾：過濾機制最佳化了錯誤的指標，成功阻止「看起來像複製」的行為，卻沒阻止「實際有害」的行為。這是典型的 Goodhart's Law。",
       "date_published": "2025-12-02T12:00:00.000Z",
