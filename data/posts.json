@@ -7,8 +7,18 @@
     "author": "Jason Chien",
     "publishedAt": "2025-12-03T00:00:00Z",
     "readingTime": "12 min",
-    "tags": ["Dell", "HP", "Lenovo", "ThinkPad", "散熱", "筆電", "工作站", "硬體分析"],
-    "accentColor": "#d63031"
+    "tags": [
+      "Dell",
+      "HP",
+      "Lenovo",
+      "ThinkPad",
+      "散熱",
+      "筆電",
+      "工作站",
+      "硬體分析"
+    ],
+    "accentColor": "#d63031",
+    "coverImage": "/content/img/2025/workstation-thermal-cover.png"
   },
   {
     "slug": "claude-content-filter-paradox",
