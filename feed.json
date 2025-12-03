@@ -6,6 +6,20 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "thinkpad-p15-gen2-thermal",
+      "url": "https://b-log.to/tech-analysis/thinkpad-p15-gen2-thermal/",
+      "title": "ThinkPad P15 Gen 2 的 100°C：設計缺陷還是正常運作？",
+      "content_text": "買了 ThinkPad P15 Gen 2 頂規，結果 CPU 跑到 100°C。深入研究後發現，這不是故障，而是 Lenovo 用韌體限制功耗的「設計如此」。比較 Dell VRM 遺漏與 ThinkPad 韌體鎖功耗的差異，分析為什麼 i9 在功耗牆下只能當 i7 用，以及整個筆電產業的散熱困境。",
+      "date_published": "2025-12-03T00:00:00.000Z",
+      "date_modified": "2025-12-03T00:00:00.000Z",
+      "tags": ["ThinkPad", "散熱", "筆電", "Lenovo", "工作站", "硬體分析"],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "claude-content-filter-paradox",
       "url": "https://b-log.to/ai-analysis/claude-content-filter-paradox/",
       "title": "我用 Claude 做了一個實驗：請它生成 GPL 授權，結果被自己的過濾機制擋下來了",
