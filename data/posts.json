@@ -1,14 +1,13 @@
 [
   {
-    "slug": "thinkpad-p15-gen2-thermal",
-    "title": "ThinkPad P15 Gen 2 的 100°C：設計缺陷還是正常運作？",
-    "summary": "買了 ThinkPad P15 Gen 2 頂規，結果 CPU 跑到 100°C。深入研究後發現，這不是故障，而是 Lenovo 用韌體限制功耗的「設計如此」。比較 Dell VRM 遺漏與 ThinkPad 韌體鎖功耗的差異，分析為什麼 i9 在功耗牆下只能當 i7 用，以及整個筆電產業的散熱困境。",
+    "slug": "workstation-laptop-thermal-crisis",
+    "title": "三大廠工作站筆電的散熱危機：Dell、HP、Lenovo 都在騙你",
+    "summary": "Dell Precision 的 VRM 沒散熱片、HP ZBook 用 DPTF 強制節流、ThinkPad 韌體鎖功耗——技術手段不同，結果都一樣：付了 i9 的錢，只能當 i7 用。深入分析三大工作站筆電廠商的散熱設計問題，以及為什麼 100°C 不是故障，而是「設計如此」。",
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-03T00:00:00Z",
-    "updatedAt": "2025-12-03T00:00:00Z",
-    "readingTime": "8 min",
-    "tags": ["ThinkPad", "散熱", "筆電", "Lenovo", "工作站", "硬體分析"],
+    "readingTime": "12 min",
+    "tags": ["Dell", "HP", "Lenovo", "ThinkPad", "散熱", "筆電", "工作站", "硬體分析"],
     "accentColor": "#d63031"
   },
   {
