@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>我用 Claude 做了一個實驗：請它生成 GPL 授權，結果被自己的過濾機制擋下來了 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="請 Claude 生成 GPL v3 授權條款被阻擋，卻允許協助反編譯。透過實驗和 Agent 辯論，分析內容過濾機制的邏輯矛盾：它最佳化了錯誤的指標，成功阻止「看起來像複製」的行為，卻沒阻止「實際有害」的行為。">
+  <meta name="description"
+    content="請 Claude 生成 GPL v3 授權條款被阻擋，卻允許協助反編譯。透過實驗和 Agent 辯論，分析內容過濾機制的邏輯矛盾：它最佳化了錯誤的指標，成功阻止「看起來像複製」的行為，卻沒阻止「實際有害」的行為。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/claude-content-filter-paradox/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/claude-content-filter-paradox/" id="og-url">
   <meta property="og:title" content="我用 Claude 做了一個實驗：請它生成 GPL 授權，結果被自己的過濾機制擋下來了" id="og-title">
-  <meta property="og:description" content="請 Claude 生成 GPL v3 授權條款被阻擋，卻允許協助反編譯。透過實驗和 Agent 辯論，分析內容過濾機制的邏輯矛盾：它最佳化了錯誤的指標，成功阻止「看起來像複製」的行為，卻沒阻止「實際有害」的行為。" id="og-description">
-  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E7%94%A8%20Claude%20%E5%81%9A%E4%BA%86%E4%B8%80%E5%80%8B%E5%AF%A6%E9%A9%97%EF%BC%9A%E8%AB%8B%E5%AE%83%E7%94%9F%E6%88%90%20GPL%20%E6%8E%88%E6%AC%8A%EF%BC%8C%E7%B5%90%E6%9E%9C%E8%A2%AB%E8%87%AA%E5%B7%B1%E7%9A%84%E9%81%8E%E6%BF%BE%E6%A9%9F%E5%88%B6%E6%93%8B%E4%B8%8B%E4%BE%86%E4%BA%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:description"
+    content="請 Claude 生成 GPL v3 授權條款被阻擋，卻允許協助反編譯。透過實驗和 Agent 辯論，分析內容過濾機制的邏輯矛盾：它最佳化了錯誤的指標，成功阻止「看起來像複製」的行為，卻沒阻止「實際有害」的行為。"
+    id="og-description">
+  <meta property="og:image"
+    content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E7%94%A8%20Claude%20%E5%81%9A%E4%BA%86%E4%B8%80%E5%80%8B%E5%AF%A6%E9%A9%97%EF%BC%9A%E8%AB%8B%E5%AE%83%E7%94%9F%E6%88%90%20GPL%20%E6%8E%88%E6%AC%8A%EF%BC%8C%E7%B5%90%E6%9E%9C%E8%A2%AB%E8%87%AA%E5%B7%B1%E7%9A%84%E9%81%8E%E6%BF%BE%E6%A9%9F%E5%88%B6%E6%93%8B%E4%B8%8B%E4%BE%86%E4%BA%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"
+    id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="(b)-log">
@@ -24,18 +30,22 @@
   <meta property="article:published_time" content="2025-12-02T12:00:00Z" id="og-published-time">
   <meta property="article:modified_time" content="2025-12-02T12:00:00Z" id="og-modified-time">
   <meta property="article:section" content="技術分析" id="og-section">
-  <meta property="article:tag" content="Claude, AI, 內容過濾, GPL, 開源授權, Goodhart's Law" id="og-tags">
-  
+  <meta property="article:tag" content="Claude, AI, 內容過濾, GPL, 開放原始碼授權, Goodhart's Law" id="og-tags">
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/claude-content-filter-paradox/" id="twitter-url">
   <meta property="twitter:title" content="我用 Claude 做了一個實驗：請它生成 GPL 授權，結果被自己的過濾機制擋下來了" id="twitter-title">
-  <meta property="twitter:description" content="請 Claude 生成 GPL v3 授權條款被阻擋，卻允許協助反編譯。透過實驗和 Agent 辯論，分析內容過濾機制的邏輯矛盾：它最佳化了錯誤的指標，成功阻止「看起來像複製」的行為，卻沒阻止「實際有害」的行為。" id="twitter-description">
-  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E7%94%A8%20Claude%20%E5%81%9A%E4%BA%86%E4%B8%80%E5%80%8B%E5%AF%A6%E9%A9%97%EF%BC%9A%E8%AB%8B%E5%AE%83%E7%94%9F%E6%88%90%20GPL%20%E6%8E%88%E6%AC%8A%EF%BC%8C%E7%B5%90%E6%9E%9C%E8%A2%AB%E8%87%AA%E5%B7%B1%E7%9A%84%E9%81%8E%E6%BF%BE%E6%A9%9F%E5%88%B6%E6%93%8B%E4%B8%8B%E4%BE%86%E4%BA%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:description"
+    content="請 Claude 生成 GPL v3 授權條款被阻擋，卻允許協助反編譯。透過實驗和 Agent 辯論，分析內容過濾機制的邏輯矛盾：它最佳化了錯誤的指標，成功阻止「看起來像複製」的行為，卻沒阻止「實際有害」的行為。"
+    id="twitter-description">
+  <meta property="twitter:image"
+    content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E7%94%A8%20Claude%20%E5%81%9A%E4%BA%86%E4%B8%80%E5%80%8B%E5%AF%A6%E9%A9%97%EF%BC%9A%E8%AB%8B%E5%AE%83%E7%94%9F%E6%88%90%20GPL%20%E6%8E%88%E6%AC%8A%EF%BC%8C%E7%B5%90%E6%9E%9C%E8%A2%AB%E8%87%AA%E5%B7%B1%E7%9A%84%E9%81%8E%E6%BF%BE%E6%A9%9F%E5%88%B6%E6%93%8B%E4%B8%8B%E4%BE%86%E4%BA%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"
+    id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
-  <meta name="keywords" content="Claude, AI, 內容過濾, GPL, 開源授權, Goodhart's Law" id="meta-keywords">
+  <meta name="keywords" content="Claude, AI, 內容過濾, GPL, 開放原始碼授權, Goodhart's Law" id="meta-keywords">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#556bff">
 
@@ -80,6 +90,7 @@
       --radius-sm: 10px;
       --sidebar-width: 320px;
     }
+
     [data-theme="dark"] {
       color-scheme: dark;
       --bg-gradient: var(--bg-dark-gradient);
@@ -91,6 +102,7 @@
       --shadow-soft: 0 18px 40px -20px rgba(0, 0, 0, 0.9);
       --shadow-strong: 0 28px 80px -30px rgba(0, 0, 0, 0.95);
     }
+
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
         color-scheme: dark;
@@ -104,7 +116,13 @@
         --shadow-strong: 0 28px 80px -30px rgba(0, 0, 0, 0.95);
       }
     }
-    *, *::before, *::after { box-sizing: border-box; }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
@@ -113,36 +131,43 @@
       background: var(--bg-gradient);
       color: var(--text);
     }
+
     .page-chrome {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       backdrop-filter: saturate(120%) blur(60px);
     }
+
     .wrapper {
       width: min(1600px, 98vw);
       margin: 0 auto;
     }
+
     a {
       color: var(--accent);
       text-decoration: none;
     }
+
     /* Article page 首屏樣式 */
     .site-header {
       padding: 3.5rem 0 2.5rem;
       position: relative;
     }
+
     .site-title {
       margin: 0;
       font-size: clamp(2.6rem, 6vw, 3.4rem);
       letter-spacing: -0.04em;
     }
+
     .site-tagline {
       margin: 0.35rem 0 0;
       color: var(--text-muted);
       font-size: 1.05rem;
       max-width: 540px;
     }
+
     .article {
       background: var(--surface);
       border-radius: var(--radius-lg);
@@ -150,42 +175,55 @@
       box-shadow: var(--shadow-soft);
       overflow: hidden;
     }
+
     .article-header h1 {
       margin: 0 0 1rem;
       font-size: clamp(2.2rem, 5vw, 3.2rem);
       letter-spacing: -0.02em;
     }
+
     /* 防止 CLS - Article 頁面 */
     .article-shell {
       min-height: 600px;
     }
+
     .article-hero {
       min-height: 260px;
       aspect-ratio: 16 / 9;
     }
+
     .article-layout {
       min-height: 500px;
     }
+
     .article-footer {
       min-height: 400px;
     }
+
     /* 內容區域預留空間 */
     #post-content:empty {
       min-height: 400px;
-      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255, 255, 255, 0.3) 50%, var(--surface-muted) 75%);
       background-size: 200% 100%;
       animation: skeleton-loading 1.5s infinite;
       border-radius: var(--radius-md);
     }
+
     @keyframes skeleton-loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
     }
   </style>
 
   <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.css">
 </head>
+
 <body class="post-page">
   <div class="page-chrome">
     <header class="site-header">
@@ -258,9 +296,11 @@
   <script src="../../assets/marked.min.js" defer></script>
   <script src="../../assets/main.min.js" type="module" defer></script>
   <!-- Service Worker 註冊 - 延長字型快取 -->
-  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }</script>
   <!-- Cloudflare Web Analytics -->
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4654c3d3db9e4f21b3640178e6f5bd09"}'></script>
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+    data-cf-beacon='{"token": "4654c3d3db9e4f21b3640178e6f5bd09"}'></script>
   <!-- End Cloudflare Web Analytics -->
 </body>
+
 </html>

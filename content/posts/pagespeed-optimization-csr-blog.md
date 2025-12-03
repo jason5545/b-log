@@ -402,4 +402,4 @@ font-display: optional;  /* ← 我用這個 */
 
 ---
 
-*本文技術細節已開源在 [GitHub](https://github.com/jason5545/b-log)，歡迎參考。*
+*本文技術細節已開放原始碼在 [GitHub](https://github.com/jason5545/b-log)，歡迎參考。*

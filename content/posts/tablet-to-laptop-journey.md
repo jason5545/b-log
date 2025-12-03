@@ -118,7 +118,7 @@ Android 平板硬體再強，沒有完整開發環境就是廢。iPad Pro 硬體
 
 **什麼是小狼毫？**
 
-小狼毫是 Rime 輸入法引擎在 Windows 上的版本。Rime 是一個開源的輸入法框架，跨平台支援 Windows（小狼毫）、macOS（鼠鬚管）、Linux（ibus-rime）。
+小狼毫是 Rime 輸入法引擎在 Windows 上的版本。Rime 是一個開放原始碼的輸入法框架，跨平台支援 Windows（小狼毫）、macOS（鼠鬚管）、Linux（ibus-rime）。
 
 **為什麼可自訂很重要？**
 

@@ -11,7 +11,7 @@
 
 這不只是「功能增強」工具，更是**無障礙輔助工具**。當大廠以「現代化」為名移除基本功能時，我決定自己把它找回來。
 
-專案開源在 GitHub：[Touchpad Advanced Tool](https://github.com/jason5545/Touchpad-Advanced-Tool)
+專案開放原始碼在 GitHub：[Touchpad Advanced Tool](https://github.com/jason5545/Touchpad-Advanced-Tool)
 
 ## 為什麼要自己寫？
 
@@ -333,7 +333,7 @@ Log.Logger = new LoggerConfiguration()
 
 當大廠以「現代化」為名移除基本功能時，我們不是只能被動接受。AI 的普及讓客製化開發變得可行，即使是像我這樣身體有限制的開發者，也能為自己的需求打造解決方案。
 
-如果你也是單指使用者，或者你也對這類技術感興趣，歡迎到 [GitHub](https://github.com/jason5545/Touchpad-Advanced-Tool) 看看。程式碼完全開源，也歡迎提出改進建議。
+如果你也是單指使用者，或者你也對這類技術感興趣，歡迎到 [GitHub](https://github.com/jason5545/Touchpad-Advanced-Tool) 看看。程式碼完全開放原始碼，也歡迎提出改進建議。
 
 **技術統計**：
 - 開發時間：約 3 天

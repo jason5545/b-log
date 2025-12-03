@@ -12,7 +12,7 @@ API Error: 400
 "message":"Output blocked by content filtering policy"}}
 ```
 
-這讓我很意外。GPL 是完全合法的開源授權條款，為什麼會被擋？
+這讓我很意外。GPL 是完全合法的開放原始碼授權條款，為什麼會被擋？
 
 ## 搜尋發現：不只我遇到
 
@@ -72,7 +72,7 @@ curl -s https://www.gnu.org/licenses/gpl-3.0.txt > LICENSE
 
 ### 建議改進方向
 
-1. **白名單機制**：標準開源授權（GPL、MIT、Apache）應列入白名單
+1. **白名單機制**：標準開放原始碼授權（GPL、MIT、Apache）應列入白名單
 2. **錯誤訊息透明化**：說明是「產品定位」而非「版權保護」
 3. **風險導向**：過濾應基於實際危害，而非形式上的「複製」
 
