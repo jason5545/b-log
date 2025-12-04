@@ -1,5 +1,25 @@
 [
   {
+    "slug": "lisa-p0-priority-realization",
+    "title": "當你喊不出「很喜歡」的時候",
+    "summary": "2024 年 6 月 1 日，LiSA 和 yanaginagi 的演唱會在同一天。被 LiSA 場地拒於門外後，我去了 yanaginagi 的場，卻發現自己完全無法專心。MC 問「你喜歡我嗎？」全場大喊「很喜歡」，我喊不出來。那一刻我才懂：什麼是 P0，什麼是真正重要的事。喜歡是喜歡，P0 是 P0——你可以喜歡很多東西，但 P0 只有一個。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-04T00:00:00Z",
+    "updatedAt": "2025-12-04T00:00:00Z",
+    "readingTime": "12 min",
+    "tags": [
+      "LiSA",
+      "yanaginagi",
+      "演唱會",
+      "P0",
+      "優先級",
+      "追星",
+      "身心障礙"
+    ],
+    "accentColor": "#e74c3c"
+  },
+  {
     "slug": "workstation-laptop-thermal-crisis",
     "title": "三大廠工作站筆電的散熱危機：Dell、HP、Lenovo 都在騙你",
     "summary": "Dell Precision 的 VRM 沒散熱片、HP ZBook 用 DPTF 強制節流、ThinkPad 韌體鎖功耗——技術手段不同，結果都一樣：付了 i9 的錢，只能當 i7 用。深入分析三大工作站筆電廠商的散熱設計問題，以及為什麼 100°C 不是故障，而是「設計如此」。",
