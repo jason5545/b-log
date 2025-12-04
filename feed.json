@@ -6,6 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "lisa-p0-priority-realization",
+      "url": "https://b-log.to/cultural-insights/lisa-p0-priority-realization/",
+      "title": "當你喊不出「很喜歡」的時候",
+      "content_text": "2024 年 6 月 1 日，LiSA 和 yanaginagi 的演唱會在同一天。被 LiSA 場地拒於門外後，我去了 yanaginagi 的場，卻發現自己完全無法專心。MC 問「你喜歡我嗎？」全場大喊「很喜歡」，我喊不出來。那一刻我才懂：什麼是 P0，什麼是真正重要的事。喜歡是喜歡，P0 是 P0——你可以喜歡很多東西，但 P0 只有一個。",
+      "date_published": "2025-12-04T00:00:00.000Z",
+      "date_modified": "2025-12-04T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "yanaginagi",
+        "演唱會",
+        "P0",
+        "優先級",
+        "追星",
+        "身心障礙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "workstation-laptop-thermal-crisis",
       "url": "https://b-log.to/tech-analysis/workstation-laptop-thermal-crisis/",
       "title": "三大廠工作站筆電的散熱危機：Dell、HP、Lenovo 都在騙你",
