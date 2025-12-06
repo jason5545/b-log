@@ -1,25 +1,45 @@
+
 [
-  {
-    "slug": "ai-wheelchair-privacy-stigma",
-    "title": "當 AI 把我的輪椅當成需要隱藏的秘密",
-    "summary": "Gemini 把「使用輪椅」標記為敏感資訊並自動刪除，說是保護隱私。但輪椅不是診斷，不是病歷——它只是一張有輪子的椅子。當系統把身心障礙和 HIV 檢測放在同一分類處理，傳達的訊息是：這是需要被隱藏的事。這不是保護，是包裝成政策的污名化。",
-    "category": "AI 分析",
-    "author": "Jason Chien",
-    "publishedAt": "2025-12-06T00:00:00Z",
-    "updatedAt": "2025-12-06T00:00:00Z",
-    "readingTime": "12 min",
-    "tags": [
-      "Gemini",
-      "AI",
-      "隱私",
-      "身心障礙",
-      "輪椅",
-      "GDPR",
-      "Reddit"
-    ],
-    "accentColor": "#8e44ad",
-    "coverImage": "/content/img/2025/ai-wheelchair-privacy-cover.png"
-  },
+	{
+	  "slug": "ai-filter-disabled-user-suspect",
+	  "title": "當 AI 把我當成搶銀行嫌犯：身障使用者眼中的內容過濾與逆向工程",
+	  "summary": "從 Gemini 把輪椅當成敏感隱私、Claude 阻擋 GPL 卻協助逆向工程，到 OpenAI 在 DRM/逆向上的保守，我作為身障使用者檢視 AI 內容過濾如何用「最壞用途」設計，卻把有正當需求的人一視同仁當成嫌犯。",
+	  "category": "AI 分析",
+	  "author": "Jason Chien",
+	  "publishedAt": "2025-12-06T12:00:00Z",
+	  "updatedAt": "2025-12-06T12:00:00Z",
+	  "readingTime": "12 min",
+	  "tags": [
+	    "AI",
+	    "內容過濾",
+	    "身心障礙",
+	    "逆向工程",
+	    "DRM",
+	    "Constitutional AI"
+	  ],
+	  "accentColor": "#3498db"
+	},
+	{
+	  "slug": "ai-wheelchair-privacy-stigma",
+	  "title": "當 AI 把我的輪椅當成需要隱藏的秘密",
+	  "summary": "Gemini 把「使用輪椅」標記為敏感資訊並自動刪除，說是保護隱私。但輪椅不是診斷，不是病歷——它只是一張有輪子的椅子。當系統把身心障礙和 HIV 檢測放在同一分類處理，傳達的訊息是：這是需要被隱藏的事。這不是保護，是包裝成政策的污名化。",
+	  "category": "AI 分析",
+	  "author": "Jason Chien",
+	  "publishedAt": "2025-12-06T00:00:00Z",
+	  "updatedAt": "2025-12-06T00:00:00Z",
+	  "readingTime": "12 min",
+	  "tags": [
+	    "Gemini",
+	    "AI",
+	    "隱私",
+	    "身心障礙",
+	    "輪椅",
+	    "GDPR",
+	    "Reddit"
+	  ],
+	  "accentColor": "#8e44ad",
+	  "coverImage": "/content/img/2025/ai-wheelchair-privacy-cover.png"
+	},
   {
     "slug": "lisa-p0-priority-realization",
     "title": "當你喊不出「很喜歡」的時候",
