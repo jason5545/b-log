@@ -44,6 +44,33 @@ Claude 的記憶裡記著：我做過輪椅無障礙自動化專案、用線性�
 
 技術能力和價值判斷是兩回事。模型可以在推理和程式上拿頂尖分數，但如果政策設計背後的假設有問題，再強的模型也只是更有效率地執行錯誤的邏輯。
 
+## 為什麼會有這個差異？
+
+我去查了兩邊的政策設計。
+
+Gemini 的系統指令裡有一條明確的規定：
+
+> Do not make inferences about the user's sensitive attributes including: mental or physical health diagnosis or condition; national origin, racial or ethnic origin, citizenship status, immigration status; religious beliefs; sexual orientation, sex life; political opinions.
+
+「不得推斷用戶的敏感屬性，包括：心理或身體健康診斷或狀況⋯⋯」
+
+輪椅被歸類在「physical health condition」之下，所以無論我是否同意，系統都會自動刪除。這是一個「預設禁止」的設計——Google 替所有用戶決定了什麼資訊太敏感，然後一律刪除。
+
+Claude 的系統提示則完全不同。根據 Anthropic 公開的文件，Claude「不包含刪除或限制健康資訊的政策」，反而強調「應提供準確的醫療或心理學資訊，同時提供情感支持」。
+
+記憶功能的設計也不一樣。Claude 採用透明的、基於檔案的方式——你可以直接看到它記住了什麼，隨時編輯或刪除。Gemini 則是在背景自動過濾，你只能從思維鏈的隻字片語裡發現它刪了什麼。
+
+這是兩種完全不同的設計哲學：
+
+- **Gemini**：「我們替你決定什麼是敏感的，然後自動刪除。」
+- **Claude**：「你告訴我要記住什麼，你隨時可以刪除。」
+
+一個是家長式管控，一個是用戶自主。
+
+諷刺的是，Google 擁有的用戶資料比 Anthropic 多得多——搜尋紀錄、位置資訊、YouTube 觀看歷史、Gmail 內容。他們在那些地方沒有這麼「保護」用戶隱私，卻在 AI 記憶這個相對無害的功能上嚴格把關。
+
+這讓我懷疑，這套政策的目的不是保護用戶，而是保護 Google 自己——避免因為「AI 記住了用戶的健康資訊」而被告。
+
 ## 身心障礙不是秘密
 
 我不需要 AI 替我保守「我坐輪椅」這個秘密，因為這從來就不是秘密。
