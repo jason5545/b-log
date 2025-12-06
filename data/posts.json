@@ -1,6 +1,18 @@
 
 [
 	{
+	  "slug": "anthropic-interviewer-experience",
+	  "title": "我參加了 Anthropic 的 AI 訪談研究：當 Claude 成為訪談員",
+	  "summary": "12 月初收到 Anthropic 的研究訪談邀請，訪談員是 Claude。這不是傳統問卷，是真的對話式半結構訪談。作為從 AI 輔助開發中受益最多的使用者之一，我選擇認真參與，分享我的視角。這種方法可能是質性研究方法論的新突破。",
+	  "category": "AI 分析",
+	  "author": "Jason Chien",
+	  "publishedAt": "2025-12-06T18:00:00Z",
+	  "updatedAt": "2025-12-06T18:00:00Z",
+	  "readingTime": "5 min",
+	  "tags": ["Anthropic", "Claude", "AI", "訪談", "質性研究", "使用者研究"],
+	  "accentColor": "#cc785c"
+	},
+	{
 	  "slug": "ai-filter-disabled-user-suspect",
 	  "title": "當 AI 把我當成搶銀行嫌犯：身障使用者眼中的內容過濾與逆向工程",
 	  "summary": "從 Gemini 把輪椅當成敏感隱私、Claude 阻擋 GPL 卻協助逆向工程，到 OpenAI 在 DRM/逆向上的保守，我作為身障使用者檢視 AI 內容過濾如何用「最壞用途」設計，卻把有正當需求的人一視同仁當成嫌犯。",
