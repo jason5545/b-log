@@ -1,5 +1,25 @@
 [
   {
+    "slug": "ai-wheelchair-privacy-stigma",
+    "title": "當 AI 把我的輪椅當成需要隱藏的秘密",
+    "summary": "Gemini 把「使用輪椅」標記為敏感資訊並自動刪除，說是保護隱私。但輪椅不是診斷，不是病歷——它只是一張有輪子的椅子。當系統把身心障礙和 HIV 檢測放在同一分類處理，傳達的訊息是：這是需要被隱藏的事。這不是保護，是包裝成政策的污名化。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-06T00:00:00Z",
+    "updatedAt": "2025-12-06T00:00:00Z",
+    "readingTime": "8 min",
+    "tags": [
+      "Gemini",
+      "AI",
+      "隱私",
+      "身心障礙",
+      "輪椅",
+      "GDPR",
+      "Reddit"
+    ],
+    "accentColor": "#8e44ad"
+  },
+  {
     "slug": "lisa-p0-priority-realization",
     "title": "當你喊不出「很喜歡」的時候",
     "summary": "2024 年 6 月 1 日，LiSA 和 yanaginagi 的演唱會在同一天。被 LiSA 場地拒於門外後，我去了 yanaginagi 的場，卻發現自己完全無法專心。MC 問「你喜歡我嗎？」全場大喊「很喜歡」，我喊不出來。那一刻我才懂：什麼是 P0，什麼是真正重要的事。喜歡是喜歡，P0 是 P0——你可以喜歡很多東西，但 P0 只有一個。",

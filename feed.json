@@ -6,6 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "ai-wheelchair-privacy-stigma",
+      "url": "https://b-log.to/ai-analysis/ai-wheelchair-privacy-stigma/",
+      "title": "當 AI 把我的輪椅當成需要隱藏的秘密",
+      "content_text": "我用 Gemini 討論演唱會進場動線時，發現它把「我是輪椅使用者」標記為敏感資訊並刪除。它說是為了保護隱私，但輪椅不是診斷，不是病歷——它只是一張有輪子的椅子。當系統把身心障礙和 HIV 檢測放在同一分類處理，傳達的訊息是：這是需要被隱藏的事。這不是保護，是包裝成政策的污名化。我把這件事寫成英文貼到 Reddit，有人說是 AI slop，我回覆說：我單指打字，一個句子要五分鐘。對某些人來說，AI 不是偷懶的捷徑，是唯一能以正常速度參與世界的方式。",
+      "date_published": "2025-12-06T00:00:00.000Z",
+      "date_modified": "2025-12-06T00:00:00.000Z",
+      "tags": [
+        "Gemini",
+        "AI",
+        "隱私",
+        "身心障礙",
+        "輪椅",
+        "GDPR",
+        "Reddit"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "lisa-p0-priority-realization",
       "url": "https://b-log.to/cultural-insights/lisa-p0-priority-realization/",
       "title": "當你喊不出「很喜歡」的時候",
