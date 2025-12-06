@@ -5,29 +5,50 @@
   "feed_url": "https://b-log.to/feed.json",
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
-    {
-      "id": "ai-wheelchair-privacy-stigma",
-      "url": "https://b-log.to/ai-analysis/ai-wheelchair-privacy-stigma/",
-      "title": "當 AI 把我的輪椅當成需要隱藏的秘密",
-      "content_text": "Gemini 把「使用輪椅」標記為敏感資訊並自動刪除，說是保護隱私。但輪椅不是診斷，不是病歷——它只是一張有輪子的椅子。當系統把身心障礙和 HIV 檢測放在同一分類處理，傳達的訊息是：這是需要被隱藏的事。這不是保護，是包裝成政策的污名化。",
-      "date_published": "2025-12-06T00:00:00.000Z",
-      "date_modified": "2025-12-06T00:00:00.000Z",
-      "tags": [
-        "Gemini",
-        "AI",
-        "隱私",
-        "身心障礙",
-        "輪椅",
-        "GDPR",
-        "Reddit"
-      ],
-      "authors": [
-        {
-          "name": "Jason Chien"
-        }
-      ],
-      "image": "https://b-log.to/content/img/2025/ai-wheelchair-privacy-cover.png"
-    },
+	    {
+	      "id": "ai-filter-disabled-user-suspect",
+	      "url": "https://b-log.to/ai-analysis/ai-filter-disabled-user-suspect/",
+	      "title": "當 AI 把我當成搶銀行嫌犯：身障使用者眼中的內容過濾與逆向工程",
+	      "content_text": "這篇文章整理我和 AI 助手的長對話：從之前寫過的 Gemini 輪椅隱私事件、Claude GPL 內容過濾實驗，到這次實測 OpenAI 對逆向工程與乾淨室實作的紅線。我用「被套上搶銀行頭套」的比喻，說明現在多數安全機制如何用最壞用途設計規則，卻讓單指打字、需要輪椅、把 AI 當成唯一溝通工具的身障使用者，為平台的風險管理付出最高代價。",
+	      "date_published": "2025-12-06T12:00:00.000Z",
+	      "date_modified": "2025-12-06T12:00:00.000Z",
+	      "tags": [
+	        "AI",
+	        "內容過濾",
+	        "身心障礙",
+	        "逆向工程",
+	        "DRM",
+	        "Constitutional AI"
+	      ],
+	      "authors": [
+	        {
+	          "name": "Jason Chien"
+	        }
+	      ]
+	    },
+	    {
+	      "id": "ai-wheelchair-privacy-stigma",
+	      "url": "https://b-log.to/ai-analysis/ai-wheelchair-privacy-stigma/",
+	      "title": "當 AI 把我的輪椅當成需要隱藏的秘密",
+	      "content_text": "Gemini 把「使用輪椅」標記為敏感資訊並自動刪除，說是保護隱私。但輪椅不是診斷，不是病歷——它只是一張有輪子的椅子。當系統把身心障礙和 HIV 檢測放在同一分類處理，傳達的訊息是：這是需要被隱藏的事。這不是保護，是包裝成政策的污名化。",
+	      "date_published": "2025-12-06T00:00:00.000Z",
+	      "date_modified": "2025-12-06T00:00:00.000Z",
+	      "tags": [
+	        "Gemini",
+	        "AI",
+	        "隱私",
+	        "身心障礙",
+	        "輪椅",
+	        "GDPR",
+	        "Reddit"
+	      ],
+	      "authors": [
+	        {
+	          "name": "Jason Chien"
+	        }
+	      ],
+	      "image": "https://b-log.to/content/img/2025/ai-wheelchair-privacy-cover.png"
+	    },
     {
       "id": "lisa-p0-priority-realization",
       "url": "https://b-log.to/cultural-insights/lisa-p0-priority-realization/",
