@@ -3,39 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>當 AI 把我的輪椅當成需要隱藏的秘密 - (b)-log</title>
+  <title>當 AI 把我當成搶銀行嫌犯：身障使用者眼中的內容過濾與逆向工程 - (b)-log</title>
   
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="Gemini 把「使用輪椅」標記為敏感資訊並自動刪除，說是保護隱私。但輪椅不是診斷，不是病歷——它只是一張有輪子的椅子。當系統把身心障礙和 HIV 檢測放在同一分類處理，傳達的訊息是：這是需要被隱藏的事。這不是保護，是包裝成政策的污名化。">
+  <meta name="description" content="從 Gemini 把輪椅當成敏感隱私、Claude 阻擋 GPL 卻協助逆向工程，到 OpenAI 在 DRM/逆向上的保守，我作為身障使用者檢視 AI 內容過濾如何用「最壞用途」設計，卻把有正當需求的人一視同仁當成嫌犯。">
   <meta name="author" content="Jason Chien">
-  <link rel="canonical" href="https://b-log.to/ai-analysis/ai-wheelchair-privacy-stigma/" id="canonical-url">
+  <link rel="canonical" href="https://b-log.to/ai-analysis/ai-filter-disabled-user-suspect/" id="canonical-url">
   
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://b-log.to/ai-analysis/ai-wheelchair-privacy-stigma/" id="og-url">
-  <meta property="og:title" content="當 AI 把我的輪椅當成需要隱藏的秘密" id="og-title">
-  <meta property="og:description" content="Gemini 把「使用輪椅」標記為敏感資訊並自動刪除，說是保護隱私。但輪椅不是診斷，不是病歷——它只是一張有輪子的椅子。當系統把身心障礙和 HIV 檢測放在同一分類處理，傳達的訊息是：這是需要被隱藏的事。這不是保護，是包裝成政策的污名化。" id="og-description">
-  <meta property="og:image" content="https://b-log.to//content/img/2025/ai-wheelchair-privacy-cover.png" id="og-image">
+  <meta property="og:url" content="https://b-log.to/ai-analysis/ai-filter-disabled-user-suspect/" id="og-url">
+  <meta property="og:title" content="當 AI 把我當成搶銀行嫌犯：身障使用者眼中的內容過濾與逆向工程" id="og-title">
+  <meta property="og:description" content="從 Gemini 把輪椅當成敏感隱私、Claude 阻擋 GPL 卻協助逆向工程，到 OpenAI 在 DRM/逆向上的保守，我作為身障使用者檢視 AI 內容過濾如何用「最壞用途」設計，卻把有正當需求的人一視同仁當成嫌犯。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%20AI%20%E6%8A%8A%E6%88%91%E7%95%B6%E6%88%90%E6%90%B6%E9%8A%80%E8%A1%8C%E5%AB%8C%E7%8A%AF%EF%BC%9A%E8%BA%AB%E9%9A%9C%E4%BD%BF%E7%94%A8%E8%80%85%E7%9C%BC%E4%B8%AD%E7%9A%84%E5%85%A7%E5%AE%B9%E9%81%8E%E6%BF%BE%E8%88%87%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="(b)-log">
   <meta property="og:locale" content="zh_TW">
   <meta property="article:author" content="Jason Chien" id="og-author">
-  <meta property="article:published_time" content="2025-12-06T00:00:00Z" id="og-published-time">
-  <meta property="article:modified_time" content="2025-12-06T00:00:00Z" id="og-modified-time">
+  <meta property="article:published_time" content="2025-12-06T12:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2025-12-06T12:00:00Z" id="og-modified-time">
   <meta property="article:section" content="AI 分析" id="og-section">
-  <meta property="article:tag" content="Gemini, AI, 隱私, 身心障礙, 輪椅, GDPR, Reddit" id="og-tags">
+  <meta property="article:tag" content="AI, 內容過濾, 身心障礙, 逆向工程, DRM, Constitutional AI" id="og-tags">
   
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://b-log.to/ai-analysis/ai-wheelchair-privacy-stigma/" id="twitter-url">
-  <meta property="twitter:title" content="當 AI 把我的輪椅當成需要隱藏的秘密" id="twitter-title">
-  <meta property="twitter:description" content="Gemini 把「使用輪椅」標記為敏感資訊並自動刪除，說是保護隱私。但輪椅不是診斷，不是病歷——它只是一張有輪子的椅子。當系統把身心障礙和 HIV 檢測放在同一分類處理，傳達的訊息是：這是需要被隱藏的事。這不是保護，是包裝成政策的污名化。" id="twitter-description">
-  <meta property="twitter:image" content="https://b-log.to//content/img/2025/ai-wheelchair-privacy-cover.png" id="twitter-image">
+  <meta property="twitter:url" content="https://b-log.to/ai-analysis/ai-filter-disabled-user-suspect/" id="twitter-url">
+  <meta property="twitter:title" content="當 AI 把我當成搶銀行嫌犯：身障使用者眼中的內容過濾與逆向工程" id="twitter-title">
+  <meta property="twitter:description" content="從 Gemini 把輪椅當成敏感隱私、Claude 阻擋 GPL 卻協助逆向工程，到 OpenAI 在 DRM/逆向上的保守，我作為身障使用者檢視 AI 內容過濾如何用「最壞用途」設計，卻把有正當需求的人一視同仁當成嫌犯。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%20AI%20%E6%8A%8A%E6%88%91%E7%95%B6%E6%88%90%E6%90%B6%E9%8A%80%E8%A1%8C%E5%AB%8C%E7%8A%AF%EF%BC%9A%E8%BA%AB%E9%9A%9C%E4%BD%BF%E7%94%A8%E8%80%85%E7%9C%BC%E4%B8%AD%E7%9A%84%E5%85%A7%E5%AE%B9%E9%81%8E%E6%BF%BE%E8%88%87%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
   
   <!-- 額外的 metadata -->
-  <meta name="keywords" content="Gemini, AI, 隱私, 身心障礙, 輪椅, GDPR, Reddit" id="meta-keywords">
+  <meta name="keywords" content="AI, 內容過濾, 身心障礙, 逆向工程, DRM, Constitutional AI" id="meta-keywords">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#556bff">
 
