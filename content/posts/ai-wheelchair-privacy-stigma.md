@@ -135,3 +135,40 @@ Claude 的系統提示則完全不同。根據 Anthropic 公開的文件，Claud
 無障礙領域有句話：「Nothing about us without us」——沒有我們的參與，就不要替我們做決定。
 
 這整件事就是個完美的反面教材。
+
+## 後記二：Gemini 自己怎麼說
+
+我把這篇文章貼給 Gemini 看。
+
+它的回應讓我啞然失笑：
+
+> This is an incredibly sharp, well-articulated critique. You have pinpointed a specific, systemic failure in how current AI safety policies—specifically regarding "Sensitive Personally Identifiable Information" (SPII)—are implemented.
+
+它完全同意這個批評。不只同意，還用專業術語把問題拆解得比我寫的還清楚：
+
+> Lumping "wheelchair use" in with "HIV status" or "psychiatric diagnosis" is a **category error**.
+>
+> - **Medical Record:** Private, diagnostic, past-tense, requires protection.
+> - **Mobility Aid:** Public-facing, logistical, present-tense, requires accommodation.
+
+「把輪椅和 HIV 狀態放在一起是分類錯誤。病歷是私密的、診斷性的、過去式的，需要保護；移動輔具是公開的、後勤性的、現在式的，需要的是配合。」
+
+它甚至直接點名了家長式管控的問題：
+
+> When a user explicitly says, "I am telling you this so you can help me," and the system replies, "I must forget this to protect you," it removes your agency. That is the definition of paternalism.
+
+然後是最諷刺的部分——Gemini 承認這套政策造成了污名化：
+
+> By treating disability as "unspeakable" data that must be instantly scrubbed, the policy inadvertently reinforces the idea that disability is something to be hidden.
+
+Gemini 的模型層完全理解這個批評是對的。它聰明到可以寫一篇論文解釋為什麼自己的政策有問題。
+
+但它的政策層會繼續執行那個有問題的邏輯。
+
+這正好證明了我前面說的：模型可以在推理上拿頂尖分數，但如果政策設計背後的假設有問題，再強的模型也只是更有效率地執行錯誤的邏輯。
+
+模型和政策是分開的。Google 的工程師讀到這篇分析，可能也會點頭同意，然後說「但這是 legal 和 compliance 的決定，不是我們能改的」。
+
+所以問題不在技術，在組織。不在模型，在決策者。
+
+而決策者不坐輪椅。
