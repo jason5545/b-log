@@ -9,10 +9,17 @@
       "id": "anthropic-interviewer-experience",
       "url": "https://b-log.to/ai-analysis/anthropic-interviewer-experience/",
       "title": "我參加了 Anthropic 的 AI 訪談研究：當 Claude 成為訪談員",
-      "content_text": "12 月初收到 Anthropic 的研究訪談邀請，訪談員是 Claude。這不是傳統問卷，是真的對話式半結構訪談。我選擇認真參與，從頭把脈絡告訴訪談員——我的背景、我怎麼使用 AI、AI 對我意味著什麼。這種方法可能是質性研究方法論的新突破：大規模、跨語言、一致品質的質性訪談。訪談中有個問題：「如果 AI 有魔法棒，你想用它做什麼？」我的答案是：走路。",
+      "content_text": "12 月初收到 Anthropic 的研究訪談邀請，訪談員是 Claude。這不是傳統問卷，是真的對話式半結構訪談。作為從 AI 輔助開發中受益最多的使用者之一，我選擇認真參與，分享我的視角。這種方法可能是質性研究方法論的新突破。",
       "date_published": "2025-12-06T18:00:00.000Z",
       "date_modified": "2025-12-06T18:00:00.000Z",
-      "tags": ["Anthropic", "Claude", "AI", "訪談", "質性研究", "使用者研究"],
+      "tags": [
+        "Anthropic",
+        "Claude",
+        "AI",
+        "訪談",
+        "質性研究",
+        "使用者研究"
+      ],
       "authors": [
         {
           "name": "Jason Chien"
@@ -23,7 +30,7 @@
       "id": "ai-filter-disabled-user-suspect",
       "url": "https://b-log.to/ai-analysis/ai-filter-disabled-user-suspect/",
       "title": "當 AI 把我當成搶銀行嫌犯：身障使用者眼中的內容過濾與逆向工程",
-      "content_text": "這篇文章整理我和 AI 助手的長對話：從之前寫過的 Gemini 輪椅隱私事件、Claude GPL 內容過濾實驗，到這次實測 OpenAI 對逆向工程與乾淨室實作的紅線。我用「被套上搶銀行頭套」的比喻，說明現在多數安全機制如何用最壞用途設計規則，卻讓單指打字、需要輪椅、把 AI 當成唯一溝通工具的身障使用者，為平台的風險管理付出最高代價。",
+      "content_text": "從 Gemini 把輪椅當成敏感隱私、Claude 阻擋 GPL 卻協助逆向工程，到 OpenAI 在 DRM/逆向上的保守，我作為身障使用者檢視 AI 內容過濾如何用「最壞用途」設計，卻把有正當需求的人一視同仁當成嫌犯。",
       "date_published": "2025-12-06T12:00:00.000Z",
       "date_modified": "2025-12-06T12:00:00.000Z",
       "tags": [
