@@ -4,28 +4,49 @@
   "home_page_url": "https://b-log.to/",
   "feed_url": "https://b-log.to/feed.json",
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
-  "items": [
-    {
-      "id": "anthropic-interviewer-experience",
-      "url": "https://b-log.to/ai-analysis/anthropic-interviewer-experience/",
-      "title": "我參加了 Anthropic 的 AI 訪談研究：當 Claude 成為訪談員",
-      "content_text": "12 月初收到 Anthropic 的研究訪談邀請，訪談員是 Claude。這不是傳統問卷，是真的對話式半結構訪談。作為從 AI 輔助開發中受益最多的使用者之一，我選擇認真參與，分享我的視角。這種方法可能是質性研究方法論的新突破。",
-      "date_published": "2025-12-06T18:00:00.000Z",
-      "date_modified": "2025-12-06T18:00:00.000Z",
-      "tags": [
-        "Anthropic",
-        "Claude",
-        "AI",
-        "訪談",
-        "質性研究",
-        "使用者研究"
-      ],
-      "authors": [
-        {
-          "name": "Jason Chien"
-        }
-      ]
-    },
+	  "items": [
+	    {
+	      "id": "ai-slop-disabled-author",
+	      "url": "https://b-log.to/ai-analysis/ai-slop-disabled-author/",
+	      "title": "我在 Reddit 被罵 AI 垃圾，然後我想到了賈伯斯",
+	      "content_text": "在 Reddit 分享自己和 AI 的關係，結果被指控是 AI 垃圾、業配文。我用語音輸入和單指修字，讓 AI 當義肢與書記官；而那些罵 slop 的人，享受鍵盤與健全身體，卻否認這樣的作者身分。賈伯斯可以請人類代筆，我只能用 AI，為什麼前者叫專業、後者就變成垃圾？",
+	      "date_published": "2025-12-07T00:00:00.000Z",
+	      "date_modified": "2025-12-07T00:00:00.000Z",
+	      "tags": [
+	        "AI",
+	        "作者身分",
+	        "身心障礙",
+	        "語音輸入",
+	        "Reddit",
+	        "slop"
+	      ],
+	      "authors": [
+	        {
+	          "name": "Jason Chien"
+	        }
+	      ]
+	    },
+	    {
+	      "id": "anthropic-interviewer-experience",
+	      "url": "https://b-log.to/ai-analysis/anthropic-interviewer-experience/",
+	      "title": "我參加了 Anthropic 的 AI 訪談研究：當 Claude 成為訪談員",
+	      "content_text": "12 月初收到 Anthropic 的研究訪談邀請，訪談員是 Claude。這不是傳統問卷，是真的對話式半結構訪談。作為從 AI 輔助開發中受益最多的使用者之一，我選擇認真參與，分享我的視角。這種方法可能是質性研究方法論的新突破。",
+	      "date_published": "2025-12-06T18:00:00.000Z",
+	      "date_modified": "2025-12-06T18:00:00.000Z",
+	      "tags": [
+	        "Anthropic",
+	        "Claude",
+	        "AI",
+	        "訪談",
+	        "質性研究",
+	        "使用者研究"
+	      ],
+	      "authors": [
+	        {
+	          "name": "Jason Chien"
+	        }
+	      ]
+	    },
     {
       "id": "ai-filter-disabled-user-suspect",
       "url": "https://b-log.to/ai-analysis/ai-filter-disabled-user-suspect/",
