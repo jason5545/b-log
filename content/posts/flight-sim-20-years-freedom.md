@@ -74,9 +74,9 @@ EICAS 下方的 ECL 自動跳出 Engine Failure checklist。一步一步跑 memo
 
 雙發失效。FL350，在太平洋上空，兩顆 GE90 都掛了。
 
-RAT 自動放出，提供緊急電力和液壓。ECL 跳出 Dual Engine Failure/Restart checklist。沒有引擎推力，只剩滑翔。777 的滑翔比大約 17:1，從 35,000 呎大概能滑 100 海浬左右。
+RAT 自動放出，提供緊急電力和液壓。ECL 跳出 Dual Engine Failure/Restart checklist。沒有引擎推力，只剩滑翔。維持最佳滑翔速度，777 的滑翔比大約 17:1，從 35,000 呎大概能滑 100 海浬左右。
 
-Restart 需要在 In-Flight Start Envelope 內，要趁引擎還有殘餘轉速趕快嘗試。但我拉 ND 看最近的機場，算了一下——就算成功重啟，距離也不夠。
+Restart 需要在 In-Flight Start Envelope 內——大約 280 knots 以上才能 windmill relight，要趁引擎還有殘餘轉速趕快嘗試。但我拉 ND 看最近的機場，算了一下——就算成功重啟，距離也不夠。
 
 雙發失效需要完全手動飛行——沒有自動駕駛、沒有自動油門、操縱面靠液壓備援。要同時控制姿態、速度、航向，還要算 glide path，找機場，準備迫降。
 
@@ -86,7 +86,9 @@ Restart 需要在 In-Flight Start Envelope 內，要趁引擎還有殘餘轉速�
 
 沒有英雄式的奇蹟迫降。冷靜跑完程序，算完數字，發現不行就是不行。
 
-但我體驗了那個過程——真正的飛行員希望永遠不會遇到的情況。從警告響起、查 checklist、評估選項，到最後承認做不到。整個 decision-making 的過程。
+還好只是模擬器。
+
+但我體驗了那個過程——真正的飛行員希望永遠不會遇到的情況。從警告響起、查 checklist、評估選項，到最後承認做不到。整個 decision-making 的過程，真實的 workload。
 
 ---
 
