@@ -1,96 +1,103 @@
-
 [
-    {
-      "slug": "flight-sim-20-years-freedom",
-      "title": "在虛擬天空中找自由：模擬飛行二十年",
-      "summary": "2006年被朋友帶入坑開始玩FSX，到讀FCOM學真正的飛行程序，到現在腦中複習程序讓自己冷靜。模擬飛行對我來說是執行一個一輩子都無法實現的願望——在虛擬天空中自由飛行，不用管身體限制。手動降落做不到了，但AUTO LAND可以。即使在自由的天空裡，限制還是存在，但我找到了繞過去的方式。",
-      "category": "生活記事",
-      "author": "Jason Chien",
-      "publishedAt": "2025-12-08T00:00:00Z",
-      "updatedAt": "2025-12-08T00:00:00Z",
-      "readingTime": "6 min",
-      "tags": [
-        "模擬飛行",
-        "FSX",
-        "MSFS",
-        "PMDG",
-        "VATSIM",
-        "777F",
-        "自由"
-      ],
-      "accentColor": "#5dade2"
-    },
-		{
-		  "slug": "ai-slop-disabled-author",
-      "title": "我在 Reddit 被罵 AI 垃圾，然後我想到了賈伯斯",
-      "summary": "在 Reddit 分享自己和 AI 的關係，結果被指控是 AI 垃圾、業配文。我用語音輸入和單指修字，讓 AI 當義肢與書記官；而那些罵 slop 的人，享受鍵盤與健全身體，卻否認這樣的作者身分。賈伯斯可以請人類代筆，我只能用 AI，為什麼前者叫專業、後者就變成垃圾？",
-      "category": "AI 分析",
-      "author": "Jason Chien",
-      "publishedAt": "2025-12-07T00:00:00Z",
-      "updatedAt": "2025-12-07T00:00:00Z",
-      "readingTime": "6 min",
-      "tags": [
-        "AI",
-        "作者身分",
-        "身心障礙",
-        "語音輸入",
-        "Reddit",
-        "slop"
-      ],
-      "accentColor": "#f39c12"
-    },
-		{
-		  "slug": "anthropic-interviewer-experience",
-      "title": "我參加了 Anthropic 的 AI 訪談研究：當 Claude 成為訪談員",
-      "summary": "12 月初收到 Anthropic 的研究訪談邀請，訪談員是 Claude。這不是傳統問卷，是真的對話式半結構訪談。作為從 AI 輔助開發中受益最多的使用者之一，我選擇認真參與，分享我的視角。這種方法可能是質性研究方法論的新突破。",
-      "category": "AI 分析",
-      "author": "Jason Chien",
-      "publishedAt": "2025-12-06T18:00:00Z",
-      "updatedAt": "2025-12-06T18:00:00Z",
-      "readingTime": "5 min",
-      "tags": ["Anthropic", "Claude", "AI", "訪談", "質性研究", "使用者研究"],
-      "accentColor": "#cc785c"
-    },
-	{
-	  "slug": "ai-filter-disabled-user-suspect",
-	  "title": "當 AI 把我當成搶銀行嫌犯：身障使用者眼中的內容過濾與逆向工程",
-	  "summary": "從 Gemini 把輪椅當成敏感隱私、Claude 阻擋 GPL 卻協助逆向工程，到 OpenAI 在 DRM/逆向上的保守，我作為身障使用者檢視 AI 內容過濾如何用「最壞用途」設計，卻把有正當需求的人一視同仁當成嫌犯。",
-	  "category": "AI 分析",
-	  "author": "Jason Chien",
-	  "publishedAt": "2025-12-06T12:00:00Z",
-	  "updatedAt": "2025-12-06T12:00:00Z",
-	  "readingTime": "12 min",
-	  "tags": [
-	    "AI",
-	    "內容過濾",
-	    "身心障礙",
-	    "逆向工程",
-	    "DRM",
-	    "Constitutional AI"
-	  ],
-	  "accentColor": "#3498db"
-	},
-	{
-	  "slug": "ai-wheelchair-privacy-stigma",
-	  "title": "當 AI 把我的輪椅當成需要隱藏的秘密",
-	  "summary": "Gemini 把「使用輪椅」標記為敏感資訊並自動刪除，說是保護隱私。但輪椅不是診斷，不是病歷——它只是一張有輪子的椅子。當系統把身心障礙和 HIV 檢測放在同一分類處理，傳達的訊息是：這是需要被隱藏的事。這不是保護，是包裝成政策的污名化。",
-	  "category": "AI 分析",
-	  "author": "Jason Chien",
-	  "publishedAt": "2025-12-06T00:00:00Z",
-	  "updatedAt": "2025-12-06T00:00:00Z",
-	  "readingTime": "12 min",
-	  "tags": [
-	    "Gemini",
-	    "AI",
-	    "隱私",
-	    "身心障礙",
-	    "輪椅",
-	    "GDPR",
-	    "Reddit"
-	  ],
-	  "accentColor": "#8e44ad",
-	  "coverImage": "/content/img/2025/ai-wheelchair-privacy-cover.png"
-	},
+  {
+    "slug": "flight-sim-20-years-freedom",
+    "title": "在虛擬天空中找自由：模擬飛行二十年",
+    "summary": "2006年被朋友帶入坑開始玩FSX，到讀FCOM學真正的飛行程序，到現在腦中複習程序讓自己冷靜。模擬飛行對我來說是執行一個一輩子都無法實現的願望——在虛擬天空中自由飛行，不用管身體限制。手動降落做不到了，但AUTO LAND可以。即使在自由的天空裡，限制還是存在，但我找到了繞過去的方式。",
+    "category": "生活記事",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-08T00:00:00Z",
+    "updatedAt": "2025-12-08T00:00:00Z",
+    "readingTime": "6 min",
+    "tags": [
+      "模擬飛行",
+      "FSX",
+      "MSFS",
+      "PMDG",
+      "VATSIM",
+      "777F",
+      "自由"
+    ],
+    "accentColor": "#5dade2",
+    "coverImage": "/content/img/2025/flight-sim-777f-cover.png"
+  },
+  {
+    "slug": "ai-slop-disabled-author",
+    "title": "我在 Reddit 被罵 AI 垃圾，然後我想到了賈伯斯",
+    "summary": "在 Reddit 分享自己和 AI 的關係，結果被指控是 AI 垃圾、業配文。我用語音輸入和單指修字，讓 AI 當義肢與書記官；而那些罵 slop 的人，享受鍵盤與健全身體，卻否認這樣的作者身分。賈伯斯可以請人類代筆，我只能用 AI，為什麼前者叫專業、後者就變成垃圾？",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-07T00:00:00Z",
+    "updatedAt": "2025-12-07T00:00:00Z",
+    "readingTime": "6 min",
+    "tags": [
+      "AI",
+      "作者身分",
+      "身心障礙",
+      "語音輸入",
+      "Reddit",
+      "slop"
+    ],
+    "accentColor": "#f39c12"
+  },
+  {
+    "slug": "anthropic-interviewer-experience",
+    "title": "我參加了 Anthropic 的 AI 訪談研究：當 Claude 成為訪談員",
+    "summary": "12 月初收到 Anthropic 的研究訪談邀請，訪談員是 Claude。這不是傳統問卷，是真的對話式半結構訪談。作為從 AI 輔助開發中受益最多的使用者之一，我選擇認真參與，分享我的視角。這種方法可能是質性研究方法論的新突破。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-06T18:00:00Z",
+    "updatedAt": "2025-12-06T18:00:00Z",
+    "readingTime": "5 min",
+    "tags": [
+      "Anthropic",
+      "Claude",
+      "AI",
+      "訪談",
+      "質性研究",
+      "使用者研究"
+    ],
+    "accentColor": "#cc785c"
+  },
+  {
+    "slug": "ai-filter-disabled-user-suspect",
+    "title": "當 AI 把我當成搶銀行嫌犯：身障使用者眼中的內容過濾與逆向工程",
+    "summary": "從 Gemini 把輪椅當成敏感隱私、Claude 阻擋 GPL 卻協助逆向工程，到 OpenAI 在 DRM/逆向上的保守，我作為身障使用者檢視 AI 內容過濾如何用「最壞用途」設計，卻把有正當需求的人一視同仁當成嫌犯。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-06T12:00:00Z",
+    "updatedAt": "2025-12-06T12:00:00Z",
+    "readingTime": "12 min",
+    "tags": [
+      "AI",
+      "內容過濾",
+      "身心障礙",
+      "逆向工程",
+      "DRM",
+      "Constitutional AI"
+    ],
+    "accentColor": "#3498db"
+  },
+  {
+    "slug": "ai-wheelchair-privacy-stigma",
+    "title": "當 AI 把我的輪椅當成需要隱藏的秘密",
+    "summary": "Gemini 把「使用輪椅」標記為敏感資訊並自動刪除，說是保護隱私。但輪椅不是診斷，不是病歷——它只是一張有輪子的椅子。當系統把身心障礙和 HIV 檢測放在同一分類處理，傳達的訊息是：這是需要被隱藏的事。這不是保護，是包裝成政策的污名化。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-06T00:00:00Z",
+    "updatedAt": "2025-12-06T00:00:00Z",
+    "readingTime": "12 min",
+    "tags": [
+      "Gemini",
+      "AI",
+      "隱私",
+      "身心障礙",
+      "輪椅",
+      "GDPR",
+      "Reddit"
+    ],
+    "accentColor": "#8e44ad",
+    "coverImage": "/content/img/2025/ai-wheelchair-privacy-cover.png"
+  },
   {
     "slug": "lisa-p0-priority-realization",
     "title": "當你喊不出「很喜歡」的時候",
