@@ -60,23 +60,33 @@ VATSIM用語音通話，因為航管不太喜歡打字機。在頻道上說標�
 
 ---
 
-有一次從日本起飛飛回台北，巡航階段引擎機油報low。開始備降。
+有一次從日本起飛飛回台北，巡航階段 EICAS 跳 ENG OIL PRESS，右發機油壓力異常。開始找備降場。
 
-然後R ENG VIB。然後FAIL。
+然後 R ENG VIBRATION。
 
-開始準備單發落地程序。
+然後 R ENG FAIL。
 
-結果另一顆一模一樣。
+EICAS 下方的 ECL 自動跳出 Engine Failure checklist。一步一步跑 memory items：Autothrottle arm switch off、Thrust lever confirm idle、確認是哪顆引擎。沒有恢復跡象，繼續跑 Engine Severe Damage/Separation checklist——Fuel control switch cutoff、Engine fire switch pull。
 
-雙發失效。在太平洋上空，兩顆引擎都掛了。
+單發，沒問題，777 單發飛行性能很好。開始計算備降場距離、燃油、進場程序。
 
-判斷滑翔距離不足。手動飛行，或許勉強——但雙發失效需要完全手動滑翔迫降，對單指操作來說幾乎不可能。
+結果左發一模一樣的 sequence。L ENG OIL PRESS，L ENG VIBRATION，L ENG FAIL。
+
+雙發失效。FL350，在太平洋上空，兩顆 GE90 都掛了。
+
+RAT 自動放出，提供緊急電力和液壓。ECL 跳出 Dual Engine Failure/Restart checklist。沒有引擎推力，只剩滑翔。777 的滑翔比大約 17:1，從 35,000 呎大概能滑 100 海浬左右。
+
+Restart 需要在 In-Flight Start Envelope 內，要趁引擎還有殘餘轉速趕快嘗試。但我拉 ND 看最近的機場，算了一下——就算成功重啟，距離也不夠。
+
+雙發失效需要完全手動飛行——沒有自動駕駛、沒有自動油門、操縱面靠液壓備援。要同時控制姿態、速度、航向，還要算 glide path，找機場，準備迫降。
+
+對單指操作來說，幾乎不可能。
 
 關掉模擬器。
 
-沒有英雄式的奇蹟迫降。冷靜算完，發現不行。
+沒有英雄式的奇蹟迫降。冷靜跑完程序，算完數字，發現不行就是不行。
 
-但我體驗了那個過程——真正的飛行員希望永遠不會遇到的情況。
+但我體驗了那個過程——真正的飛行員希望永遠不會遇到的情況。從警告響起、查 checklist、評估選項，到最後承認做不到。整個 decision-making 的過程。
 
 ---
 
