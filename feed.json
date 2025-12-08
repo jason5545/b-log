@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "ai-generated-image-lesson",
+      "url": "https://b-log.to/ai-analysis/ai-generated-image-lesson/",
+      "title": "AI 幫我畫了一架引擎掛反的飛機",
+      "content_text": "用 AI 生了一張華航 777 的封面圖，氛圍超對，發文上班去。結果被人戳：引擎掛架是反的，尾翼位置也錯。Google 的生圖模型自吹排名第一，畫出來的東西像飛機，但不是飛機。學到的事：不應該求快，寧願自己開模擬器截圖。",
+      "date_published": "2025-12-08T12:00:00.000Z",
+      "date_modified": "2025-12-08T12:00:00.000Z",
+      "tags": [
+        "AI",
+        "生圖",
+        "模擬飛行",
+        "Google",
+        "benchmark"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "flight-sim-20-years-freedom",
       "url": "https://b-log.to/life-stories/flight-sim-20-years-freedom/",
       "title": "在虛擬天空中找自由：模擬飛行二十年",
