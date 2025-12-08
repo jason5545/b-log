@@ -1,5 +1,25 @@
 
 [
+    {
+      "slug": "flight-sim-20-years-freedom",
+      "title": "在虛擬天空中找自由：模擬飛行二十年",
+      "summary": "2006年被朋友帶入坑開始玩FSX，到讀FCOM學真正的飛行程序，到現在腦中複習程序讓自己冷靜。模擬飛行對我來說是執行一個一輩子都無法實現的願望——在虛擬天空中自由飛行，不用管身體限制。手動降落做不到了，但AUTO LAND可以。即使在自由的天空裡，限制還是存在，但我找到了繞過去的方式。",
+      "category": "生活記事",
+      "author": "Jason Chien",
+      "publishedAt": "2025-12-08T00:00:00Z",
+      "updatedAt": "2025-12-08T00:00:00Z",
+      "readingTime": "6 min",
+      "tags": [
+        "模擬飛行",
+        "FSX",
+        "MSFS",
+        "PMDG",
+        "VATSIM",
+        "777F",
+        "自由"
+      ],
+      "accentColor": "#5dade2"
+    },
 		{
 		  "slug": "ai-slop-disabled-author",
       "title": "我在 Reddit 被罵 AI 垃圾，然後我想到了賈伯斯",
