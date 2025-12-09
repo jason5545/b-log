@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "line-pc-cache-encryption-disaster",
+      "url": "https://b-log.to/tech-analysis/line-pc-cache-encryption-disaster/",
+      "title": "LINE 電腦版快取災難檢討：我挖出了 AES Key，但決定讓這些檔案進入「冷儲存」",
+      "content_text": "備份工作群組 3000 多張照片，結果被 LINE 的 .eimg 加密格式卡住。Memdump 挖出 AES Key，發現 1892 個檔案共用同一組 IV，但解密後發現這根本不是標準加密——檔頭裝模作樣，中間塞沒加密的縮圖，本體用非標準模式鎖死。這不是資安，是築牆綁架使用者。",
+      "date_published": "2025-12-09T00:00:00.000Z",
+      "date_modified": "2025-12-09T00:00:00.000Z",
+      "tags": [
+        "LINE",
+        "逆向工程",
+        "AES",
+        "加密",
+        "快取",
+        "Walled Garden"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "ai-generated-image-lesson",
       "url": "https://b-log.to/ai-analysis/ai-generated-image-lesson/",
       "title": "AI 幫我畫了一架引擎掛反的飛機",

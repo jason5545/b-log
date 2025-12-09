@@ -1,5 +1,24 @@
 [
   {
+    "slug": "line-pc-cache-encryption-disaster",
+    "title": "LINE 電腦版快取災難檢討：我挖出了 AES Key，但決定讓這些檔案進入「冷儲存」",
+    "summary": "備份工作群組 3000 多張照片，結果被 LINE 的 .eimg 加密格式卡住。Memdump 挖出 AES Key，發現 1892 個檔案共用同一組 IV，但解密後發現這根本不是標準加密——檔頭裝模作樣，中間塞沒加密的縮圖，本體用非標準模式鎖死。這不是資安，是築牆綁架使用者。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-09T00:00:00Z",
+    "updatedAt": "2025-12-09T00:00:00Z",
+    "readingTime": "6 min",
+    "tags": [
+      "LINE",
+      "逆向工程",
+      "AES",
+      "加密",
+      "快取",
+      "Walled Garden"
+    ],
+    "accentColor": "#00c300"
+  },
+  {
     "slug": "ai-generated-image-lesson",
     "title": "AI 幫我畫了一架引擎掛反的飛機",
     "summary": "用 AI 生了一張華航 777 的封面圖，氛圍超對，發文上班去。結果被人戳：引擎掛架是反的，尾翼位置也錯。Google 的生圖模型自吹排名第一，畫出來的東西像飛機，但不是飛機。學到的事：不應該求快，寧願自己開模擬器截圖。",
