@@ -1,0 +1,15 @@
+# Cloudflare Pages 設定範例
+#
+# 使用方式：
+# 1. 複製此檔案為 wrangler.toml
+# 2. 建立 KV namespace: wrangler kv:namespace create "PAGE_VIEWS"
+# 3. 將輸出的 id 填入下方
+#
+# 注意：wrangler.toml 不需加入 .gitignore，KV ID 不是機密
+
+name = "b-log"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "PAGE_VIEWS"
+id = "你的_KV_NAMESPACE_ID_在這裡"
