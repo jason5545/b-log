@@ -166,6 +166,40 @@ const ThemeManager = {
 window.ThemeManager = ThemeManager;
 
 // ============================================================
+// 隨機文章功能
+// ============================================================
+
+async function goToRandomPost(event) {
+  if (event) event.preventDefault();
+
+  try {
+    const response = await fetch(POSTS_JSON);
+    const posts = await response.json();
+
+    if (!posts || posts.length === 0) {
+      console.warn('沒有可用的文章');
+      return;
+    }
+
+    // 隨機選擇一篇文章
+    const randomIndex = Math.floor(Math.random() * posts.length);
+    const randomPost = posts[randomIndex];
+
+    // 載入分類映射並生成 URL
+    const mapping = await loadCategoryMapping();
+    const categorySlug = mapping[randomPost.category] || 'uncategorized';
+    const url = `/${categorySlug}/${randomPost.slug}/`;
+
+    window.location.href = url;
+  } catch (error) {
+    console.error('載入隨機文章失敗', error);
+  }
+}
+
+// 暴露到全域
+window.goToRandomPost = goToRandomPost;
+
+// ============================================================
 // 12 月生日特輯主題
 // ============================================================
 
