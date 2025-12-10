@@ -16,7 +16,8 @@
       "快取",
       "Walled Garden"
     ],
-    "accentColor": "#00c300"
+    "accentColor": "#00c300",
+    "coverImage": "/content/img/2025/line-encryption-cover.png"
   },
   {
     "slug": "ai-generated-image-lesson",
