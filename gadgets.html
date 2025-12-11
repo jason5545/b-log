@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gadgets - (b)-log</title>
+
+  <!-- 基本 SEO -->
+  <meta name="description" content="我目前使用的裝置與設備清單，包含電腦、周邊、行動裝置等。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/gadgets.html">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 預載本地字型 - 最佳化 FCP/LCP -->
+  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-latin-400.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-latin-700.woff2" crossorigin>
+  <!-- 載入本地字型樣式 -->
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+
+  <!-- 關鍵 CSS 內聯 - 首屏渲染 -->
+  <style>
+    /* 核心變數和基礎樣式 */
+    :root {
+      color-scheme: light dark;
+      --bg-gradient: linear-gradient(140deg, #eef1ff 0%, #fefefe 60%, #f4f7ff 100%);
+      --bg-dark-gradient: #000000;
+      --surface: rgba(255, 255, 255, 0.88);
+      --surface-muted: rgba(255, 255, 255, 0.6);
+      --surface-dark: rgba(18, 18, 18, 0.95);
+      --surface-dark-muted: rgba(30, 30, 30, 0.8);
+      --text: #111322;
+      --text-muted: #5d6476;
+      --text-inverse: #f7f8ff;
+      --accent: #556bff;
+      --accent-soft: rgba(85, 107, 255, 0.12);
+      --accent-strong: #3644d8;
+      --border: rgba(17, 19, 34, 0.08);
+      --shadow-soft: 0 18px 50px -24px rgba(15, 21, 46, 0.55);
+      --shadow-strong: 0 22px 60px -18px rgba(26, 33, 71, 0.45);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+    }
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg-gradient: var(--bg-dark-gradient);
+      --surface: var(--surface-dark);
+      --surface-muted: var(--surface-dark-muted);
+      --text: #e5e7f6;
+      --text-muted: #9ca7c7;
+      --border: rgba(229, 231, 246, 0.08);
+      --shadow-soft: 0 18px 40px -20px rgba(0, 0, 0, 0.9);
+      --shadow-strong: 0 28px 80px -30px rgba(0, 0, 0, 0.95);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --bg-gradient: var(--bg-dark-gradient);
+        --surface: var(--surface-dark);
+        --surface-muted: var(--surface-dark-muted);
+        --text: #e5e7f6;
+        --text-muted: #9ca7c7;
+        --border: rgba(229, 231, 246, 0.08);
+        --shadow-soft: 0 18px 40px -20px rgba(0, 0, 0, 0.9);
+        --shadow-strong: 0 28px 80px -30px rgba(0, 0, 0, 0.95);
+      }
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      background: var(--bg-gradient);
+      color: var(--text);
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .wrapper {
+      width: min(1600px, 98vw);
+      margin: 0 auto;
+    }
+    .site-header {
+      padding: 3.5rem 0 2.5rem;
+      position: relative;
+    }
+    .site-title {
+      margin: 0;
+      font-size: clamp(2.6rem, 6vw, 3.4rem);
+      letter-spacing: -0.04em;
+    }
+    .site-tagline {
+      margin: 0.35rem 0 0;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 540px;
+    }
+    /* 防止 CLS */
+    main {
+      min-height: 600px;
+    }
+  </style>
+
+  <!-- 完整樣式表 -->
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrapper">
+      <div class="site-header__top">
+        <div>
+          <p class="breadcrumb"><a href="./">&lt; Back home</a></p>
+          <h1 class="site-title"><a href="./">(b)-log</a></h1>
+          <p class="site-tagline">既是部落格，也是待辦清單。記錄思考，追蹤進度。</p>
+        </div>
+        <nav class="site-nav">
+          <a href="./">Home</a>
+          <a href="about.html">About</a>
+          <a href="gadgets.html" aria-current="page">Gadgets</a>
+          <a href="feed.json">Feed</a>
+          <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+          <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+            <span class="theme-toggle__icon">🔄</span>
+            <span class="theme-toggle__text">Auto</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <main class="wrapper">
+    <section class="content">
+      <h1>我的裝置</h1>
+      <p>這裡記錄我目前使用的各種裝置與設備。</p>
+
+      <h2>主要設備</h2>
+
+      <h3>桌機 (Proxmox VE 虛擬化主機)</h3>
+      <ul>
+        <li><strong>CPU</strong>：AMD Ryzen 9 9950X3D</li>
+        <li><strong>GPU</strong>：ASUS DUAL RTX 4070 Ti Super</li>
+        <li><strong>RAM</strong>：96GB DDR5 (48GB × 2)</li>
+        <li><strong>儲存</strong>：Predator SSD GM7 4TB × 2 + Crucial MX500 500GB + Crucial BX500 1TB</li>
+        <li><strong>主機板</strong>：ASUS ROG STRIX B650E-I GAMING WIFI</li>
+        <li><strong>用途</strong>：Proxmox VE，VM 包含 Windows (MSFS)、Nextcloud、Tailscale DERP</li>
+      </ul>
+
+      <h3>筆電 (主力開發機)</h3>
+      <ul>
+        <li><strong>型號</strong>：Lenovo ThinkPad P15 Gen 2</li>
+        <li><strong>CPU</strong>：Intel Core i9-11950H</li>
+        <li><strong>GPU</strong>：NVIDIA RTX A5000 16GB</li>
+        <li><strong>RAM</strong>：128GB DDR4 (自行加裝鎂光)</li>
+        <li><strong>儲存</strong>：2TB + 512GB NVMe SSD</li>
+        <li><strong>螢幕</strong>：15.6" 4K OLED</li>
+        <li><strong>網路</strong>：4G LTE WWAN (Quectel EM160R-GL)</li>
+        <li><strong>其他</strong>：原廠 ADP 延保至 2027/8</li>
+      </ul>
+
+      <h3>手機</h3>
+      <ul>
+        <li><strong>目前</strong>：POCO F7 Ultra 16GB/512GB</li>
+        <li><strong>預計</strong>：iPhone 17 Pro Max 2TB</li>
+      </ul>
+
+      <h3>螢幕</h3>
+      <ul>
+        <li>Samsung Smart Monitor M7 32" (2022)</li>
+      </ul>
+
+      <h2>曾用設備</h2>
+
+      <h3>舊筆電</h3>
+      <ul>
+        <li><strong>型號</strong>：Clevo NH55JNR (神舟 HASEE ZX9-DA5DA)</li>
+        <li><strong>CPU</strong>：Intel i5-12400 (桌面版，限制 45W TDP)</li>
+        <li><strong>GPU</strong>：RTX 3070 Mobile 8GB 140W</li>
+      </ul>
+
+      <h3>平板</h3>
+      <ul>
+        <li>iPad Pro M1 11"</li>
+        <li>iPad Pro M1 12.9"</li>
+        <li>Samsung Galaxy Tab S9 Ultra</li>
+      </ul>
+
+      <h2>音訊設備</h2>
+      <ul>
+        <li>CLEER ARC 3 × 2</li>
+        <li>AKG N9 Hybrid</li>
+      </ul>
+
+      <h2>控制器</h2>
+      <ul>
+        <li>8BitDo Lite SE（無障礙控制器，用於 MSFS 飛行）</li>
+      </ul>
+
+      <h2>網路/周邊</h2>
+      <ul>
+        <li><strong>主路由器</strong>：GL.iNet GL-MT6000</li>
+        <li><strong>WDS 延伸</strong>：Linksys MX4200</li>
+        <li><strong>UPS</strong>：APC Back-UPS 1500MS</li>
+        <li><strong>KVM</strong>：GL.iNet Comet RM1</li>
+        <li><strong>串流方案</strong>：Moonlight + Sunshine</li>
+      </ul>
+
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="wrapper">
+      <p>Built on GitHub Pages with a sprinkle of JavaScript.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4654c3d3db9e4f21b3640178e6f5bd09"}'></script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
