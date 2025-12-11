@@ -492,6 +492,18 @@ function initSearch() {
  * 更新 URL 參數並重新渲染
  */
 function updateSearchParams(searchQuery) {
+  const isHomePage = document.body.classList.contains('home');
+
+  // 非首頁：跳轉到首頁並帶上搜尋參數
+  if (!isHomePage) {
+    const homeUrl = searchQuery
+      ? `/?search=${encodeURIComponent(searchQuery)}`
+      : '/';
+    window.location.href = homeUrl;
+    return;
+  }
+
+  // 首頁：更新 URL 參數並重新渲染
   const params = new URLSearchParams(window.location.search);
 
   if (searchQuery) {
@@ -1152,6 +1164,8 @@ document.addEventListener('DOMContentLoaded', () => {
   ThemeManager.init();
   // 初始化語音播放器
   AudioPlayerManager.init();
+  // 初始化搜尋功能（所有頁面）
+  initSearch();
   // 載入分類映射
   loadCategoryMapping().catch((error) => {
     console.warn('[init] failed to load category mapping', error);
@@ -1160,8 +1174,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const bodyClassList = document.body.classList;
 
   if (bodyClassList.contains('home')) {
-    // 初始化搜尋功能
-    initSearch();
     // 初始化 12 月生日特輯
     BirthdayTheme.init();
 
