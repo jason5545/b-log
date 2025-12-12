@@ -1,5 +1,24 @@
 [
   {
+    "slug": "nvidia-hybrid-fix",
+    "title": "切換 hybrid 模式後黑螢幕，然後我發現是 prime-select 埋的雷",
+    "summary": "ThinkPad P15 Gen 2 跑 KDE neon Wayland，想用 prime-select on-demand 切換 hybrid 模式，結果重開機黑螢幕。查了半天發現是之前切 intel 模式時留下的 blacklist 檔案沒清乾淨。結論：不要用 prime-select，改用 EnvyControl。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-12T00:00:00Z",
+    "updatedAt": "2025-12-12T00:00:00Z",
+    "readingTime": "4 min",
+    "tags": [
+      "KDE neon",
+      "NVIDIA",
+      "Wayland",
+      "hybrid",
+      "EnvyControl",
+      "ThinkPad"
+    ],
+    "accentColor": "#76b900"
+  },
+  {
     "slug": "line-pc-cache-encryption-disaster",
     "title": "LINE 電腦版快取災難檢討：我挖出了 AES Key，但決定讓這些檔案進入「冷儲存」",
     "summary": "備份工作群組 3000 多張照片，結果被 LINE 的 .eimg 加密格式卡住。Memdump 挖出 AES Key，發現 1892 個檔案共用同一組 IV，但解密後發現這根本不是標準加密——檔頭裝模作樣，中間塞沒加密的縮圖，本體用非標準模式鎖死。這不是資安，是築牆綁架使用者。",

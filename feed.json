@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "nvidia-hybrid-fix",
+      "url": "https://b-log.to/tech-analysis/nvidia-hybrid-fix/",
+      "title": "切換 hybrid 模式後黑螢幕，然後我發現是 prime-select 埋的雷",
+      "content_text": "我的筆電是 ThinkPad P15 Gen 2，Intel + NVIDIA 雙顯卡，跑 KDE neon Wayland。想切換到 hybrid 模式省電，結果 prime-select on-demand 一執行，重開機就黑螢幕。查了半天發現是之前切 intel 模式時留下的 blacklist 檔案沒清乾淨——prime-select 切模式的方式就是寫 blacklist 檔案，但它不會幫你清。結論：不要用 prime-select，改用 EnvyControl。",
+      "date_published": "2025-12-12T00:00:00.000Z",
+      "date_modified": "2025-12-12T00:00:00.000Z",
+      "tags": [
+        "KDE neon",
+        "NVIDIA",
+        "Wayland",
+        "hybrid",
+        "EnvyControl",
+        "ThinkPad"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "line-pc-cache-encryption-disaster",
       "url": "https://b-log.to/tech-analysis/line-pc-cache-encryption-disaster/",
       "title": "LINE 電腦版快取災難檢討：我挖出了 AES Key，但決定讓這些檔案進入「冷儲存」",
