@@ -6,7 +6,7 @@
   <title>ThinkPad P15 Gen 2i 的 WWAN FCC Lock：QMI 繞過去了，重開機就通 - (b)-log</title>
   
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 官方解鎖工具不支援這台，但發現 QMI 介面可以繞過 FCC Lock。折騰了一堆設定都沒用，最後重開機就通了。不需要 Windows，不需要官方工具，純 Linux 搞定。">
+  <meta name="description" content="筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 明確拒絕支援這個型號，理由是「合規要求」——但硬體完全相同，FCC 法規也不適用於非美國地區。發現 QMI 介面可以繞過 FCC Lock，重開機後就通了。不需要 Windows，不需要官方工具。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/thinkpad-p15-wwan-linux/" id="canonical-url">
   
@@ -14,7 +14,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/thinkpad-p15-wwan-linux/" id="og-url">
   <meta property="og:title" content="ThinkPad P15 Gen 2i 的 WWAN FCC Lock：QMI 繞過去了，重開機就通" id="og-title">
-  <meta property="og:description" content="筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 官方解鎖工具不支援這台，但發現 QMI 介面可以繞過 FCC Lock。折騰了一堆設定都沒用，最後重開機就通了。不需要 Windows，不需要官方工具，純 Linux 搞定。" id="og-description">
+  <meta property="og:description" content="筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 明確拒絕支援這個型號，理由是「合規要求」——但硬體完全相同，FCC 法規也不適用於非美國地區。發現 QMI 介面可以繞過 FCC Lock，重開機後就通了。不需要 Windows，不需要官方工具。" id="og-description">
   <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:ThinkPad%20P15%20Gen%202i%20%E7%9A%84%20WWAN%20FCC%20Lock%EF%BC%9AQMI%20%E7%B9%9E%E9%81%8E%E5%8E%BB%E4%BA%86%EF%BC%8C%E9%87%8D%E9%96%8B%E6%A9%9F%E5%B0%B1%E9%80%9A,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -30,7 +30,7 @@
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/thinkpad-p15-wwan-linux/" id="twitter-url">
   <meta property="twitter:title" content="ThinkPad P15 Gen 2i 的 WWAN FCC Lock：QMI 繞過去了，重開機就通" id="twitter-title">
-  <meta property="twitter:description" content="筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 官方解鎖工具不支援這台，但發現 QMI 介面可以繞過 FCC Lock。折騰了一堆設定都沒用，最後重開機就通了。不需要 Windows，不需要官方工具，純 Linux 搞定。" id="twitter-description">
+  <meta property="twitter:description" content="筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 明確拒絕支援這個型號，理由是「合規要求」——但硬體完全相同，FCC 法規也不適用於非美國地區。發現 QMI 介面可以繞過 FCC Lock，重開機後就通了。不需要 Windows，不需要官方工具。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:ThinkPad%20P15%20Gen%202i%20%E7%9A%84%20WWAN%20FCC%20Lock%EF%BC%9AQMI%20%E7%B9%9E%E9%81%8E%E5%8E%BB%E4%BA%86%EF%BC%8C%E9%87%8D%E9%96%8B%E6%A9%9F%E5%B0%B1%E9%80%9A,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
   
