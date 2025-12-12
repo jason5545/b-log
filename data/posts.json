@@ -1,5 +1,24 @@
 [
   {
+    "slug": "thinkpad-p15-wwan-linux",
+    "title": "ThinkPad P15 Gen 2i 的 WWAN FCC Lock：QMI 繞過去了，重開機就通",
+    "summary": "筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 官方解鎖工具不支援這台，但發現 QMI 介面可以繞過 FCC Lock。折騰了一堆設定都沒用，最後重開機就通了。不需要 Windows，不需要官方工具，純 Linux 搞定。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-12T12:00:00Z",
+    "updatedAt": "2025-12-12T12:00:00Z",
+    "readingTime": "4 min",
+    "tags": [
+      "ThinkPad",
+      "WWAN",
+      "LTE",
+      "Linux",
+      "QMI",
+      "FCC Lock"
+    ],
+    "accentColor": "#e2231a"
+  },
+  {
     "slug": "nvidia-hybrid-fix",
     "title": "切換 hybrid 模式後黑螢幕，然後我發現是 prime-select 埋的雷",
     "summary": "ThinkPad P15 Gen 2 跑 KDE neon Wayland，想用 prime-select on-demand 切換 hybrid 模式，結果重開機黑螢幕。查了半天發現是之前切 intel 模式時留下的 blacklist 檔案沒清乾淨。結論：不要用 prime-select，改用 EnvyControl。",

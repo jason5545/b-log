@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "thinkpad-p15-wwan-linux",
+      "url": "https://b-log.to/tech-analysis/thinkpad-p15-wwan-linux/",
+      "title": "ThinkPad P15 Gen 2i 的 WWAN FCC Lock：QMI 繞過去了，重開機就通",
+      "content_text": "我的筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 官方解鎖工具不支援這台，但我發現 QMI 介面可以繞過 FCC Lock。折騰了一堆設定都沒用，最後重開機就通了。不需要 Windows，不需要官方工具，純 Linux 搞定。",
+      "date_published": "2025-12-12T12:00:00.000Z",
+      "date_modified": "2025-12-12T12:00:00.000Z",
+      "tags": [
+        "ThinkPad",
+        "WWAN",
+        "LTE",
+        "Linux",
+        "QMI",
+        "FCC Lock"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "nvidia-hybrid-fix",
       "url": "https://b-log.to/tech-analysis/nvidia-hybrid-fix/",
       "title": "切換 hybrid 模式後黑螢幕，然後我發現是 prime-select 埋的雷",
