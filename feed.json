@@ -9,7 +9,7 @@
       "id": "thinkpad-p15-wwan-linux",
       "url": "https://b-log.to/tech-analysis/thinkpad-p15-wwan-linux/",
       "title": "ThinkPad P15 Gen 2i 的 WWAN FCC Lock：QMI 繞過去了，重開機就通",
-      "content_text": "我的筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。有人在 GitHub 回報過，Lenovo 明確拒絕支援這個型號，理由是「合規要求」——但硬體完全相同，FCC 法規也不適用於非美國地區。我發現 QMI 介面可以繞過 FCC Lock，重開機後就通了。不需要 Windows，不需要官方工具。",
+      "content_text": "筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 明確拒絕支援這個型號，理由是「合規要求」——但硬體完全相同，FCC 法規也不適用於非美國地區。發現 QMI 介面可以繞過 FCC Lock，重開機後就通了。不需要 Windows，不需要官方工具。",
       "date_published": "2025-12-12T12:00:00.000Z",
       "date_modified": "2025-12-12T12:00:00.000Z",
       "tags": [
