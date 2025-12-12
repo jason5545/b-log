@@ -8,6 +8,32 @@ Lenovo 有官方解鎖工具，但只支援特定機型，P15 Gen 2i 不在清�
 
 ---
 
+## 為什麼會有 FCC Lock
+
+FCC（美國聯邦通訊委員會）要求無線電發射設備必須經過認證，認證綁定特定硬體組態。OEM 用 FCC Lock 確保數據機只在認證過的筆電裡運作——數據機開機後預設禁用，要收到官方軟體的解鎖指令才會啟動射頻。
+
+理論上合理。
+
+問題是：我的數據機就裝在原廠認證的筆電裡，天線是原廠的，硬體組態完全沒變。Quectel EM160R-GL 是標準 M.2 模組，裝在其他 ThinkPad 型號都能正常解鎖。唯獨 P15 Gen 2i 不在支援清單上。
+
+---
+
+## Lenovo 明確拒絕支援
+
+這不是疏忽，是刻意的。
+
+有人在 GitHub 回報過這個問題（[lenovo/lenovo-wwan-unlock#12](https://github.com/lenovo/lenovo-wwan-unlock/issues/12)），要求支援 P15s Gen 2i + EM160R-GL。Lenovo 的回應：
+
+> "As of now, there is no plan to support Quectel EM160R-GL on a ThinkPad P15s Gen 2i for Linux."
+
+理由是「合規要求」。但報告者在澳洲——FCC 是美國法規，根本不適用。使用者說願意自己改程式碼，Lenovo 不給 source code。
+
+Issue 最後被標記為 "COMPLETED" 關閉。不是 "won't fix"，是裝作已經解決了。
+
+硬體完全相同，其他型號都支援，就是不打算處理這個 SKU。純粹的商業決策。
+
+---
+
 ## 突破點：QMI 可以繞過 FCC Lock
 
 翻了一堆文件和論壇，發現 QMI 介面可以直接啟動數據機，不需要官方工具：
