@@ -1,5 +1,25 @@
 [
   {
+    "slug": "kde-wayland-input-debugging",
+    "title": "在 KDE Wayland 上實現語音輸入：一段痛苦又有趣的除錯之旅",
+    "summary": "開發 XVoice 跨平台語音輸入系統，在 KDE Plasma Wayland 環境遇到文字打不出來的問題。Wayland 的安全模型移除了 X11 的輸入模擬 API，wtype、ydotool、dotool 都無法處理中文。最終發現 KWtype 是 KDE 專用的解決方案。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-13T12:00:00Z",
+    "updatedAt": "2025-12-13T12:00:00Z",
+    "readingTime": "8 min",
+    "tags": [
+      "Wayland",
+      "KDE",
+      "Linux",
+      "語音輸入",
+      "KWtype",
+      "中文輸入",
+      "故障排除"
+    ],
+    "accentColor": "#1d99f3"
+  },
+  {
     "slug": "steam-exfat-proton-fix",
     "title": "Steam 遊戲不跑了，然後我發現是 exFAT 不支援 symlink",
     "summary": "把 Steam 遊戲裝在 exFAT 外接硬碟，想用 Proton 跑 Windows 遊戲，結果噴 PermissionError。Proton 需要在 compatdata 建 symlink，exFAT 不支援。解法是把 compatdata 放到內部硬碟（ext4），遊戲檔案繼續留在外接硬碟。",

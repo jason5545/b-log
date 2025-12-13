@@ -6,6 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "kde-wayland-input-debugging",
+      "url": "https://b-log.to/tech-analysis/kde-wayland-input-debugging/",
+      "title": "在 KDE Wayland 上實現語音輸入：一段痛苦又有趣的除錯之旅",
+      "content_text": "開發 XVoice 跨平台語音輸入系統，在 KDE Plasma Wayland 環境遇到文字打不出來的問題。Wayland 的安全模型移除了 X11 的輸入模擬 API，wtype、ydotool、dotool 都無法處理中文。最終發現 KWtype 是 KDE 專用的解決方案，它使用 KWin 的 Fake Input 協議，完美支援中文輸入。",
+      "date_published": "2025-12-13T12:00:00.000Z",
+      "date_modified": "2025-12-13T12:00:00.000Z",
+      "tags": [
+        "Wayland",
+        "KDE",
+        "Linux",
+        "語音輸入",
+        "KWtype",
+        "中文輸入",
+        "故障排除"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "steam-exfat-proton-fix",
       "url": "https://b-log.to/tech-analysis/steam-exfat-proton-fix/",
       "title": "Steam 遊戲不跑了，然後我發現是 exFAT 不支援 symlink",
