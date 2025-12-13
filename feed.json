@@ -9,7 +9,7 @@
       "id": "kde-wayland-input-debugging",
       "url": "https://b-log.to/tech-analysis/kde-wayland-input-debugging/",
       "title": "在 KDE Wayland 上實現語音輸入：一段痛苦又有趣的偵錯之旅",
-      "content_text": "開發 XVoice 跨平台語音輸入系統，在 KDE Plasma Wayland 環境遇到文字打不出來的問題。Wayland 的安全模型移除了 X11 的輸入模擬 API，wtype、ydotool、dotool 都無法處理中文。最終發現 KWtype 是 KDE 專用的解決方案，它使用 KWin 的 Fake Input 協議，完美支援中文輸入。",
+      "content_text": "開發 XVoice 跨平台語音輸入系統，在 KDE Plasma Wayland 環境遇到文字打不出來的問題。Wayland 的安全模型移除了 X11 的輸入模擬 API，wtype、ydotool、dotool 都無法處理中文。最終發現 KWtype 是 KDE 專用的解決方案。",
       "date_published": "2025-12-13T12:00:00.000Z",
       "date_modified": "2025-12-13T12:00:00.000Z",
       "tags": [
@@ -31,7 +31,7 @@
       "id": "steam-exfat-proton-fix",
       "url": "https://b-log.to/tech-analysis/steam-exfat-proton-fix/",
       "title": "Steam 遊戲不跑了，然後我發現是 exFAT 不支援 symlink",
-      "content_text": "把 Steam 遊戲裝在 exFAT 外接硬碟，想用 Proton 跑 Windows 遊戲，結果噴 PermissionError。查了一下發現 Proton 需要在 compatdata 建 symlink 來模擬 Windows 目錄結構，但 exFAT 不支援 symlink。解法是把 compatdata 放到內部硬碟（ext4），遊戲檔案繼續留在外接硬碟。",
+      "content_text": "把 Steam 遊戲裝在 exFAT 外接硬碟，想用 Proton 跑 Windows 遊戲，結果噴 PermissionError。Proton 需要在 compatdata 建 symlink，exFAT 不支援。解法是把 compatdata 放到內部硬碟（ext4），遊戲檔案繼續留在外接硬碟。",
       "date_published": "2025-12-13T00:00:00.000Z",
       "date_modified": "2025-12-13T00:00:00.000Z",
       "tags": [
