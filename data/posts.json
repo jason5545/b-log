@@ -1,5 +1,24 @@
 [
   {
+    "slug": "xvoice-speech-input-tool",
+    "title": "我為什麼要做 XVoice：一個為「發音不標準」的人設計的語音輸入工具",
+    "summary": "身為發音不標準的開發者，市面上的語音輸入工具辨識率慘不忍睹。於是我做了 XVoice：用 Whisper 辨識，信心度不足時送 LLM 修正同音字錯誤。搭配 Silero VAD、OpenCC 簡繁轉換、KDE Wayland 的 kwtype，打造一個真正能用的語音輸入工具。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-13T14:00:00Z",
+    "updatedAt": "2025-12-13T14:00:00Z",
+    "readingTime": "6 min",
+    "tags": [
+      "語音輸入",
+      "Whisper",
+      "LLM",
+      "Python",
+      "開源專案",
+      "無障礙"
+    ],
+    "accentColor": "#9b59b6"
+  },
+  {
     "slug": "kde-wayland-input-debugging",
     "title": "在 KDE Wayland 上實現語音輸入：一段痛苦又有趣的偵錯之旅",
     "summary": "開發 XVoice 跨平台語音輸入系統，在 KDE Plasma Wayland 環境遇到文字打不出來的問題。Wayland 的安全模型移除了 X11 的輸入模擬 API，wtype、ydotool、dotool 都無法處理中文。最終發現 KWtype 是 KDE 專用的解決方案。",

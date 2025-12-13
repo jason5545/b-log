@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "xvoice-speech-input-tool",
+      "url": "https://b-log.to/tech-development/xvoice-speech-input-tool/",
+      "title": "我為什麼要做 XVoice：一個為「發音不標準」的人設計的語音輸入工具",
+      "content_text": "身為發音不標準的開發者，市面上的語音輸入工具辨識率慘不忍睹。於是我做了 XVoice：用 Whisper 辨識，信心度不足時送 LLM 修正同音字錯誤。搭配 Silero VAD、OpenCC 簡繁轉換、KDE Wayland 的 kwtype，打造一個真正能用的語音輸入工具。每次 LLM 修正約 $0.0005 美金，月成本約 $1.5。",
+      "date_published": "2025-12-13T14:00:00.000Z",
+      "date_modified": "2025-12-13T14:00:00.000Z",
+      "tags": [
+        "語音輸入",
+        "Whisper",
+        "LLM",
+        "Python",
+        "開源專案",
+        "無障礙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "kde-wayland-input-debugging",
       "url": "https://b-log.to/tech-analysis/kde-wayland-input-debugging/",
       "title": "在 KDE Wayland 上實現語音輸入：一段痛苦又有趣的偵錯之旅",
