@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "steam-exfat-proton-fix",
+      "url": "https://b-log.to/tech-analysis/steam-exfat-proton-fix/",
+      "title": "Steam 遊戲不跑了，然後我發現是 exFAT 不支援 symlink",
+      "content_text": "把 Steam 遊戲裝在 exFAT 外接硬碟，想用 Proton 跑 Windows 遊戲，結果噴 PermissionError。查了一下發現 Proton 需要在 compatdata 建 symlink 來模擬 Windows 目錄結構，但 exFAT 不支援 symlink。解法是把 compatdata 放到內部硬碟（ext4），遊戲檔案繼續留在外接硬碟。",
+      "date_published": "2025-12-13T00:00:00.000Z",
+      "date_modified": "2025-12-13T00:00:00.000Z",
+      "tags": [
+        "Steam",
+        "Proton",
+        "exFAT",
+        "Linux",
+        "symlink",
+        "Wine"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "thinkpad-p15-wwan-linux",
       "url": "https://b-log.to/tech-analysis/thinkpad-p15-wwan-linux/",
       "title": "ThinkPad P15 Gen 2i 的 WWAN FCC Lock：QMI 繞過去了，重開機就通",

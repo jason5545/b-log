@@ -1,5 +1,24 @@
 [
   {
+    "slug": "steam-exfat-proton-fix",
+    "title": "Steam 遊戲不跑了，然後我發現是 exFAT 不支援 symlink",
+    "summary": "把 Steam 遊戲裝在 exFAT 外接硬碟，想用 Proton 跑 Windows 遊戲，結果噴 PermissionError。Proton 需要在 compatdata 建 symlink，exFAT 不支援。解法是把 compatdata 放到內部硬碟（ext4），遊戲檔案繼續留在外接硬碟。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-13T00:00:00Z",
+    "updatedAt": "2025-12-13T00:00:00Z",
+    "readingTime": "3 min",
+    "tags": [
+      "Steam",
+      "Proton",
+      "exFAT",
+      "Linux",
+      "symlink",
+      "Wine"
+    ],
+    "accentColor": "#1b2838"
+  },
+  {
     "slug": "thinkpad-p15-wwan-linux",
     "title": "ThinkPad P15 Gen 2i 的 WWAN FCC Lock：QMI 繞過去了，重開機就通",
     "summary": "筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 明確拒絕支援這個型號，理由是「合規要求」——但硬體完全相同，FCC 法規也不適用於非美國地區。發現 QMI 介面可以繞過 FCC Lock，重開機後就通了。不需要 Windows，不需要官方工具。",
