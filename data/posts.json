@@ -1,20 +1,20 @@
 [
   {
     "slug": "xvoice-speech-input-tool",
-    "title": "我為什麼要做 XVoice：一個為「發音不標準」的人設計的語音輸入工具",
-    "summary": "身為發音不標準的開發者，市面上的語音輸入工具辨識率慘不忍睹。於是我做了 XVoice：用 Whisper 辨識，信心度不足時送 LLM 修正同音字錯誤。搭配 Silero VAD、OpenCC 簡繁轉換、KDE Wayland 的 kwtype，打造一個真正能用的語音輸入工具。",
+    "title": "從 ViaVoice 到 xvoice：一個非標準發音者的語音辨識之路",
+    "summary": "90 年代的 ViaVoice 要我念一小時標準文章來訓練，結果越念越爛。現在 Whisper 不用訓練了，但幻覺問題一樣災難。於是我做了 xvoice：Whisper 負責聽，LLM 負責想，專門修正那些「我講 A 它聽成 B」的固定錯誤。構音障礙分五級，我大概在 mild 到 moderate 之間——機器聽不準但人能懂的灰色地帶。",
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2025-12-13T14:00:00Z",
-    "updatedAt": "2025-12-13T14:00:00Z",
-    "readingTime": "6 min",
+    "updatedAt": "2025-12-15T00:00:00Z",
+    "readingTime": "8 min",
     "tags": [
       "語音輸入",
       "Whisper",
       "LLM",
       "Python",
-      "開源專案",
-      "無障礙"
+      "無障礙",
+      "構音障礙"
     ],
     "accentColor": "#9b59b6"
   },
