@@ -9,7 +9,7 @@
       "id": "line-on-linux",
       "url": "https://b-log.to/tech-analysis/line-on-linux/",
       "title": "在 KDE Wayland 上讓 LINE 支援中文輸入法的折騰之旅",
-      "content_text": "LINE 沒有官方 Linux 版本，只能用 Wine 跑。但我用 Bottles (Flatpak) 安裝後，fcitx5 中文輸入法完全沒反應。試了設環境變數、改 Wine Registry、改 bottle.yml 全都沒用。最後發現問題在 Flatpak 沙盒會阻擋 fcitx5 與 Wine 通訊。解決方案：直接用 Bottles 裡的 Wine runner，但不透過 Flatpak 執行。Linux 桌面真的很折騰，但折騰完的成就感也是無可取代的。",
+      "content_text": "LINE 沒有官方 Linux 版本，只能用 Wine 跑。但 Bottles (Flatpak) 的沙盒會阻擋 fcitx5 與 Wine 通訊，導致中文輸入法完全沒反應。最終解決方案：直接用 Bottles 裡的 Wine runner，繞過 Flatpak 執行。",
       "date_published": "2025-12-16T00:00:00.000Z",
       "date_modified": "2025-12-16T00:00:00.000Z",
       "tags": [
@@ -32,7 +32,7 @@
       "id": "xvoice-speech-input-tool",
       "url": "https://b-log.to/tech-development/xvoice-speech-input-tool/",
       "title": "從 ViaVoice 到 xvoice：一個非標準發音者的語音辨識之路",
-      "content_text": "90 年代的 ViaVoice 要我念一小時標準文章來訓練，結果越念越爛——我天生肌肉張力問題，發音跟標準有落差，系統學到的全是錯的。現在 Whisper 不用訓練了，但幻覺問題一樣災難，動不動就輸出「字幕組提供」。於是我做了 xvoice：Whisper 負責聽，LLM 負責想，專門修正那些固定的錯誤 pattern。構音障礙分五級，我大概在 mild 到 moderate 之間。目標是有一天達到 100% 準確率，每一句話都在累積資料。",
+      "content_text": "90 年代的 ViaVoice 要我念一小時標準文章來訓練，結果越念越爛。現在 Whisper 不用訓練了，但幻覺問題一樣災難。於是我做了 xvoice：Whisper 負責聽，LLM 負責想，專門修正那些「我講 A 它聽成 B」的固定錯誤。構音障礙分五級，我大概在 mild 到 moderate 之間——機器聽不準但人能懂的灰色地帶。",
       "date_published": "2025-12-13T14:00:00.000Z",
       "date_modified": "2025-12-15T00:00:00.000Z",
       "tags": [
