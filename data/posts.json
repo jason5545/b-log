@@ -1,5 +1,26 @@
 [
   {
+    "slug": "line-on-linux",
+    "title": "在 KDE Wayland 上讓 LINE 支援中文輸入法的折騰之旅",
+    "summary": "LINE 沒有官方 Linux 版本，只能用 Wine 跑。但 Bottles (Flatpak) 的沙盒會阻擋 fcitx5 與 Wine 通訊，導致中文輸入法完全沒反應。最終解決方案：直接用 Bottles 裡的 Wine runner，繞過 Flatpak 執行。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-16T00:00:00Z",
+    "updatedAt": "2025-12-16T00:00:00Z",
+    "readingTime": "5 min",
+    "tags": [
+      "Wine",
+      "LINE",
+      "fcitx5",
+      "Wayland",
+      "KDE",
+      "Linux",
+      "Flatpak",
+      "中文輸入"
+    ],
+    "accentColor": "#00c300"
+  },
+  {
     "slug": "xvoice-speech-input-tool",
     "title": "從 ViaVoice 到 xvoice：一個非標準發音者的語音辨識之路",
     "summary": "90 年代的 ViaVoice 要我念一小時標準文章來訓練，結果越念越爛。現在 Whisper 不用訓練了，但幻覺問題一樣災難。於是我做了 xvoice：Whisper 負責聽，LLM 負責想，專門修正那些「我講 A 它聽成 B」的固定錯誤。構音障礙分五級，我大概在 mild 到 moderate 之間——機器聽不準但人能懂的灰色地帶。",
