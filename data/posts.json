@@ -1,5 +1,24 @@
 [
   {
+    "slug": "macos-sequoia-kvm-apple-id",
+    "title": "在 KVM 虛擬機上修復 macOS Sequoia 的 Apple ID 登入問題",
+    "summary": "在 KVM 跑 macOS Sequoia，想登 Xcode 結果 Apple ID 死活過不了。問題在 kern.hv_vmm_present 旗標、SMBIOS 序號、還有 VM 偵測。解法是三管齊下：核心補丁把 hv_vmm_present 偽裝成 0、裝 VMHide kext、再用 GenSMBIOS 生成唯一序號。Sequoia 比之前的版本嚴格很多，少一個都不行。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-21T00:00:00Z",
+    "updatedAt": "2025-12-21T00:00:00Z",
+    "readingTime": "15 min",
+    "tags": [
+      "macOS",
+      "KVM",
+      "Apple ID",
+      "OpenCore",
+      "虛擬機",
+      "Hackintosh"
+    ],
+    "accentColor": "#a2aaad"
+  },
+  {
     "slug": "line-on-linux",
     "title": "在 KDE Wayland 上讓 LINE 支援中文輸入法的折騰之旅",
     "summary": "LINE 沒有官方 Linux 版本，只能用 Wine 跑。但 Bottles (Flatpak) 的沙盒會阻擋 fcitx5 與 Wine 通訊，導致中文輸入法完全沒反應。最終解決方案：直接用 Bottles 裡的 Wine runner，繞過 Flatpak 執行。",
