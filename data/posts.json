@@ -1,5 +1,24 @@
 [
   {
+    "slug": "swiftui-observable-gotcha",
+    "title": "我花了一整天才發現：SwiftUI @Observable 的子視圖陷阱",
+    "summary": "用 @Observable 管理下載進度，結果進度條完全不動。Debug Log 顯示狀態有更新，UI 卻紋風不動。查了一天才發現：把 struct 傳給子視圖會切斷觀察鏈，SwiftUI 只看 id 決定要不要重新渲染。解法是內聯 UI 或讓子視圖自己存取 Observable。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-24T00:00:00Z",
+    "updatedAt": "2025-12-24T00:00:00Z",
+    "readingTime": "8 min",
+    "tags": [
+      "SwiftUI",
+      "@Observable",
+      "iOS",
+      "Swift",
+      "除錯",
+      "狀態管理"
+    ],
+    "accentColor": "#f05138"
+  },
+  {
     "slug": "macos-sequoia-kvm-apple-id",
     "title": "在 KVM 虛擬機上修復 macOS Sequoia 的 Apple ID 登入問題",
     "summary": "在 KVM 跑 macOS Sequoia，想登 Xcode 結果 Apple ID 死活過不了。問題在 kern.hv_vmm_present 旗標、SMBIOS 序號、還有 VM 偵測。解法是三管齊下：核心補丁把 hv_vmm_present 偽裝成 0、裝 VMHide kext、再用 GenSMBIOS 生成唯一序號。Sequoia 比之前的版本嚴格很多，少一個都不行。",

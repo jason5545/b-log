@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "swiftui-observable-gotcha",
+      "url": "https://b-log.to/tech-development/swiftui-observable-gotcha/",
+      "title": "我花了一整天才發現：SwiftUI @Observable 的子視圖陷阱",
+      "content_text": "用 @Observable 管理下載進度，結果進度條完全不動。Debug Log 顯示狀態有更新，UI 卻紋風不動。查了一天才發現：把 struct 傳給子視圖會切斷觀察鏈，SwiftUI 只看 id 決定要不要重新渲染。解法是內聯 UI 或讓子視圖自己存取 Observable。",
+      "date_published": "2025-12-24T00:00:00.000Z",
+      "date_modified": "2025-12-24T00:00:00.000Z",
+      "tags": [
+        "SwiftUI",
+        "@Observable",
+        "iOS",
+        "Swift",
+        "除錯",
+        "狀態管理"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "macos-sequoia-kvm-apple-id",
       "url": "https://b-log.to/tech-analysis/macos-sequoia-kvm-apple-id/",
       "title": "在 KVM 虛擬機上修復 macOS Sequoia 的 Apple ID 登入問題",
