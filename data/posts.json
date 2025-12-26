@@ -1,5 +1,43 @@
 [
   {
+    "slug": "claude-in-chrome-helium-fix",
+    "title": "讓 Claude Code 的瀏覽器自動化功能在 Helium 上運作",
+    "summary": "Claude Code 的 Claude in Chrome 功能在 Helium 瀏覽器上無法運作。問題出在兩個地方：Native Messaging manifest 沒複製到 Helium 的設定目錄，以及 socket 路徑不一致——擴充套件找 ~/.claude-tmp，Native Host 卻建在 /tmp。解法是複製 manifest 加上 symlink，再用 systemd user service 讓它重開機後還能活。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-26T00:00:00Z",
+    "updatedAt": "2025-12-26T00:00:00Z",
+    "readingTime": "5 min",
+    "tags": [
+      "Claude Code",
+      "Chrome",
+      "Helium",
+      "Native Messaging",
+      "Linux",
+      "systemd"
+    ],
+    "accentColor": "#cc785c"
+  },
+  {
+    "slug": "waydroid-arm-translation-fix",
+    "title": "解決 Waydroid 中酷安閃退問題：從 libndk_translation 切換到 libhoudini",
+    "summary": "在 Linux 上用 Waydroid 跑酷安，每次開啟都立刻閃退。Logcat 顯示 ANR 加上 68% kernel time，問題出在 libndk_translation 與酷安的 native 程式碼不相容。解法是用 waydroid_script 切換到 Google 的 libhoudini 轉譯層。其他 ARM App 閃退也可以試試這個方法。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-12-26T00:00:00Z",
+    "updatedAt": "2025-12-26T00:00:00Z",
+    "readingTime": "4 min",
+    "tags": [
+      "Waydroid",
+      "Android",
+      "Linux",
+      "ARM",
+      "libhoudini",
+      "酷安"
+    ],
+    "accentColor": "#3ddc84"
+  },
+  {
     "slug": "swiftui-observable-gotcha",
     "title": "我花了一整天才發現：SwiftUI @Observable 的子視圖陷阱",
     "summary": "用 @Observable 管理下載進度，結果進度條完全不動。Debug Log 顯示狀態有更新，UI 卻紋風不動。查了一天才發現：把 struct 傳給子視圖會切斷觀察鏈，SwiftUI 只看 id 決定要不要重新渲染。解法是內聯 UI 或讓子視圖自己存取 Observable。",
