@@ -9,7 +9,7 @@
       "id": "claude-in-chrome-helium-fix",
       "url": "https://b-log.to/tech-analysis/claude-in-chrome-helium-fix/",
       "title": "讓 Claude Code 的瀏覽器自動化功能在 Helium 上運作",
-      "content_text": "今天解決了 Claude Code 的 Claude in Chrome 功能在 Helium 瀏覽器上無法運作的問題。問題出在兩個地方：Native Messaging manifest 沒複製到 Helium 的設定目錄，以及 socket 路徑不一致——擴充套件找 ~/.claude-tmp，Native Host 卻建在 /tmp。解法是複製 manifest 加上 symlink，再用 systemd user service 讓它重開機後還能活。",
+      "content_text": "Claude Code 的 Claude in Chrome 功能在 Helium 瀏覽器上無法運作。問題出在兩個地方：Native Messaging manifest 沒複製到 Helium 的設定目錄，以及 socket 路徑不一致——擴充套件找 ~/.claude-tmp，Native Host 卻建在 /tmp。解法是複製 manifest 加上 symlink，再用 systemd user service 讓它重開機後還能活。",
       "date_published": "2025-12-26T00:00:00.000Z",
       "date_modified": "2025-12-26T00:00:00.000Z",
       "tags": [
@@ -72,7 +72,7 @@
       "id": "macos-sequoia-kvm-apple-id",
       "url": "https://b-log.to/tech-analysis/macos-sequoia-kvm-apple-id/",
       "title": "在 KVM 虛擬機上修復 macOS Sequoia 的 Apple ID 登入問題",
-      "content_text": "在 KVM 跑 macOS Sequoia，想登 Xcode 開發 iOS App，結果 Apple ID 死活過不了。查了一堆資料才發現問題在三個地方：kern.hv_vmm_present 旗標會暴露 VM 身分、OSX-KVM 預設的 SMBIOS 序號被用爛了、還有網卡類型可能觸發偵測。解法是三管齊下：核心補丁把 hv_vmm_present 偽裝成 0、裝 VMHide kext 進一步隱藏、再用 GenSMBIOS 生成唯一序號。Sequoia 比之前的版本嚴格很多，少一個都不行。",
+      "content_text": "在 KVM 跑 macOS Sequoia，想登 Xcode 結果 Apple ID 死活過不了。問題在 kern.hv_vmm_present 旗標、SMBIOS 序號、還有 VM 偵測。解法是三管齊下：核心補丁把 hv_vmm_present 偽裝成 0、裝 VMHide kext、再用 GenSMBIOS 生成唯一序號。Sequoia 比之前的版本嚴格很多，少一個都不行。",
       "date_published": "2025-12-21T00:00:00.000Z",
       "date_modified": "2025-12-21T00:00:00.000Z",
       "tags": [
