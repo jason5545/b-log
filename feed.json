@@ -6,6 +6,48 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "macos-kvm-iphone-usb-passthrough",
+      "url": "https://b-log.to/tech-analysis/macos-kvm-iphone-usb-passthrough/",
+      "title": "讓 macOS VM 認得 iPhone：USB Passthrough 踩坑全紀錄",
+      "content_text": "在 Linux 上用 libvirt/QEMU 跑 macOS VM，想讓 Xcode 認得 iPhone 做真機調試，結果標準 USB passthrough 怎麼試都是 Offline。試過 guest-reset=off、停用 usbmuxd、qemu hook 延遲附加，全部失敗。最後發現只有把整個 USB 控制器 PCI passthrough 給 VM 才行——iPhone 跟 macOS 之間的 USB 溝通協定太敏感了。",
+      "date_published": "2025-12-29T00:00:00.000Z",
+      "date_modified": "2025-12-29T00:00:00.000Z",
+      "tags": [
+        "macOS",
+        "KVM",
+        "iPhone",
+        "USB Passthrough",
+        "VFIO",
+        "Xcode",
+        "虛擬機"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
+      "id": "kde-plasma-autohide-fix",
+      "url": "https://b-log.to/tech-analysis/kde-plasma-autohide-fix/",
+      "title": "KDE Plasma 6 面板自動隱藏失效的解決方法",
+      "content_text": "開始用 KDE Neon 之後，底部面板的自動隱藏功能用一段時間就會失效，每次都得重啟 plasmashell。查了 bug report 才發現這是 2013 年就存在的老問題，兇手是任務管理器的「當視窗需要注意時取消隱藏」選項。關掉它就好了。",
+      "date_published": "2025-12-29T00:00:00.000Z",
+      "date_modified": "2025-12-29T00:00:00.000Z",
+      "tags": [
+        "KDE",
+        "Plasma 6",
+        "Wayland",
+        "Linux",
+        "故障排除"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "claude-in-chrome-helium-fix",
       "url": "https://b-log.to/tech-analysis/claude-in-chrome-helium-fix/",
       "title": "讓 Claude Code 的瀏覽器自動化功能在 Helium 上運作",
