@@ -3,39 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>讓 macOS VM 認得 iPhone：USB Passthrough 踩坑全紀錄 - (b)-log</title>
+  <title>在 Linux KVM 虛擬機中實現 iPhone USB 直通：一場與系統服務的戰鬥 - (b)-log</title>
   
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="在 Linux 上用 libvirt/QEMU 跑 macOS VM，想讓 Xcode 認得 iPhone 做真機調試，結果標準 USB passthrough 怎麼試都是 Offline。試過 guest-reset=off、停用 usbmuxd、qemu hook 延遲附加，全部失敗。最後發現只有把整個 USB 控制器 PCI passthrough 給 VM 才行。">
+  <meta name="description" content="在 Linux 上用 libvirt/QEMU 跑 macOS VM，想讓 Xcode 認得 iPhone 做真機調試。試過標準 USB passthrough、guest-reset=off、停用 usbmuxd、qemu hook 全部失敗。PCI passthrough 整個 USB 控制器雖然有效，但會失去所有 USB 設備。最終解法是寫一個 systemd daemon 持續監控、壓制 usbmuxd、自動重試 attach。暴力但有效。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/macos-kvm-iphone-usb-passthrough/" id="canonical-url">
   
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/macos-kvm-iphone-usb-passthrough/" id="og-url">
-  <meta property="og:title" content="讓 macOS VM 認得 iPhone：USB Passthrough 踩坑全紀錄" id="og-title">
-  <meta property="og:description" content="在 Linux 上用 libvirt/QEMU 跑 macOS VM，想讓 Xcode 認得 iPhone 做真機調試，結果標準 USB passthrough 怎麼試都是 Offline。試過 guest-reset=off、停用 usbmuxd、qemu hook 延遲附加，全部失敗。最後發現只有把整個 USB 控制器 PCI passthrough 給 VM 才行。" id="og-description">
-  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%AE%93%20macOS%20VM%20%E8%AA%8D%E5%BE%97%20iPhone%EF%BC%9AUSB%20Passthrough%20%E8%B8%A9%E5%9D%91%E5%85%A8%E7%B4%80%E9%8C%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:title" content="在 Linux KVM 虛擬機中實現 iPhone USB 直通：一場與系統服務的戰鬥" id="og-title">
+  <meta property="og:description" content="在 Linux 上用 libvirt/QEMU 跑 macOS VM，想讓 Xcode 認得 iPhone 做真機調試。試過標準 USB passthrough、guest-reset=off、停用 usbmuxd、qemu hook 全部失敗。PCI passthrough 整個 USB 控制器雖然有效，但會失去所有 USB 設備。最終解法是寫一個 systemd daemon 持續監控、壓制 usbmuxd、自動重試 attach。暴力但有效。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%9C%A8%20Linux%20KVM%20%E8%99%9B%E6%93%AC%E6%A9%9F%E4%B8%AD%E5%AF%A6%E7%8F%BE%20iPhone%20USB%20%E7%9B%B4%E9%80%9A%EF%BC%9A%E4%B8%80%E5%A0%B4%E8%88%87%E7%B3%BB%E7%B5%B1%E6%9C%8D%E5%8B%99%E7%9A%84%E6%88%B0%E9%AC%A5,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="(b)-log">
   <meta property="og:locale" content="zh_TW">
   <meta property="article:author" content="Jason Chien" id="og-author">
   <meta property="article:published_time" content="2025-12-29T00:00:00Z" id="og-published-time">
-  <meta property="article:modified_time" content="2025-12-29T00:00:00Z" id="og-modified-time">
+  <meta property="article:modified_time" content="2025-12-30T00:00:00Z" id="og-modified-time">
   <meta property="article:section" content="技術分析" id="og-section">
-  <meta property="article:tag" content="macOS, KVM, iPhone, USB Passthrough, VFIO, Xcode, 虛擬機" id="og-tags">
+  <meta property="article:tag" content="macOS, KVM, iPhone, USB Passthrough, VFIO, Xcode, 虛擬機, systemd, usbmuxd" id="og-tags">
   
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/macos-kvm-iphone-usb-passthrough/" id="twitter-url">
-  <meta property="twitter:title" content="讓 macOS VM 認得 iPhone：USB Passthrough 踩坑全紀錄" id="twitter-title">
-  <meta property="twitter:description" content="在 Linux 上用 libvirt/QEMU 跑 macOS VM，想讓 Xcode 認得 iPhone 做真機調試，結果標準 USB passthrough 怎麼試都是 Offline。試過 guest-reset=off、停用 usbmuxd、qemu hook 延遲附加，全部失敗。最後發現只有把整個 USB 控制器 PCI passthrough 給 VM 才行。" id="twitter-description">
-  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%AE%93%20macOS%20VM%20%E8%AA%8D%E5%BE%97%20iPhone%EF%BC%9AUSB%20Passthrough%20%E8%B8%A9%E5%9D%91%E5%85%A8%E7%B4%80%E9%8C%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:title" content="在 Linux KVM 虛擬機中實現 iPhone USB 直通：一場與系統服務的戰鬥" id="twitter-title">
+  <meta property="twitter:description" content="在 Linux 上用 libvirt/QEMU 跑 macOS VM，想讓 Xcode 認得 iPhone 做真機調試。試過標準 USB passthrough、guest-reset=off、停用 usbmuxd、qemu hook 全部失敗。PCI passthrough 整個 USB 控制器雖然有效，但會失去所有 USB 設備。最終解法是寫一個 systemd daemon 持續監控、壓制 usbmuxd、自動重試 attach。暴力但有效。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%9C%A8%20Linux%20KVM%20%E8%99%9B%E6%93%AC%E6%A9%9F%E4%B8%AD%E5%AF%A6%E7%8F%BE%20iPhone%20USB%20%E7%9B%B4%E9%80%9A%EF%BC%9A%E4%B8%80%E5%A0%B4%E8%88%87%E7%B3%BB%E7%B5%B1%E6%9C%8D%E5%8B%99%E7%9A%84%E6%88%B0%E9%AC%A5,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
   
   <!-- 額外的 metadata -->
-  <meta name="keywords" content="macOS, KVM, iPhone, USB Passthrough, VFIO, Xcode, 虛擬機" id="meta-keywords">
+  <meta name="keywords" content="macOS, KVM, iPhone, USB Passthrough, VFIO, Xcode, 虛擬機, systemd, usbmuxd" id="meta-keywords">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#556bff">
 
