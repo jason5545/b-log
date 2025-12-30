@@ -84,7 +84,7 @@ USB_PCI="0000:00:14.0"
 if [[ "$VM_NAME" == "macOS" ]]; then
     case "$ACTION" in
         prepare)
-            # VM 啟動前：將 USB 控制器綁定到 vfio-pci
+            # VM 啟動前：將 USB 控制器繫結到 vfio-pci
             modprobe vfio-pci
             echo "$USB_PCI" > /sys/bus/pci/drivers/xhci_hcd/unbind 2>/dev/null || true
             echo "8086 43ed" > /sys/bus/pci/drivers/vfio-pci/new_id 2>/dev/null || true
@@ -141,7 +141,7 @@ XMLEOF
 
 while true; do
     if virsh list --name --state-running 2>/dev/null | grep -q "^macOS$"; then
-        # VM 運行中 - 停掉 usbmuxd，嘗試 attach
+        # VM 執行中 - 停掉 usbmuxd，嘗試 attach
         systemctl stop usbmuxd.service 2>/dev/null
         pkill usbmuxd 2>/dev/null
 
