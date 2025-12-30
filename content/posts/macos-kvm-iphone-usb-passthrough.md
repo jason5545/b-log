@@ -38,11 +38,11 @@ device_add usb-host,vendorid=0x05ac,productid=0x12a8,guest-reset=off
 
 ### 3. 停用 Host 端的 usbmuxd
 
-罪魁禍首是 `usbmuxd`——這個 daemon 會自動抓取任何 Apple 設備。就算手動停掉它，udev 規則又會把它叫回來。
+罪魁禍首是 `usbmuxd`——這個 daemon 會自動抓取任何 Apple 裝置。就算手動停掉它，udev 規則又會把它叫回來。
 
-### 4. udev 規則 unbind 設備
+### 4. udev 規則 unbind 裝置
 
-時機問題，設備會重新列舉。
+時機問題，裝置會重新列舉。
 
 ### 5. 空的 usbmuxd.rules 覆蓋系統規則
 
@@ -116,7 +116,7 @@ EOF
 
 這樣確實能讓 Xcode 認得 iPhone 了。
 
-但問題來了——**所有 USB 設備都進了虛擬機**。鍵盤、滑鼠、指紋辨識器、藍牙、Wacom 繪圖板全都不見了。
+但問題來了——**所有 USB 裝置都進了虛擬機**。鍵盤、滑鼠、指紋辨識器、藍牙、Wacom 繪圖板全都不見了。
 
 這顯然不是我要的。
 
@@ -188,11 +188,11 @@ sudo systemctl enable --now iphone-passthrough.service
 | 問題 | Hook | Daemon |
 |------|------|--------|
 | 時序 | 只執行一次 | 持續重試 |
-| 設備重新列舉 | 抓到舊的設備號 | 每次都拿最新的 |
+| 裝置重新列舉 | 抓到舊的裝置號 | 每次都拿最新的 |
 | usbmuxd 競爭 | 被 udev 重新啟動 | 持續壓制 |
 | 錯誤恢復 | 沒有 | 自動重試 |
 
-核心問題在於：當你執行 `virsh attach-device` 時，iPhone 會重新列舉並取得新的設備號。Hook 只跑一次，抓到的是「舊」設備。等 QEMU 要用時，設備已經不在那了。Daemon 不在乎這個——它會一直重試直到成功。
+核心問題在於：當你執行 `virsh attach-device` 時，iPhone 會重新列舉並取得新的裝置號。Hook 只跑一次，抓到的是「舊」裝置。等 QEMU 要用時，裝置已經不在那了。Daemon 不在乎這個——它會一直重試直到成功。
 
 ## 還需要的設定
 
@@ -212,7 +212,7 @@ systemctl --user mask gvfs-gphoto2-volume-monitor.service
 systemctl --user mask gvfs-mtp-volume-monitor.service
 ```
 
-### 3. 設定 USB 設備權限
+### 3. 設定 USB 裝置權限
 
 ```bash
 # /etc/udev/rules.d/90-iphone-qemu.rules
@@ -229,11 +229,11 @@ SUBSYSTEM=="usb", ATTR{idVendor}=="05ac", ATTR{idProduct}=="12a8", MODE="0666"
 
 1. **需要 IOMMU 支援**：BIOS 要開 VT-d/IOMMU，kernel 參數要加 `intel_iommu=on`。
 
-2. **PCI passthrough 備案**：如果 daemon 方案還是有問題，PCI passthrough 整個 USB 控制器是最可靠的。但要確保你有其他 USB 控制器可用，或願意接受失去所有 USB 設備的代價。
+2. **PCI passthrough 備案**：如果 daemon 方案還是有問題，PCI passthrough 整個 USB 控制器是最可靠的。但要確保你有其他 USB 控制器可用，或願意接受失去所有 USB 裝置的代價。
 
 ## 結論
 
-USB 直通看似簡單，實際上 Linux 桌面有太多服務在搶設備。與其跟它們鬥智鬥勇搞一次性的 hook，不如寫個 daemon 持續監控。暴力但有效。
+USB 直通看似簡單，實際上 Linux 桌面有太多服務在搶裝置。與其跟它們鬥智鬥勇搞一次性的 hook，不如寫個 daemon 持續監控。暴力但有效。
 
 ---
 
