@@ -11,7 +11,7 @@
 - `system_profiler SPUSBDataType` 可以看到 iPhone
 - 但 Xcode 始終顯示裝置 **Offline**
 
-沒辦法用 Xcode 真機調試或部署 App。
+沒辦法用 Xcode 真機偵錯或部署 App。
 
 ## 嘗試過的方法（都失敗了）
 
