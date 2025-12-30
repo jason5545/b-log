@@ -9,7 +9,7 @@
       "id": "macos-kvm-iphone-usb-passthrough",
       "url": "https://b-log.to/tech-analysis/macos-kvm-iphone-usb-passthrough/",
       "title": "在 Linux KVM 虛擬機中實現 iPhone USB 直通：一場與系統服務的戰鬥",
-      "content_text": "折騰了好幾天，終於讓 iPhone 能夠穩定地直通到 macOS 虛擬機了。試過標準 USB passthrough、guest-reset=off、停用 usbmuxd、qemu hook 全部失敗。PCI passthrough 整個 USB 控制器雖然有效，但會失去所有 USB 設備——鍵盤、滑鼠、藍牙全都不見了。最終解法是寫一個 systemd daemon 持續監控：VM 運行時壓制 usbmuxd、自動重試 attach；VM 關閉後恢復正常。暴力但有效。",
+      "content_text": "在 Linux 上用 libvirt/QEMU 跑 macOS VM，想讓 Xcode 認得 iPhone 做真機調試。試過標準 USB passthrough、guest-reset=off、停用 usbmuxd、qemu hook 全部失敗。PCI passthrough 整個 USB 控制器雖然有效，但會失去所有 USB 設備。最終解法是寫一個 systemd daemon 持續監控、壓制 usbmuxd、自動重試 attach。暴力但有效。",
       "date_published": "2025-12-29T00:00:00.000Z",
       "date_modified": "2025-12-30T00:00:00.000Z",
       "tags": [
@@ -33,7 +33,7 @@
       "id": "kde-plasma-autohide-fix",
       "url": "https://b-log.to/tech-analysis/kde-plasma-autohide-fix/",
       "title": "KDE Plasma 6 面板自動隱藏失效的解決方法",
-      "content_text": "開始用 KDE Neon 之後，底部面板的自動隱藏功能用一段時間就會失效，每次都得重啟 plasmashell。查了 bug report 才發現這是 2013 年就存在的老問題，兇手是任務管理器的「當視窗需要注意時取消隱藏」選項。關掉它就好了。",
+      "content_text": "KDE Neon 的底部面板自動隱藏功能用一段時間就會失效，每次都得重啟 plasmashell。查了 bug report 才發現這是 2013 年就存在的老問題，兇手是任務管理器的「當視窗需要注意時取消隱藏」選項。關掉它就好了。",
       "date_published": "2025-12-29T00:00:00.000Z",
       "date_modified": "2025-12-29T00:00:00.000Z",
       "tags": [
