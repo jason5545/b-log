@@ -42,14 +42,14 @@ jobs:
           echo "最新文章發布日期: $PUBLISHED_AT"
           echo "年份: $YEAR"
 
-          # 取得文章標題供後續使用
-          TITLE=$(jq -r '.[0].title' data/posts.json)
-          echo "文章標題: $TITLE"
+          # 取得文章 slug 供後續使用
+          SLUG=$(jq -r '.[0].slug' data/posts.json)
+          echo "文章 slug: $SLUG"
 
           if [ "$YEAR" != "2026" ]; then
             echo "needs_fix=true" >> $GITHUB_OUTPUT
             echo "old_year=$YEAR" >> $GITHUB_OUTPUT
-            echo "title=$TITLE" >> $GITHUB_OUTPUT
+            echo "slug=$SLUG" >> $GITHUB_OUTPUT
             echo ""
             echo "⚠️ 最新文章的發布年份是 $YEAR，需要修正為 2026"
           else
@@ -78,10 +78,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add data/posts.json
-          git commit -m "修正最新文章發布年份：${{ steps.check_year.outputs.old_year }} → 2026
-
-          自動修正文章：${{ steps.check_year.outputs.title }}
-          由 GitHub Actions 自動執行"
+          git commit -m "修正 ${{ steps.check_year.outputs.slug }} 發布日期：${{ steps.check_year.outputs.old_year }} → 2026"
 
       - name: 推送修正
         if: steps.check_year.outputs.needs_fix == 'true' && github.event_name == 'push'
