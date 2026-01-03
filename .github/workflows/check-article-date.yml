@@ -1,0 +1,96 @@
+name: 檢查文章發布年份
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data/posts.json'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'data/posts.json'
+  workflow_dispatch:  # 允許手動觸發
+
+jobs:
+  check-date:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 檢出程式碼
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 檢查最新文章發布年份
+        id: check_year
+        run: |
+          # 取得第一篇文章（最新文章）的發布日期
+          PUBLISHED_AT=$(jq -r '.[0].publishedAt' data/posts.json)
+
+          if [ -z "$PUBLISHED_AT" ] || [ "$PUBLISHED_AT" = "null" ]; then
+            echo "❌ 錯誤：無法取得最新文章的發布日期"
+            exit 1
+          fi
+
+          # 取得年份
+          YEAR=$(echo "$PUBLISHED_AT" | cut -c1-4)
+
+          echo "最新文章發布日期: $PUBLISHED_AT"
+          echo "年份: $YEAR"
+
+          # 取得文章 slug 供後續使用
+          SLUG=$(jq -r '.[0].slug' data/posts.json)
+          echo "文章 slug: $SLUG"
+
+          if [ "$YEAR" != "2026" ]; then
+            echo "needs_fix=true" >> $GITHUB_OUTPUT
+            echo "old_year=$YEAR" >> $GITHUB_OUTPUT
+            echo "slug=$SLUG" >> $GITHUB_OUTPUT
+            echo ""
+            echo "⚠️ 最新文章的發布年份是 $YEAR，需要修正為 2026"
+          else
+            echo "needs_fix=false" >> $GITHUB_OUTPUT
+            echo ""
+            echo "✅ 檢查通過：最新文章發布年份正確 (2026)"
+          fi
+
+      - name: 修正最新文章年份
+        if: steps.check_year.outputs.needs_fix == 'true' && github.event_name == 'push'
+        run: |
+          echo "正在修正最新文章的發布年份..."
+
+          # 使用 jq 只修改第一篇文章的 publishedAt 年份
+          # sub 函數會將前 4 個數字替換為 2026
+          jq '.[0].publishedAt |= sub("^[0-9]{4}"; "2026")' data/posts.json > data/posts.json.tmp
+          mv data/posts.json.tmp data/posts.json
+
+          # 顯示修正後的結果
+          NEW_DATE=$(jq -r '.[0].publishedAt' data/posts.json)
+          echo "修正後的發布日期: $NEW_DATE"
+
+      - name: 提交修正
+        if: steps.check_year.outputs.needs_fix == 'true' && github.event_name == 'push'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/posts.json
+          git commit -m "修正 ${{ steps.check_year.outputs.slug }} 發布日期：${{ steps.check_year.outputs.old_year }} → 2026"
+
+      - name: 推送修正
+        if: steps.check_year.outputs.needs_fix == 'true' && github.event_name == 'push'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+      - name: PR 檢查失敗
+        if: steps.check_year.outputs.needs_fix == 'true' && github.event_name == 'pull_request'
+        run: |
+          echo "❌ 錯誤：最新文章的發布年份是 ${{ steps.check_year.outputs.old_year }}，應該是 2026"
+          echo ""
+          echo "請修正 data/posts.json 中第一篇文章的 publishedAt 欄位"
+          exit 1
