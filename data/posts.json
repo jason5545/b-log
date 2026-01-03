@@ -5,8 +5,8 @@
     "summary": "花了一個月研究 VAD、Whisper、LLM 校正層，結論是 iOS 本地做不到。結果 Typeless 直接繞過限制——既然本地做不到，那就不要在本地做。雲端處理換來接近 100% 的辨識準確率，代價是隱私取捨。對於打字成本極高的使用者，這個交易值得。",
     "category": "技術分析",
     "author": "Jason Chien",
-    "publishedAt": "2025-01-03T00:00:00Z",
-    "updatedAt": "2025-01-03T00:00:00Z",
+    "publishedAt": "2025-01-04T00:00:00Z",
+    "updatedAt": "2025-01-04T00:00:00Z",
     "readingTime": "10 min",
     "tags": [
       "語音輸入",
