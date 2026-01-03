@@ -1,0 +1,50 @@
+name: 檢查文章發布年份
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data/posts.json'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'data/posts.json'
+  workflow_dispatch:  # 允許手動觸發
+
+jobs:
+  check-date:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 檢出程式碼
+        uses: actions/checkout@v4
+
+      - name: 檢查最新文章發布年份
+        run: |
+          # 取得第一篇文章（最新文章）的發布日期
+          PUBLISHED_AT=$(jq -r '.[0].publishedAt' data/posts.json)
+
+          if [ -z "$PUBLISHED_AT" ] || [ "$PUBLISHED_AT" = "null" ]; then
+            echo "❌ 錯誤：無法取得最新文章的發布日期"
+            exit 1
+          fi
+
+          # 取得年份
+          YEAR=$(echo "$PUBLISHED_AT" | cut -c1-4)
+
+          echo "最新文章發布日期: $PUBLISHED_AT"
+          echo "年份: $YEAR"
+
+          # 檢查年份是否為 2026
+          if [ "$YEAR" != "2026" ]; then
+            echo ""
+            echo "❌ 錯誤：最新文章的發布年份是 $YEAR，應該是 2026"
+            echo ""
+            echo "請檢查 data/posts.json 中第一篇文章的 publishedAt 欄位"
+            exit 1
+          fi
+
+          echo ""
+          echo "✅ 檢查通過：最新文章發布年份正確 (2026)"
