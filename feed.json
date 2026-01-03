@@ -1332,6 +1332,28 @@
       "image": "https://b-log.to/content/img/2025/ai-policy-red-lines-cover.png"
     },
     {
+      "id": "typeless-voice-input-review",
+      "url": "https://b-log.to/tech-analysis/typeless-voice-input-review/",
+      "title": "我花了一個月研究語音輸入，結果被一款 App 直接超越——Typeless 深度體驗",
+      "content_text": "花了一個月研究 VAD、Whisper、LLM 校正層，結論是 iOS 本地跑不動。結果朋友丟了 Typeless 給我——人家直接繞過限制，既然本地做不到就不要在本地做。雲端處理換來接近 100% 的辨識準確率，代價是隱私。對我這種打字成本極高的人，這個取捨值得。",
+      "date_published": "2025-01-04T00:00:00.000Z",
+      "date_modified": "2025-01-04T00:00:00.000Z",
+      "tags": [
+        "語音輸入",
+        "Typeless",
+        "Whisper",
+        "iOS",
+        "LLM",
+        "無障礙",
+        "AI"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "lisa-concert-2017-ssa-ldp",
       "url": "https://b-log.to/life-stories/lisa-concert-2017-ssa-ldp/",
       "title": "2017 LiSA 日本演唱會：相遇的魔法與感動的兩天",
