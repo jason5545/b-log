@@ -1,5 +1,24 @@
 [
   {
+    "slug": "typeless-voice-input-review",
+    "title": "我花了一個月研究語音輸入，結果被一款 App 直接超越——Typeless 深度體驗",
+    "summary": "花了一個月研究 VAD、Whisper、LLM 校正層，結論是 iOS 本地跑不動。結果朋友丟了 Typeless 給我——人家直接繞過限制，既然本地做不到就不要在本地做。雲端處理換來接近 100% 的辨識準確率，代價是隱私。對我這種打字成本極高的人，這個取捨值得。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2025-01-04T00:00:00Z",
+    "readingTime": "10 min",
+    "tags": [
+      "語音輸入",
+      "Typeless",
+      "Whisper",
+      "iOS",
+      "LLM",
+      "無障礙",
+      "AI"
+    ],
+    "accentColor": "#5856d6"
+  },
+  {
     "slug": "macos-kvm-iphone-usb-passthrough",
     "title": "在 Linux KVM 虛擬機中實現 iPhone USB 直通：一場與系統服務的戰鬥",
     "summary": "在 Linux 上用 libvirt/QEMU 跑 macOS VM，想讓 Xcode 認得 iPhone 做真機偵錯。試過標準 USB passthrough、guest-reset=off、停用 usbmuxd、qemu hook 全部失敗。PCI passthrough 整個 USB 控制器雖然有效，但會失去所有 USB 裝置。最終解法是寫一個 systemd daemon 持續監控、壓制 usbmuxd、自動重試 attach。暴力但有效。",
