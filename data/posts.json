@@ -1,5 +1,23 @@
 [
   {
+    "slug": "voice-input-behind-the-scenes",
+    "title": "我意外讓一個語音輸入工具吐出了它的系統提示詞",
+    "summary": "正常使用語音輸入工具時，系統意外輸出了內部推理過程——包括多 ASR 引擎並行架構和 LLM 綜合判斷邏輯。作為非標準發音使用者，我天然就是這類系統的 stress tester，正常使用就能觸發別人用 injection 技巧才能挖出來的東西。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-01-08T00:00:00Z",
+    "updatedAt": "2026-01-08T00:00:00Z",
+    "readingTime": "5 min",
+    "tags": [
+      "語音辨識",
+      "AI",
+      "ASR",
+      "LLM",
+      "系統架構"
+    ],
+    "accentColor": "#3498db"
+  },
+  {
     "slug": "typeless-voice-input-review",
     "title": "我花了一個月研究語音輸入，結果被一款 App 直接超越——Typeless 深度體驗",
     "summary": "花了一個月研究 VAD、Whisper、LLM 校正層，結論是 iOS 本地跑不動。結果朋友丟了 Typeless 給我——人家直接繞過限制，既然本地做不到就不要在本地做。雲端處理換來接近 100% 的辨識準確率，代價是隱私。對我這種打字成本極高的人，這個取捨值得。",

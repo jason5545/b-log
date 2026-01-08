@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "voice-input-behind-the-scenes",
+      "url": "https://b-log.to/tech-analysis/voice-input-behind-the-scenes/",
+      "title": "我意外讓一個語音輸入工具吐出了它的系統提示詞",
+      "content_text": "正常使用語音輸入工具時，系統意外輸出了內部推理過程——包括多 ASR 引擎並行架構和 LLM 綜合判斷邏輯。作為非標準發音使用者，我天然就是這類系統的 stress tester，正常使用就能觸發別人用 injection 技巧才能挖出來的東西。",
+      "date_published": "2026-01-08T00:00:00.000Z",
+      "date_modified": "2026-01-08T00:00:00.000Z",
+      "tags": [
+        "語音辨識",
+        "AI",
+        "ASR",
+        "LLM",
+        "系統架構"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "macos-kvm-iphone-usb-passthrough",
       "url": "https://b-log.to/tech-analysis/macos-kvm-iphone-usb-passthrough/",
       "title": "在 Linux KVM 虛擬機中實現 iPhone USB 直通：一場與系統服務的戰鬥",
