@@ -1,5 +1,24 @@
 [
   {
+    "slug": "apple-love-hate-single-finger-user",
+    "title": "我對 Apple 的愛恨交織：一個單指使用者的無奈",
+    "summary": "想開發 iOS App 就必須買 Mac，買了 Mac 卻發現單指捲動不支援。Apple 能做頭部追蹤、眼球控制這種高門檻輔助功能，卻不肯加一個邊緣捲動選項。從 128GB RAM 的 ThinkPad 換到記憶體焊死的 MacBook，從 LDAC 降級到 AAC，這不是愛恨，是「你不給我選擇」的無奈。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-01-10T00:00:00Z",
+    "updatedAt": "2026-01-10T00:00:00Z",
+    "readingTime": "8 min",
+    "tags": [
+      "Apple",
+      "macOS",
+      "iOS",
+      "無障礙",
+      "單指捲動",
+      "MacBook"
+    ],
+    "accentColor": "#a2aaad"
+  },
+  {
     "slug": "voice-input-behind-the-scenes",
     "title": "我意外讓一個語音輸入工具吐出了它的系統提示詞",
     "summary": "正常使用語音輸入工具時，系統意外輸出了內部推理過程——包括多 ASR 引擎並行架構和 LLM 綜合判斷邏輯。作為非標準發音使用者，我天然就是這類系統的 stress tester，正常使用就能觸發別人用 injection 技巧才能挖出來的東西。",

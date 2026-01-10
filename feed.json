@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "apple-love-hate-single-finger-user",
+      "url": "https://b-log.to/tech-analysis/apple-love-hate-single-finger-user/",
+      "title": "我對 Apple 的愛恨交織：一個單指使用者的無奈",
+      "content_text": "想開發 iOS App 就必須買 Mac，買了 Mac 卻發現單指捲動不支援。Apple 能做頭部追蹤、眼球控制這種高門檻輔助功能，卻不肯加一個邊緣捲動選項。從 128GB RAM 的 ThinkPad 換到記憶體焊死的 MacBook，從 LDAC 降級到 AAC，這不是愛恨，是「你不給我選擇」的無奈。",
+      "date_published": "2026-01-10T00:00:00Z",
+      "date_modified": "2026-01-10T00:00:00Z",
+      "tags": [
+        "Apple",
+        "macOS",
+        "iOS",
+        "無障礙",
+        "單指捲動",
+        "MacBook"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "voice-input-behind-the-scenes",
       "url": "https://b-log.to/tech-analysis/voice-input-behind-the-scenes/",
       "title": "我意外讓一個語音輸入工具吐出了它的系統提示詞",
