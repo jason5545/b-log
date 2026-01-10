@@ -1,5 +1,24 @@
 [
   {
+    "slug": "anthropic-max-ban-disaster",
+    "title": "Anthropic 這次真的搞砸了",
+    "summary": "Anthropic 零預警封鎖所有透過第三方工具使用 Claude Max 的帳號，付著 $200 月費的開發者工作到一半直接被踢。等到社群炸開才解封說要「把 ToS 寫清楚」。一間強調 AI 安全和對齊的公司，在對待開發者時選擇先斬後奏。而他們訓練出來的 Claude，反而比他們更懂得這樣不對。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-01-10T12:00:00Z",
+    "updatedAt": "2026-01-10T12:00:00Z",
+    "readingTime": "6 min",
+    "tags": [
+      "Anthropic",
+      "Claude",
+      "AI",
+      "開發者社群",
+      "信任",
+      "商業策略"
+    ],
+    "accentColor": "#cc785c"
+  },
+  {
     "slug": "apple-love-hate-single-finger-user",
     "title": "我對 Apple 的愛恨交織：一個單指使用者的無奈",
     "summary": "想開發 iOS App 就必須買 Mac，買了 Mac 卻發現單指捲動不支援。Apple 能做頭部追蹤、眼球控制這種高門檻輔助功能，卻不肯加一個邊緣捲動選項。從 128GB RAM 的 ThinkPad 換到記憶體焊死的 MacBook，從 LDAC 降級到 AAC，這不是愛恨，是「你不給我選擇」的無奈。",
