@@ -1,5 +1,23 @@
 [
   {
+    "slug": "disability-ticket-resale",
+    "title": "身障票不是你的入場券生意",
+    "summary": "看到有人在社團轉賣 Rain 演唱會的身障票，開價四百塊加一杯星巴克，條件是「陪同進場」。身障票是社會對我們額外困難的補償，不是拿來變現的入場券生意。這種人不多，但只要有，就會壞事——最後承受後果的是那些老老實實在搶票、真正需要這些位置的人。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-01-11T12:00:00Z",
+    "updatedAt": "2026-01-11T12:00:00Z",
+    "readingTime": "4 min",
+    "tags": [
+      "身心障礙",
+      "演唱會",
+      "購票系統",
+      "黃牛",
+      "社會觀察"
+    ],
+    "accentColor": "#e74c3c"
+  },
+  {
     "slug": "anthropic-max-ban-disaster",
     "title": "Anthropic 這次真的搞砸了",
     "summary": "Anthropic 零預警封鎖所有透過第三方工具使用 Claude Max 的帳號，付著 $200 月費的開發者工作到一半直接被踢。等到社群炸開才解封說要「把 ToS 寫清楚」。一間強調 AI 安全和對齊的公司，在對待開發者時選擇先斬後奏。而他們訓練出來的 Claude，反而比他們更懂得這樣不對。",
