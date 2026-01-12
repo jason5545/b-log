@@ -9,9 +9,9 @@
       "id": "disability-ticket-resale",
       "url": "https://b-log.to/cultural-insights/disability-ticket-resale/",
       "title": "身障票不是你的入場券生意",
-      "content_text": "今天下午滑社團的時候，看到有人在轉賣 Rain 演唱會的身障票，開價四百塊加一杯星巴克，條件是「陪同進場」。身障票是社會對我們額外困難的補償，不是拿來變現的入場券生意。我從 2015 年開始看演唱會，到現在十年了，身障席從來就不是什麼好位置，我們要的也不多，就是一個能進場、能看到的機會。這種人不多，但只要有，就會壞事——最後承受後果的是那些老老實實在搶票、真正需要這些位置的人。",
+      "content_text": "看到有人在社團轉賣 Rain 演唱會的身障票，開價四百塊加一杯星巴克，條件是「陪同進場」。身障票是社會對我們額外困難的補償，不是拿來變現的入場券生意。這種人不多，但只要有，就會壞事——最後承受後果的是那些老老實實在搶票、真正需要這些位置的人。",
       "date_published": "2026-01-11T12:00:00Z",
-      "date_modified": "2026-01-11T12:00:00Z",
+      "date_modified": "2026-01-11T12:00:00.000Z",
       "tags": [
         "身心障礙",
         "演唱會",
@@ -115,9 +115,9 @@
       "id": "kde-plasma-autohide-fix",
       "url": "https://b-log.to/tech-analysis/kde-plasma-autohide-fix/",
       "title": "KDE Plasma 6 面板自動隱藏失效的解決方法",
-      "content_text": "KDE Neon 的底部面板自動隱藏功能用一段時間就會失效，每次都得重啟 plasmashell。查了 bug report 才發現這是 2013 年就存在的老問題，兇手是任務管理器的「當視窗需要注意時取消隱藏」選項。關掉它就好了。",
+      "content_text": "KDE Neon 的底部面板自動隱藏功能用一段時間就會失效，每次都得重啟 plasmashell。後來發現真正的兇手是透過 Wine 執行的 LINE，把 LINE 重新最小化一次就能恢復。",
       "date_published": "2025-12-29T00:00:00.000Z",
-      "date_modified": "2025-12-29T00:00:00.000Z",
+      "date_modified": "2026-01-12T00:00:00.000Z",
       "tags": [
         "KDE",
         "Plasma 6",
