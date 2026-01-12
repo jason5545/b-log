@@ -137,6 +137,14 @@ update-desktop-database ~/.local/share/applications
 3. **必要的環境變數**：`XMODIFIERS`、`GTK_IM_MODULE`、`QT_IM_MODULE` 等
 4. **Wine runner**：kron4ek-wine 比官方 WineHQ 更適合跑 LINE
 
+## 已知問題：會影響 KDE 面板自動隱藏
+
+透過 Wine 執行的 LINE 會導致 KDE Plasma 底部面板的自動隱藏功能失效。每次 LINE 有新訊息通知，面板就會跳出來然後卡住不隱藏。
+
+**解法**：把 LINE 視窗重新最小化一次，面板就會恢復正常。
+
+詳細說明請參考：[KDE Plasma 6 面板自動隱藏失效的解決方法](https://b-log.to/tech-analysis/kde-plasma-autohide-fix/)
+
 ## 後記
 
 Linux 桌面真的很折騰，但折騰完的成就感也是無可取代的。希望這篇文章能幫到同樣在 Linux 上掙扎的朋友們！
