@@ -16,6 +16,77 @@
 
 **快速解法**：把 LINE 視窗重新最小化一次，面板就會恢復正常。
 
+### 永久解法：KWin 腳本 + 規則
+
+與其每次手動處理，不如寫個 KWin 腳本自動攔截 LINE 的「demands attention」狀態。
+
+**步驟 1：建立 KWin 腳本**
+
+建立目錄結構：
+
+```bash
+mkdir -p ~/.local/share/kwin/scripts/shut-up-line/contents/code
+```
+
+建立 `~/.local/share/kwin/scripts/shut-up-line/contents/code/main.js`：
+
+```javascript
+function shutUpLine(client) {
+    if (client.resourceClass === 'line.exe') {
+        client.demandsAttentionChanged.connect(function() {
+            if (client.demandsAttention) {
+                client.demandsAttention = false;
+            }
+        });
+    }
+}
+
+// KDE 6
+if (typeof workspace.windowAdded !== 'undefined') {
+    workspace.windowAdded.connect(shutUpLine);
+    workspace.windowList().forEach(shutUpLine);
+} else {
+    // KDE 5
+    workspace.clientAdded.connect(shutUpLine);
+    workspace.clientList().forEach(shutUpLine);
+}
+```
+
+建立 `~/.local/share/kwin/scripts/shut-up-line/metadata.json`：
+
+```json
+{
+    "KPlugin": {
+        "Id": "shut-up-line",
+        "Name": "Shut up LINE!",
+        "Description": "Disable demands attention for LINE (Wine)",
+        "Icon": "preferences-system-windows-script-test",
+        "Authors": [{"Name": "Jason"}],
+        "Version": "1.0"
+    },
+    "X-Plasma-API": "javascript",
+    "X-Plasma-MainScript": "code/main.js"
+}
+```
+
+**步驟 2：啟用腳本**
+
+```bash
+kwriteconfig6 --file kwinrc --group Plugins --key shut-up-lineEnabled true
+qdbus6 org.kde.KWin /KWin reconfigure
+```
+
+或者到 系統設定 → 視窗管理 → KWin 腳本 手動啟用。
+
+**步驟 3：加入 KWin 規則（雙保險）**
+
+系統設定 → 視窗管理 → 視窗規則 → 新增：
+
+- **視窗類別**：`line.exe`（完全符合）
+- **焦點竊取防護**：強制 → 極端
+
+這樣 LINE 就不會再搶焦點導致面板卡住了。
+
 ## 查 log
 
 ```bash

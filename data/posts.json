@@ -118,7 +118,7 @@
   {
     "slug": "kde-plasma-autohide-fix",
     "title": "KDE Plasma 6 面板自動隱藏失效的解決方法",
-    "summary": "KDE Neon 的底部面板自動隱藏功能用一段時間就會失效，每次都得重啟 plasmashell。後來發現真正的兇手是透過 Wine 執行的 LINE，把 LINE 重新最小化一次就能恢復。",
+    "summary": "KDE Neon 的底部面板自動隱藏功能用一段時間就會失效，每次都得重啟 plasmashell。後來發現真正的兇手是透過 Wine 執行的 LINE。永久解法是用 KWin 腳本自動攔截 LINE 的 demands attention 狀態。",
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-29T00:00:00Z",
