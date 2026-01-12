@@ -226,7 +226,22 @@ const GiscusManager = {
     const container = document.getElementById('giscus-container');
     if (!container) return;
 
-    // 使用 Intersection Observer 懶載入
+    this.initialized = true;
+
+    // 檢查元素是否已在視圖中
+    const isInViewport = () => {
+      const rect = container.getBoundingClientRect();
+      return rect.top < window.innerHeight + 200 && rect.bottom > -200;
+    };
+
+    // 如果已在視圖中，直接載入
+    if (isInViewport()) {
+      this.loadScript();
+      this.setupThemeListener();
+      return;
+    }
+
+    // 否則使用 Intersection Observer 懶載入
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -235,12 +250,11 @@ const GiscusManager = {
         }
       });
     }, {
-      rootMargin: '200px 0px', // 提前 200px 開始載入
+      rootMargin: '200px 0px',
       threshold: 0
     });
 
     observer.observe(container);
-    this.initialized = true;
 
     // 監聽主題變更
     this.setupThemeListener();
