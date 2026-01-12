@@ -6,7 +6,7 @@
   <title>在 KDE Wayland 上讓 LINE 支援中文輸入法的折騰之旅 - (b)-log</title>
   
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="LINE 沒有官方 Linux 版本，只能用 Wine 跑。但 Bottles (Flatpak) 的沙盒會阻擋 fcitx5 與 Wine 通訊，導致中文輸入法完全沒反應。最終解決方案：直接用 Bottles 裡的 Wine runner，繞過 Flatpak 執行。">
+  <meta name="description" content="LINE 沒有官方 Linux 版本，只能用 Wine 跑。但 Bottles (Flatpak) 的沙盒會阻擋 fcitx5 與 Wine 通訊，導致中文輸入法完全沒反應。最終解決方案：直接用 Bottles 裡的 Wine runner，繞過 Flatpak 執行。另外 LINE 會導致 KDE 面板自動隱藏失效。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/line-on-linux/" id="canonical-url">
   
@@ -14,7 +14,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/line-on-linux/" id="og-url">
   <meta property="og:title" content="在 KDE Wayland 上讓 LINE 支援中文輸入法的折騰之旅" id="og-title">
-  <meta property="og:description" content="LINE 沒有官方 Linux 版本，只能用 Wine 跑。但 Bottles (Flatpak) 的沙盒會阻擋 fcitx5 與 Wine 通訊，導致中文輸入法完全沒反應。最終解決方案：直接用 Bottles 裡的 Wine runner，繞過 Flatpak 執行。" id="og-description">
+  <meta property="og:description" content="LINE 沒有官方 Linux 版本，只能用 Wine 跑。但 Bottles (Flatpak) 的沙盒會阻擋 fcitx5 與 Wine 通訊，導致中文輸入法完全沒反應。最終解決方案：直接用 Bottles 裡的 Wine runner，繞過 Flatpak 執行。另外 LINE 會導致 KDE 面板自動隱藏失效。" id="og-description">
   <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%9C%A8%20KDE%20Wayland%20%E4%B8%8A%E8%AE%93%20LINE%20%E6%94%AF%E6%8F%B4%E4%B8%AD%E6%96%87%E8%BC%B8%E5%85%A5%E6%B3%95%E7%9A%84%E6%8A%98%E9%A8%B0%E4%B9%8B%E6%97%85,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
   <meta property="og:locale" content="zh_TW">
   <meta property="article:author" content="Jason Chien" id="og-author">
   <meta property="article:published_time" content="2025-12-16T00:00:00Z" id="og-published-time">
-  <meta property="article:modified_time" content="2025-12-16T00:00:00Z" id="og-modified-time">
+  <meta property="article:modified_time" content="2026-01-12T00:00:00Z" id="og-modified-time">
   <meta property="article:section" content="技術分析" id="og-section">
   <meta property="article:tag" content="Wine, LINE, fcitx5, Wayland, KDE, Linux, Flatpak, 中文輸入" id="og-tags">
   
@@ -30,7 +30,7 @@
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/line-on-linux/" id="twitter-url">
   <meta property="twitter:title" content="在 KDE Wayland 上讓 LINE 支援中文輸入法的折騰之旅" id="twitter-title">
-  <meta property="twitter:description" content="LINE 沒有官方 Linux 版本，只能用 Wine 跑。但 Bottles (Flatpak) 的沙盒會阻擋 fcitx5 與 Wine 通訊，導致中文輸入法完全沒反應。最終解決方案：直接用 Bottles 裡的 Wine runner，繞過 Flatpak 執行。" id="twitter-description">
+  <meta property="twitter:description" content="LINE 沒有官方 Linux 版本，只能用 Wine 跑。但 Bottles (Flatpak) 的沙盒會阻擋 fcitx5 與 Wine 通訊，導致中文輸入法完全沒反應。最終解決方案：直接用 Bottles 裡的 Wine runner，繞過 Flatpak 執行。另外 LINE 會導致 KDE 面板自動隱藏失效。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%9C%A8%20KDE%20Wayland%20%E4%B8%8A%E8%AE%93%20LINE%20%E6%94%AF%E6%8F%B4%E4%B8%AD%E6%96%87%E8%BC%B8%E5%85%A5%E6%B3%95%E7%9A%84%E6%8A%98%E9%A8%B0%E4%B9%8B%E6%97%85,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
   
