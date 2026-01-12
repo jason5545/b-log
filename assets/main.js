@@ -75,6 +75,11 @@ const ThemeManager = {
 
     this.applyTheme();
     this.updateToggleButton();
+
+    // 同步更新 Giscus 主題
+    if (window.GiscusManager && window.GiscusManager.scriptLoaded) {
+      window.GiscusManager.updateTheme();
+    }
   },
 
   applyTheme() {
@@ -164,6 +169,179 @@ const ThemeManager = {
 
 // 暴露到全域（因為使用 type="module"）
 window.ThemeManager = ThemeManager;
+
+// ============================================================
+// Giscus 留言系統管理
+// ============================================================
+
+const GiscusManager = {
+  // Giscus 配置參數
+  CONFIG: {
+    repo: 'jason5545/b-log',
+    repoId: 'R_kgDOQC92wg',
+    category: 'Announcements',
+    categoryId: 'DIC_kwDOQC92ws4C02BV',
+    mapping: 'pathname',
+    strict: '0',
+    reactionsEnabled: '1',
+    emitMetadata: '0',
+    inputPosition: 'top',
+    lang: 'zh-TW',
+    loading: 'lazy'
+  },
+
+  // 狀態標記
+  initialized: false,
+  scriptLoaded: false,
+
+  /**
+   * 取得當前有效的主題名稱
+   * 處理 auto 模式，回傳實際應套用的主題
+   */
+  getEffectiveTheme() {
+    const currentTheme = ThemeManager.getCurrentTheme();
+
+    if (currentTheme === 'auto') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return prefersDark ? 'dark' : 'light';
+    }
+
+    return currentTheme;
+  },
+
+  /**
+   * 將主題名稱轉換為 Giscus 主題
+   */
+  getGiscusTheme() {
+    const effectiveTheme = this.getEffectiveTheme();
+    return effectiveTheme === 'dark' ? 'dark' : 'light';
+  },
+
+  /**
+   * 初始化 Giscus（使用 Intersection Observer 懶載入）
+   */
+  init() {
+    if (this.initialized) return;
+
+    const container = document.getElementById('giscus-container');
+    if (!container) return;
+
+    // 使用 Intersection Observer 懶載入
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.loadScript();
+          observer.disconnect();
+        }
+      });
+    }, {
+      rootMargin: '200px 0px', // 提前 200px 開始載入
+      threshold: 0
+    });
+
+    observer.observe(container);
+    this.initialized = true;
+
+    // 監聽主題變更
+    this.setupThemeListener();
+  },
+
+  /**
+   * 載入 Giscus 腳本
+   */
+  loadScript() {
+    if (this.scriptLoaded) return;
+
+    const container = document.getElementById('giscus-container');
+    const loading = document.getElementById('giscus-loading');
+    const fallback = document.getElementById('giscus-fallback');
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+
+    // 設定 Giscus 配置屬性
+    script.setAttribute('data-repo', this.CONFIG.repo);
+    script.setAttribute('data-repo-id', this.CONFIG.repoId);
+    script.setAttribute('data-category', this.CONFIG.category);
+    script.setAttribute('data-category-id', this.CONFIG.categoryId);
+    script.setAttribute('data-mapping', this.CONFIG.mapping);
+    script.setAttribute('data-strict', this.CONFIG.strict);
+    script.setAttribute('data-reactions-enabled', this.CONFIG.reactionsEnabled);
+    script.setAttribute('data-emit-metadata', this.CONFIG.emitMetadata);
+    script.setAttribute('data-input-position', this.CONFIG.inputPosition);
+    script.setAttribute('data-theme', this.getGiscusTheme());
+    script.setAttribute('data-lang', this.CONFIG.lang);
+    script.setAttribute('data-loading', this.CONFIG.loading);
+
+    // 載入成功
+    script.onload = () => {
+      this.scriptLoaded = true;
+      if (loading) loading.style.display = 'none';
+    };
+
+    // 載入失敗
+    script.onerror = () => {
+      console.error('Giscus 載入失敗');
+      if (loading) loading.style.display = 'none';
+      if (fallback) fallback.hidden = false;
+    };
+
+    container.appendChild(script);
+  },
+
+  /**
+   * 設定主題變更監聽器
+   */
+  setupThemeListener() {
+    // 監聽系統主題變更（auto 模式時）
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', () => {
+      if (ThemeManager.getCurrentTheme() === 'auto') {
+        this.updateTheme();
+      }
+    });
+
+    // 使用 MutationObserver 監聽 data-theme 屬性變更
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+          this.updateTheme();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+  },
+
+  /**
+   * 更新 Giscus 主題（透過 postMessage 與 iframe 通訊）
+   */
+  updateTheme() {
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (!iframe || !iframe.contentWindow) return;
+
+    const newTheme = this.getGiscusTheme();
+
+    iframe.contentWindow.postMessage(
+      {
+        giscus: {
+          setConfig: {
+            theme: newTheme
+          }
+        }
+      },
+      'https://giscus.app'
+    );
+  }
+};
+
+// 暴露到全域
+window.GiscusManager = GiscusManager;
 
 // ============================================================
 // 隨機文章功能
@@ -2050,9 +2228,9 @@ function renderRelatedPosts(posts, currentPost) {
     });
   }
 
-  const commentsLink = document.querySelector('#comments-link');
-  if (commentsLink) {
-    commentsLink.href = `https://github.com/jason5545/b-log/issues/new?title=${encodeURIComponent(`Comment: ${currentPost.title || currentPost.slug}`)}&labels=discussion`;
+  // 初始化 Giscus 留言系統
+  if (document.getElementById('giscus-container')) {
+    GiscusManager.init();
   }
 }
 

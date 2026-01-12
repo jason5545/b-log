@@ -1594,6 +1594,109 @@ a:focus {
   margin-bottom: 0;
 }
 
+/* ============================================================
+   Giscus 留言系統樣式
+   ============================================================ */
+
+.comments-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.comments-section h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.3rem;
+}
+
+.giscus-container {
+  min-height: 300px; /* 防止 CLS */
+  contain: layout style;
+}
+
+/* 載入中狀態 */
+.giscus-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.giscus-loading p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.giscus-loading::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: giscus-spin 1s linear infinite;
+}
+
+@keyframes giscus-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Fallback 樣式 */
+.giscus-fallback {
+  padding: 1.5rem;
+  background: var(--accent-soft);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.giscus-fallback p {
+  margin: 0;
+  color: var(--text);
+}
+
+.giscus-fallback a {
+  font-weight: 600;
+}
+
+/* Giscus iframe 容器樣式 */
+.giscus {
+  width: 100%;
+}
+
+.giscus-frame {
+  width: 100%;
+  border: none;
+  color-scheme: light dark;
+  min-height: 200px;
+}
+
+/* 深色模式調整 */
+[data-theme="dark"] .giscus-loading::before {
+  border-color: var(--border);
+  border-top-color: var(--accent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .giscus-loading::before {
+    border-color: var(--border);
+    border-top-color: var(--accent);
+  }
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+  .giscus-container {
+    min-height: 250px;
+  }
+
+  .comments-section h2 {
+    font-size: 1.2rem;
+  }
+}
+
 .breadcrumb {
   margin: 0 0 1.25rem;
   font-size: 0.875rem;

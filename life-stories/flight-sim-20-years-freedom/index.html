@@ -269,10 +269,19 @@
           <div id="post-content" class="article-body"></div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
-            <section class="comments-callout" id="comments">
-              <h2>Join the conversation</h2>
-              <p>Have thoughts or upgrades? Open a GitHub issue and tag this slug.</p>
-              <p><a id="comments-link" href="#" target="_blank" rel="noopener noreferrer">Start a thread</a></p>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
             </section>
             <nav class="article-nav" aria-label="Post navigation">
               <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
