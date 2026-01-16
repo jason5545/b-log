@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "asking-question-got-blacklisted",
+      "url": "https://b-log.to/business-insights/asking-question-got-blacklisted/",
+      "title": "我只是想問個問題，卻被列入黑名單",
+      "content_text": "幾年前租虛擬主機，發現扣款扣到錯的卡，在 PayPal 點了「報告問題」想問一下，結果直接觸發爭議調查，被主機商列入黑名單。PayPal 的解決中心根本沒有「詢問」選項，只有「爭議」。後來遇到 Data Ideas 的老闆 Josh，他主動問我為什麼有爭議紀錄，才知道這種紀錄會留存，主機商之間可以互查。Josh 是少數願意先問原因再判斷的人，可惜他的公司後來因為投資人撤資而倒閉。這件事教會我：永遠不要用 PayPal 解決中心問問題，有問題直接聯繫賣家；你的紀錄會跟著你；願意溝通的人很珍貴。",
+      "date_published": "2026-01-16T00:00:00Z",
+      "date_modified": "2026-01-16T00:00:00Z",
+      "tags": [
+        "PayPal",
+        "爭議機制",
+        "黑名單",
+        "主機商",
+        "網路交易",
+        "教訓"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "disability-ticket-resale",
       "url": "https://b-log.to/cultural-insights/disability-ticket-resale/",
       "title": "身障票不是你的入場券生意",
