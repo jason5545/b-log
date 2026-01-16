@@ -6,6 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "why-i-turned-off-chunghwa-telecom-ipv6",
+      "url": "https://b-log.to/tech-analysis/why-i-turned-off-chunghwa-telecom-ipv6/",
+      "title": "為什麼我最後還是關掉了中華電信的 IPv6",
+      "content_text": "IPv6 的好處對我來說很明確：不用設 port forwarding，對單指打字的我來說省下很多操作成本。結果開了之後網路不穩，換了華碩換了 GL.iNet OpenWrt 路由器還是一樣爛。問題出在 MTU 黑洞、PPPoE Dual Stack、72 小時強制斷線，以及中華電信只給 /64 prefix。研究之後發現全世界的 ISP 都差不多爛，只是有些國家起步早、給的 prefix 夠大。調整完 OpenWrt 設定後拿到 test-ipv6.com 滿分，針對 Apple 裝置做了 RA lifetime 最佳化，長期穩定性還要觀察。",
+      "date_published": "2026-01-16T12:00:00Z",
+      "date_modified": "2026-01-16T12:00:00Z",
+      "tags": [
+        "IPv6",
+        "中華電信",
+        "PPPoE",
+        "OpenWrt",
+        "MTU",
+        "網路",
+        "路由器"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "asking-question-got-blacklisted",
       "url": "https://b-log.to/business-insights/asking-question-got-blacklisted/",
       "title": "我只是想問個問題，卻被列入黑名單",

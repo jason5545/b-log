@@ -1,5 +1,25 @@
 [
   {
+    "slug": "why-i-turned-off-chunghwa-telecom-ipv6",
+    "title": "為什麼我最後還是關掉了中華電信的 IPv6",
+    "summary": "IPv6 的好處很明確：不用設 port forwarding，對單指打字的我來說省下很多操作成本。結果開了之後網路不穩、換了 OpenWrt 路由器還是一樣爛。問題出在 MTU 黑洞、PPPoE Dual Stack、72 小時強制斷線，以及中華電信只給 /64 prefix。調整完 OpenWrt 設定後拿到 test-ipv6.com 滿分，但長期穩定性還要觀察。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-01-16T12:00:00Z",
+    "updatedAt": "2026-01-16T12:00:00Z",
+    "readingTime": "12 min",
+    "tags": [
+      "IPv6",
+      "中華電信",
+      "PPPoE",
+      "OpenWrt",
+      "MTU",
+      "網路",
+      "路由器"
+    ],
+    "accentColor": "#3498db"
+  },
+  {
     "slug": "asking-question-got-blacklisted",
     "title": "我只是想問個問題，卻被列入黑名單",
     "summary": "在 PayPal 點了「報告問題」想問為什麼扣到錯的卡，結果直接觸發爭議調查，被主機商列入黑名單。PayPal 的解決中心沒有「詢問」選項，只有「爭議」。後來遇到願意先問原因的 Josh，才知道這種紀錄會留存、主機商之間可以互查。沒有惡意，卻承擔所有後果。",
