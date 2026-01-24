@@ -1,5 +1,26 @@
 [
   {
+    "slug": "fnos-repair-after-hack",
+    "title": "被駭客入侵後的 fnOS NAS 修復紀錄",
+    "summary": "我的 fnOS NAS 被中國駭客透過 Docker Manager 漏洞入侵。修復過程發現駭客刪除了 cat、chattr 等關鍵命令，還把目錄設成 immutable 阻止修復。從官方 ISO 提取檔案恢復系統，設定台灣 IP 限制防火牆，順便評估了 fnOS 的安全性問題。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-01-24T00:00:00Z",
+    "updatedAt": "2026-01-24T00:00:00Z",
+    "readingTime": "15 min",
+    "tags": [
+      "fnOS",
+      "NAS",
+      "駭客",
+      "防火牆",
+      "nftables",
+      "Docker",
+      "系統修復",
+      "資安"
+    ],
+    "accentColor": "#e74c3c"
+  },
+  {
     "slug": "why-i-turned-off-chunghwa-telecom-ipv6",
     "title": "為什麼我最後還是關掉了中華電信的 IPv6",
     "summary": "IPv6 的好處很明確：不用設 port forwarding，對單指打字的我來說省下很多操作成本。結果開了之後網路不穩、換了 OpenWrt 路由器還是一樣爛。問題出在 MTU 黑洞、PPPoE Dual Stack、72 小時強制斷線，以及中華電信只給 /64 prefix。調整完 OpenWrt 設定後拿到 test-ipv6.com 滿分，但長期穩定性還要觀察。",

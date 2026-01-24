@@ -6,6 +6,29 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "fnos-repair-after-hack",
+      "url": "https://b-log.to/tech-analysis/fnos-repair-after-hack/",
+      "title": "被駭客入侵後的 fnOS NAS 修復紀錄",
+      "content_text": "我的 fnOS NAS 被中國駭客透過 Docker Manager 漏洞入侵。修復過程中發現駭客不只入侵，還刪除了 cat、chattr 等關鍵系統命令，把 /tmp/appcenter 設成 immutable 阻止應用商店運作。花了大半天從官方 ISO 提取檔案逐一恢復，設定台灣 IP 限制防火牆（別忘了 IPv6 會繞過），最後順便評估了 fnOS 的安全性——結論是目前偏低，不建議直接暴露在公網。",
+      "date_published": "2026-01-24T00:00:00Z",
+      "date_modified": "2026-01-24T00:00:00Z",
+      "tags": [
+        "fnOS",
+        "NAS",
+        "駭客",
+        "防火牆",
+        "nftables",
+        "Docker",
+        "系統修復",
+        "資安"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "why-i-turned-off-chunghwa-telecom-ipv6",
       "url": "https://b-log.to/tech-analysis/why-i-turned-off-chunghwa-telecom-ipv6/",
       "title": "為什麼我最後還是關掉了中華電信的 IPv6",
