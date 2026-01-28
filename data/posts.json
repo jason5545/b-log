@@ -1,5 +1,27 @@
 [
   {
+    "slug": "touchpal",
+    "title": "反編譯 Scroll2 之後，我用 Apple 的私有框架寫了 TrackPal",
+    "summary": "macOS 觸控板號稱業界標杆，但沒有邊緣捲動。花十美元買了 Scroll2，反編譯後發現水平捲動根本不存在。用 Apple 的私有框架 MultitouchSupport.framework 自己寫了 TrackPal，還加上貝葉斯意圖預測讓系統學會判斷你是真的想捲動。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-01-28T00:00:00Z",
+    "updatedAt": "2026-01-28T00:00:00Z",
+    "readingTime": "10 min",
+    "tags": [
+      "macOS",
+      "TrackPal",
+      "無障礙",
+      "邊緣捲動",
+      "逆向工程",
+      "Bayesian",
+      "觸控板",
+      "Apple",
+      "Swift"
+    ],
+    "accentColor": "#5B86E5"
+  },
+  {
     "slug": "fnos-repair-after-hack",
     "title": "被駭客入侵後的 fnOS NAS 修復紀錄",
     "summary": "我的 fnOS NAS 被中國駭客透過 Docker Manager 漏洞入侵。修復過程發現駭客刪除了 cat、chattr 等關鍵命令，還把目錄設成 immutable 阻止修復。從官方 ISO 提取檔案恢復系統，設定台灣 IP 限制防火牆，順便評估了 fnOS 的安全性問題。",
