@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "lisa-15th-anniversary-taipei-2026",
+      "url": "https://b-log.to/life-stories/lisa-15th-anniversary-taipei-2026/",
+      "title": "15週年，我們都還在",
+      "content_text": "這兩天過得很充實。昨天後援會去機場接機，從早守到晚，沒接到人。今天見面會在台北車站大廳，老朋友都還在，也多了新面孔。第一次在台灣遇到見送會這種形式——不是交換什麼，就是單純的道別。從 2015 年華山 Legacy 追到現在快十年了，六月小巨蛋的約定終於要兌現。趁著靈魂還有火花，盡情在名為生命的畫布上揮灑。",
+      "date_published": "2026-01-31T00:00:00Z",
+      "date_modified": "2026-01-31T00:00:00Z",
+      "tags": [
+        "LiSA",
+        "演唱會",
+        "台北",
+        "後援會",
+        "見面會"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-15-taipei.png"
+    },
+    {
       "id": "touchpal",
       "url": "https://b-log.to/tech-development/touchpal/",
       "title": "反編譯 Scroll2 之後，我用 Apple 的私有框架寫了 TrackPal",
