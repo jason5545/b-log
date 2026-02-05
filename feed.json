@@ -6,6 +6,29 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "ai-value-chain-reshuffle-2026",
+      "url": "https://b-log.to/ai-analysis/ai-value-chain-reshuffle-2026/",
+      "title": "AI 價值鏈大洗牌：從四件事看懂 2026 年開局的產業地震",
+      "content_text": "2026 年開局四顆震撼彈：軟體股血洗蒸發 3,000 億美元、Anthropic 百億美元押注 TPU、NVIDIA 200 億買下 Groq、記憶體成為 AI 命門。乍看四條獨立新聞，串起來卻是同一個故事——AI 價值鏈正在重新洗牌，從建設期進入應用期，上一輪的贏家不一定是下一輪的贏家。",
+      "date_published": "2026-02-05T00:00:00Z",
+      "date_modified": "2026-02-05T00:00:00Z",
+      "tags": [
+        "AI",
+        "NVIDIA",
+        "Anthropic",
+        "Groq",
+        "HBM",
+        "記憶體",
+        "晶片",
+        "產業分析"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "lisa-15th-anniversary-taipei-2026",
       "url": "https://b-log.to/life-stories/lisa-15th-anniversary-taipei-2026/",
       "title": "15週年，我們都還在",
