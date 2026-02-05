@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "concert-tickets-can-be-unsold",
+      "url": "https://b-log.to/cultural-insights/concert-tickets-can-be-unsold/",
+      "title": "原來演唱會的票，是可以賣不完的",
+      "content_text": "追星追了十年，今天才第一次知道原來有的歌手場地只有 500 人，票還是賣不完。從 LiSA 的小巨蛋、nagi 的 Zepp 抽選，到某位歌手的角落文創賣不完，同樣都唱過知名動畫主題曲，差距可以大到這種程度。「唱過知名作品」跟「被觀眾記住」是兩回事，努力是基本門檻，不是保證。",
+      "date_published": "2026-02-05T12:00:00Z",
+      "date_modified": "2026-02-05T12:00:00Z",
+      "tags": [
+        "LiSA",
+        "演唱會",
+        "動漫歌手",
+        "追星",
+        "市場觀察"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "ai-value-chain-reshuffle-2026",
       "url": "https://b-log.to/ai-analysis/ai-value-chain-reshuffle-2026/",
       "title": "AI 價值鏈大洗牌：從四件事看懂 2026 年開局的產業地震",
