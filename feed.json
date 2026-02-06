@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "macos-add-to-sidebar-missing",
+      "url": "https://b-log.to/tech-analysis/macos-add-to-sidebar-missing/",
+      "title": "macOS 沒有「加入側邊欄」的右鍵選項，我差點毀掉整個公司專案",
+      "content_text": "對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對我來說，拖曳公司雲端資料夾是高風險操作。差點把整個專案資料夾移到不知道哪裡去之後，我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。",
+      "date_published": "2026-02-06T00:00:00Z",
+      "date_modified": "2026-02-06T00:00:00Z",
+      "tags": [
+        "macOS",
+        "Finder",
+        "無障礙",
+        "Apple",
+        "AppleScript",
+        "捷徑"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "concert-tickets-can-be-unsold",
       "url": "https://b-log.to/cultural-insights/concert-tickets-can-be-unsold/",
       "title": "原來演唱會的票，是可以賣不完的",

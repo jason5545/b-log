@@ -1,5 +1,24 @@
 [
   {
+    "slug": "macos-add-to-sidebar-missing",
+    "title": "macOS 沒有「加入側邊欄」的右鍵選項，我差點毀掉整個公司專案",
+    "summary": "對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對手部動作受限的人來說，拖曳公司雲端資料夾是高風險操作。差點把整個專案資料夾移到不知道哪裡去之後，我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-06T00:00:00Z",
+    "updatedAt": "2026-02-06T00:00:00Z",
+    "readingTime": "5 min",
+    "tags": [
+      "macOS",
+      "Finder",
+      "無障礙",
+      "Apple",
+      "AppleScript",
+      "捷徑"
+    ],
+    "accentColor": "#a2aaad"
+  },
+  {
     "slug": "concert-tickets-can-be-unsold",
     "title": "原來演唱會的票，是可以賣不完的",
     "summary": "追星追了十年，今天才第一次知道原來有的歌手場地只有 500 人，票還是賣不完。從 LiSA 的小巨蛋、nagi 的 Zepp 抽選，到某位歌手的角落文創賣不完，同樣都唱過知名動畫主題曲，差距可以大到這種程度。「唱過知名作品」跟「被觀眾記住」是兩回事，努力是基本門檻，不是保證。",
