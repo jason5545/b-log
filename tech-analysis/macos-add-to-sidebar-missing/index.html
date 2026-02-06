@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>macOS 沒有「加入側邊欄」的右鍵選項，我差點毀掉整個公司專案 - (b)-log</title>
+  <title>macOS 沒有「加入側邊欄」的右鍵選項，然後公司資料夾就被我移走了 - (b)-log</title>
   
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對手部動作受限的人來說，拖曳公司雲端資料夾是高風險操作。差點把整個專案資料夾移到不知道哪裡去之後，我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。">
+  <meta name="description" content="對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對手部動作受限的人來說，拖曳公司雲端資料夾是高風險操作。公司專案資料夾真的被移走了，Box 網頁版還移不回來，最後靠 Finder 拖回去才解決。之後我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/macos-add-to-sidebar-missing/" id="canonical-url">
   
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/macos-add-to-sidebar-missing/" id="og-url">
-  <meta property="og:title" content="macOS 沒有「加入側邊欄」的右鍵選項，我差點毀掉整個公司專案" id="og-title">
-  <meta property="og:description" content="對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對手部動作受限的人來說，拖曳公司雲端資料夾是高風險操作。差點把整個專案資料夾移到不知道哪裡去之後，我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。" id="og-description">
-  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:macOS%20%E6%B2%92%E6%9C%89%E3%80%8C%E5%8A%A0%E5%85%A5%E5%81%B4%E9%82%8A%E6%AC%84%E3%80%8D%E7%9A%84%E5%8F%B3%E9%8D%B5%E9%81%B8%E9%A0%85%EF%BC%8C%E6%88%91%E5%B7%AE%E9%BB%9E%E6%AF%80%E6%8E%89%E6%95%B4%E5%80%8B%E5%85%AC%E5%8F%B8%E5%B0%88%E6%A1%88,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:title" content="macOS 沒有「加入側邊欄」的右鍵選項，然後公司資料夾就被我移走了" id="og-title">
+  <meta property="og:description" content="對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對手部動作受限的人來說，拖曳公司雲端資料夾是高風險操作。公司專案資料夾真的被移走了，Box 網頁版還移不回來，最後靠 Finder 拖回去才解決。之後我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:macOS%20%E6%B2%92%E6%9C%89%E3%80%8C%E5%8A%A0%E5%85%A5%E5%81%B4%E9%82%8A%E6%AC%84%E3%80%8D%E7%9A%84%E5%8F%B3%E9%8D%B5%E9%81%B8%E9%A0%85%EF%BC%8C%E7%84%B6%E5%BE%8C%E5%85%AC%E5%8F%B8%E8%B3%87%E6%96%99%E5%A4%BE%E5%B0%B1%E8%A2%AB%E6%88%91%E7%A7%BB%E8%B5%B0%E4%BA%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="(b)-log">
@@ -29,9 +29,9 @@
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/macos-add-to-sidebar-missing/" id="twitter-url">
-  <meta property="twitter:title" content="macOS 沒有「加入側邊欄」的右鍵選項，我差點毀掉整個公司專案" id="twitter-title">
-  <meta property="twitter:description" content="對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對手部動作受限的人來說，拖曳公司雲端資料夾是高風險操作。差點把整個專案資料夾移到不知道哪裡去之後，我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。" id="twitter-description">
-  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:macOS%20%E6%B2%92%E6%9C%89%E3%80%8C%E5%8A%A0%E5%85%A5%E5%81%B4%E9%82%8A%E6%AC%84%E3%80%8D%E7%9A%84%E5%8F%B3%E9%8D%B5%E9%81%B8%E9%A0%85%EF%BC%8C%E6%88%91%E5%B7%AE%E9%BB%9E%E6%AF%80%E6%8E%89%E6%95%B4%E5%80%8B%E5%85%AC%E5%8F%B8%E5%B0%88%E6%A1%88,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:title" content="macOS 沒有「加入側邊欄」的右鍵選項，然後公司資料夾就被我移走了" id="twitter-title">
+  <meta property="twitter:description" content="對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對手部動作受限的人來說，拖曳公司雲端資料夾是高風險操作。公司專案資料夾真的被移走了，Box 網頁版還移不回來，最後靠 Finder 拖回去才解決。之後我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:macOS%20%E6%B2%92%E6%9C%89%E3%80%8C%E5%8A%A0%E5%85%A5%E5%81%B4%E9%82%8A%E6%AC%84%E3%80%8D%E7%9A%84%E5%8F%B3%E9%8D%B5%E9%81%B8%E9%A0%85%EF%BC%8C%E7%84%B6%E5%BE%8C%E5%85%AC%E5%8F%B8%E8%B3%87%E6%96%99%E5%A4%BE%E5%B0%B1%E8%A2%AB%E6%88%91%E7%A7%BB%E8%B5%B0%E4%BA%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
   
   <!-- 額外的 metadata -->
