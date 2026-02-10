@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "wheelchair-ticket-collection",
+      "url": "https://b-log.to/cultural-insights/wheelchair-ticket-collection/",
+      "title": "你的收藏品，是我唯一能進場的方式",
+      "content_text": "我追 LiSA 十年，每一場台灣演唱會都拚了命搶輪椅席，因為那是我唯一能進場的方式。結果有人連續四次抽到輪椅席，明知自己不會去，還把票領出來當收藏品。四張票，四個本來可以進場的人，就這樣沒了。更可惡的是，這種行為傷害的不只是搶不到票的人，它讓主辦單位覺得「開了身障席也是被浪費」，破壞的是整個身障社群好不容易爭取到的信任。",
+      "date_published": "2026-02-10T00:00:00Z",
+      "date_modified": "2026-02-10T00:00:00Z",
+      "tags": [
+        "LiSA",
+        "演唱會",
+        "無障礙",
+        "身心障礙",
+        "輪椅席"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/wheelchair-ticket-collection.webp"
+    },
+    {
       "id": "macos-add-to-sidebar-missing",
       "url": "https://b-log.to/tech-analysis/macos-add-to-sidebar-missing/",
       "title": "macOS 沒有「加入側邊欄」的右鍵選項，然後公司資料夾就被我移走了",

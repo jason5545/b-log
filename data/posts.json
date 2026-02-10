@@ -1,5 +1,24 @@
 [
   {
+    "slug": "wheelchair-ticket-collection",
+    "title": "你的收藏品，是我唯一能進場的方式",
+    "summary": "有人連續四次抽到 LiSA 演唱會的輪椅席，明知自己不會去，還是把票領出來放進收藏匣。對坐輪椅的人來說，輪椅席沒有 plan B，搶不到就是不能去。這種行為傷害的不只是一場演唱會，是整個身障社群跟主辦單位之間好不容易建立的信任。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-10T00:00:00Z",
+    "updatedAt": "2026-02-10T00:00:00Z",
+    "readingTime": "5 min",
+    "tags": [
+      "LiSA",
+      "演唱會",
+      "無障礙",
+      "身心障礙",
+      "輪椅席"
+    ],
+    "accentColor": "#c0392b",
+    "coverImage": "/content/img/2026/wheelchair-ticket-collection.webp"
+  },
+  {
     "slug": "macos-add-to-sidebar-missing",
     "title": "macOS 沒有「加入側邊欄」的右鍵選項，然後公司資料夾就被我移走了",
     "summary": "對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對手部動作受限的人來說，拖曳公司雲端資料夾是高風險操作。公司專案資料夾真的被移走了，Box 網頁版還移不回來，最後靠 Finder 拖回去才解決。之後我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。",
