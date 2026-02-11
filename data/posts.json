@@ -16,7 +16,8 @@
       "輪椅席"
     ],
     "accentColor": "#c0392b",
-    "coverImage": "/content/img/2026/wheelchair-ticket-collection.webp"
+    "coverImage": "/content/img/2026/wheelchair-ticket-collection.webp",
+    "hasAudio": true
   },
   {
     "slug": "macos-add-to-sidebar-missing",
