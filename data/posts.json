@@ -163,6 +163,7 @@
   {
     "slug": "asking-question-got-blacklisted",
     "title": "我只是想問個問題，卻被列入黑名單",
+    "coverImage": "/content/img/2026/blacklisted_inquiry.png",
     "summary": "在 PayPal 點了「報告問題」想問為什麼扣到錯的卡，結果直接觸發爭議調查，被主機商列入黑名單。PayPal 的解決中心沒有「詢問」選項，只有「爭議」。後來遇到願意先問原因的 Josh，才知道這種紀錄會留存、主機商之間可以互查。沒有惡意，卻承擔所有後果。",
     "category": "商業觀察",
     "author": "Jason Chien",
