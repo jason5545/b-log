@@ -1,0 +1,99 @@
+/* Shared critical styles for core layout/theme. Keep this file small and stable. */
+:root {
+  color-scheme: light dark;
+  --bg-gradient: linear-gradient(140deg, #eef1ff 0%, #fefefe 60%, #f4f7ff 100%);
+  --bg-dark-gradient: #000000;
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface-muted: rgba(255, 255, 255, 0.6);
+  --surface-dark: rgba(18, 18, 18, 0.95);
+  --surface-dark-muted: rgba(30, 30, 30, 0.8);
+  --text: #111322;
+  --text-muted: #5d6476;
+  --text-inverse: #f7f8ff;
+  --accent: #556bff;
+  --accent-soft: rgba(85, 107, 255, 0.12);
+  --accent-strong: #3644d8;
+  --border: rgba(17, 19, 34, 0.08);
+  --shadow-soft: 0 18px 50px -24px rgba(15, 21, 46, 0.55);
+  --shadow-strong: 0 22px 60px -18px rgba(26, 33, 71, 0.45);
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  --sidebar-width: 320px;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-gradient: var(--bg-dark-gradient);
+  --surface: var(--surface-dark);
+  --surface-muted: var(--surface-dark-muted);
+  --text: #e5e7f6;
+  --text-muted: #9ca7c7;
+  --border: rgba(229, 231, 246, 0.08);
+  --shadow-soft: 0 18px 40px -20px rgba(0, 0, 0, 0.9);
+  --shadow-strong: 0 28px 80px -30px rgba(0, 0, 0, 0.95);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg-gradient: var(--bg-dark-gradient);
+    --surface: var(--surface-dark);
+    --surface-muted: var(--surface-dark-muted);
+    --text: #e5e7f6;
+    --text-muted: #9ca7c7;
+    --border: rgba(229, 231, 246, 0.08);
+    --shadow-soft: 0 18px 40px -20px rgba(0, 0, 0, 0.9);
+    --shadow-strong: 0 28px 80px -30px rgba(0, 0, 0, 0.95);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  background: var(--bg-gradient);
+  color: var(--text);
+}
+
+.page-chrome {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: saturate(120%) blur(60px);
+}
+
+.wrapper {
+  width: min(1600px, 98vw);
+  margin: 0 auto;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.site-header {
+  padding: 3.5rem 0 2.5rem;
+  position: relative;
+}
+
+.site-title {
+  margin: 0;
+  font-size: clamp(2.6rem, 6vw, 3.4rem);
+  letter-spacing: -0.04em;
+}
+
+.site-tagline {
+  margin: 0.35rem 0 0;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  max-width: 540px;
+}
