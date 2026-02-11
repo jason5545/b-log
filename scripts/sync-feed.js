@@ -8,16 +8,19 @@ const path = require('path');
 
 const POSTS_PATH = path.join(__dirname, '../data/posts.json');
 const FEED_PATH = path.join(__dirname, '../feed.json');
+const CATEGORIES_PATH = path.join(__dirname, '../config/categories.json');
 
-const categoryMapping = {
-  'AI 分析': 'ai-analysis',
-  '技術開發': 'tech-development',
-  '技術分析': 'tech-analysis',
-  '開發哲學': 'dev-philosophy',
-  '生活記事': 'life-stories',
-  '商業觀察': 'business-insights',
-  '文化觀察': 'cultural-insights'
-};
+const { categoryMapping } = JSON.parse(fs.readFileSync(CATEGORIES_PATH, 'utf-8'));
+
+function buildAbsoluteUrl(resourcePath) {
+  if (!resourcePath) return null;
+  if (resourcePath.startsWith('http://') || resourcePath.startsWith('https://')) {
+    return resourcePath;
+  }
+
+  const normalizedPath = resourcePath.startsWith('/') ? resourcePath : `/${resourcePath}`;
+  return `https://b-log.to${normalizedPath}`;
+}
 
 function generateUrl(slug, category) {
   const catSlug = categoryMapping[category] || 'uncategorized';
@@ -38,9 +41,7 @@ function createFeedItem(post) {
 
   // 如果有封面圖片，添加 image 欄位
   if (post.coverImage) {
-    item.image = post.coverImage.startsWith('http')
-      ? post.coverImage
-      : `https://b-log.to${post.coverImage}`;
+    item.image = buildAbsoluteUrl(post.coverImage);
   }
 
   return item;

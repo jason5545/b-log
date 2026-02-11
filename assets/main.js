@@ -2,8 +2,25 @@ const POSTS_JSON = '/data/posts.json';
 const POSTS_ROOT = '/content/posts/';
 const GITHUB_USERNAME = 'jason5545';
 const GITHUB_REPO = 'b-log';
+const DEFAULT_CATEGORY_MAPPING = {
+  'AI 分析': 'ai-analysis',
+  '技術開發': 'tech-development',
+  '技術分析': 'tech-analysis',
+  '開發哲學': 'dev-philosophy',
+  '生活記事': 'life-stories',
+  '商業觀察': 'business-insights',
+  '文化觀察': 'cultural-insights'
+};
+const POSTS_CACHE_TTL_MS = 5 * 60 * 1000;
+
 // 全域變數儲存分類映射（從設定檔載入）
 let categoryMapping = null;
+let postsCatalogCache = null;
+let postsCatalogCacheAt = 0;
+let postsCatalogPromise = null;
+let normalizedPostsCache = null;
+let normalizedPostsCacheAt = 0;
+const markdownCache = new Map();
 
 // 載入分類設定
 async function loadCategoryMapping() {
@@ -16,14 +33,8 @@ async function loadCategoryMapping() {
     return categoryMapping;
   } catch (error) {
     console.error('無法載入分類設定，使用預設值', error);
-    // 降級方案：使用硬編碼的映射
-    categoryMapping = {
-      'AI 分析': 'ai-analysis',
-      '技術開發': 'tech-development',
-      '技術分析': 'tech-analysis',
-      '開發哲學': 'dev-philosophy',
-      '生活記事': 'life-stories'
-    };
+    // 降級方案：使用內建的完整映射
+    categoryMapping = DEFAULT_CATEGORY_MAPPING;
     return categoryMapping;
   }
 }
@@ -1634,17 +1645,45 @@ async function renderArticle() {
 }
 
 async function loadPostsCatalog() {
-  const response = await fetch(`${POSTS_JSON}?t=${Date.now()}`);
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  const text = await readUtf8Text(response);
-  const posts = JSON.parse(text);
-  if (!Array.isArray(posts)) throw new Error('Invalid posts.json format');
-  return posts;
+  const now = Date.now();
+
+  if (postsCatalogCache && now - postsCatalogCacheAt < POSTS_CACHE_TTL_MS) {
+    return postsCatalogCache;
+  }
+
+  if (postsCatalogPromise) {
+    return postsCatalogPromise;
+  }
+
+  postsCatalogPromise = (async () => {
+    const response = await fetch(POSTS_JSON);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const text = await readUtf8Text(response);
+    const posts = JSON.parse(text);
+    if (!Array.isArray(posts)) throw new Error('Invalid posts.json format');
+
+    postsCatalogCache = posts;
+    postsCatalogCacheAt = Date.now();
+    return postsCatalogCache;
+  })();
+
+  try {
+    return await postsCatalogPromise;
+  } finally {
+    postsCatalogPromise = null;
+  }
 }
 
 async function loadNormalizedPosts() {
   const raw = await loadPostsCatalog();
-  return normalizePosts(raw);
+
+  if (normalizedPostsCache && normalizedPostsCacheAt === postsCatalogCacheAt) {
+    return normalizedPostsCache;
+  }
+
+  normalizedPostsCache = normalizePosts(raw);
+  normalizedPostsCacheAt = postsCatalogCacheAt;
+  return normalizedPostsCache;
 }
 
 function normalizePosts(rawPosts) {
@@ -1829,12 +1868,20 @@ function populateTagCloud(posts) {
 
 async function renderMarkdownContent(slug, contentEl) {
   if (!contentEl) return;
-  const response = await fetch(`${POSTS_ROOT}${slug}.md?t=${Date.now()}`);
-  if (!response.ok) {
-    throw new Error(`Markdown fetch failed with status ${response.status}`);
-  }
+  let markdown = null;
+  const cachedMarkdown = markdownCache.get(slug);
 
-  let markdown = await readUtf8Text(response);
+  if (cachedMarkdown) {
+    markdown = cachedMarkdown;
+  } else {
+    const response = await fetch(`${POSTS_ROOT}${slug}.md`);
+    if (!response.ok) {
+      throw new Error(`Markdown fetch failed with status ${response.status}`);
+    }
+
+    markdown = await readUtf8Text(response);
+    markdownCache.set(slug, markdown);
+  }
 
   // 移除第一行的 H1 標題（避免與頁面標題欄重複）
   const lines = markdown.split('\n');
@@ -2350,15 +2397,7 @@ function clamp(value, min, max) {
 function slugToPath(slug, category) {
   // 使用全局的 categoryMapping（從 config/categories.json 載入）
   // 如果還沒載入，使用完整的預設映射作為 fallback
-  const mapping = categoryMapping || {
-    'AI 分析': 'ai-analysis',
-    '技術開發': 'tech-development',
-    '技術分析': 'tech-analysis',
-    '開發哲學': 'dev-philosophy',
-    '生活記事': 'life-stories',
-    '商業觀察': 'business-insights',
-    '文化觀察': 'cultural-insights'
-  };
+  const mapping = categoryMapping || DEFAULT_CATEGORY_MAPPING;
 
   // 如果有分類，生成 WordPress 風格的 URL（絕對路徑）
   if (category && mapping[category]) {

@@ -1,0 +1,110 @@
+name: 內容資料管線
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data/posts.json'
+      - 'config/categories.json'
+      - 'post.html'
+      - 'scripts/generate-redirects.js'
+      - 'scripts/generate-sitemap.js'
+      - 'scripts/sync-feed.js'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'data/posts.json'
+      - 'config/categories.json'
+      - 'post.html'
+      - 'scripts/generate-redirects.js'
+      - 'scripts/generate-sitemap.js'
+      - 'scripts/sync-feed.js'
+  workflow_dispatch:
+
+jobs:
+  content-pipeline:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 檢出程式碼
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 設定 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 驗證最新文章年份
+        run: |
+          LATEST_PUBLISHED_AT=$(jq -r 'max_by(.publishedAt).publishedAt // empty' data/posts.json)
+          LATEST_SLUG=$(jq -r 'max_by(.publishedAt).slug // empty' data/posts.json)
+
+          if [[ -z "$LATEST_PUBLISHED_AT" || -z "$LATEST_SLUG" ]]; then
+            echo "❌ 錯誤：無法從 posts.json 取得最新文章資訊"
+            exit 1
+          fi
+
+          LATEST_YEAR="${LATEST_PUBLISHED_AT:0:4}"
+          CURRENT_YEAR=$(date -u +%Y)
+
+          echo "最新文章: $LATEST_SLUG"
+          echo "發布日期: $LATEST_PUBLISHED_AT"
+          echo "年份檢查: $LATEST_YEAR vs $CURRENT_YEAR"
+
+          if [[ "$LATEST_YEAR" != "$CURRENT_YEAR" ]]; then
+            echo "❌ 最新文章年份為 $LATEST_YEAR，應為 $CURRENT_YEAR"
+            exit 1
+          fi
+
+      - name: 生成文章靜態頁與重定向
+        run: node scripts/generate-redirects.js
+
+      - name: 生成 Sitemap
+        run: node scripts/generate-sitemap.js
+
+      - name: 同步 Feed
+        run: node scripts/sync-feed.js
+
+      - name: 檢查變更
+        id: check_changes
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "發現需同步的產出檔案"
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "產出檔案已是最新"
+          fi
+
+      - name: PR 檢查（禁止未同步產出）
+        if: github.event_name == 'pull_request' && steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          echo "❌ 偵測到未同步的產出檔案，請先更新後再送出 PR"
+          git status --short
+          git diff --stat
+          exit 1
+
+      - name: 提交同步結果
+        if: github.event_name == 'push' && steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/posts.json feed.json sitemap.xml */*/index.html
+          git commit -m "chore: sync content artifacts
+
+          - regenerate static article routes
+          - refresh sitemap.xml
+          - sync feed.json"
+
+      - name: 推送變更
+        if: github.event_name == 'push' && steps.check_changes.outputs.has_changes == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
