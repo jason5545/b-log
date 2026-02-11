@@ -54,7 +54,8 @@
       "追星",
       "市場觀察"
     ],
-    "accentColor": "#e74c3c"
+    "accentColor": "#e74c3c",
+    "coverImage": "/content/img/2026/concert_tickets_unsold.png"
   },
   {
     "slug": "ai-value-chain-reshuffle-2026",
