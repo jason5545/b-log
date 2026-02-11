@@ -98,6 +98,7 @@ function generatePostHTML(post) {
     .replace(/src="assets\//g, 'src="../../assets/')
     .replace(/href="\.\/"/g, 'href="../../"')
     .replace(/href="about\.html"/g, 'href="../../about.html"')
+    .replace(/href="gadgets\.html"/g, 'href="../../gadgets.html"')
     .replace(/href="feed\.json"/g, 'href="../../feed.json"');
 
   // 生成完整的 URL
