@@ -6,6 +6,20 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "thought-i-was-cold",
+      "url": "https://b-log.to/life-stories/thought-i-was-cold/",
+      "title": "我以為我已經冷了",
+      "content_text": "做了一個被溫柔對待的夢，醒來才發現自己根本沒有冷。三十一年來把「沒機會」包裝成「不需要」，一個夢就把蓋子掀開了。承認自己還活著、還有渴望，可能是今年做過最誠實的事。",
+      "date_published": "2026-02-13T00:00:00Z",
+      "date_modified": "2026-02-13T00:00:00Z",
+      "tags": ["身心障礙", "感情", "自我對話"],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "wheelchair-ticket-collection",
       "url": "https://b-log.to/cultural-insights/wheelchair-ticket-collection/",
       "title": "你的收藏品，是我唯一能進場的方式",
