@@ -6,6 +6,20 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "typeless-privacy-audit",
+      "url": "https://b-log.to/tech-analysis/typeless-privacy-audit/",
+      "title": "我對 Typeless v1.0.0 進行了完整逆向分析——身為重度語音輸入使用者，這是我的發現",
+      "content_text": "身為付費訂閱的重度語音輸入使用者，我對 Typeless v1.0.0 進行了完整逆向分析。發現它會擷取螢幕上最多一萬字元的可見文字、記錄完整瀏覽器 URL、監控全域鍵盤事件，而且所有音訊都上傳雲端處理，沒有本地模型。一個語音輸入工具，不該需要知道你螢幕上的一切。",
+      "date_published": "2026-02-13T00:00:00Z",
+      "date_modified": "2026-02-13T00:00:00Z",
+      "tags": ["Typeless", "隱私", "逆向工程", "語音輸入", "Electron", "macOS", "資安"],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "thought-i-was-cold",
       "url": "https://b-log.to/life-stories/thought-i-was-cold/",
       "title": "我以為我已經冷了",

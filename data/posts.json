@@ -1,5 +1,17 @@
 [
   {
+    "slug": "typeless-privacy-audit",
+    "title": "我對 Typeless v1.0.0 進行了完整逆向分析——身為重度語音輸入使用者，這是我的發現",
+    "summary": "身為付費訂閱的重度語音輸入使用者，我對 Typeless v1.0.0 進行了完整逆向分析。發現螢幕文字擷取、瀏覽器 URL 追蹤、全域鍵盤監控、100% 雲端處理等問題。一個語音輸入工具，不該需要知道你螢幕上的一切。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-13T00:00:00Z",
+    "updatedAt": "2026-02-13T00:00:00Z",
+    "readingTime": "15 min",
+    "tags": ["Typeless", "隱私", "逆向工程", "語音輸入", "Electron", "macOS", "資安"],
+    "accentColor": "#c0392b"
+  },
+  {
     "slug": "thought-i-was-cold",
     "title": "我以為我已經冷了",
     "summary": "做了一個被溫柔對待的夢，醒來才發現自己根本沒有冷。三十一年來把「沒機會」包裝成「不需要」，一個夢就把蓋子掀開了。承認自己還活著、還有渴望，可能是今年做過最誠實的事。",
