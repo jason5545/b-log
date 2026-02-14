@@ -1,5 +1,16 @@
 [
   {
+    "slug": "a-piano-a-voice-a-pause",
+    "title": "一架鋼琴、一個聲音、一個被停住的人",
+    "summary": "大部分人看到 LiSA 會覺得嗨、激動，我卻覺得安心。追了超過十年，才明白這份安定感從 2015 年日比谷的那架鋼琴開始，就已經決定了一切。",
+    "category": "生活記事",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-14T00:00:00Z",
+    "readingTime": "8 min",
+    "tags": ["LiSA", "音樂", "演唱會", "身心障礙", "自我對話", "ナミダ流星群"],
+    "accentColor": "#5b7a94"
+  },
+  {
     "slug": "typeless-privacy-audit",
     "title": "我對 Typeless v1.0.0 進行了完整逆向分析——身為重度語音輸入使用者，這是我的發現",
     "summary": "身為付費訂閱的重度語音輸入使用者，我對 Typeless v1.0.0 進行了完整逆向分析。發現螢幕文字擷取、瀏覽器 URL 追蹤、全域鍵盤監控、100% 雲端處理等問題。一個語音輸入工具，不該需要知道你螢幕上的一切。",
