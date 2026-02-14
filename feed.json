@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "a-piano-a-voice-a-pause",
+      "url": "https://b-log.to/life-stories/a-piano-a-voice-a-pause/",
+      "title": "一架鋼琴、一個聲音、一個被停住的人",
+      "content_text": "大部分人看到 LiSA 會覺得嗨、激動，我卻覺得安心。追了超過十年，才明白這份安定感從 2015 年日比谷的那架鋼琴開始，就已經決定了一切。",
+      "date_published": "2026-02-14T00:00:00.000Z",
+      "date_modified": "2026-02-14T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "音樂",
+        "演唱會",
+        "身心障礙",
+        "自我對話",
+        "ナミダ流星群"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "typeless-privacy-audit",
       "url": "https://b-log.to/tech-analysis/typeless-privacy-audit/",
       "title": "我對 Typeless v1.0.0 進行了完整逆向分析——身為重度語音輸入使用者，這是我的發現",
