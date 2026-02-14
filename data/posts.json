@@ -7,7 +7,14 @@
     "author": "Jason Chien",
     "publishedAt": "2026-02-14T00:00:00Z",
     "readingTime": "8 min",
-    "tags": ["LiSA", "音樂", "演唱會", "身心障礙", "自我對話", "ナミダ流星群"],
+    "tags": [
+      "LiSA",
+      "音樂",
+      "演唱會",
+      "身心障礙",
+      "自我對話",
+      "ナミダ流星群"
+    ],
     "accentColor": "#5b7a94",
     "coverImage": "/content/img/2026/a-piano-a-voice-a-pause-cover.webp"
   },
@@ -20,7 +27,15 @@
     "publishedAt": "2026-02-13T00:00:00Z",
     "updatedAt": "2026-02-13T00:00:00Z",
     "readingTime": "15 min",
-    "tags": ["Typeless", "隱私", "逆向工程", "語音輸入", "Electron", "macOS", "資安"],
+    "tags": [
+      "Typeless",
+      "隱私",
+      "逆向工程",
+      "語音輸入",
+      "Electron",
+      "macOS",
+      "資安"
+    ],
     "accentColor": "#c0392b"
   },
   {
@@ -32,7 +47,11 @@
     "publishedAt": "2026-02-13T00:00:00Z",
     "updatedAt": "2026-02-13T00:00:00Z",
     "readingTime": "5 min",
-    "tags": ["身心障礙", "感情", "自我對話"],
+    "tags": [
+      "身心障礙",
+      "感情",
+      "自我對話"
+    ],
     "accentColor": "#5b7a94"
   },
   {
@@ -91,7 +110,7 @@
       "市場觀察"
     ],
     "accentColor": "#e74c3c",
-    "coverImage": "/content/img/2026/concert_tickets_unsold.png"
+    "coverImage": "/content/img/2026/concert_tickets_unsold.webp"
   },
   {
     "slug": "ai-value-chain-reshuffle-2026",
@@ -199,7 +218,7 @@
   {
     "slug": "asking-question-got-blacklisted",
     "title": "我只是想問個問題，卻被列入黑名單",
-    "coverImage": "/content/img/2026/blacklisted_inquiry.png",
+    "coverImage": "/content/img/2026/blacklisted_inquiry.webp",
     "summary": "在 PayPal 點了「報告問題」想問為什麼扣到錯的卡，結果直接觸發爭議調查，被主機商列入黑名單。PayPal 的解決中心沒有「詢問」選項，只有「爭議」。後來遇到願意先問原因的 Josh，才知道這種紀錄會留存、主機商之間可以互查。沒有惡意，卻承擔所有後果。",
     "category": "商業觀察",
     "author": "Jason Chien",
@@ -219,7 +238,7 @@
   {
     "slug": "disability-ticket-resale",
     "title": "身障票不是你的入場券生意",
-    "coverImage": "/content/img/2026/disability_ticket_business.png",
+    "coverImage": "/content/img/2026/disability_ticket_business.webp",
     "summary": "看到有人在社團轉賣 Rain 演唱會的身障票，開價四百塊加一杯星巴克，條件是「陪同進場」。身障票是社會對我們額外困難的補償，不是拿來變現的入場券生意。這種人不多，但只要有，就會壞事——最後承受後果的是那些老老實實在搶票、真正需要這些位置的人。",
     "category": "文化觀察",
     "author": "Jason Chien",
@@ -309,7 +328,7 @@
       "AI"
     ],
     "accentColor": "#5856d6",
-    "coverImage": "/content/img/2026/typeless-voice-input-review-cover.png"
+    "coverImage": "/content/img/2026/typeless-voice-input-review-cover.webp"
   },
   {
     "slug": "macos-kvm-iphone-usb-passthrough",
@@ -562,7 +581,7 @@
       "Walled Garden"
     ],
     "accentColor": "#00c300",
-    "coverImage": "/content/img/2025/line-encryption-cover.png"
+    "coverImage": "/content/img/2025/line-encryption-cover.webp"
   },
   {
     "slug": "ai-generated-image-lesson",
@@ -680,7 +699,7 @@
       "Reddit"
     ],
     "accentColor": "#8e44ad",
-    "coverImage": "/content/img/2025/ai-wheelchair-privacy-cover.png"
+    "coverImage": "/content/img/2025/ai-wheelchair-privacy-cover.webp"
   },
   {
     "slug": "lisa-p0-priority-realization",
@@ -701,7 +720,7 @@
       "身心障礙"
     ],
     "accentColor": "#e74c3c",
-    "coverImage": "/content/img/2025/lisa-p0-priority-cover.png"
+    "coverImage": "/content/img/2025/lisa-p0-priority-cover.webp"
   },
   {
     "slug": "workstation-laptop-thermal-crisis",
@@ -722,7 +741,7 @@
       "硬體分析"
     ],
     "accentColor": "#d63031",
-    "coverImage": "/content/img/2025/workstation-thermal-cover.png"
+    "coverImage": "/content/img/2025/workstation-thermal-cover.webp"
   },
   {
     "slug": "claude-content-filter-paradox",
@@ -742,7 +761,7 @@
       "Goodhart's Law"
     ],
     "accentColor": "#e74c3c",
-    "coverImage": "/content/img/2025/claude-gpl-paradox-cover.png"
+    "coverImage": "/content/img/2025/claude-gpl-paradox-cover.webp"
   },
   {
     "slug": "birthday-avatar-ai-barrier",
@@ -762,7 +781,7 @@
       "生日"
     ],
     "accentColor": "#e91e8c",
-    "coverImage": "/content/img/2025/birthday-avatar-cover.png"
+    "coverImage": "/content/img/2025/birthday-avatar-cover.webp"
   },
   {
     "slug": "pdf-ocr-rotation-pdftk-trap",
@@ -819,7 +838,7 @@
       "WinUtil"
     ],
     "accentColor": "#0078d4",
-    "coverImage": "/content/img/2025/windows-voice-cover.png"
+    "coverImage": "/content/img/2025/windows-voice-cover.webp"
   },
   {
     "slug": "disability-seating-ticket-barriers",
@@ -839,7 +858,7 @@
       "數位落差"
     ],
     "accentColor": "#3498db",
-    "coverImage": "/content/img/2025/disability-seating-cover.png"
+    "coverImage": "/content/img/2025/disability-seating-cover.webp"
   },
   {
     "slug": "fake-buyer-scam-personal-data",
@@ -878,7 +897,7 @@
       "AI 輔助開發"
     ],
     "accentColor": "#e74c3c",
-    "coverImage": "/content/img/2025/Screenshot_2025-11-24-16-43-21-161_com.jp.sma.lisalarm.jpg"
+    "coverImage": "/content/img/2025/Screenshot_2025-11-24-16-43-21-161_com.jp.sma.lisalarm.webp"
   },
   {
     "slug": "payment-gateway-bank-declined-authorization",
@@ -937,7 +956,7 @@
       "resolv.conf"
     ],
     "accentColor": "#27ae60",
-    "coverImage": "/content/img/2025/proxmox-lxc-dns-cover.png"
+    "coverImage": "/content/img/2025/proxmox-lxc-dns-cover.webp"
   },
   {
     "slug": "traceroute-hostname-misleading",
@@ -1094,7 +1113,7 @@
       "文化觀察"
     ],
     "accentColor": "#8e44ad",
-    "coverImage": "/content/img/2025/religion-realism-cover.png"
+    "coverImage": "/content/img/2025/religion-realism-cover.webp"
   },
   {
     "slug": "super-computer-prophecy-18-years",
@@ -1115,7 +1134,7 @@
       "清醒夢"
     ],
     "accentColor": "#4a90e2",
-    "coverImage": "/content/img/2025/supercomputer-prophecy-cover.png"
+    "coverImage": "/content/img/2025/supercomputer-prophecy-cover.webp"
   },
   {
     "slug": "emotional-vtuber-business-logic",
@@ -1267,7 +1286,7 @@
       "PCIe"
     ],
     "accentColor": "#3498db",
-    "coverImage": "/content/img/2025/gpu-passthrough-cover.png"
+    "coverImage": "/content/img/2025/gpu-passthrough-cover.webp"
   },
   {
     "slug": "audio-player-promise-error-fix",
@@ -1327,7 +1346,7 @@
     ],
     "accentColor": "#e74c3c",
     "hasAudio": true,
-    "coverImage": "/content/img/2025/claude-nerf-cover.png"
+    "coverImage": "/content/img/2025/claude-nerf-cover.webp"
   },
   {
     "slug": "webp-automation-path-compatibility",
@@ -1387,7 +1406,7 @@
     ],
     "accentColor": "#e67e22",
     "hasAudio": true,
-    "coverImage": "/content/img/2025/tablet-ecosystem-cover.png"
+    "coverImage": "/content/img/2025/tablet-ecosystem-cover.webp"
   },
   {
     "slug": "syntax-highlighting-debugging-journey",
@@ -1443,7 +1462,7 @@
     ],
     "accentColor": "#e74c3c",
     "hasAudio": true,
-    "coverImage": "/content/img/2025/openai-contradiction-cover.png"
+    "coverImage": "/content/img/2025/openai-contradiction-cover.webp"
   },
   {
     "slug": "unified-remote-evo-development-journey",
@@ -1498,7 +1517,7 @@
     ],
     "accentColor": "#556bff",
     "hasAudio": true,
-    "coverImage": "/content/img/2025/understanding-execution-cover.png"
+    "coverImage": "/content/img/2025/understanding-execution-cover.webp"
   },
   {
     "slug": "openai-vs-anthropic-red-lines",
@@ -1518,7 +1537,7 @@
     ],
     "accentColor": "#e74c3c",
     "hasAudio": true,
-    "coverImage": "/content/img/2025/ai-policy-red-lines-cover.png"
+    "coverImage": "/content/img/2025/ai-policy-red-lines-cover.webp"
   },
   {
     "slug": "lisa-concert-2017-ssa-ldp",
@@ -1538,7 +1557,7 @@
       "旅行"
     ],
     "accentColor": "#e74c3c",
-    "coverImage": "/content/img/2017/516144484_24424208643829727_3352255877500501813_n.jpg"
+    "coverImage": "/content/img/2017/516144484_24424208643829727_3352255877500501813_n.webp"
   },
   {
     "slug": "lisa-concert-believe-in-myself",
@@ -1558,7 +1577,7 @@
       "勇氣"
     ],
     "accentColor": "#e74c3c",
-    "coverImage": "/content/img/2015/514520210_24392094240374501_7379293703597388984_n.jpg",
+    "coverImage": "/content/img/2015/514520210_24392094240374501_7379293703597388984_n.webp",
     "hasAudio": true
   }
 ]

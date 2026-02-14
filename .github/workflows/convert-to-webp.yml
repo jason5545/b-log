@@ -62,7 +62,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add content/img/ content/posts/
+          git add content/img/ content/posts/ data/posts.json feed.json
           git commit -m "🖼️ 自動轉換圖片為 WebP 格式
 
           - 使用 sharp 套件轉換為高品質 WebP
