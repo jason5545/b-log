@@ -42,11 +42,27 @@ jobs:
       - name: 轉換圖片為 WebP
         run: node scripts/convert-to-webp.js
 
-      # 5. 更新 Markdown 文章中的圖片參照
-      - name: 更新 Markdown 圖片參照
+      # 5. 更新圖片參照為 WebP
+      - name: 更新圖片參照
         run: node scripts/update-image-refs.js
 
-      # 6. 檢查是否有變更
+      # 6. 刪除已轉換的原始圖片
+      - name: 刪除原始圖片
+        run: |
+          deleted=0
+          for ext in jpg jpeg png; do
+            for f in $(find content/img -name "*.${ext}" 2>/dev/null); do
+              webp="${f%.*}.webp"
+              if [ -f "$webp" ]; then
+                rm "$f"
+                echo "🗑️  已刪除: $f"
+                deleted=$((deleted + 1))
+              fi
+            done
+          done
+          echo "共刪除 ${deleted} 個原始圖片"
+
+      # 7. 檢查是否有變更
       - name: 檢查變更
         id: check_changes
         run: |
@@ -56,22 +72,21 @@ jobs:
             echo "has_changes=false" >> $GITHUB_OUTPUT
           fi
 
-      # 7. 提交並推送變更
+      # 8. 提交並推送變更
       - name: 提交變更
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add content/img/ content/posts/ data/posts.json feed.json
-          git commit -m "🖼️ 自動轉換圖片為 WebP 格式
+          git commit -m "🖼️ 自動轉換圖片為 WebP 並移除原始檔
 
-          - 使用 sharp 套件轉換為高品質 WebP
-          - 品質設定：85
-          - 更新 Markdown 文章使用 <picture> 標籤
-          - 保留原始圖片作為降級方案"
+          - 轉換為高品質 WebP（品質 85）
+          - 更新所有圖片參照為 .webp
+          - 刪除已轉換的原始 JPG/PNG"
           git push
 
-      # 8. 顯示結果
+      # 9. 顯示結果
       - name: 顯示結果
         if: steps.check_changes.outputs.has_changes == 'false'
         run: echo "✅ 沒有需要轉換的圖片"

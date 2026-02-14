@@ -1,11 +1,9 @@
 /**
- * 自動更新 Markdown 文章中的圖片參照為 <picture> 標籤
+ * 自動更新圖片參照為 WebP
  *
  * 功能：
- * - 掃描所有 Markdown 文章
- * - 找出 ![alt](path) 格式的圖片
- * - 如果有對應的 .webp 檔案，轉換為 <picture> 標籤
- * - 提供 WebP + 原始格式的降級方案
+ * - 掃描 Markdown 文章，將圖片路徑直接改為 .webp
+ * - 更新 posts.json 和 feed.json 中的封面圖片路徑
  *
  * 使用方式：node scripts/update-image-refs.js
  */
@@ -33,7 +31,6 @@ function findMarkdownFiles(dir) {
  * 檢查 WebP 檔案是否存在
  */
 function hasWebPVersion(imagePath, markdownDir) {
-  // 將相對路徑轉換為絕對路徑
   const absolutePath = path.resolve(markdownDir, imagePath);
   const parsedPath = path.parse(absolutePath);
   const webpPath = path.join(parsedPath.dir, `${parsedPath.name}.webp`);
@@ -42,36 +39,7 @@ function hasWebPVersion(imagePath, markdownDir) {
 }
 
 /**
- * 將 Markdown 圖片語法轉換為 <picture> 標籤
- */
-function convertToPictureTag(match, alt, imagePath, markdownDir) {
-  const parsedPath = path.parse(imagePath);
-  const webpPath = path.join(parsedPath.dir, `${parsedPath.name}.webp`);
-
-  // 檢查 WebP 是否存在
-  if (!hasWebPVersion(imagePath, markdownDir)) {
-    return match; // 沒有 WebP 版本，保持原樣
-  }
-
-  // 正規化路徑：將反斜線轉換為正斜線（Web 標準）
-  // 注意：由於 Markdown 是在 post.html 中動態渲染，路徑需相對於根目錄
-  let normalizedWebpPath = webpPath.replace(/\\/g, '/');
-  let normalizedImagePath = imagePath.replace(/\\/g, '/');
-
-  // 將相對於 Markdown 的路徑（../img/）轉換為絕對路徑（/content/img/）
-  // 絕對路徑確保在任何頁面深度都能正確解析
-  normalizedWebpPath = normalizedWebpPath.replace(/^\.\.\/img\//, '/content/img/');
-  normalizedImagePath = normalizedImagePath.replace(/^\.\.\/img\//, '/content/img/');
-
-  // 生成 <picture> 標籤
-  return `<picture>
-  <source srcset="${normalizedWebpPath}" type="image/webp">
-  <img src="${normalizedImagePath}" alt="${alt}" loading="lazy">
-</picture>`;
-}
-
-/**
- * 更新單一 Markdown 檔案
+ * 更新單一 Markdown 檔案中的圖片路徑為 WebP
  */
 function updateMarkdownFile(filePath) {
   const content = fs.readFileSync(filePath, 'utf8');
@@ -79,7 +47,7 @@ function updateMarkdownFile(filePath) {
   let updated = false;
   let convertedCount = 0;
 
-  // 正則表達式：匹配 ![alt](path) 格式
+  // 匹配 ![alt](path) 格式的圖片
   const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
 
   const newContent = content.replace(imageRegex, (match, alt, imagePath) => {
@@ -88,19 +56,21 @@ function updateMarkdownFile(filePath) {
       return match;
     }
 
-    // 檢查是否已經是 <picture> 標籤（避免重複處理）
-    const contextBefore = content.substring(Math.max(0, content.indexOf(match) - 100), content.indexOf(match));
-    if (contextBefore.includes('<picture>')) {
+    // 跳過已經是 .webp 的路徑
+    if (imagePath.endsWith('.webp')) {
       return match;
     }
 
-    const result = convertToPictureTag(match, alt, imagePath, markdownDir);
-    if (result !== match) {
-      updated = true;
-      convertedCount++;
+    // 檢查是否有對應的 WebP 檔案
+    if (!hasWebPVersion(imagePath, markdownDir)) {
+      return match;
     }
 
-    return result;
+    // 直接替換副檔名為 .webp
+    const webpImagePath = imagePath.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+    updated = true;
+    convertedCount++;
+    return `![${alt}](${webpImagePath})`;
   });
 
   if (updated) {
@@ -141,8 +111,7 @@ function updateCoverImageRefs() {
       const webpPath = path.join(parsed.dir, `${parsed.name}.webp`);
 
       if (fs.existsSync(webpPath)) {
-        const oldValue = post.coverImage;
-        post.coverImage = oldValue.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+        post.coverImage = post.coverImage.replace(/\.(jpg|jpeg|png)$/i, '.webp');
         console.log(`✅ posts.json: ${post.slug} coverImage → .webp`);
         postsChanged = true;
         updatedCount++;
