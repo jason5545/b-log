@@ -1,5 +1,22 @@
 [
   {
+    "slug": "japan-av-industry-hypocrisy",
+    "title": "看完一則新聞之後的思考：日本成人產業的荒謬與矛盾",
+    "summary": "一個親戚在看 AV 的過程中認出你，享受完之後切換成道德模式來審判你。消費的時候享受供給，發現供給者是誰的時候翻臉不認人——這不叫道德標準，這叫雙重標準。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-15T00:00:00Z",
+    "readingTime": "10 min",
+    "tags": [
+      "日本",
+      "AV 產業",
+      "社會觀察",
+      "職業歧視",
+      "雙重標準"
+    ],
+    "accentColor": "#8b2252"
+  },
+  {
     "slug": "seven-ai-one-article",
     "title": "我拿一篇最私密的文章去測了七家 AI，結果測出了一整個產業的問題",
     "summary": "同一篇關於 LiSA 的私人文章，丟給 ChatGPT、Claude、Gemini、Kimi K2.5、K2、MiniMax、GLM-5。七種反應，測出了模型的真實性格，也追出了整個 AI 產業格局的縮影。",

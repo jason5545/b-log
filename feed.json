@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "japan-av-industry-hypocrisy",
+      "url": "https://b-log.to/cultural-insights/japan-av-industry-hypocrisy/",
+      "title": "看完一則新聞之後的思考：日本成人產業的荒謬與矛盾",
+      "content_text": "今天看到一位 AV 女優因為被親友發現而被迫隱退，片商全面下架作品。最荒謬的是——發現她的那個親戚自己就是消費者，享受完了之後切換成道德模式來審判。日本有全世界最完整的成人產業體系，卻唯獨缺了最重要的一塊：讓從業者不需要害怕被知道自己在做什麼。消費的時候享受供給，發現供給者是誰的時候翻臉不認人，這不叫道德標準，這叫雙重標準。",
+      "date_published": "2026-02-15T00:00:00.000Z",
+      "date_modified": "2026-02-15T00:00:00.000Z",
+      "tags": [
+        "日本",
+        "AV 產業",
+        "社會觀察",
+        "職業歧視",
+        "雙重標準"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "seven-ai-one-article",
       "url": "https://b-log.to/ai-analysis/seven-ai-one-article/",
       "title": "我拿一篇最私密的文章去測了七家 AI，結果測出了一整個產業的問題",
