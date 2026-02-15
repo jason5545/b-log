@@ -6,6 +6,30 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "seven-ai-one-article",
+      "url": "https://b-log.to/ai-analysis/seven-ai-one-article/",
+      "title": "我拿一篇最私密的文章去測了七家 AI，結果測出了一整個產業的問題",
+      "content_text": "我把一篇關於 LiSA 的私人文章丟給七家 AI——ChatGPT、Claude、Gemini、Kimi K2.5、K2、MiniMax、GLM-5。GPT 太冷、Gemini 太用力、Kimi K2.5 太漂亮、K2 太失控、GLM-5 想到了卻沒做到、MiniMax 連繁簡體都搞不定。只有 Claude 讓我覺得它真的在跟我說話。一路追下來，追出了整個 AI 產業格局的縮影。",
+      "date_published": "2026-02-15T00:00:00.000Z",
+      "date_modified": "2026-02-15T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Kimi",
+        "GLM-5",
+        "OpenAI",
+        "LiSA",
+        "模型比較"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "a-piano-a-voice-a-pause",
       "url": "https://b-log.to/life-stories/a-piano-a-voice-a-pause/",
       "title": "一架鋼琴、一個聲音、一個被停住的人",

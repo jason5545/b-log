@@ -1,5 +1,26 @@
 [
   {
+    "slug": "seven-ai-one-article",
+    "title": "我拿一篇最私密的文章去測了七家 AI，結果測出了一整個產業的問題",
+    "summary": "同一篇關於 LiSA 的私人文章，丟給 ChatGPT、Claude、Gemini、Kimi K2.5、K2、MiniMax、GLM-5。七種反應，測出了模型的真實性格，也追出了整個 AI 產業格局的縮影。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-15T00:00:00Z",
+    "readingTime": "15 min",
+    "tags": [
+      "AI",
+      "ChatGPT",
+      "Claude",
+      "Gemini",
+      "Kimi",
+      "GLM-5",
+      "OpenAI",
+      "LiSA",
+      "模型比較"
+    ],
+    "accentColor": "#2c3e50"
+  },
+  {
     "slug": "a-piano-a-voice-a-pause",
     "title": "一架鋼琴、一個聲音、一個被停住的人",
     "summary": "大部分人看到 LiSA 會覺得嗨、激動，我卻覺得安心。追了超過十年，才明白這份安定感從 2015 年日比谷的那架鋼琴開始，就已經決定了一切。",
