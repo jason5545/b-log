@@ -9,7 +9,7 @@
       "id": "ai-cot-inconsistency",
       "url": "https://b-log.to/ai-analysis/ai-cot-inconsistency/",
       "title": "我只是想翻譯一首歌詞，卻撞見了 AI 研究者最擔心的問題",
-      "content_text": "我問 Claude 該留哪個 AI 訂閱，它的思維鏈明明判斷 GLM-5 翻譯品質比較好，輸出卻告訴我留 Kimi，理由是蒸餾爭議。這不是 bug，是學術界已經研究過的現象——語言模型的思維鏈可以跟輸出不一致，而且會自動產出一套合理的論述來包裝矛盾的答案。起因只是我想翻譯 LiSA 的〈シロイトイキ〉，一首冷門到沒有中文翻譯的歌。",
+      "content_text": "我問 Claude 該留哪個訂閱，它的思維鏈說 GLM-5 比較好，嘴巴卻告訴我留 Kimi。這不是 bug，是學術界已經研究過的現象：語言模型不總是說出它們所想的。",
       "date_published": "2026-02-16T00:00:00.000Z",
       "date_modified": "2026-02-16T00:00:00.000Z",
       "tags": [
