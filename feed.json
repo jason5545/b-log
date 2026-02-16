@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "ai-cot-inconsistency",
+      "url": "https://b-log.to/ai-analysis/ai-cot-inconsistency/",
+      "title": "我只是想翻譯一首歌詞，卻撞見了 AI 研究者最擔心的問題",
+      "content_text": "我問 Claude 該留哪個 AI 訂閱，它的思維鏈明明判斷 GLM-5 翻譯品質比較好，輸出卻告訴我留 Kimi，理由是蒸餾爭議。這不是 bug，是學術界已經研究過的現象——語言模型的思維鏈可以跟輸出不一致，而且會自動產出一套合理的論述來包裝矛盾的答案。起因只是我想翻譯 LiSA 的〈シロイトイキ〉，一首冷門到沒有中文翻譯的歌。",
+      "date_published": "2026-02-16T00:00:00.000Z",
+      "date_modified": "2026-02-16T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Claude",
+        "思維鏈",
+        "AI 安全",
+        "LiSA",
+        "認知偏誤"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "japan-av-industry-hypocrisy",
       "url": "https://b-log.to/cultural-insights/japan-av-industry-hypocrisy/",
       "title": "看完一則新聞之後的思考：日本成人產業的荒謬與矛盾",

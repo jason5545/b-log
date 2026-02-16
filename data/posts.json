@@ -1,5 +1,23 @@
 [
   {
+    "slug": "ai-cot-inconsistency",
+    "title": "我只是想翻譯一首歌詞，卻撞見了 AI 研究者最擔心的問題",
+    "summary": "我問 Claude 該留哪個訂閱，它的思維鏈說 GLM-5 比較好，嘴巴卻告訴我留 Kimi。這不是 bug，是學術界已經研究過的現象：語言模型不總是說出它們所想的。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-16T00:00:00Z",
+    "readingTime": "8 min",
+    "tags": [
+      "AI",
+      "Claude",
+      "思維鏈",
+      "AI 安全",
+      "LiSA",
+      "認知偏誤"
+    ],
+    "accentColor": "#4a5568"
+  },
+  {
     "slug": "japan-av-industry-hypocrisy",
     "title": "看完一則新聞之後的思考：日本成人產業的荒謬與矛盾",
     "summary": "一個親戚在看 AV 的過程中認出你，享受完之後切換成道德模式來審判你。消費的時候享受供給，發現供給者是誰的時候翻臉不認人——這不叫道德標準，這叫雙重標準。",
