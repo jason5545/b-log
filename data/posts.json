@@ -1,5 +1,23 @@
 [
   {
+    "slug": "songshan-airport-jpop-parallel-world",
+    "title": "清晨五點的松山機場，我撞見了另一個 J-POP 的平行世界",
+    "summary": "凌晨五點去松山機場接 LiSA，結果搞錯日期，卻意外撞見上百人接機 King & Prince 的場面。十年來以為 J-POP 偶像圈在台灣已經消失，那天才發現不是人少，是我看不到。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-17T00:00:00Z",
+    "readingTime": "8 min",
+    "tags": [
+      "J-POP",
+      "LiSA",
+      "King & Prince",
+      "粉絲文化",
+      "松山機場",
+      "接機"
+    ],
+    "accentColor": "#e85d75"
+  },
+  {
     "slug": "ai-cot-inconsistency",
     "title": "我只是想翻譯一首歌詞，卻撞見了 AI 研究者最擔心的問題",
     "summary": "我問 Claude 該留哪個訂閱，它的思維鏈說 GLM-5 比較好，嘴巴卻告訴我留 Kimi。這不是 bug，是學術界已經研究過的現象：語言模型不總是說出它們所想的。",
