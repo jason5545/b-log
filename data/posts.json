@@ -1,5 +1,22 @@
 [
   {
+    "slug": "ai-collaboration-why-resistance",
+    "title": "我想把部落格系統給朋友用，結果卡在一個我沒預料到的地方",
+    "summary": "朋友用 WordPress 十年，主機慢到不行，我想幫他搬到靜態部落格。技術上沒問題，結果卡在他不想讓 AI 碰他的文章。折衷讓他 Word 寫好、AI 只負責轉檔發布，但真正讓我意外的是：跟 AI 協作幾個月下來，改變最大的不是產出速度，是我開始會回頭思考了。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-17T00:00:00Z",
+    "readingTime": "6 min",
+    "tags": [
+      "AI 協作",
+      "寫作流程",
+      "WordPress",
+      "靜態部落格",
+      "反思"
+    ],
+    "accentColor": "#4a7dff"
+  },
+  {
     "slug": "songshan-airport-jpop-parallel-world",
     "title": "清晨五點的松山機場，我撞見了另一個 J-POP 的平行世界",
     "summary": "凌晨五點去松山機場接 LiSA，結果搞錯日期，卻意外撞見上百人接機 King & Prince 的場面。十年來以為 J-POP 偶像圈在台灣已經消失，那天才發現不是人少，是我看不到。",

@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "ai-collaboration-why-resistance",
+      "url": "https://b-log.to/ai-analysis/ai-collaboration-why-resistance/",
+      "title": "我想把部落格系統給朋友用，結果卡在一個我沒預料到的地方",
+      "content_text": "我想幫朋友把部落格從 WordPress 搬到靜態系統，技術上完全沒問題，結果卡在他不想讓 AI 碰他的文章。他覺得讓 AI 整理想法，文章就不是他的了。折衷方案是他在 Word 寫好，AI 只負責轉格式發布。但跟 AI 協作幾個月、八十幾篇文章下來，我發現改變最大的不是產出速度，是我開始會回頭反思以前發生的事。AI 沒有給我新的想法，它給了我一個結構化思考的習慣。",
+      "date_published": "2026-02-17T00:00:00.000Z",
+      "date_modified": "2026-02-17T00:00:00.000Z",
+      "tags": [
+        "AI 協作",
+        "寫作流程",
+        "WordPress",
+        "靜態部落格",
+        "反思"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "songshan-airport-jpop-parallel-world",
       "url": "https://b-log.to/cultural-insights/songshan-airport-jpop-parallel-world/",
       "title": "清晨五點的松山機場，我撞見了另一個 J-POP 的平行世界",
