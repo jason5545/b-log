@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "same-name-different-paths-same-days",
+      "url": "https://b-log.to/cultural-insights/same-name-different-paths-same-days/",
+      "title": "同一個名字，不同的路，一樣的日子",
+      "content_text": "大年初一滑到孫嘉梁的臉書貼文，兩個溝通困難的人在互相猜意思。我跟他見過面，那是在手天使的面談，他負責面談我。我們都是腦性麻痺，但表現完全不一樣——他手比較能動但口語模糊，我嘴巴比較能動但手不太行。那次面談變成兩個人用 iMac 大字互相推測對方的意思。後來查了他的資料才知道他是建中榜首、台大第一名、中研院數學博士。但報導裡也寫了他的感情被社會扭曲成看護關係、辦公室看起來有點寂寞。我當初沒有選擇繼續唸碩士，因為我很早就想清楚了：頭銜換不到我真正需要的東西。我選了用 AI 做實際能用的東西這條路。我比較幸運的是口語還夠讓語音辨識聽懂，但他連輸入端都進不去。我們碰到的日子是一樣的，但我們都在用自己的方式活著。",
+      "date_published": "2026-02-17T00:00:00.000Z",
+      "date_modified": "2026-02-17T00:00:00.000Z",
+      "tags": [
+        "腦性麻痺",
+        "身心障礙",
+        "人生選擇",
+        "AI 工具",
+        "結構性障礙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "ai-collaboration-why-resistance",
       "url": "https://b-log.to/ai-analysis/ai-collaboration-why-resistance/",
       "title": "我想把部落格系統給朋友用，結果卡在一個我沒預料到的地方",
