@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "anime-singer-survival-line",
+      "url": "https://b-log.to/cultural-insights/anime-singer-survival-line/",
+      "title": "當所有條件都有，但每一個都差一點——從綾野真白看動漫歌手的生存線",
+      "content_text": "因為看到綾野真白的台灣公演一直賣不完，我開始認真去了解這位歌手。她 2014 年出道就拿到 Fate UBW 的 OP，起跑點算頂級了，但同作品的 ED 是 Aimer 唱的，存在感遠超過她的 OP。後續搭的動畫沒有一部成為現象級，對比 LiSA 有鬼滅、藍井艾露有 SAO，她缺少一個能讓陌生人「啊我知道」的錨點。我特地去聽了 ideal white，製作跟唱功都有，但聽完哼不出副歌旋律。她的力量型聲線又跟藍井艾露撞型，辨識度上找不到自己的位置。2021 年她離開 SACRA MUSIC 和事務所，活動休止。2024 年獨立復出，新歌在 BOOTH 賣、封面自己畫，場地規模從幾百人縮到兩三百人。這次來台灣是第二次了，2019 年第一次在角落文創票沒賣完，七年後同個場地結果一樣。研究完她之後，我回想自己追 LiSA 的經驗——2015 年偶然點到一個 2012 年日比谷野外音樂堂的影片，那個瞬間把我停住了。但那個能停住我的 LiSA，是經歷了地下樂團、Angel Beats!、好幾年現場累積之後的她。綾野真白什麼都做了，但就是少了那個把人停住的瞬間。才華跟努力是門票，最後決定結果的，往往是那個無法控制的偶然。",
+      "date_published": "2026-02-19T00:00:00.000Z",
+      "date_modified": "2026-02-19T00:00:00.000Z",
+      "tags": [
+        "動漫音樂",
+        "綾野真白",
+        "LiSA",
+        "產業觀察",
+        "獨立音樂人"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "same-name-different-paths-same-days",
       "url": "https://b-log.to/cultural-insights/same-name-different-paths-same-days/",
       "title": "同一個名字，不同的路，一樣的日子",
