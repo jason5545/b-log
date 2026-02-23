@@ -34,6 +34,16 @@ tailscale set --accept-routes=false
 
 邏輯很單純：你自己就在這個網段上，你不需要「接受」別人告訴你怎麼到這個網段。你本來就在這裡。
 
+事後去翻[官方文件](https://tailscale.com/kb/1019/subnets)，人家寫得很清楚：
+
+> If you turn on `--accept-routes` for subnet routers that share the same routes in the same region, the standby router will accept its own advertised routes from the primary router.
+
+> The standby router will send all 192.168.1.0/24 traffic through the primary router, even though it is directly connected to that network.
+
+> For most HA subnet router setups, use the `--advertise-routes` flag alone.
+
+就是這樣。答案一直在文件裡。
+
 ## 然後我犯了真正的錯
 
 關掉 accept-routes 之後，我從 MacBook 測試連 10.0.0.192。
