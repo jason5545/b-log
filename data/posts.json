@@ -1,5 +1,22 @@
 [
   {
+    "slug": "tailscale-dual-subnet-router-disaster",
+    "title": "在 PVE 上裝第二台 Tailscale 子網路由，然後花三小時修一個不存在的問題",
+    "summary": "PVE 跟 mt6000 都跑 Tailscale subnet router，兩邊都開了 --accept-routes，結果區網路由被劫持到 Tailscale 隧道。關掉 accept-routes 是正確修正，但我沒等控制平面傳播完就疊了 ip rule 上去，把回覆路徑炸掉了。tcpdump 告訴我封包根本不走我以為的路。三小時的除錯，答案是關一個參數然後等五分鐘。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-23T00:00:00Z",
+    "readingTime": "8 min",
+    "tags": [
+      "Tailscale",
+      "Proxmox VE",
+      "網路除錯",
+      "subnet routing",
+      "自架伺服器"
+    ],
+    "accentColor": "#4a7c59"
+  },
+  {
     "slug": "anime-singer-survival-line",
     "title": "當所有條件都有，但每一個都差一點——從綾野真白看動漫歌手的生存線",
     "summary": "因為看到綾野真白的台灣公演一直賣不完，我開始研究她的故事。出道就拿到 Fate UBW 的 OP，但同作品的 ED 是 Aimer 唱的，光芒被分走了一半。後續作品沒有一部成為現象級，聲音風格又跟藍井艾露撞型。休止三年後獨立復出，場地從幾百人縮到兩三百人。她什麼都做了，但就是少了那個把人停住的瞬間。才華跟努力是門票，但最後決定結果的，往往是那個無法控制的偶然。",

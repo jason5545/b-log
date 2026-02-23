@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "tailscale-dual-subnet-router-disaster",
+      "url": "https://b-log.to/tech-analysis/tailscale-dual-subnet-router-disaster/",
+      "title": "在 PVE 上裝第二台 Tailscale 子網路由，然後花三小時修一個不存在的問題",
+      "content_text": "我的 PVE 主機跟 mt6000 路由器都在同一個區網，兩台都跑 Tailscale subnet router。問題出在兩邊都開了 --accept-routes，讓兩台機器互相接受對方廣播的路由，結果區網流量被劫持到 Tailscale 隧道，區網直接斷了。關掉 accept-routes 是正確的修正，PVE 區網立刻恢復。但我從 MacBook 測試連 PVE 還是失敗，因為 Tailscale 控制平面的路由傳播需要時間。我沒等，直接疊了 ip rule 跟 iptables 上去。tcpdump 最後告訴我，封包根本不走 mt6000，Tailscale 直接送到 PVE。我加的 ip rule 反而把回覆封包劫持到預設閘道，閘道不認識 Tailscale 的 CGNAT 位址，封包直接黑洞。全部還原之後就通了，因為控制平面的傳播早就完成了。三小時的除錯，答案是關一個參數然後等五分鐘。教訓：先跑 tcpdump，不要在傳播空窗期疊加修正。",
+      "date_published": "2026-02-23T00:00:00.000Z",
+      "date_modified": "2026-02-23T00:00:00.000Z",
+      "tags": [
+        "Tailscale",
+        "Proxmox VE",
+        "網路除錯",
+        "subnet routing",
+        "自架伺服器"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "anime-singer-survival-line",
       "url": "https://b-log.to/cultural-insights/anime-singer-survival-line/",
       "title": "當所有條件都有，但每一個都差一點——從綾野真白看動漫歌手的生存線",
