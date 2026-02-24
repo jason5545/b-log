@@ -1,7 +1,7 @@
 [
   {
     "slug": "anthropic-distillation-attack-hypocrisy",
-    "title": "Anthropic 說別人蒸餾是攻擊，但他們自己封鎖中國、沒有開源模型",
+    "title": "Anthropic 說別人蒸餾是攻擊，但他們自己封鎖中國、沒有開放原始碼模型",
     "summary": "Anthropic 發了一篇指控 DeepSeek、Moonshot、MiniMax 蒸餾攻擊的 blog，數字看起來很嚇人。但仔細拆開來，每一根柱子都在搖。",
     "category": "AI 分析",
     "author": "Jason Chien",
