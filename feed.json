@@ -8,8 +8,8 @@
     {
       "id": "anthropic-distillation-attack-hypocrisy",
       "url": "https://b-log.to/ai-analysis/anthropic-distillation-attack-hypocrisy/",
-      "title": "Anthropic 說別人蒸餾是攻擊，但他們自己封鎖中國、沒有開放原始碼模型",
-      "content_text": "Anthropic 發了一篇指控 DeepSeek、Moonshot、MiniMax 蒸餾攻擊的 blog，數字看起來很嚇人。但仔細拆開來，每一根柱子都在搖。",
+      "title": "Anthropic 指控 DeepSeek 蒸餾攻擊，然後有人把數字翻開了",
+      "content_text": "Anthropic 發了一篇指控蒸餾攻擊的 blog，數字很嚇人。然後有人把數字一根一根拆開，我看完之後更不信了。",
       "date_published": "2026-02-24T00:00:00.000Z",
       "date_modified": "2026-02-24T00:00:00.000Z",
       "tags": [
