@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "anthropic-distillation-attack-hypocrisy",
+      "url": "https://b-log.to/ai-analysis/anthropic-distillation-attack-hypocrisy/",
+      "title": "Anthropic 說別人蒸餾是攻擊，但他們自己封鎖中國、沒有開源模型",
+      "content_text": "Anthropic 發了一篇指控 DeepSeek、Moonshot、MiniMax 蒸餾攻擊的 blog，數字看起來很嚇人。但仔細拆開來，每一根柱子都在搖。",
+      "date_published": "2026-02-24T00:00:00.000Z",
+      "date_modified": "2026-02-24T00:00:00.000Z",
+      "tags": [
+        "Anthropic",
+        "DeepSeek",
+        "蒸餾",
+        "開源",
+        "AI政策"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "tailscale-dual-subnet-router-disaster",
       "url": "https://b-log.to/tech-analysis/tailscale-dual-subnet-router-disaster/",
       "title": "在 PVE 上裝第二台 Tailscale 子網路由，然後花三小時修一個不存在的問題",
