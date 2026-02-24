@@ -1,5 +1,21 @@
 [
   {
+    "slug": "anthropic-distillation-attack-hypocrisy",
+    "title": "Anthropic 說別人蒸餾是攻擊，但他們自己封鎖中國、沒有開源模型",
+    "summary": "Anthropic 發了一篇指控 DeepSeek、Moonshot、MiniMax 蒸餾攻擊的 blog，數字看起來很嚇人。但仔細拆開來，每一根柱子都在搖。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-24T00:00:00Z",
+    "tags": [
+      "Anthropic",
+      "DeepSeek",
+      "蒸餾",
+      "開源",
+      "AI政策"
+    ],
+    "accentColor": "#c0392b"
+  },
+  {
     "slug": "tailscale-dual-subnet-router-disaster",
     "title": "在 PVE 上裝第二台 Tailscale 子網路由，然後花三小時修一個不存在的問題",
     "summary": "PVE 跟 mt6000 都跑 Tailscale subnet router，兩邊都開了 --accept-routes，結果區網路由被劫持到 Tailscale 隧道。關掉 accept-routes 是正確修正，但我沒等控制平面傳播完就疊了 ip rule 上去，把回覆路徑炸掉了。tcpdump 告訴我封包根本不走我以為的路。三小時的除錯，答案是關一個參數然後等五分鐘。",
