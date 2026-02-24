@@ -9,7 +9,9 @@ Anthropic 昨天發了一篇 blog，說他們偵測到 DeepSeek、Moonshot、Min
 
 Anthropic 說 DeepSeek 跟 Claude 交互超過 15 萬次。
 
-T3 Chat 是 Theo 做的 AI 聊天 App，支援多個模型，用戶不算少。他說他的網站一天就能跑到這個數字。
+Theo 是 T3 Chat 的創辦人，那是一個支援多模型的 AI 聊天 App，用戶不算少。他本來不會公開內部數據，但 Anthropic 這篇 blog 讓他受不了了，決定說出來。
+
+他說 T3 Chat 一天就能跑到 15 萬次。而且這還算是低的——因為用戶在聊天的時候，T3 Chat 還會同時呼叫網頁搜尋、工具整合，一個問題背後可能就是好幾次 exchange。
 
 那 T3 Chat 也算在攻擊嗎？
 
