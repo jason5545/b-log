@@ -275,6 +275,26 @@
       "image": "https://b-log.to/content/img/2026/wheelchair-ticket-collection.webp"
     },
     {
+      "id": "macos-disable-lookup-forever",
+      "url": "https://b-log.to/tech-analysis/macos-disable-lookup-forever/",
+      "title": "我把 Mac 的「查詢／字典」功能徹底關掉了（而且保留 Force Click）",
+      "content_text": "Mac 的 Look Up 彈窗一直干擾我，但它不是單一 App，而是系統 XPC 服務鏈。我用 launchctl disable 加 LaunchAgent 自動維護，徹底關掉它又保留 Force Click。",
+      "date_published": "2026-02-07T00:00:00.000Z",
+      "date_modified": "2026-02-07T00:00:00.000Z",
+      "tags": [
+        "macOS",
+        "無障礙",
+        "系統設定",
+        "LaunchAgent",
+        "XPC"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "macos-add-to-sidebar-missing",
       "url": "https://b-log.to/tech-analysis/macos-add-to-sidebar-missing/",
       "title": "macOS 沒有「加入側邊欄」的右鍵選項，然後公司資料夾就被我移走了",
