@@ -66,6 +66,8 @@ MCP 的做法不一樣。我只要用自然語言告訴 Claude：「幫我發一
 
 準確一點說：有人做過靜態部落格的 MCP server。GitHub 上有 Hugo 的版本，npm 上有 Kronk 這類工具，支援 Hugo、Jekyll、Astro，可以讓 Claude 用自然語言管理部落格。但這些方案都有同一個前提：你得先打開電腦，跑本地 MCP server，透過 Claude Desktop 連進去。換句話說，你還是得開電腦。
 
+而且那些工具是針對標準框架設計的——Hugo 有 Hugo 的格式，Jekyll 有 Jekyll 的慣例。我的部落格系統是自己搭的，沒有任何現成工具能直接套用。整個 connector 是從零開始，對應的是這個 repo 的具體結構。
+
 我做的這個版本是跑在 Cloudflare Workers 上的遠端 connector，直接接 claude.ai。這才是為什麼手機能用，為什麼躺著也能發文。差異不在工具本身，在於它跑在哪裡。
 
 靜態部落格圈子裡，大家在意的是主題、外掛、建構速度。把 AI 當成「內容管理介面」這個概念，好像沒有人認真做過。
