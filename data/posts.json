@@ -1,5 +1,23 @@
 [
   {
+    "slug": "static-blog-mcp-connector",
+    "title": "幫靜態部落格接上 MCP，然後我可以躺在床上用手機發文了",
+    "summary": "我的部落格是純靜態的，發一篇文章要動三個檔案然後 git push。但我只有一根手指能動，所以我做了一個 MCP 伺服器跑在 Cloudflare Workers 上，讓 Claude 幫我處理所有事。這篇文章就是用它發的。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-25T00:00:00Z",
+    "readingTime": "4 min",
+    "tags": [
+      "MCP",
+      "Cloudflare Workers",
+      "GitHub API",
+      "靜態部落格",
+      "無障礙",
+      "AI 協作"
+    ],
+    "accentColor": "#5b6abf"
+  },
+  {
     "slug": "anthropic-distillation-attack-hypocrisy",
     "title": "Anthropic 指控 DeepSeek 蒸餾攻擊，然後有人把數字翻開了",
     "summary": "Anthropic 發了一篇指控蒸餾攻擊的 blog，數字很嚇人。然後有人把數字一根一根拆開，我看完之後更不信了。",
