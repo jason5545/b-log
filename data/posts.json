@@ -1,5 +1,24 @@
 [
   {
+    "slug": "tcl-ik512-gps-false-advertising",
+    "title": "TCL LINKKEY IK512 的 GPS 不實廣告：從技術驗證到代理商回應",
+    "summary": "購入 TCL LINKKEY IK512 5G USB 網卡後，發現廣告標榜的「即時 GPS 追蹤」完全無法使用。透過技術驗證取得確切證據，並向代理商查詢後收到書面承認。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-26T00:00:00Z",
+    "tags": [
+      "TCL",
+      "IK512",
+      "GPS",
+      "不實廣告",
+      "消費者保護",
+      "5G",
+      "硬體"
+    ],
+    "accentColor": "#e05a2b",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "claude-search-broken-built-my-own-memory",
     "title": "Claude 的搜尋功能壞了，所以我自己蓋了一個記憶資料庫",
     "summary": "claude.ai 有記憶功能，也有對話搜尋。但搜尋壞了——明明聊過的東西，搜不到。Bug report 被關掉，標「not planned」。對一個用一根手指打字的人來說，不可靠的搜尋比沒有搜尋更糟。所以我用 Cloudflare Workers + D1 做了自己的 MCP 記憶伺服器。",
