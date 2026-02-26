@@ -6,6 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "tcl-ik512-gps-false-advertising",
+      "url": "https://b-log.to/business-insights/tcl-ik512-gps-false-advertising/",
+      "title": "TCL LINKKEY IK512 的 GPS 不實廣告：從技術驗證到代理商回應",
+      "content_text": "購入 TCL LINKKEY IK512 5G USB 網卡後，發現廣告標榜的「即時 GPS 追蹤」完全無法使用。透過技術驗證取得確切證據，並向代理商查詢後收到書面承認。",
+      "date_published": "2026-02-26T00:00:00.000Z",
+      "date_modified": "2026-02-26T00:00:00.000Z",
+      "tags": [
+        "TCL",
+        "IK512",
+        "GPS",
+        "不實廣告",
+        "消費者保護",
+        "5G",
+        "硬體"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "claude-search-broken-built-my-own-memory",
       "url": "https://b-log.to/tech-development/claude-search-broken-built-my-own-memory/",
       "title": "Claude 的搜尋功能壞了，所以我自己蓋了一個記憶資料庫",
