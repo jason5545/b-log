@@ -1,5 +1,24 @@
 [
   {
+    "slug": "claude-search-broken-built-my-own-memory",
+    "title": "Claude 的搜尋功能壞了，所以我自己蓋了一個記憶資料庫",
+    "summary": "claude.ai 有記憶功能，也有對話搜尋。但搜尋壞了——明明聊過的東西，搜不到。Bug report 被關掉，標「not planned」。對一個用一根手指打字的人來說，不可靠的搜尋比沒有搜尋更糟。所以我用 Cloudflare Workers + D1 做了自己的 MCP 記憶伺服器。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-26T00:00:00Z",
+    "tags": [
+      "MCP",
+      "Cloudflare Workers",
+      "D1",
+      "SQLite",
+      "記憶系統",
+      "AI 協作",
+      "無障礙"
+    ],
+    "accentColor": "#4a6fa5",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "static-blog-mcp-connector",
     "title": "幫靜態部落格接上 MCP，然後我可以躺在床上用手機發文了",
     "summary": "我的部落格是純靜態的，發一篇文章要動三個檔案然後 git push。但我只有一根手指能動，所以我做了一個 MCP 伺服器跑在 Cloudflare Workers 上，讓 Claude 幫我處理所有事。這篇文章就是用它發的。",
