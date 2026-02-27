@@ -1,5 +1,21 @@
 [
   {
+    "slug": "anthropic-pentagon-real-redline",
+    "title": "什麼叫真正的底線",
+    "summary": "Anthropic 拒絕五角大廈要求一事，讓我想到一個問題：底線跟設定，到底差在哪裡。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-27T00:00:00Z",
+    "tags": [
+      "Anthropic",
+      "AI",
+      "五角大廈",
+      "國防生產法",
+      "Dario Amodei"
+    ],
+    "readingTime": "3 min"
+  },
+  {
     "slug": "tcl-ik512-gps-false-advertising",
     "title": "TCL LINKKEY IK512 的 GPS 不實廣告：從技術驗證到代理商回應",
     "summary": "購入 TCL LINKKEY IK512 5G USB 網卡後，發現廣告標榜的「即時 GPS 追蹤」完全無法使用。透過技術驗證取得確切證據，並向代理商查詢後收到書面承認。",
