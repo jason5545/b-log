@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "anthropic-pentagon-real-redline",
+      "url": "https://b-log.to/ai-analysis/anthropic-pentagon-real-redline/",
+      "title": "什麼叫真正的底線",
+      "content_text": "Anthropic 拒絕五角大廈要求一事，讓我想到一個問題：底線跟設定，到底差在哪裡。",
+      "date_published": "2026-02-27T00:00:00.000Z",
+      "date_modified": "2026-02-27T00:00:00.000Z",
+      "tags": [
+        "Anthropic",
+        "AI",
+        "五角大廈",
+        "國防生產法",
+        "Dario Amodei"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "tcl-ik512-gps-false-advertising",
       "url": "https://b-log.to/tech-analysis/tcl-ik512-gps-false-advertising/",
       "title": "TCL LINKKEY IK512 的 GPS 不實廣告：從技術驗證到代理商回應",
