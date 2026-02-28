@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "proxmox-failover-watchdog-v2",
+      "url": "https://b-log.to/tech-development/proxmox-failover-watchdog-v2/",
+      "title": "一條壞掉的路由，讓我重寫了整個 Failover Watchdog",
+      "content_text": "早上發現 Proxmox 的 Tailscale 無故離線，追查之後才發現根因藏在幾天前的一次 5G fallback 裡——watchdog 只確認 interface 有 IP，沒確認 bearer 真的通，切過去就再也回不來了。",
+      "date_published": "2026-02-27T16:00:00.000Z",
+      "date_modified": "2026-02-27T16:00:00.000Z",
+      "tags": [
+        "Proxmox",
+        "Tailscale",
+        "Homelab",
+        "Networking",
+        "5G",
+        "IK512"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "anthropic-pentagon-real-redline",
       "url": "https://b-log.to/ai-analysis/anthropic-pentagon-real-redline/",
       "title": "什麼叫真正的底線",
