@@ -1,5 +1,23 @@
 [
   {
+    "slug": "ai-virtual-companion-vs-data-script",
+    "title": "當 AI 願意幫你做虛擬伴侶，卻不幫你整理一份清單",
+    "summary": "Grok 開了成人模式、做起虛擬伴侶，卻擋掉一個整理資料的腳本需求。這個矛盾說明了什麼？",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-28T00:00:00Z",
+    "tags": [
+      "AI",
+      "Claude",
+      "Grok",
+      "ChatGPT",
+      "成人內容",
+      "AI政策",
+      "模型比較"
+    ],
+    "readingTime": "3 min"
+  },
+  {
     "slug": "ai-closed-loop-vibecoder-trap",
     "title": "當 AI 變成閉環：為什麼 Vibecoder 的文章看起來很有道理，但留言區全是罵聲",
     "summary": "一篇關於 macOS 記憶體洩漏的技術文章，觀察真實、工具可用，卻在留言區被批得體無完膚。問題不在資料，在閉環。",
