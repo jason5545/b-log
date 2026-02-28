@@ -1,5 +1,22 @@
 [
   {
+    "slug": "proxmox-failover-watchdog-v2",
+    "title": "一條壞掉的路由，讓我重寫了整個 Failover Watchdog",
+    "summary": "早上發現 Proxmox 的 Tailscale 無故離線，追查之後才發現根因藏在幾天前的一次 5G fallback 裡——watchdog 只確認 interface 有 IP，沒確認 bearer 真的通，切過去就再也回不來了。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-28T00:00:00+08:00",
+    "tags": [
+      "Proxmox",
+      "Tailscale",
+      "Homelab",
+      "Networking",
+      "5G",
+      "IK512"
+    ],
+    "readingTime": "2 min"
+  },
+  {
     "slug": "anthropic-pentagon-real-redline",
     "title": "什麼叫真正的底線",
     "summary": "Anthropic 拒絕五角大廈要求一事，讓我想到一個問題：底線跟設定，到底差在哪裡。",
