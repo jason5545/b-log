@@ -6,6 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "ai-virtual-companion-vs-data-script",
+      "url": "https://b-log.to/ai-analysis/ai-virtual-companion-vs-data-script/",
+      "title": "當 AI 願意幫你做虛擬伴侶，卻不幫你整理一份清單",
+      "content_text": "Grok 開了成人模式、做起虛擬伴侶，卻擋掉一個整理資料的腳本需求。這個矛盾說明了什麼？",
+      "date_published": "2026-02-28T00:00:00.000Z",
+      "date_modified": "2026-02-28T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Claude",
+        "Grok",
+        "ChatGPT",
+        "成人內容",
+        "AI政策",
+        "模型比較"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "ai-closed-loop-vibecoder-trap",
       "url": "https://b-log.to/dev-philosophy/ai-closed-loop-vibecoder-trap/",
       "title": "當 AI 變成閉環：為什麼 Vibecoder 的文章看起來很有道理，但留言區全是罵聲",
