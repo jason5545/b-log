@@ -1,5 +1,24 @@
 [
   {
+    "slug": "ai-closed-loop-vibecoder-trap",
+    "title": "當 AI 變成閉環：為什麼 Vibecoder 的文章看起來很有道理，但留言區全是罵聲",
+    "summary": "一篇關於 macOS 記憶體洩漏的技術文章，觀察真實、工具可用，卻在留言區被批得體無完膚。問題不在資料，在閉環。",
+    "category": "開發哲學",
+    "author": "Jason Chien",
+    "publishedAt": "2026-02-28T00:00:00Z",
+    "tags": [
+      "AI協作",
+      "Claude",
+      "ChatGPT",
+      "vibecoder",
+      "技術寫作",
+      "閉環",
+      "第二意見"
+    ],
+    "accentColor": "#5b6af0",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "proxmox-failover-watchdog-v2",
     "title": "一條壞掉的路由，讓我重寫了整個 Failover Watchdog",
     "summary": "早上發現 Proxmox 的 Tailscale 無故離線，追查之後才發現根因藏在幾天前的一次 5G fallback 裡——watchdog 只確認 interface 有 IP，沒確認 bearer 真的通，切過去就再也回不來了。",
