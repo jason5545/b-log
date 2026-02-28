@@ -122,6 +122,30 @@ GitHub 上有幾個 MCP memory server 的開源專案。但它們幾乎都是跑
 
 而且我需要的搜尋策略跟大部分人不同——中英日三語混用、需要同義詞展開、需要跨語言比對。這些不是現成方案能解決的。
 
+## 實戰：5G 網卡凌晨又斷線了
+
+這套系統上線兩天後就碰到了一個完美的測試案例。
+
+我的 Proxmox 伺服器插了一張 TCL IK512 5G USB 網卡當備援線路。前一天晚上才花了好幾個小時把整個 failover 架構從「斷線才連」改成「always-on 常駐連線」——改了 systemd service、watchdog 腳本、MBIM static IP 設定，除錯過程中還發現了 USB rebind、`mmcli -m any`、bearer JSON 解析等一堆眉角。所有這些都存進了記憶資料庫。
+
+隔天早上，5G 又斷了。
+
+我連進 Claude Code，說了一句「5G 網卡又來了」。就這樣。沒有解釋是哪張網卡、沒有交代架構、沒有複述昨天做了什麼。
+
+Claude 搜了一下記憶，拉出昨天存的那筆記錄——裡面寫著「MBIM session 卡住（NotOpened）時需 USB rebind（echo 2-1 > /sys/bus/usb/drivers/usb/unbind 再 bind）」。它直接問我：要不要執行 USB rebind？
+
+整個修復過程：USB rebind、等 ModemManager 重新 probe、enable、connect、設定 MBIM static IP、驗證連線。兩分鐘。
+
+然後我們順著查下去，發現了真正的根因：USB Root Hub 的 autosuspend。Linux 預設會讓閒置的 USB hub 進入省電模式，hub 一睡，下面掛的 5G 網卡就跟著斷線。這台是伺服器不是筆電，USB 省電完全沒必要。一行 kernel 參數 `usbcore.autosuspend=-1` 解決。
+
+如果沒有記憶系統，這個早上會是這樣的：我得重新解釋這是哪張網卡、用什麼協定、插在哪個 USB port、昨天改了什麼、當時的錯誤訊息長什麼樣、USB rebind 的指令是什麼。用一根手指打完這些，大概十分鐘。
+
+有了記憶系統，我只需要六個字。
+
+而且不只是「找到答案」——Claude 拿到的是完整脈絡。它知道這張網卡之前就有 GPS 廣告不實的問題，知道 always-on 架構的設計意圖，知道 watchdog 腳本的結構。所以它能直接往下挖到 USB autosuspend 這個根因，而不是停在「重連一下就好了」。
+
+這就是原子事實加上搜尋的價值：不只是記住答案，而是記住脈絡，讓下一次的除錯能從上一次結束的地方開始。
+
 ## 結局
 
 claude.ai 的搜尋功能壞了。bug report 被標 "not planned"。
