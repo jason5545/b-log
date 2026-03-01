@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "claude-code-compact-failed-and-theo-was-right",
+      "url": "https://b-log.to/ai-analysis/claude-code-compact-failed-and-theo-was-right/",
+      "title": "Claude Code 的 Compact 壞了，而且 Theo 說的是對的",
+      "content_text": "最近看了 Theo 批評 AI 開發工具的影片，不只是旁觀，而是每一個 bug 我都親身遇過。",
+      "date_published": "2026-03-01T00:00:00.000Z",
+      "date_modified": "2026-03-01T00:00:00.000Z",
+      "tags": [
+        "Claude Code",
+        "Codex",
+        "vibe coding",
+        "compact",
+        "AI 工具",
+        "開發工具"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "fnos-firewall-four-rescue-modes",
       "url": "https://b-log.to/tech-analysis/fnos-firewall-four-rescue-modes/",
       "title": "fnOS 防火牆設定記：一天四次 Rescue Mode 的血淚教訓",
