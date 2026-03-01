@@ -1,5 +1,25 @@
 [
   {
+    "slug": "ik512-firmware-diagnosis",
+    "title": "IK512 到底壞了沒？一次從表象到根因的系統診斷",
+    "summary": "IK512 從 USB 斷線、zombie bearer 到每次換 IP，問題一個接一個。追完之後才發現硬體從頭到尾沒壞過，三個問題來自三個完全不同的層次。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-01T00:00:00Z",
+    "tags": [
+      "IK512",
+      "5G",
+      "Proxmox",
+      "Homelab",
+      "Networking",
+      "Failover",
+      "Watchdog",
+      "ModemManager"
+    ],
+    "accentColor": "#3b6ea5",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "ai-virtual-companion-vs-data-script",
     "title": "當 AI 願意幫你做虛擬伴侶，卻不幫你整理一份清單",
     "summary": "Grok 開了成人模式、做起虛擬伴侶，卻擋掉一個整理資料的腳本需求。這個矛盾說明了什麼？",
