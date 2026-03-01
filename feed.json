@@ -6,6 +6,30 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "fnos-firewall-four-rescue-modes",
+      "url": "https://b-log.to/tech-analysis/fnos-firewall-four-rescue-modes/",
+      "title": "fnOS 防火牆設定記：一天四次 Rescue Mode 的血淚教訓",
+      "content_text": "在 OVH 伺服器上設定 fnOS 防火牆，因為「鎖台灣」策略導致 Tailscale 斷線，一天之內跑了四次 rescue mode 才找到根因。",
+      "date_published": "2026-03-01T00:00:00.000Z",
+      "date_modified": "2026-03-01T00:00:00.000Z",
+      "tags": [
+        "fnOS",
+        "Tailscale",
+        "防火牆",
+        "OVH",
+        "BPF",
+        "XDP",
+        "IPv6",
+        "rescue mode",
+        "除錯"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "ik512-firmware-diagnosis",
       "url": "https://b-log.to/tech-analysis/ik512-firmware-diagnosis/",
       "title": "IK512 到底壞了沒？一次從表象到根因的系統診斷",
