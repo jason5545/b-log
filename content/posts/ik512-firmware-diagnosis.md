@@ -29,6 +29,14 @@ MBIM 協定對 bearer 的設計期望是：當資料通道斷開時，modem firm
 
 Watchdog v2.5 的補救方式是主動驗證：不相信 bearer status 的回報，每次都自己去 ping 確認資料通道真的通。這是從 host 端繞過 firmware 的缺口，有效，但本質上是在替 firmware 做它原本應該做的事。
 
+## 這個裝置本來就不是設計來這樣用的
+
+IK512 的設計使用情境是：插上 Windows 電腦，裝驅動程式，打開瀏覽器，上網。使用者不需要知道 bearer 是什麼，不需要知道 MBIM，不需要知道 session 斷了再連。那個層次的問題，Windows 驅動程式和電信商 app 都幫你處理掉了，使用者也不在乎 IP 有沒有換。
+
+我拿它來做的事情完全不同：裸接 Linux、ModemManager 直接管、當 Proxmox 的 failover 備援、要求 bearer failure 要能被偵測到、要求路由要能自動切換。這些需求在它的設計目標裡根本不存在。
+
+所以才需要用 watchdog 去補——本質上是在用一個消費級工具做工業級的工作，缺的部分只能自己加。這也解釋了為什麼工業模組貴那麼多：那些需求它原本就設計進去了，firmware 完整實作是預設，不是選配。
+
 ## 為什麼手機熱點不會有這個問題
 
 很多人用手機熱點，從來不會碰到這種 zombie 狀態，但裝了 USB dongle 的 Linux 卻要自己想辦法。差別在架構。
