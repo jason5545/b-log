@@ -1,5 +1,23 @@
 [
   {
+    "slug": "claude-code-compact-failed-and-theo-was-right",
+    "title": "Claude Code 的 Compact 壞了，而且 Theo 說的是對的",
+    "summary": "最近看了 Theo 批評 AI 開發工具的影片，不只是旁觀，而是每一個 bug 我都親身遇過。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-01T00:00:00Z",
+    "tags": [
+      "Claude Code",
+      "Codex",
+      "vibe coding",
+      "compact",
+      "AI 工具",
+      "開發工具"
+    ],
+    "accentColor": "#e85d4a",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "fnos-firewall-four-rescue-modes",
     "title": "fnOS 防火牆設定記：一天四次 Rescue Mode 的血淚教訓",
     "summary": "在 OVH 伺服器上設定 fnOS 防火牆，因為「鎖台灣」策略導致 Tailscale 斷線，一天之內跑了四次 rescue mode 才找到根因。",
