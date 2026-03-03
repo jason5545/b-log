@@ -6,6 +6,30 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "openclaw-setup-pitfalls",
+      "url": "https://b-log.to/tech-analysis/openclaw-setup-pitfalls/",
+      "title": "OpenClaw 自架踩坑全紀錄：從 gateway.bind 到「關掉驗證反而壞掉」",
+      "content_text": "在 iMac Pro VM 上架 OpenClaw 當 Claude 的備案，結果光設定就踩了十幾個坑。有些是文件沒寫清楚，有些是設定名稱會騙人，有些是你以為關掉會更簡單結果反而更複雜。",
+      "date_published": "2026-03-03T00:00:00.000Z",
+      "date_modified": "2026-03-03T00:00:00.000Z",
+      "tags": [
+        "OpenClaw",
+        "Tailscale",
+        "MiniMax",
+        "自架",
+        "Homelab",
+        "踩坑",
+        "gateway",
+        "配對",
+        "驗證"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "claude-code-compact-failed-and-theo-was-right",
       "url": "https://b-log.to/ai-analysis/claude-code-compact-failed-and-theo-was-right/",
       "title": "Claude Code 的 Compact 壞了，而且 Theo 說的是對的",
