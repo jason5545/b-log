@@ -1,5 +1,26 @@
 [
   {
+    "slug": "openclaw-setup-pitfalls",
+    "title": "OpenClaw 自架踩坑全紀錄：從 gateway.bind 到「關掉驗證反而壞掉」",
+    "summary": "在 iMac Pro VM 上架 OpenClaw 當 Claude 的備案，結果光設定就踩了十幾個坑。有些是文件沒寫清楚，有些是設定名稱會騙人，有些是你以為關掉會更簡單結果反而更複雜。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-03T00:00:00Z",
+    "tags": [
+      "OpenClaw",
+      "Tailscale",
+      "MiniMax",
+      "自架",
+      "Homelab",
+      "踩坑",
+      "gateway",
+      "配對",
+      "驗證"
+    ],
+    "accentColor": "#FF4500",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "claude-code-compact-failed-and-theo-was-right",
     "title": "Claude Code 的 Compact 壞了，而且 Theo 說的是對的",
     "summary": "最近看了 Theo 批評 AI 開發工具的影片，不只是旁觀，而是每一個 bug 我都親身遇過。",
