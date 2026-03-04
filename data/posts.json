@@ -2,7 +2,7 @@
   {
     "slug": "hackintosh-vm-xcode-codesigning",
     "title": "為什麼我在 Proxmox 上跑了一台 Hackintosh",
-    "summary": "用 OpenClaw 做 iOS 開發自動化，但雲端服務跑不了 Xcode、也給不了 200GB 空間。HomeLab 既然擺在那裡，不用就浪費，所以在 Proxmox 上架了一台 QEMU/KVM Hackintosh——然後花了一段時間讓 Xcode 的 Apple ID 登入正常。",
+    "summary": "大批人搶購 Mac mini 跑 OpenClaw，但其實大多數人根本不需要強大的硬體。我的情況相反——Xcode code signing 和 Accessibility API 這兩個需求，讓 macOS VM 成為唯一選擇。加上 HomeLab 本來就在跑，不如直接在 Proxmox 上架一台 Hackintosh。",
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2026-03-04T00:00:00Z",
@@ -15,10 +15,12 @@
       "VMHide",
       "OpenClaw",
       "code signing",
-      "HomeLab"
+      "HomeLab",
+      "Accessibility API",
+      "MCP"
     ],
     "accentColor": "#556bff",
-    "readingTime": "2 min"
+    "readingTime": "3 min"
   },
   {
     "slug": "openclaw-setup-pitfalls",
