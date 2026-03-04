@@ -6,6 +6,30 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "hackintosh-vm-xcode-codesigning",
+      "url": "https://b-log.to/tech-development/hackintosh-vm-xcode-codesigning/",
+      "title": "為什麼我在 Proxmox 上跑了一台 Hackintosh",
+      "content_text": "用 OpenClaw 做 iOS 開發自動化，但雲端服務跑不了 Xcode、也給不了 200GB 空間。HomeLab 既然擺在那裡，不用就浪費，所以在 Proxmox 上架了一台 QEMU/KVM Hackintosh——然後花了一段時間讓 Xcode 的 Apple ID 登入正常。",
+      "date_published": "2026-03-04T00:00:00.000Z",
+      "date_modified": "2026-03-04T00:00:00.000Z",
+      "tags": [
+        "Hackintosh",
+        "Proxmox",
+        "KVM",
+        "OpenCore",
+        "Xcode",
+        "VMHide",
+        "OpenClaw",
+        "code signing",
+        "HomeLab"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "openclaw-setup-pitfalls",
       "url": "https://b-log.to/tech-analysis/openclaw-setup-pitfalls/",
       "title": "OpenClaw 自架踩坑全紀錄：從 gateway.bind 到「關掉驗證反而壞掉」",
