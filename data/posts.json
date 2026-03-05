@@ -1,5 +1,27 @@
 [
   {
+    "slug": "telegram-bot-flyio-deploy-pitfalls",
+    "title": "把 Telegram Bot 丟上 Fly.io：七個坑和一次 52 分鐘的強制等待",
+    "summary": "寫了一個 Telegram master bot 控制多個子 bot，想丟上 Fly.io 跑。Docker image 建置、session 檔持久化、Telegram 限速，每一步都有坑。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-05T00:00:00Z",
+    "tags": [
+      "Telegram",
+      "Fly.io",
+      "Docker",
+      "Pyrogram",
+      "PyroTGFork",
+      "MTProto",
+      "部署",
+      "踩坑",
+      "FloodWait",
+      "Session"
+    ],
+    "accentColor": "#0088cc",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "hackintosh-vm-xcode-codesigning",
     "title": "為什麼我在 Proxmox 上跑了一台 Hackintosh",
     "summary": "大批人搶購 Mac mini 跑 OpenClaw，但其實大多數人根本不需要強大的硬體。我的情況相反——Xcode code signing 和 Accessibility API 這兩個需求，讓 macOS VM 成為唯一選擇。加上 HomeLab 本來就在跑，不如直接在 Proxmox 上架一台 Hackintosh。",
