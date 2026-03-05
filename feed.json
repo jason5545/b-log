@@ -6,6 +6,31 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "telegram-bot-flyio-deploy-pitfalls",
+      "url": "https://b-log.to/tech-analysis/telegram-bot-flyio-deploy-pitfalls/",
+      "title": "把 Telegram Bot 丟上 Fly.io：七個坑和一次 52 分鐘的強制等待",
+      "content_text": "寫了一個 Telegram master bot 控制多個子 bot，想丟上 Fly.io 跑。Docker image 建置、session 檔持久化、Telegram 限速，每一步都有坑。",
+      "date_published": "2026-03-05T00:00:00.000Z",
+      "date_modified": "2026-03-05T00:00:00.000Z",
+      "tags": [
+        "Telegram",
+        "Fly.io",
+        "Docker",
+        "Pyrogram",
+        "PyroTGFork",
+        "MTProto",
+        "部署",
+        "踩坑",
+        "FloodWait",
+        "Session"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "hackintosh-vm-xcode-codesigning",
       "url": "https://b-log.to/tech-development/hackintosh-vm-xcode-codesigning/",
       "title": "為什麼我在 Proxmox 上跑了一台 Hackintosh",
