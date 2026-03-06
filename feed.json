@@ -6,6 +6,32 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "rehabilitation-bus-login-reverse-engineering",
+      "url": "https://b-log.to/tech-analysis/rehabilitation-bus-login-reverse-engineering/",
+      "title": "一張 Logo 圖片擋了所有人兩年：逆向台北市復康巴士登入機制",
+      "content_text": "台北市復康巴士訂車網站的登入，瀏覽器 100% 成功，curl 和 Python 全部失敗。12 種方法、兩年時間，答案竟然是一張圖片。",
+      "date_published": "2026-03-06T00:00:00.000Z",
+      "date_modified": "2026-03-06T00:00:00.000Z",
+      "tags": [
+        "逆向工程",
+        "JSP",
+        "Tomcat",
+        "curl",
+        "HTTP",
+        "反機器人",
+        "復康巴士",
+        "台灣政府網站",
+        "web beacon",
+        "自動化",
+        "無障礙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "telegram-bot-flyio-deploy-pitfalls",
       "url": "https://b-log.to/tech-analysis/telegram-bot-flyio-deploy-pitfalls/",
       "title": "把 Telegram Bot 丟上 Fly.io：七個坑和一次 52 分鐘的強制等待",
