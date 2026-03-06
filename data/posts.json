@@ -1,5 +1,28 @@
 [
   {
+    "slug": "rehabilitation-bus-login-reverse-engineering",
+    "title": "一張 Logo 圖片擋了所有人兩年：逆向台北市復康巴士登入機制",
+    "summary": "台北市復康巴士訂車網站的登入，瀏覽器 100% 成功，curl 和 Python 全部失敗。12 種方法、兩年時間，答案竟然是一張圖片。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-06T00:00:00Z",
+    "tags": [
+      "逆向工程",
+      "JSP",
+      "Tomcat",
+      "curl",
+      "HTTP",
+      "反機器人",
+      "復康巴士",
+      "台灣政府網站",
+      "web beacon",
+      "自動化",
+      "無障礙"
+    ],
+    "accentColor": "#018089",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "telegram-bot-flyio-deploy-pitfalls",
     "title": "把 Telegram Bot 丟上 Fly.io：七個坑和一次 52 分鐘的強制等待",
     "summary": "寫了一個 Telegram master bot 控制多個子 bot，想丟上 Fly.io 跑。Docker image 建置、session 檔持久化、Telegram 限速，每一步都有坑。",
