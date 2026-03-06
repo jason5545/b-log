@@ -6,6 +6,29 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "please-use-the-phone",
+      "url": "https://b-log.to/life-stories/please-use-the-phone/",
+      "title": "請用電話",
+      "content_text": "我只是想去上班。這不應該是一個需要逆向工程政府網站的問題，但它變成了。",
+      "date_published": "2026-03-06T00:00:00.000Z",
+      "date_modified": "2026-03-06T00:00:00.000Z",
+      "tags": [
+        "復康巴士",
+        "無障礙",
+        "身障",
+        "政府系統",
+        "自動化",
+        "AI",
+        "政策",
+        "台灣"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "rehabilitation-bus-login-reverse-engineering",
       "url": "https://b-log.to/tech-analysis/rehabilitation-bus-login-reverse-engineering/",
       "title": "一張 Logo 圖片擋了所有人兩年：逆向台北市復康巴士登入機制",
