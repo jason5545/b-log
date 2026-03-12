@@ -1,5 +1,22 @@
 [
   {
+    "slug": "cmux-finder-open-terminal-workaround",
+    "title": "cmux 的 Finder「在終端機中開啟」不帶路徑？用 wrapper app 解決",
+    "summary": "cmux（Ghostty fork）設為預設終端機後，Finder 右鍵「在終端機中開啟」不帶入路徑。追蹤根因後用一個小型 Swift wrapper app 透過 NSPerformService 轉發解決。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-12T00:00:00Z",
+    "tags": [
+      "cmux",
+      "Ghostty",
+      "macOS",
+      "Finder",
+      "Swift",
+      "workaround"
+    ],
+    "readingTime": "2 min"
+  },
+  {
     "slug": "please-use-the-phone",
     "title": "當系統告訴我：請用電話",
     "summary": "我只是想去上班。這不應該是一個需要逆向工程政府網站的問題，但它變成了。",
