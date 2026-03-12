@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "cmux-finder-open-terminal-workaround",
+      "url": "https://b-log.to/tech-development/cmux-finder-open-terminal-workaround/",
+      "title": "cmux 的 Finder「在終端機中開啟」不帶路徑？用 wrapper app 解決",
+      "content_text": "cmux（Ghostty fork）設為預設終端機後，Finder 右鍵「在終端機中開啟」不帶入路徑。追蹤根因後用一個小型 Swift wrapper app 透過 NSPerformService 轉發解決。",
+      "date_published": "2026-03-12T00:00:00.000Z",
+      "date_modified": "2026-03-12T00:00:00.000Z",
+      "tags": [
+        "cmux",
+        "Ghostty",
+        "macOS",
+        "Finder",
+        "Swift",
+        "workaround"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "please-use-the-phone",
       "url": "https://b-log.to/cultural-insights/please-use-the-phone/",
       "title": "當系統告訴我：請用電話",
