@@ -50,6 +50,14 @@ Theo 說他放棄 Spotlight 改用 Raycast。我不行，因為我常用 iPhone 
 
 Apple 的原生軟體，我能替換的都替換了。
 
+## macOS 獨有的工具，Linux 根本沒份
+
+這不只是「Apple 的東西爛」那麼簡單。有些好東西就是只在 macOS 上有。
+
+我最近在用 cmux，一個 Ghostty 的 fork，macOS 專屬的終端機 app。這種工具在 Linux 上根本沒有對應的東西。不是 Linux 版本比較差，是完全沒有。
+
+所以我被留在 Apple 生態裡，不只是因為硬體，也因為這些只在 macOS 上存在的工具。這讓「逃跑」這件事更難。
+
 ## 那為什麼還在用？
 
 硬體目前沒有替代品。要電池、要螢幕、要效能三個同時成立，只有 Apple Silicon。Android 的影片品質差距還在，Linux 的 HDMI HDR 問題沒有解決。
