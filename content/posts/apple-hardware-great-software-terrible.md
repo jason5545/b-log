@@ -50,6 +50,8 @@ Theo 說他放棄 Spotlight 改用 Raycast。我不行，因為我常用 iPhone 
 
 Apple 的原生軟體，我能替換的都替換了。
 
+這才是判斷果粉最直接的標準：一個真正的果粉，Safari、iCloud 鑰匙圈、Apple Mail、Spotlight 全部用原廠的，而且覺得很好用。我呢？硬體幾乎買齊了——iPhone、MacBook、AirTag 四個——但軟體能換就換，換不掉的就想辦法繞開。花了果粉的錢，卻在逃離果粉的生活方式。
+
 ## macOS 獨有的工具，Linux 根本沒份
 
 這不只是「Apple 的東西爛」那麼簡單。有些好東西就是只在 macOS 上有。
