@@ -1,5 +1,24 @@
 [
   {
+    "slug": "apple-hardware-great-software-terrible",
+    "title": "我和 Theo 的結論一樣：Apple 硬體沒得挑，軟體爛得徹底",
+    "summary": "看完 Theo 一小時五分鐘的 Apple 抱怨影片，發現他說的我幾乎全部親身經歷過。iCloud 把我的工作照片刪光、Gmail 同步花三天、AirDrop 常常失敗——硬體一流，軟體爛透。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-12T00:00:00Z",
+    "tags": [
+      "Apple",
+      "macOS",
+      "iOS",
+      "iCloud",
+      "AirDrop",
+      "語音輸入",
+      "軟體品質",
+      "使用者體驗"
+    ],
+    "readingTime": "4 min"
+  },
+  {
     "slug": "cmux-finder-open-terminal-workaround",
     "title": "cmux 的 Finder「在終端機中開啟」不帶路徑？用 wrapper app 解決",
     "summary": "cmux（Ghostty fork）設為預設終端機後，Finder 右鍵「在終端機中開啟」不帶入路徑。追蹤根因後用一個小型 Swift wrapper app 透過 NSPerformService 轉發解決。",
