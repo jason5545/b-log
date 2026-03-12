@@ -6,6 +6,29 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "apple-hardware-great-software-terrible",
+      "url": "https://b-log.to/tech-analysis/apple-hardware-great-software-terrible/",
+      "title": "我和 Theo 的結論一樣：Apple 硬體沒得挑，軟體爛得徹底",
+      "content_text": "看完 Theo 一小時五分鐘的 Apple 抱怨影片，發現他說的我幾乎全部親身經歷過。iCloud 把我的工作照片刪光、Gmail 同步花三天、AirDrop 常常失敗——硬體一流，軟體爛透。",
+      "date_published": "2026-03-12T00:00:00.000Z",
+      "date_modified": "2026-03-12T00:00:00.000Z",
+      "tags": [
+        "Apple",
+        "macOS",
+        "iOS",
+        "iCloud",
+        "AirDrop",
+        "語音輸入",
+        "軟體品質",
+        "使用者體驗"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "cmux-finder-open-terminal-workaround",
       "url": "https://b-log.to/tech-development/cmux-finder-open-terminal-workaround/",
       "title": "cmux 的 Finder「在終端機中開啟」不帶路徑？用 wrapper app 解決",
