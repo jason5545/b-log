@@ -14,10 +14,14 @@
       "音樂評論",
       "產業觀察",
       "YOASOBI",
-      "King Gnu"
+      "King Gnu",
+      "K-POP",
+      "アニソン",
+      "fripSide",
+      "Aimer"
     ],
     "accentColor": "#4a6b8a",
-    "readingTime": "8 min"
+    "readingTime": "11 min"
   },
   {
     "slug": "cmux-browser-integration-design-philosophy",
