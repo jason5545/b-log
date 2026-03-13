@@ -1,5 +1,25 @@
 [
   {
+    "slug": "jpop-subordination-fan-perspective",
+    "title": "當音樂不再是音樂——一個十年粉絲看 J-POP 的「從屬化」",
+    "summary": "一位日本音樂評論人的長文在日本引起熱議：J-POP 正在被動畫綁架。他的數據沒有錯，但他站在路人的視角寫了一篇路人看不到的文章。身為追了 LiSA 超過十年的人，我想從牆的另一邊說幾句。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-13T00:00:00Z",
+    "tags": [
+      "J-POP",
+      "LiSA",
+      "動畫",
+      "商業合作",
+      "音樂評論",
+      "產業觀察",
+      "YOASOBI",
+      "King Gnu"
+    ],
+    "accentColor": "#4a6b8a",
+    "readingTime": "8 min"
+  },
+  {
     "slug": "cmux-browser-integration-design-philosophy",
     "title": "cmux 的內建瀏覽器：我誤解了它的設計",
     "summary": "從「這功能沒用、直接關掉」到理解它的真正定位——cmux 的瀏覽器不是要給你一個 Chrome，而是讓瀏覽器成為可程式化的 pane。",
