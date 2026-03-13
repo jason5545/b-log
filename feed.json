@@ -6,6 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "cmux-browser-integration-design-philosophy",
+      "url": "https://b-log.to/tech-analysis/cmux-browser-integration-design-philosophy/",
+      "title": "cmux 的內建瀏覽器：我誤解了它的設計",
+      "content_text": "從「這功能沒用、直接關掉」到理解它的真正定位——cmux 的瀏覽器不是要給你一個 Chrome，而是讓瀏覽器成為可程式化的 pane。",
+      "date_published": "2026-03-13T00:00:00.000Z",
+      "date_modified": "2026-03-13T00:00:00.000Z",
+      "tags": [
+        "cmux",
+        "Claude Code",
+        "瀏覽器",
+        "agent",
+        "開發工具",
+        "工作流",
+        "設計思路"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "apple-hardware-great-software-terrible",
       "url": "https://b-log.to/tech-analysis/apple-hardware-great-software-terrible/",
       "title": "我和 Theo 的結論一樣：Apple 硬體沒得挑，軟體爛得徹底",
