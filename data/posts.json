@@ -1,24 +1,5 @@
 [
   {
-    "slug": "why-i-switched-from-ghostty-to-cmux",
-    "title": "我為什麼從 Ghostty 換到 cmux",
-    "summary": "用了 Ghostty 多年，換到 cmux 的理由不是它更炫，而是它的層級設計符合 agentic 工作流的形狀。",
-    "category": "技術分析",
-    "author": "Jason Chien",
-    "publishedAt": "2026-03-13T00:00:00Z",
-    "tags": [
-      "cmux",
-      "Ghostty",
-      "Claude Code",
-      "終端機",
-      "工作流",
-      "agentic",
-      "開發工具"
-    ],
-    "accentColor": "#2d6a4f",
-    "readingTime": "3 min"
-  },
-  {
     "slug": "cmux-browser-integration-design-philosophy",
     "title": "cmux 的內建瀏覽器：我誤解了它的設計",
     "summary": "從「這功能沒用、直接關掉」到理解它的真正定位——cmux 的瀏覽器不是要給你一個 Chrome，而是讓瀏覽器成為可程式化的 pane。",
