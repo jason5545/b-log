@@ -13,6 +13,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://b-log.to/tech-analysis/why-i-switched-from-ghostty-to-cmux/</loc>
+    <lastmod>2026-03-13T00:00:00Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://b-log.to/tech-analysis/cmux-browser-integration-design-philosophy/</loc>
     <lastmod>2026-03-13T00:00:00Z</lastmod>
     <changefreq>monthly</changefreq>
