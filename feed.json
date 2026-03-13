@@ -6,28 +6,6 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
-      "id": "why-i-switched-from-ghostty-to-cmux",
-      "url": "https://b-log.to/tech-analysis/why-i-switched-from-ghostty-to-cmux/",
-      "title": "我為什麼從 Ghostty 換到 cmux",
-      "content_text": "用了 Ghostty 多年，換到 cmux 的理由不是它更炫，而是它的層級設計符合 agentic 工作流的形狀。",
-      "date_published": "2026-03-13T00:00:00.000Z",
-      "date_modified": "2026-03-13T00:00:00.000Z",
-      "tags": [
-        "cmux",
-        "Ghostty",
-        "Claude Code",
-        "終端機",
-        "工作流",
-        "agentic",
-        "開發工具"
-      ],
-      "authors": [
-        {
-          "name": "Jason Chien"
-        }
-      ]
-    },
-    {
       "id": "cmux-browser-integration-design-philosophy",
       "url": "https://b-log.to/tech-analysis/cmux-browser-integration-design-philosophy/",
       "title": "cmux 的內建瀏覽器：我誤解了它的設計",
