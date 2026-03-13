@@ -6,6 +6,29 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "jpop-subordination-fan-perspective",
+      "url": "https://b-log.to/cultural-insights/jpop-subordination-fan-perspective/",
+      "title": "當音樂不再是音樂——一個十年粉絲看 J-POP 的「從屬化」",
+      "content_text": "一位日本音樂評論人的長文在日本引起熱議：J-POP 正在被動畫綁架。他的數據沒有錯，但他站在路人的視角寫了一篇路人看不到的文章。身為追了 LiSA 超過十年的人，我想從牆的另一邊說幾句。",
+      "date_published": "2026-03-13T00:00:00.000Z",
+      "date_modified": "2026-03-13T00:00:00.000Z",
+      "tags": [
+        "J-POP",
+        "LiSA",
+        "動畫",
+        "商業合作",
+        "音樂評論",
+        "產業觀察",
+        "YOASOBI",
+        "King Gnu"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "cmux-browser-integration-design-philosophy",
       "url": "https://b-log.to/tech-analysis/cmux-browser-integration-design-philosophy/",
       "title": "cmux 的內建瀏覽器：我誤解了它的設計",
