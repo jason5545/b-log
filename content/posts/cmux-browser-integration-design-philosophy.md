@@ -1,7 +1,9 @@
 # cmux 的內建瀏覽器：我誤解了它的設計
 
 
-[cmux](https://github.com/manaflow-ai/cmux) 是一個基於 Ghostty 打造的 macOS 終端機，專為 AI coding agent 工作流設計。如果你還不熟悉它，可以先看[這篇介紹](/tech-analysis/why-i-switched他的理由很直接：沒有 Cookie、沒有擴充功能、不能用 1Password，每次用 Lazygit 按 PR 連結就跳出一個殘廢視窗。
+[cmux](https://github.com/manaflow-ai/cmux) 是一個基於 Ghostty（libghostty）打造的 macOS 終端機，專為 AI coding agent 的工作流設計。它的核心功能是側邊欄 workspace 管理、agent 通知系統（等待輸入時 pane 亮藍色光環）、以及可程式化的 socket API。除此之外，它還有一個內建瀏覽器——而這個功能，我一開始完全誤解了。
+
+Theo 在影片裡說，他裝上 cmux 之後第一件事是把「在 cmux 瀏覽器開啟終端機連結」關掉。他的理由很直接：沒有 Cookie、沒有擴充功能、不能用 1Password，每次用 Lazygit 按 PR 連結就跳出一個殘廢視窗。
 
 我也關掉了同一個設定，理由一模一樣。
 
