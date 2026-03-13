@@ -1,5 +1,24 @@
 [
   {
+    "slug": "cmux-browser-integration-design-philosophy",
+    "title": "cmux 的內建瀏覽器：我誤解了它的設計",
+    "summary": "從「這功能沒用、直接關掉」到理解它的真正定位——cmux 的瀏覽器不是要給你一個 Chrome，而是讓瀏覽器成為可程式化的 pane。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-13T00:00:00Z",
+    "tags": [
+      "cmux",
+      "Claude Code",
+      "瀏覽器",
+      "agent",
+      "開發工具",
+      "工作流",
+      "設計思路"
+    ],
+    "accentColor": "#3d7aed",
+    "readingTime": "3 min"
+  },
+  {
     "slug": "apple-hardware-great-software-terrible",
     "title": "我和 Theo 的結論一樣：Apple 硬體沒得挑，軟體爛得徹底",
     "summary": "看完 Theo 一小時五分鐘的 Apple 抱怨影片，發現他說的我幾乎全部親身經歷過。iCloud 把我的工作照片刪光、Gmail 同步花三天、AirDrop 常常失敗——硬體一流，軟體爛透。",
