@@ -6,6 +6,29 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "taiwan-every-path-has-its-price",
+      "url": "https://b-log.to/cultural-insights/taiwan-every-path-has-its-price/",
+      "title": "每一條路都有代價——從翁曉玲的貼文想起國中歷史課",
+      "content_text": "從一篇立委的臉書貼文出發，重新走過台灣錯過的每一個歷史節點，最後發現：不管選哪一條路，都沒有好答案。",
+      "date_published": "2026-03-15T00:00:00.000Z",
+      "date_modified": "2026-03-15T00:00:00.000Z",
+      "tags": [
+        "台灣",
+        "歷史",
+        "政治",
+        "沖繩",
+        "國際關係",
+        "身分認同",
+        "翁曉玲",
+        "文化觀察"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "jpop-subordination-fan-perspective",
       "url": "https://b-log.to/cultural-insights/jpop-subordination-fan-perspective/",
       "title": "當音樂不再是音樂——一個十年粉絲看 J-POP 的「從屬化」",
