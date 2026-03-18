@@ -1,13 +1,13 @@
 [
   {
     "slug": "ai-breaking-open-source-social-contract",
-    "title": "AI 正在打破開源的社會契約",
-    "summary": "從 Helium 的 prompt injection 到 Theo 的 150 個 PR，開源的隱性門檻正在被 AI 摧毀。問題不是 AI 好不好，是責任去哪了。",
+    "title": "AI 正在打破開放原始碼的社會契約",
+    "summary": "從 Helium 的 prompt injection 到 Theo 的 150 個 PR，開放原始碼的隱性門檻正在被 AI 摧毀。問題不是 AI 好不好，是責任去哪了。",
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2026-03-18T00:00:00Z",
     "tags": [
-      "開源",
+      "開放原始碼",
       "AI",
       "GitHub",
       "prompt injection",
@@ -16,7 +16,7 @@
       "Helium",
       "Theo",
       "Voco",
-      "開源生態"
+      "開放原始碼生態"
     ],
     "accentColor": "#e85d3a",
     "readingTime": "6 min"
