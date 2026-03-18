@@ -37,7 +37,7 @@
   <!-- 額外的 metadata -->
   <meta name="keywords" content="身心障礙, 感情, 自我對話" id="meta-keywords">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#556bff">
+  <meta name="theme-color" content="#8a2be2">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -59,10 +59,12 @@
   <!-- 文章頁專屬關鍵 CSS -->
   <style>
     .article {
-      background: var(--surface);
+      background: var(--card-bg, rgba(255, 255, 255, 0.03));
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft);
+      box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.05);
       overflow: hidden;
     }
     .article-header h1 {
@@ -102,6 +104,8 @@
   <link rel="stylesheet" href="../../assets/styles.min.css">
 </head>
 <body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
   <div class="page-chrome">
     <header class="site-header">
       <div class="wrapper">
