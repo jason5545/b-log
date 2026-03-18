@@ -2779,7 +2779,6 @@ a:focus {
   border: 1px solid var(--border);
   box-shadow: var(--shadow-soft);
   padding: clamp(2rem, 4vw, 3.5rem);
-  max-width: 860px;
 }
 
 .content h1:first-child {
