@@ -8,12 +8,12 @@
     {
       "id": "ai-breaking-open-source-social-contract",
       "url": "https://b-log.to/tech-analysis/ai-breaking-open-source-social-contract/",
-      "title": "AI 正在打破開源的社會契約",
-      "content_text": "從 Helium 的 prompt injection 到 Theo 的 150 個 PR，開源的隱性門檻正在被 AI 摧毀。問題不是 AI 好不好，是責任去哪了。",
+      "title": "AI 正在打破開放原始碼的社會契約",
+      "content_text": "從 Helium 的 prompt injection 到 Theo 的 150 個 PR，開放原始碼的隱性門檻正在被 AI 摧毀。問題不是 AI 好不好，是責任去哪了。",
       "date_published": "2026-03-18T00:00:00.000Z",
       "date_modified": "2026-03-18T00:00:00.000Z",
       "tags": [
-        "開源",
+        "開放原始碼",
         "AI",
         "GitHub",
         "prompt injection",
@@ -22,7 +22,7 @@
         "Helium",
         "Theo",
         "Voco",
-        "開源生態"
+        "開放原始碼生態"
       ],
       "authors": [
         {

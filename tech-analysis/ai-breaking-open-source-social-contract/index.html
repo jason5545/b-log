@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>AI 正在打破開源的社會契約 - (b)-log</title>
+  <title>AI 正在打破開放原始碼的社會契約 - (b)-log</title>
   
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="從 Helium 的 prompt injection 到 Theo 的 150 個 PR，開源的隱性門檻正在被 AI 摧毀。問題不是 AI 好不好，是責任去哪了。">
+  <meta name="description" content="從 Helium 的 prompt injection 到 Theo 的 150 個 PR，開放原始碼的隱性門檻正在被 AI 摧毀。問題不是 AI 好不好，是責任去哪了。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/ai-breaking-open-source-social-contract/" id="canonical-url">
   
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/ai-breaking-open-source-social-contract/" id="og-url">
-  <meta property="og:title" content="AI 正在打破開源的社會契約" id="og-title">
-  <meta property="og:description" content="從 Helium 的 prompt injection 到 Theo 的 150 個 PR，開源的隱性門檻正在被 AI 摧毀。問題不是 AI 好不好，是責任去哪了。" id="og-description">
-  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:AI%20%E6%AD%A3%E5%9C%A8%E6%89%93%E7%A0%B4%E9%96%8B%E6%BA%90%E7%9A%84%E7%A4%BE%E6%9C%83%E5%A5%91%E7%B4%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:title" content="AI 正在打破開放原始碼的社會契約" id="og-title">
+  <meta property="og:description" content="從 Helium 的 prompt injection 到 Theo 的 150 個 PR，開放原始碼的隱性門檻正在被 AI 摧毀。問題不是 AI 好不好，是責任去哪了。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:AI%20%E6%AD%A3%E5%9C%A8%E6%89%93%E7%A0%B4%E9%96%8B%E6%94%BE%E5%8E%9F%E5%A7%8B%E7%A2%BC%E7%9A%84%E7%A4%BE%E6%9C%83%E5%A5%91%E7%B4%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="(b)-log">
@@ -24,18 +24,18 @@
   <meta property="article:published_time" content="2026-03-18T00:00:00Z" id="og-published-time">
   <meta property="article:modified_time" content="2026-03-18T00:00:00Z" id="og-modified-time">
   <meta property="article:section" content="技術分析" id="og-section">
-  <meta property="article:tag" content="開源, AI, GitHub, prompt injection, 維護者, PR spam, Helium, Theo, Voco, 開源生態" id="og-tags">
+  <meta property="article:tag" content="開放原始碼, AI, GitHub, prompt injection, 維護者, PR spam, Helium, Theo, Voco, 開放原始碼生態" id="og-tags">
   
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/ai-breaking-open-source-social-contract/" id="twitter-url">
-  <meta property="twitter:title" content="AI 正在打破開源的社會契約" id="twitter-title">
-  <meta property="twitter:description" content="從 Helium 的 prompt injection 到 Theo 的 150 個 PR，開源的隱性門檻正在被 AI 摧毀。問題不是 AI 好不好，是責任去哪了。" id="twitter-description">
-  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:AI%20%E6%AD%A3%E5%9C%A8%E6%89%93%E7%A0%B4%E9%96%8B%E6%BA%90%E7%9A%84%E7%A4%BE%E6%9C%83%E5%A5%91%E7%B4%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:title" content="AI 正在打破開放原始碼的社會契約" id="twitter-title">
+  <meta property="twitter:description" content="從 Helium 的 prompt injection 到 Theo 的 150 個 PR，開放原始碼的隱性門檻正在被 AI 摧毀。問題不是 AI 好不好，是責任去哪了。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:AI%20%E6%AD%A3%E5%9C%A8%E6%89%93%E7%A0%B4%E9%96%8B%E6%94%BE%E5%8E%9F%E5%A7%8B%E7%A2%BC%E7%9A%84%E7%A4%BE%E6%9C%83%E5%A5%91%E7%B4%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
   
   <!-- 額外的 metadata -->
-  <meta name="keywords" content="開源, AI, GitHub, prompt injection, 維護者, PR spam, Helium, Theo, Voco, 開源生態" id="meta-keywords">
+  <meta name="keywords" content="開放原始碼, AI, GitHub, prompt injection, 維護者, PR spam, Helium, Theo, Voco, 開放原始碼生態" id="meta-keywords">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#b45309">
 
