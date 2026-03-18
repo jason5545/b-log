@@ -6,6 +6,31 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "ai-breaking-open-source-social-contract",
+      "url": "https://b-log.to/tech-analysis/ai-breaking-open-source-social-contract/",
+      "title": "AI 正在打破開源的社會契約",
+      "content_text": "從 Helium 的 prompt injection 到 Theo 的 150 個 PR，開源的隱性門檻正在被 AI 摧毀。問題不是 AI 好不好，是責任去哪了。",
+      "date_published": "2026-03-18T00:00:00.000Z",
+      "date_modified": "2026-03-18T00:00:00.000Z",
+      "tags": [
+        "開源",
+        "AI",
+        "GitHub",
+        "prompt injection",
+        "維護者",
+        "PR spam",
+        "Helium",
+        "Theo",
+        "Voco",
+        "開源生態"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "taiwan-every-path-has-its-price",
       "url": "https://b-log.to/cultural-insights/taiwan-every-path-has-its-price/",
       "title": "每一條路都有代價——從翁曉玲的貼文想起國中歷史課",
