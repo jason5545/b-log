@@ -37,7 +37,7 @@
   <!-- 額外的 metadata -->
   <meta name="keywords" content="PDF, OCR, pdftk, ocrmypdf, 故障排除, bash" id="meta-keywords">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#8a2be2">
+  <meta name="theme-color" content="#b45309">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -49,22 +49,22 @@
   <!-- 啟用 View Transition API（跨文件過渡） -->
   <meta name="view-transition" content="same-origin">
 
-  <!-- 預載本地字型 - 最佳化 FCP/LCP -->
-  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-latin-400.woff2" crossorigin>
-  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-latin-700.woff2" crossorigin>
-  <!-- 載入本地字型樣式 -->
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
   <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/critical-shared.css">
 
   <!-- 文章頁專屬關鍵 CSS -->
   <style>
     .article {
-      background: var(--card-bg, rgba(255, 255, 255, 0.03));
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      box-shadow: var(--shadow-soft);
       overflow: hidden;
     }
     .article-header h1 {

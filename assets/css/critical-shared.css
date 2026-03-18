@@ -1,86 +1,107 @@
-/* Shared critical styles for core layout/theme – Premium Glassmorphism edition */
+/* ====================================================================
+   Critical Shared — Loaded first for fast FCP
+   Single source of truth for ALL CSS custom properties
+   ==================================================================== */
+
 :root {
   color-scheme: light dark;
 
-  /* Premium palette (shared across modes) */
-  --primary: #8a2be2;
-  --secondary: #4169e1;
+  /* Brand */
+  --primary: #b45309;
+  --secondary: #0369a1;
 
-  /* Light mode defaults */
-  --bg-gradient: linear-gradient(140deg, #f0ecff 0%, #fefefe 40%, #eef1ff 100%);
-  --surface: rgba(255, 255, 255, 0.6);
-  --surface-muted: rgba(255, 255, 255, 0.4);
-  --card-bg: rgba(255, 255, 255, 0.5);
-  --text: #111322;
-  --text-muted: #5d6476;
-  --text-inverse: #f7f8ff;
-  --accent: #7c3aed;
-  --accent-soft: rgba(124, 58, 237, 0.1);
-  --accent-strong: #6d28d9;
-  --border: rgba(17, 19, 34, 0.1);
-  --shadow-soft: 0 10px 30px rgba(15, 21, 46, 0.08);
-  --shadow-strong: 0 20px 40px rgba(15, 21, 46, 0.15);
+  /* Light mode */
+  --bg-gradient: linear-gradient(140deg, #faf8f5 0%, #ffffff 40%, #f5f0eb 100%);
+  --surface: rgba(255, 255, 255, 0.85);
+  --surface-muted: rgba(255, 255, 255, 0.5);
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --text: #1c1917;
+  --text-muted: #78716c;
+  --text-inverse: #fafaf9;
+  --accent: #b45309;
+  --accent-soft: rgba(180, 83, 9, 0.08);
+  --accent-strong: #92400e;
+  --accent-border: rgba(180, 83, 9, 0.2);
+  --accent-glow: rgba(180, 83, 9, 0.3);
+  --border: rgba(28, 25, 23, 0.1);
+  --shadow-soft: 0 10px 30px rgba(28, 25, 23, 0.06);
+  --shadow-strong: 0 20px 40px rgba(28, 25, 23, 0.12);
 
-  /* Ambient glow tokens */
-  --glow-opacity: 0.06;
-  --orb-opacity-1: 0.08;
-  --orb-opacity-2: 0.06;
+  /* Glass tints — adapt per mode */
+  --glass-tint: rgba(28, 25, 23, 0.02);
+  --glass-tint-strong: rgba(28, 25, 23, 0.05);
 
-  /* Gradient text tokens */
-  --gradient-text-from: #1a1a2e;
-  --gradient-text-to: #7c5cbf;
+  /* Ambient */
+  --glow-opacity: 0.04;
+  --orb-opacity-1: 0.06;
+  --orb-opacity-2: 0.04;
 
-  /* Geometry (constant) */
+  /* Gradient text */
+  --gradient-text-from: #1c1917;
+  --gradient-text-to: #78350f;
+
+  /* Geometry */
   --radius-lg: 24px;
   --radius-md: 16px;
   --radius-sm: 10px;
   --sidebar-width: 320px;
 }
 
+/* Dark — explicit toggle */
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg-gradient: #0f111a;
-  --surface: rgba(255, 255, 255, 0.03);
+  --bg-gradient: #0c0a09;
+  --surface: rgba(255, 255, 255, 0.04);
   --surface-muted: rgba(255, 255, 255, 0.02);
-  --card-bg: rgba(255, 255, 255, 0.03);
-  --text: #ffffff;
-  --text-muted: #8b92a5;
-  --accent: #5eead4;
-  --accent-soft: rgba(138, 43, 226, 0.12);
-  --accent-strong: #2dd4bf;
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --text: #fafaf9;
+  --text-muted: #a8a29e;
+  --accent: #f59e0b;
+  --accent-soft: rgba(245, 158, 11, 0.1);
+  --accent-strong: #d97706;
+  --accent-border: rgba(245, 158, 11, 0.2);
+  --accent-glow: rgba(245, 158, 11, 0.3);
   --border: rgba(255, 255, 255, 0.08);
   --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.2);
   --shadow-strong: 0 20px 40px rgba(0, 0, 0, 0.4);
-  --glow-opacity: 0.15;
-  --orb-opacity-1: 0.2;
-  --orb-opacity-2: 0.15;
-  --gradient-text-from: #ffffff;
-  --gradient-text-to: #aeb5d1;
+  --glass-tint: rgba(255, 255, 255, 0.05);
+  --glass-tint-strong: rgba(255, 255, 255, 0.1);
+  --glow-opacity: 0.08;
+  --orb-opacity-1: 0.12;
+  --orb-opacity-2: 0.08;
+  --gradient-text-from: #fafaf9;
+  --gradient-text-to: #d6d3d1;
 }
 
+/* Dark — auto (system preference) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg-gradient: #0f111a;
-    --surface: rgba(255, 255, 255, 0.03);
+    --bg-gradient: #0c0a09;
+    --surface: rgba(255, 255, 255, 0.04);
     --surface-muted: rgba(255, 255, 255, 0.02);
-    --card-bg: rgba(255, 255, 255, 0.03);
-    --text: #ffffff;
-    --text-muted: #8b92a5;
-    --accent: #5eead4;
-    --accent-soft: rgba(138, 43, 226, 0.12);
-    --accent-strong: #2dd4bf;
+    --card-bg: rgba(255, 255, 255, 0.04);
+    --text: #fafaf9;
+    --text-muted: #a8a29e;
+    --accent: #f59e0b;
+    --accent-soft: rgba(245, 158, 11, 0.1);
+    --accent-strong: #d97706;
+    --accent-border: rgba(245, 158, 11, 0.2);
+    --accent-glow: rgba(245, 158, 11, 0.3);
     --border: rgba(255, 255, 255, 0.08);
     --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.2);
     --shadow-strong: 0 20px 40px rgba(0, 0, 0, 0.4);
-    --glow-opacity: 0.15;
-    --orb-opacity-1: 0.2;
-    --orb-opacity-2: 0.15;
-    --gradient-text-from: #ffffff;
-    --gradient-text-to: #aeb5d1;
+    --glass-tint: rgba(255, 255, 255, 0.05);
+    --glass-tint-strong: rgba(255, 255, 255, 0.1);
+    --glow-opacity: 0.08;
+    --orb-opacity-1: 0.12;
+    --orb-opacity-2: 0.08;
+    --gradient-text-from: #fafaf9;
+    --gradient-text-to: #d6d3d1;
   }
 }
 
+/* ---------- Baseline (fast first paint) ---------- */
 *,
 *::before,
 *::after {
@@ -89,7 +110,7 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-family: var(--font-body, ui-sans-serif, system-ui, -apple-system, sans-serif);
   font-size: 16px;
   line-height: 1.7;
   background: var(--bg-gradient);
@@ -116,7 +137,7 @@ a {
 }
 
 .site-header {
-  padding: 3.5rem 0 2.5rem;
+  padding: 2rem 0;
   position: relative;
 }
 

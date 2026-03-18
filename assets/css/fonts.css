@@ -1,22 +1,26 @@
-@font-face{
-  font-family:"Inter";
-  src:url("/assets/fonts/inter-latin-400.woff2") format("woff2");
-  font-weight:400;
-  font-style:normal;
-  font-display:optional;
-}
-@font-face{
-  font-family:"Inter";
-  src:url("/assets/fonts/inter-latin-700.woff2") format("woff2");
-  font-weight:700;
-  font-style:normal;
-  font-display:optional;
+/* ====================================================================
+   Fonts — Bricolage Grotesque for headings, system stack for body/CJK
+   ==================================================================== */
+
+/* Chinese-optimised system stack */
+:root {
+  --sans-tc: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+             "PingFang TC", "Microsoft JhengHei", "Noto Sans TC",
+             "Heiti TC", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  --font-heading: "Bricolage Grotesque", var(--sans-tc);
+  --font-body: var(--sans-tc);
 }
 
-/* Global family: Inter for ASCII/latin; Chinese uses fast system fonts */
-:root{
-  --sans-tc: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-             "PingFang TC","Microsoft JhengHei","Noto Sans TC",
-             "Heiti TC","Helvetica Neue",Arial,Helvetica,sans-serif;
+html[lang="zh-Hant-TW"] body {
+  font-family: var(--font-body);
 }
-html[lang="zh-Hant-TW"] body{ font-family:"Inter", var(--sans-tc); }
+
+/* Apply heading font to all headings and key UI elements */
+h1, h2, h3, h4, h5, h6,
+.site-title,
+.hero-card__title,
+.stream-title,
+.widget__title,
+.article-header h1 {
+  font-family: var(--font-heading);
+}

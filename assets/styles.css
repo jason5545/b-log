@@ -1,107 +1,4 @@
-/* Theme variables – Premium Glassmorphism */
-:root {
-  color-scheme: light dark;
-
-  /* Premium palette (shared) */
-  --primary: #8a2be2;
-  --secondary: #4169e1;
-
-  /* Light mode defaults */
-  --bg-gradient: linear-gradient(140deg, #f0ecff 0%, #fefefe 40%, #eef1ff 100%);
-  --surface: rgba(255, 255, 255, 0.6);
-  --surface-muted: rgba(255, 255, 255, 0.4);
-  --card-bg: rgba(255, 255, 255, 0.5);
-  --text: #111322;
-  --text-muted: #5d6476;
-  --text-inverse: #f7f8ff;
-  --accent: #7c3aed;
-  --accent-soft: rgba(124, 58, 237, 0.1);
-  --accent-strong: #6d28d9;
-  --border: rgba(17, 19, 34, 0.1);
-  --shadow-soft: 0 10px 30px rgba(15, 21, 46, 0.08);
-  --shadow-strong: 0 20px 40px rgba(15, 21, 46, 0.15);
-
-  /* Ambient glow tokens */
-  --glow-opacity: 0.06;
-  --orb-opacity-1: 0.08;
-  --orb-opacity-2: 0.06;
-
-  /* Gradient text tokens */
-  --gradient-text-from: #1a1a2e;
-  --gradient-text-to: #7c5cbf;
-
-  /* Geometry (constant) */
-  --radius-lg: 24px;
-  --radius-md: 16px;
-  --radius-sm: 10px;
-  --sidebar-width: 320px;
-}
-
-/* 深色模式 – 完整 Glassmorphism */
-[data-theme="dark"] {
-  color-scheme: dark;
-  --bg-gradient: #0f111a;
-  --surface: rgba(255, 255, 255, 0.03);
-  --surface-muted: rgba(255, 255, 255, 0.02);
-  --card-bg: rgba(255, 255, 255, 0.03);
-  --text: #ffffff;
-  --text-muted: #8b92a5;
-  --accent: #5eead4;
-  --accent-soft: rgba(138, 43, 226, 0.12);
-  --accent-strong: #2dd4bf;
-  --border: rgba(255, 255, 255, 0.08);
-  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.2);
-  --shadow-strong: 0 20px 40px rgba(0, 0, 0, 0.4);
-  --glow-opacity: 0.15;
-  --orb-opacity-1: 0.2;
-  --orb-opacity-2: 0.15;
-  --gradient-text-from: #ffffff;
-  --gradient-text-to: #aeb5d1;
-}
-
-/* 自動跟隨系統偏好 */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg-gradient: #0f111a;
-    --surface: rgba(255, 255, 255, 0.03);
-    --surface-muted: rgba(255, 255, 255, 0.02);
-    --card-bg: rgba(255, 255, 255, 0.03);
-    --text: #ffffff;
-    --text-muted: #8b92a5;
-    --accent: #5eead4;
-    --accent-soft: rgba(138, 43, 226, 0.12);
-    --accent-strong: #2dd4bf;
-    --border: rgba(255, 255, 255, 0.08);
-    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.2);
-    --shadow-strong: 0 20px 40px rgba(0, 0, 0, 0.4);
-    --glow-opacity: 0.15;
-    --orb-opacity-1: 0.2;
-    --orb-opacity-2: 0.15;
-    --gradient-text-from: #ffffff;
-    --gradient-text-to: #aeb5d1;
-  }
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: "Noto Sans TC", "Segoe UI", system-ui, -apple-system, sans-serif;
-  font-size: 16px;
-  line-height: 1.7;
-  background: var(--bg-gradient);
-  color: var(--text);
-  overflow-x: hidden;
-  position: relative;
-  min-height: 100vh;
-  /* 防止字型載入導致的 CLS */
-  font-display: swap;
-}
+/* Theme variables live in /assets/css/critical-shared.css — single source of truth */
 
 /* Ambient glow – central radial pulse */
 body::before {
@@ -109,7 +6,7 @@ body::before {
   position: fixed;
   width: 80vw;
   height: 80vw;
-  background: radial-gradient(circle, rgba(65, 105, 225, var(--glow-opacity)) 0%, rgba(138, 43, 226, calc(var(--glow-opacity) * 0.67)) 40%, transparent 70%);
+  background: radial-gradient(circle, rgba(180, 83, 9, var(--glow-opacity)) 0%, rgba(217, 119, 6, calc(var(--glow-opacity) * 0.67)) 40%, transparent 70%);
   border-radius: 50%;
   top: 50%;
   left: 50%;
@@ -163,13 +60,11 @@ body::before {
   flex-direction: column;
 }
 
-/* Glassmorphism card utility */
+/* Card utility */
 .glass-card {
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-soft);
   border-radius: var(--radius-md);
   transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
               border-color 0.3s ease,
@@ -177,8 +72,8 @@ body::before {
 }
 .glass-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: var(--shadow-strong), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow-strong);
 }
 
 /* Gradient text utility */
@@ -223,9 +118,7 @@ a:focus {
   padding: 2rem 0;
   margin-bottom: 3rem;
   position: relative;
-  background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
 
@@ -297,13 +190,11 @@ a:focus {
 .site-nav a[aria-current="page"] {
   border-color: var(--accent);
   color: var(--accent);
-  text-shadow: 0 0 10px rgba(94, 234, 212, 0.3);
 }
 
 .site-nav a:hover,
 .site-nav a:focus {
   color: var(--accent);
-  text-shadow: 0 0 10px rgba(94, 234, 212, 0.3);
   text-decoration: none;
   border-color: var(--accent);
 }
@@ -342,7 +233,7 @@ a:focus {
   background: var(--surface);
   border-color: var(--accent);
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(138, 43, 226, 0.25);
+  box-shadow: 0 12px 28px var(--accent-glow);
 }
 
 .theme-toggle:hover::before {
@@ -351,7 +242,7 @@ a:focus {
 
 .theme-toggle:active {
   transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(138, 43, 226, 0.2);
+  box-shadow: 0 4px 12px var(--accent-border);
 }
 
 .theme-toggle__icon {
@@ -380,14 +271,14 @@ a:focus {
   z-index: 1;
 }
 
-/* 深色模式下的图标调整 */
-[data-theme="dark"] .theme-icon {
+/* theme icon glow in dark mode */
+[data-theme="dark"] .theme-icon,
+:root:not([data-theme="light"]) .theme-icon {
   filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
 }
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .theme-icon {
-    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .theme-icon {
+    filter: none;
   }
 }
 
@@ -396,8 +287,6 @@ a:focus {
   padding: 1.6rem 1.8rem;
   border-radius: var(--radius-lg);
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-soft);
   display: flex;
@@ -428,11 +317,11 @@ a:focus {
   display: grid;
   grid-template-columns: 1fr;
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-strong), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-strong);
   border: 1px solid var(--border);
 }
 
@@ -465,7 +354,7 @@ a:focus {
 
 .hero-card__media {
   min-height: 220px;
-  background: linear-gradient(135deg, rgba(138, 43, 226, 0.6), rgba(65, 105, 225, 0.5));
+  background: linear-gradient(135deg, rgba(180, 83, 9, 0.5), rgba(3, 105, 161, 0.4));
   background-size: cover;
   background-position: center;
   /* 防止 CLS - 設定寬高比 */
@@ -488,7 +377,7 @@ a:focus {
   font-weight: 500;
   color: var(--accent);
   background: var(--accent-soft);
-  border: 1px solid rgba(138, 43, 226, 0.3);
+  border: 1px solid var(--accent-border);
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
   margin: 0 0 1rem;
@@ -506,8 +395,8 @@ a:focus {
 }
 
 .hero-card__title a:hover {
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
   text-decoration: none;
+  color: var(--accent);
 }
 
 .hero-card__meta {
@@ -550,7 +439,7 @@ a:focus {
 .button--primary {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: #fff;
-  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+  box-shadow: 0 4px 15px var(--accent-glow);
   position: relative;
   overflow: hidden;
 }
@@ -574,20 +463,20 @@ a:focus {
 
 .button--primary:hover,
 .button--primary:focus {
-  box-shadow: 0 6px 20px rgba(138, 43, 226, 0.5);
+  box-shadow: 0 6px 20px var(--accent-glow);
   transform: translateY(-2px);
 }
 
 .button--ghost {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--glass-tint);
+  border: 1px solid var(--border);
   color: var(--text);
 }
 
 .button--ghost:hover,
 .button--ghost:focus {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: var(--glass-tint-strong);
+  border-color: var(--accent-border);
 }
 
 .content-grid {
@@ -616,11 +505,11 @@ a:focus {
 
 .post-stream {
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-soft);
   padding: clamp(2rem, 3vw, 2.8rem);
   /* 防止 CLS - 限制重排範圍 */
   contain: layout style;
@@ -739,12 +628,12 @@ a:focus {
   display: flex;
   align-items: center;
   width: 100%;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 20px;
   box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   transition: all 0.3s ease;
 }
 
@@ -780,8 +669,8 @@ a:focus {
 }
 
 .search-input-wrapper:focus-within {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2), var(--shadow-soft);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-border), var(--shadow-soft);
 }
 
 /* 清除按鈕 */
@@ -856,12 +745,10 @@ a:focus {
 
 .post-card {
   padding: 2rem;
-  background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--glass-tint);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-soft);
   transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
               border-color 0.3s ease,
               box-shadow 0.3s ease;
@@ -871,8 +758,8 @@ a:focus {
 
 .post-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: var(--shadow-strong), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow-strong);
 }
 
 .post-card:last-child {
@@ -894,7 +781,7 @@ a:focus {
   font-weight: 500;
   color: var(--accent);
   background: var(--accent-soft);
-  border: 1px solid rgba(138, 43, 226, 0.3);
+  border: 1px solid var(--accent-border);
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
   width: fit-content;
@@ -911,8 +798,8 @@ a:focus {
 }
 
 .post-card h3 a:hover {
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
   text-decoration: none;
+  color: var(--accent);
 }
 
 .post-meta {
@@ -935,8 +822,8 @@ a:focus {
 }
 
 .post-tags span {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--glass-tint);
+  border: 1px solid var(--border);
   color: var(--text-muted);
   font-size: 0.8rem;
   padding: 0.2rem 0.8rem;
@@ -947,7 +834,7 @@ a:focus {
 .post-tags span:hover {
   background: var(--accent-soft);
   color: var(--accent);
-  border-color: rgba(138, 43, 226, 0.4);
+  border-color: var(--accent-border);
 }
 
 /* 語音版圖示 */
@@ -966,7 +853,7 @@ a:focus {
 .audio-indicator svg {
   width: 1.2rem;
   height: 1.2rem;
-  filter: drop-shadow(0 1px 2px rgba(85, 107, 255, 0.2));
+  filter: drop-shadow(0 1px 2px var(--accent-border));
 }
 
 .audio-indicator:hover {
@@ -978,7 +865,7 @@ a:focus {
 .audio-indicator--hero svg {
   width: 1.8rem;
   height: 1.8rem;
-  filter: drop-shadow(0 2px 4px rgba(85, 107, 255, 0.3));
+  filter: drop-shadow(0 2px 4px var(--accent-glow));
 }
 
 /* 文章頁面的語音圖示（最大） */
@@ -992,7 +879,7 @@ a:focus {
 .audio-indicator--article svg {
   width: clamp(1.4rem, 3vw, 2.2rem);
   height: clamp(1.4rem, 3vw, 2.2rem);
-  filter: drop-shadow(0 2px 6px rgba(85, 107, 255, 0.35));
+  filter: drop-shadow(0 2px 6px var(--accent-glow));
   vertical-align: middle;
 }
 
@@ -1006,32 +893,7 @@ a:focus {
   height: 1.3rem !important;
 }
 
-/* 深色模式支援 */
-@media (prefers-color-scheme: dark) {
-  .audio-indicator svg {
-    filter: drop-shadow(0 1px 3px rgba(85, 107, 255, 0.4));
-  }
-
-  .audio-indicator--hero svg {
-    filter: drop-shadow(0 2px 6px rgba(85, 107, 255, 0.5));
-  }
-
-  .audio-indicator--article svg {
-    filter: drop-shadow(0 2px 8px rgba(85, 107, 255, 0.6));
-  }
-}
-
-[data-theme="dark"] .audio-indicator svg {
-  filter: drop-shadow(0 1px 3px rgba(85, 107, 255, 0.4));
-}
-
-[data-theme="dark"] .audio-indicator--hero svg {
-  filter: drop-shadow(0 2px 6px rgba(85, 107, 255, 0.5));
-}
-
-[data-theme="dark"] .audio-indicator--article svg {
-  filter: drop-shadow(0 2px 8px rgba(85, 107, 255, 0.6));
-}
+/* audio indicator — filter uses accent glow that works in both modes */
 
 /* 響應式設計 */
 @media (max-width: 768px) {
@@ -1076,12 +938,10 @@ a:focus {
 
 .widget {
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border-radius: var(--radius-md);
   padding: 1.8rem;
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-soft);
   /* 防止 CLS - 限制重排範圍 */
   contain: layout style;
 }
@@ -1093,14 +953,14 @@ a:focus {
 .widget--note {
   font-size: 0.95rem;
   color: var(--text-muted);
-  background: linear-gradient(135deg, rgba(65, 105, 225, 0.03), rgba(138, 43, 226, 0.03));
+  background: linear-gradient(135deg, var(--glass-tint), var(--accent-soft));
 }
 
 .widget__title {
   margin: 0 0 1.2rem;
   font-size: 1.2rem;
   padding-bottom: 0.8rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border);
   background: linear-gradient(to right, var(--gradient-text-from), var(--gradient-text-to));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1152,7 +1012,7 @@ a:focus {
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--glass-tint);
   color: var(--text-muted);
   transition: all 0.3s ease;
 }
@@ -1162,7 +1022,7 @@ a:focus {
   transform: translateY(-1px);
   background: var(--accent-soft);
   color: var(--accent);
-  border-color: rgba(138, 43, 226, 0.4);
+  border-color: var(--accent-border);
   text-decoration: none;
 }
 
@@ -1232,11 +1092,11 @@ a:focus {
 
 .article {
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-soft);
   overflow: hidden;
   /* 防止 CLS - 限制重排範圍 */
   contain: layout style;
@@ -1244,7 +1104,7 @@ a:focus {
 
 .article-hero {
   min-height: 260px;
-  background: linear-gradient(135deg, rgba(138, 43, 226, 0.4), rgba(65, 105, 225, 0.3));
+  background: linear-gradient(135deg, rgba(180, 83, 9, 0.35), rgba(3, 105, 161, 0.25));
   background-size: cover;
   background-position: center;
   position: relative;
@@ -1281,7 +1141,7 @@ a:focus {
   font-weight: 500;
   color: var(--accent);
   background: var(--accent-soft);
-  border: 1px solid rgba(138, 43, 226, 0.3);
+  border: 1px solid var(--accent-border);
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
 }
@@ -1314,8 +1174,8 @@ a:focus {
 }
 
 .article-tags span {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--glass-tint);
+  border: 1px solid var(--border);
   color: var(--text-muted);
   font-size: 0.85rem;
   padding: 0.3rem 0.9rem;
@@ -1328,7 +1188,7 @@ a:focus {
 .article-tags span:hover {
   background: var(--accent-soft);
   color: var(--accent);
-  border-color: rgba(138, 43, 226, 0.4);
+  border-color: var(--accent-border);
 }
 
 .article-body {
@@ -1413,27 +1273,10 @@ a:focus {
 .article-body blockquote blockquote {
   margin: 1rem 0 0;
   border-left-color: var(--accent-strong);
-  background: rgba(138, 43, 226, 0.06);
+  background: var(--glass-tint-strong);
 }
 
-/* 深色模式引用區塊 */
-@media (prefers-color-scheme: dark) {
-  .article-body blockquote {
-    background: rgba(138, 43, 226, 0.08);
-  }
-
-  .article-body blockquote blockquote {
-    background: rgba(138, 43, 226, 0.12);
-  }
-}
-
-[data-theme="dark"] .article-body blockquote {
-  background: rgba(138, 43, 226, 0.08);
-}
-
-[data-theme="dark"] .article-body blockquote blockquote {
-  background: rgba(138, 43, 226, 0.12);
-}
+/* blockquote uses --accent-soft which auto-adapts to dark mode */
 
 /* 表格樣式 */
 .article-body table {
@@ -1477,7 +1320,7 @@ a:focus {
 }
 
 .article-body tbody tr:hover {
-  background: rgba(138, 43, 226, 0.12);
+  background: var(--accent-soft);
 }
 
 /* 響應式表格 - 橫向滾動 */
@@ -1492,40 +1335,7 @@ a:focus {
   min-width: 500px;
 }
 
-/* 深色模式表格 */
-@media (prefers-color-scheme: dark) {
-  .article-body table {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  }
-
-  .article-body thead {
-    background: var(--accent-strong);
-  }
-
-  .article-body tbody tr:nth-child(even) {
-    background: rgba(138, 43, 226, 0.06);
-  }
-
-  .article-body tbody tr:hover {
-    background: rgba(138, 43, 226, 0.12);
-  }
-}
-
-[data-theme="dark"] .article-body table {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-[data-theme="dark"] .article-body thead {
-  background: var(--primary);
-}
-
-[data-theme="dark"] .article-body tbody tr:nth-child(even) {
-  background: rgba(138, 43, 226, 0.06);
-}
-
-[data-theme="dark"] .article-body tbody tr:hover {
-  background: rgba(85, 107, 255, 0.15);
-}
+/* table uses CSS variables — auto-adapts to dark mode */
 
 /* 圖片樣式 */
 .article-body img {
@@ -1728,15 +1538,15 @@ a:focus {
   color: #89dceb;
 }
 
-/* 深色模式調整 */
-@media (prefers-color-scheme: dark) {
-  .article-body pre {
-    background: #11111b;
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  }
-  
-  .article-body .line-numbers {
-    background: rgba(0, 0, 0, 0.3);
+/* code block dark mode */
+[data-theme="dark"] .article-body pre,
+:root:not([data-theme="light"]) .article-body pre {
+  background: #11111b;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .article-body pre {
+    background: #1e1e2e;
   }
 }
 
@@ -1790,7 +1600,7 @@ a:focus {
 .article-share a:hover,
 .article-share a:focus {
   transform: translateY(-1px);
-  box-shadow: 0 12px 28px rgba(138, 43, 226, 0.2);
+  box-shadow: 0 12px 28px var(--accent-border);
   border-color: var(--accent);
   text-decoration: none;
 }
@@ -2232,7 +2042,7 @@ a:focus {
 
 /* 播放/暫停按鈕 */
 .audio-btn {
-  background: var(--accent-color, #556bff);
+  background: var(--accent-color, #b45309);
   border: none;
   border-radius: 50%;
   width: 48px;
@@ -2248,7 +2058,7 @@ a:focus {
 
 .audio-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(85, 107, 255, 0.3);
+  box-shadow: 0 4px 12px var(--accent-glow);
 }
 
 .audio-btn:active {
@@ -2276,8 +2086,8 @@ a:focus {
   border-radius: 3px;
   background: linear-gradient(
     to right,
-    var(--accent-color, #556bff) 0%,
-    var(--accent-color, #556bff) 0%,
+    var(--accent-color, #b45309) 0%,
+    var(--accent-color, #b45309) 0%,
     var(--border-color, #e0e0e0) 0%,
     var(--border-color, #e0e0e0) 100%
   );
@@ -2296,7 +2106,7 @@ a:focus {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--accent-color, #556bff);
+  background: var(--accent-color, #b45309);
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
@@ -2304,14 +2114,14 @@ a:focus {
 
 .audio-progress::-webkit-slider-thumb:hover {
   transform: scale(1.2);
-  box-shadow: 0 2px 8px rgba(85, 107, 255, 0.4);
+  box-shadow: 0 2px 8px var(--accent-glow);
 }
 
 .audio-progress::-moz-range-thumb {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--accent-color, #556bff);
+  background: var(--accent-color, #b45309);
   cursor: pointer;
   border: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -2320,7 +2130,7 @@ a:focus {
 
 .audio-progress::-moz-range-thumb:hover {
   transform: scale(1.2);
-  box-shadow: 0 2px 8px rgba(85, 107, 255, 0.4);
+  box-shadow: 0 2px 8px var(--accent-glow);
 }
 
 /* 時間顯示 */
@@ -2353,7 +2163,7 @@ a:focus {
 
 .speed-btn:hover {
   background: var(--hover-background, #f5f5f5);
-  border-color: var(--accent-color, #556bff);
+  border-color: var(--accent-color, #b45309);
 }
 
 .speed-menu {
@@ -2389,7 +2199,7 @@ a:focus {
 }
 
 .speed-menu button.active {
-  background: var(--accent-color, #556bff);
+  background: var(--accent-color, #b45309);
   color: #fff;
   font-weight: 600;
 }
@@ -2418,7 +2228,7 @@ a:focus {
 
 .volume-btn:hover {
   background: var(--hover-background, #f5f5f5);
-  color: var(--accent-color, #556bff);
+  color: var(--accent-color, #b45309);
 }
 
 .volume-btn svg {
@@ -2443,7 +2253,7 @@ a:focus {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: var(--accent-color, #556bff);
+  background: var(--accent-color, #b45309);
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -2456,7 +2266,7 @@ a:focus {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: var(--accent-color, #556bff);
+  background: var(--accent-color, #b45309);
   cursor: pointer;
   border: none;
   transition: transform 0.2s ease;
@@ -2466,56 +2276,7 @@ a:focus {
   transform: scale(1.2);
 }
 
-/* 深色模式支援 */
-@media (prefers-color-scheme: dark) {
-  .audio-player {
-    background: var(--card-background, #1e1e1e);
-    border-color: var(--border-color, #333);
-  }
-
-  .speed-btn,
-  .speed-menu {
-    background: var(--card-background, #1e1e1e);
-    border-color: var(--border-color, #333);
-    color: var(--text-primary, #e0e0e0);
-  }
-
-  .speed-menu button {
-    color: var(--text-primary, #e0e0e0);
-  }
-
-  .speed-menu button:hover {
-    background: var(--hover-background, #2a2a2a);
-  }
-
-  .volume-btn:hover {
-    background: var(--hover-background, #2a2a2a);
-  }
-}
-
-[data-theme="dark"] .audio-player {
-  background: var(--card-background, #1e1e1e);
-  border-color: var(--border-color, #333);
-}
-
-[data-theme="dark"] .speed-btn,
-[data-theme="dark"] .speed-menu {
-  background: var(--card-background, #1e1e1e);
-  border-color: var(--border-color, #333);
-  color: var(--text-primary, #e0e0e0);
-}
-
-[data-theme="dark"] .speed-menu button {
-  color: var(--text-primary, #e0e0e0);
-}
-
-[data-theme="dark"] .speed-menu button:hover {
-  background: var(--hover-background, #2a2a2a);
-}
-
-[data-theme="dark"] .volume-btn:hover {
-  background: var(--hover-background, #2a2a2a);
-}
+/* audio player — uses fallback vars that handle both modes */
 
 /* NotebookLM 標記 */
 .audio-attribution {
@@ -2534,7 +2295,7 @@ a:focus {
 }
 
 .audio-attribution a {
-  color: var(--accent-color, #556bff);
+  color: var(--accent-color, #b45309);
   text-decoration: none;
   font-weight: 500;
   transition: all 0.2s ease;
@@ -2542,7 +2303,7 @@ a:focus {
 
 .audio-attribution a:hover {
   text-decoration: underline;
-  color: var(--accent-strong, #3644d8);
+  color: var(--accent-strong, #92400e);
 }
 
 /* 音訊錯誤訊息 */
@@ -2571,28 +2332,7 @@ a:focus {
   }
 }
 
-/* 深色模式支援 */
-@media (prefers-color-scheme: dark) {
-  .audio-attribution {
-    border-top-color: var(--border-color, #333);
-  }
-
-  .audio-error {
-    background: rgba(239, 68, 68, 0.15);
-    border-color: rgba(239, 68, 68, 0.4);
-    color: #ef4444;
-  }
-}
-
-[data-theme="dark"] .audio-attribution {
-  border-top-color: var(--border-color, #333);
-}
-
-[data-theme="dark"] .audio-error {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.4);
-  color: #ef4444;
-}
+/* audio attribution/error — uses fallback vars */
 
 /* 響應式設計 */
 @media (max-width: 768px) {
@@ -2977,4 +2717,169 @@ a:focus {
   .yearly-stats__number {
     font-size: 1.5rem;
   }
+}
+
+/* ============================================================
+   Entry animations — staggered reveal on page load
+   ============================================================ */
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-card,
+.post-stream,
+.sidebar .widget,
+.article,
+.content {
+  animation: reveal-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-card              { animation-delay: 0.05s; }
+.post-stream            { animation-delay: 0.15s; }
+.sidebar .widget:nth-child(1) { animation-delay: 0.2s; }
+.sidebar .widget:nth-child(2) { animation-delay: 0.28s; }
+.sidebar .widget:nth-child(3) { animation-delay: 0.36s; }
+.sidebar .widget:nth-child(4) { animation-delay: 0.44s; }
+
+.article                { animation-delay: 0.05s; }
+.article-sidebar .widget:nth-child(1) { animation-delay: 0.2s; }
+.article-sidebar .widget:nth-child(2) { animation-delay: 0.3s; }
+
+.content                { animation-delay: 0.05s; }
+
+/* Respect user preferences */
+@media (prefers-reduced-motion: reduce) {
+  .hero-card,
+  .post-stream,
+  .sidebar .widget,
+  .article,
+  .article-sidebar .widget,
+  .content {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   Static content pages (About, Gadgets)
+   ============================================================ */
+
+.content {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  padding: clamp(2rem, 4vw, 3.5rem);
+  max-width: 860px;
+}
+
+.content h1:first-child {
+  margin-top: 0;
+}
+
+.content h1 {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+  background: linear-gradient(to right, var(--gradient-text-from), var(--gradient-text-to));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.content h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 1.4rem;
+}
+
+.content h3 {
+  margin-top: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+  font-size: 1.15rem;
+}
+
+.content p {
+  margin: 1rem 0;
+  line-height: 1.8;
+}
+
+.content ul {
+  padding-left: 1.5rem;
+  margin: 0.75rem 0;
+}
+
+.content li {
+  margin: 0.4rem 0;
+  line-height: 1.7;
+}
+
+.content li strong {
+  color: var(--text);
+}
+
+.content a:not(.button) {
+  font-weight: 500;
+  text-decoration-line: underline;
+  text-decoration-color: var(--accent-border);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.content a:not(.button):hover {
+  text-decoration-color: var(--accent);
+}
+
+.content hr {
+  margin: 2.5rem 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+.content code {
+  background: var(--glass-tint-strong);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* Gadgets page — device cards */
+.content .device-grid {
+  display: grid;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.content .device-card {
+  background: var(--glass-tint);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.2rem 1.5rem;
+  transition: border-color 0.2s ease;
+}
+
+.content .device-card:hover {
+  border-color: var(--accent-border);
+}
+
+.content .device-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.content .device-card ul {
+  margin: 0;
+  padding-left: 1.2rem;
 }
