@@ -1471,11 +1471,18 @@ async function renderHomepage() {
   } else {
     rest.forEach((post) => {
       const clone = template.content.cloneNode(true);
+      const cardEl = clone.querySelector('.post-card');
       const linkEl = clone.querySelector('.post-link');
       const metaEl = clone.querySelector('.post-meta');
       const summaryEl = clone.querySelector('.post-summary');
       const categoryEl = clone.querySelector('.post-card__category');
       const tagsEl = clone.querySelector('.post-tags');
+
+      // Accent-colored left border
+      if (cardEl) {
+        const accent = post.accentColor || '#556bff';
+        cardEl.style.borderLeft = `3px solid ${accent}`;
+      }
 
       if (linkEl) {
         linkEl.href = slugToPath(post.slug, post.category);
@@ -1500,8 +1507,18 @@ async function renderHomepage() {
         }
       }
 
+      // Category badge with accent color
       if (categoryEl) {
         categoryEl.textContent = post.category || 'Dispatch';
+        const accent = post.accentColor || '#556bff';
+        categoryEl.style.color = accent;
+        categoryEl.style.borderColor = accent.replace(')', ', 0.3)').replace('rgb', 'rgba').replace('#', '');
+        // Use hex-based rgba for border
+        const rgb = hexToRgb(accent);
+        if (rgb) {
+          categoryEl.style.borderColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`;
+          categoryEl.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`;
+        }
       }
 
       if (metaEl) {
@@ -1728,6 +1745,14 @@ function renderFeaturedPost(post) {
   if (heroCategory) {
     heroCategory.textContent = post.category || 'Dispatch';
     heroCategory.hidden = !post.category;
+    // Accent-colored badge
+    const accent = post.accentColor || '#556bff';
+    heroCategory.style.color = accent;
+    const rgb = hexToRgb(accent);
+    if (rgb) {
+      heroCategory.style.borderColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`;
+      heroCategory.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`;
+    }
   }
 
   if (heroLink) {
