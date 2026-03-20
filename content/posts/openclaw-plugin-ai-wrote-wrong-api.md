@@ -110,9 +110,40 @@ Benchmark 不測這個。Benchmark 不會問「你能不能在讀完文件之後
 
 ---
 
-## 最後修好它的不是寫壞它的那個
+## 但公平地說：問題不只是模型
 
-最後是 Claude Code 來修的。它沒有去猜 API 長什麼樣，而是一路追到 `@mariozechner/pi-agent-core` 的 TypeScript 定義，確認 `Tool` interface 要的是 `parameters` 不是 `inputSchema`，然後才改。
+最後修好這個外掛的是 Claude Code（Opus）。但如果要公平評價，得問一個問題：**換成 Opus 在同樣的條件下，會不會也寫錯？**
 
-這大概就是「用 AI 寫程式」跟「讓 AI 自己維護自己」之間的差距。前者已經很好用了，後者還差得遠——至少對號稱接近 Opus 的模型來說是這樣。
+老實說，大概也會。`inputSchema`/`handler` 在 Opus 的訓練資料裡一樣是壓倒性的主流 pattern。如果純靠記憶直接寫，第一版很可能也會中一樣的陷阱。
+
+Opus 能修好它，不是因為模型本身比較聰明，而是因為**環境不同**：
+
+1. 它從看 error message 開始，不是從零寫起
+2. 它可以用 `Object.keys(OpenCC)` 確認實際有哪些方法，不用猜
+3. 它一路追型別定義：`registerTool` → `AnyAgentTool` → `AgentTool` → `Tool` → 確認是 `parameters` 不是 `inputSchema`
+4. 每次改完可以重啟 Gateway、看 log、確認結果
+
+而且 Opus 也犯了錯——它把 `configSchema` 從 manifest 拿掉，導致 Gateway 拒絕載入。多浪費了一次重啟才發現。
+
+Itsuki 呢？它也有 shell 存取權限，也讀了原始碼，但它一口氣寫完就交出去了。崩潰發生在 OpenClaw 的 Gateway 層級——不在 Itsuki 的對話裡。從它的角度看，外掛寫完了，任務結束了。它根本不知道自己搞砸了。
+
+如果把 MiniMax-M2.7 拉到 OpenClaw 之外，給它同樣的 feedback loop——error message、shell 存取、iterate 的機會——它大概也能修好自己的 bug。
+
+**模型的差異沒有 feedback loop 的差異大。**
+
+---
+
+## 真正的缺口在 OpenClaw
+
+這件事暴露的與其說是模型的問題，不如說是 OpenClaw 的架構缺口：
+
+**外掛沒有驗證步驟。**
+
+如果 OpenClaw 在載入外掛時有一個 sandbox 驗證——檢查 `registerTool` 的呼叫有沒有符合 `AgentTool` 介面、`parameters` 有沒有 `properties` 欄位——然後把驗證結果回饋到對話裡，Itsuki 就能在同一個 session 內看到錯誤、自己修正。
+
+現在的狀況是：外掛載入失敗或造成崩潰，錯誤只出現在 Gateway 的 stderr log 裡。對話裡的 AI 完全不知道發生了什麼事。它以為自己成功了，但使用者發訊息過來就只有一行 `Cannot read properties of undefined`。
+
+這不是「AI 太笨所以寫不好 code」，這是「系統沒有告訴 AI 它寫的 code 壞了」。
+
+任何開發者——人類或 AI——在沒有 feedback loop 的條件下都會交出有 bug 的程式碼。差別在於有 feedback loop 的時候，好的開發者能夠自我修正。OpenClaw 把這條路切斷了。
 
