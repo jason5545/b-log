@@ -6,6 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "openclaw-plugin-ai-wrote-wrong-api",
+      "url": "https://b-log.to/tech-analysis/openclaw-plugin-ai-wrote-wrong-api/",
+      "title": "讓 AI 幫自己寫外掛，然後它用錯了自己平台的 API",
+      "content_text": "我請 OpenClaw 的 AI 寫一個 OpenCC 繁體轉換外掛，它寫出來的東西直接讓自己崩潰——因為它用錯了自己平台的 Tool 介面。",
+      "date_published": "2026-03-20T00:00:00.000Z",
+      "date_modified": "2026-03-20T00:00:00.000Z",
+      "tags": [
+        "OpenClaw",
+        "MiniMax",
+        "外掛開發",
+        "OpenCC",
+        "AgentTool",
+        "API",
+        "AI"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "ai-breaking-open-source-social-contract",
       "url": "https://b-log.to/tech-analysis/ai-breaking-open-source-social-contract/",
       "title": "AI 正在打破開放原始碼的社會契約",
