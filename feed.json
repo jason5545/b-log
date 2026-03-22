@@ -6,6 +6,29 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "when-an-ai-song-speaks-your-truth",
+      "url": "https://b-log.to/cultural-insights/when-an-ai-song-speaks-your-truth/",
+      "title": "當一首 AI 寫的歌說中了你的處境",
+      "content_text": "聽 Neuro-sama 的 LIFE，我沒有「代入」她的角色——我是辨認出了自己的感受。歌曲的價值從來不由創作者的物種決定。",
+      "date_published": "2026-03-22T00:00:00.000Z",
+      "date_modified": "2026-03-22T00:00:00.000Z",
+      "tags": [
+        "Neuro-sama",
+        "AI",
+        "音樂",
+        "LIFE",
+        "VTuber",
+        "存在",
+        "共鳴",
+        "文化觀察"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "what-defines-an-old-song",
       "url": "https://b-log.to/cultural-insights/what-defines-an-old-song/",
       "title": "何謂老歌？一個沒有標準答案的問題",
