@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "what-defines-an-old-song",
+      "url": "https://b-log.to/cultural-insights/what-defines-an-old-song/",
+      "title": "何謂老歌？一個沒有標準答案的問題",
+      "content_text": "從一個已經消失的廣播節目出發，探討「老歌」的定義——它量測的到底是歌的年齡，還是聽的人跟那首歌之間的距離？",
+      "date_published": "2026-03-22T00:00:00.000Z",
+      "date_modified": "2026-03-22T00:00:00.000Z",
+      "tags": [
+        "音樂",
+        "老歌",
+        "廣播",
+        "News98",
+        "文化觀察"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "door-monitor-ssim-drift-death-spiral",
       "url": "https://b-log.to/tech-development/door-monitor-ssim-drift-death-spiral/",
       "title": "門監控的死亡螺旋：一張參考影像搞垮整晚的警報系統",
