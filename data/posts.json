@@ -38,7 +38,7 @@
   },
   {
     "slug": "door-monitor-ssim-drift-death-spiral",
-    "title": "門監控的死亡螺旋：一張參考影像搞垮整晚的警報系統",
+    "title": "門口監控的死亡螺旋：一張參考影像搞垮整晚的警報系統",
     "summary": "凌晨被 Telegram 轟炸 285 次門開警告，門根本沒開。追查下來是 IR 夜視的光線漂移加上自適應更新的死鎖設計，讓系統陷入一個永遠回不來的迴圈。",
     "category": "技術開發",
     "author": "Jason Chien",
