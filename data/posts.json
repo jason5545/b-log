@@ -1,5 +1,22 @@
 [
   {
+    "slug": "what-defines-an-old-song",
+    "title": "何謂老歌？一個沒有標準答案的問題",
+    "summary": "從一個已經消失的廣播節目出發，探討「老歌」的定義——它量測的到底是歌的年齡，還是聽的人跟那首歌之間的距離？",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-22T00:00:00Z",
+    "tags": [
+      "音樂",
+      "老歌",
+      "廣播",
+      "News98",
+      "文化觀察"
+    ],
+    "accentColor": "#7a6a55",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "door-monitor-ssim-drift-death-spiral",
     "title": "門監控的死亡螺旋：一張參考影像搞垮整晚的警報系統",
     "summary": "凌晨被 Telegram 轟炸 285 次門開警告，門根本沒開。追查下來是 IR 夜視的光線漂移加上自適應更新的死鎖設計，讓系統陷入一個永遠回不來的迴圈。",
