@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "preparing-for-disaster-not-war",
+      "url": "https://b-log.to/cultural-insights/preparing-for-disaster-not-war/",
+      "title": "你準備的是天災，不是戰爭",
+      "content_text": "長輩又來問我要不要備戰物資了。我的回答是：做這些都是徒勞無功。",
+      "date_published": "2026-03-22T00:00:00.000Z",
+      "date_modified": "2026-03-22T00:00:00.000Z",
+      "tags": [
+        "台灣",
+        "備戰",
+        "天災",
+        "資訊過濾",
+        "焦慮",
+        "邏輯"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "when-an-ai-song-speaks-your-truth",
       "url": "https://b-log.to/cultural-insights/when-an-ai-song-speaks-your-truth/",
       "title": "當一首 AI 寫的歌說中了你的處境",
