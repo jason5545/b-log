@@ -6,6 +6,31 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "door-monitor-ssim-drift-death-spiral",
+      "url": "https://b-log.to/tech-development/door-monitor-ssim-drift-death-spiral/",
+      "title": "門監控的死亡螺旋：一張參考影像搞垮整晚的警報系統",
+      "content_text": "凌晨被 Telegram 轟炸 285 次門開警告，門根本沒開。追查下來是 IR 夜視的光線漂移加上自適應更新的死鎖設計，讓系統陷入一個永遠回不來的迴圈。",
+      "date_published": "2026-03-22T00:00:00.000Z",
+      "date_modified": "2026-03-22T00:00:00.000Z",
+      "tags": [
+        "door-monitor",
+        "SSIM",
+        "YOLOv8",
+        "Tapo C200",
+        "RTSP",
+        "HomeLab",
+        "Proxmox",
+        "LXC",
+        "IR 夜視",
+        "影像比對"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "openclaw-plugin-ai-wrote-wrong-api",
       "url": "https://b-log.to/tech-analysis/openclaw-plugin-ai-wrote-wrong-api/",
       "title": "讓 AI 幫自己寫外掛，然後它用錯了自己平台的 API",
