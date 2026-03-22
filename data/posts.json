@@ -1,5 +1,27 @@
 [
   {
+    "slug": "door-monitor-ssim-drift-death-spiral",
+    "title": "門監控的死亡螺旋：一張參考影像搞垮整晚的警報系統",
+    "summary": "凌晨被 Telegram 轟炸 285 次門開警告，門根本沒開。追查下來是 IR 夜視的光線漂移加上自適應更新的死鎖設計，讓系統陷入一個永遠回不來的迴圈。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-22T00:00:00Z",
+    "tags": [
+      "door-monitor",
+      "SSIM",
+      "YOLOv8",
+      "Tapo C200",
+      "RTSP",
+      "HomeLab",
+      "Proxmox",
+      "LXC",
+      "IR 夜視",
+      "影像比對"
+    ],
+    "accentColor": "#c44536",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "openclaw-plugin-ai-wrote-wrong-api",
     "title": "讓 AI 幫自己寫外掛，然後它用錯了自己平台的 API",
     "summary": "我請 OpenClaw 的 AI 寫一個 OpenCC 繁體轉換外掛，它寫出來的東西直接讓自己崩潰——因為它用錯了自己平台的 Tool 介面。",
