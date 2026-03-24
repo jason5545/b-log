@@ -129,7 +129,3 @@ YouTube 推薦給我相關影片，我的第一個動作是點「不感興趣」
 
 但人沒有 127.0.0.1 可以導。
 
----
-
-<font color="red">這是紅色字體測試</font>　<font color="#3399ff">這是藍色字體測試</font>　<span style="color: #ff6600">這是橘色 span 測試</span>
-
