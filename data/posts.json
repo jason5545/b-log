@@ -1,5 +1,30 @@
 [
   {
+    "slug": "supply-chain-attack-meets-age-verification",
+    "title": "當供應鏈攻擊遇上年齡驗證：開源的兩面夾擊",
+    "summary": "LiteLLM 供應鏈攻擊和年齡驗證法案，看起來不相關，但疊在一起反而暴露了開源面對的真正危機。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-25T00:00:00Z",
+    "tags": [
+      "供應鏈攻擊",
+      "LiteLLM",
+      "Trivy",
+      "TeamPCP",
+      "GitHub Actions",
+      "CI/CD",
+      "年齡驗證",
+      "Linux",
+      "systemd",
+      "Discord",
+      "開放原始碼",
+      "隱私",
+      "資安"
+    ],
+    "accentColor": "#c23616",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "preparing-for-disaster-not-war",
     "title": "你準備的是天災，不是戰爭",
     "summary": "長輩又來問我要不要備戰物資了。我的回答是：做這些都是徒勞無功。",
