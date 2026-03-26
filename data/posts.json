@@ -1,5 +1,23 @@
 [
   {
+    "slug": "macos-cursoruiviewservice-ime-bug",
+    "title": "macOS 輸入法突然卡死？CursorUIViewService 的 CPU 失控 bug",
+    "summary": "記錄一次 macOS 輸入法完全無法切換的除錯過程，從症狀追蹤到根因，最終找到永久修法。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-26T00:00:00Z",
+    "tags": [
+      "macOS",
+      "CursorUIViewService",
+      "輸入法",
+      "IME",
+      "除錯",
+      "Squirrel"
+    ],
+    "accentColor": "#e05252",
+    "readingTime": "2 min"
+  },
+  {
     "slug": "supply-chain-attack-meets-age-verification",
     "title": "當供應鏈攻擊遇上年齡驗證：開放原始碼的兩面夾擊",
     "summary": "LiteLLM 供應鏈攻擊和年齡驗證法案，看起來不相關，但疊在一起反而暴露了開放原始碼面對的真正危機。",
