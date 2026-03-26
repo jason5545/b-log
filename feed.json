@@ -6,6 +6,27 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "macos-cursoruiviewservice-ime-bug",
+      "url": "https://b-log.to/tech-analysis/macos-cursoruiviewservice-ime-bug/",
+      "title": "macOS 輸入法突然卡死？CursorUIViewService 的 CPU 失控 bug",
+      "content_text": "記錄一次 macOS 輸入法完全無法切換的除錯過程，從症狀追蹤到根因，最終找到永久修法。",
+      "date_published": "2026-03-26T00:00:00.000Z",
+      "date_modified": "2026-03-26T00:00:00.000Z",
+      "tags": [
+        "macOS",
+        "CursorUIViewService",
+        "輸入法",
+        "IME",
+        "除錯",
+        "Squirrel"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "supply-chain-attack-meets-age-verification",
       "url": "https://b-log.to/tech-analysis/supply-chain-attack-meets-age-verification/",
       "title": "當供應鏈攻擊遇上年齡驗證：開放原始碼的兩面夾擊",
