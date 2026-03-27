@@ -6,6 +6,31 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "ai-service-sla-availability-problem",
+      "url": "https://b-log.to/business-insights/ai-service-sla-availability-problem/",
+      "title": "AI 服務的 SLA 問題：當可用性成為奢望",
+      "content_text": "Anthropic 三月反覆出事，今天又宣布在尖峰時段收緊用量限制。AI 服務到底應不應該有 SLA？我認為應該，但能做到的不會是 Anthropic 自己。",
+      "date_published": "2026-03-27T20:00:00.000Z",
+      "date_modified": "2026-03-27T20:00:00.000Z",
+      "tags": [
+        "Anthropic",
+        "Claude",
+        "SLA",
+        "OpenRouter",
+        "Vertex AI",
+        "AWS Bedrock",
+        "基礎設施",
+        "訂閱制",
+        "AI產業",
+        "商業策略"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "jal-boarding-music-ai-reasoning-failure",
       "url": "https://b-log.to/ai-analysis/jal-boarding-music-ai-reasoning-failure/",
       "title": "一首登機音樂、兩段記憶，以及一次 AI 推理失敗的解剖",
