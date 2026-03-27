@@ -6,6 +6,28 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "jal-boarding-music-ai-reasoning-failure",
+      "url": "https://b-log.to/cultural-insights/jal-boarding-music-ai-reasoning-failure/",
+      "title": "一首登機音樂、兩段記憶，以及一次 AI 推理失敗的解剖",
+      "content_text": "朋友提起一首歌，我才想起自己在 JAL 飛機上聽到它兩次——2013 年東京迪士尼、2017 年日本演唱會。順帶引出一次值得記錄的 AI 推理失敗案例。",
+      "date_published": "2026-03-27T04:30:00.000Z",
+      "date_modified": "2026-03-27T04:30:00.000Z",
+      "tags": [
+        "音樂",
+        "JAL",
+        "David Foster",
+        "AI",
+        "推理",
+        "記憶",
+        "文化觀察"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "macos-cursoruiviewservice-ime-bug",
       "url": "https://b-log.to/tech-analysis/macos-cursoruiviewservice-ime-bug/",
       "title": "macOS 輸入法突然卡死？CursorUIViewService 的 CPU 失控 bug",
