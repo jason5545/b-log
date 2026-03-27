@@ -1,5 +1,23 @@
 [
   {
+    "slug": "jal-boarding-music-ai-reasoning-failure",
+    "title": "一首登機音樂、兩段記憶，以及一次 AI 推理失敗的解剖",
+    "summary": "朋友提起一首歌，我才想起自己在 JAL 飛機上聽到它兩次——2013 年東京迪士尼、2017 年日本演唱會。順帶引出一次值得記錄的 AI 推理失敗案例。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-27T12:30:00+08:00",
+    "tags": [
+      "音樂",
+      "JAL",
+      "David Foster",
+      "AI",
+      "推理",
+      "記憶",
+      "文化觀察"
+    ],
+    "readingTime": "4 min"
+  },
+  {
     "slug": "macos-cursoruiviewservice-ime-bug",
     "title": "macOS 輸入法突然卡死？CursorUIViewService 的 CPU 失控 bug",
     "summary": "記錄一次 macOS 輸入法完全無法切換的除錯過程，從症狀追蹤到根因，最終找到永久修法。",
