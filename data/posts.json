@@ -1,5 +1,20 @@
 [
   {
+    "slug": "applecare-plus-why-not",
+    "title": "花四萬買旗艦，省四千八毀旗艦",
+    "summary": "都捨得花四萬多買 iPhone，卻省那兩年 4800 的 AppleCare+，然後壞了去找第三方把整台機器降級。這筆帳怎麼算都不對。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-03-28T00:00:00Z",
+    "tags": [
+      "iPhone",
+      "AppleCare+",
+      "消費者行為",
+      "Apple"
+    ],
+    "readingTime": "3 min"
+  },
+  {
     "slug": "ai-service-sla-availability-problem",
     "title": "AI 服務的 SLA 問題：當可用性成為奢望",
     "summary": "Anthropic 三月反覆出事，今天又宣布在尖峰時段收緊用量限制。AI 服務到底應不應該有 SLA？我認為應該，但能做到的不會是 Anthropic 自己。",
