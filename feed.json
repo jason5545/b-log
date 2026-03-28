@@ -6,6 +6,25 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "applecare-plus-vs-third-party-repair",
+      "url": "https://b-log.to/business-insights/applecare-plus-vs-third-party-repair/",
+      "title": "花四萬買旗艦機，卻省四千八的 AppleCare+？",
+      "content_text": "從一則第三方維修店的貼文，聊聊為什麼很多人買得起 iPhone，卻不願意買 AppleCare+。",
+      "date_published": "2026-03-28T00:00:00.000Z",
+      "date_modified": "2026-03-28T00:00:00.000Z",
+      "tags": [
+        "Apple",
+        "iPhone",
+        "AppleCare+",
+        "消費決策"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "applecare-plus-why-not",
       "url": "https://b-log.to/business-insights/applecare-plus-why-not/",
       "title": "花四萬買旗艦，省四千八毀旗艦",
