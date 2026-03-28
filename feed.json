@@ -6,6 +6,25 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "applecare-plus-why-not",
+      "url": "https://b-log.to/business-insights/applecare-plus-why-not/",
+      "title": "花四萬買旗艦，省四千八毀旗艦",
+      "content_text": "都捨得花四萬多買 iPhone，卻省那兩年 4800 的 AppleCare+，然後壞了去找第三方把整台機器降級。這筆帳怎麼算都不對。",
+      "date_published": "2026-03-28T00:00:00.000Z",
+      "date_modified": "2026-03-28T00:00:00.000Z",
+      "tags": [
+        "iPhone",
+        "AppleCare+",
+        "消費者行為",
+        "Apple"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "ai-service-sla-availability-problem",
       "url": "https://b-log.to/business-insights/ai-service-sla-availability-problem/",
       "title": "AI 服務的 SLA 問題：當可用性成為奢望",
