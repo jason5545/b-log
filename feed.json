@@ -6,6 +6,31 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "why-fans-fly-with-their-idol",
+      "url": "https://b-log.to/cultural-insights/why-fans-fly-with-their-idol/",
+      "title": "為什麼粉絲願意跟著偶像到處飛？——從一個 VTuber 的困惑聊起",
+      "content_text": "一個 VTuber 去看了韓國 Trot 歌手的美國場，不理解為什麼韓國人要跟著飛到美國看自己國家的歌手。我用 LiSA 的例子回了她，然後想了想——這件事其實沒什麼好奇怪的。",
+      "date_published": "2026-03-29T00:00:00.000Z",
+      "date_modified": "2026-03-29T00:00:00.000Z",
+      "tags": [
+        "文化觀察",
+        "演唱會",
+        "粉絲文化",
+        "Trot",
+        "林英雄",
+        "Lim Young-woong",
+        "LiSA",
+        "藤倉ウルカ",
+        "Phase Connect",
+        "VTuber"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "lindsey-stirling-1430-million-subscribers",
       "url": "https://b-log.to/cultural-insights/lindsey-stirling-1430-million-subscribers/",
       "title": "1430 萬個訂閱，以及那些曾經說她不行的人——從一個 VTuber 直播聊起 Lindsey Stirling",
