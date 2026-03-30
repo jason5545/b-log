@@ -6,6 +6,26 @@
   "description": "(b)-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。記錄思考，追蹤進度。",
   "items": [
     {
+      "id": "dhl-phishing-email-analysis",
+      "url": "https://b-log.to/tech-analysis/dhl-phishing-email-analysis/",
+      "title": "拆解一封冒用 DHL 的釣魚信：從寄件者到發信平台",
+      "content_text": "收到一封看似來自 noreply@dhl.com 的通知信，從連結、發信機制到 SendGrid 濫用，完整拆解這封釣魚信的手法。",
+      "date_published": "2026-03-30T00:00:00.000Z",
+      "date_modified": "2026-03-30T00:00:00.000Z",
+      "tags": [
+        "資安",
+        "釣魚信",
+        "電子郵件",
+        "SMTP",
+        "SendGrid"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "why-fans-fly-with-their-idol",
       "url": "https://b-log.to/cultural-insights/why-fans-fly-with-their-idol/",
       "title": "為什麼粉絲願意跟著偶像到處飛？——從一個 VTuber 的困惑聊起",
