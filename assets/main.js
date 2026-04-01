@@ -2481,7 +2481,7 @@ function updatePageMetadata(post) {
   // 更新 description
   const descriptionEl = document.querySelector('meta[name="description"]');
   if (descriptionEl) {
-    descriptionEl.content = post.summary || 'b-log 是一個雙重用途的內容系統：既是分享見解的部落格，也是管理項目的待辦清單。';
+    descriptionEl.content = post.summary || '用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。';
   }
   
   // 更新 keywords
