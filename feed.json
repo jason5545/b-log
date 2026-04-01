@@ -6,6 +6,27 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "when-newest-is-wrong",
+      "url": "https://b-log.to/dev-philosophy/when-newest-is-wrong/",
+      "title": "當「取最新」是對的，但結果是錯的",
+      "content_text": "一個合理的設計假設，被一個不合理的資料狀態炸開。反思自動化邏輯中「預設假設」的邊界。",
+      "date_published": "2026-04-01T00:00:00.000Z",
+      "date_modified": "2026-04-01T00:00:00.000Z",
+      "tags": [
+        "自動化",
+        "設計決策",
+        "Python",
+        "os.walk",
+        "檔案管理",
+        "邊界條件"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "tomoyo-after-no-miracle-stays-longest",
       "url": "https://b-log.to/cultural-insights/tomoyo-after-no-miracle-stays-longest/",
       "title": "智代アフター——那個沒有奇蹟的故事，留得最久",
