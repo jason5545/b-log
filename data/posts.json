@@ -1,5 +1,24 @@
 [
   {
+    "slug": "paypal-lesson-learned-twice",
+    "title": "學費繳過一次就夠了",
+    "summary": "睽違多年終於在 MSFS 買了第一架 PMDG 正版飛機，PayPal 付款時系統錯誤導致重複扣款。銀行客服第一反應就要啟動爭款調查，但上次被列黑名單的教訓讓我踩了煞車。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-02T00:00:00Z",
+    "tags": [
+      "PayPal",
+      "PMDG",
+      "MSFS",
+      "國泰世華",
+      "重複扣款",
+      "消費者保護",
+      "模擬飛行"
+    ],
+    "accentColor": "#003087",
+    "readingTime": "3 min"
+  },
+  {
     "slug": "when-newest-is-wrong",
     "title": "當「取最新」是對的，但結果是錯的",
     "summary": "一個合理的設計假設，被一個不合理的資料狀態炸開。反思自動化邏輯中「預設假設」的邊界。",
