@@ -6,6 +6,25 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "paratransit-easycard-auto-reload-denied",
+      "url": "https://b-log.to/life-stories/paratransit-easycard-auto-reload-denied/",
+      "title": "復康巴士的自動加值壞了，然後業者說「從來就沒有」",
+      "content_text": "搭復康巴士用了好幾年的悠遊聯名卡自動加值突然失效，業者堅稱從未支援，但三方記錄全部打臉。一個行動不便者的維權紀錄。",
+      "date_published": "2026-04-02T00:00:00.000Z",
+      "date_modified": "2026-04-02T00:00:00.000Z",
+      "tags": [
+        "復康巴士",
+        "悠遊卡",
+        "無障礙",
+        "陳情"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "paypal-lesson-learned-twice",
       "url": "https://b-log.to/business-insights/paypal-lesson-learned-twice/",
       "title": "學費繳過一次就夠了",
