@@ -6,6 +6,26 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "ai-content-has-no-soul-whose-fault",
+      "url": "https://b-log.to/cultural-insights/ai-content-has-no-soul-whose-fault/",
+      "title": "你的文章沒有靈魂，不是 AI 的錯",
+      "content_text": "從 VideoGamer 被 Google 除名事件，聊聊 AI 內容氾濫的真正問題不在工具，而在使用它的人。",
+      "date_published": "2026-04-03T00:00:00.000Z",
+      "date_modified": "2026-04-03T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "內容品質",
+        "文化觀察",
+        "VideoGamer",
+        "搜尋引擎"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "paratransit-easycard-auto-reload-denied",
       "url": "https://b-log.to/life-stories/paratransit-easycard-auto-reload-denied/",
       "title": "復康巴士的自動加值壞了，然後業者說「從來就沒有」",
