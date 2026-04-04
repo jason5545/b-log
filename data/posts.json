@@ -1,5 +1,24 @@
 [
   {
+    "slug": "claude-code-forced-me-back-to-chatgpt",
+    "title": "我被 Claude Code 逼到重新註冊 ChatGPT",
+    "summary": "Claude Code 三月底的 prompt cache bug 讓付費使用者的 context 消耗膨脹 10-20 倍。身為二月才刪掉 GPT 帳號的人，我現在得把它註冊回來當備案。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-04T00:00:00Z",
+    "tags": [
+      "Claude Code",
+      "ChatGPT",
+      "Anthropic",
+      "prompt cache",
+      "bug",
+      "備案",
+      "AI 工具"
+    ],
+    "accentColor": "#cc3333",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "ai-content-has-no-soul-whose-fault",
     "title": "你的文章沒有靈魂，不是 AI 的錯",
     "summary": "從 VideoGamer 被 Google 除名事件，聊聊 AI 內容氾濫的真正問題不在工具，而在使用它的人。",
