@@ -1,8 +1,8 @@
 [
   {
     "slug": "claude-code-forced-me-back-to-chatgpt",
-    "title": "我被 Claude Code 逼到重新註冊 ChatGPT",
-    "summary": "Claude Code 三月底的 prompt cache bug 讓付費使用者的 context 消耗膨脹 10-20 倍。身為二月才刪掉 GPT 帳號的人，我現在得把它註冊回來當備案。",
+    "title": "Claude Code 差點逼我重新註冊 ChatGPT",
+    "summary": "Claude Code 的 prompt cache bug 讓 context 消耗膨脹 10-20 倍。身為二月才刪掉 GPT 帳號的人，我差點被逼到重新註冊——最後靠 GitHub Copilot 裡的 Claude 模型找到替代路線。",
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2026-04-04T00:00:00Z",
@@ -16,7 +16,7 @@
       "AI 工具"
     ],
     "accentColor": "#cc3333",
-    "readingTime": "5 min"
+    "readingTime": "6 min"
   },
   {
     "slug": "ai-content-has-no-soul-whose-fault",
