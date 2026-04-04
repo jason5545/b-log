@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "claude-code-forced-me-back-to-chatgpt",
+      "url": "https://b-log.to/ai-analysis/claude-code-forced-me-back-to-chatgpt/",
+      "title": "我被 Claude Code 逼到重新註冊 ChatGPT",
+      "content_text": "Claude Code 三月底的 prompt cache bug 讓付費使用者的 context 消耗膨脹 10-20 倍。身為二月才刪掉 GPT 帳號的人，我現在得把它註冊回來當備案。",
+      "date_published": "2026-04-04T00:00:00.000Z",
+      "date_modified": "2026-04-04T00:00:00.000Z",
+      "tags": [
+        "Claude Code",
+        "ChatGPT",
+        "Anthropic",
+        "prompt cache",
+        "bug",
+        "備案",
+        "AI 工具"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "ai-content-has-no-soul-whose-fault",
       "url": "https://b-log.to/cultural-insights/ai-content-has-no-soul-whose-fault/",
       "title": "你的文章沒有靈魂，不是 AI 的錯",
