@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "gemma4-local-writing-experiment",
+      "url": "https://b-log.to/ai-analysis/gemma4-local-writing-experiment/",
+      "title": "我用 Gemma 4 寫了一篇文章，然後花了一整天在修",
+      "content_text": "用 Gemma 4 26B MoE 接 DDG MCP 寫文章的完整實驗紀錄，發現三層問題，並驗證 DDG 是確定的負面變數。",
+      "date_published": "2026-04-05T00:00:00.000Z",
+      "date_modified": "2026-04-05T00:00:00.000Z",
+      "tags": [
+        "Gemma 4",
+        "LM Studio",
+        "DDG",
+        "MCP",
+        "本地模型",
+        "寫作品質",
+        "實驗",
+        "SearXNG"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "language-as-a-strategic-tool-in-digital-age",
       "url": "https://b-log.to/cultural-insights/language-as-a-strategic-tool-in-digital-age/",
       "title": "「玻璃心不適合」背後的精算",
