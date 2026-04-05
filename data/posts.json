@@ -1,5 +1,24 @@
 [
   {
+    "slug": "gemma4-local-writing-experiment",
+    "title": "我用 Gemma 4 寫了一篇文章，然後花了一整天在修",
+    "summary": "用 Gemma 4 26B MoE 接 DDG MCP 寫文章的完整實驗紀錄，發現三層問題，並驗證 DDG 是確定的負面變數。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-05T00:00:00Z",
+    "tags": [
+      "Gemma 4",
+      "LM Studio",
+      "DDG",
+      "MCP",
+      "本地模型",
+      "寫作品質",
+      "實驗",
+      "SearXNG"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "language-as-a-strategic-tool-in-digital-age",
     "title": "「玻璃心不適合」背後的精算",
     "summary": "從一則徵才文和一位前員工的經歷，看「愛台灣」與「玻璃心不適合」如何配合成一套完美的語言防線。",
