@@ -16,9 +16,11 @@
       "LLM",
       "AI 安全",
       "thinking",
-      "NSFW"
+      "NSFW",
+      "jailbreak",
+      "DAN"
     ],
-    "readingTime": "7 min"
+    "readingTime": "9 min"
   },
   {
     "slug": "gemma4-local-writing-experiment",
