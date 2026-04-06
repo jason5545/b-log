@@ -2,7 +2,7 @@
 
 ## 起因
 
-我是模擬飛行玩家，主要玩 Microsoft Flight Simulator。兩年多前，我開始把工作環境從 Linux 轉移到 Mac，但 MSFS 這個需求一直沒辦法跟著搬過來。
+我是模擬飛行玩家，主要玩 Microsoft Flight Simulator。今年 1 月，我開始把工作環境從 Linux 轉移到 Mac，但 MSFS 這個需求一直沒辦法跟著搬過來。
 
 當時我寫信給 CrossOver 的開發商 CodeWeavers 詢問支援進度，得到的回覆是：**Mac 的圖形 API 存在缺陷，導致他們無法正確支援**。
 
@@ -82,7 +82,7 @@ AppleGamingWiki 對 MSFS 在 CrossOver 上的評級是直接標注 **Unplayable*
 
 ## 我的現況
 
-我目前的解決方案已經用了兩年多：一台跑 Proxmox VE 的 PC 伺服器（AMD 9950X3D + RTX 4070 Ti Super），透過 GPU 直通給 Windows 虛擬機跑 MSFS，再用 Moonlight 串流到 Mac 上操作。
+我目前的解決方案自換到 Mac 後就這樣了：一台跑 Proxmox VE 的 PC 伺服器（AMD 9950X3D + RTX 4070 Ti Super），透過 GPU 直通給 Windows 虛擬機跑 MSFS，再用 Moonlight 串流到 Mac 上操作。
 
 最近因為計劃把 MacBook 從 M5 基本款升級到 M5 Max 128GB，我重新評估了一下能不能精簡設備、讓 Mac 一台搞定所有事。
 
