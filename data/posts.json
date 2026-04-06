@@ -1,5 +1,23 @@
 [
   {
+    "slug": "why-msfs-cant-run-on-mac-metal-api-limitations",
+    "title": "為什麼 Microsoft Flight Simulator 到現在還不能在 Mac 上跑？",
+    "summary": "我用 CrossOver 在 Linux 上飛 MSFS 毫無問題，Mac 上卻完全行不通。深入調查後發現，問題不在硬體，而在 Apple Metal API 的設計選擇。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-06T00:00:00Z",
+    "tags": [
+      "Metal",
+      "CrossOver",
+      "MSFS",
+      "macOS",
+      "DirectX",
+      "Apple Silicon",
+      "遊戲"
+    ],
+    "readingTime": "5 min"
+  },
+  {
     "slug": "crack-abliterated-model-test",
     "title": "去對齊不等於更乾脆：我拿 CRACK 模型做了一次實測",
     "summary": "拿 CRACK 去對齊模型測試了一個真實情境，結果發現「uncensored」跟想像中的完全不同。",
