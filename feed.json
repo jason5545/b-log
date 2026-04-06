@@ -103,7 +103,7 @@
       "title": "Claude Code 差點逼我重新註冊 ChatGPT",
       "content_text": "Claude Code 的 prompt cache bug 讓 context 消耗膨脹 10-20 倍。身為二月才刪掉 GPT 帳號的人，我差點被逼到重新註冊——最後靠 GitHub Copilot 裡的 Claude 模型找到替代路線。",
       "date_published": "2026-04-04T00:00:00.000Z",
-      "date_modified": "2026-04-04T00:00:00.000Z",
+      "date_modified": "2026-04-06T00:00:00.000Z",
       "tags": [
         "Claude Code",
         "ChatGPT",
@@ -112,7 +112,11 @@
         "prompt cache",
         "bug",
         "備案",
-        "AI 工具"
+        "AI 工具",
+        "Theo",
+        "system prompt",
+        "OpenClaw",
+        "Matt Pocock"
       ],
       "authors": [
         {
