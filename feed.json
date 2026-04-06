@@ -22,7 +22,9 @@
         "LLM",
         "AI 安全",
         "thinking",
-        "NSFW"
+        "NSFW",
+        "jailbreak",
+        "DAN"
       ],
       "authors": [
         {
