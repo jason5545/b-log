@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "crack-abliterated-model-test",
+      "url": "https://b-log.to/tech-analysis/crack-abliterated-model-test/",
+      "title": "去對齊不等於更乾脆：我拿 CRACK 模型做了一次實測",
+      "content_text": "拿 CRACK 去對齊模型測試了一個真實情境，結果發現「uncensored」跟想像中的完全不同。",
+      "date_published": "2026-04-06T00:00:00.000Z",
+      "date_modified": "2026-04-06T00:00:00.000Z",
+      "tags": [
+        "abliteration",
+        "CRACK",
+        "Gemma 4",
+        "去對齊",
+        "JANGQ-AI",
+        "開放原始碼",
+        "LLM",
+        "AI 安全"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "gemma4-crack-abliteration-test",
       "url": "https://b-log.to/ai-analysis/gemma4-crack-abliteration-test/",
       "title": "我拿去對齊的 Gemma 4 做了一個測試，結果跟想像的不一樣",
