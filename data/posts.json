@@ -1,5 +1,24 @@
 [
   {
+    "slug": "crack-abliterated-model-test",
+    "title": "去對齊不等於更乾脆：我拿 CRACK 模型做了一次實測",
+    "summary": "拿 CRACK 去對齊模型測試了一個真實情境，結果發現「uncensored」跟想像中的完全不同。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-06T00:00:00Z",
+    "tags": [
+      "abliteration",
+      "CRACK",
+      "Gemma 4",
+      "去對齊",
+      "JANGQ-AI",
+      "開放原始碼",
+      "LLM",
+      "AI 安全"
+    ],
+    "readingTime": "5 min"
+  },
+  {
     "slug": "gemma4-crack-abliteration-test",
     "title": "我拿去對齊的 Gemma 4 做了一個測試，結果跟想像的不一樣",
     "summary": "實測 CRACK 去對齊版 Gemma 4，發現「uncensored」不等於「不說教」，abliteration 的技術天花板比行銷文案誠實得多。",
