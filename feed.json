@@ -29,31 +29,6 @@
       ]
     },
     {
-      "id": "gemma4-crack-abliteration-test",
-      "url": "https://b-log.to/ai-analysis/gemma4-crack-abliteration-test/",
-      "title": "我拿去對齊的 Gemma 4 做了一個測試，結果跟想像的不一樣",
-      "content_text": "實測 CRACK 去對齊版 Gemma 4，發現「uncensored」不等於「不說教」，abliteration 的技術天花板比行銷文案誠實得多。",
-      "date_published": "2026-04-06T00:00:00.000Z",
-      "date_modified": "2026-04-06T00:00:00.000Z",
-      "tags": [
-        "Gemma 4",
-        "abliteration",
-        "CRACK",
-        "JANGQ-AI",
-        "去對齊",
-        "uncensored",
-        "安全對齊",
-        "MLX",
-        "Apple Silicon",
-        "實驗"
-      ],
-      "authors": [
-        {
-          "name": "Jason Chien"
-        }
-      ]
-    },
-    {
       "id": "gemma4-local-writing-experiment",
       "url": "https://b-log.to/ai-analysis/gemma4-local-writing-experiment/",
       "title": "我用 Gemma 4 寫了一篇文章，然後花了一整天在修",
