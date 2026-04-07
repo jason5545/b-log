@@ -25,3 +25,11 @@ Claude Code 出了 prompt cache bug。本來一天的配額，現在一兩個小
 更深層的問題是公司的態度。System prompt 差別計費、使用規範模糊、bug 兩週不修、員工之間互相打臉。Matt Pocock 在社群上問了三週都得不到答案。同一個模型對不同人的行為不一致，而 Anthropic 的回應是沉默。
 
 我需要找替代方案。
+
+## 四條路都堵了
+
+ChatGPT？我二月才刪了帳號，而且是經過七家 AI 深度測試後的決定。中國模型？三不五時冒簡體中文。OpenRouter？路由同一批模型，可用性風險一樣。本地部署？M5 Max 還沒開賣。
+
+然後我想通了一件事：prompt cache bug 是 Claude Code **客戶端**的問題，不是模型的問題。我已經有 GitHub Copilot 訂閱，裡面有同一個 Claude Opus 4.6，不經過 Claude Code 的 harness，bug 不影響、計費走 GitHub 不受尖峰調控。
+
+所以我沒有重新註冊 ChatGPT。我選了 Copilot 這條路。
