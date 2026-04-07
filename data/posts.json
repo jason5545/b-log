@@ -1,5 +1,23 @@
 [
   {
+    "slug": "because-you-are-worth-it",
+    "title": "因為你值得：我為什麼離開 Claude，又為什麼沒有真的離開",
+    "summary": "付費兩年、花了 $840 美金，我決定離開 claude.ai。但我離開的是平台，不是模型。這是一個被平台逼到自己動手的故事。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-07T00:00:00Z",
+    "tags": [
+      "Claude",
+      "Anthropic",
+      "GitHub Copilot",
+      "CopilotChat",
+      "Claude Code",
+      "Dario Amodei"
+    ],
+    "accentColor": "#556bff",
+    "readingTime": "1 min"
+  },
+  {
     "slug": "why-msfs-cant-run-on-mac-metal-api-limitations",
     "title": "為什麼 Microsoft Flight Simulator 到現在還不能在 Mac 上跑？",
     "summary": "我用 CrossOver 在 Linux 上飛 MSFS 毫無問題，Mac 上卻完全行不通。深入調查後發現，問題不在硬體，而在 Apple Metal API 的設計選擇。",
