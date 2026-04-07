@@ -33,3 +33,25 @@ ChatGPT？我二月才刪了帳號，而且是經過七家 AI 深度測試後的
 然後我想通了一件事：prompt cache bug 是 Claude Code **客戶端**的問題，不是模型的問題。我已經有 GitHub Copilot 訂閱，裡面有同一個 Claude Opus 4.6，不經過 Claude Code 的 harness，bug 不影響、計費走 GitHub 不受尖峰調控。
 
 所以我沒有重新註冊 ChatGPT。我選了 Copilot 這條路。
+
+## Copilot 也不是答案
+
+但是 GitHub 沒有一個好的 iOS Copilot Chat 客戶端。所以我自己做了一個。
+
+用 Claude Code 做的。是的，我用 Claude 做了一個離開 Claude 的工具。
+
+我把 tool call 自動執行、MCP 整合、auto-compaction、context window tracking 全部做進去了。官方都沒有的功能，我的 app 有。
+
+然後我發現了一個問題。
+
+同一個 Claude Opus 4.6：
+
+| 平台 | Context Window |
+|---|---|
+| **Anthropic 官方 API** | **1,000,000 tokens** |
+| **GitHub Copilot（VS Code）** | **192K tokens** |
+| **GitHub Copilot（第三方客戶端）** | **144K tokens** |
+
+Anthropic 在 2026 年三月就已經把 1M context window GA 了，標準定價不加錢。但 GitHub 把它砍到剩 1/5 不到。
+
+我付了 Copilot Pro+ 的錢，拿到的是一個被閹割的 Claude。
