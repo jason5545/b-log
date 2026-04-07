@@ -6,6 +6,27 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "because-you-are-worth-it",
+      "url": "https://b-log.to/ai-analysis/because-you-are-worth-it/",
+      "title": "因為你值得：我為什麼離開 Claude，又為什麼沒有真的離開",
+      "content_text": "付費兩年、花了 $840 美金，我決定離開 claude.ai。但我離開的是平台，不是模型。這是一個被平台逼到自己動手的故事。",
+      "date_published": "2026-04-07T00:00:00.000Z",
+      "date_modified": "2026-04-07T00:00:00.000Z",
+      "tags": [
+        "Claude",
+        "Anthropic",
+        "GitHub Copilot",
+        "CopilotChat",
+        "Claude Code",
+        "Dario Amodei"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "why-msfs-cant-run-on-mac-metal-api-limitations",
       "url": "https://b-log.to/tech-analysis/why-msfs-cant-run-on-mac-metal-api-limitations/",
       "title": "為什麼 Microsoft Flight Simulator 到現在還不能在 Mac 上跑？",
