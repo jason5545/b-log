@@ -55,3 +55,17 @@ ChatGPT？我二月才刪了帳號，而且是經過七家 AI 深度測試後的
 Anthropic 在 2026 年三月就已經把 1M context window GA 了，標準定價不加錢。但 GitHub 把它砍到剩 1/5 不到。
 
 我付了 Copilot Pro+ 的錢，拿到的是一個被閹割的 Claude。
+
+## 403：你不該問這個問題
+
+我想調查這個差異的原因。是 client ID 的限制？是 token exchange 機制？還是刻意的產品策略？
+
+我嘗試用 VS Code 的 client ID 做 OAuth 測試，看看是不是 client ID 不同導致 GitHub 給的 token limit 不一樣。
+
+GitHub 的回應是直接 403。錯誤訊息明確指出這是不被允許的行為，並附上 TOS 的連結。
+
+但只給了 TOS 首頁。
+
+我怎麼知道違反哪一條？TOS 那麼長，你丟一個首頁給我，等於是叫我自己去翻一整份法律文件。這就像警察跟你說「你違法了」，然後丟一本六法全書給你，叫你自己去查。
+
+我不是在惡意冒充 VS Code。我是在合理地調查為什麼同一個模型、同一個 API，第三方客戶端拿到的 context window 比官方客戶端少了 48K。GitHub 的回應是把門關上。
