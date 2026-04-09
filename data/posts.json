@@ -1,5 +1,24 @@
 [
   {
+    "slug": "glm51-identity-drift-when-distillation-goes-wrong",
+    "title": "我問了一個模型「你是誰」，它給了四種答案",
+    "summary": "Z.AI 的 GLM-5.1 在帶 tools 的時候會自稱 Claude，不帶 tools 又說自己是 GLM。我做了一輪調查，結論比想像中有趣。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-09T00:00:00Z",
+    "tags": [
+      "Z.AI",
+      "GLM-5.1",
+      "蒸餾",
+      "identity drift",
+      "Claude",
+      "CopilotChat",
+      "調查"
+    ],
+    "accentColor": "#c0392b",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "copilotchat-first-ios-native-mcp-client",
     "title": "我把 GitHub Copilot 塞進手機裡，然後發現沒有人做過這件事",
     "summary": "我自己做了一個 iOS app，把 GitHub Copilot 的聊天功能帶到手機上，還能跑 MCP 工具。做完之後去網路上找了一圈，發現這個組合真的沒有人做過。",
