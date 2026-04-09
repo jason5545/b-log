@@ -1,5 +1,25 @@
 [
   {
+    "slug": "copilotchat-first-ios-native-mcp-client",
+    "title": "我把 GitHub Copilot 塞進手機裡，然後發現沒有人做過這件事",
+    "summary": "我自己做了一個 iOS app，把 GitHub Copilot 的聊天功能帶到手機上，還能跑 MCP 工具。做完之後去網路上找了一圈，發現這個組合真的沒有人做過。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-09T00:00:00Z",
+    "tags": [
+      "CopilotChat",
+      "iOS",
+      "GitHub Copilot",
+      "MCP",
+      "SwiftUI",
+      "開源",
+      "Chatbox",
+      "tool call"
+    ],
+    "accentColor": "#556bff",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "because-you-are-worth-it",
     "title": "因為你值得：我為什麼離開 Claude，又為什麼沒有真的離開",
     "summary": "付費兩年、花了 $840 美金，我決定離開 claude.ai。但我離開的是平台，不是模型。這是一個被平台逼到自己動手的故事。",
