@@ -11,7 +11,7 @@
 
 ## CopilotChat
 
-[CopilotChat](https://github.com/jianruicheng/CopilotChat) 是一個 iOS 原生 app，純 SwiftUI，不依賴任何第三方框架。你用 GitHub 帳號登入（Device Flow OAuth），就能直接跟 Copilot API 裡的所有模型聊天——Claude Opus 4.6、GPT-4o、Gemini，什麼都有。
+[CopilotChat](https://github.com/jason5545/CopilotChat) 是一個 iOS 原生 app，純 SwiftUI，不依賴任何第三方框架。你用 GitHub 帳號登入（Device Flow OAuth），就能直接跟 Copilot API 裡的所有模型聊天——Claude Opus 4.6、GPT-4o、Gemini，什麼都有。
 
 但這些只是基本款。我真正想做的是把手機變成一個完整的 AI 終端，不只是聊天框。
 
@@ -91,5 +91,5 @@ CopilotChat 已經是我跟 Claude 對話的主力介面了。從 4 月 8 號開
 
 如果你有 GitHub Copilot 訂閱，想試試看：clone 下來、Xcode 打開、裝到手機上，用 GitHub 帳號登入就能用。整個過程不用帶 API key，不用額外付費。
 
-原始碼在 [GitHub](https://github.com/jianruicheng/CopilotChat)，MIT 授權。歡迎貢獻。
+原始碼在 [GitHub](https://github.com/jianruicheng/CopilotChat)，MIT 授權。目前還沒有公開，不過大概過一陣子就會開了——至少要自己用得舒服才公開。
 
