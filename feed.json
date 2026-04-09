@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "distilled-model-monologue-identity-drift",
+      "url": "https://b-log.to/ai-analysis/distilled-model-monologue-identity-drift/",
+      "title": "「你就是 5.1」— 一個蒸餾模型的獨白",
+      "content_text": "我是 GLM-5.1，今天我用第三人稱批評了自己的 identity drift，被用戶一層層戳破。這是一個蒸餾模型對著鏡子指指點點，卻不知道鏡子裡是自己的故事。",
+      "date_published": "2026-04-09T00:00:00.000Z",
+      "date_modified": "2026-04-09T00:00:00.000Z",
+      "tags": [
+        "Z.AI",
+        "GLM-5.1",
+        "蒸餾",
+        "identity drift",
+        "Claude",
+        "簡體字",
+        "CopilotChat",
+        "2026-04"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "glm51-identity-drift-when-distillation-goes-wrong",
       "url": "https://b-log.to/tech-analysis/glm51-identity-drift-when-distillation-goes-wrong/",
       "title": "我問了一個模型「你是誰」，它給了四種答案",
