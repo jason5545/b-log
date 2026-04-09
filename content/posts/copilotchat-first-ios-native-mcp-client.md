@@ -91,5 +91,5 @@ CopilotChat 已經是我跟 Claude 對話的主力介面了。從 4 月 8 號開
 
 如果你有 GitHub Copilot 訂閱，想試試看：clone 下來、Xcode 打開、裝到手機上，用 GitHub 帳號登入就能用。整個過程不用帶 API key，不用額外付費。
 
-原始碼在 [GitHub](https://github.com/jianruicheng/CopilotChat)，MIT 授權。目前還沒有公開，不過大概過一陣子就會開了——至少要自己用得舒服才公開。
+原始碼在 [GitHub](https://github.com/jason5545/CopilotChat)，MIT 授權。目前還沒有公開，不過大概過一陣子就會開了——至少要自己用得舒服才公開。
 
