@@ -76,7 +76,7 @@ GLM-5.1 是我日常 coding 的主力。便宜、快、coding 能力夠用，不
 
 ## 調查報告
 
-完整的調查報告在 [GitHub repo](https://github.com/jianruicheng/CopilotChat) 的 `docs/zai-glm51-tool-calling-investigation.md` 裡。裡面有完整的測試矩陣、重現步驟、curl 指令，以及待辦事項。歡迎自行驗證。
+完整的調查報告在 [GitHub repo](https://github.com/jason5545/CopilotChat) 的 `docs/zai-glm51-tool-calling-investigation.md` 裡。裡面有完整的測試矩陣、重現步驟、curl 指令，以及待辦事項。歡迎自行驗證。
 
 ## 最後
 
