@@ -1,7 +1,7 @@
 # 我問了一個模型「你是誰」，它給了四種答案
 
 
-上禮拜，我在 OpenCode 接上了 Z.AI CodingPlan 的 GLM-5.1。
+上禮拜，我在 CopilotChat 接上了 Z.AI CodingPlan 的 GLM-5.1。
 
 第一次對話，它跟我說：「I am Claude, made by Anthropic。」
 
