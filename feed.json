@@ -56,16 +56,18 @@
       "title": "我把 GitHub Copilot 塞進手機裡，然後發現沒有人做過這件事",
       "content_text": "我自己做了一個 iOS app，把 GitHub Copilot 的聊天功能帶到手機上，還能跑 MCP 工具。做完之後去網路上找了一圈，發現這個組合真的沒有人做過。",
       "date_published": "2026-04-09T00:00:00.000Z",
-      "date_modified": "2026-04-09T00:00:00.000Z",
+      "date_modified": "2026-04-10T00:00:00.000Z",
       "tags": [
         "CopilotChat",
         "iOS",
         "GitHub Copilot",
+        "Augment Code",
         "MCP",
         "SwiftUI",
         "開源",
-        "Chatbox",
-        "tool call"
+        "多 Provider",
+        "tool call",
+        "Keychain"
       ],
       "authors": [
         {
