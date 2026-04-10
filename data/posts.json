@@ -49,14 +49,17 @@
       "CopilotChat",
       "iOS",
       "GitHub Copilot",
+      "Augment Code",
       "MCP",
       "SwiftUI",
       "開源",
-      "Chatbox",
-      "tool call"
+      "多 Provider",
+      "tool call",
+      "Keychain"
     ],
     "accentColor": "#556bff",
-    "readingTime": "4 min"
+    "readingTime": "5 min",
+    "updatedAt": "2026-04-10T00:00:00Z"
   },
   {
     "slug": "because-you-are-worth-it",
