@@ -89,11 +89,13 @@ headers: license ? { 'x-chatbox-license': license } : undefined,
 
 Chatbox 是一個很好的產品，我不否認。但在 iOS 上，它是一個不帶 MCP 的聊天客戶端。而 CopilotChat 在手機上就能跑完整的 MCP tool call loop。
 
-## 所以這是首創嗎？
+## 所以這個東西特別在哪？
 
-以「iOS 原生 + MCP 自動執行 + 120+ providers（含 GitHub Copilot、Augment Code 等獨立認證流程）」這個具體組合來說，是的。
+不是單一功能。是整合。
 
-這不是在吹。是這個定位本身就是一個空缺——GitHub 官方沒做、Chatbox 做了但鎖桌面、其他開源項目不是走 Copilot API 就是不是 iOS 原生。而且現在它不再只是 Copilot 客戶端——它是一個真正的多 provider LLM 終端，碰巧支援 Copilot。
+CopilotChat 把 GitHub Copilot、多 provider、MCP 自動工具執行，和 iPhone 上的本機 workspace coding mode 放進了同一個原生 app。這些東西拆開來看，都不是新發明。但把整套 workflow 串起來，就是另一回事。
+
+我想做的也不是一個只能聊天的 mobile client，不是一個只能填 API key 的通用殼，也不是一個只能在桌面跑 agent mode 的 IDE 配件。我想做的是：在手機上就能進入工具調度、檔案編輯、provider 切換、MCP 呼叫完整循環的 LLM 終端。
 
 ## 我用 Claude 做了一個離開 Claude 的工具
 
