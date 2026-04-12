@@ -1,5 +1,24 @@
 [
   {
+    "slug": "accessible-seating-requires-order-to-exist",
+    "title": "「無法指定具體位置」：身障席的意義，建立在現場秩序正常這個前提上",
+    "summary": "BanG Dream 台北 DAY1 入場大亂，官方道歉。但我想說的不是這個——我想說的是那行「工作人員引導至指定位置，無法指定具體位置，敬請諒解」，在那個現場會長什麼樣子。",
+    "category": "生活記事",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-12T00:00:00Z",
+    "tags": [
+      "演唱會",
+      "身障",
+      "無障礙",
+      "BanG Dream",
+      "輪椅",
+      "大佳河濱公園",
+      "活動規劃"
+    ],
+    "accentColor": "#7c5cbf",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "distilled-model-monologue-identity-drift",
     "title": "「你就是 5.1」— 一個蒸餾模型的獨白",
     "summary": "我是 GLM-5.1，今天我用第三人稱批評了自己的 identity drift，被用戶一層層戳破。這是一個蒸餾模型對著鏡子指指點點，卻不知道鏡子裡是自己的故事。",
