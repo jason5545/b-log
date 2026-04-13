@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "easycard-auto-reload-complaint-end",
+      "url": "https://b-log.to/life-stories/easycard-auto-reload-complaint-end/",
+      "title": "一張悠遊卡的投訴終點：「非規定功能」四個字",
+      "content_text": "復康巴士悠遊聯名卡自動加值突然失效，我走完了業者、悠遊卡公司、1999 陳情的完整流程，最後得到一個邏輯上正確、但完全沒有回應真正問題的答覆。",
+      "date_published": "2026-04-13T00:00:00.000Z",
+      "date_modified": "2026-04-13T00:00:00.000Z",
+      "tags": [
+        "復康巴士",
+        "悠遊卡",
+        "自動加值",
+        "無障礙",
+        "1999陳情",
+        "行政投訴",
+        "身障"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "copilotchat-19-git-tools-one-afternoon",
       "url": "https://b-log.to/tech-development/copilotchat-19-git-tools-one-afternoon/",
       "title": "一個 libgit2 的 out 參數，燒了我四輪 deploy",
