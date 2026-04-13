@@ -1,5 +1,25 @@
 [
   {
+    "slug": "copilotchat-19-git-tools-one-afternoon",
+    "title": "一個下午補完 19 個 git 工具，和一個藏很深的 libgit2 bug",
+    "summary": "我讓 AI 幫 CopilotChat 補上了 stash、merge、cherry-pick、revert、blame 等 19 個 git 工具，測試 26/28 通過。唯一卡住的是 branch_create——花了四輪 deploy 才找到兇手：libgit2 的一個 out 參數不能傳 NULL。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-13T00:00:00Z",
+    "tags": [
+      "CopilotChat",
+      "libgit2",
+      "GitHub",
+      "MCP",
+      "iOS",
+      "Swift",
+      "git",
+      "debug"
+    ],
+    "accentColor": "#3fb950",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "accessible-seating-requires-order-to-exist",
     "title": "「無法指定具體位置」：身障席的意義，建立在現場秩序正常這個前提上",
     "summary": "BanG Dream 台北 DAY1 入場大亂，官方道歉。但我想說的不是這個——我想說的是那行「工作人員引導至指定位置，無法指定具體位置，敬請諒解」，在那個現場會長什麼樣子。",
