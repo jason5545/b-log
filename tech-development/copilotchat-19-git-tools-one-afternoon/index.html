@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>一個下午補完 19 個 git 工具，和一個藏很深的 libgit2 bug - (b)-log</title>
+  <title>一個 libgit2 的 out 參數，燒了我四輪 deploy - (b)-log</title>
   
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="我讓 AI 幫 CopilotChat 補上了 stash、merge、cherry-pick、revert、blame 等 19 個 git 工具，測試 26/28 通過。唯一卡住的是 branch_create——花了四輪 deploy 才找到兇手：libgit2 的一個 out 參數不能傳 NULL。">
+  <meta name="description" content="CopilotChat 補上 19 個 git 工具，26/28 測試通過。唯一卡住的是 branch_create——`git_branch_create(nil, ...)` 看起來完全合理，但 libgit2 的 out 參數不能傳 NULL。四輪 deploy、三個錯誤假設，才找到這個文件沒寫的限制。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/copilotchat-19-git-tools-one-afternoon/" id="canonical-url">
   
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/copilotchat-19-git-tools-one-afternoon/" id="og-url">
-  <meta property="og:title" content="一個下午補完 19 個 git 工具，和一個藏很深的 libgit2 bug" id="og-title">
-  <meta property="og:description" content="我讓 AI 幫 CopilotChat 補上了 stash、merge、cherry-pick、revert、blame 等 19 個 git 工具，測試 26/28 通過。唯一卡住的是 branch_create——花了四輪 deploy 才找到兇手：libgit2 的一個 out 參數不能傳 NULL。" id="og-description">
-  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E5%80%8B%E4%B8%8B%E5%8D%88%E8%A3%9C%E5%AE%8C%2019%20%E5%80%8B%20git%20%E5%B7%A5%E5%85%B7%EF%BC%8C%E5%92%8C%E4%B8%80%E5%80%8B%E8%97%8F%E5%BE%88%E6%B7%B1%E7%9A%84%20libgit2%20bug,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:title" content="一個 libgit2 的 out 參數，燒了我四輪 deploy" id="og-title">
+  <meta property="og:description" content="CopilotChat 補上 19 個 git 工具，26/28 測試通過。唯一卡住的是 branch_create——`git_branch_create(nil, ...)` 看起來完全合理，但 libgit2 的 out 參數不能傳 NULL。四輪 deploy、三個錯誤假設，才找到這個文件沒寫的限制。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E5%80%8B%20libgit2%20%E7%9A%84%20out%20%E5%8F%83%E6%95%B8%EF%BC%8C%E7%87%92%E4%BA%86%E6%88%91%E5%9B%9B%E8%BC%AA%20deploy,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="(b)-log">
@@ -29,9 +29,9 @@
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/copilotchat-19-git-tools-one-afternoon/" id="twitter-url">
-  <meta property="twitter:title" content="一個下午補完 19 個 git 工具，和一個藏很深的 libgit2 bug" id="twitter-title">
-  <meta property="twitter:description" content="我讓 AI 幫 CopilotChat 補上了 stash、merge、cherry-pick、revert、blame 等 19 個 git 工具，測試 26/28 通過。唯一卡住的是 branch_create——花了四輪 deploy 才找到兇手：libgit2 的一個 out 參數不能傳 NULL。" id="twitter-description">
-  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E5%80%8B%E4%B8%8B%E5%8D%88%E8%A3%9C%E5%AE%8C%2019%20%E5%80%8B%20git%20%E5%B7%A5%E5%85%B7%EF%BC%8C%E5%92%8C%E4%B8%80%E5%80%8B%E8%97%8F%E5%BE%88%E6%B7%B1%E7%9A%84%20libgit2%20bug,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:title" content="一個 libgit2 的 out 參數，燒了我四輪 deploy" id="twitter-title">
+  <meta property="twitter:description" content="CopilotChat 補上 19 個 git 工具，26/28 測試通過。唯一卡住的是 branch_create——`git_branch_create(nil, ...)` 看起來完全合理，但 libgit2 的 out 參數不能傳 NULL。四輪 deploy、三個錯誤假設，才找到這個文件沒寫的限制。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E5%80%8B%20libgit2%20%E7%9A%84%20out%20%E5%8F%83%E6%95%B8%EF%BC%8C%E7%87%92%E4%BA%86%E6%88%91%E5%9B%9B%E8%BC%AA%20deploy,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
   
   <!-- 額外的 metadata -->

@@ -8,8 +8,8 @@
     {
       "id": "copilotchat-19-git-tools-one-afternoon",
       "url": "https://b-log.to/tech-development/copilotchat-19-git-tools-one-afternoon/",
-      "title": "一個下午補完 19 個 git 工具，和一個藏很深的 libgit2 bug",
-      "content_text": "我讓 AI 幫 CopilotChat 補上了 stash、merge、cherry-pick、revert、blame 等 19 個 git 工具，測試 26/28 通過。唯一卡住的是 branch_create——花了四輪 deploy 才找到兇手：libgit2 的一個 out 參數不能傳 NULL。",
+      "title": "一個 libgit2 的 out 參數，燒了我四輪 deploy",
+      "content_text": "CopilotChat 補上 19 個 git 工具，26/28 測試通過。唯一卡住的是 branch_create——`git_branch_create(nil, ...)` 看起來完全合理，但 libgit2 的 out 參數不能傳 NULL。四輪 deploy、三個錯誤假設，才找到這個文件沒寫的限制。",
       "date_published": "2026-04-13T00:00:00.000Z",
       "date_modified": "2026-04-13T00:00:00.000Z",
       "tags": [
