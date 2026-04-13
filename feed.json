@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "copilotchat-19-git-tools-one-afternoon",
+      "url": "https://b-log.to/tech-development/copilotchat-19-git-tools-one-afternoon/",
+      "title": "一個下午補完 19 個 git 工具，和一個藏很深的 libgit2 bug",
+      "content_text": "我讓 AI 幫 CopilotChat 補上了 stash、merge、cherry-pick、revert、blame 等 19 個 git 工具，測試 26/28 通過。唯一卡住的是 branch_create——花了四輪 deploy 才找到兇手：libgit2 的一個 out 參數不能傳 NULL。",
+      "date_published": "2026-04-13T00:00:00.000Z",
+      "date_modified": "2026-04-13T00:00:00.000Z",
+      "tags": [
+        "CopilotChat",
+        "libgit2",
+        "GitHub",
+        "MCP",
+        "iOS",
+        "Swift",
+        "git",
+        "debug"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "accessible-seating-requires-order-to-exist",
       "url": "https://b-log.to/cultural-insights/accessible-seating-requires-order-to-exist/",
       "title": "「無法指定具體位置」：身障席的意義，建立在現場秩序正常這個前提上",
