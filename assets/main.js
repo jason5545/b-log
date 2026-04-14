@@ -2364,10 +2364,23 @@ function formatDate(date) {
 
 function applyAccentBackground(element, post) {
   if (!element) return;
+
+  element.replaceChildren();
+  element.classList.remove('article-hero--image');
+  element.style.backgroundSize = '';
+  element.style.backgroundPosition = '';
+
   if (post.coverImage) {
-    element.style.backgroundImage = `url(${post.coverImage})`;
-    element.style.backgroundSize = 'cover';
-    element.style.backgroundPosition = 'center';
+    const heroImage = document.createElement('img');
+    heroImage.className = 'article-hero__image';
+    heroImage.src = post.coverImage;
+    heroImage.alt = '';
+    heroImage.decoding = 'async';
+    heroImage.fetchPriority = 'high';
+    heroImage.setAttribute('aria-hidden', 'true');
+    element.classList.add('article-hero--image');
+    element.appendChild(heroImage);
+    element.style.backgroundImage = '';
     return;
   }
 

@@ -26,6 +26,22 @@ function ensureDir(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true });
 }
 
+function buildHeroPreload(coverImage) {
+  if (!coverImage) return '';
+
+  return `  <link rel="preload" as="image" href="${coverImage}" fetchpriority="high">\n`;
+}
+
+function buildHeroMarkup(post) {
+  if (!post.coverImage) {
+    return '<div id="post-hero" class="article-hero"></div>';
+  }
+
+  const safeTitle = escapeHtml(post.title || post.slug || '');
+  const safeCoverImage = escapeHtml(post.coverImage);
+  return `<div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="${safeCoverImage}" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>`;
+}
+
 function removeEmptyDirsUpward(startDir, stopDir) {
   let current = startDir;
   while (current.startsWith(stopDir) && current !== stopDir) {
@@ -104,6 +120,8 @@ function generatePostHTML(post) {
   // 生成完整的 URL
   const baseUrl = 'https://b-log.to';
   const fullUrl = `${baseUrl}/${categorySlug}/${slug}/`;
+  const heroPreload = buildHeroPreload(coverImage);
+  const heroMarkup = buildHeroMarkup(post);
 
   // 生成 Open Graph 圖片 URL
   let ogImageUrl;
@@ -133,6 +151,9 @@ function generatePostHTML(post) {
   html = html.replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${safeSummary}"`);
   html = html.replace(/<link rel="canonical" href="" id="canonical-url">/, `<link rel="canonical" href="${fullUrl}" id="canonical-url">`);
   html = html.replace(/<meta name="keywords" content="" id="meta-keywords">/, `<meta name="keywords" content="${tagsString}" id="meta-keywords">`);
+  html = html.replace(/  <!-- 首圖 preload 會由生成腳本注入到這裡 -->\s*/,
+    `  <!-- 首圖 preload 會由生成腳本注入到這裡 -->\n${heroPreload}`);
+  html = html.replace(/<div id="post-hero" class="article-hero"><\/div>/, heroMarkup);
 
   // Open Graph
   html = html.replace(/<meta property="og:url" content="" id="og-url">/, `<meta property="og:url" content="${fullUrl}" id="og-url">`);
