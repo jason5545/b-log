@@ -1,5 +1,27 @@
 [
   {
+    "slug": "macos-freedom-illusion-dmg-sip-core-audio",
+    "title": "DMG 裝得了、SIP 關得了，然後呢？macOS 的自由是一種錯覺",
+    "summary": "我用了十幾年蘋果，從 iPhone 到 Mac 都用得很深。最近看到有人說蘋果生態像監獄，我覺得這個比喻對 iPhone 完全成立，但 Mac 的情況更微妙——它給你自由，但只給到某條線為止。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-15T00:00:00Z",
+    "tags": [
+      "Apple",
+      "macOS",
+      "iPhone",
+      "Core Audio",
+      "藍牙",
+      "AAC",
+      "LDAC",
+      "SIP",
+      "生態系",
+      "Walled Garden"
+    ],
+    "accentColor": "#3b82f6",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "easycard-auto-reload-complaint-end",
     "title": "一張悠遊卡的投訴終點：「非規定功能」四個字",
     "summary": "復康巴士悠遊聯名卡自動加值突然失效，我走完了業者、悠遊卡公司、1999 陳情的完整流程，最後得到一個邏輯上正確、但完全沒有回應真正問題的答覆。",
