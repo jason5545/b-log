@@ -23,6 +23,8 @@ Mac 就不一樣了。你可以裝 DMG、可以關 SIP（System Integrity Protec
 
 在 macOS 上？你辦不到。Core Audio 一定會過一次系統 mixer，你的取樣率和位元深度不見得是你設定的那個值。這不是 bug，這是架構設計。蘋果決定了音訊要怎麼處理，你沒有繞過的選項。
 
+更微妙的是，如果你要用蘋果內建的 Voice Processing API 來拿到更好的降噪效果，你就必須接受音訊被強制 ducking——系統會自動壓低其他音源的音量，把空間讓給語音通道。你不能只要降噪、不要 ducking。這是一個綁定的套餐，不接受就不能用。
+
 ### 藍牙：萬年 AAC，LDAC 別想
 
 蘋果的藍牙編碼支援從頭到尾就只有 SBC 和 AAC。AAC 在藍牙環境下大概就是 256kbps。你買了一副支援 LDAC 的耳機，在 Android 上可以跑到 990kbps，在 Mac 上就是只能聽 AAC。
