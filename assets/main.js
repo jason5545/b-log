@@ -1993,6 +1993,34 @@ async function renderMarkdownContent(slug, contentEl) {
 
   // 增強表格（響應式包裝）
   enhanceTables(contentEl);
+
+  // 專訪 Q&A 樣式增強
+  const articleEl = contentEl.closest('[data-category-theme]');
+  if (articleEl) {
+    styleInterviewQA(contentEl);
+  }
+}
+
+function styleInterviewQA(contentEl) {
+  if (!contentEl) return;
+  const children = Array.from(contentEl.children);
+  let isAnswer = false;
+
+  children.forEach(child => {
+    const isQuestion = child.tagName === 'P' && child.querySelector('strong') &&
+      child.textContent.trim().startsWith('——');
+
+    if (isQuestion) {
+      child.classList.add('cf-question');
+      isAnswer = true;
+    } else if (child.tagName === 'HR' || child.tagName === 'H2' ||
+               (child.tagName === 'DIV' && child.classList.contains('crossing-field-toc')) ||
+               (child.tagName === 'DIV' && child.classList.contains('crossing-field-intro'))) {
+      isAnswer = false;
+    } else if (isAnswer && (child.tagName === 'P' || child.tagName === 'UL' || child.tagName === 'OL')) {
+      child.classList.add('cf-answer');
+    }
+  });
 }
 
 function enhanceCodeBlocks(contentEl) {

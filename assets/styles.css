@@ -1424,6 +1424,64 @@ a:focus {
   line-height: 1.7;
 }
 
+/* ── Crossing Field 專訪 Q&A 樣式 ── */
+.article-body .cf-question {
+  color: var(--text-muted);
+  font-size: 0.94rem;
+  line-height: 1.75;
+  margin: 2rem 0 0.4rem;
+  padding-right: 0.5rem;
+}
+
+.article-body .cf-question strong {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.article-body .cf-answer {
+  border-left: 3px solid rgba(168, 85, 247, 0.4);
+  padding-left: 1rem;
+  margin-left: 0;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.04), rgba(244, 114, 182, 0.02));
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.article-body .cf-answer + .cf-answer {
+  margin-top: -0.6rem;
+  border-left-color: transparent;
+  background: none;
+  border-radius: 0;
+}
+
+.article-body .cf-answer + .cf-answer::before {
+  content: none;
+}
+
+.article-body .cf-question + .cf-answer {
+  margin-top: 0.4rem;
+}
+
+[data-theme="dark"] .article-body .cf-answer {
+  border-left-color: rgba(168, 85, 247, 0.55);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.07), rgba(244, 114, 182, 0.03));
+}
+
+[data-theme="dark"] .article-body .cf-answer + .cf-answer {
+  border-left-color: transparent;
+  background: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .article-body .cf-answer {
+    border-left-color: rgba(168, 85, 247, 0.55);
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.07), rgba(244, 114, 182, 0.03));
+  }
+  :root:not([data-theme="light"]) .article-body .cf-answer + .cf-answer {
+    border-left-color: transparent;
+    background: none;
+  }
+}
+
 @media (min-width: 1600px) {
   .article-body p {
     margin: 1.4rem 0;
