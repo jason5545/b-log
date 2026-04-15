@@ -12,6 +12,9 @@ const DEFAULT_CATEGORY_MAPPING = {
   '文化觀察': 'cultural-insights'
 };
 const POSTS_CACHE_TTL_MS = 5 * 60 * 1000;
+const POSTS_PER_PAGE = 10;
+let visibleCount = 0;
+let allFilteredPosts = [];
 
 // 全域變數儲存分類映射（從設定檔載入）
 let categoryMapping = null;
@@ -1463,79 +1466,108 @@ async function renderHomepage() {
   const [featured, ...rest] = posts;
   renderFeaturedPost(featured);
 
-  const template = document.querySelector('#post-item-template');
-  if (!template) return;
+  allFilteredPosts = rest;
+  visibleCount = 0;
+  postsListEl.innerHTML = '';
 
-  if (!rest.length) {
-    postsListEl.innerHTML = '';
-  } else {
-    rest.forEach((post) => {
-      const clone = template.content.cloneNode(true);
-      const cardEl = clone.querySelector('.post-card');
-      const linkEl = clone.querySelector('.post-link');
-      const metaEl = clone.querySelector('.post-meta');
-      const summaryEl = clone.querySelector('.post-summary');
-      const categoryEl = clone.querySelector('.post-card__category');
-      const tagsEl = clone.querySelector('.post-tags');
-
-      // Accent-colored left border
-      if (cardEl) {
-        const accent = post.accentColor || '#556bff';
-        cardEl.style.borderLeft = `3px solid ${accent}`;
-      }
-
-      if (linkEl) {
-        linkEl.href = slugToPath(post.slug, post.category);
-        linkEl.textContent = post.title || post.slug;
-
-        // 先清除已存在的音訊圖示（防禦性編程，雖然列表已被清空）
-        const existingAudioIcon = linkEl.parentElement.querySelector('.audio-indicator');
-        if (existingAudioIcon) {
-          existingAudioIcon.remove();
-        }
-
-        // 如果文章有語音版，添加語音圖示
-        if (post.hasAudio) {
-          const audioIcon = document.createElement('span');
-          audioIcon.className = 'audio-indicator';
-          audioIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
-          </svg>`;
-          audioIcon.setAttribute('aria-label', '有語音版');
-          audioIcon.setAttribute('title', '此文章有語音版');
-          linkEl.parentElement.insertBefore(audioIcon, linkEl.nextSibling);
-        }
-      }
-
-      // Category badge with accent color
-      if (categoryEl) {
-        categoryEl.textContent = post.category || 'Dispatch';
-        const accent = post.accentColor || '#556bff';
-        categoryEl.style.color = accent;
-        categoryEl.style.borderColor = accent.replace(')', ', 0.3)').replace('rgb', 'rgba').replace('#', '');
-        // Use hex-based rgba for border
-        const rgb = hexToRgb(accent);
-        if (rgb) {
-          categoryEl.style.borderColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`;
-          categoryEl.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`;
-        }
-      }
-
-      if (metaEl) {
-        metaEl.textContent = formatMetaParts(post).join(' | ');
-      }
-
-      if (summaryEl) {
-        summaryEl.textContent = post.summary || '';
-      }
-
-      populateTagBadges(tagsEl, post.tags);
-      postsListEl.appendChild(clone);
-    });
-  }
+  appendNextPage();
 
   populateCategoryList(posts);
   populateTagCloud(posts);
+}
+
+function appendNextPage() {
+  const postsListEl = document.querySelector('#posts-list');
+  if (!postsListEl) return;
+
+  const template = document.querySelector('#post-item-template');
+  if (!template) return;
+
+  const end = Math.min(visibleCount + POSTS_PER_PAGE, allFilteredPosts.length);
+  const batch = allFilteredPosts.slice(visibleCount, end);
+
+  batch.forEach((post) => {
+    const clone = template.content.cloneNode(true);
+    const cardEl = clone.querySelector('.post-card');
+    const linkEl = clone.querySelector('.post-link');
+    const metaEl = clone.querySelector('.post-meta');
+    const summaryEl = clone.querySelector('.post-summary');
+    const categoryEl = clone.querySelector('.post-card__category');
+    const tagsEl = clone.querySelector('.post-tags');
+
+    if (cardEl) {
+      const accent = post.accentColor || '#556bff';
+      cardEl.style.borderLeft = `3px solid ${accent}`;
+    }
+
+    if (linkEl) {
+      linkEl.href = slugToPath(post.slug, post.category);
+      linkEl.textContent = post.title || post.slug;
+
+      const existingAudioIcon = linkEl.parentElement.querySelector('.audio-indicator');
+      if (existingAudioIcon) {
+        existingAudioIcon.remove();
+      }
+
+      if (post.hasAudio) {
+        const audioIcon = document.createElement('span');
+        audioIcon.className = 'audio-indicator';
+        audioIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
+        </svg>`;
+        audioIcon.setAttribute('aria-label', '有語音版');
+        audioIcon.setAttribute('title', '此文章有語音版');
+        linkEl.parentElement.insertBefore(audioIcon, linkEl.nextSibling);
+      }
+    }
+
+    if (categoryEl) {
+      categoryEl.textContent = post.category || 'Dispatch';
+      const accent = post.accentColor || '#556bff';
+      categoryEl.style.color = accent;
+      const rgb = hexToRgb(accent);
+      if (rgb) {
+        categoryEl.style.borderColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`;
+        categoryEl.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`;
+      }
+    }
+
+    if (metaEl) {
+      metaEl.textContent = formatMetaParts(post).join(' | ');
+    }
+
+    if (summaryEl) {
+      summaryEl.textContent = post.summary || '';
+    }
+
+    populateTagBadges(tagsEl, post.tags);
+    postsListEl.appendChild(clone);
+  });
+
+  visibleCount = end;
+  updateLoadMoreButton();
+}
+
+function updateLoadMoreButton() {
+  let btn = document.querySelector('#load-more-btn');
+  if (visibleCount >= allFilteredPosts.length) {
+    if (btn) btn.hidden = true;
+    return;
+  }
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'load-more-btn';
+    btn.className = 'load-more-btn';
+    btn.textContent = '載入更多';
+    btn.addEventListener('click', appendNextPage);
+    const postsListEl = document.querySelector('#posts-list');
+    if (postsListEl && postsListEl.parentElement) {
+      postsListEl.parentElement.appendChild(btn);
+    }
+  }
+  const remaining = allFilteredPosts.length - visibleCount;
+  btn.textContent = `載入更多（還有 ${remaining} 篇）`;
+  btn.hidden = false;
 }
 
 async function renderArticle() {
