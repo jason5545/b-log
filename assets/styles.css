@@ -767,18 +767,12 @@ a:focus {
 }
 
 .load-more-btn {
-  display: block;
-  width: 100%;
-  max-width: 420px;
-  margin: 2rem auto 0;
-}
-
-.load-more-btn:active {
-  transform: scale(0.98);
+  display: flex !important;
+  margin: 3rem auto 2rem;
 }
 
 .load-more-btn[hidden] {
-  display: none;
+  display: none !important;
 }
 
 .post-card__header {
