@@ -19,7 +19,7 @@ Mac 就不一樣了。你可以裝 DMG、可以關 SIP（System Integrity Protec
 
 ### Core Audio：你永遠拿不到 bit-perfect
 
-在 Windows 上，你可以用 ASIO 或 WASAPI exclusive mode 直接跟 DAC 對話，拿到 bit-perfect 的音訊輸出。在 Linux 上，你可以走 ALSA 做到同樣的事。
+在 Windows 上，你可以用 ASIO 或 WASAPI exclusive mode 直接跟 DAC 對話，拿到 bit-perfect 的音訊輸出。在 Linux 上，你可以走 PulseAudio 做到同樣的事。
 
 在 macOS 上？你辦不到。Core Audio 一定會過一次系統 mixer，你的取樣率和位元深度不見得是你設定的那個值。這不是 bug，這是架構設計。蘋果決定了音訊要怎麼處理，你沒有繞過的選項。
 
