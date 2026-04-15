@@ -1560,7 +1560,7 @@ function updateLoadMoreButton() {
     const btn = document.createElement('button');
     btn.id = 'load-more-btn';
     btn.className = 'button button--ghost load-more-btn';
-    btn.textContent = '載入更多';
+    btn.textContent = 'Load More';
     btn.addEventListener('click', appendNextPage);
     wrapper.appendChild(btn);
     const postsListEl = document.querySelector('#posts-list');
@@ -1569,7 +1569,7 @@ function updateLoadMoreButton() {
     }
   }
   const remaining = allFilteredPosts.length - visibleCount;
-  wrapper.querySelector('#load-more-btn').textContent = `載入更多（還有 ${remaining} 篇）`;
+  wrapper.querySelector('#load-more-btn').textContent = `Load More (${remaining} left)`;
   wrapper.hidden = false;
 }
 
