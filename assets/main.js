@@ -1557,7 +1557,7 @@ function updateLoadMoreButton() {
   if (!btn) {
     btn = document.createElement('button');
     btn.id = 'load-more-btn';
-    btn.className = 'load-more-btn';
+    btn.className = 'button button--ghost load-more-btn';
     btn.textContent = '載入更多';
     btn.addEventListener('click', appendNextPage);
     const postsListEl = document.querySelector('#posts-list');
