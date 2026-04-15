@@ -1549,25 +1549,28 @@ function appendNextPage() {
 }
 
 function updateLoadMoreButton() {
-  let btn = document.querySelector('#load-more-btn');
+  let wrapper = document.querySelector('.load-more-btn-wrapper');
   if (visibleCount >= allFilteredPosts.length) {
-    if (btn) btn.hidden = true;
+    if (wrapper) wrapper.hidden = true;
     return;
   }
-  if (!btn) {
-    btn = document.createElement('button');
+  if (!wrapper) {
+    wrapper = document.createElement('div');
+    wrapper.className = 'load-more-btn-wrapper';
+    const btn = document.createElement('button');
     btn.id = 'load-more-btn';
     btn.className = 'button button--ghost load-more-btn';
     btn.textContent = '載入更多';
     btn.addEventListener('click', appendNextPage);
+    wrapper.appendChild(btn);
     const postsListEl = document.querySelector('#posts-list');
     if (postsListEl && postsListEl.parentElement) {
-      postsListEl.parentElement.appendChild(btn);
+      postsListEl.parentElement.appendChild(wrapper);
     }
   }
   const remaining = allFilteredPosts.length - visibleCount;
-  btn.textContent = `載入更多（還有 ${remaining} 篇）`;
-  btn.hidden = false;
+  wrapper.querySelector('#load-more-btn').textContent = `載入更多（還有 ${remaining} 篇）`;
+  wrapper.hidden = false;
 }
 
 async function renderArticle() {

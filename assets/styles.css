@@ -766,13 +766,17 @@ a:focus {
   /* no special treatment needed */
 }
 
-.load-more-btn {
-  display: flex !important;
-  margin: 3rem auto 2rem;
+.load-more-btn-wrapper {
+  text-align: center;
+  margin: 3rem 0 0;
 }
 
-.load-more-btn[hidden] {
-  display: none !important;
+.load-more-btn-wrapper[hidden] {
+  display: none;
+}
+
+.load-more-btn {
+  display: inline-flex !important;
 }
 
 .post-card__header {
