@@ -9,7 +9,8 @@ const DEFAULT_CATEGORY_MAPPING = {
   '開發哲學': 'dev-philosophy',
   '生活記事': 'life-stories',
   '商業觀察': 'business-insights',
-  '文化觀察': 'cultural-insights'
+  '文化觀察': 'cultural-insights',
+  'Crossing Field': 'crossing-field'
 };
 const POSTS_CACHE_TTL_MS = 5 * 60 * 1000;
 const POSTS_PER_PAGE = 10;
@@ -1498,6 +1499,7 @@ function appendNextPage() {
     if (cardEl) {
       const accent = post.accentColor || '#556bff';
       cardEl.style.borderLeft = `3px solid ${accent}`;
+      applyCategoryTheme(cardEl, post);
     }
 
     if (linkEl) {
@@ -1613,6 +1615,8 @@ async function renderArticle() {
   const titleEl = document.querySelector('#post-title');
   const metaEl = document.querySelector('#post-meta');
   const tagsEl = document.querySelector('#post-tags');
+  const articleEl = document.querySelector('.article');
+  const articleShellEl = document.querySelector('.article-shell');
 
   if (breadcrumbCurrent) {
     const parent = breadcrumbCurrent.parentElement;
@@ -1630,6 +1634,9 @@ async function renderArticle() {
   }
 
   applyAccentBackground(heroEl, post);
+  applyCategoryTheme(articleEl, post);
+  applyCategoryTheme(heroEl, post);
+  applyCategoryTheme(articleShellEl, post);
 
   if (categoryEl) {
     if (post.category) {
@@ -1775,6 +1782,8 @@ function renderFeaturedPost(post) {
   if (!heroSection) return;
 
   applyAccentBackground(heroMedia, post);
+  applyCategoryTheme(heroSection, post);
+  applyCategoryTheme(heroMedia, post);
   heroSection.hidden = false;
 
   if (heroCategory) {
@@ -2465,6 +2474,24 @@ function rgbToHex({ r, g, b }) {
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
+}
+
+function getCategoryTheme(post) {
+  const mapping = categoryMapping || DEFAULT_CATEGORY_MAPPING;
+  const category = post?.category;
+  if (!category || !mapping[category]) return '';
+  return mapping[category];
+}
+
+function applyCategoryTheme(element, post) {
+  if (!element) return;
+
+  const theme = getCategoryTheme(post);
+  if (theme) {
+    element.dataset.categoryTheme = theme;
+  } else {
+    delete element.dataset.categoryTheme;
+  }
 }
 
 function slugToPath(slug, category) {

@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-lace-up-interview",
+      "url": "https://b-log.to/crossing-field/lisa-lace-up-interview/",
+      "title": "LiSA「LACE UP」專訪｜將15年的思念一一編織而成的第7張專輯",
+      "content_text": "這是一篇 LiSA《LACE UP》專訪的完整翻譯。我保留了原文的訪談節奏與章節分段，從她為15週年重新整理腳下、確認自己仍喜歡 LiSA 的自己，到專輯中每一首歌如何被編織進同一條敘事線。",
+      "date_published": "2026-04-15T00:00:00.000Z",
+      "date_modified": "2026-04-15T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "LACE UP",
+        "音楽ナタリー",
+        "專訪翻譯",
+        "J-POP",
+        "PATCH WALK",
+        "15週年"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-lace-up/pc_header01.jpg"
+    },
+    {
       "id": "macos-freedom-illusion-dmg-sip-core-audio",
       "url": "https://b-log.to/business-insights/macos-freedom-illusion-dmg-sip-core-audio/",
       "title": "DMG 裝得了、SIP 關得了，然後呢？macOS 的自由是一種錯覺",

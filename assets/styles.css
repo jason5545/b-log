@@ -417,6 +417,42 @@ a:focus {
   margin-top: 0.5rem;
 }
 
+.hero-card[data-category-theme="crossing-field"] {
+  position: relative;
+  border-color: rgba(244, 114, 182, 0.24);
+  box-shadow: 0 24px 60px rgba(88, 28, 135, 0.24);
+}
+
+.hero-card[data-category-theme="crossing-field"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(168, 85, 247, 0.18), transparent 38%),
+    radial-gradient(circle at top right, rgba(244, 114, 182, 0.18), transparent 30%);
+  pointer-events: none;
+}
+
+.hero-card[data-category-theme="crossing-field"] .hero-card__media {
+  background:
+    linear-gradient(135deg, rgba(88, 28, 135, 0.8), rgba(190, 24, 93, 0.5)),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.08), transparent 50%);
+}
+
+.hero-card[data-category-theme="crossing-field"] .hero-card__body {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-card[data-category-theme="crossing-field"] .hero-card__title {
+  text-shadow: 0 10px 30px rgba(168, 85, 247, 0.22);
+}
+
+.hero-card[data-category-theme="crossing-field"] .hero-card__summary {
+  font-size: 1.08rem;
+  line-height: 1.8;
+}
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -764,6 +800,39 @@ a:focus {
 
 .post-card:last-child {
   /* no special treatment needed */
+}
+
+.post-card[data-category-theme="crossing-field"] {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(244, 114, 182, 0.2);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
+    linear-gradient(135deg, rgba(88, 28, 135, 0.12), rgba(190, 24, 93, 0.06)),
+    var(--glass-tint);
+}
+
+.post-card[data-category-theme="crossing-field"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.05), transparent 70%);
+  pointer-events: none;
+}
+
+.post-card[data-category-theme="crossing-field"] h3 {
+  line-height: 1.35;
+}
+
+.post-card[data-category-theme="crossing-field"] .post-summary {
+  line-height: 1.8;
+}
+
+.post-card[data-category-theme="crossing-field"] .post-card__category {
+  background: rgba(168, 85, 247, 0.14);
+  border-color: rgba(244, 114, 182, 0.28);
+  color: #f472b6;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .load-more-btn-wrapper {
@@ -1115,6 +1184,22 @@ a:focus {
   contain: layout style;
 }
 
+.article[data-category-theme="crossing-field"] {
+  position: relative;
+  border-color: rgba(244, 114, 182, 0.22);
+  box-shadow: 0 30px 90px rgba(88, 28, 135, 0.18);
+}
+
+.article[data-category-theme="crossing-field"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, rgba(168, 85, 247, 0.12), transparent 26%),
+    radial-gradient(circle at top right, rgba(244, 114, 182, 0.12), transparent 24%);
+  pointer-events: none;
+}
+
 .article-hero {
   min-height: 260px;
   background: linear-gradient(135deg, rgba(180, 83, 9, 0.35), rgba(3, 105, 161, 0.25));
@@ -1144,6 +1229,33 @@ a:focus {
   background: linear-gradient(160deg, rgba(0, 0, 0, 0.25), transparent 60%);
   opacity: 0.5;
   pointer-events: none;
+}
+
+.article-shell[data-category-theme="crossing-field"] .article-hero {
+  background:
+    linear-gradient(140deg, rgba(88, 28, 135, 0.88), rgba(190, 24, 93, 0.56)),
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.16), transparent 20%);
+}
+
+.article-shell[data-category-theme="crossing-field"] .article-header {
+  padding-bottom: clamp(1.6rem, 2vw, 2.2rem);
+}
+
+.article-shell[data-category-theme="crossing-field"] .article-header h1 {
+  max-width: 14ch;
+  line-height: 1.18;
+  text-shadow: 0 16px 36px rgba(168, 85, 247, 0.22);
+}
+
+.article-shell[data-category-theme="crossing-field"] .article-category {
+  background: rgba(168, 85, 247, 0.14);
+  border-color: rgba(244, 114, 182, 0.3);
+  color: #f472b6;
+}
+
+.article-shell[data-category-theme="crossing-field"] .article-tags span {
+  background: rgba(88, 28, 135, 0.12);
+  border-color: rgba(244, 114, 182, 0.22);
 }
 
 .article-header {
@@ -1254,6 +1366,62 @@ a:focus {
 
 .article-body p {
   margin: 1.2rem 0;
+}
+
+.article-body .crossing-field-intro {
+  margin: 0 0 2rem;
+  padding: 1.35rem 1.5rem 1.5rem;
+  border: 1px solid rgba(244, 114, 182, 0.2);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(135deg, rgba(88, 28, 135, 0.18), rgba(190, 24, 93, 0.08)),
+    var(--glass-tint);
+  box-shadow: 0 16px 40px rgba(88, 28, 135, 0.12);
+}
+
+.article-body .crossing-field-intro__eyebrow {
+  margin: 0 0 0.85rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #f472b6;
+  font-weight: 700;
+}
+
+.article-body .crossing-field-intro__lead {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.9;
+}
+
+.article-body .crossing-field-intro__meta {
+  margin: 1rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.article-body .crossing-field-toc {
+  margin: 2rem 0 2.4rem;
+  padding: 1.3rem 1.5rem 1.2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.article-body .crossing-field-toc h2 {
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+}
+
+.article-body .crossing-field-toc ol {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.article-body .crossing-field-toc li {
+  margin: 0.35rem 0;
+  line-height: 1.7;
 }
 
 @media (min-width: 1600px) {
