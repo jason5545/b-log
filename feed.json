@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-gifu-memory-journey-mother-interview",
+      "url": "https://b-log.to/crossing-field/lisa-gifu-memory-journey-mother-interview/",
+      "title": "《今日もいい日だ。》LiSA 岐阜記憶之旅",
+      "content_text": "這是一篇持續更新中的 LiSA 翻譯報導。我先從她回到岐阜老家、與母親對談開始，寫到童年的孤獨、第一次被音樂拯救，以及後來獨自離家的開端。後續段落會直接在同一篇補完。",
+      "date_published": "2026-04-17T00:00:00.000Z",
+      "date_modified": "2026-04-17T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "岐阜",
+        "母女對談",
+        "翻譯報導",
+        "連載中",
+        "今日もいい日だ。"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-gifu-memory-cover.jpeg"
+    },
+    {
       "id": "lisa-lace-up-interview",
       "url": "https://b-log.to/crossing-field/lisa-lace-up-interview/",
       "title": "LiSA「LACE UP」專訪｜將15年的思念一一編織而成的第7張專輯",

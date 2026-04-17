@@ -1424,6 +1424,63 @@ a:focus {
   line-height: 1.7;
 }
 
+.article-body .crossing-field-serial {
+  position: relative;
+  margin: 0 0 2rem;
+  padding: 1.3rem 1.5rem 1.45rem;
+  border: 1px solid rgba(244, 114, 182, 0.22);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(135deg, rgba(168, 85, 247, 0.16), rgba(190, 24, 93, 0.1)),
+    var(--glass-tint);
+  box-shadow: 0 18px 44px rgba(88, 28, 135, 0.12);
+  overflow: hidden;
+}
+
+.article-body .crossing-field-serial::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent 35%),
+    radial-gradient(circle at top right, rgba(244, 114, 182, 0.14), transparent 28%);
+  pointer-events: none;
+}
+
+.article-body .crossing-field-serial > * {
+  position: relative;
+  z-index: 1;
+}
+
+.article-body .crossing-field-serial__eyebrow {
+  margin: 0 0 0.85rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #f9a8d4;
+  font-weight: 700;
+}
+
+.article-body .crossing-field-serial__lead {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+.article-body .crossing-field-serial__meta {
+  margin: 0.95rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.article-body .crossing-field-serial--end {
+  margin-top: 2.4rem;
+  border-color: rgba(168, 85, 247, 0.26);
+  background:
+    linear-gradient(135deg, rgba(88, 28, 135, 0.22), rgba(190, 24, 93, 0.12)),
+    var(--glass-tint);
+}
+
 /* ── Crossing Field 專訪 Q&A 樣式 ── */
 .article-body .cf-question {
   color: var(--text-muted);
@@ -1436,6 +1493,19 @@ a:focus {
 .article-body .cf-question strong {
   color: var(--text-muted);
   font-weight: 600;
+}
+
+.article-body .cf-speaker {
+  margin: 1.3rem 0 0.35rem;
+  color: #f9a8d4;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.article-body .cf-speaker + .cf-answer {
+  margin-top: 0;
 }
 
 .article-body .cf-answer {

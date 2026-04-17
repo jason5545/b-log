@@ -2007,15 +2007,22 @@ function styleInterviewQA(contentEl) {
   let isAnswer = false;
 
   children.forEach(child => {
-    const isQuestion = child.tagName === 'P' && child.querySelector('strong') &&
-      child.textContent.trim().startsWith('——');
+    const text = child.textContent.trim();
+    const isQuestion = child.tagName === 'P' && text.startsWith('——');
+    const isSpeaker = child.tagName === 'P' &&
+      /^[\p{L}\p{N}・ー・]+$/u.test(text) &&
+      text.length > 0 &&
+      text.length <= 8;
 
     if (isQuestion) {
       child.classList.add('cf-question');
       isAnswer = true;
+    } else if (isSpeaker) {
+      child.classList.add('cf-speaker');
     } else if (child.tagName === 'HR' || child.tagName === 'H2' ||
                (child.tagName === 'DIV' && child.classList.contains('crossing-field-toc')) ||
-               (child.tagName === 'DIV' && child.classList.contains('crossing-field-intro'))) {
+               (child.tagName === 'DIV' && child.classList.contains('crossing-field-intro')) ||
+               (child.tagName === 'DIV' && child.classList.contains('crossing-field-serial'))) {
       isAnswer = false;
     } else if (isAnswer && (child.tagName === 'P' || child.tagName === 'UL' || child.tagName === 'OL')) {
       child.classList.add('cf-answer');
