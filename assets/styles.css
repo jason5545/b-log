@@ -1242,7 +1242,6 @@ a:focus {
 }
 
 .article-shell[data-category-theme="crossing-field"] .article-header h1 {
-  max-width: 14ch;
   line-height: 1.18;
   text-shadow: 0 16px 36px rgba(168, 85, 247, 0.22);
 }
