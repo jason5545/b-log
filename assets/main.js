@@ -2005,6 +2005,7 @@ function styleInterviewQA(contentEl) {
   if (!contentEl) return;
   const children = Array.from(contentEl.children);
   let isAnswer = false;
+  let pendingSpeaker = null;
 
   children.forEach(child => {
     const text = child.textContent.trim();
@@ -2017,15 +2018,24 @@ function styleInterviewQA(contentEl) {
     if (isQuestion) {
       child.classList.add('cf-question');
       isAnswer = true;
+      pendingSpeaker = null;
     } else if (isSpeaker) {
       child.classList.add('cf-speaker');
+      pendingSpeaker = text;
     } else if (child.tagName === 'HR' || child.tagName === 'H2' ||
                (child.tagName === 'DIV' && child.classList.contains('crossing-field-toc')) ||
                (child.tagName === 'DIV' && child.classList.contains('crossing-field-intro')) ||
                (child.tagName === 'DIV' && child.classList.contains('crossing-field-serial'))) {
       isAnswer = false;
+      pendingSpeaker = null;
     } else if (isAnswer && (child.tagName === 'P' || child.tagName === 'UL' || child.tagName === 'OL')) {
       child.classList.add('cf-answer');
+
+      if (pendingSpeaker) {
+        child.classList.add('cf-answer--speaker-start');
+        child.dataset.speaker = pendingSpeaker;
+        pendingSpeaker = null;
+      }
     }
   });
 }
