@@ -2006,6 +2006,7 @@ function styleInterviewQA(contentEl) {
   const children = Array.from(contentEl.children);
   let isAnswer = false;
   let pendingSpeaker = null;
+  const knownSpeakers = new Set(['LiSA', '媽媽', '母親']);
 
   children.forEach(child => {
     const text = child.textContent.trim();
@@ -2014,6 +2015,12 @@ function styleInterviewQA(contentEl) {
       /^[\p{L}\p{N}・ー・]+$/u.test(text) &&
       text.length > 0 &&
       text.length <= 8;
+    const inlineSpeakerMatch = child.tagName === 'P'
+      ? text.match(/^([\p{L}\p{N}・ー・]{1,8})[ \u3000]+([\s\S]+)$/u)
+      : null;
+    const inlineSpeaker = inlineSpeakerMatch && knownSpeakers.has(inlineSpeakerMatch[1])
+      ? { speaker: inlineSpeakerMatch[1], content: inlineSpeakerMatch[2] }
+      : null;
 
     if (isQuestion) {
       child.classList.add('cf-question');
@@ -2021,7 +2028,14 @@ function styleInterviewQA(contentEl) {
       pendingSpeaker = null;
     } else if (isSpeaker) {
       child.classList.add('cf-speaker');
+      knownSpeakers.add(text);
+      isAnswer = true;
       pendingSpeaker = text;
+    } else if (inlineSpeaker && isAnswer) {
+      child.classList.add('cf-answer', 'cf-answer--speaker-start');
+      child.dataset.speaker = inlineSpeaker.speaker;
+      child.textContent = inlineSpeaker.content;
+      pendingSpeaker = null;
     } else if (child.tagName === 'HR' || child.tagName === 'H2' ||
                (child.tagName === 'DIV' && child.classList.contains('crossing-field-toc')) ||
                (child.tagName === 'DIV' && child.classList.contains('crossing-field-intro')) ||
