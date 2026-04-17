@@ -2017,11 +2017,16 @@ function styleInterviewQA(contentEl) {
       /^[\p{L}\p{N}・ー・]+$/u.test(text) &&
       text.length > 0 &&
       text.length <= 8;
-    const inlineSpeakerMatch = child.tagName === 'P'
-      ? text.match(/^([\p{L}\p{N}・ー・]{1,8})[\s\u3000]+([\s\S]+)$/u)
+    const multilineSpeakerMatch = child.tagName === 'P'
+      ? text.match(/^([\p{L}\p{N}・ー・]{1,8})\n+([\s\S]+)$/u)
       : null;
-    const inlineSpeaker = inlineSpeakerMatch && knownSpeakers.has(inlineSpeakerMatch[1])
-      ? { speaker: inlineSpeakerMatch[1], content: inlineSpeakerMatch[2] }
+    const spacedSpeakerMatch = child.tagName === 'P'
+      ? text.match(/^([\p{L}\p{N}・ー・]{1,8})[ \u3000]+([\s\S]+)$/u)
+      : null;
+    const inlineSpeaker = multilineSpeakerMatch && knownSpeakers.has(multilineSpeakerMatch[1])
+      ? { speaker: multilineSpeakerMatch[1], content: multilineSpeakerMatch[2], mode: 'multiline' }
+      : spacedSpeakerMatch && knownSpeakers.has(spacedSpeakerMatch[1])
+      ? { speaker: spacedSpeakerMatch[1], content: spacedSpeakerMatch[2], mode: 'inline' }
       : null;
 
     if (isQuestion) {
@@ -2037,7 +2042,7 @@ function styleInterviewQA(contentEl) {
       hasDialogueContext = true;
       currentSpeaker = text;
       pendingSpeaker = text;
-    } else if (inlineSpeaker && hasDialogueContext) {
+    } else if (inlineSpeaker && (hasDialogueContext || inlineSpeaker.mode === 'multiline')) {
       isAnswer = true;
       hasDialogueContext = true;
       currentSpeaker = inlineSpeaker.speaker;
