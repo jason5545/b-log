@@ -2006,6 +2006,7 @@ function styleInterviewQA(contentEl) {
   const children = Array.from(contentEl.children);
   let isAnswer = false;
   let pendingSpeaker = null;
+  let currentSpeaker = null;
   const knownSpeakers = new Set(['LiSA', '媽媽', '母親']);
 
   children.forEach(child => {
@@ -2030,10 +2031,13 @@ function styleInterviewQA(contentEl) {
       child.classList.add('cf-speaker');
       knownSpeakers.add(text);
       isAnswer = true;
+      currentSpeaker = text;
       pendingSpeaker = text;
-    } else if (inlineSpeaker && isAnswer) {
+    } else if (inlineSpeaker) {
+      isAnswer = true;
+      currentSpeaker = inlineSpeaker.speaker;
       child.classList.add('cf-answer', 'cf-answer--speaker-start');
-      child.dataset.speaker = inlineSpeaker.speaker;
+      child.dataset.speaker = currentSpeaker;
       child.textContent = inlineSpeaker.content;
       pendingSpeaker = null;
     } else if (child.tagName === 'HR' || child.tagName === 'H2' ||
@@ -2041,9 +2045,14 @@ function styleInterviewQA(contentEl) {
                (child.tagName === 'DIV' && child.classList.contains('crossing-field-intro')) ||
                (child.tagName === 'DIV' && child.classList.contains('crossing-field-serial'))) {
       isAnswer = false;
+      currentSpeaker = null;
       pendingSpeaker = null;
     } else if (isAnswer && (child.tagName === 'P' || child.tagName === 'UL' || child.tagName === 'OL')) {
       child.classList.add('cf-answer');
+
+      if (currentSpeaker) {
+        child.dataset.speaker = currentSpeaker;
+      }
 
       if (pendingSpeaker) {
         child.classList.add('cf-answer--speaker-start');
