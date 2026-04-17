@@ -2005,6 +2005,7 @@ function styleInterviewQA(contentEl) {
   if (!contentEl) return;
   const children = Array.from(contentEl.children);
   let isAnswer = false;
+  let hasDialogueContext = false;
   let pendingSpeaker = null;
   let currentSpeaker = null;
   const knownSpeakers = new Set(['LiSA', '媽媽', '母親']);
@@ -2017,7 +2018,7 @@ function styleInterviewQA(contentEl) {
       text.length > 0 &&
       text.length <= 8;
     const inlineSpeakerMatch = child.tagName === 'P'
-      ? text.match(/^([\p{L}\p{N}・ー・]{1,8})[ \u3000]+([\s\S]+)$/u)
+      ? text.match(/^([\p{L}\p{N}・ー・]{1,8})[\s\u3000]+([\s\S]+)$/u)
       : null;
     const inlineSpeaker = inlineSpeakerMatch && knownSpeakers.has(inlineSpeakerMatch[1])
       ? { speaker: inlineSpeakerMatch[1], content: inlineSpeakerMatch[2] }
@@ -2026,15 +2027,19 @@ function styleInterviewQA(contentEl) {
     if (isQuestion) {
       child.classList.add('cf-question');
       isAnswer = true;
+      hasDialogueContext = true;
+      currentSpeaker = null;
       pendingSpeaker = null;
     } else if (isSpeaker) {
       child.classList.add('cf-speaker');
       knownSpeakers.add(text);
       isAnswer = true;
+      hasDialogueContext = true;
       currentSpeaker = text;
       pendingSpeaker = text;
-    } else if (inlineSpeaker) {
+    } else if (inlineSpeaker && hasDialogueContext) {
       isAnswer = true;
+      hasDialogueContext = true;
       currentSpeaker = inlineSpeaker.speaker;
       child.classList.add('cf-answer', 'cf-answer--speaker-start');
       child.dataset.speaker = currentSpeaker;
@@ -2045,6 +2050,7 @@ function styleInterviewQA(contentEl) {
                (child.tagName === 'DIV' && child.classList.contains('crossing-field-intro')) ||
                (child.tagName === 'DIV' && child.classList.contains('crossing-field-serial'))) {
       isAnswer = false;
+      hasDialogueContext = false;
       currentSpeaker = null;
       pendingSpeaker = null;
     } else if (isAnswer && (child.tagName === 'P' || child.tagName === 'UL' || child.tagName === 'OL')) {
