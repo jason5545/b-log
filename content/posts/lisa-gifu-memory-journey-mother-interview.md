@@ -2,7 +2,7 @@
 
 <div class="crossing-field-intro">
   <p class="crossing-field-intro__eyebrow">Crossing Field / Memory Dispatch</p>
-  <p class="crossing-field-intro__lead">這篇不是一般感想，也不是一次貼完就結束的翻譯。我想把 LiSA 與母親談岐阜記憶的這篇內容，放進 <strong>Crossing Field</strong> 裡慢慢補完，讓它保留訪談的呼吸，也保留「還在長出來」的狀態。</p>
+  <p class="crossing-field-intro__lead">大概 12 年前，我就看過有人在英文網站翻譯這篇內容了。現在回頭找，卻已經完全找不到，八成連那個網域都沒有續了。我很想把這一塊補回來，只能自己動手。還好現在得益於 AI，我終於有能力把這篇放進 <strong>Crossing Field</strong> 裡，慢慢補完。</p>
   <p class="crossing-field-intro__meta">關鍵詞：LiSA、岐阜、母女對談、成長記憶、翻譯報導</p>
 </div>
 
