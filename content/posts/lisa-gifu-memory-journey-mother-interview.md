@@ -2,14 +2,14 @@
 
 <div class="crossing-field-intro">
   <p class="crossing-field-intro__eyebrow">Crossing Field / Memory Dispatch</p>
-  <p class="crossing-field-intro__lead">大概 12 年前，我就看過有人在英文網站翻譯這篇內容了。現在回頭找，卻已經完全找不到，八成連那個網域都沒有續了。我很想把這一塊補回來，只能自己動手。還好現在得益於 AI，我終於有能力把這篇放進 <strong>Crossing Field</strong> 裡，慢慢補完。</p>
+  <p class="crossing-field-intro__lead">大概 12 年前，我曾在一個英文網站讀過這篇翻譯。最近回頭想找，卻怎麼都找不到了。也許是網站沒再續，也許只是就這樣安靜地消失了。那種「明明存在過，現在卻不見了」的感覺一直卡在我心裡。所以現在，既然終於能靠 AI 幫忙自己處理翻譯，我想把它重新補回來，慢慢放進 <strong>Crossing Field</strong> 裡。</p>
   <p class="crossing-field-intro__meta">關鍵詞：LiSA、岐阜、母女對談、成長記憶、翻譯報導</p>
 </div>
 
 <div class="crossing-field-serial">
   <p class="crossing-field-serial__eyebrow">Serial Dispatch / Still Growing</p>
-  <p class="crossing-field-serial__lead">這篇翻譯報導會在同一篇文章裡持續更新。你現在看到的是目前公開版本，還不是完整全文。</p>
-  <p class="crossing-field-serial__meta">更新方式：我會直接在本文後面補上新的段落，不另外拆成上下集。</p>
+  <p class="crossing-field-serial__lead">這篇會留在同一個頁面裡慢慢更新。你現在讀到的是目前的進度，還不是完整版本。</p>
+  <p class="crossing-field-serial__meta">後面的段落會直接接在本文後面，不拆上下集，也不另外開新文。</p>
 </div>
 
 > 翻譯連載
@@ -296,6 +296,6 @@ LiSA
 
 <div class="crossing-field-serial crossing-field-serial--end">
   <p class="crossing-field-serial__eyebrow">To Be Continued</p>
-  <p class="crossing-field-serial__lead">這篇翻譯目前先更新到這裡。後面的內容我會直接接在同一篇文章裡，不另外拆文。</p>
-  <p class="crossing-field-serial__meta">如果你現在讀到這裡覺得「靠，怎麼停了」，對，這篇目前就是連載中。</p>
+  <p class="crossing-field-serial__lead">這次先更新到這裡。後面的內容，我會繼續接在同一篇裡。</p>
+  <p class="crossing-field-serial__meta">它還沒寫完，但至少這一次，我不想再讓它像當年那個網站一樣，就這樣消失。</p>
 </div>
