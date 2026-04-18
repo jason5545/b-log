@@ -14,7 +14,7 @@
 >
 > 攝影／森好弘
 
-![LiSA LACE UP 專訪視覺](/content/img/2026/lisa-lace-up/pc_header01.jpg)
+![LiSA LACE UP 專訪視覺](/content/img/2026/lisa-lace-up/pc_header01.webp)
 
 2011年4月，LiSA 攜迷你專輯《Letters to U》踏上獨立藝人之路。迎來出道15週年的她，完成了第7張原創全長專輯《LACE UP》。即便已因動畫《鬼滅之刃》系列主題曲〈紅蓮華〉、〈炎〉而廣為人知，LiSA 對音樂的貪婪姿態從未停歇。新作中透過與ケンモチヒデフミ、GLIM SPANKY、水野良樹（いきものがかり）等藝術家的全新相遇，進一步拓展了音樂的寬度。
 
@@ -52,7 +52,7 @@
 
 成功了。
 
-![LiSA 日本武道館公演 RiP SERViCE](/content/img/2026/lisa-lace-up/photo07.jpg)
+![LiSA 日本武道館公演 RiP SERViCE](/content/img/2026/lisa-lace-up/photo07.webp)
 
 「RiP SERViCE」的時候就有很強烈的踏實感。在大型場館演出，需要增添讓更多人感受到的演出效果、安排縝密的流程。大場地裡，舞台機關的運作、層次差異的製造，加入無法單靠音樂引導觀眾的演出也很重要。但「RiP SERViCE」借助了武道館這個空間的優勢，讓我有了自信，我們只靠自己就能盡力傳達了。
 
@@ -78,7 +78,7 @@
 
 是的。「LACE UP」是編織的意思——我始終穿著 Doc Martens 綁好鞋帶，成為 LiSA 走向舞台。
 
-![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo03.jpg)
+![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo03.webp)
 
 我其實從「RiP SERViCE」就開始自顧自地把故事串聯起來了。裁切（Rip）、拼布縫製、然後全部結繫起來，就像製作一件衣服的過程。我希望這一年能成為通往專輯的旅程，帶著這樣的心情在製作。
 
@@ -106,7 +106,7 @@
 
 <a id="chapter-3"></a>
 
-![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo01.jpg)
+![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo01.webp)
 
 ## 將15年的璀璨裝上裝飾卡車出發
 
@@ -130,7 +130,7 @@
 
 <a id="chapter-4"></a>
 
-![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo02.jpg)
+![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo02.webp)
 
 ## 想讓日本妖怪起舞
 
@@ -150,7 +150,7 @@
 
 <a id="chapter-5"></a>
 
-![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo05.jpg)
+![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo05.webp)
 
 ## 與 GLIM SPANKY 的合作，呈現全新的 LiSA
 
@@ -190,7 +190,7 @@
 
 <a id="chapter-6"></a>
 
-![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo06.jpg)
+![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo06.webp)
 
 ## 在現場遇見的衝擊，才是最棒的音樂體驗
 
@@ -220,7 +220,7 @@
 
 今年這一年，在嘗試許多從來沒做過的事、同時實現這15年間浮現的那些好點子的過程中……
 
-![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo04.jpg)
+![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo04.webp)
 
 ……搞不好一下子就到18週年了（笑）。
 
@@ -244,7 +244,7 @@
 
 對。無法替 LiSA 加分的事，大概都不太會去做吧。
 
-![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo08.jpg)
+![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo08.webp)
 
 ---
 
@@ -252,4 +252,4 @@
 
 *採訪・撰文／臼杵成晃　攝影／森好弘*
 
-![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo_09.jpg)
+![LiSA LACE UP 專訪照片](/content/img/2026/lisa-lace-up/photo_09.webp)

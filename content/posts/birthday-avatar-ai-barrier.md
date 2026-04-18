@@ -6,7 +6,7 @@
 
 這些都是我的日常，我的真實樣貌。應該不難吧？
 
-![Birthday Avatar](/content/img/2025/birthday-avatar-cover.png)
+![Birthday Avatar](/content/img/2025/birthday-avatar-cover.webp)
 
 ## 第一道牆：「Ghibli」
 

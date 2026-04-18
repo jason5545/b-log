@@ -13,6 +13,7 @@ const path = require('path');
 
 // 設定
 const CONFIG = {
+  rootDir: path.join(__dirname, '..'),
   postsDir: path.join(__dirname, '..', 'content', 'posts'),
   imgDir: path.join(__dirname, '..', 'content', 'img'),
 };
@@ -31,7 +32,9 @@ function findMarkdownFiles(dir) {
  * 檢查 WebP 檔案是否存在
  */
 function hasWebPVersion(imagePath, markdownDir) {
-  const absolutePath = path.resolve(markdownDir, imagePath);
+  const absolutePath = imagePath.startsWith('/')
+    ? path.join(CONFIG.rootDir, imagePath.substring(1))
+    : path.resolve(markdownDir, imagePath);
   const parsedPath = path.parse(absolutePath);
   const webpPath = path.join(parsedPath.dir, `${parsedPath.name}.webp`);
 
@@ -88,9 +91,8 @@ function updateMarkdownFile(filePath) {
  * 更新 posts.json 和 feed.json 中的封面圖片路徑為 WebP
  */
 function updateCoverImageRefs() {
-  const rootDir = path.join(__dirname, '..');
-  const postsJsonPath = path.join(rootDir, 'data', 'posts.json');
-  const feedJsonPath = path.join(rootDir, 'feed.json');
+  const postsJsonPath = path.join(CONFIG.rootDir, 'data', 'posts.json');
+  const feedJsonPath = path.join(CONFIG.rootDir, 'feed.json');
   let updatedCount = 0;
 
   // 更新 posts.json 的 coverImage
@@ -105,8 +107,8 @@ function updateCoverImageRefs() {
 
       // 檢查對應的 WebP 檔案是否存在
       const coverPath = post.coverImage.startsWith('/')
-        ? path.join(rootDir, post.coverImage.substring(1))
-        : path.join(rootDir, post.coverImage);
+        ? path.join(CONFIG.rootDir, post.coverImage.substring(1))
+        : path.join(CONFIG.rootDir, post.coverImage);
       const parsed = path.parse(coverPath);
       const webpPath = path.join(parsed.dir, `${parsed.name}.webp`);
 
@@ -135,7 +137,7 @@ function updateCoverImageRefs() {
 
       // 從完整 URL 提取路徑來檢查 WebP 檔案
       const urlPath = item.image.replace(/^https?:\/\/[^/]+\//, '');
-      const localPath = path.join(rootDir, urlPath);
+      const localPath = path.join(CONFIG.rootDir, urlPath);
       const parsed = path.parse(localPath);
       const webpPath = path.join(parsed.dir, `${parsed.name}.webp`);
 

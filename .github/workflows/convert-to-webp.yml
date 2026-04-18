@@ -34,9 +34,9 @@ jobs:
         with:
           node-version: '20'
 
-      # 3. 安裝 sharp（圖片處理套件）
+      # 3. 安裝 sharp（避免生成 package-lock.json，否則會讓 rebase 失敗）
       - name: 安裝 sharp
-        run: npm install sharp
+        run: npm install --no-package-lock
 
       # 4. 轉換圖片為 WebP
       - name: 轉換圖片為 WebP
@@ -76,6 +76,8 @@ jobs:
       - name: 提交變更
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
+          # .gitignore 會忽略 package-lock.json，若 npm 意外產生它，先清掉避免 rebase 因工作樹髒掉而失敗
+          rm -f package-lock.json
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add content/img/ content/posts/ data/posts.json feed.json
