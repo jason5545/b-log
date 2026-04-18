@@ -6,12 +6,6 @@
   <p class="crossing-field-intro__meta">關鍵詞：LiSA、岐阜、母女對談、成長記憶、翻譯報導</p>
 </div>
 
-<div class="crossing-field-serial">
-  <p class="crossing-field-serial__eyebrow">Memory Dispatch / Completed</p>
-  <p class="crossing-field-serial__lead">這篇翻譯已經補完，保留在同一個頁面裡完整收錄。</p>
-  <p class="crossing-field-serial__meta">不是上下集，也不另外開新文；現在你讀到的就是完整版本。</p>
-</div>
-
 > 翻譯整理
 >
 > 原文標題：`今日もいい日だ。`
