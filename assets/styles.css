@@ -1520,8 +1520,6 @@ a:focus {
   border: 1px solid rgba(244, 114, 182, 0.24);
   color: #f9a8d4;
   font-size: 0.74rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
   font-weight: 700;
 }
 
