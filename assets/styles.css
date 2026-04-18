@@ -1316,8 +1316,6 @@ a:focus {
   font-size: 0.85rem;
   padding: 0.3rem 0.9rem;
   border-radius: 20px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
   transition: all 0.3s ease;
 }
 
