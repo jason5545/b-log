@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - 'index.html'
       - 'data/posts.json'
       - 'config/categories.json'
       - 'assets/main.js'
@@ -24,6 +25,7 @@ on:
     branches:
       - main
     paths:
+      - 'index.html'
       - 'data/posts.json'
       - 'config/categories.json'
       - 'assets/main.js'

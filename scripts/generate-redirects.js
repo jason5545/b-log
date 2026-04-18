@@ -70,6 +70,25 @@ function replaceMarkedBlock(html, startMarker, endMarker, replacement = '') {
   return html.replace(pattern, block);
 }
 
+function extractMetaPropertyContent(html, property) {
+  const pattern = new RegExp(`<meta\\s+property="${escapeRegExp(property)}"\\s+content="([^"]*)"`);
+  const match = html.match(pattern);
+  if (!match) {
+    throw new Error(`找不到 meta property：${property}`);
+  }
+
+  return match[1];
+}
+
+function replaceMetaPropertyContent(html, property, content) {
+  const pattern = new RegExp(`(<meta\\s+property="${escapeRegExp(property)}"\\s+content=")[^"]*(")`);
+  if (!pattern.test(html)) {
+    throw new Error(`找不到 meta property：${property}`);
+  }
+
+  return html.replace(pattern, (_, prefix, suffix) => `${prefix}${escapeHtml(content)}${suffix}`);
+}
+
 function parseDate(value) {
   if (!value) return null;
   const date = value instanceof Date ? value : new Date(value);
@@ -259,6 +278,8 @@ function syncHomepage(posts) {
   });
   const featuredPost = sortedPosts[0] || null;
   const homepageTemplate = fs.readFileSync(HOMEPAGE_PATH, 'utf8');
+  const homepageOgTitle = extractMetaPropertyContent(homepageTemplate, 'og:title');
+  const homepageOgImage = buildCloudinaryOgImage(homepageOgTitle);
 
   let updatedHomepage = replaceMarkedBlock(
     homepageTemplate,
@@ -273,6 +294,9 @@ function syncHomepage(posts) {
     HOME_FEATURED_END,
     buildHomepageFeaturedSection(featuredPost)
   );
+
+  updatedHomepage = replaceMetaPropertyContent(updatedHomepage, 'og:image', homepageOgImage);
+  updatedHomepage = replaceMetaPropertyContent(updatedHomepage, 'twitter:image', homepageOgImage);
 
   if (updatedHomepage !== homepageTemplate) {
     fs.writeFileSync(HOMEPAGE_PATH, updatedHomepage, 'utf8');
