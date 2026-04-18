@@ -5,10 +5,19 @@ const ROOT_DIR = path.join(__dirname, '..');
 const POSTS_PATH = path.join(ROOT_DIR, 'data/posts.json');
 const TEMPLATE_PATH = path.join(ROOT_DIR, 'post.html');
 const HOMEPAGE_PATH = path.join(ROOT_DIR, 'index.html');
+const SITE_BASE_URL = 'https://b-log.to';
+const META_DATE_LOCALE = 'en-US';
+const CLOUDINARY_OG_IMAGE_CONFIG = {
+  cloudName: 'dynj7181i',
+  backgroundId: 'og-background_cbst7j',
+  fontId: 'notosanstc-bold.ttf'
+};
 const HOME_FEATURED_PRELOAD_START = '<!-- HOME_FEATURED_PRELOAD_START -->';
 const HOME_FEATURED_PRELOAD_END = '<!-- HOME_FEATURED_PRELOAD_END -->';
 const HOME_FEATURED_START = '<!-- HOME_FEATURED_START -->';
 const HOME_FEATURED_END = '<!-- HOME_FEATURED_END -->';
+const ARTICLE_TAGS_START = '<!-- ARTICLE_TAGS_START -->';
+const ARTICLE_TAGS_END = '<!-- ARTICLE_TAGS_END -->';
 
 // 從集中式設定檔載入分類映射
 const categoriesConfigPath = path.join(ROOT_DIR, 'config/categories.json');
@@ -70,7 +79,7 @@ function parseDate(value) {
 function formatStaticDate(value) {
   const date = parseDate(value);
   if (!date) return '';
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat(META_DATE_LOCALE, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -157,6 +166,29 @@ function buildHeroCategoryStyle(post) {
   }
 
   return ` style="color: ${accent}; border-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3); background: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1);"`;
+}
+
+function buildCloudinaryOgImage(title) {
+  const encodedTitle = encodeURIComponent(title || 'Untitled');
+  return (
+    `https://res.cloudinary.com/${CLOUDINARY_OG_IMAGE_CONFIG.cloudName}/image/upload/` +
+    'c_fill,w_1200,h_630/' +
+    'co_rgb:ffffff,' +
+    `l_text:${CLOUDINARY_OG_IMAGE_CONFIG.fontId}_60_center:${encodedTitle},w_1000,c_fit/` +
+    'fl_layer_apply,g_center/' +
+    `${CLOUDINARY_OG_IMAGE_CONFIG.backgroundId}.png`
+  );
+}
+
+function buildArticleTagMetaBlock(tags = []) {
+  if (!Array.isArray(tags) || !tags.length) {
+    return '';
+  }
+
+  return tags
+    .filter(Boolean)
+    .map((tag) => `  <meta property="article:tag" content="${escapeHtml(tag)}">`)
+    .join('\n');
 }
 
 function buildHomepageHeroMedia(post, categoryThemeAttr) {
@@ -326,8 +358,7 @@ function generatePostHTML(post) {
     .replace(/href="feed\.json"/g, 'href="../../feed.json"');
 
   // 生成完整的 URL
-  const baseUrl = 'https://b-log.to';
-  const fullUrl = `${baseUrl}/${categorySlug}/${slug}/`;
+  const fullUrl = `${SITE_BASE_URL}/${categorySlug}/${slug}/`;
   const heroPreload = buildHeroPreload(coverImage);
   const heroMarkup = buildHeroMarkup(post);
 
@@ -335,21 +366,9 @@ function generatePostHTML(post) {
   let ogImageUrl;
   if (coverImage) {
     const normalizedCoverImage = coverImage.startsWith('/') ? coverImage.slice(1) : coverImage;
-    ogImageUrl = `${baseUrl}/${normalizedCoverImage}`;
+    ogImageUrl = `${SITE_BASE_URL}/${normalizedCoverImage}`;
   } else {
-    // 使用 Cloudinary 動態生成圖片（支援中文 Noto Sans TC Bold 字型）
-    const cloudName = 'dynj7181i';
-    const backgroundId = 'og-background_cbst7j';
-    const fontId = 'notosanstc-bold.ttf';
-    const encodedTitle = encodeURIComponent(title || slug || 'Untitled');
-
-    ogImageUrl =
-      `https://res.cloudinary.com/${cloudName}/image/upload/` +
-      `c_fill,w_1200,h_630/` +
-      `co_rgb:ffffff,` +
-      `l_text:${fontId}_60_center:${encodedTitle},w_1000,c_fit/` +
-      `fl_layer_apply,g_center/` +
-      `${backgroundId}.png`;
+    ogImageUrl = buildCloudinaryOgImage(title || slug || 'Untitled');
   }
 
   const tagsString = Array.isArray(tags) ? tags.map((tag) => escapeHtml(tag)).join(', ') : '';
@@ -362,6 +381,12 @@ function generatePostHTML(post) {
   html = html.replace(/  <!-- 首圖 preload 會由生成腳本注入到這裡 -->\s*/,
     `  <!-- 首圖 preload 會由生成腳本注入到這裡 -->\n${heroPreload}`);
   html = html.replace(/<div id="post-hero" class="article-hero"><\/div>/, heroMarkup);
+  html = replaceMarkedBlock(
+    html,
+    ARTICLE_TAGS_START,
+    ARTICLE_TAGS_END,
+    buildArticleTagMetaBlock(tags)
+  );
 
   // Open Graph
   html = html.replace(/<meta property="og:url" content="" id="og-url">/, `<meta property="og:url" content="${fullUrl}" id="og-url">`);
@@ -371,7 +396,6 @@ function generatePostHTML(post) {
   html = html.replace(/<meta property="article:published_time" content="" id="og-published-time">/, `<meta property="article:published_time" content="${publishedAt || ''}" id="og-published-time">`);
   html = html.replace(/<meta property="article:modified_time" content="" id="og-modified-time">/, `<meta property="article:modified_time" content="${updatedAt || publishedAt || ''}" id="og-modified-time">`);
   html = html.replace(/<meta property="article:section" content="" id="og-section">/, `<meta property="article:section" content="${safeCategory}" id="og-section">`);
-  html = html.replace(/<meta property="article:tag" content="" id="og-tags">/, `<meta property="article:tag" content="${tagsString}" id="og-tags">`);
 
   // Twitter
   html = html.replace(/<meta property="twitter:url" content="" id="twitter-url">/, `<meta property="twitter:url" content="${fullUrl}" id="twitter-url">`);

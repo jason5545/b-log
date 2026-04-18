@@ -2,6 +2,14 @@ const POSTS_JSON = '/data/posts.json';
 const POSTS_ROOT = '/content/posts/';
 const GITHUB_USERNAME = 'jason5545';
 const GITHUB_REPO = 'b-log';
+const SITE_BASE_URL = 'https://b-log.to';
+const DEFAULT_META_DESCRIPTION = '用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。';
+const META_DATE_LOCALE = 'en-US';
+const CLOUDINARY_OG_IMAGE_CONFIG = {
+  cloudName: 'dynj7181i',
+  backgroundId: 'og-background_cbst7j',
+  fontId: 'notosanstc-bold.ttf'
+};
 const DEFAULT_CATEGORY_MAPPING = {
   'AI 分析': 'ai-analysis',
   '技術開發': 'tech-development',
@@ -10,7 +18,8 @@ const DEFAULT_CATEGORY_MAPPING = {
   '生活記事': 'life-stories',
   '商業觀察': 'business-insights',
   '文化觀察': 'cultural-insights',
-  'Crossing Field': 'crossing-field'
+  'Crossing Field': 'crossing-field',
+  'シルシ': 'shirushi'
 };
 const POSTS_CACHE_TTL_MS = 5 * 60 * 1000;
 const POSTS_PER_PAGE = 10;
@@ -19,6 +28,7 @@ let allFilteredPosts = [];
 
 // 全域變數儲存分類映射（從設定檔載入）
 let categoryMapping = null;
+let categoryMappingPromise = null;
 let postsCatalogCache = null;
 let postsCatalogCacheAt = 0;
 let postsCatalogPromise = null;
@@ -29,18 +39,29 @@ const markdownCache = new Map();
 // 載入分類設定
 async function loadCategoryMapping() {
   if (categoryMapping) return categoryMapping;
-  
-  try {
-    const response = await fetch('/config/categories.json');
-    const config = await response.json();
-    categoryMapping = config.categoryMapping;
-    return categoryMapping;
-  } catch (error) {
-    console.error('無法載入分類設定，使用預設值', error);
-    // 降級方案：使用內建的完整映射
-    categoryMapping = DEFAULT_CATEGORY_MAPPING;
-    return categoryMapping;
-  }
+  if (categoryMappingPromise) return categoryMappingPromise;
+
+  categoryMappingPromise = (async () => {
+    try {
+      const response = await fetch('/config/categories.json');
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const config = await response.json();
+      categoryMapping = config.categoryMapping;
+      return categoryMapping;
+    } catch (error) {
+      console.error('無法載入分類設定，使用預設值', error);
+      // 降級方案：使用內建的完整映射
+      categoryMapping = DEFAULT_CATEGORY_MAPPING;
+      return categoryMapping;
+    } finally {
+      categoryMappingPromise = null;
+    }
+  })();
+
+  return categoryMappingPromise;
 }
 
 
@@ -1366,19 +1387,22 @@ const AudioPlayerManager = {
   }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // 初始化深色模式
   ThemeManager.init();
   // 初始化語音播放器
   AudioPlayerManager.init();
   // 初始化搜尋功能（所有頁面）
   initSearch();
-  // 載入分類映射
-  loadCategoryMapping().catch((error) => {
+  const categoryMappingReady = loadCategoryMapping().catch((error) => {
     console.warn('[init] failed to load category mapping', error);
+    return categoryMapping || DEFAULT_CATEGORY_MAPPING;
   });
 
   const bodyClassList = document.body.classList;
+  if (bodyClassList.contains('home') || bodyClassList.contains('post-page')) {
+    await categoryMappingReady;
+  }
 
   if (bodyClassList.contains('home')) {
     // 初始化 12 月生日特輯
@@ -2478,11 +2502,11 @@ function formatMetaParts(post) {
 
 function formatDate(date) {
   if (!date) return '';
-  return date.toLocaleDateString(undefined, {
+  return new Intl.DateTimeFormat(META_DATE_LOCALE, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
-  });
+  }).format(date);
 }
 
 function applyAccentBackground(element, post) {
@@ -2635,11 +2659,10 @@ function setupCopyLink(container, url) {
 }
 
 function updatePageMetadata(post) {
-  const baseUrl = 'https://b-log.to/';
   // 使用 WordPress 風格的 URL，指向預渲染的靜態頁面
   // 這樣社群平台爬蟲才能看到正確的 meta 標籤（爬蟲不執行 JavaScript）
   const postPath = slugToPath(post.slug, post.category);
-  const postUrl = `${baseUrl}${postPath.startsWith('/') ? postPath.substring(1) : postPath}`;
+  const postUrl = `${SITE_BASE_URL}/${postPath.startsWith('/') ? postPath.substring(1) : postPath}`;
 
   // 更新基本的 title 和 description
   document.title = post.title ? `${post.title} - b-log` : 'Reading - b-log';
@@ -2653,7 +2676,7 @@ function updatePageMetadata(post) {
   // 更新 description
   const descriptionEl = document.querySelector('meta[name="description"]');
   if (descriptionEl) {
-    descriptionEl.content = post.summary || '用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。';
+    descriptionEl.content = post.summary || DEFAULT_META_DESCRIPTION;
   }
   
   // 更新 keywords
@@ -2667,18 +2690,15 @@ function updatePageMetadata(post) {
   updateMetaProperty('og:url', postUrl);
   updateMetaProperty('og:title', post.title || 'Untitled Post');
   updateMetaProperty('og:description', post.summary || '');
-  updateMetaProperty('og:image', getPostImage(post, baseUrl));
+  updateMetaProperty('og:image', getPostImage(post, SITE_BASE_URL));
   updateMetaProperty('article:author', post.author || 'Jason Chien');
   updateMetaProperty('article:published_time', post.publishedAt || '');
   updateMetaProperty('article:modified_time', post.updatedAt || post.publishedAt || '');
   updateMetaProperty('article:section', post.category || '');
   
   // 更新文章標籤 - 每個標籤都需要單獨的 meta property
-  if (Array.isArray(post.tags) && post.tags.length > 0) {
-    // 先移除現有的標籤
-    document.querySelectorAll('meta[property^="article:tag"]').forEach(el => el.remove());
-    
-    // 添加新的標籤
+  document.querySelectorAll('meta[property="article:tag"]').forEach(el => el.remove());
+  if (Array.isArray(post.tags)) {
     post.tags.forEach(tag => {
       if (tag) {
         const meta = document.createElement('meta');
@@ -2693,7 +2713,7 @@ function updatePageMetadata(post) {
   updateMetaProperty('twitter:url', postUrl);
   updateMetaProperty('twitter:title', post.title || 'Untitled Post');
   updateMetaProperty('twitter:description', post.summary || '');
-  updateMetaProperty('twitter:image', getPostImage(post, baseUrl));
+  updateMetaProperty('twitter:image', getPostImage(post, SITE_BASE_URL));
 }
 
 function updateMetaProperty(property, content) {
@@ -2721,13 +2741,15 @@ function getPostImage(post, baseUrl) {
     return post.coverImage;
   }
 
-  // 如果沒有封面圖片，使用一個簡單的漸變圖片生成服務
-  const accentColor = post.accentColor || '#556bff';
-  const title = encodeURIComponent(post.title || 'Untitled Post');
-
-  // 使用第三方服務生成簡單的 OG 圖片
-  // 這裡使用 https://og-image.vercel.app/ 作為例子
-  return `https://og-image.vercel.app/${title}.png?theme=light&md=1&fontSize=100px&images=https%3A%2F%2Fb-log.to%2Ffavicon.ico`;
+  const encodedTitle = encodeURIComponent(post.title || 'Untitled Post');
+  return (
+    `https://res.cloudinary.com/${CLOUDINARY_OG_IMAGE_CONFIG.cloudName}/image/upload/` +
+    'c_fill,w_1200,h_630/' +
+    'co_rgb:ffffff,' +
+    `l_text:${CLOUDINARY_OG_IMAGE_CONFIG.fontId}_60_center:${encodedTitle},w_1000,c_fit/` +
+    'fl_layer_apply,g_center/' +
+    `${CLOUDINARY_OG_IMAGE_CONFIG.backgroundId}.png`
+  );
 }
 
 // ============================================================

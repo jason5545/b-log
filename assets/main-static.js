@@ -6,24 +6,38 @@ const DEFAULT_CATEGORY_MAPPING = {
   '開發哲學': 'dev-philosophy',
   '生活記事': 'life-stories',
   '商業觀察': 'business-insights',
-  '文化觀察': 'cultural-insights'
+  '文化觀察': 'cultural-insights',
+  'Crossing Field': 'crossing-field',
+  'シルシ': 'shirushi'
 };
 
 let categoryMapping = null;
+let categoryMappingPromise = null;
 
 async function loadCategoryMapping() {
   if (categoryMapping) return categoryMapping;
+  if (categoryMappingPromise) return categoryMappingPromise;
 
-  try {
-    const response = await fetch('/config/categories.json');
-    const config = await response.json();
-    categoryMapping = config.categoryMapping;
-    return categoryMapping;
-  } catch (error) {
-    console.error('無法載入分類設定，使用預設值', error);
-    categoryMapping = DEFAULT_CATEGORY_MAPPING;
-    return categoryMapping;
-  }
+  categoryMappingPromise = (async () => {
+    try {
+      const response = await fetch('/config/categories.json');
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const config = await response.json();
+      categoryMapping = config.categoryMapping;
+      return categoryMapping;
+    } catch (error) {
+      console.error('無法載入分類設定，使用預設值', error);
+      categoryMapping = DEFAULT_CATEGORY_MAPPING;
+      return categoryMapping;
+    } finally {
+      categoryMappingPromise = null;
+    }
+  })();
+
+  return categoryMappingPromise;
 }
 
 const ThemeManager = {
