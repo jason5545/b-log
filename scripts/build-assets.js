@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const terser = require('terser');
+const esbuild = require('esbuild');
 const CleanCSS = require('clean-css');
 
 const ROOT_DIR = path.join(__dirname, '..');
@@ -19,23 +19,18 @@ function resolvePath(relativePath) {
 async function minifyJs(inputRelativePath, outputRelativePath) {
   const inputPath = resolvePath(inputRelativePath);
   const outputPath = resolvePath(outputRelativePath);
-  const source = fs.readFileSync(inputPath, 'utf8');
-  const result = await terser.minify(source, {
-    module: true,
-    compress: {
-      passes: 2,
-    },
-    mangle: true,
-    format: {
-      comments: false,
-    },
+  await esbuild.build({
+    entryPoints: [inputPath],
+    outfile: outputPath,
+    bundle: true,
+    format: 'esm',
+    minify: true,
+    platform: 'browser',
+    target: ['es2020'],
+    charset: 'utf8',
+    legalComments: 'none',
+    logLevel: 'silent',
   });
-
-  if (!result.code) {
-    throw new Error(`無法壓縮 ${inputRelativePath}`);
-  }
-
-  fs.writeFileSync(outputPath, `${result.code}\n`, 'utf8');
   console.log(`✅ 已同步 ${outputRelativePath}`);
 }
 

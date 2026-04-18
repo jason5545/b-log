@@ -10,6 +10,6 @@
   },
   "devDependencies": {
     "clean-css": "^5.3.3",
-    "terser": "^5.39.2"
+    "esbuild": "^0.25.11"
   }
 }
