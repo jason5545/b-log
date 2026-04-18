@@ -2,7 +2,7 @@
 
 <div class="crossing-field-intro">
   <p class="crossing-field-intro__eyebrow">Crossing Field / Memory Dispatch</p>
-  <p class="crossing-field-intro__lead">大概 12 年前，我曾在一個英文網站讀過這篇翻譯。最近回頭想找，卻怎麼都找不到了。也許是網站沒再續，也許只是就這樣安靜地消失了。那種「明明存在過，現在卻不見了」的感覺一直卡在我心裡。所以現在，既然終於能靠 AI 幫忙自己處理翻譯，我想把它重新補回來，慢慢放進 <strong>Crossing Field</strong> 裡。</p>
+  <p class="crossing-field-intro__lead">大概 12 年前，我曾在一個英文網站讀過這篇翻譯。最近回頭想找，卻怎麼都找不到了。也許是網站沒再續，也許只是就這樣安靜地消失了。那種「明明存在過，現在卻不見了」的感覺一直卡在我心裡。所以現在，既然終於能靠 AI 幫忙自己處理翻譯，我想把它重新補回來，慢慢放進 <strong>Crossing Field</strong> 裡。對我自己來說，這也算是替 LiSA 出道 15 週年留下一個小小的紀念。</p>
   <p class="crossing-field-intro__meta">關鍵詞：LiSA、岐阜、母女對談、成長記憶、翻譯報導</p>
 </div>
 
