@@ -1512,9 +1512,10 @@ a:focus {
 
 .article-body .cf-answer--speaker-start::before {
   content: attr(data-speaker);
-  display: inline-flex;
+  display: flex;
   align-items: center;
   margin: 0 0 0.7rem;
+  width: fit-content;
   padding: 0.16rem 0.6rem;
   border-radius: 999px;
   background: rgba(244, 114, 182, 0.14);
