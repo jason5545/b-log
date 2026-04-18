@@ -95,7 +95,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add data/posts.json feed.json sitemap.xml */*/index.html
+          git add index.html data/posts.json feed.json sitemap.xml */*/index.html
           git commit -m "chore: sync content artifacts
 
           - regenerate static article routes

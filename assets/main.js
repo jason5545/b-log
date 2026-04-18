@@ -2488,6 +2488,24 @@ function formatDate(date) {
 function applyAccentBackground(element, post) {
   if (!element) return;
 
+  if (post.coverImage) {
+    const existingImage = element.querySelector('.article-hero__image');
+    const resolvedCoverImage = new URL(post.coverImage, window.location.origin).href;
+    if (
+      existingImage &&
+      (
+        existingImage.getAttribute('src') === post.coverImage ||
+        existingImage.currentSrc === resolvedCoverImage
+      )
+    ) {
+      element.classList.add('article-hero--image');
+      element.style.backgroundImage = '';
+      element.style.backgroundSize = '';
+      element.style.backgroundPosition = '';
+      return;
+    }
+  }
+
   element.replaceChildren();
   element.classList.remove('article-hero--image');
   element.style.backgroundSize = '';

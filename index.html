@@ -94,6 +94,11 @@
     }
   </style>
 
+  <!-- 首頁 featured preload 會由生成腳本注入到這裡 -->
+  <!-- HOME_FEATURED_PRELOAD_START -->
+  <link rel="preload" as="image" href="/content/img/2026/lisa-gifu-memory-cover.webp" fetchpriority="high">
+<!-- HOME_FEATURED_PRELOAD_END -->
+
   <!-- 完整樣式表 -->
   <link rel="stylesheet" href="assets/styles.min.css">
 </head>
@@ -198,21 +203,23 @@
         </a>
       </section>
 
-      <section id="featured" class="hero-card" hidden>
-        <div class="hero-card__media" id="hero-media"></div>
+      <!-- HOME_FEATURED_START -->
+      <section id="featured" class="hero-card" data-category-theme="crossing-field" data-featured-slug="lisa-gifu-memory-journey-mother-interview" data-featured-cover="/content/img/2026/lisa-gifu-memory-cover.webp">
+        <div class="hero-card__media article-hero--image" id="hero-media" data-category-theme="crossing-field"><img class="article-hero__image" src="/content/img/2026/lisa-gifu-memory-cover.webp" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
         <div class="hero-card__body">
-          <p class="hero-card__category" id="hero-category"></p>
+          <p class="hero-card__category" id="hero-category" style="color: #f472b6; border-color: rgba(244, 114, 182, 0.3); background: rgba(244, 114, 182, 0.1);">Crossing Field</p>
           <h2 class="hero-card__title">
-            <a id="hero-link" href="#"></a>
+            <a id="hero-link" href="/crossing-field/lisa-gifu-memory-journey-mother-interview/">《今日もいい日だ。》LiSA 岐阜記憶之旅</a>
           </h2>
-          <p class="hero-card__meta" id="hero-meta"></p>
-          <p class="hero-card__summary" id="hero-summary"></p>
+          <p class="hero-card__meta" id="hero-meta">By Jason Chien | Published Apr 17, 2026 | Updated Apr 18, 2026 | 25 min</p>
+          <p class="hero-card__summary" id="hero-summary">大約 12 年前，我曾在一個英文網站讀過這篇 LiSA 岐阜訪談的翻譯。如今那個網站已經找不到了，可能連網域都沒再續。這篇文章，是我把那段曾經存在、後來消失的內容重新補回來的嘗試；對我自己來說，它也算是替 LiSA 出道 15 週年留下一個紀念。</p>
           <div class="hero-card__actions">
-            <a id="hero-read-more" class="button button--primary" href="#">Continue reading</a>
-            <a id="hero-open-discussion" class="button button--ghost" href="#comments">Discuss</a>
+            <a id="hero-read-more" class="button button--primary" href="/crossing-field/lisa-gifu-memory-journey-mother-interview/">Continue reading</a>
+            <a id="hero-open-discussion" class="button button--ghost" href="/crossing-field/lisa-gifu-memory-journey-mother-interview/#comments">Discuss</a>
           </div>
         </div>
       </section>
+<!-- HOME_FEATURED_END -->
 
       <div class="content-grid">
         <section id="posts" class="post-stream" aria-live="polite">

@@ -4,6 +4,11 @@ const path = require('path');
 const ROOT_DIR = path.join(__dirname, '..');
 const POSTS_PATH = path.join(ROOT_DIR, 'data/posts.json');
 const TEMPLATE_PATH = path.join(ROOT_DIR, 'post.html');
+const HOMEPAGE_PATH = path.join(ROOT_DIR, 'index.html');
+const HOME_FEATURED_PRELOAD_START = '<!-- HOME_FEATURED_PRELOAD_START -->';
+const HOME_FEATURED_PRELOAD_END = '<!-- HOME_FEATURED_PRELOAD_END -->';
+const HOME_FEATURED_START = '<!-- HOME_FEATURED_START -->';
+const HOME_FEATURED_END = '<!-- HOME_FEATURED_END -->';
 
 // 從集中式設定檔載入分類映射
 const categoriesConfigPath = path.join(ROOT_DIR, 'config/categories.json');
@@ -40,6 +45,209 @@ function buildHeroMarkup(post) {
   const safeTitle = escapeHtml(post.title || post.slug || '');
   const safeCoverImage = escapeHtml(post.coverImage);
   return `<div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="${safeCoverImage}" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>`;
+}
+
+function escapeRegExp(value = '') {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function replaceMarkedBlock(html, startMarker, endMarker, replacement = '') {
+  const pattern = new RegExp(`${escapeRegExp(startMarker)}[\\s\\S]*?${escapeRegExp(endMarker)}`);
+  if (!pattern.test(html)) {
+    throw new Error(`找不到首頁 marker：${startMarker}`);
+  }
+
+  const block = replacement ? `${startMarker}\n${replacement}\n${endMarker}` : `${startMarker}\n${endMarker}`;
+  return html.replace(pattern, block);
+}
+
+function parseDate(value) {
+  if (!value) return null;
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatStaticDate(value) {
+  const date = parseDate(value);
+  if (!date) return '';
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(date);
+}
+
+function formatStaticMetaParts(post) {
+  const parts = [];
+  if (post.author) {
+    parts.push(`By ${post.author}`);
+  }
+
+  const publishedDate = formatStaticDate(post.publishedAt);
+  if (publishedDate) {
+    parts.push(`Published ${publishedDate}`);
+  }
+
+  const updatedDate = formatStaticDate(post.updatedAt || post.publishedAt);
+  if (updatedDate && updatedDate !== publishedDate) {
+    parts.push(`Updated ${updatedDate}`);
+  }
+
+  if (post.readingTime) {
+    parts.push(post.readingTime);
+  }
+
+  return parts;
+}
+
+function hexToRgb(hex) {
+  if (typeof hex !== 'string') return null;
+  let normalized = hex.trim().replace('#', '');
+  if (![3, 6].includes(normalized.length)) return null;
+  if (normalized.length === 3) {
+    normalized = normalized.split('').map((char) => char + char).join('');
+  }
+
+  const value = Number.parseInt(normalized, 16);
+  if (Number.isNaN(value)) return null;
+
+  return {
+    r: (value >> 16) & 255,
+    g: (value >> 8) & 255,
+    b: value & 255,
+  };
+}
+
+function rgbToHex({ r, g, b }) {
+  const toHex = (value) => value.toString(16).padStart(2, '0');
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function shadeColor(hex, percent) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
+
+  const factor = (100 + percent) / 100;
+  return rgbToHex({
+    r: clamp(Math.round(rgb.r * factor), 0, 255),
+    g: clamp(Math.round(rgb.g * factor), 0, 255),
+    b: clamp(Math.round(rgb.b * factor), 0, 255),
+  });
+}
+
+function slugToPath(slug, category) {
+  const categorySlug = categoryMapping[category] || 'uncategorized';
+  return `/${categorySlug}/${slug}/`;
+}
+
+function buildAudioIndicatorMarkup(isHero = false) {
+  const className = isHero ? 'audio-indicator audio-indicator--hero' : 'audio-indicator';
+  return `<span class="${className}" aria-label="有語音版" title="此文章有語音版"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/></svg></span>`;
+}
+
+function buildHeroCategoryStyle(post) {
+  const accent = post.accentColor || '#556bff';
+  const rgb = hexToRgb(accent);
+  if (!rgb) {
+    return '';
+  }
+
+  return ` style="color: ${accent}; border-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3); background: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1);"`;
+}
+
+function buildHomepageHeroMedia(post, categoryThemeAttr) {
+  if (post.coverImage) {
+    const safeCoverImage = escapeHtml(post.coverImage);
+    return `        <div class="hero-card__media article-hero--image" id="hero-media"${categoryThemeAttr}><img class="article-hero__image" src="${safeCoverImage}" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>`;
+  }
+
+  const accent = post.accentColor || '#556bff';
+  const gradient = `linear-gradient(135deg, ${shadeColor(accent, -15)} 0%, ${accent} 50%, ${shadeColor(accent, 25)} 100%)`;
+  return `        <div class="hero-card__media" id="hero-media"${categoryThemeAttr} style="background-image: ${gradient};"></div>`;
+}
+
+function buildHomepageFeaturedSection(post) {
+  if (!post) {
+    return `      <section id="featured" class="hero-card" hidden data-featured-slug="" data-featured-cover="">
+        <div class="hero-card__media" id="hero-media"></div>
+        <div class="hero-card__body">
+          <p class="hero-card__category" id="hero-category"></p>
+          <h2 class="hero-card__title">
+            <a id="hero-link" href="#"></a>
+          </h2>
+          <p class="hero-card__meta" id="hero-meta"></p>
+          <p class="hero-card__summary" id="hero-summary"></p>
+          <div class="hero-card__actions">
+            <a id="hero-read-more" class="button button--primary" href="#">Continue reading</a>
+            <a id="hero-open-discussion" class="button button--ghost" href="#comments">Discuss</a>
+          </div>
+        </div>
+      </section>`;
+  }
+
+  const categoryTheme = categoryMapping[post.category] || '';
+  const categoryThemeAttr = categoryTheme ? ` data-category-theme="${escapeHtml(categoryTheme)}"` : '';
+  const safeSlug = escapeHtml(post.slug || '');
+  const safeCoverImage = escapeHtml(post.coverImage || '');
+  const safeCategory = escapeHtml(post.category || 'Dispatch');
+  const safeTitle = escapeHtml(post.title || post.slug || 'Untitled');
+  const safeSummary = escapeHtml(post.summary || '');
+  const safeMeta = escapeHtml(formatStaticMetaParts(post).join(' | '));
+  const safePath = escapeHtml(slugToPath(post.slug, post.category));
+  const safeDiscussPath = escapeHtml(`${slugToPath(post.slug, post.category)}#comments`);
+  const categoryStyle = buildHeroCategoryStyle(post);
+  const audioIndicator = post.hasAudio ? buildAudioIndicatorMarkup(true) : '';
+
+  return `      <section id="featured" class="hero-card"${categoryThemeAttr} data-featured-slug="${safeSlug}" data-featured-cover="${safeCoverImage}">
+${buildHomepageHeroMedia(post, categoryThemeAttr)}
+        <div class="hero-card__body">
+          <p class="hero-card__category" id="hero-category"${categoryStyle}>${safeCategory}</p>
+          <h2 class="hero-card__title">
+            <a id="hero-link" href="${safePath}">${safeTitle}</a>${audioIndicator}
+          </h2>
+          <p class="hero-card__meta" id="hero-meta">${safeMeta}</p>
+          <p class="hero-card__summary" id="hero-summary">${safeSummary}</p>
+          <div class="hero-card__actions">
+            <a id="hero-read-more" class="button button--primary" href="${safePath}">Continue reading</a>
+            <a id="hero-open-discussion" class="button button--ghost" href="${safeDiscussPath}">Discuss</a>
+          </div>
+        </div>
+      </section>`;
+}
+
+function syncHomepage(posts) {
+  const sortedPosts = [...posts].sort((a, b) => {
+    const timeA = parseDate(a.publishedAt)?.getTime() || 0;
+    const timeB = parseDate(b.publishedAt)?.getTime() || 0;
+    return timeB - timeA;
+  });
+  const featuredPost = sortedPosts[0] || null;
+  const homepageTemplate = fs.readFileSync(HOMEPAGE_PATH, 'utf8');
+
+  let updatedHomepage = replaceMarkedBlock(
+    homepageTemplate,
+    HOME_FEATURED_PRELOAD_START,
+    HOME_FEATURED_PRELOAD_END,
+    buildHeroPreload(featuredPost?.coverImage || '').trimEnd()
+  );
+
+  updatedHomepage = replaceMarkedBlock(
+    updatedHomepage,
+    HOME_FEATURED_START,
+    HOME_FEATURED_END,
+    buildHomepageFeaturedSection(featuredPost)
+  );
+
+  if (updatedHomepage !== homepageTemplate) {
+    fs.writeFileSync(HOMEPAGE_PATH, updatedHomepage, 'utf8');
+    console.log('🏠 已同步首頁 featured 區塊');
+  } else {
+    console.log('🏠 首頁 featured 區塊已是最新');
+  }
 }
 
 function removeEmptyDirsUpward(startDir, stopDir) {
@@ -199,6 +407,7 @@ function generateRedirects() {
   console.log('開始生成 WordPress 風格文章頁面...\n');
 
   const posts = JSON.parse(fs.readFileSync(POSTS_PATH, 'utf8'));
+  syncHomepage(posts);
 
   let createdCount = 0;
   let redirectCount = 0;
