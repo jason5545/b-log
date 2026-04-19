@@ -1,5 +1,26 @@
 [
   {
+    "slug": "ai-model-degradation-translation-steering",
+    "title": "當 AI 不再幫你腦補：從一篇 LiSA 翻譯看模型退化的真實影響",
+    "summary": "我用 AI 完成了一篇 LiSA 母女對談的完整翻譯，但隨著 Opus 4.7 和 GPT-5 走向同一條「字面聽話」的路線，我開始思考：翻譯工作流的核心到底是 AI 的能力，還是人類的 steering？",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-19T00:00:00Z",
+    "tags": [
+      "AI 翻譯",
+      "Opus 4.7",
+      "GPT-5",
+      "Prompt Engineering",
+      "模型退化",
+      "Steering",
+      "本地模型",
+      "Claude",
+      "翻譯工作流"
+    ],
+    "accentColor": "#6366f1",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "lisa-gifu-memory-journey-mother-interview",
     "title": "《今日もいい日だ。》LiSA 岐阜記憶之旅",
     "summary": "大約 12 年前，我曾在一個英文網站讀過這篇 LiSA 岐阜訪談的翻譯。如今那個網站已經找不到了，可能連網域都沒再續。這篇文章，是我把那段曾經存在、後來消失的內容重新補回來的嘗試；對我自己來說，它也算是替 LiSA 出道 15 週年留下一個紀念。",
