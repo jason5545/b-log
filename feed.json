@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "cloud-ai-promise-expiration-date",
+      "url": "https://b-log.to/business-insights/cloud-ai-promise-expiration-date/",
+      "title": "雲端 AI 的承諾有保存期限",
+      "content_text": "從 claude.ai 到 GitHub Copilot，雲端 AI 服務的條款說變就變。這不是哪家公司特別惡意，而是訂閱制商業模式的內建邏輯。",
+      "date_published": "2026-04-21T00:00:00.000Z",
+      "date_modified": "2026-04-21T00:00:00.000Z",
+      "tags": [
+        "GitHub Copilot",
+        "Anthropic",
+        "Claude",
+        "訂閱制",
+        "本地模型",
+        "商業觀察",
+        "AI 工具",
+        "agentic"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "ai-model-degradation-translation-steering",
       "url": "https://b-log.to/ai-analysis/ai-model-degradation-translation-steering/",
       "title": "當 AI 不再幫你腦補：從一篇 LiSA 翻譯看模型退化的真實影響",
