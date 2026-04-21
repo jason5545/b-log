@@ -1,5 +1,24 @@
 [
   {
+    "slug": "cloud-ai-promise-expiration-date",
+    "title": "雲端 AI 的承諾有保存期限",
+    "summary": "從 claude.ai 到 GitHub Copilot，雲端 AI 服務的條款說變就變。這不是哪家公司特別惡意，而是訂閱制商業模式的內建邏輯。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-21T00:00:00Z",
+    "tags": [
+      "GitHub Copilot",
+      "Anthropic",
+      "Claude",
+      "訂閱制",
+      "本地模型",
+      "商業觀察",
+      "AI 工具",
+      "agentic"
+    ],
+    "readingTime": "5 min"
+  },
+  {
     "slug": "ai-model-degradation-translation-steering",
     "title": "當 AI 不再幫你腦補：從一篇 LiSA 翻譯看模型退化的真實影響",
     "summary": "我用 AI 完成了一篇 LiSA 母女對談的完整翻譯，但隨著 Opus 4.7 和 GPT-5 走向同一條「字面聽話」的路線，我開始思考：翻譯工作流的核心到底是 AI 的能力，還是人類的 steering？",
