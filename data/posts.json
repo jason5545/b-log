@@ -1,5 +1,25 @@
 [
   {
+    "slug": "lisa-confirmation-to-imprint",
+    "title": "不要忘記我——從確認到印記，一個十五年的重量",
+    "summary": "家人一直問我為什麼十幾年還是那麼喜歡。以前我說不清楚，現在我知道了——那不是喜歡，是印記。而印記這件事，不需要理由，就像呼吸一樣。",
+    "category": "シルシ",
+    "author": "Jason Chien",
+    "publishedAt": "2026-04-21T00:00:00Z",
+    "tags": [
+      "LiSA",
+      "LACE UP",
+      "patch walk",
+      "演唱會",
+      "確認",
+      "印記",
+      "音樂",
+      "存在"
+    ],
+    "accentColor": "#4a6b8a",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "cloud-ai-promise-expiration-date",
     "title": "雲端 AI 的承諾有保存期限",
     "summary": "從 claude.ai 到 GitHub Copilot，雲端 AI 服務的條款說變就變。這不是哪家公司特別惡意，而是訂閱制商業模式的內建邏輯。",
