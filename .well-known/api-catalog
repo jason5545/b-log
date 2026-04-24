@@ -1,0 +1,28 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://b-log.to/",
+      "service-desc": [
+        {
+          "href": "https://b-log.to/.well-known/openapi.json",
+          "type": "application/vnd.oai.openapi+json",
+          "title": "b-log public content API description"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://b-log.to/docs/agent-api.md",
+          "type": "text/markdown",
+          "title": "b-log agent API documentation"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://b-log.to/.well-known/status.json",
+          "type": "application/json",
+          "title": "b-log static site status"
+        }
+      ]
+    }
+  ]
+}

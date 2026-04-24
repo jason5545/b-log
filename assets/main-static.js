@@ -3,6 +3,7 @@ import {
   createRandomPostHandler,
   createThemeManager,
   initSearchUI,
+  initWebMcpTools,
 } from './shared-ui.js';
 
 const categoryMappingStore = createCategoryMappingStore();
@@ -26,6 +27,7 @@ window.goToRandomPost = goToRandomPost;
 document.addEventListener('DOMContentLoaded', () => {
   ThemeManager.init();
   initSearchUI({ onSearch: redirectToHomeWithSearch });
+  initWebMcpTools({ loadCategoryMapping });
   loadCategoryMapping().catch((error) => {
     console.warn('[init] failed to load category mapping', error);
   });

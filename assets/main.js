@@ -4,6 +4,7 @@ import {
   createRandomPostHandler,
   createThemeManager,
   initSearchUI,
+  initWebMcpTools,
 } from './shared-ui.js';
 
 const POSTS_ROOT = '/content/posts/';
@@ -1096,6 +1097,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   AudioPlayerManager.init();
   // 初始化搜尋功能（所有頁面）
   initSearch();
+  // 讓支援 WebMCP 的瀏覽器代理可直接讀取公開內容。
+  initWebMcpTools({ loadCategoryMapping });
   const categoryMappingReady = loadCategoryMapping().catch((error) => {
     console.warn('[init] failed to load category mapping', error);
     return getCategoryMapping();

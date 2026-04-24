@@ -1,6 +1,7 @@
 # robots.txt for b-log.to
 User-agent: *
 Allow: /
+Content-Signal: ai-train=no, search=yes, ai-input=yes
 
 # 主要内容页面
 Allow: /*/

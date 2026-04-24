@@ -1,0 +1,199 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "b-log public content API",
+    "version": "1.0.0",
+    "description": "Static, unauthenticated content endpoints for agents and feed readers."
+  },
+  "servers": [
+    {
+      "url": "https://b-log.to"
+    }
+  ],
+  "paths": {
+    "/data/posts.json": {
+      "get": {
+        "summary": "List all posts",
+        "description": "Returns the public post catalog used by the site.",
+        "operationId": "listPosts",
+        "responses": {
+          "200": {
+            "description": "Post metadata catalog",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/content/posts/{slug}.md": {
+      "get": {
+        "summary": "Get post markdown",
+        "description": "Returns the source Markdown for a public post.",
+        "operationId": "getPostMarkdown",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Markdown source",
+            "content": {
+              "text/markdown": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Post not found"
+          }
+        }
+      }
+    },
+    "/feed.json": {
+      "get": {
+        "summary": "Read JSON Feed",
+        "operationId": "getJsonFeed",
+        "responses": {
+          "200": {
+            "description": "JSON Feed 1.1 document",
+            "content": {
+              "application/feed+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/config/categories.json": {
+      "get": {
+        "summary": "Read category mapping",
+        "operationId": "getCategories",
+        "responses": {
+          "200": {
+            "description": "Category label to URL slug mapping",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sitemap.xml": {
+      "get": {
+        "summary": "Read sitemap",
+        "operationId": "getSitemap",
+        "responses": {
+          "200": {
+            "description": "Sitemap XML",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/status.json": {
+      "get": {
+        "summary": "Static site status",
+        "operationId": "getStatus",
+        "responses": {
+          "200": {
+            "description": "Static status document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Post": {
+        "type": "object",
+        "required": ["slug", "title", "summary", "category", "author", "publishedAt", "tags"],
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "readingTime": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "accentColor": {
+            "type": "string"
+          },
+          "coverImage": {
+            "type": "string"
+          },
+          "hasAudio": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

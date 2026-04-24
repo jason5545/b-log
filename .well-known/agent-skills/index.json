@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "read-b-log",
+      "type": "skill-md",
+      "description": "Discover, search, summarize, and link to public b-log posts using the site's static JSON catalog and Markdown sources.",
+      "url": "https://b-log.to/.well-known/agent-skills/read-b-log/SKILL.md",
+      "digest": "sha256:a65505ae89c8e6d8226ed5938da6fda756b680db146e210ec3ce961cb28e3f82"
+    }
+  ]
+}
