@@ -5,7 +5,7 @@
 
 當時的過渡方案是 GitHub Copilot Pro+，透過它存取 Claude Opus。這個方案在邏輯上是合理的——換一個中間層，但模型本身沒變。
 
-昨天（4/20）GitHub 官方宣布：Opus 從 Pro 完全移除，Pro+ 僅保留 Opus 4.7，舊版本全數退場。同一天，Pro、Pro+、Student 三個方案全面暫停新用戶註冊——理由是要優先保障現有付費使用者的服務品質。
+昨天（4/20）GitHub 官方宣布：Opus 從 Pro 完全移除，Pro+ 僅保留 Opus 4.7，舊版本全數退場。同一天，Pro、Pro+、Student 三個方案全面暫停新使用者註冊——理由是要優先保障現有付費使用者的服務品質。
 
 這個決定有其商業邏輯。洩漏的內部文件顯示，Copilot 每週的運營成本從今年年初到現在已經翻倍。GitHub 副總裁 Joe Binder 在公告裡的措辭相當直白：「長時間運行的平行 agentic 工作流，所消耗的資源遠超過原本方案結構的設計上限。」換句話說，有些使用者單一請求的成本已經超過他們整個月的訂閱費。Microsoft 內部也已在規劃長期轉向按 token 計費的機制。
 
@@ -20,7 +20,7 @@
 從 claude.ai 到 GitHub Copilot，這半年來我親歷的劇本如出一轍：
 
 - Anthropic：prompt cache bug 兩週不修、system prompt 差別計費、使用規範模糊化
-- GitHub：免費試用暫停、Opus 移除、新用戶註冊關閉、按 token 計費浮上檯面
+- GitHub：免費試用暫停、Opus 移除、新使用者註冊關閉、按 token 計費浮上檯面
 
 不同公司，相同邏輯。
 
