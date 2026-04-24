@@ -85,7 +85,7 @@ function main() {
       let itemChanged = false;
 
       // 比較並更新關鍵欄位
-      const keysToCheck = ['url', 'title', 'content_text', 'image', 'tags', 'date_modified'];
+      const keysToCheck = ['url', 'title', 'content_text', 'image', 'tags', 'date_published', 'date_modified'];
       
       keysToCheck.forEach(key => {
         // 簡單比較，如果是物件/陣列則轉字串比較

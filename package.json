@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "build:assets": "node scripts/build-assets.js",
-    "fetch:fonts": "node scripts/fetch-fonts.mjs"
+    "fetch:fonts": "node scripts/fetch-fonts.mjs",
+    "validate": "node scripts/validate-content.js"
   },
   "dependencies": {
     "sharp": "^0.34.4"

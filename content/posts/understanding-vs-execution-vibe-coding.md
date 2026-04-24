@@ -1,4 +1,4 @@
-﻿# 理解與執行的分離:從 Vibe Coding 談起
+# 理解與執行的分離:從 Vibe Coding 談起
 
 <!-- audio: Vibe_Coding與AI時代的程式設計：當「理解」與「執行」分離，誰才是真正的開發者？.m4a -->
 

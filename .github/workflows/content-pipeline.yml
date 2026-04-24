@@ -21,6 +21,7 @@ on:
       - 'scripts/generate-redirects.js'
       - 'scripts/generate-sitemap.js'
       - 'scripts/sync-feed.js'
+      - 'scripts/validate-content.js'
   pull_request:
     branches:
       - main
@@ -41,6 +42,7 @@ on:
       - 'scripts/generate-redirects.js'
       - 'scripts/generate-sitemap.js'
       - 'scripts/sync-feed.js'
+      - 'scripts/validate-content.js'
   workflow_dispatch:
 
 jobs:
@@ -96,6 +98,9 @@ jobs:
 
       - name: 同步 Feed
         run: node scripts/sync-feed.js
+
+      - name: 驗證內容一致性
+        run: npm run validate
 
       - name: 檢查變更
         id: check_changes

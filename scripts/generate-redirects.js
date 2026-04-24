@@ -450,20 +450,9 @@ function generateRedirectHTML(newCategorySlug, slug) {
 </html>`;
 }
 
-// 主要函數
-function generateRedirects() {
-  console.log('開始生成 WordPress 風格文章頁面...\n');
-
-  const posts = JSON.parse(fs.readFileSync(POSTS_PATH, 'utf8'));
-  syncHomepage(posts);
-
-  let createdCount = 0;
-  let redirectCount = 0;
-  let skippedCount = 0;
-  let orphanRemovedCount = 0;
-  let staleConvertedCount = 0;
-
+function buildCurrentRouteMap(posts) {
   const slugToCurrentCategory = new Map();
+  let skippedCount = 0;
 
   for (const post of posts) {
     const { slug, title, category } = post;
@@ -482,7 +471,16 @@ function generateRedirects() {
     slugToCurrentCategory.set(slug, categorySlug);
   }
 
-  // 1) 先生成每篇文章當前分類下的完整靜態頁面
+  return {
+    skippedCount,
+    slugToCurrentCategory,
+  };
+}
+
+function writeCurrentPostPages(posts) {
+  let createdCount = 0;
+  let redirectCount = 0;
+
   for (const post of posts) {
     const { slug, title, category } = post;
     const categorySlug = categoryMapping[category];
@@ -518,9 +516,15 @@ function generateRedirects() {
     }
   }
 
-  // 2) 掃描既有分類目錄：
-  //    - slug 不存在於 posts.json -> 刪除
-  //    - slug 存在但分類已變更 -> 自動改寫為重定向頁
+  return {
+    createdCount,
+    redirectCount,
+  };
+}
+
+function reconcileGeneratedRoutes(slugToCurrentCategory) {
+  let orphanRemovedCount = 0;
+  let staleConvertedCount = 0;
   const existingIndexFiles = listGeneratedIndexFiles();
 
   for (const fileInfo of existingIndexFiles) {
@@ -551,6 +555,19 @@ function generateRedirects() {
     }
   }
 
+  return {
+    orphanRemovedCount,
+    staleConvertedCount,
+  };
+}
+
+function printSyncSummary({
+  createdCount,
+  redirectCount,
+  skippedCount,
+  orphanRemovedCount,
+  staleConvertedCount,
+}) {
   console.log(`\n完成！共建立 ${createdCount} 個文章頁面`);
   if (redirectCount > 0) {
     console.log(`🔀 額外建立 ${redirectCount} 個顯式重定向頁面`);
@@ -566,9 +583,26 @@ function generateRedirects() {
   }
 }
 
+function syncGeneratedContent() {
+  console.log('開始同步內容產物與 WordPress 風格文章頁面...\n');
+
+  const posts = JSON.parse(fs.readFileSync(POSTS_PATH, 'utf8'));
+  syncHomepage(posts);
+
+  const routeState = buildCurrentRouteMap(posts);
+  const writeSummary = writeCurrentPostPages(posts);
+  const reconcileSummary = reconcileGeneratedRoutes(routeState.slugToCurrentCategory);
+
+  printSyncSummary({
+    ...routeState,
+    ...writeSummary,
+    ...reconcileSummary,
+  });
+}
+
 // 執行腳本
 try {
-  generateRedirects();
+  syncGeneratedContent();
 } catch (error) {
   console.error('❌ 錯誤：', error.message);
   process.exit(1);

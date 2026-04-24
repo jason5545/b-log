@@ -1536,7 +1536,7 @@
       "url": "https://b-log.to/tech-analysis/typeless-privacy-audit/",
       "title": "我對 Typeless v1.0.0 進行了完整逆向分析——身為重度語音輸入使用者，這是我的發現",
       "content_text": "身為付費訂閱的重度語音輸入使用者，我對 Typeless v1.0.0 進行了完整逆向分析。發現螢幕文字擷取、瀏覽器 URL 追蹤、全域鍵盤監控、100% 雲端處理等問題。一個語音輸入工具，不該需要知道你螢幕上的一切。",
-      "date_published": "2026-02-13T00:00:00Z",
+      "date_published": "2026-02-13T00:00:00.000Z",
       "date_modified": "2026-02-13T00:00:00.000Z",
       "tags": [
         "Typeless",
@@ -1558,7 +1558,7 @@
       "url": "https://b-log.to/life-stories/thought-i-was-cold/",
       "title": "我以為我已經冷了",
       "content_text": "做了一個被溫柔對待的夢，醒來才發現自己根本沒有冷。三十一年來把「沒機會」包裝成「不需要」，一個夢就把蓋子掀開了。承認自己還活著、還有渴望，可能是今年做過最誠實的事。",
-      "date_published": "2026-02-13T00:00:00Z",
+      "date_published": "2026-02-13T00:00:00.000Z",
       "date_modified": "2026-02-13T00:00:00.000Z",
       "tags": [
         "身心障礙",
@@ -1576,7 +1576,7 @@
       "url": "https://b-log.to/cultural-insights/wheelchair-ticket-collection/",
       "title": "你的收藏品，是我唯一能進場的方式",
       "content_text": "有人連續四次抽到 LiSA 演唱會的輪椅席，明知自己不會去，還是把票領出來放進收藏匣。對坐輪椅的人來說，輪椅席沒有 plan B，搶不到就是不能去。這種行為傷害的不只是一場演唱會，是整個身障社群跟主辦單位之間好不容易建立的信任。",
-      "date_published": "2026-02-10T00:00:00Z",
+      "date_published": "2026-02-10T00:00:00.000Z",
       "date_modified": "2026-02-10T00:00:00.000Z",
       "tags": [
         "LiSA",
@@ -1617,7 +1617,7 @@
       "url": "https://b-log.to/tech-analysis/macos-add-to-sidebar-missing/",
       "title": "macOS 沒有「加入側邊欄」的右鍵選項，然後公司資料夾就被我移走了",
       "content_text": "對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對手部動作受限的人來說，拖曳公司雲端資料夾是高風險操作。公司專案資料夾真的被移走了，Box 網頁版還移不回來，最後靠 Finder 拖回去才解決。之後我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。",
-      "date_published": "2026-02-06T00:00:00Z",
+      "date_published": "2026-02-06T00:00:00.000Z",
       "date_modified": "2026-02-06T00:00:00.000Z",
       "tags": [
         "macOS",
@@ -1638,7 +1638,7 @@
       "url": "https://b-log.to/cultural-insights/concert-tickets-can-be-unsold/",
       "title": "原來演唱會的票，是可以賣不完的",
       "content_text": "追星追了十年，今天才第一次知道原來有的歌手場地只有 500 人，票還是賣不完。從 LiSA 的小巨蛋、nagi 的 Zepp 抽選，到某位歌手的角落文創賣不完，同樣都唱過知名動畫主題曲，差距可以大到這種程度。「唱過知名作品」跟「被觀眾記住」是兩回事，努力是基本門檻，不是保證。",
-      "date_published": "2026-02-05T12:00:00Z",
+      "date_published": "2026-02-05T12:00:00.000Z",
       "date_modified": "2026-02-05T12:00:00.000Z",
       "tags": [
         "LiSA",
@@ -1659,7 +1659,7 @@
       "url": "https://b-log.to/ai-analysis/ai-value-chain-reshuffle-2026/",
       "title": "AI 價值鏈大洗牌：從四件事看懂 2026 年開局的產業地震",
       "content_text": "2026 年開局四顆震撼彈：軟體股血洗蒸發 3,000 億美元、Anthropic 百億美元押注 TPU、NVIDIA 200 億買下 Groq、記憶體成為 AI 命門。乍看四條獨立新聞，串起來卻是同一個故事——AI 價值鏈正在重新洗牌，從建設期進入應用期，上一輪的贏家不一定是下一輪的贏家。",
-      "date_published": "2026-02-05T00:00:00Z",
+      "date_published": "2026-02-05T00:00:00.000Z",
       "date_modified": "2026-02-05T00:00:00.000Z",
       "tags": [
         "AI",
@@ -1682,7 +1682,7 @@
       "url": "https://b-log.to/shirushi/lisa-15th-anniversary-taipei-2026/",
       "title": "15週年，我們都還在",
       "content_text": "LiSA 15 週年亞洲巡迴台北見面會。後援會接機沒接到，但老朋友都還在。第一次在台灣遇到見送會這種形式。從 2015 年華山 Legacy 追到現在快十年，六月小巨蛋的約定終於要兌現了。",
-      "date_published": "2026-01-31T00:00:00Z",
+      "date_published": "2026-01-31T00:00:00.000Z",
       "date_modified": "2026-01-31T00:00:00.000Z",
       "tags": [
         "LiSA",
@@ -1703,7 +1703,7 @@
       "url": "https://b-log.to/tech-development/touchpal/",
       "title": "反編譯 Scroll2 之後，我用 Apple 的私有框架寫了 TrackPal",
       "content_text": "macOS 觸控板號稱業界標杆，但沒有邊緣捲動。花十美元買了 Scroll2，反編譯後發現水平捲動根本不存在。用 Apple 的私有框架 MultitouchSupport.framework 自己寫了 TrackPal，還加上貝葉斯意圖預測讓系統學會判斷你是真的想捲動。",
-      "date_published": "2026-01-28T00:00:00Z",
+      "date_published": "2026-01-28T00:00:00.000Z",
       "date_modified": "2026-01-28T00:00:00.000Z",
       "tags": [
         "macOS",
@@ -1727,7 +1727,7 @@
       "url": "https://b-log.to/tech-analysis/fnos-repair-after-hack/",
       "title": "被駭客入侵後的 fnOS NAS 修復紀錄",
       "content_text": "我的 fnOS NAS 被中國駭客透過 Docker Manager 漏洞入侵。修復過程發現駭客刪除了 cat、chattr 等關鍵命令，還把目錄設成 immutable 阻止修復。從官方 ISO 提取檔案恢復系統，設定台灣 IP 限制防火牆，順便評估了 fnOS 的安全性問題。",
-      "date_published": "2026-01-24T00:00:00Z",
+      "date_published": "2026-01-24T00:00:00.000Z",
       "date_modified": "2026-01-24T00:00:00.000Z",
       "tags": [
         "fnOS",
@@ -1750,7 +1750,7 @@
       "url": "https://b-log.to/tech-analysis/why-i-turned-off-chunghwa-telecom-ipv6/",
       "title": "為什麼我最後還是關掉了中華電信的 IPv6",
       "content_text": "IPv6 的好處很明確：不用設 port forwarding，對單指打字的我來說省下很多操作成本。結果開了之後網路不穩、換了 OpenWrt 路由器還是一樣爛。問題出在 MTU 黑洞、PPPoE Dual Stack、72 小時強制斷線，以及中華電信只給 /64 prefix。調整完 OpenWrt 設定後拿到 test-ipv6.com 滿分，但長期穩定性還要觀察。",
-      "date_published": "2026-01-16T12:00:00Z",
+      "date_published": "2026-01-16T12:00:00.000Z",
       "date_modified": "2026-01-16T12:00:00.000Z",
       "tags": [
         "IPv6",
@@ -1772,7 +1772,7 @@
       "url": "https://b-log.to/business-insights/asking-question-got-blacklisted/",
       "title": "我只是想問個問題，卻被列入黑名單",
       "content_text": "在 PayPal 點了「報告問題」想問為什麼扣到錯的卡，結果直接觸發爭議調查，被主機商列入黑名單。PayPal 的解決中心沒有「詢問」選項，只有「爭議」。後來遇到願意先問原因的 Josh，才知道這種紀錄會留存、主機商之間可以互查。沒有惡意，卻承擔所有後果。",
-      "date_published": "2026-01-16T00:00:00Z",
+      "date_published": "2026-01-16T00:00:00.000Z",
       "date_modified": "2026-01-16T00:00:00.000Z",
       "tags": [
         "PayPal",
@@ -1794,7 +1794,7 @@
       "url": "https://b-log.to/cultural-insights/disability-ticket-resale/",
       "title": "身障票不是你的入場券生意",
       "content_text": "看到有人在社團轉賣 Rain 演唱會的身障票，開價四百塊加一杯星巴克，條件是「陪同進場」。身障票是社會對我們額外困難的補償，不是拿來變現的入場券生意。這種人不多，但只要有，就會壞事——最後承受後果的是那些老老實實在搶票、真正需要這些位置的人。",
-      "date_published": "2026-01-11T12:00:00Z",
+      "date_published": "2026-01-11T12:00:00.000Z",
       "date_modified": "2026-01-11T12:00:00.000Z",
       "tags": [
         "身心障礙",
@@ -1815,7 +1815,7 @@
       "url": "https://b-log.to/business-insights/anthropic-max-ban-disaster/",
       "title": "Anthropic 這次真的搞砸了",
       "content_text": "Anthropic 零預警封鎖所有透過第三方工具使用 Claude Max 的帳號，付著 $200 月費的開發者工作到一半直接被踢。等到社群炸開才解封說要「把 ToS 寫清楚」。一間強調 AI 安全和對齊的公司，在對待開發者時選擇先斬後奏。而他們訓練出來的 Claude，反而比他們更懂得這樣不對。",
-      "date_published": "2026-01-10T12:00:00Z",
+      "date_published": "2026-01-10T12:00:00.000Z",
       "date_modified": "2026-01-10T12:00:00.000Z",
       "tags": [
         "Anthropic",
@@ -1836,7 +1836,7 @@
       "url": "https://b-log.to/tech-analysis/apple-love-hate-single-finger-user/",
       "title": "我對 Apple 的愛恨交織：一個單指使用者的無奈",
       "content_text": "想開發 iOS App 就必須買 Mac，買了 Mac 卻發現單指捲動不支援。Apple 能做頭部追蹤、眼球控制這種高門檻輔助功能，卻不肯加一個邊緣捲動選項。從 128GB RAM 的 ThinkPad 換到記憶體焊死的 MacBook，從 LDAC 降級到 AAC，這不是愛恨，是「你不給我選擇」的無奈。",
-      "date_published": "2026-01-10T00:00:00Z",
+      "date_published": "2026-01-10T00:00:00.000Z",
       "date_modified": "2026-01-10T00:00:00.000Z",
       "tags": [
         "Apple",
@@ -1871,6 +1871,29 @@
           "name": "Jason Chien"
         }
       ]
+    },
+    {
+      "id": "typeless-voice-input-review",
+      "url": "https://b-log.to/tech-analysis/typeless-voice-input-review/",
+      "title": "我花了一個月研究語音輸入，結果被一款 App 直接超越——Typeless 深度體驗",
+      "content_text": "花了一個月研究 VAD、Whisper、LLM 校正層，結論是 iOS 本地跑不動。結果朋友丟了 Typeless 給我——人家直接繞過限制，既然本地做不到就不要在本地做。雲端處理換來接近 100% 的辨識準確率，代價是隱私。對我這種打字成本極高的人，這個取捨值得。",
+      "date_published": "2026-01-04T00:00:00.000Z",
+      "date_modified": "2026-01-04T00:00:00.000Z",
+      "tags": [
+        "語音輸入",
+        "Typeless",
+        "Whisper",
+        "iOS",
+        "LLM",
+        "無障礙",
+        "AI"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/typeless-voice-input-review-cover.webp"
     },
     {
       "id": "macos-kvm-iphone-usb-passthrough",
@@ -3197,29 +3220,6 @@
         }
       ],
       "image": "https://b-log.to/content/img/2025/ai-policy-red-lines-cover.webp"
-    },
-    {
-      "id": "typeless-voice-input-review",
-      "url": "https://b-log.to/tech-analysis/typeless-voice-input-review/",
-      "title": "我花了一個月研究語音輸入，結果被一款 App 直接超越——Typeless 深度體驗",
-      "content_text": "花了一個月研究 VAD、Whisper、LLM 校正層，結論是 iOS 本地跑不動。結果朋友丟了 Typeless 給我——人家直接繞過限制，既然本地做不到就不要在本地做。雲端處理換來接近 100% 的辨識準確率，代價是隱私。對我這種打字成本極高的人，這個取捨值得。",
-      "date_published": "2025-01-04T00:00:00.000Z",
-      "date_modified": "2026-01-04T00:00:00.000Z",
-      "tags": [
-        "語音輸入",
-        "Typeless",
-        "Whisper",
-        "iOS",
-        "LLM",
-        "無障礙",
-        "AI"
-      ],
-      "authors": [
-        {
-          "name": "Jason Chien"
-        }
-      ],
-      "image": "https://b-log.to/content/img/2026/typeless-voice-input-review-cover.webp"
     },
     {
       "id": "lisa-concert-2017-ssa-ldp",
