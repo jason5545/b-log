@@ -6,6 +6,27 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "saba-membership-is-not-monthly-content-contract",
+      "url": "https://b-log.to/cultural-insights/saba-membership-is-not-monthly-content-contract/",
+      "title": "會員不是月租內容合約——從 Saba 的停播爭議想到",
+      "content_text": "我把 Saba 的停播爭議看成一場支持與訂閱的混線：會員不是月租內容合約，老粉也不該假裝自己不知道她的節奏。",
+      "date_published": "2026-04-26T00:00:00.000Z",
+      "date_modified": "2026-04-26T00:00:00.000Z",
+      "tags": [
+        "文化觀察",
+        "VTuber",
+        "Saba",
+        "粉絲文化",
+        "會員訂閱",
+        "個人勢"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "lisa-confirmation-to-imprint",
       "url": "https://b-log.to/shirushi/lisa-confirmation-to-imprint/",
       "title": "不要忘記我——從確認到生根，一個十五年的重量",
