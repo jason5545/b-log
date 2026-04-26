@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "apple-support-genius-bar-process-black-box",
+      "url": "https://b-log.to/business-insights/apple-support-genius-bar-process-black-box/",
+      "title": "Genius Bar 最會修的，是流程裡已經存在的問題",
+      "content_text": "我看 Reddit 對 Apple Support 的討論，再回頭看自己的訂單經驗，越來越覺得 Apple 客服真正的價值不是理解未知問題，而是把問題推進既有流程。",
+      "date_published": "2026-04-26T00:00:00.000Z",
+      "date_modified": "2026-04-26T00:00:00.000Z",
+      "tags": [
+        "Apple",
+        "Apple Support",
+        "Genius Bar",
+        "客服",
+        "訂單流程",
+        "AppleCare+",
+        "商業觀察"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "saba-membership-is-not-monthly-content-contract",
       "url": "https://b-log.to/cultural-insights/saba-membership-is-not-monthly-content-contract/",
       "title": "會員不是月租內容合約",
