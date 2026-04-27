@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-lace-up-apple-music-interview",
+      "url": "https://b-log.to/crossing-field/lisa-lace-up-apple-music-interview/",
+      "title": "LiSA「LACE UP」專訪 × Apple Music｜沒有偷懶地走到這裡，就是驕傲",
+      "content_text": "這篇是 Apple Music《J-Pop Now Radio》的 LiSA 訪談翻譯。從《LACE UP》的開場、〈DECOTORA15〉、〈小豆あらい〉到〈Patch Walk〉，我想保留廣播裡那種一邊聽歌、一邊回頭確認 15 年足跡的節奏。",
+      "date_published": "2026-04-27T00:00:00.000Z",
+      "date_modified": "2026-04-27T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "LACE UP",
+        "Apple Music",
+        "J-Pop Now Radio",
+        "專訪翻譯",
+        "PATCH WALK",
+        "15週年"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-lace-up-apple-music-cover.webp"
+    },
+    {
       "id": "apple-support-genius-bar-process-black-box",
       "url": "https://b-log.to/business-insights/apple-support-genius-bar-process-black-box/",
       "title": "Genius Bar 最會修的，是流程裡已經存在的問題",
