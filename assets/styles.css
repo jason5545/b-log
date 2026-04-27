@@ -54,6 +54,25 @@ body::before {
   100% { transform: translateY(30px) scale(1.1); }
 }
 
+@media (max-width: 768px) {
+  body::before,
+  .orb {
+    display: none;
+  }
+
+  .theme-toggle,
+  .hero-card,
+  .post-stream,
+  .search-input-wrapper,
+  .article,
+  .article-sidebar .widget,
+  .sidebar .widget,
+  .content {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
 .page-chrome {
   min-height: 100vh;
   display: flex;
@@ -3107,6 +3126,16 @@ a:focus {
 
 /* Respect user preferences */
 @media (prefers-reduced-motion: reduce) {
+  .hero-card,
+  .post-stream,
+  .sidebar .widget,
+  .article-sidebar .widget,
+  .content {
+    animation: none;
+  }
+}
+
+@media (max-width: 768px) {
   .hero-card,
   .post-stream,
   .sidebar .widget,
