@@ -76,9 +76,6 @@ async function download(url, outPath) {
   font-weight:400;
   font-style:normal;
   font-display:optional;
-  unicode-range:${LATIN_MARK}, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191,
-    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face{
   font-family:"Inter";
@@ -86,9 +83,6 @@ async function download(url, outPath) {
   font-weight:700;
   font-style:normal;
   font-display:optional;
-  unicode-range:${LATIN_MARK}, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191,
-    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 /* Global family: Inter for ASCII/latin; Chinese uses fast system fonts */
@@ -96,16 +90,8 @@ async function download(url, outPath) {
   --sans-tc: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
              "PingFang TC","Microsoft JhengHei","Noto Sans TC",
              "Heiti TC","Helvetica Neue",Arial,Helvetica,sans-serif;
-  --font-heading:"Inter", var(--sans-tc);
-  --font-body:"Inter", var(--sans-tc);
 }
-html[lang="zh-Hant-TW"] body{ font-family:var(--font-body); }
-h1,h2,h3,h4,h5,h6,
-.site-title,
-.hero-card__title,
-.stream-title,
-.widget__title,
-.article-header h1{ font-family:var(--font-heading); }
+html[lang="zh-Hant-TW"] body{ font-family:"Inter", var(--sans-tc); }
 `;
   const cssPath = path.resolve(__dirname, "..", "assets", "css", "fonts.css");
   await ensureDir(path.dirname(cssPath));

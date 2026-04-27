@@ -56,7 +56,11 @@
   <!-- 啟用 View Transition API（跨文件過渡） -->
   <meta name="view-transition" content="same-origin">
 
-  <!-- Critical local styles -->
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/critical-shared.css">
 
   <!-- 文章頁專屬關鍵 CSS -->
@@ -105,9 +109,8 @@
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
   <link rel="preload" as="image" href="/content/img/2026/blacklisted_inquiry.webp" fetchpriority="high">
-<!-- 完整樣式表：首屏後載入 -->
-  <link rel="preload" href="../../assets/styles.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="../../assets/styles.min.css"></noscript>
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -238,12 +241,10 @@
   <!-- JavaScript - CSR 核心，延遲載入 -->
   <script src="../../assets/marked.min.js" defer></script>
   <script src="../../assets/main.min.js" type="module" defer></script>
-  <!-- Service Worker 註冊 - 首屏完成後再啟動 -->
-  <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js'));}</script>
-  <!-- Cloudflare Web Analytics - 非首屏資源 -->
-  <script>
-    window.addEventListener('load',()=>{const loadAnalytics=()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);};if('requestIdleCallback' in window){requestIdleCallback(loadAnalytics,{timeout:2000});}else{setTimeout(loadAnalytics,1500);}});
-  </script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4654c3d3db9e4f21b3640178e6f5bd09"}'></script>
   <!-- End Cloudflare Web Analytics -->
 </body>
 </html>
