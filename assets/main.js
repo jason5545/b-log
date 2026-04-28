@@ -1510,10 +1510,17 @@ function renderFeaturedPost(post) {
 
   if (!heroSection) return;
 
-  applyAccentBackground(heroMedia, post);
-  applyCategoryTheme(heroSection, post);
-  applyCategoryTheme(heroMedia, post);
-  heroSection.hidden = false;
+  const isCurrentStaticFeatured =
+    !hasActiveHomeFilter() &&
+    heroSection.dataset.featuredSlug === post.slug &&
+    heroMedia?.querySelector('.article-hero__image');
+
+  if (!isCurrentStaticFeatured) {
+    applyAccentBackground(heroMedia, post);
+    applyCategoryTheme(heroSection, post);
+    applyCategoryTheme(heroMedia, post);
+    heroSection.hidden = false;
+  }
 
   if (heroCategory) {
     heroCategory.textContent = post.category || 'Dispatch';
@@ -1566,6 +1573,11 @@ function renderFeaturedPost(post) {
   if (heroDiscuss) {
     heroDiscuss.href = `${slugToPath(post.slug, post.category)}#comments`;
   }
+}
+
+function hasActiveHomeFilter() {
+  const params = new URLSearchParams(window.location.search);
+  return params.has('tag') || params.has('category') || params.has('search');
 }
 
 function populateTagBadges(container, tags) {

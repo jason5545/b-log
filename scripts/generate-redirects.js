@@ -64,11 +64,11 @@ function buildResponsiveImageSrcset(imageUrl) {
     .join(', ');
 }
 
-function buildHeroImageAttributes(coverImage, sizes) {
+function buildHeroImageAttributes(coverImage, sizes, decoding = 'async') {
   const safeCoverImage = escapeHtml(coverImage);
   const srcset = buildResponsiveImageSrcset(coverImage);
   const srcsetAttr = srcset ? ` srcset="${escapeHtml(srcset)}" sizes="${escapeHtml(sizes)}"` : '';
-  return `src="${safeCoverImage}"${srcsetAttr} alt="" aria-hidden="true" fetchpriority="high" decoding="async"`;
+  return `src="${safeCoverImage}"${srcsetAttr} alt="" aria-hidden="true" fetchpriority="high" decoding="${decoding}"`;
 }
 
 function buildHeroPreload(coverImage, sizes = ARTICLE_HERO_SIZES) {
@@ -247,7 +247,7 @@ function buildArticleTagMetaBlock(tags = []) {
 
 function buildHomepageHeroMedia(post, categoryThemeAttr) {
   if (post.coverImage) {
-    return `        <div class="hero-card__media article-hero--image" id="hero-media"${categoryThemeAttr}><img class="article-hero__image" ${buildHeroImageAttributes(post.coverImage, HOME_HERO_SIZES)}></div>`;
+    return `        <div class="hero-card__media article-hero--image" id="hero-media"${categoryThemeAttr}><img class="article-hero__image" ${buildHeroImageAttributes(post.coverImage, HOME_HERO_SIZES, 'sync')}></div>`;
   }
 
   const accent = post.accentColor || '#556bff';
