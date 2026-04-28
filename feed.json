@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-stage-tormented-saved-her",
+      "url": "https://b-log.to/crossing-field/lisa-stage-tormented-saved-her/",
+      "title": "舞台折磨她，也拯救了她",
+      "content_text": "我把《LiSA 15th Anniversary Book PRiSM》裡 2011 年到 2016 年這段長訪談整理成一篇翻譯報導。從單飛出道前那種隨時可能消失的不安，到初次武道館的崩潰，再到重新站回武道館與橫濱競技場，LiSA 和舞台之間最殘酷也最真實的關係，都在這裡。",
+      "date_published": "2026-04-28T00:00:00.000Z",
+      "date_modified": "2026-04-28T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "PRiSM",
+        "專訪翻譯",
+        "15週年",
+        "武道館",
+        "橫濱競技場",
+        "演唱會"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-stage-tormented-saved-her-cover.webp"
+    },
+    {
       "id": "lisa-lace-up-apple-music-interview",
       "url": "https://b-log.to/crossing-field/lisa-lace-up-apple-music-interview/",
       "title": "LiSA「LACE UP」專訪 × Apple Music｜沒有偷懶地走到這裡，就是驕傲",
