@@ -46,6 +46,9 @@ jobs:
       - name: 更新圖片參照
         run: node scripts/update-image-refs.js
 
+      - name: 產生回應式圖片變體
+        run: node scripts/generate-responsive-images.js
+
       # 6. 刪除已轉換的原始圖片
       - name: 刪除原始圖片
         run: |

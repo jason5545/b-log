@@ -18,6 +18,7 @@ on:
       - 'post.html'
       - 'package.json'
       - 'scripts/build-assets.js'
+      - 'scripts/generate-responsive-images.js'
       - 'scripts/generate-redirects.js'
       - 'scripts/generate-sitemap.js'
       - 'scripts/sync-feed.js'
@@ -39,6 +40,7 @@ on:
       - 'post.html'
       - 'package.json'
       - 'scripts/build-assets.js'
+      - 'scripts/generate-responsive-images.js'
       - 'scripts/generate-redirects.js'
       - 'scripts/generate-sitemap.js'
       - 'scripts/sync-feed.js'
@@ -67,6 +69,9 @@ jobs:
 
       - name: 同步 minified assets
         run: npm run build:assets
+
+      - name: 產生回應式圖片變體
+        run: node scripts/generate-responsive-images.js
 
       - name: 驗證最新文章年份
         run: |
@@ -126,7 +131,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add index.html data/posts.json feed.json sitemap.xml assets/main.min.js assets/main-static.min.js assets/styles.min.css */*/index.html
+          git add index.html data/posts.json feed.json sitemap.xml assets/main.min.js assets/main-static.min.js assets/styles.min.css content/img/ */*/index.html
           git commit -m "chore: sync content artifacts
 
           - regenerate static article routes
