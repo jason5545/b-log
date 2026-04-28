@@ -1557,8 +1557,6 @@ a:focus {
 
 .article-body .cf-answer + .cf-answer:not(.cf-answer--speaker-start) {
   margin-top: -0.6rem;
-  border-left-color: transparent;
-  background: none;
   border-radius: 0;
 }
 
@@ -1582,8 +1580,8 @@ a:focus {
 }
 
 [data-theme="dark"] .article-body .cf-answer + .cf-answer:not(.cf-answer--speaker-start) {
-  border-left-color: transparent;
-  background: none;
+  border-left-color: rgba(168, 85, 247, 0.55);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.07), rgba(244, 114, 182, 0.03));
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1597,8 +1595,8 @@ a:focus {
     background: linear-gradient(135deg, rgba(245, 158, 11, 0.09), rgba(251, 146, 60, 0.04));
   }
   :root:not([data-theme="light"]) .article-body .cf-answer + .cf-answer:not(.cf-answer--speaker-start) {
-    border-left-color: transparent;
-    background: none;
+    border-left-color: rgba(168, 85, 247, 0.55);
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.07), rgba(244, 114, 182, 0.03));
   }
 }
 
