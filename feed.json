@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-accept-yourself-to-accept-love",
+      "url": "https://b-log.to/crossing-field/lisa-accept-yourself-to-accept-love/",
+      "title": "學會接受自己，才能接受愛",
+      "content_text": "這篇整理《LiSA 15th Anniversary Book PRiSM》裡 2022 年到 2026 年的長訪談。從 10 週年後暫停演唱會、重新規劃未來，到 PATCH WALK、PRiSM 展與學會接受自己的過程，LiSA 終於比較能接受那些一直都在的愛。",
+      "date_published": "2026-04-29T00:00:00.000Z",
+      "date_modified": "2026-04-29T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "PRiSM",
+        "專訪翻譯",
+        "15週年",
+        "Eve&Birth",
+        "LANDER",
+        "PATCH WALK",
+        "LiSAっ子",
+        "PRiSM展"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-accept-yourself-to-accept-love-cover.webp"
+    },
+    {
       "id": "lisa-scars-bloom-gurenge-homura",
       "url": "https://b-log.to/crossing-field/lisa-scars-bloom-gurenge-homura/",
       "title": "傷痕累累也要盛開",
