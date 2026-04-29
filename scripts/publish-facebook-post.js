@@ -15,6 +15,10 @@ const dryRun = args.has('--dry-run') || process.env.DRY_RUN === '1';
 const force = args.has('--force') || process.env.FORCE_SOCIAL_POST === '1';
 const targetSlug = process.env.POST_SLUG || '';
 const graphApiVersion = process.env.FB_GRAPH_API_VERSION || 'v25.0';
+const publishBaseline = args.has('--baseline') || process.env.PUBLISH_BASELINE === '1';
+const includeOriginalDate = args.has('--include-original-date') || process.env.INCLUDE_ORIGINAL_DATE === '1';
+const postLimit = Number.parseInt(process.env.POST_LIMIT || '', 10);
+const publishDelayMs = Number.parseInt(process.env.PUBLISH_DELAY_MS || '0', 10);
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -68,8 +72,21 @@ function loadState(posts, categoryMapping) {
   };
 }
 
+function formatDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  return date.toISOString().slice(0, 10);
+}
+
 function buildMessage(post) {
   const parts = [post.title];
+
+  if (includeOriginalDate) {
+    const dateText = formatDate(post.publishedAt);
+    if (dateText) {
+      parts.push(`原文發布：${dateText}`);
+    }
+  }
 
   if (post.summary) {
     parts.push(post.summary);
@@ -135,7 +152,13 @@ async function main() {
     }
     candidates = [post];
   } else {
-    candidates = posts.filter((post) => !state.items[post.slug]);
+    candidates = posts.filter((post) => {
+      const status = state.items[post.slug]?.status;
+      if (publishBaseline) {
+        return status === 'baseline';
+      }
+      return !status;
+    });
   }
 
   if (!force) {
@@ -143,6 +166,10 @@ async function main() {
   }
 
   candidates.sort((a, b) => new Date(a.publishedAt) - new Date(b.publishedAt));
+
+  if (Number.isInteger(postLimit) && postLimit > 0) {
+    candidates = candidates.slice(0, postLimit);
+  }
 
   if (candidates.length === 0) {
     console.log('No new Facebook posts to publish.');
@@ -179,6 +206,12 @@ async function main() {
       facebookPostId: result.id,
       publishedAt: new Date().toISOString(),
     };
+
+    writeJson(paths.state, state);
+
+    if (publishDelayMs > 0) {
+      await new Promise((resolve) => setTimeout(resolve, publishDelayMs));
+    }
   }
 
   if (!dryRun) {
