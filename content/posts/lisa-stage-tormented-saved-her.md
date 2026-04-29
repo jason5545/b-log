@@ -17,7 +17,7 @@
 <div class="crossing-field-serial">
   <p class="crossing-field-serial__eyebrow">PRiSM Dispatch / 完整系列</p>
   <p class="crossing-field-serial__lead">這三篇是一組，從 2011 年一路整理到 2026 年。想照時間順序讀，可以從單飛出道那篇開始。</p>
-  <p class="crossing-field-serial__meta">2011年-2016年：<a href="https://b-log.to/crossing-field/lisa-stage-tormented-saved-her/">https://b-log.to/crossing-field/lisa-stage-tormented-saved-her/</a><br>2017年-2021年：<a href="https://b-log.to/crossing-field/lisa-scars-bloom-gurenge-homura/">https://b-log.to/crossing-field/lisa-scars-bloom-gurenge-homura/</a><br>2022年-2026年：<a href="https://b-log.to/crossing-field/lisa-accept-yourself-to-accept-love/">https://b-log.to/crossing-field/lisa-accept-yourself-to-accept-love/</a></p>
+  <p class="crossing-field-serial__meta">2011年-2016年：<a href="https://b-log.to/crossing-field/lisa-stage-tormented-saved-her/">舞台折磨她，也拯救了她</a><br>2017年-2021年：<a href="https://b-log.to/crossing-field/lisa-scars-bloom-gurenge-homura/">傷痕累累也要盛開</a><br>2022年-2026年：<a href="https://b-log.to/crossing-field/lisa-accept-yourself-to-accept-love/">學會接受自己，才能接受愛</a></p>
 </div>
 
 <div class="crossing-field-toc">
