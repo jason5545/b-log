@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>macOS 沒有「加入側邊欄」的右鍵選項，然後公司資料夾就被我移走了 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對手部動作受限的人來說，拖曳公司雲端資料夾是高風險操作。公司專案資料夾真的被移走了，Box 網頁版還移不回來，最後靠 Finder 拖回去才解決。之後我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/macos-add-to-sidebar-missing/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/macos-add-to-sidebar-missing/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="AppleScript">
   <meta property="article:tag" content="捷徑">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/macos-add-to-sidebar-missing/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對手部動作受限的人來說，拖曳公司雲端資料夾是高風險操作。公司專案資料夾真的被移走了，Box 網頁版還移不回來，最後靠 Finder 拖回去才解決。之後我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:macOS%20%E6%B2%92%E6%9C%89%E3%80%8C%E5%8A%A0%E5%85%A5%E5%81%B4%E9%82%8A%E6%AC%84%E3%80%8D%E7%9A%84%E5%8F%B3%E9%8D%B5%E9%81%B8%E9%A0%85%EF%BC%8C%E7%84%B6%E5%BE%8C%E5%85%AC%E5%8F%B8%E8%B3%87%E6%96%99%E5%A4%BE%E5%B0%B1%E8%A2%AB%E6%88%91%E7%A7%BB%E8%B5%B0%E4%BA%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="macOS, Finder, 無障礙, Apple, AppleScript, 捷徑" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"macOS 沒有「加入側邊欄」的右鍵選項，然後公司資料夾就被我移走了","description":"對著資料夾按右鍵，發現「加入側邊欄」選項不見了。Apple 把它移除後，唯一的替代方案是拖曳——但對手部動作受限的人來說，拖曳公司雲端資料夾是高風險操作。公司專案資料夾真的被移走了，Box 網頁版還移不回來，最後靠 Finder 拖回去才解決。之後我用捷徑 App 和 AppleScript 自己做了一個右鍵選項。一個本來就該在選單裡的功能，不該由使用者寫程式來補。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-02-06T00:00:00Z","dateModified":"2026-02-06T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/macos-add-to-sidebar-missing/"},"url":"https://b-log.to/tech-analysis/macos-add-to-sidebar-missing/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:macOS%20%E6%B2%92%E6%9C%89%E3%80%8C%E5%8A%A0%E5%85%A5%E5%81%B4%E9%82%8A%E6%AC%84%E3%80%8D%E7%9A%84%E5%8F%B3%E9%8D%B5%E9%81%B8%E9%A0%85%EF%BC%8C%E7%84%B6%E5%BE%8C%E5%85%AC%E5%8F%B8%E8%B3%87%E6%96%99%E5%A4%BE%E5%B0%B1%E8%A2%AB%E6%88%91%E7%A7%BB%E8%B5%B0%E4%BA%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"macOS, Finder, 無障礙, Apple, AppleScript, 捷徑","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">macOS 沒有「加入側邊欄」的右鍵選項，然後公司資料夾就被我移走了</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,59 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">macOS 沒有「加入側邊欄」的右鍵選項，然後公司資料夾就被我移走了</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Feb 6, 2026</span><span>5 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>macOS</span><span>Finder</span><span>無障礙</span><span>Apple</span><span>AppleScript</span><span>捷徑</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>今天，我需要把 Box 雲端上一個常用的專案資料夾加到 Finder 側邊欄。路徑很深，每次要打開都得一層一層點進去，加到側邊欄是最合理的做法。</p>
+<p>於是我對著資料夾按右鍵。</p>
+<p>沒有。</p>
+<p>「加入側邊欄」這個選項，不在右鍵選單裡。</p>
+<h2>你在開玩笑吧？</h2>
+<p>我以為是我漏看了，把選單從頭到尾掃了一遍。沒有。Google 之後才知道，Apple 很早以前就把這個功能從右鍵選單移除了。現在只剩三種方式：</p>
+<ul>
+<li>鍵盤快捷鍵 Cmd+Ctrl+T</li>
+<li>選單列 → 檔案 → 加入側邊欄</li>
+<li><strong>拖曳資料夾到側邊欄</strong></li>
+</ul>
+<p>我用 macOS 才三週多，之前一直是 Linux 和 Windows 的使用者。在 Windows 上，右鍵就有「釘選到快速存取」，不需要知道任何隱藏選項。所以我根本不知道選單列裡還藏了一個「加入側邊欄」，直覺就是試拖曳。</p>
+<h2>冷汗直流</h2>
+<p>我的身體狀況讓拖曳這個動作變得非常高風險。精細的滑鼠控制對我來說不是理所當然的事，手一滑，資料夾就會掉到別的位置。</p>
+<p>而我拖的是什麼？公司在 Box 雲端上的正式專案資料夾。</p>
+<p>然後資料夾就被移走了。</p>
+<p>我整個人冒冷汗。趕快去 Box 網頁版想把它移回來，結果嘗試移動時直接跳出錯誤：「發生錯誤，無法移動資料夾」。Box 自己的官方網頁版，連把資料夾移回原位都會跳出錯誤，反而是靠 Finder 透過 Box Drive 掛載才能處理。官方的網頁版還沒第三方整合可靠，這到底是什麼產品邏輯。</p>
+<p>最後還是得回到 Finder，用拖曳把它拖回正確的位置——對，就是用同一個害我出事的操作來收拾殘局。</p>
+<p>macOS 又沒有「剪下」檔案的概念，不能像 Windows 一樣 Ctrl+X 剪下、Ctrl+V 貼上。Finder 的「移動」只能靠拖曳，或是 Cmd+C 複製之後用 Cmd+Option+V「移動到此」——但這招要先導覽到目標資料夾，路徑那麼深，光是找到正確位置就夠麻煩了。</p>
+<p>總之最後是移回去了。但在雲端同步的環境下，那幾分鐘真的很漫長。</p>
+<h2>這是誰的設計決策？</h2>
+<p>Apple 把「加入側邊欄」從右鍵選單移除的理由，大概是覺得選單太長需要「精簡」。但這個決定等於是逼使用者去拖曳——一個對很多人來說有風險的操作。</p>
+<p>不是每個人都能精準地把資料夾拖到側邊欄上正確的位置。手部動作受限的人、年長的使用者、甚至只是手邊放著咖啡不方便的人，都可能在拖曳過程中出錯。</p>
+<p>而出錯的代價可以很大。移動一個雲端同步的資料夾，影響的可能是整個團隊。</p>
+<p>前面提過，Windows 右鍵就有「釘選到快速存取」，一個點擊搞定。Apple 號稱比 Windows 更注重使用者體驗，結果連 Windows 都做到的基本功能，macOS 要使用者自己寫 AppleScript 來補。</p>
+<h2>自己動手解決</h2>
+<p>既然 Apple 不給，我就自己做。最後的方案是用 macOS 內建的「捷徑」App 做了一個快速動作：</p>
+<ol>
+<li>在捷徑 App 建立一個新捷徑，命名為「加入側邊欄」</li>
+<li>加入「執行 AppleScript」動作，內容就是模擬 Cmd+Ctrl+T 快捷鍵：</li>
+</ol>
+<pre><code class="language-applescript">tell application &quot;Finder&quot; to activate
+delay 0.5
+tell application &quot;System Events&quot;
+    keystroke &quot;t&quot; using {command down, control down}
+end tell
+</code></pre>
+<ol start="3">
+<li>設定接收類型為「檔案夾」</li>
+<li>在捷徑詳細資訊裡勾選「用作快速動作」→「Finder」</li>
+<li>到系統設定 → 隱私權與安全性 → 輔助使用，允許「Finder」控制電腦</li>
+</ol>
+<p>完成之後，右鍵資料夾 → 快速動作 → 「加入側邊欄」，搞定。不用拖曳，不用記快捷鍵，不用翻選單列。</p>
+<h2>不該由使用者來補這個洞</h2>
+<p>這整件事花了我不少時間，中間還繞了一圈先嘗試 Automator 的 workflow（結果在新版 macOS 上只會出現在「服務」子選單而不是「快速動作」裡）。</p>
+<p>一個本來就該在右鍵選單裡的功能，使用者不應該需要寫 AppleScript、設定權限、搞清楚 Automator 跟捷徑的差別，才能安全地使用它。</p>
+<p>Apple 談無障礙設計談得很多，但像這種細節上的倒退，才是真正影響日常使用的地方。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

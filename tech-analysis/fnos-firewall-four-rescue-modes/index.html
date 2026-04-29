@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>fnOS 防火牆設定記：一天四次 Rescue Mode 的血淚教訓 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="在 OVH 伺服器上設定 fnOS 防火牆，因為「鎖台灣」策略導致 Tailscale 斷線，一天之內跑了四次 rescue mode 才找到根因。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/fnos-firewall-four-rescue-modes/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/fnos-firewall-four-rescue-modes/" id="og-url">
@@ -35,7 +35,7 @@
   <meta property="article:tag" content="rescue mode">
   <meta property="article:tag" content="除錯">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/fnos-firewall-four-rescue-modes/" id="twitter-url">
@@ -43,7 +43,7 @@
   <meta property="twitter:description" content="在 OVH 伺服器上設定 fnOS 防火牆，因為「鎖台灣」策略導致 Tailscale 斷線，一天之內跑了四次 rescue mode 才找到根因。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:fnOS%20%E9%98%B2%E7%81%AB%E7%89%86%E8%A8%AD%E5%AE%9A%E8%A8%98%EF%BC%9A%E4%B8%80%E5%A4%A9%E5%9B%9B%E6%AC%A1%20Rescue%20Mode%20%E7%9A%84%E8%A1%80%E6%B7%9A%E6%95%99%E8%A8%93,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="fnOS, Tailscale, 防火牆, OVH, BPF, XDP, IPv6, rescue mode, 除錯" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -113,6 +113,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"fnOS 防火牆設定記：一天四次 Rescue Mode 的血淚教訓","description":"在 OVH 伺服器上設定 fnOS 防火牆，因為「鎖台灣」策略導致 Tailscale 斷線，一天之內跑了四次 rescue mode 才找到根因。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-03-01T00:00:00Z","dateModified":"2026-03-01T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/fnos-firewall-four-rescue-modes/"},"url":"https://b-log.to/tech-analysis/fnos-firewall-four-rescue-modes/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:fnOS%20%E9%98%B2%E7%81%AB%E7%89%86%E8%A8%AD%E5%AE%9A%E8%A8%98%EF%BC%9A%E4%B8%80%E5%A4%A9%E5%9B%9B%E6%AC%A1%20Rescue%20Mode%20%E7%9A%84%E8%A1%80%E6%B7%9A%E6%95%99%E8%A8%93,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"fnOS, Tailscale, 防火牆, OVH, BPF, XDP, IPv6, rescue mode, 除錯","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -122,7 +123,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">fnOS 防火牆設定記：一天四次 Rescue Mode 的血淚教訓</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -191,12 +192,72 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">fnOS 防火牆設定記：一天四次 Rescue Mode 的血淚教訓</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Mar 1, 2026</span><span>5 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>fnOS</span><span>Tailscale</span><span>防火牆</span><span>OVH</span><span>BPF</span><span>XDP</span><span>IPv6</span><span>rescue mode</span><span>除錯</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>起因</h2>
+<p>我在 OVH 租了一台伺服器跑 fnOS（飛牛 NAS），今年一月被駭客利用 dockermgr 漏洞入侵，發動 DDoS 攻擊後被 OVH 隔離。事後更新了 fnOS、改了密碼，之前也設了台灣 IP 白名單的 nftables 防火牆應急。</p>
+<p>今天打算用 fnOS 內建的防火牆功能來取代臨時方案，想法很單純：入站預設拒絕，只允許 Tailscale 網段和台灣 IP。</p>
+<p>以正常人的概念來說，「鎖台灣」應該是最合理的策略——我人在台灣，伺服器在法國，只讓台灣 IP 進來，駭客不就進不來了嗎？</p>
+<p>結果就是這個「鎖台灣」，讓我一天跑了四次 rescue mode。</p>
+<h2>第一次鎖死</h2>
+<p>設好規則、重開機，直接連不上。</p>
+<p>最初以為是 Tailscale 沒有自動啟動。畢竟防火牆第一條規則是只允許 Tailscale 網段（100.64.0.0/10），Tailscale 沒起來的話這條就廢了。</p>
+<p>於是從 rescue mode 進去，想修 Tailscale 自動啟動。結果發現 fnOS 的 Tailscale 不是標準 systemd service，是 fnOS 自己的 app 框架管理的，binary 還放在 LVM 的 vol2 上。</p>
+<p>先不管了，直接改 <code>/usr/trim/etc/fw.conf</code> 把防火牆 <code>enable</code> 設成 <code>false</code>，重開機，恢復連線。</p>
+<h2>第二次鎖死</h2>
+<p>進了網頁介面，重新設定防火牆規則。這次多加了一條：我家的公網 IP 全部放行。再加上 Tailscale 網段、台灣系統預設 port、FTP passive port，最後擋中國。</p>
+<p>應該很完美了吧？重開機。</p>
+<p>又鎖死了。</p>
+<p>這次觀察到一個重要線索：Tailscale 的後台顯示 Connected 大約 10 秒後就斷線了。這就推翻了「Tailscale 沒自動啟動」的假設——它有啟動，而且連上了，只是很快就被踢掉。</p>
+<h2>第三次鎖死</h2>
+<p>根據 10 秒斷線的線索，我判斷是防火牆延遲載入，生效後砍斷了 Tailscale 的連線。查了 Tailscale 官方文件，WireGuard 需要 UDP 41641 入站。於是加了這條規則，同時把所有規則的協定改成「全部」而不只是 TCP。</p>
+<p>重開機前還特地 SSH 進去確認 <code>fw.conf</code> 的實際內容，規則沒錯。</p>
+<p>重開機後，一開始 port 8000 和 5667 能通，但 SSH port 22 超時。三者都在台灣規則的允許列表裡，為什麼 22 被擋？這至今是個謎。</p>
+<p>更糟的是，Tailscale 又斷線了。最終所有連線都失敗。</p>
+<h2>還有一個未解之謎</h2>
+<p>我明明設了一條規則：我的家用 IP，全 port、全協定、允許。SSH 進去看 <code>fw.conf</code> 也確認規則正確寫入了。但 port 22 就是連不上，而 port 8000 和 5667 卻可以。</p>
+<p>同一個 IP、同一條規則、不同 port 的結果不一樣。這完全不合邏輯，但確實發生了。至今沒有找到原因。</p>
+<h2>第四次：放棄自訂，恢復預設</h2>
+<p>再次 rescue mode 關防火牆，這次恢復完全預設的規則（入站預設允許）。重開機後，Tailscale 穩定連線，一切正常。</p>
+<h2>真正的根因</h2>
+<p>恢復預設後，我用 Claude Code SSH 進伺服器做了完整調查。</p>
+<p>首先發現 fnOS 的防火牆是用 <strong>BPF（XDP + TC）</strong> 實作的，不是常見的 iptables 或 nftables。<code>security_service</code> 負責載入 BPF 程式到網卡上，XDP 處理入站、TC 處理出站，還有自己的 Connection Tracking。</p>
+<p>然後看了 Tailscale 的實際連線：</p>
+<pre><code>tcp  [本機IPv6]:36552  →  [美國DERP]:80
+tcp  [本機IPv6]:53474  →  [歐洲DERP]:443
+tcp  [本機IPv6]:50210  →  [美國DERP]:443
+</code></pre>
+<p><strong>Tailscale 走的是 IPv6，連到美國和歐洲的 DERP relay，用的是 TCP 443。</strong></p>
+<p>一切都說通了：</p>
+<ul>
+<li><strong>預設規則</strong>：系統 port（含 443）允許<strong>所有 IP</strong> 入站 → DERP relay 回應能進來 → Tailscale 正常</li>
+<li><strong>自訂規則</strong>：系統 port（含 443）只允許<strong>台灣 IP</strong> → DERP relay 在美國/歐洲 → TCP 443 回應被擋 → Tailscale 斷線</li>
+</ul>
+<p>我加的那些補救規則全都沒打到點上：</p>
+<ul>
+<li>家用 IP → 這是我的 IP，不是 DERP server 的 IP</li>
+<li>100.64.0.0/10 → 這是 Tailscale 虛擬 IP，不是 DERP server 的實體 IP</li>
+<li>UDP 41641 → DERP relay 走 TCP 443，不是 UDP</li>
+</ul>
+<h2>教訓</h2>
+<ol>
+<li><p><strong>「鎖台灣」聽起來很安全，但你的 VPN 不在台灣。</strong> Tailscale 的基礎設施分布全球，限制來源國家等於切斷自己的遠端管理通道。</p>
+</li>
+<li><p><strong>IPv6 是隱形殺手。</strong> 我所有的思考都圍繞 IPv4，但 OVH 伺服器有 IPv6，Tailscale 優先走 IPv6。防火牆規則如果沒考慮 IPv6 的流量模式，就會出現意想不到的結果。</p>
+</li>
+<li><p><strong>BPF 防火牆不是你以為的 iptables。</strong> fnOS 用 XDP 實作防火牆，在核心網路層最早期處理封包。雖然有 Connection Tracking，但行為可能和傳統防火牆不同。</p>
+</li>
+<li><p><strong>永遠留一個不經過 VPN 的後門。</strong> 如果防火牆規則依賴 VPN 連線，而 VPN 又依賴防火牆放行，就形成死鎖。至少要有一個固定 IP 的直連規則作為保底——前提是它真的能生效。</p>
+</li>
+</ol>
+<h2>目前狀態</h2>
+<p>暫時使用預設規則（入站預設允許），不再動防火牆。fnOS 已經更新修補了當初被利用的漏洞，密碼也改過，先靠軟體本身的安全性撐著。</p>
+<p>等哪天想再調，只需要加一條 <strong>TCP 443 入站全開</strong>，就能在不影響 Tailscale 的前提下開啟自訂防火牆規則。</p>
+<p>但今天就到這裡了。四次 rescue mode，夠了。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

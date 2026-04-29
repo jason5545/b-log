@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Claude 的搜尋功能壞了，所以我自己蓋了一個記憶資料庫 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="claude.ai 有記憶功能，也有對話搜尋。但搜尋壞了——明明聊過的東西，搜不到。Bug report 被關掉，標「not planned」。對一個用一根手指打字的人來說，不可靠的搜尋比沒有搜尋更糟。所以我用 Cloudflare Workers + D1 做了自己的 MCP 記憶伺服器。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/claude-search-broken-built-my-own-memory/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/claude-search-broken-built-my-own-memory/" id="og-url">
@@ -33,7 +33,7 @@
   <meta property="article:tag" content="AI 協作">
   <meta property="article:tag" content="無障礙">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/claude-search-broken-built-my-own-memory/" id="twitter-url">
@@ -41,7 +41,7 @@
   <meta property="twitter:description" content="claude.ai 有記憶功能，也有對話搜尋。但搜尋壞了——明明聊過的東西，搜不到。Bug report 被關掉，標「not planned」。對一個用一根手指打字的人來說，不可靠的搜尋比沒有搜尋更糟。所以我用 Cloudflare Workers + D1 做了自己的 MCP 記憶伺服器。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:Claude%20%E7%9A%84%E6%90%9C%E5%B0%8B%E5%8A%9F%E8%83%BD%E5%A3%9E%E4%BA%86%EF%BC%8C%E6%89%80%E4%BB%A5%E6%88%91%E8%87%AA%E5%B7%B1%E8%93%8B%E4%BA%86%E4%B8%80%E5%80%8B%E8%A8%98%E6%86%B6%E8%B3%87%E6%96%99%E5%BA%AB,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="MCP, Cloudflare Workers, D1, SQLite, 記憶系統, AI 協作, 無障礙" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -111,6 +111,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Claude 的搜尋功能壞了，所以我自己蓋了一個記憶資料庫","description":"claude.ai 有記憶功能，也有對話搜尋。但搜尋壞了——明明聊過的東西，搜不到。Bug report 被關掉，標「not planned」。對一個用一根手指打字的人來說，不可靠的搜尋比沒有搜尋更糟。所以我用 Cloudflare Workers + D1 做了自己的 MCP 記憶伺服器。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-02-26T00:00:00Z","dateModified":"2026-02-26T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/claude-search-broken-built-my-own-memory/"},"url":"https://b-log.to/tech-development/claude-search-broken-built-my-own-memory/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:Claude%20%E7%9A%84%E6%90%9C%E5%B0%8B%E5%8A%9F%E8%83%BD%E5%A3%9E%E4%BA%86%EF%BC%8C%E6%89%80%E4%BB%A5%E6%88%91%E8%87%AA%E5%B7%B1%E8%93%8B%E4%BA%86%E4%B8%80%E5%80%8B%E8%A8%98%E6%86%B6%E8%B3%87%E6%96%99%E5%BA%AB,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"MCP, Cloudflare Workers, D1, SQLite, 記憶系統, AI 協作, 無障礙","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -120,7 +121,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">Claude 的搜尋功能壞了，所以我自己蓋了一個記憶資料庫</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -189,12 +190,93 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">Claude 的搜尋功能壞了，所以我自己蓋了一個記憶資料庫</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Feb 26, 2026</span><span>9 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>MCP</span><span>Cloudflare Workers</span><span>D1</span><span>SQLite</span><span>記憶系統</span><span>AI 協作</span><span>無障礙</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>claude.ai 其實有記憶功能。</p>
+<p>它會自動整理你的對話歷史，每 24 小時更新一次，生成一份叫 User Synthesis 的個人摘要。付費用戶還能搜尋過去的對話，用 RAG 把相關的脈絡拉回來。聽起來很完整。</p>
+<p>但搜尋是壞的。</p>
+<p>有人在 GitHub 上開了 <a href="https://github.com/anthropics/claude-code/issues/16528">bug report</a>：搜一個關鍵字，明明昨天的對話裡就有這個詞，搜不到。手動往下翻，找到了，點進去，關鍵字確實在裡面。搜尋引擎就是沒抓到。</p>
+<p>有人實測，搜尋的可靠率大概六成。</p>
+<p>六成。丟一個銅板都有五成。</p>
+<p>而且不只一個平台——VS Code 插件壞、macOS app 也壞。有使用者確認這是退化，之前的版本是能用的。bug report 最後被關掉了，標了 &quot;not planned&quot;。</p>
+<p>更荒謬的是，<a href="https://www.threads.com/@fredbenenson/post/DKM_KUCxhB6">有人在 Threads 上寫了一段話</a>，大意是：「搜尋自己的對話歷史這件事，在 Claude 和 ChatGPT 上都爛到令人震驚。連搜一個單字都不行。考慮到這些公司擁有的算力，這很諷刺。」</p>
+<p>二十年前就解決的問題。全文搜尋。他們做不到。</p>
+<h2>不可靠比沒有更糟</h2>
+<p>如果 Claude 從頭就沒有記憶功能，我早就自己想辦法了。</p>
+<p>問題是它有。它告訴你「我記得你」，它告訴你「你可以搜過去的對話」。所以你會依賴它。你花了一個小時跟它討論一個技術方案，想著「反正它記得，下次可以接著來」。</p>
+<p>然後下次搜不到。</p>
+<p>對大部分人來說，這是小麻煩。重新交代一下背景，三十秒的事。</p>
+<p>但我用一根手指打字。</p>
+<p>每次重新交代背景，對我來說是好幾分鐘。而且不是打一次——每個搜不到的對話都要重來。上週決定用 SQLite 不用 PostgreSQL 的理由？重新解釋。某個 bug 的除錯過程和最後的解法？重新描述。我的身體狀況、打字成本、工作流程偏好？一切從零開始。</p>
+<p>不可靠的搜尋比沒有搜尋更糟，因為它讓你誤判成本。你以為資訊存著了，結果要用的時候拿不出來。</p>
+<h2>自己蓋</h2>
+<p>既然官方的方案不能信，那就自己來。</p>
+<p>架構很簡單：一個跑在 Cloudflare Workers 上的 MCP 伺服器，後面接 D1（Cloudflare 的 SQLite 服務）。Claude 透過 MCP 協定連上來，就能在對話中存記憶、搜記憶、讀記憶。</p>
+<p>跨對話。跨裝置。免費方案就夠用。</p>
+<p>接上 claude.ai 的 connector 之後，Claude 在對話過程中會自動判斷什麼時候該存東西——你確認了一個事實、做了一個決定、解決了一個技術問題，它就呼叫 <code>save_memory</code> 存下來。下次開新對話，它呼叫 <code>get_recent_context</code> 把最近的記憶拉回來，就知道你是誰、在做什麼、上次聊到哪。</p>
+<p>不用我打字提醒。這是關鍵。</p>
+<h2>原子事實，不是主題摘要</h2>
+<p>設計記憶格式的時候，我做了一個跟 claude.ai 內建記憶完全相反的決定。</p>
+<p>claude.ai 的記憶是摘要式的——它把你的對話濃縮成一份「這個人大概是做什麼的、偏好什麼」的 profile。這種東西在回答「這個人是誰」的時候有用，但在回答「上週那個 bug 的解法是什麼」的時候完全沒用。</p>
+<p>我的系統存的是原子事實。每筆記憶是一個自包含的、直接可搜的具體資訊。</p>
+<p>「yanaginagi 2026 台北演唱會抽選落選（初回+復活都沒中）」是一筆。「yanaginagi 演唱會日期 2026-05-17」是另一筆。「場地：小巨蛋」是第三筆。</p>
+<p>不做摘要。不做歸類。每筆都能獨立存在、獨立被搜到、獨立回答一個問題。</p>
+<p>這跟人類記憶的運作方式其實很像——你不會把「跟某個人相關的所有事」存成一個檔案。你是在不同時間點記住不同的事實，需要的時候各自提取。</p>
+<h2>原子事實要有重量，不只有結構</h2>
+<p>結構對了之後，我發現還有另一層問題：內容太薄。</p>
+<p>「某人抽了輪椅席卻沒去演唱會」是原子事實。「連續四次抽中、四次都沒去、特地去 7-11 把票領出來放進收藏匣、被指出來之後說『謝謝所有罵我的人』」也是原子事實。</p>
+<p>兩筆都符合格式，但只有後者讓事件有重量。前者你讀完只知道「有這件事」，後者你讀完知道這個人是什麼人、為什麼重要、下次提到相關話題時你需要哪些背景。</p>
+<p>同樣的問題出現在其他地方。「使用者對宗教持懷疑態度」和「不是學術無神論，是生存條件逼出來的務實——禱告不會讓腿站起來，所以意義只能在此刻找」，是完全不同層次的記憶。</p>
+<p>差別在三件事：<strong>數字和頻率</strong>（一次還是四次，差的不只是量）、<strong>原話</strong>（對方說了什麼，比你描述他說了什麼更準確）、<strong>為什麼重要</strong>（這件事影響了什麼、跟哪些事有關聯）。</p>
+<p>不是寫故事。還是要精簡。但精簡不等於丟掉讓事件「撐得起來」的細節。</p>
+<p>今天把這個原則寫進了 Claude 的 system prompt，讓它在儲存記憶的時候自動套用。測試結果明顯——搜到的記憶不只是能找到，而且找到了就夠用，不需要再回頭翻對話。</p>
+<h2>搜尋：三條路同時跑</h2>
+<p>既然動機就是搜尋壞了，那搜尋架構得認真做。</p>
+<p>我用中文和日文生活，用英文寫程式碼，標籤是中英雙語的。一次搜尋可能同時涉及「抽選」「ballot」「yanaginagi」「落選」「failed」這些不同語言的詞彙。只做全文搜尋是不夠的。</p>
+<p>所以 <code>search_memory</code> 同時跑三條路：</p>
+<ol>
+<li><strong>FTS5 全文搜尋</strong>——把查詢詞用 OR 展開，任何一個詞命中就算，給 3 分。FTS 沒結果就自動 fallback 到 LIKE 子字串比對，給 2 分。</li>
+<li><strong>Entity 比對</strong>——在 entities 欄位裡找子字串，給 2 分。</li>
+<li><strong>日期範圍</strong>——按 event_date 篩選，給 1 分。</li>
+</ol>
+<p>三路結果合併、加分、排序。同一筆記憶被多條路徑命中，分數疊加。</p>
+<p>Claude 搜的時候會自動把問題展開成多個變體。你問「yanaginagi 抽選怎樣了」，它展開成 <code>[&quot;yanaginagi&quot;, &quot;抽選&quot;, &quot;落選&quot;, &quot;沒中&quot;, &quot;ballot&quot;, &quot;concert&quot;]</code>，同時丟進三條路徑。</p>
+<p>不需要使用者自己想關鍵字。而且——這是重點——搜得到。每次都搜得到。因為資料就在我自己的 D1 裡面，SQL 查詢不會玄學失靈。</p>
+<h2>User Synthesis：自己的版本</h2>
+<p>claude.ai 的自動摘要是黑盒子。你不知道它記了什麼、什麼時候更新、有沒有漏掉重要的東西。</p>
+<p>我做了自己的版本，叫 User Synthesis，分成七個區段：工作脈絡、個人脈絡、當前關注、近期動態、早期背景、長期歷史、行為指令。</p>
+<p>格式參考了 claude.ai 的結構，但內容完全由我控制。我看得到裡面每一個字，我可以手動觸發整理，可以直接改任何一個區段。</p>
+<p>存在資料庫裡，key 是 <code>user-synthesis</code>，用 upsert 更新，不會重複。Claude 讀取它就能快速理解「這個人是誰」，不需要翻遍所有記憶。</p>
+<h2>安全</h2>
+<p>伺服器跑在公開的 Cloudflare Workers 上，安全不能馬虎。</p>
+<p>MCP 端點藏在 URL 路徑裡：<code>/mcp/{一串隨機密鑰}</code>。密鑰存在 Cloudflare Worker Secrets，不進版控。</p>
+<p>錯的密鑰？404。不是 403，是 404。連端點存在這件事都不讓你知道。</p>
+<p>密鑰比對用 constant-time comparison 防 timing attack。對個人專案來說有點 overkill，但寫都寫了。</p>
+<h2>為什麼不用現成的</h2>
+<p>GitHub 上有幾個 MCP memory server 的開源專案。但它們幾乎都是跑在本地的——Claude Desktop 連本地 server，資料存本機。代表你得開電腦才能用。</p>
+<p>我的版本跑在 Cloudflare Workers 上，接的是 claude.ai 的遠端 connector。手機能用，躺在床上也能用。</p>
+<p>而且我需要的搜尋策略跟大部分人不同——中英日三語混用、需要同義詞展開、需要跨語言比對。這些不是現成方案能解決的。</p>
+<h2>實戰：5G 網卡凌晨又斷線了</h2>
+<p>這套系統上線兩天後就碰到了一個完美的測試案例。</p>
+<p>我的 Proxmox 伺服器插了一張 TCL IK512 5G USB 網卡當備援線路。前一天晚上才花了好幾個小時把整個 failover 架構從「斷線才連」改成「always-on 常駐連線」——改了 systemd service、watchdog 腳本、MBIM static IP 設定，除錯過程中還發現了 USB rebind、<code>mmcli -m any</code>、bearer JSON 解析等一堆眉角。所有這些都存進了記憶資料庫。</p>
+<p>隔天早上，5G 又斷了。</p>
+<p>我連進 Claude Code，說了一句「5G 網卡又來了」。就這樣。沒有解釋是哪張網卡、沒有交代架構、沒有複述昨天做了什麼。</p>
+<p>Claude 搜了一下記憶，拉出昨天存的那筆記錄——裡面寫著「MBIM session 卡住（NotOpened）時需 USB rebind（echo 2-1 &gt; /sys/bus/usb/drivers/usb/unbind 再 bind）」。它直接問我：要不要執行 USB rebind？</p>
+<p>整個修復過程：USB rebind、等 ModemManager 重新 probe、enable、connect、設定 MBIM static IP、驗證連線。兩分鐘。</p>
+<p>然後我們順著查下去，發現了真正的根因：USB Root Hub 的 autosuspend。Linux 預設會讓閒置的 USB hub 進入省電模式，hub 一睡，下面掛的 5G 網卡就跟著斷線。這台是伺服器不是筆電，USB 省電完全沒必要。一行 kernel 參數 <code>usbcore.autosuspend=-1</code> 解決。</p>
+<p>如果沒有記憶系統，這個早上會是這樣的：我得重新解釋這是哪張網卡、用什麼協定、插在哪個 USB port、昨天改了什麼、當時的錯誤訊息長什麼樣、USB rebind 的指令是什麼。用一根手指打完這些，大概十分鐘。</p>
+<p>有了記憶系統，我只需要六個字。</p>
+<p>而且不只是「找到答案」——Claude 拿到的是完整脈絡。它知道這張網卡之前就有 GPS 廣告不實的問題，知道 always-on 架構的設計意圖，知道 watchdog 腳本的結構。所以它能直接往下挖到 USB autosuspend 這個根因，而不是停在「重連一下就好了」。</p>
+<p>這就是原子事實加上搜尋的價值：不只是記住答案，而是記住脈絡，讓下一次的除錯能從上一次結束的地方開始。</p>
+<h2>結局</h2>
+<p>claude.ai 的搜尋功能壞了。bug report 被標 &quot;not planned&quot;。</p>
+<p>所以我花了一個週末，在 Cloudflare Workers 上蓋了一個 300 行的 MCP 伺服器，接上 D1，寫了三路搜尋、FTS5 全文索引、自動同步的 trigger、原子事實的儲存架構。</p>
+<p>現在 Claude 記得我是誰。每次都記得。不是因為它變聰明了，是因為我給了它一個不會壞的地方放東西。</p>
+<p>搜尋也不會六成了。是一百。因為 SQL 不丟銅板。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

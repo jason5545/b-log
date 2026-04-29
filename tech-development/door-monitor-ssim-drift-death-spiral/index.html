@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>門口監控的死亡螺旋：一張參考影像搞垮整晚的警報系統 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="凌晨被 Telegram 轟炸 285 次門開警告，門根本沒開。追查下來是 IR 夜視的光線漂移加上自適應更新的死鎖設計，讓系統陷入一個永遠回不來的迴圈。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/door-monitor-ssim-drift-death-spiral/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/door-monitor-ssim-drift-death-spiral/" id="og-url">
@@ -36,7 +36,7 @@
   <meta property="article:tag" content="IR 夜視">
   <meta property="article:tag" content="影像比對">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/door-monitor-ssim-drift-death-spiral/" id="twitter-url">
@@ -44,7 +44,7 @@
   <meta property="twitter:description" content="凌晨被 Telegram 轟炸 285 次門開警告，門根本沒開。追查下來是 IR 夜視的光線漂移加上自適應更新的死鎖設計，讓系統陷入一個永遠回不來的迴圈。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E9%96%80%E5%8F%A3%E7%9B%A3%E6%8E%A7%E7%9A%84%E6%AD%BB%E4%BA%A1%E8%9E%BA%E6%97%8B%EF%BC%9A%E4%B8%80%E5%BC%B5%E5%8F%83%E8%80%83%E5%BD%B1%E5%83%8F%E6%90%9E%E5%9E%AE%E6%95%B4%E6%99%9A%E7%9A%84%E8%AD%A6%E5%A0%B1%E7%B3%BB%E7%B5%B1,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="door-monitor, SSIM, YOLOv8, Tapo C200, RTSP, HomeLab, Proxmox, LXC, IR 夜視, 影像比對" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -114,6 +114,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"門口監控的死亡螺旋：一張參考影像搞垮整晚的警報系統","description":"凌晨被 Telegram 轟炸 285 次門開警告，門根本沒開。追查下來是 IR 夜視的光線漂移加上自適應更新的死鎖設計，讓系統陷入一個永遠回不來的迴圈。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-03-22T00:00:00Z","dateModified":"2026-03-22T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/door-monitor-ssim-drift-death-spiral/"},"url":"https://b-log.to/tech-development/door-monitor-ssim-drift-death-spiral/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E9%96%80%E5%8F%A3%E7%9B%A3%E6%8E%A7%E7%9A%84%E6%AD%BB%E4%BA%A1%E8%9E%BA%E6%97%8B%EF%BC%9A%E4%B8%80%E5%BC%B5%E5%8F%83%E8%80%83%E5%BD%B1%E5%83%8F%E6%90%9E%E5%9E%AE%E6%95%B4%E6%99%9A%E7%9A%84%E8%AD%A6%E5%A0%B1%E7%B3%BB%E7%B5%B1,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"door-monitor, SSIM, YOLOv8, Tapo C200, RTSP, HomeLab, Proxmox, LXC, IR 夜視, 影像比對","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -123,7 +124,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">門口監控的死亡螺旋：一張參考影像搞垮整晚的警報系統</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -192,12 +193,61 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">門口監控的死亡螺旋：一張參考影像搞垮整晚的警報系統</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Mar 22, 2026</span><span>5 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>door-monitor</span><span>SSIM</span><span>YOLOv8</span><span>Tapo C200</span><span>RTSP</span><span>HomeLab</span><span>Proxmox</span><span>LXC</span><span>IR 夜視</span><span>影像比對</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>我在家門口裝了一台 Tapo C200，用 RTSP 串流接進 Proxmox LXC 裡跑的 Python 服務，偵測門是否開著超過五秒，是的話就發 Telegram 警告。偵測邏輯是 YOLOv8 nano 做物件偵測，加上 SSIM 比對一張「門關著」的參考影像——SSIM 低於 0.65 就判定門開。</p>
+<p>這套東西跑了一陣子都沒問題，直到今天凌晨。</p>
+<hr>
+<h2>285 次警告，門沒開過</h2>
+<p>早上起來看手機，Telegram 炸了。從半夜 00:11 開始，每 60 秒一則「門未關警告」，一路報到我手動停掉服務為止。總共 285 則。</p>
+<p>拍了一張即時截圖，門關得好好的。</p>
+<p>用 LXC 上的環境跑了一次 SSIM 比對：夜間參考影像 vs 當前畫面，<strong>SSIM 0.42</strong>。門檻是 0.65，難怪系統覺得門開了。</p>
+<p>但兩張圖肉眼看幾乎一模一樣。</p>
+<hr>
+<h2>IR 夜視的光線漂移</h2>
+<p>Tapo C200 晚上會切到 IR 紅外線夜視模式，畫面變成黑白的。我的夜間參考影像是前一天傍晚 17:50 拍的——剛切進 IR 模式的時候。</p>
+<p>問題是，IR LED 的反射亮度會隨時間漂移。傍晚的 IR 畫面跟凌晨三點的 IR 畫面，肉眼看差不多，但像素層面的亮度分佈已經不同了。SSIM 對這種全域亮度偏移很敏感，0.9+ 可以一路掉到 0.42。</p>
+<p>門沒動過，但在演算法眼裡，整個畫面都變了。</p>
+<hr>
+<h2>自適應更新的死鎖</h2>
+<p>系統其實有自適應參考影像更新的機制：門穩定關閉 120 秒、SSIM ≥ 0.80，就自動用當前畫面更新參考影像，應對光線漸變。</p>
+<p>聽起來應該能處理這個問題，但它有一個前提：<strong>門必須被判定為關閉</strong>。</p>
+<p>SSIM 掉到 0.42 → 系統判定門開 → <code>door_closed_since</code> 被重置為 <code>None</code> → 自適應更新永遠不會觸發 → SSIM 繼續低 → 繼續判定門開。</p>
+<p>死亡螺旋。一旦進去就回不來。</p>
+<hr>
+<h2>修復：多參考 + 漂移恢復</h2>
+<h3>多參考影像</h3>
+<p>單張參考影像太脆弱了。夜間不同時段的 IR 亮度不同，一張搞不定。</p>
+<p>改成自動載入所有 <code>reference_closed_night*.jpg</code>，SSIM 比對時跟每張參考都算一次，取最高分。只要跟其中一張夠像，就判定門關。上限 5 張，超過時淘汰最舊的（但保留第一張校準影像）。</p>
+<h3>漂移恢復</h3>
+<p>打破死鎖的關鍵。當 SSIM 持續低於門檻，但 YOLO 在門口附近沒有偵測到任何異常（沒有人、沒有物件），持續 300 秒後，系統認定這是光線漂移，自動把當前畫面加入參考影像。</p>
+<p>加了一道安全門：SSIM 低於 0.35 時不允許漂移恢復。光線漂移是漸進的，SSIM 不會掉太低；真的門開了是結構性變化，SSIM 會更低。0.35 是區分這兩者的門檻。</p>
+<hr>
+<h2>花屏：另一個驚喜</h2>
+<p>修完部署上去之後，系統跑得很穩。但過了一會兒又收到一則警告。</p>
+<p>看了截圖——畫面是花的。大片垂直色塊條紋，典型的 h264 解碼錯誤。RTSP 串流偶爾會出這種問題，畫面壞掉的時候 SSIM 當然也會暴跌。</p>
+<p>加了兩層防護：</p>
+<ol>
+<li><strong>花屏偵測</strong>：用 Sobel 算垂直邊緣比例，異常高的直接跳過該幀</li>
+<li><strong>連續 3 幀確認</strong>：SSIM 需要連續 3 幀都判定門開才真正觸發警告。偶爾一幀花屏不會造成誤報，而且只多 1.5 秒延遲（偵測間隔 0.5 秒 × 3），原本的 5 秒門檻之上幾乎感覺不到</li>
+</ol>
+<hr>
+<h2>清晨的日夜切換</h2>
+<p>以為搞定了，早上八點又來。</p>
+<p>這次不是夜間的問題。攝影機在清晨從 IR 切回彩色模式，系統跟著切到日間模式去比對日間參考影像——但日間參考是之前大白天拍的，清晨的光線完全不同，SSIM 只有 0.48。</p>
+<p>根本原因一樣：單張參考影像，沒有漂移恢復。只是這次發生在日間。</p>
+<p>把多參考和漂移恢復統一套用到日間模式，問題解決。</p>
+<hr>
+<h2>回頭看</h2>
+<p>整件事的核心問題不是演算法錯了——SSIM 比對、YOLOv8 偵測，這些邏輯都是對的。問題在於系統設計沒有考慮到「參考影像會過期」這個現實。</p>
+<p>一台 24 小時運作的攝影機，光線每分每秒都在變。IR 切換、日出日落、室內燈開關——任何一個都足以讓固定的參考影像失效。</p>
+<p>自適應更新的出發點是對的，但它把「門必須是關的」作為更新前提，等於假設了「系統判斷正確」才能自我修正——可一旦判斷錯了，就永遠修正不了。</p>
+<p>漂移恢復打破了這個假設：<strong>不依賴自己的判斷結果，而是用另一個獨立的訊號（YOLO 是否在門口看到東西）來交叉驗證。</strong> 如果兩個獨立訊號矛盾——SSIM 說門開了但 YOLO 什麼都沒看到——持續夠久，就承認是自己的參考過期了，而不是門真的開了。</p>
+<p>單一訊號源的系統，死在訊號漂移的那一刻就回不來了。多訊號交叉驗證才有自我修復的能力。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

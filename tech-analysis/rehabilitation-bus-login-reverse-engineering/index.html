@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>一張 Logo 圖片擋了所有人兩年：逆向台北市復康巴士登入機制 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="台北市復康巴士訂車網站的登入，瀏覽器 100% 成功，curl 和 Python 全部失敗。12 種方法、兩年時間，答案竟然是一張圖片。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/rehabilitation-bus-login-reverse-engineering/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/rehabilitation-bus-login-reverse-engineering/" id="og-url">
@@ -37,7 +37,7 @@
   <meta property="article:tag" content="自動化">
   <meta property="article:tag" content="無障礙">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/rehabilitation-bus-login-reverse-engineering/" id="twitter-url">
@@ -45,7 +45,7 @@
   <meta property="twitter:description" content="台北市復康巴士訂車網站的登入，瀏覽器 100% 成功，curl 和 Python 全部失敗。12 種方法、兩年時間，答案竟然是一張圖片。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E5%BC%B5%20Logo%20%E5%9C%96%E7%89%87%E6%93%8B%E4%BA%86%E6%89%80%E6%9C%89%E4%BA%BA%E5%85%A9%E5%B9%B4%EF%BC%9A%E9%80%86%E5%90%91%E5%8F%B0%E5%8C%97%E5%B8%82%E5%BE%A9%E5%BA%B7%E5%B7%B4%E5%A3%AB%E7%99%BB%E5%85%A5%E6%A9%9F%E5%88%B6,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="逆向工程, JSP, Tomcat, curl, HTTP, 反機器人, 復康巴士, 台灣政府網站, web beacon, 自動化, 無障礙" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -115,6 +115,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"一張 Logo 圖片擋了所有人兩年：逆向台北市復康巴士登入機制","description":"台北市復康巴士訂車網站的登入，瀏覽器 100% 成功，curl 和 Python 全部失敗。12 種方法、兩年時間，答案竟然是一張圖片。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-03-06T00:00:00Z","dateModified":"2026-03-06T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/rehabilitation-bus-login-reverse-engineering/"},"url":"https://b-log.to/tech-analysis/rehabilitation-bus-login-reverse-engineering/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E5%BC%B5%20Logo%20%E5%9C%96%E7%89%87%E6%93%8B%E4%BA%86%E6%89%80%E6%9C%89%E4%BA%BA%E5%85%A9%E5%B9%B4%EF%BC%9A%E9%80%86%E5%90%91%E5%8F%B0%E5%8C%97%E5%B8%82%E5%BE%A9%E5%BA%B7%E5%B7%B4%E5%A3%AB%E7%99%BB%E5%85%A5%E6%A9%9F%E5%88%B6,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"逆向工程, JSP, Tomcat, curl, HTTP, 反機器人, 復康巴士, 台灣政府網站, web beacon, 自動化, 無障礙","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -124,7 +125,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">一張 Logo 圖片擋了所有人兩年：逆向台北市復康巴士登入機制</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -193,12 +194,225 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">一張 Logo 圖片擋了所有人兩年：逆向台北市復康巴士登入機制</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Mar 6, 2026</span><span>7 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>逆向工程</span><span>JSP</span><span>Tomcat</span><span>curl</span><span>HTTP</span><span>反機器人</span><span>復康巴士</span><span>台灣政府網站</span><span>web beacon</span><span>自動化</span><span>無障礙</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>背景</h2>
+<p>我是重度身障者，日常出行靠台北市的復康巴士。訂車要透過一個 15 年以上的 JSP 網站：<code>0809080650.gov.taipei</code>。</p>
+<p>我做這件事的動機很單純：<strong>讓自己能順利去上班，而且不會忘記訂車。</strong> 沒有其他意圖，沒有要搶占資源，也沒有要破壞任何系統。</p>
+<p>理想情況下，這件事根本不需要自己動手。如果政府能提供批次預約或自動排程功能，我完全不需要走這條路。我也確實去問過——台北市目前的立場是，只有高中生有所謂的「特教專案」可以申請固定排車，其他身障者一律沒有，而且這項政策 20 年來從未改過。每次出行都要自己手動訂。</p>
+<p>所以只剩一條路：自動化這個訂車流程。</p>
+<p>目前有一套能用的方案：用 Claude Code 的瀏覽器自動化（claude-in-chrome MCP）操作 Chrome 完成訂車。但它依賴一個真實的 Chrome 視窗——不能跑在 headless Docker 裡，不能用在純文字環境。</p>
+<p>所以我想做一件看起來很簡單的事：<strong>用 curl 或 Python 登入這個網站。</strong></p>
+<p>表單只有兩個欄位——帳號和密碼，POST 到 <code>/</code>。沒有 CSRF token，沒有隱藏欄位。前端 JS 只是 <code>setTimeout</code> 延遲兩秒後 <code>form.submit()</code>。看起來是隨便一個 <code>curl -d</code> 就能解決的事。</p>
+<p>事實證明不是。</p>
+<h2>12 種方法，全部失敗</h2>
+<p>兩年前已經有人研究過這個問題，結論是放棄。我接手之後，又花了幾個月，試了以下所有方法：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>方法</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>curl 標準 POST</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>2</td>
+<td>curl 完全模擬 Chrome headers</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Python requests</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Python httpx</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>5</td>
+<td>curl_cffi（模擬 Chrome TLS 指紋）</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Node.js fetch</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>7</td>
+<td>各種 Sec-Fetch-* header 組合</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Tomcat URL 路由技巧（%2F 繞過代理）</td>
+<td>到了 Tomcat 但登入仍失敗</td>
+</tr>
+<tr>
+<td>9</td>
+<td>multipart 等各種 POST body 格式</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>10</td>
+<td>同一 TCP 連線 GET+POST</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>11</td>
+<td>連續重試多次</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>12</td>
+<td>延遲 2 秒再 POST</td>
+<td>失敗</td>
+</tr>
+</tbody></table>
+<p>每一次「失敗」都長一樣：伺服器返回 7655 bytes 的登入頁面，<code>Server-Timing: total;dur=5.xxx</code>，連 SQL 查詢都沒跑到。密碼對或錯，回應完全一樣——<strong>伺服器在驗證密碼之前就把請求擋掉了。</strong></p>
+<h2>把所有人帶偏的線索</h2>
+<p>這個問題最棘手的地方不是答案有多複雜，而是所有線索都指向錯誤的方向。</p>
+<p><strong>線索一：瀏覽器的 fetch() 也能成功。</strong> 在 Chrome console 裡執行最簡單的 <code>fetch(&#39;/&#39;, {method: &#39;POST&#39;, body: &#39;ac=...&amp;ps=...&#39;})</code> ，不加任何額外 header，100% 成功。這排除了「伺服器檢查特定 header」的可能性——至少看起來是這樣。</p>
+<p><strong>線索二：curl_cffi 也失敗。</strong> curl_cffi 可以模擬 Chrome 的 TLS 指紋（JA3），理論上能騙過 TLS 層的檢測。它也失敗了。這讓所有人都覺得問題不在 TLS 層。</p>
+<p><strong>線索三：Server-Timing 的誤導。</strong> 失敗時伺服器回傳 <code>total;dur=5.xxx</code>——整整 5 秒的處理時間。5 秒很長，讓人直覺以為伺服器在做某種複雜的驗證。但成功時只有不到 2 秒。失敗反而比成功慢，這不合理。</p>
+<p><strong>線索四：TLS 憑證本身就壞的。</strong> 這個網站的 SSL 憑證缺少 Subject Key Identifier，所有工具都需要 <code>--insecure</code> 或 <code>verify=False</code> 才連得上。一個連 TLS 憑證都搞不好的系統，怎麼可能有 TLS 指紋檢測？</p>
+<p>這四條線索把所有人的注意力都拉到了 TLS 層和 HTTP header 層。但答案不在那裡。</p>
+<h2>突破口</h2>
+<p>在幾乎要放棄的時候，我決定試最笨的方法：<strong>完整模擬瀏覽器載入頁面的整個過程。</strong></p>
+<p>不只是 POST 登入表單，而是先 GET 首頁、載入所有 JS、CSS、圖片、等幾秒、然後再 POST。如果真實瀏覽器就是這樣做的，那我也照做。</p>
+<pre><code class="language-python">s = requests.Session()
+s.get(&#39;https://0809080650.gov.taipei/&#39;, verify=False)
+
+# 載入瀏覽器會載入的所有資源
+for res in [&#39;/func.js&#39;, &#39;/func2.js&#39;, &#39;/js/eventTool.js&#39;,
+            &#39;/js/baseTool.js&#39;, &#39;/img2.gif&#39;, &#39;/favicon.ico&#39;, ...]:
+    s.get(f&#39;https://0809080650.gov.taipei{res}&#39;, verify=False)
+
+time.sleep(3)
+
+r = s.post(&#39;https://0809080650.gov.taipei/&#39;,
+    data={&#39;ac&#39;: &#39;帳號&#39;, &#39;ps&#39;: &#39;密碼&#39;},
+    headers={&#39;Referer&#39;: &#39;https://0809080650.gov.taipei/&#39;},
+    verify=False)
+</code></pre>
+<p><strong>登入成功了。</strong></p>
+<p><code>Server-Timing</code> 第一次出現了 <code>desc=&quot;0 sql&quot;</code>——伺服器終於去查密碼了。回應從 7655 bytes 變成 2122 bytes，302 重定向到 <code>index2.jsp</code>，頁面上顯示我的名字。</p>
+<p>兩年的謎題，第一次看到曙光。</p>
+<h2>縮小範圍</h2>
+<p>知道「載入全部資源」能成功之後，下一步是找出最小必要條件。我把 13 個資源一個一個單獨測試：</p>
+<table>
+<thead>
+<tr>
+<th>資源</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>func.js</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>func2.js</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>favicon.ico</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td><strong>img2.gif</strong></td>
+<td><strong>成功</strong></td>
+</tr>
+<tr>
+<td>jjTool.css</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>eventTool.js</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>nonexistent.gif</td>
+<td>失敗</td>
+</tr>
+</tbody></table>
+<p><strong>只有 <code>img2.gif</code> 有效。</strong> 不是「任何資源」，也不是「任何圖片」，就是這一張登入頁面的 logo。伺服器在 session 裡追蹤了你有沒有載入這張特定的圖片。</p>
+<p>接著測延遲：</p>
+<table>
+<thead>
+<tr>
+<th>延遲</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0 秒</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>1 秒</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td>1.9 秒</td>
+<td>失敗</td>
+</tr>
+<tr>
+<td><strong>2.0 秒</strong></td>
+<td><strong>成功</strong></td>
+</tr>
+<tr>
+<td>3.0 秒</td>
+<td>成功</td>
+</tr>
+</tbody></table>
+<p>精確到 2.0 秒，對應前端 <code>chk()</code> 函數的 <code>setTimeout(..., 2000)</code>。</p>
+<p>最後測 headers：</p>
+<ul>
+<li>User-Agent：<strong>不需要。</strong> 連 <code>bot</code> 都能過。</li>
+<li>Origin：不需要。</li>
+<li>Sec-Fetch-*：不需要。</li>
+<li><strong>Referer：必須。</strong></li>
+</ul>
+<h2>完整的機制</h2>
+<p>伺服器的防機器人檢查有三道，缺一不可：</p>
+<ol>
+<li><strong>GET /img2.gif</strong> — 登入頁的 logo 是 server-side 的 web beacon。載入時在 session 設 flag 並記錄時間戳。</li>
+<li><strong>等 2 秒以上</strong> — 從 img2.gif 載入後算起。確認客戶端有執行 JavaScript（<code>chk()</code> 強制延遲 2 秒）。</li>
+<li><strong>POST 帶 Referer</strong> — 確認請求來自同一個網頁。</li>
+</ol>
+<p>這就是最小可行的 curl 登入：</p>
+<pre><code class="language-bash">curl -k -s -c cookies.txt https://0809080650.gov.taipei/ &gt; /dev/null
+curl -k -s -b cookies.txt https://0809080650.gov.taipei/img2.gif &gt; /dev/null
+sleep 2
+curl -k -s -b cookies.txt -c cookies.txt \
+  -d &quot;ac=帳號&amp;ps=密碼&quot; \
+  -H &quot;Referer: https://0809080650.gov.taipei/&quot; \
+  -L https://0809080650.gov.taipei/
+</code></pre>
+<p>四行。不需要 Selenium，不需要 Puppeteer，不需要真實瀏覽器。</p>
+<h2>為什麼它擋了所有人兩年</h2>
+<p>事後來看，這三道檢查在技術上極其簡單。一個寫死的檔名、一個計時器、一個 header。但它有效地擋住了所有人兩年以上，原因是：</p>
+<p><strong>它不在任何 checklist 上。</strong></p>
+<p>標準的逆向工程流程是：看 headers → 看 cookies → 看 TLS 指紋 → 看 JS 混淆。沒有人會想到「試試載入頁面上的圖片」。這不是任何 WAF 產品的功能，不是任何安全框架的模式，可能就是某個工程師十五年前隨手寫的。</p>
+<p>而且 Server-Timing 的 5 秒誤導非常致命。它讓人覺得伺服器在做複雜的驗證，把注意力拉到 TLS 和連線層。但那 5 秒大概只是 Tomcat 在等 timeout。</p>
+<p>最諷刺的是：一個連 TLS 憑證都搞不好的系統，用一張 logo 圖片擋住了 curl_cffi 這種專門模擬 TLS 指紋的工具。所有人都在研究高深的加密層差異，答案卻是最樸素的 HTTP GET。</p>
+<h2>對這個防護的看法</h2>
+<p>這不是好的安全設計。沒有隨機性、沒有 CSRF token、密碼是身分證後六碼。Server-Timing header 直接洩漏後端架構。一旦知道答案，永久失效。</p>
+<p>但它完成了它的任務。這個系統服務的是身障者訂車，它的威脅模型不是防駭客，是防有人寫 script 搶車位。從這個角度看，一個零成本、零維護、不增加使用者操作負擔的機制，擋了所有 casual 嘗試兩年以上——投資報酬率高得離譜。</p>
+<p>真正有趣的是，它的安全性不是來自設計的精巧，而是來自<strong>意外的非典型性</strong>。傳統的 security by obscurity 是刻意隱藏機制，這個是機制本身太平凡、太不起眼，以至於沒人想得到。</p>
+<p>有時候最好的防護不是最強的鎖，而是沒人會去試的鎖孔。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

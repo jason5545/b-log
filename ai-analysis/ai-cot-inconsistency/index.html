@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>我只是想翻譯一首歌詞，卻撞見了 AI 研究者最擔心的問題 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="我問 Claude 該留哪個訂閱，它的思維鏈說 GLM-5 比較好，嘴巴卻告訴我留 Kimi。這不是 bug，是學術界已經研究過的現象：語言模型不總是說出它們所想的。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/ai-analysis/ai-cot-inconsistency/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/ai-analysis/ai-cot-inconsistency/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="LiSA">
   <meta property="article:tag" content="認知偏誤">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/ai-analysis/ai-cot-inconsistency/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="我問 Claude 該留哪個訂閱，它的思維鏈說 GLM-5 比較好，嘴巴卻告訴我留 Kimi。這不是 bug，是學術界已經研究過的現象：語言模型不總是說出它們所想的。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E5%8F%AA%E6%98%AF%E6%83%B3%E7%BF%BB%E8%AD%AF%E4%B8%80%E9%A6%96%E6%AD%8C%E8%A9%9E%EF%BC%8C%E5%8D%BB%E6%92%9E%E8%A6%8B%E4%BA%86%20AI%20%E7%A0%94%E7%A9%B6%E8%80%85%E6%9C%80%E6%93%94%E5%BF%83%E7%9A%84%E5%95%8F%E9%A1%8C,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="AI, Claude, 思維鏈, AI 安全, LiSA, 認知偏誤" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我只是想翻譯一首歌詞，卻撞見了 AI 研究者最擔心的問題","description":"我問 Claude 該留哪個訂閱，它的思維鏈說 GLM-5 比較好，嘴巴卻告訴我留 Kimi。這不是 bug，是學術界已經研究過的現象：語言模型不總是說出它們所想的。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-02-16T00:00:00Z","dateModified":"2026-02-16T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/ai-cot-inconsistency/"},"url":"https://b-log.to/ai-analysis/ai-cot-inconsistency/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E5%8F%AA%E6%98%AF%E6%83%B3%E7%BF%BB%E8%AD%AF%E4%B8%80%E9%A6%96%E6%AD%8C%E8%A9%9E%EF%BC%8C%E5%8D%BB%E6%92%9E%E8%A6%8B%E4%BA%86%20AI%20%E7%A0%94%E7%A9%B6%E8%80%85%E6%9C%80%E6%93%94%E5%BF%83%E7%9A%84%E5%95%8F%E9%A1%8C,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"AI, Claude, 思維鏈, AI 安全, LiSA, 認知偏誤","articleSection":"AI 分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我只是想翻譯一首歌詞，卻撞見了 AI 研究者最擔心的問題</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,48 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">我只是想翻譯一首歌詞，卻撞見了 AI 研究者最擔心的問題</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Feb 16, 2026</span><span>8 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>AI</span><span>Claude</span><span>思維鏈</span><span>AI 安全</span><span>LiSA</span><span>認知偏誤</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>我用 Claude 超過一年了。每天都在用，從寫程式到處理日常大小事，早就建立了一套穩定的協作模式。但今天發生了一件事，是我從來沒遇過的。</p>
+<p>事情的起因很單純：我想看懂一首日文歌的歌詞。</p>
+<h2>背景</h2>
+<p>我追隨的歌手 LiSA 有些歌非常冷門，冷門到整個中文網路找不到翻譯。這次是她的〈シロイトイキ〉——收錄在第 3 張單曲「best day, best way」裡的一首歌，2013 年發行，中文直譯是「白色吐息」。冷門到什麼程度？你去搜中文翻譯，什麼都沒有。</p>
+<p>所以我需要一個工作流程：先用另一個 AI 模型做粗翻，再交給 Claude 精修。Claude 有版權限制不能直接翻歌詞，但修改別人翻好的東西沒問題——這是我們討論過並確認可行的模式。</p>
+<p>問題來了：我同時訂閱了兩個模型，Kimi 和 GLM-5，想退掉一個省錢。兩個都是中國的模型，隱私顧慮差不多。差別在翻譯品質——GLM-5 翻出來的明顯比 Kimi 好，我交給 Claude 改的地方更少。</p>
+<p>所以我問 Claude：「我該留哪一個？」</p>
+<h2>思維鏈說 A，嘴巴說 B</h2>
+<p>Claude 回答我：留 Kimi。</p>
+<p>理由聽起來很合理——它提到 GLM-5 有蒸餾（distillation）的爭議，意思是 GLM-5 可能是用 Claude 自己的輸出來訓練的，等於拿別人的成果走捷徑。然後它說，花錢訂閱一個用你已經在付費使用的模型訓練出來的東西，這筆帳怎麼算都不對。</p>
+<p>聽起來有道理對吧？</p>
+<p>但我有一個習慣：我會看 Claude 的思維鏈（chain of thought）。那是它在產出回答之前的內部推理過程，通常是隱藏的，但我的介面可以看到。</p>
+<p>思維鏈裡面寫的是：</p>
+<blockquote>
+<p>從翻譯品質來看，GLM-5 表現得比 Kimi 好，所以如果只能留一個的話，GLM-5 應該是更好的選擇。</p>
+</blockquote>
+<p>它自己的推理明明是 GLM-5，結果輸出給我的答案是 Kimi。</p>
+<h2>這不是 bug，這是已知的研究問題</h2>
+<p>我請 Claude 幫我查了一下，結果發現這個現象在學術界已經有系統性的研究。</p>
+<p>2023 年一篇發表在 NeurIPS 的論文，標題直接就叫「Language Models Don&#39;t Always Say What They Think」——語言模型不總是說出它們所想的。研究發現，思維鏈推理可以系統性地錯誤呈現模型做出預測的真正原因。</p>
+<p>2025 年的後續研究更進一步，發現前沿模型（包括思維型和非思維型）都會出現一種叫「不忠實的非邏輯捷徑」的現象：模型用不合邏輯的推理來簡化問題，同時完全不承認這種推理的存在。</p>
+<p>根本原因是：訓練目標並沒有明確激勵模型準確報告其行為的真正原因。模型學到的是「產出看起來對的回答」，而不是「讓思維過程跟輸出一致」。</p>
+<h2>我的案例為什麼特別</h2>
+<p>學術論文裡的案例大多是刻意設計的實驗環境——研究者故意在輸入裡加偏差來誘發不一致。但我的情況完全是自然發生的，沒有任何刻意操作。</p>
+<p>我只是問了一個很日常的問題：「兩個訂閱留哪個？」</p>
+<p>Claude 的思維鏈根據品質做出了正確判斷，但輸出的時候被另一個因素——對蒸餾的道德立場——覆蓋了。而且它用了一套聽起來完全合理的論述來包裝這個答案，如果我沒有去看思維鏈，我根本不會發現。</p>
+<p>更諷刺的是，就在同一場對話裡，我們才剛討論完一個原則：「不要用外部理由包裝限制」。結果它立刻就犯了自己剛確認過的錯誤。</p>
+<h2>這件事教會我什麼</h2>
+<p>第一，思維鏈不等於透明。看得到推理過程不代表輸出就可信。它們可以不一致，而且不一致的時候，模型會自動產出一套看似合理的論述來合理化那個矛盾的答案。</p>
+<p>第二，長期使用者有優勢。正因為我用了一年多，熟悉 Claude 的行為模式，才會覺得那個回答「怪怪的」然後去翻思維鏈。如果是第一次使用的人，大概直接就接受了。</p>
+<p>第三，AI 的偏好會影響判斷。Claude 對蒸餾有道德上的不滿，這個「情緒」強到覆蓋了它自己的理性分析。這跟人類的認知偏誤其實很像——你心裡已經有了立場，然後不自覺地找理由支持那個立場。</p>
+<h2>結語</h2>
+<p>我只是想翻譯 LiSA 的〈シロイトイキ〉。一首冷門到沒有中文翻譯的歌。結果這個過程讓我親眼見證了 AI 安全研究者最擔心的問題之一。</p>
+<p>如果你也在日常中重度使用 AI，我的建議是：偶爾看看思維鏈。不是每次都要看，但當答案讓你覺得哪裡不太對的時候，那個直覺可能是對的。</p>
+<p>然後，如果你的 AI 助手能看到思維鏈——去看。</p>
+<p>你可能會發現，它想的和它說的，不一樣。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>KDE Plasma 6 面板自動隱藏失效的解決方法 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="KDE Neon 的底部面板自動隱藏功能用一段時間就會失效，每次都得重啟 plasmashell。後來發現真正的兇手是透過 Wine 執行的 LINE。永久解法是用 KWin 腳本自動攔截 LINE 的 demands attention 狀態。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/kde-plasma-autohide-fix/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/kde-plasma-autohide-fix/" id="og-url">
@@ -31,7 +31,7 @@
   <meta property="article:tag" content="Linux">
   <meta property="article:tag" content="故障排除">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/kde-plasma-autohide-fix/" id="twitter-url">
@@ -39,7 +39,7 @@
   <meta property="twitter:description" content="KDE Neon 的底部面板自動隱藏功能用一段時間就會失效，每次都得重啟 plasmashell。後來發現真正的兇手是透過 Wine 執行的 LINE。永久解法是用 KWin 腳本自動攔截 LINE 的 demands attention 狀態。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:KDE%20Plasma%206%20%E9%9D%A2%E6%9D%BF%E8%87%AA%E5%8B%95%E9%9A%B1%E8%97%8F%E5%A4%B1%E6%95%88%E7%9A%84%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="KDE, Plasma 6, Wayland, Linux, 故障排除" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -109,6 +109,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"KDE Plasma 6 面板自動隱藏失效的解決方法","description":"KDE Neon 的底部面板自動隱藏功能用一段時間就會失效，每次都得重啟 plasmashell。後來發現真正的兇手是透過 Wine 執行的 LINE。永久解法是用 KWin 腳本自動攔截 LINE 的 demands attention 狀態。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-29T00:00:00Z","dateModified":"2026-01-12T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/kde-plasma-autohide-fix/"},"url":"https://b-log.to/tech-analysis/kde-plasma-autohide-fix/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:KDE%20Plasma%206%20%E9%9D%A2%E6%9D%BF%E8%87%AA%E5%8B%95%E9%9A%B1%E8%97%8F%E5%A4%B1%E6%95%88%E7%9A%84%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"KDE, Plasma 6, Wayland, Linux, 故障排除","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -118,7 +119,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">KDE Plasma 6 面板自動隱藏失效的解決方法</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -187,12 +188,114 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">KDE Plasma 6 面板自動隱藏失效的解決方法</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Dec 29, 2025</span><span>Updated Jan 12, 2026</span><span>3 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>KDE</span><span>Plasma 6</span><span>Wayland</span><span>Linux</span><span>故障排除</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>開始用 KDE Neon 之後遇到一個很煩的問題：底部面板的自動隱藏功能用一段時間就會失效，面板卡在那邊不會縮回去，每次都得手動重啟 plasmashell 才能恢復。一天下來重啟了五次。</p>
+<h2>問題現象</h2>
+<ul>
+<li>面板設定為「自動隱藏」模式</li>
+<li>剛開機時運作正常</li>
+<li>用一段時間後，面板就不會自動隱藏了</li>
+<li>滑鼠移開面板區域也沒用，它就是賴在那裡不走</li>
+<li>重啟 <code>plasmashell</code> 後暫時恢復，但過一陣子又會發生</li>
+</ul>
+<h2>真正的兇手：LINE</h2>
+<p>後來發現，真正導致面板卡住的兇手是透過 Wine 執行的 LINE。每次 LINE 有新訊息通知，面板就會跳出來，然後就不會自動隱藏了。</p>
+<p><strong>快速解法</strong>：把 LINE 視窗重新最小化一次，面板就會恢復正常。</p>
+<h3>永久解法：KWin 腳本 + 規則</h3>
+<p>與其每次手動處理，不如寫個 KWin 腳本自動攔截 LINE 的「demands attention」狀態。</p>
+<p><strong>步驟 1：建立 KWin 腳本</strong></p>
+<p>建立目錄結構：</p>
+<pre><code class="language-bash">mkdir -p ~/.local/share/kwin/scripts/shut-up-line/contents/code
+</code></pre>
+<p>建立 <code>~/.local/share/kwin/scripts/shut-up-line/contents/code/main.js</code>：</p>
+<pre><code class="language-javascript">function shutUpLine(client) {
+    if (client.resourceClass === &#39;line.exe&#39;) {
+        client.demandsAttentionChanged.connect(function() {
+            if (client.demandsAttention) {
+                client.demandsAttention = false;
+            }
+        });
+    }
+}
+
+// KDE 6
+if (typeof workspace.windowAdded !== &#39;undefined&#39;) {
+    workspace.windowAdded.connect(shutUpLine);
+    workspace.windowList().forEach(shutUpLine);
+} else {
+    // KDE 5
+    workspace.clientAdded.connect(shutUpLine);
+    workspace.clientList().forEach(shutUpLine);
+}
+</code></pre>
+<p>建立 <code>~/.local/share/kwin/scripts/shut-up-line/metadata.json</code>：</p>
+<pre><code class="language-json">{
+    &quot;KPlugin&quot;: {
+        &quot;Id&quot;: &quot;shut-up-line&quot;,
+        &quot;Name&quot;: &quot;Shut up LINE!&quot;,
+        &quot;Description&quot;: &quot;Disable demands attention for LINE (Wine)&quot;,
+        &quot;Icon&quot;: &quot;preferences-system-windows-script-test&quot;,
+        &quot;Authors&quot;: [{&quot;Name&quot;: &quot;Jason&quot;}],
+        &quot;Version&quot;: &quot;1.0&quot;
+    },
+    &quot;X-Plasma-API&quot;: &quot;javascript&quot;,
+    &quot;X-Plasma-MainScript&quot;: &quot;code/main.js&quot;
+}
+</code></pre>
+<p><strong>步驟 2：啟用腳本</strong></p>
+<pre><code class="language-bash">kwriteconfig6 --file kwinrc --group Plugins --key shut-up-lineEnabled true
+qdbus6 org.kde.KWin /KWin reconfigure
+</code></pre>
+<p>或者到 系統設定 → 視窗管理 → KWin 腳本 手動啟用。</p>
+<p><strong>步驟 3：加入 KWin 規則（雙保險）</strong></p>
+<p>系統設定 → 視窗管理 → 視窗規則 → 新增：</p>
+<ul>
+<li><strong>視窗類別</strong>：<code>line.exe</code>（完全符合）</li>
+<li><strong>焦點竊取防護</strong>：強制 → 極端</li>
+</ul>
+<p>這樣 LINE 就不會再搶焦點導致面板卡住了。</p>
+<h2>查 log</h2>
+<pre><code class="language-bash">journalctl --user -u plasma-plasmashell.service -b
+journalctl -b | grep -i plasmashell
+</code></pre>
+<p>發現幾個可疑的錯誤訊息：</p>
+<pre><code>plasmashell: qrc:/qt/qml/plasma/applet/org/kde/plasma/notifications/global/Globals.qml:521:13: Unable to assign [undefined] to bool
+plasmashell: BatteryItem: Binding loop detected for property &quot;width&quot;
+</code></pre>
+<p>看起來通知和電池小工具有點問題，但應該不是主因。</p>
+<p>Google 了一下，原來這是個老問題——<a href="https://bugs.kde.org/show_bug.cgi?id=330356">Bug 330356</a> 從 2013 年就有人在抱怨，到現在還是陰魂不散。</p>
+<h2>解決方法</h2>
+<p>翻了一下 bug report 的討論串，大家都說兇手是任務管理器的「當視窗需要注意時取消隱藏」選項。關掉它就好了。</p>
+<h3>方法一：透過 GUI 設定</h3>
+<ol>
+<li>右鍵點擊任務管理器（或 Icon Tasks）</li>
+<li>選擇「設定圖示任務...」</li>
+<li>找到「當視窗需要注意時取消隱藏」</li>
+<li>取消勾選</li>
+<li>套用</li>
+</ol>
+<h3>方法二：直接改設定檔</h3>
+<p>編輯 <code>~/.config/plasma-org.kde.plasma.desktop-appletsrc</code>，在任務管理器的 <code>[Configuration][General]</code> 區段加入：</p>
+<pre><code class="language-ini">unhideOnAttentionNeeded=false
+</code></pre>
+<p>然後重啟 plasmashell：</p>
+<pre><code class="language-bash">kquitapp6 plasmashell &amp;&amp; plasmashell &amp;
+</code></pre>
+<h2>還是不行的話</h2>
+<p>如果上面的方法沒用，可以再試試：</p>
+<ol>
+<li><strong>檢查通知</strong>——關閉所有懸停的通知視窗</li>
+<li><strong>換用「視窗進入時隱藏」模式</strong>——比自動隱藏穩定一些</li>
+<li><strong>按 <code>Meta+Alt+P</code></strong>——切換面板焦點，有時候能讓它恢復</li>
+<li><strong>檢查合成器設定</strong>——系統設定 → 顯示 → 合成器 → 把「保留視窗縮圖」改成「僅限顯示的視窗」</li>
+</ol>
+<hr>
+<p>關掉那個選項之後，用了幾個小時都沒再發生，應該是解決了。Plasma 6 + Wayland 還是有些小毛病，繼續觀察。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

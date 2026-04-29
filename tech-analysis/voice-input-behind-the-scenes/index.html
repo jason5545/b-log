@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>我意外讓一個語音輸入工具吐出了它的系統提示詞 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="正常使用語音輸入工具時，系統意外輸出了內部推理過程——包括多 ASR 引擎並行架構和 LLM 綜合判斷邏輯。作為非標準發音使用者，我天然就是這類系統的 stress tester，正常使用就能觸發別人用 injection 技巧才能挖出來的東西。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/voice-input-behind-the-scenes/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/voice-input-behind-the-scenes/" id="og-url">
@@ -31,7 +31,7 @@
   <meta property="article:tag" content="LLM">
   <meta property="article:tag" content="系統架構">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/voice-input-behind-the-scenes/" id="twitter-url">
@@ -39,7 +39,7 @@
   <meta property="twitter:description" content="正常使用語音輸入工具時，系統意外輸出了內部推理過程——包括多 ASR 引擎並行架構和 LLM 綜合判斷邏輯。作為非標準發音使用者，我天然就是這類系統的 stress tester，正常使用就能觸發別人用 injection 技巧才能挖出來的東西。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E6%84%8F%E5%A4%96%E8%AE%93%E4%B8%80%E5%80%8B%E8%AA%9E%E9%9F%B3%E8%BC%B8%E5%85%A5%E5%B7%A5%E5%85%B7%E5%90%90%E5%87%BA%E4%BA%86%E5%AE%83%E7%9A%84%E7%B3%BB%E7%B5%B1%E6%8F%90%E7%A4%BA%E8%A9%9E,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="語音辨識, AI, ASR, LLM, 系統架構" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -109,6 +109,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我意外讓一個語音輸入工具吐出了它的系統提示詞","description":"正常使用語音輸入工具時，系統意外輸出了內部推理過程——包括多 ASR 引擎並行架構和 LLM 綜合判斷邏輯。作為非標準發音使用者，我天然就是這類系統的 stress tester，正常使用就能觸發別人用 injection 技巧才能挖出來的東西。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-01-08T00:00:00Z","dateModified":"2026-01-08T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/voice-input-behind-the-scenes/"},"url":"https://b-log.to/tech-analysis/voice-input-behind-the-scenes/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E6%84%8F%E5%A4%96%E8%AE%93%E4%B8%80%E5%80%8B%E8%AA%9E%E9%9F%B3%E8%BC%B8%E5%85%A5%E5%B7%A5%E5%85%B7%E5%90%90%E5%87%BA%E4%BA%86%E5%AE%83%E7%9A%84%E7%B3%BB%E7%B5%B1%E6%8F%90%E7%A4%BA%E8%A9%9E,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"語音辨識, AI, ASR, LLM, 系統架構","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -118,7 +119,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我意外讓一個語音輸入工具吐出了它的系統提示詞</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -187,12 +188,25 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">我意外讓一個語音輸入工具吐出了它的系統提示詞</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Jan 8, 2026</span><span>5 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>語音辨識</span><span>AI</span><span>ASR</span><span>LLM</span><span>系統架構</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>幾天前我寫了一篇關於某個 AI 語音輸入工具的文章，結論是它對我的非標準發音有接近 100% 的辨識率，直接讓打字成本歸零。我很滿意，也付費訂閱了。</p>
+<p>今天，它在正常使用中把內部運作邏輯吐給我看了。</p>
+<p>我沒有做任何 prompt injection，沒有試圖繞過任何防護。我只是像平常一樣對著手機說話。</p>
+<p>系統回傳的不是我要的轉錄結果，而是它的內部推理過程——包括它用了哪些語音辨識引擎、怎麼綜合判斷、以及 LLM 的指令結構。</p>
+<p>從意外輸出的內容來看，這個工具的架構比我想像中複雜：它不是單一 ASR 引擎，而是多個引擎並行，各自產生一份轉錄結果，然後 LLM 綜合判斷哪個對、怎麼合併。這解釋了為什麼準確率可以這麼高——不是單一模型硬撐，是讓多個模型互相補位。</p>
+<p>但這次它搞砸了。其中一個引擎其實聽對了我說的話，但 LLM 的「語義邏輯推斷」認為另一個詞彙比較合理，正確答案被否決了。更諷刺的是，系統有偵測到我當時的使用情境，但卻沒有用這個資訊來做判斷。</p>
+<p>我的推測是這樣：正常情況下，多個引擎的結果應該有足夠重疊，LLM 可以快速收斂。但我的發音讓各個引擎聽成完全不同的東西，推理鏈變得很長，某個環節出錯，導致內部邏輯跟著輸出了。</p>
+<p>這件事發生了兩次，輸出的是不同段落的內容。</p>
+<p>對我來說，這次經驗驗證了一些事。之前我在開發自己的語音輸入專案，架構概念類似——VAD + ASR + LLM 校正層。核心假設是：ASR 聽錯沒關係，只要後面的 LLM 夠強，就能從上下文推敲原意。這個產品用商業級資源驗證了這個假設，他們只是把「單一 ASR」升級成「多 ASR 並行」。</p>
+<p>另外，我自己的專案從來沒出現過這種情況。原因很簡單：我的 prompt 就是「請校正這段文字」，LLM 不需要輸出推理過程，自然沒有東西會跑出來。簡單架構有時候反而更穩定。</p>
+<p>我已經把這個情況回報給官方了。即使有這次的問題，這仍然是我用過最好的語音輸入工具。日常使用的準確率確實很高，這次只是剛好踩到邊界案例。</p>
+<p>但這次經驗讓我意識到一件事：作為一個發音非標準的使用者，我天然就是這類系統的 stress tester。我正常使用就能觸發別人用 injection 技巧才能挖出來的東西。</p>
+<p>或許我該開始收 bug bounty 了。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

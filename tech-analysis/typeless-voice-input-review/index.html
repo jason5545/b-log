@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>我花了一個月研究語音輸入，結果被一款 App 直接超越——Typeless 深度體驗 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="花了一個月研究 VAD、Whisper、LLM 校正層，結論是 iOS 本地跑不動。結果朋友丟了 Typeless 給我——人家直接繞過限制，既然本地做不到就不要在本地做。雲端處理換來接近 100% 的辨識準確率，代價是隱私。對我這種打字成本極高的人，這個取捨值得。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/typeless-voice-input-review/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/typeless-voice-input-review/" id="og-url">
@@ -33,7 +33,7 @@
   <meta property="article:tag" content="無障礙">
   <meta property="article:tag" content="AI">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/typeless-voice-input-review/" id="twitter-url">
@@ -41,7 +41,7 @@
   <meta property="twitter:description" content="花了一個月研究 VAD、Whisper、LLM 校正層，結論是 iOS 本地跑不動。結果朋友丟了 Typeless 給我——人家直接繞過限制，既然本地做不到就不要在本地做。雲端處理換來接近 100% 的辨識準確率，代價是隱私。對我這種打字成本極高的人，這個取捨值得。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2026/typeless-voice-input-review-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="語音輸入, Typeless, Whisper, iOS, LLM, 無障礙, AI" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -112,6 +112,7 @@
   <link rel="preload" as="image" href="/content/img/2026/typeless-voice-input-review-cover.webp" imagesrcset="/content/img/2026/typeless-voice-input-review-cover-480w.webp 480w, /content/img/2026/typeless-voice-input-review-cover-828w.webp 828w, /content/img/2026/typeless-voice-input-review-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我花了一個月研究語音輸入，結果被一款 App 直接超越——Typeless 深度體驗","description":"花了一個月研究 VAD、Whisper、LLM 校正層，結論是 iOS 本地跑不動。結果朋友丟了 Typeless 給我——人家直接繞過限制，既然本地做不到就不要在本地做。雲端處理換來接近 100% 的辨識準確率，代價是隱私。對我這種打字成本極高的人，這個取捨值得。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-01-04T00:00:00Z","dateModified":"2026-01-04T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/typeless-voice-input-review/"},"url":"https://b-log.to/tech-analysis/typeless-voice-input-review/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/typeless-voice-input-review-cover.webp"],"keywords":"語音輸入, Typeless, Whisper, iOS, LLM, 無障礙, AI","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -121,7 +122,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我花了一個月研究語音輸入，結果被一款 App 直接超越——Typeless 深度體驗</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -190,12 +191,101 @@
         <article class="article">
           <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/typeless-voice-input-review-cover.webp" srcset="/content/img/2026/typeless-voice-input-review-cover-480w.webp 480w, /content/img/2026/typeless-voice-input-review-cover-828w.webp 828w, /content/img/2026/typeless-voice-input-review-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">我花了一個月研究語音輸入，結果被一款 App 直接超越——Typeless 深度體驗</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Jan 4, 2026</span><span>10 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>語音輸入</span><span>Typeless</span><span>Whisper</span><span>iOS</span><span>LLM</span><span>無障礙</span><span>AI</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>如果你看過我之前那篇關於 xvoice 專案的文章，你會知道我一直在找一個能真正聽懂我說話的語音輸入工具。</p>
+<p>簡單回顧一下：我只能用右手食指打字，每一個字都是成本。「用說的取代打字」這件事，對我來說不是錦上添花，是剛需。</p>
+<p>過去幾個月，我研究了 Silero VAD、faster-whisper、LLM 語意校正，還討論過怎麼把整套系統塞進 iOS 鍵盤擴充。結論是：iOS 鍵盤擴充有大約 50MB 的記憶體限制，本地跑 Whisper 根本塞不進去。</p>
+<p>然後，就在我剛換 iPhone 不到三週，朋友丟了一個叫 <strong>Typeless</strong> 的東西給我。</p>
+<p>我試了。</p>
+<p><strong>接近 100% 的辨識準確率。</strong></p>
+<p>我現在跟 Claude 討論的這整段對話，全都是用 Typeless 說的。</p>
+<p>傳統語音辨識會把你說的每個字都打出來，包括「呃」、「嗯」、「就是那個」、還有你中途改口的句子。</p>
+<p>Typeless 不會。</p>
+<p>它會自動把 filler words 幹掉，偵測你重複講的句子只留最後一個版本，還會辨識你中途改口、只輸出你「真正想說的」。</p>
+<p>更扯的是，它會根據你用的 App 調整語氣。Slack 口語一點，Email 正式一點。</p>
+<p>剛才我跟 Claude 對話，隨口說了「一是什麼什麼，二是什麼什麼」，它直接幫我輸出成條列格式。</p>
+<p>我當下反應：「哇靠，它還自動條列了。」</p>
+<p>但它怎麼做到的？我花了一個月研究怎麼在 iOS 上跑本地 Whisper，結論是做不到。</p>
+<p>那 Typeless 怎麼做到的？</p>
+<p>答案很簡單：<strong>它根本沒在本地跑</strong>。</p>
+<p>我開飛航模式測試，完全無法使用。確認是雲端處理。</p>
+<p>官方隱私政策寫得很清楚：</p>
+<blockquote>
+<p>&quot;Both your audio and contextual data are processed in real time on our cloud servers and immediately discarded once the result is returned to your device.&quot;</p>
+</blockquote>
+<p>架構大概是這樣：</p>
+<pre><code>麥克風錄音 → 上傳雲端 → ASR 語音辨識 → LLM 語意理解與潤飾 → 返回裝置
+</code></pre>
+<p>官網寫「Everything stays local」指的是轉錄歷史記錄存在本地，不是處理過程。這兩件事不一樣。</p>
+<p>至於他們用什麼 ASR 引擎，官方沒說。但從支援 100+ 語言、自動語言偵測這些特徵來看，我猜是 OpenAI Whisper API 或類似等級的東西。雲端大模型的能力本來就不是本地小模型能比的。</p>
+<p>說實話，有一點好笑。</p>
+<p>我花了一個月研究 VAD、Whisper、LLM 校正層的組合，結論是「iOS 本地做不到」。</p>
+<p>結果人家直接繞過這個限制——既然本地做不到，那就不要在本地做。</p>
+<p>但我不覺得白費。正因為我搞懂了整個技術棧，所以我一看到 Typeless 就知道它大概怎麼運作、為什麼要連網、隱私風險在哪裡。換成沒研究過的人，可能根本不會注意到「zero data retention」跟「local processing」是兩回事。</p>
+<p>而且 Typeless 也驗證了我的假設：對於我的發音狀況，<strong>LLM 語意理解層是關鍵</strong>。傳統 ASR 聽錯了就是聽錯了，但如果後面接一個夠強的 LLM，它可以從上下文推敲出你真正想說什麼。</p>
+<p>我的 xvoice 設計了同樣的架構（VAD + Whisper + LLM），只是我用本地 Whisper + OpenRouter 免費模型。Typeless 用的是雲端 Whisper（或更強的東西）+ 不知道什麼等級的 LLM。硬體資源差距在那裡，效果自然不同。</p>
+<p>但隱私是用 Typeless 最需要想清楚的事。</p>
+<p><strong>你說的每一句話都會送到雲端。</strong></p>
+<p>官方宣稱「零資料保留」、「不用於訓練」，但你無法獨立驗證。隱私政策還提到會用「third-party LLMs」，具體是哪家也沒說。</p>
+<p>如果你要處理機密內容（病歷、法律文件、商業機密），不要用。</p>
+<p>但對於日常溝通、寫部落格、跟 AI 聊天，我可以接受這個風險。打字成本歸零這件事，對我的生活品質影響太大了。</p>
+<p>如果你對隱私零容忍，可以看 <strong>Superwhisper</strong>（100% 本地，$249 終身）或 <strong>Aiko</strong>（免費，本地，但沒有 LLM 潤飾）。</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>處理位置</th>
+<th>AI 潤飾</th>
+<th>離線</th>
+<th>價格</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Typeless</strong></td>
+<td>雲端</td>
+<td>✅ 完整</td>
+<td>❌</td>
+<td>$12-30/月</td>
+</tr>
+<tr>
+<td><strong>Superwhisper</strong></td>
+<td>本地</td>
+<td>✅ 可配置</td>
+<td>✅</td>
+<td>$249 終身</td>
+</tr>
+<tr>
+<td><strong>Aiko</strong></td>
+<td>本地</td>
+<td>❌</td>
+<td>✅</td>
+<td>免費</td>
+</tr>
+<tr>
+<td><strong>Apple 聽寫</strong></td>
+<td>本地/雲端</td>
+<td>❌</td>
+<td>✅</td>
+<td>內建</td>
+</tr>
+<tr>
+<td><strong>Wispr Flow</strong></td>
+<td>雲端</td>
+<td>✅</td>
+<td>❌</td>
+<td>訂閱制</td>
+</tr>
+</tbody></table>
+<p>Typeless 免費版每週 4,000 字（平均一天約 570 字），日常短訊息夠用，但大量跟 AI 對話會撞到限制。Pro 版月付 $30，年付 $12/月。新帳號有 30 天試用，不用綁卡。</p>
+<p>目前支援 iOS、macOS、Windows，Android 和 Web 寫「Coming soon」。我 12 月中剛換 iPhone，不到三週就發現這工具——運氣不錯。</p>
+<p>Typeless 有個特別的功能叫 <strong>Speak to Edit</strong>——選取已經打好的文字，用語音說「改成更正式的語氣」或「把這段縮短」，它就會幫你改。這在競品上很少見。</p>
+<p>Typeless 是我目前用過最接近「說話即打字」的工具。技術路線是「準確度優先、隱私妥協」——用雲端 AI 換極高的辨識率和智慧潤飾，代價是音訊會離開裝置。對我這種打字成本極高的人，這個取捨值得。</p>
+<p><em>這篇文章跟 Claude 討論的過程，全程用 Typeless 輸入。</em></p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

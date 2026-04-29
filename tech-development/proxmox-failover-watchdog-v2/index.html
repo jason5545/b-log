@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>一條壞掉的路由，讓我重寫了整個 Failover Watchdog - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="早上發現 Proxmox 的 Tailscale 無故離線，追查之後才發現根因藏在幾天前的一次 5G fallback 裡——watchdog 只確認 interface 有 IP，沒確認 bearer 真的通，切過去就再也回不來了。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/proxmox-failover-watchdog-v2/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/proxmox-failover-watchdog-v2/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="5G">
   <meta property="article:tag" content="IK512">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/proxmox-failover-watchdog-v2/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="早上發現 Proxmox 的 Tailscale 無故離線，追查之後才發現根因藏在幾天前的一次 5G fallback 裡——watchdog 只確認 interface 有 IP，沒確認 bearer 真的通，切過去就再也回不來了。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E6%A2%9D%E5%A3%9E%E6%8E%89%E7%9A%84%E8%B7%AF%E7%94%B1%EF%BC%8C%E8%AE%93%E6%88%91%E9%87%8D%E5%AF%AB%E4%BA%86%E6%95%B4%E5%80%8B%20Failover%20Watchdog,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Proxmox, Tailscale, Homelab, Networking, 5G, IK512" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"一條壞掉的路由，讓我重寫了整個 Failover Watchdog","description":"早上發現 Proxmox 的 Tailscale 無故離線，追查之後才發現根因藏在幾天前的一次 5G fallback 裡——watchdog 只確認 interface 有 IP，沒確認 bearer 真的通，切過去就再也回不來了。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-02-28T00:00:00+08:00","dateModified":"2026-02-28T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/proxmox-failover-watchdog-v2/"},"url":"https://b-log.to/tech-development/proxmox-failover-watchdog-v2/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E6%A2%9D%E5%A3%9E%E6%8E%89%E7%9A%84%E8%B7%AF%E7%94%B1%EF%BC%8C%E8%AE%93%E6%88%91%E9%87%8D%E5%AF%AB%E4%BA%86%E6%95%B4%E5%80%8B%20Failover%20Watchdog,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"Proxmox, Tailscale, Homelab, Networking, 5G, IK512","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">一條壞掉的路由，讓我重寫了整個 Failover Watchdog</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,32 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">一條壞掉的路由，讓我重寫了整個 Failover Watchdog</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Feb 28, 2026</span><span>2 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Proxmox</span><span>Tailscale</span><span>Homelab</span><span>Networking</span><span>5G</span><span>IK512</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>今天早上想連 Proxmox，發現 Tailscale 完全沒回應。所有路徑都試過了：直連不行、透過 mt6000 Subnet Router 也不行。是首次遇到整個 tsnode 離線的情況。</p>
+<p>第一反應是懷疑路由器，但很快排除了。mt6000 本身沒問題，Subnet Router 也運作正常——它只是個中繼，封包進來了還是得靠 PVE 自己的 default route 回應，而 PVE 的 default route 指錯地方，Tailscale keepalive 就這樣靜悄悄斷掉。</p>
+<h2>根因</h2>
+<p>往前追，幾天前曾經觸發過一次 5G fallback。IK512 切了進來，舊版 watchdog 看到 <code>wwp10s0u1i3</code> 上有 IP 就當作連線正常，但實際上 bearer 根本沒建立，ModemManager 回的是 <code>NotOpened</code>。主線路恢復後，watchdog 沒有判斷「現在 5G 是假連線」的能力，就這樣永遠卡在那條路由上。</p>
+<h2>IK512 的另一個坑：USB autosuspend</h2>
+<p>在整理 IK512 的過程中另外發現，它之所以偶爾會出現 <code>NotOpened</code>，根本原因是 USB hub autosuspend 把 modem 給掛起來了。解法很乾脆：在 GRUB 加上 <code>usbcore.autosuspend=-1</code>，全域關掉 USB 省電。</p>
+<h2>Watchdog v2：重寫</h2>
+<p>舊版邏輯只有一件事：interface 上有 IP → 連線正常。這在大多數情況夠用，但在 MBIM 模式下完全不可靠。</p>
+<p>v2 改成直接查 bearer 狀態：</p>
+<ul>
+<li>用 <code>mmcli</code> 詢問 bearer 連線狀態，<code>NotOpened</code> 就視為斷線</li>
+<li>偵測到斷線後自動觸發 USB rebind，附帶 cooldown 機制避免短時間內反覆重綁，rebind 紀錄寫入 <code>ik512-rebind.log</code></li>
+<li>切換後主動同步 IP，不依賴 interface 被動更新</li>
+<li>metric 管理確保主線路優先，5G 只在主線路真的掛掉時才上</li>
+<li>主線路恢復後主動切回，不需要人工介入</li>
+</ul>
+<h2>管理通道強化：NISS 跳板</h2>
+<p>這次事件讓我意識到一件事：如果 tsnode 是直接跑在 PVE 宿主上，一旦宿主的網路出問題，管理通道就一起斷了。</p>
+<p>解法是在 CT 106（NISS，10.0.0.172）裡另外裝一個 Tailscale，作為獨立的管理跳板。有一個細節要注意：CT 106 本身就在 mt6000 Subnet Router 的廣播範圍內，如果開了 <code>accept-routes</code> 會造成路由迴圈，所以只能用 point-to-point 模式，不開 subnet 廣播。Tailscale IP 規劃為 <code>100.64.10.172</code>，方便記憶。</p>
+<p>往後就算 PVE 宿主的 Tailscale 再次掉線，至少還有 CT 106 這條路可以進來處理。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>切換 hybrid 模式後黑螢幕，然後我發現是 prime-select 埋的雷 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="ThinkPad P15 Gen 2 跑 KDE neon Wayland，想用 prime-select on-demand 切換 hybrid 模式，結果重開機黑螢幕。查了半天發現是之前切 intel 模式時留下的 blacklist 檔案沒清乾淨。結論：不要用 prime-select，改用 EnvyControl。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/nvidia-hybrid-fix/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/nvidia-hybrid-fix/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="EnvyControl">
   <meta property="article:tag" content="ThinkPad">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/nvidia-hybrid-fix/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="ThinkPad P15 Gen 2 跑 KDE neon Wayland，想用 prime-select on-demand 切換 hybrid 模式，結果重開機黑螢幕。查了半天發現是之前切 intel 模式時留下的 blacklist 檔案沒清乾淨。結論：不要用 prime-select，改用 EnvyControl。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%88%87%E6%8F%9B%20hybrid%20%E6%A8%A1%E5%BC%8F%E5%BE%8C%E9%BB%91%E8%9E%A2%E5%B9%95%EF%BC%8C%E7%84%B6%E5%BE%8C%E6%88%91%E7%99%BC%E7%8F%BE%E6%98%AF%20prime-select%20%E5%9F%8B%E7%9A%84%E9%9B%B7,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="KDE neon, NVIDIA, Wayland, hybrid, EnvyControl, ThinkPad" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"切換 hybrid 模式後黑螢幕，然後我發現是 prime-select 埋的雷","description":"ThinkPad P15 Gen 2 跑 KDE neon Wayland，想用 prime-select on-demand 切換 hybrid 模式，結果重開機黑螢幕。查了半天發現是之前切 intel 模式時留下的 blacklist 檔案沒清乾淨。結論：不要用 prime-select，改用 EnvyControl。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-12T00:00:00Z","dateModified":"2025-12-12T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/nvidia-hybrid-fix/"},"url":"https://b-log.to/tech-analysis/nvidia-hybrid-fix/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%88%87%E6%8F%9B%20hybrid%20%E6%A8%A1%E5%BC%8F%E5%BE%8C%E9%BB%91%E8%9E%A2%E5%B9%95%EF%BC%8C%E7%84%B6%E5%BE%8C%E6%88%91%E7%99%BC%E7%8F%BE%E6%98%AF%20prime-select%20%E5%9F%8B%E7%9A%84%E9%9B%B7,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"KDE neon, NVIDIA, Wayland, hybrid, EnvyControl, ThinkPad","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">切換 hybrid 模式後黑螢幕，然後我發現是 prime-select 埋的雷</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,80 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">切換 hybrid 模式後黑螢幕，然後我發現是 prime-select 埋的雷</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Dec 12, 2025</span><span>4 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>KDE neon</span><span>NVIDIA</span><span>Wayland</span><span>hybrid</span><span>EnvyControl</span><span>ThinkPad</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>我的筆電是 ThinkPad P15 Gen 2，Intel + NVIDIA 雙顯卡配置（RTX A5000 Laptop GPU），跑 KDE neon（基於 Ubuntu 24.04）Wayland。裝好 <code>nvidia-driver-580-open</code> 和 <code>nvidia-prime</code> 之後，想切換到 hybrid 模式省電。</p>
+<p>結果 <code>prime-select on-demand</code> 一執行，重開機就黑螢幕。</p>
+<hr>
+<p>先講結論：<code>prime-select</code> 這東西不要碰。</p>
+<p>它切換模式的方式是直接寫 blacklist 檔案把 NVIDIA 模組擋掉，然後你下次想用 hybrid 模式的時候，它不會幫你清乾淨。黑螢幕的原因就是 NVIDIA 模組被擋了但系統又嘗試載入它。</p>
+<hr>
+<p>排查的過程很煩。</p>
+<p>先是發現 <code>prime-run</code> 指令根本不存在。<code>nvidia-prime</code> 套件竟然沒包含這個腳本，要自己建：</p>
+<pre><code class="language-bash">cat &gt; /tmp/prime-run &lt;&lt; &#39;EOF&#39;
+#!/bin/bash
+__NV_PRIME_RENDER_OFFLOAD=1 __VK_LAYER_NV_optimus=NVIDIA_only __GLX_VENDOR_LIBRARY_NAME=nvidia &quot;$@&quot;
+EOF
+chmod +x /tmp/prime-run
+sudo mv /tmp/prime-run /usr/bin/prime-run
+</code></pre>
+<p>然後改用 <a href="https://github.com/bayasdev/envycontrol">EnvyControl</a> 來管理 GPU 切換，因為 <code>prime-select</code> 顯然靠不住：</p>
+<pre><code class="language-bash">wget -O /tmp/python3-envycontrol.deb \
+  https://github.com/bayasdev/envycontrol/releases/download/v3.5.1/python3-envycontrol_3.5.1-1_all.deb
+sudo apt install /tmp/python3-envycontrol.deb
+sudo systemctl mask gpu-manager.service
+sudo envycontrol -s hybrid --rtd3
+</code></pre>
+<p>重開機。</p>
+<p><code>nvidia-smi</code> 還是失敗。</p>
+<hr>
+<p>查了一下模組設定：</p>
+<pre><code class="language-bash">$ modprobe --showconfig | grep nvidia
+blacklist nvidia
+blacklist nvidia_drm
+blacklist nvidia_modeset
+</code></pre>
+<p>罪魁禍首是 <code>/lib/modprobe.d/blacklist-nvidia.conf</code>：</p>
+<pre><code># Do not modify
+# This file was generated by nvidia-prime
+blacklist nvidia
+blacklist nvidia-drm
+blacklist nvidia-modeset
+alias nvidia off
+alias nvidia-drm off
+alias nvidia-modeset off
+</code></pre>
+<p>這是之前用 <code>prime-select intel</code> 留下的。<code>prime-select</code> 切到純內顯模式時會寫這個檔案，但你之後想換回 hybrid，它不會刪掉。</p>
+<p>刪掉它：</p>
+<pre><code class="language-bash">sudo rm /lib/modprobe.d/blacklist-nvidia.conf
+sudo update-initramfs -u
+sudo modprobe nvidia
+</code></pre>
+<p>終於成功了：</p>
+<pre><code>+-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.95.05              Driver Version: 580.95.05      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+|   0  NVIDIA RTX A5000 Laptop GPU    Off |   00000000:01:00.0 Off |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+</code></pre>
+<hr>
+<p>以後就只用 <code>envycontrol</code> 切換模式。<code>prime-select</code> 這東西碰了就是踩雷。</p>
+<p>如果不小心黑螢幕進不去系統，進 recovery mode 執行：</p>
+<pre><code class="language-bash">sudo rm /lib/modprobe.d/blacklist-nvidia.conf
+sudo update-initramfs -u
+</code></pre>
+<p>常用的指令備忘：</p>
+<pre><code class="language-bash">envycontrol --query                    # 查詢目前模式
+sudo envycontrol -s integrated         # 純內顯
+sudo envycontrol -s hybrid --rtd3      # 混合模式 + 省電
+sudo envycontrol -s nvidia             # 純 NVIDIA
+prime-run ./my-app                     # 指定用 NVIDIA 跑程式
+</code></pre>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

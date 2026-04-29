@@ -1,10 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const marked = require('../assets/marked.min.js');
 
 const ROOT_DIR = path.join(__dirname, '..');
 const POSTS_PATH = path.join(ROOT_DIR, 'data/posts.json');
 const TEMPLATE_PATH = path.join(ROOT_DIR, 'post.html');
 const HOMEPAGE_PATH = path.join(ROOT_DIR, 'index.html');
+const POSTS_DIR = path.join(ROOT_DIR, 'content/posts');
 const SITE_BASE_URL = 'https://b-log.to';
 const META_DATE_LOCALE = 'en-US';
 const CLOUDINARY_OG_IMAGE_CONFIG = {
@@ -37,6 +39,20 @@ function escapeHtml(value = '') {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function escapeJsonForScript(value) {
+  return JSON.stringify(value)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026');
+}
+
+function stripTrailingWhitespace(html) {
+  return html
+    .split('\n')
+    .map((line) => line.trimEnd())
+    .join('\n');
 }
 
 function ensureDir(dirPath) {
@@ -210,6 +226,140 @@ function slugToPath(slug, category) {
 function buildAudioIndicatorMarkup(isHero = false) {
   const className = isHero ? 'audio-indicator audio-indicator--hero' : 'audio-indicator';
   return `<span class="${className}" aria-label="有語音版" title="此文章有語音版"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/></svg></span>`;
+}
+
+function buildAudioPlayerHTML(audioFile) {
+  const safeAudioFile = escapeHtml(audioFile);
+  return `<div class="audio-player" data-audio-file="${safeAudioFile}">
+  <audio preload="metadata">
+    <source src="/content/audio/${safeAudioFile}" type="audio/mp4">
+    您的瀏覽器不支援音訊播放。
+  </audio>
+  <div class="audio-controls">
+    <button class="audio-btn play-pause" aria-label="播放/暫停">
+      <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+      <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+      </svg>
+    </button>
+    <div class="audio-progress-container">
+      <input type="range" class="audio-progress" min="0" max="100" value="0" step="0.1" aria-label="播放進度">
+      <div class="audio-time">
+        <span class="current-time">0:00</span>
+        <span class="duration">0:00</span>
+      </div>
+      <div class="playlist-info" style="display:none; font-size:0.75rem; color:var(--text-secondary, #666); margin-top:0.25rem;">
+        片段 <span class="current-part">1</span> / <span class="total-parts">1</span>
+      </div>
+    </div>
+    <div class="audio-speed">
+      <button class="speed-btn" aria-label="播放速度">1.0x</button>
+      <div class="speed-menu" style="display:none">
+        <button data-speed="0.75">0.75x</button>
+        <button data-speed="1.0" class="active">1.0x</button>
+        <button data-speed="1.25">1.25x</button>
+        <button data-speed="1.5">1.5x</button>
+        <button data-speed="2.0">2.0x</button>
+      </div>
+    </div>
+    <div class="audio-volume">
+      <button class="volume-btn" aria-label="音量">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+        </svg>
+      </button>
+      <input type="range" class="volume-slider" min="0" max="100" value="100" aria-label="音量控制">
+    </div>
+  </div>
+  <div class="audio-attribution">
+    Powered by <a href="https://notebooklm.google/" target="_blank" rel="noopener noreferrer">NotebookLM</a>. You may check facts.
+  </div>
+</div>`;
+}
+
+function stripMarkdownTitle(markdown) {
+  const lines = markdown.split('\n');
+  if (lines[0]?.trim().startsWith('#')) {
+    lines.shift();
+    while (lines.length > 0 && lines[0].trim() === '') {
+      lines.shift();
+    }
+  }
+  return lines.join('\n');
+}
+
+function renderMarkdownForStaticPage(post) {
+  const markdownPath = path.join(POSTS_DIR, `${post.slug}.md`);
+  if (!fs.existsSync(markdownPath)) {
+    throw new Error(`找不到 Markdown 檔案：content/posts/${post.slug}.md`);
+  }
+
+  let markdown = stripMarkdownTitle(fs.readFileSync(markdownPath, 'utf8'));
+  markdown = markdown.replace(/<!--\s*audio:\s*(.+?)\s*-->/g, (_, audioFile) => buildAudioPlayerHTML(audioFile.trim()));
+
+  return marked
+    .parse(markdown)
+    .replace(/\b(src|srcset)="content\//g, '$1="/content/');
+}
+
+function buildArticleMetaMarkup(post) {
+  return formatStaticMetaParts(post)
+    .map((part) => `<span>${escapeHtml(part)}</span>`)
+    .join('');
+}
+
+function buildArticleTagsMarkup(tags = []) {
+  if (!Array.isArray(tags) || !tags.length) {
+    return '<div id="post-tags" class="article-tags" hidden></div>';
+  }
+
+  const tagMarkup = tags
+    .filter(Boolean)
+    .map((tag) => `<span>${escapeHtml(tag)}</span>`)
+    .join('');
+
+  return `<div id="post-tags" class="article-tags">${tagMarkup}</div>`;
+}
+
+function buildStructuredData(post, fullUrl, imageUrl) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title || post.slug || 'Untitled',
+    description: post.summary || '',
+    author: {
+      '@type': 'Person',
+      name: post.author || 'Jason Chien',
+    },
+    publisher: {
+      '@type': 'Person',
+      name: 'Jason Chien',
+    },
+    datePublished: post.publishedAt || '',
+    dateModified: post.updatedAt || post.publishedAt || '',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': fullUrl,
+    },
+    url: fullUrl,
+    inLanguage: 'zh-Hant-TW',
+  };
+
+  if (imageUrl) {
+    schema.image = [imageUrl];
+  }
+
+  if (Array.isArray(post.tags) && post.tags.length) {
+    schema.keywords = post.tags.join(', ');
+  }
+
+  if (post.category) {
+    schema.articleSection = post.category;
+  }
+
+  return `  <script type="application/ld+json">${escapeJsonForScript(schema)}</script>\n`;
 }
 
 function buildHeroCategoryStyle(post) {
@@ -419,6 +569,9 @@ function generatePostHTML(post) {
   const fullUrl = `${SITE_BASE_URL}/${categorySlug}/${slug}/`;
   const heroPreload = buildHeroPreload(coverImage);
   const heroMarkup = buildHeroMarkup(post);
+  const staticPostContent = renderMarkdownForStaticPage(post);
+  const staticMetaMarkup = buildArticleMetaMarkup(post);
+  const staticTagsMarkup = buildArticleTagsMarkup(tags);
 
   // 生成 Open Graph 圖片 URL
   let ogImageUrl;
@@ -434,11 +587,18 @@ function generatePostHTML(post) {
   // 更新 meta tags
   html = html.replace(/<title>Reading - \(b\)-log<\/title>/, `<title>${safeTitle} - (b)-log</title>`);
   html = html.replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${safeSummary}"`);
-  html = html.replace(/<link rel="canonical" href="" id="canonical-url">/, `<link rel="canonical" href="${fullUrl}" id="canonical-url">`);
+  html = html.replace(/<link rel="canonical" href="[^"]*" id="canonical-url">/, `<link rel="canonical" href="${fullUrl}" id="canonical-url">`);
   html = html.replace(/<meta name="keywords" content="" id="meta-keywords">/, `<meta name="keywords" content="${tagsString}" id="meta-keywords">`);
+  html = html.replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="index, follow">');
   html = html.replace(/  <!-- 首圖 preload 會由生成腳本注入到這裡 -->\s*/,
     `  <!-- 首圖 preload 會由生成腳本注入到這裡 -->\n${heroPreload}`);
   html = html.replace(/<div id="post-hero" class="article-hero"><\/div>/, heroMarkup);
+  html = html.replace(/<span id="breadcrumb-current"><\/span>/, `<span id="breadcrumb-current">${safeTitle}</span>`);
+  html = html.replace(/<p id="post-category" class="article-category"><\/p>/, `<p id="post-category" class="article-category">${safeCategory}</p>`);
+  html = html.replace(/<h1 id="post-title">Loading<\/h1>/, `<h1 id="post-title">${safeTitle}</h1>`);
+  html = html.replace(/<div id="post-meta" class="article-meta"><\/div>/, `<div id="post-meta" class="article-meta">${staticMetaMarkup}</div>`);
+  html = html.replace(/<div id="post-tags" class="article-tags"><\/div>/, staticTagsMarkup);
+  html = html.replace(/<div id="post-content" class="article-body"><\/div>/, `<div id="post-content" class="article-body" data-prerendered="true">${staticPostContent}</div>`);
   html = replaceMarkedBlock(
     html,
     ARTICLE_TAGS_START,
@@ -460,8 +620,9 @@ function generatePostHTML(post) {
   html = html.replace(/<meta property="twitter:title" content="Loading - \(b\)-log" id="twitter-title">/, `<meta property="twitter:title" content="${safeTitle}" id="twitter-title">`);
   html = html.replace(/<meta property="twitter:description" content="" id="twitter-description">/, `<meta property="twitter:description" content="${safeSummary}" id="twitter-description">`);
   html = html.replace(/<meta property="twitter:image" content="" id="twitter-image">/, `<meta property="twitter:image" content="${ogImageUrl}" id="twitter-image">`);
+  html = html.replace('</head>', `${buildStructuredData(post, fullUrl, ogImageUrl)}</head>`);
 
-  return html;
+  return stripTrailingWhitespace(html);
 }
 
 // 生成重定向頁面 HTML

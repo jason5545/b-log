@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>解決 Facebook 分享預覽的中文顯示問題：Cloudinary 整合實戰 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="從發現 og-image.vercel.app 無法顯示中文，到成功整合 Cloudinary + Noto Sans TC 字型，完整記錄解決 Facebook 社交預覽問題的技術細節與踩坑經驗。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/cloudinary-chinese-og-image-solution/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/cloudinary-chinese-og-image-solution/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="SEO">
   <meta property="article:tag" content="自動化">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/cloudinary-chinese-og-image-solution/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="從發現 og-image.vercel.app 無法顯示中文，到成功整合 Cloudinary + Noto Sans TC 字型，完整記錄解決 Facebook 社交預覽問題的技術細節與踩坑經驗。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%A7%A3%E6%B1%BA%20Facebook%20%E5%88%86%E4%BA%AB%E9%A0%90%E8%A6%BD%E7%9A%84%E4%B8%AD%E6%96%87%E9%A1%AF%E7%A4%BA%E5%95%8F%E9%A1%8C%EF%BC%9ACloudinary%20%E6%95%B4%E5%90%88%E5%AF%A6%E6%88%B0,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Cloudinary, Open Graph, 中文字型, Facebook, SEO, 自動化" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"解決 Facebook 分享預覽的中文顯示問題：Cloudinary 整合實戰","description":"從發現 og-image.vercel.app 無法顯示中文，到成功整合 Cloudinary + Noto Sans TC 字型，完整記錄解決 Facebook 社交預覽問題的技術細節與踩坑經驗。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-10-18T08:00:00Z","dateModified":"2025-10-18T08:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/cloudinary-chinese-og-image-solution/"},"url":"https://b-log.to/tech-development/cloudinary-chinese-og-image-solution/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%A7%A3%E6%B1%BA%20Facebook%20%E5%88%86%E4%BA%AB%E9%A0%90%E8%A6%BD%E7%9A%84%E4%B8%AD%E6%96%87%E9%A1%AF%E7%A4%BA%E5%95%8F%E9%A1%8C%EF%BC%9ACloudinary%20%E6%95%B4%E5%90%88%E5%AF%A6%E6%88%B0,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"Cloudinary, Open Graph, 中文字型, Facebook, SEO, 自動化","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">解決 Facebook 分享預覽的中文顯示問題：Cloudinary 整合實戰</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,181 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">解決 Facebook 分享預覽的中文顯示問題：Cloudinary 整合實戰</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Oct 18, 2025</span><span>15 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Cloudinary</span><span>Open Graph</span><span>中文字型</span><span>Facebook</span><span>SEO</span><span>自動化</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>當你滿心期待地在 Facebook 分享你的中文部落格文章，卻發現預覽圖只顯示「loading」或一堆亂碼方塊時，那種挫折感我完全理解。今天花了幾個小時，終於徹底解決了這個問題。</p>
+<h2>問題的根源</h2>
+<p>最初使用 <code>og-image.vercel.app</code> 來動態生成 Open Graph 圖片。對於英文內容來說，這個服務完美無瑕。但對於中文？完全不行。</p>
+<p><strong>問題有兩個層次：</strong></p>
+<ol>
+<li><p><strong>Facebook 不執行 JavaScript</strong>
+我的 <code>post.html</code> 中的 OG meta tags 是由 JavaScript 動態填入的。Twitter/X 可以正常抓取，但 Facebook 的爬蟲只看到空白的 <code>&lt;meta property=&quot;og:title&quot; content=&quot;Loading&quot;&gt;</code>。</p>
+</li>
+<li><p><strong>og-image.vercel.app 不支援中文字型</strong>
+即使預先填入 meta tags，使用 <code>og-image.vercel.app</code> 生成的圖片也會將中文顯示為亂碼或方塊，因為預設字型不包含 CJK 字元集。</p>
+</li>
+</ol>
+<h2>解決方案：Cloudinary + Noto Sans TC</h2>
+<h3>為什麼選擇 Cloudinary？</h3>
+<p>考慮過幾個方案：</p>
+<ul>
+<li><strong>靜態預設圖片</strong>：太單調，失去個性化</li>
+<li><strong>手動設計封面</strong>：每篇文章都要設計，不切實際</li>
+<li><strong>自架 Vercel Edge Function</strong>：需要額外專案，維護成本高</li>
+<li><strong>Cloudinary</strong>：免費額度足夠，內建文字覆蓋 API，支援自訂字型 ✅</li>
+</ul>
+<h3>實作步驟</h3>
+<h4>1. 註冊 Cloudinary 並上傳背景圖片</h4>
+<p>首先註冊免費帳號，記下你的 Cloud Name（我的是 <code>dynj7181i</code>）。</p>
+<p>然後建立一張 1200×630px 的背景圖片。我選擇使用 SVG 製作漸層背景：</p>
+<pre><code class="language-svg">&lt;svg width=&quot;1200&quot; height=&quot;630&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+  &lt;defs&gt;
+    &lt;linearGradient id=&quot;grad&quot; x1=&quot;0%&quot; y1=&quot;0%&quot; x2=&quot;100%&quot; y2=&quot;100%&quot;&gt;
+      &lt;stop offset=&quot;0%&quot; style=&quot;stop-color:#556bff;stop-opacity:1&quot; /&gt;
+      &lt;stop offset=&quot;100%&quot; style=&quot;stop-color:#3644d8;stop-opacity:1&quot; /&gt;
+    &lt;/linearGradient&gt;
+  &lt;/defs&gt;
+  &lt;rect width=&quot;1200&quot; height=&quot;630&quot; fill=&quot;url(#grad)&quot; /&gt;
+  &lt;text x=&quot;1140&quot; y=&quot;600&quot; font-family=&quot;Arial&quot; font-size=&quot;24&quot;
+        fill=&quot;#ffffff&quot; opacity=&quot;0.8&quot; text-anchor=&quot;end&quot;&gt;(b)-log&lt;/text&gt;
+&lt;/svg&gt;
+</code></pre>
+<p>上傳後得到 Public ID：<code>og-background_cbst7j</code></p>
+<h4>2. 上傳 Noto Sans TC 字型</h4>
+<p>這是關鍵步驟。Cloudinary 的內建字型（如 WenQuanYi Zen Hei）雖然支援中文，但視覺效果不夠現代。我想用 Noto Sans TC。</p>
+<p><strong>重要：字型必須作為 authenticated raw file 上傳，且 Public ID 不能包含底線。</strong></p>
+<p>步驟：</p>
+<ol>
+<li>前往 Cloudinary Settings → Upload Presets</li>
+<li>建立新 preset：<ul>
+<li>Signing Mode：Signed</li>
+<li>Delivery type：Authenticated</li>
+</ul>
+</li>
+<li>使用此 preset 上傳 <code>NotoSansTC-Bold.ttf</code></li>
+<li>設定 Public ID 為 <code>notosanstc-bold.ttf</code>（全小寫，無底線）</li>
+</ol>
+<h4>3. 測試文字覆蓋 API</h4>
+<p>Cloudinary 的文字覆蓋語法是這樣的：</p>
+<pre><code>https://res.cloudinary.com/{cloud_name}/image/upload/
+  c_fill,w_1200,h_630/
+  co_rgb:ffffff,
+  l_text:{font_id}_{size}_{alignment}:{encoded_text},w_{max_width},c_fit/
+  fl_layer_apply,g_center/
+  {background_id}.png
+</code></pre>
+<p>關鍵參數：</p>
+<ul>
+<li><code>co_rgb:ffffff</code>：文字顏色（白色）</li>
+<li><code>l_text:notosanstc-bold.ttf_60_center:...</code>：使用自訂字型，60px，置中對齊</li>
+<li><code>w_1000,c_fit</code>：限制文字寬度 1000px，自動縮放和換行</li>
+<li><code>fl_layer_apply,g_center</code>：套用文字圖層並置中</li>
+</ul>
+<p>測試時發現：</p>
+<ul>
+<li><strong>60px 字型 + 1000px 寬度</strong>：完美，無白邊</li>
+<li><strong>60px 字型 + 1100px 寬度</strong>：長標題會超出邊界</li>
+<li><strong>50px 字型</strong>：文字太小，視覺效果不佳</li>
+</ul>
+<h4>4. 修改 generate-redirects.js</h4>
+<p>在生成 WordPress 風格頁面時，預先填入 Cloudinary URL：</p>
+<pre><code class="language-javascript">// 生成 Open Graph 圖片 URL
+let ogImageUrl;
+if (coverImage) {
+  ogImageUrl = `${baseUrl}/${coverImage}`;
+} else {
+  const cloudName = &#39;dynj7181i&#39;;
+  const backgroundId = &#39;og-background_cbst7j&#39;;
+  const fontId = &#39;notosanstc-bold.ttf&#39;;
+  const encodedTitle = encodeURIComponent(title);
+
+  ogImageUrl = `https://res.cloudinary.com/${cloudName}/image/upload/` +
+    `c_fill,w_1200,h_630/` +
+    `co_rgb:ffffff,` +
+    `l_text:${fontId}_60_center:${encodedTitle},w_1000,c_fit/` +
+    `fl_layer_apply,g_center/` +
+    `${backgroundId}.png`;
+}
+</code></pre>
+<p>這樣每篇文章都會自動生成包含正確 OG 圖片 URL 的頁面。</p>
+<h2>遇到的坑</h2>
+<h3>坑 1：字型檔案上傳失敗（Error 400）</h3>
+<p>一開始直接在 Media Library 上傳字型，Cloudinary 自動加上底線後綴（如 <code>NotoSansTC-Bold_i1elwz.ttf</code>），導致文字覆蓋 API 無法識別。</p>
+<p><strong>解決方法</strong>：必須使用 authenticated upload preset，並手動設定不含底線的 Public ID。</p>
+<h3>坑 2：長標題超出圖片邊界</h3>
+<p>測試「OpenAI的矛盾：一邊降溫一邊加熱的危險遊戲」這樣的長標題時，發現文字超出 1200px 寬度，導致左右出現白邊。</p>
+<p><strong>解決方法</strong>：加入 <code>w_1000,c_fit</code> 參數，限制文字區域寬度並自動縮放。</p>
+<h3>坑 3：Facebook 快取問題</h3>
+<p>即使 OG 圖片 URL 正確，Facebook 可能還是顯示舊的預覽。</p>
+<p><strong>解決方法</strong>：使用 <a href="https://developers.facebook.com/tools/debug/">Facebook Sharing Debugger</a> 強制重新抓取：</p>
+<ol>
+<li>輸入文章 URL</li>
+<li>點選「Scrape Again」</li>
+<li>確認預覽正確</li>
+</ol>
+<h2>最終效果</h2>
+<p>現在所有文章的 Facebook 分享預覽都能正確顯示：</p>
+<ul>
+<li>✅ 標題使用 Noto Sans TC Bold 字型</li>
+<li>✅ 白色文字於藍色漸層背景</li>
+<li>✅ 自動換行，無白邊</li>
+<li>✅ 右下角有 (b)-log 浮水印</li>
+</ul>
+<p>最重要的是：<strong>完全自動化</strong>。未來新增文章時，GitHub Actions 會自動生成包含正確 OG 圖片的頁面，無需手動操作。</p>
+<h2>技術細節總結</h2>
+<p><strong>Cloudinary 設定：</strong></p>
+<ul>
+<li>Cloud Name: <code>dynj7181i</code></li>
+<li>背景圖片: <code>og-background_cbst7j</code> (1200×630px SVG 漸層)</li>
+<li>字型: <code>notosanstc-bold.ttf</code> (authenticated raw file)</li>
+</ul>
+<p><strong>最佳配置：</strong></p>
+<ul>
+<li>字型大小: 60px</li>
+<li>文字寬度限制: 1000px</li>
+<li>對齊方式: center</li>
+<li>自動縮放: c_fit</li>
+</ul>
+<p><strong>成本：</strong></p>
+<ul>
+<li>Cloudinary 免費額度：每月 25 credits</li>
+<li>每次圖片生成約消耗 0.0001 credits</li>
+<li>可支援約 250,000 次預覽請求/月（遠超實際需求）</li>
+</ul>
+<h2>學到的教訓</h2>
+<ol>
+<li><p><strong>不要假設第三方服務支援所有語言</strong>
+英文能用不代表中文也能用。測試時要用實際內容，不要只用「test」。</p>
+</li>
+<li><p><strong>了解平台限制很重要</strong>
+Facebook 不執行 JavaScript，這個基本認知能省下很多偵錯時間。</p>
+</li>
+<li><p><strong>自動化是值得投資的</strong>
+花幾小時設定好自動化流程，未來能省下無數次重複操作。</p>
+</li>
+<li><p><strong>免費服務也能很強大</strong>
+Cloudinary 的免費額度對個人部落格來說綽綽有餘，不一定要自己架設服務。</p>
+</li>
+</ol>
+<h2>下一步</h2>
+<p>目前所有文章都使用統一的漸層背景。未來可以考慮：</p>
+<ul>
+<li>為重要文章設計專屬 <code>coverImage</code></li>
+<li>根據文章分類使用不同背景顏色</li>
+<li>加入更多視覺元素（圖示、裝飾線條等）</li>
+</ul>
+<p>但現在這樣已經很好了。<strong>能用、好看、自動化</strong>，這就是我要的。</p>
+<hr>
+<p><strong>相關資源：</strong></p>
+<ul>
+<li><a href="https://cloudinary.com/documentation/layers">Cloudinary 文字覆蓋文件</a></li>
+<li><a href="https://developers.facebook.com/tools/debug/">Facebook Sharing Debugger</a></li>
+<li><a href="https://ogp.me/">Open Graph Protocol</a></li>
+</ul>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

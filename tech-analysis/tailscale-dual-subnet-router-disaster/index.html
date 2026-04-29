@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>在 PVE 上裝第二台 Tailscale 子網路由，然後花三小時修一個不存在的問題 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="PVE 跟 mt6000 都跑 Tailscale subnet router，兩邊都開了 --accept-routes，結果區網路由被劫持到 Tailscale 隧道。關掉 accept-routes 是正確修正，但我沒等控制平面傳播完就疊了 ip rule 上去，把回覆路徑炸掉了。tcpdump 告訴我封包根本不走我以為的路。三小時的除錯，答案是關一個參數然後等五分鐘。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/tailscale-dual-subnet-router-disaster/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/tailscale-dual-subnet-router-disaster/" id="og-url">
@@ -31,7 +31,7 @@
   <meta property="article:tag" content="subnet routing">
   <meta property="article:tag" content="自架伺服器">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/tailscale-dual-subnet-router-disaster/" id="twitter-url">
@@ -39,7 +39,7 @@
   <meta property="twitter:description" content="PVE 跟 mt6000 都跑 Tailscale subnet router，兩邊都開了 --accept-routes，結果區網路由被劫持到 Tailscale 隧道。關掉 accept-routes 是正確修正，但我沒等控制平面傳播完就疊了 ip rule 上去，把回覆路徑炸掉了。tcpdump 告訴我封包根本不走我以為的路。三小時的除錯，答案是關一個參數然後等五分鐘。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%9C%A8%20PVE%20%E4%B8%8A%E8%A3%9D%E7%AC%AC%E4%BA%8C%E5%8F%B0%20Tailscale%20%E5%AD%90%E7%B6%B2%E8%B7%AF%E7%94%B1%EF%BC%8C%E7%84%B6%E5%BE%8C%E8%8A%B1%E4%B8%89%E5%B0%8F%E6%99%82%E4%BF%AE%E4%B8%80%E5%80%8B%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E5%95%8F%E9%A1%8C,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Tailscale, Proxmox VE, 網路除錯, subnet routing, 自架伺服器" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -109,6 +109,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"在 PVE 上裝第二台 Tailscale 子網路由，然後花三小時修一個不存在的問題","description":"PVE 跟 mt6000 都跑 Tailscale subnet router，兩邊都開了 --accept-routes，結果區網路由被劫持到 Tailscale 隧道。關掉 accept-routes 是正確修正，但我沒等控制平面傳播完就疊了 ip rule 上去，把回覆路徑炸掉了。tcpdump 告訴我封包根本不走我以為的路。三小時的除錯，答案是關一個參數然後等五分鐘。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-02-23T00:00:00Z","dateModified":"2026-02-23T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/tailscale-dual-subnet-router-disaster/"},"url":"https://b-log.to/tech-analysis/tailscale-dual-subnet-router-disaster/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%9C%A8%20PVE%20%E4%B8%8A%E8%A3%9D%E7%AC%AC%E4%BA%8C%E5%8F%B0%20Tailscale%20%E5%AD%90%E7%B6%B2%E8%B7%AF%E7%94%B1%EF%BC%8C%E7%84%B6%E5%BE%8C%E8%8A%B1%E4%B8%89%E5%B0%8F%E6%99%82%E4%BF%AE%E4%B8%80%E5%80%8B%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E5%95%8F%E9%A1%8C,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"Tailscale, Proxmox VE, 網路除錯, subnet routing, 自架伺服器","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -118,7 +119,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">在 PVE 上裝第二台 Tailscale 子網路由，然後花三小時修一個不存在的問題</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -187,12 +188,102 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">在 PVE 上裝第二台 Tailscale 子網路由，然後花三小時修一個不存在的問題</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Feb 23, 2026</span><span>8 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Tailscale</span><span>Proxmox VE</span><span>網路除錯</span><span>subnet routing</span><span>自架伺服器</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>我的 PVE 主機（10.0.0.192）跟 mt6000 路由器（10.0.0.1）都在同一個區網 10.0.0.0/24 上。兩台都跑 Tailscale，都廣播這個子網段當 subnet router，這樣我在外面用 MacBook 連 Tailscale 就能存取家裡的所有設備。</p>
+<p>聽起來很合理吧。</p>
+<p>問題出在一個參數：<code>--accept-routes</code>。</p>
+<h2>兩台子網路由互相 accept-routes，然後一切都壞了</h2>
+<p><code>--accept-routes</code> 的意思是「接受其他節點廣播的路由」。當你是一般客戶端的時候，這很合理——你需要知道怎麼透過 subnet router 到達遠端網段。</p>
+<p>但當你自己就是 subnet router，而且你就在那個網段上的時候？</p>
+<p>PVE 廣播 10.0.0.0/24，mt6000 也廣播 10.0.0.0/24。兩邊都開了 <code>--accept-routes</code>，所以 PVE 接受了 mt6000 廣播的路由，mt6000 也接受了 PVE 廣播的路由。Tailscale 的路由表（table 52）裡多了一條：</p>
+<pre><code>table 52: 10.0.0.0/24 dev tailscale0
+</code></pre>
+<p>ip rule 的優先順序是 5270（查 table 52）先於 32766（查 main table）。結果就是所有 10.0.0.0/24 的流量不走 vmbr0 走區網，而是被劫持到 tailscale0 走 Tailscale 隧道。</p>
+<p>區網直接斷了。</p>
+<p>一台在 10.0.0.0/24 上的機器，要去 10.0.0.0/24 的鄰居，結果封包被塞進 Tailscale 隧道繞一圈。這已經不是效能問題了，是路由迴圈。</p>
+<h2>第一個修正：正確的</h2>
+<pre><code class="language-bash">tailscale set --accept-routes=false
+</code></pre>
+<p>兩台都關掉。PVE 的區網立刻恢復。</p>
+<p>邏輯很單純：你自己就在這個網段上，你不需要「接受」別人告訴你怎麼到這個網段。你本來就在這裡。</p>
+<p>事後去翻<a href="https://tailscale.com/kb/1019/subnets">官方文件</a>，人家寫得很清楚：</p>
+<blockquote>
+<p>If you turn on <code>--accept-routes</code> for subnet routers that share the same routes in the same region, the standby router will accept its own advertised routes from the primary router.</p>
+</blockquote>
+<blockquote>
+<p>The standby router will send all 192.168.1.0/24 traffic through the primary router, even though it is directly connected to that network.</p>
+</blockquote>
+<blockquote>
+<p>For most HA subnet router setups, use the <code>--advertise-routes</code> flag alone.</p>
+</blockquote>
+<p>就是這樣。答案一直在文件裡。</p>
+<h2>然後我犯了真正的錯</h2>
+<p>關掉 accept-routes 之後，我從 MacBook 測試連 10.0.0.192。</p>
+<p>失敗。</p>
+<p>我在 Tailscale Admin Console 上重新操作了好幾次 unapprove / re-approve，想確認路由設定有生效。</p>
+<p>還是失敗。</p>
+<p>所以我判斷：accept-routes 的修正不夠，一定還有別的問題。</p>
+<p>這個判斷是錯的。</p>
+<p>真正發生的事情是：Tailscale 的控制平面需要時間把更新後的路由設定（AllowedIPs、primary/failover 指派）傳播到所有客戶端。我在 Admin Console 上反覆操作，觸發了重新計算，但傳播不是即時的。</p>
+<p>我沒等。</p>
+<h2>在傳播空窗期疊加了錯誤的修正</h2>
+<p>我當時的心智模型是這樣的：MacBook 的封包先到 mt6000（primary subnet router），mt6000 轉發到區網，PVE 收到封包後回覆。所以我覺得問題出在 PVE 的回覆路徑。</p>
+<p>於是我做了三件事：</p>
+<ol>
+<li><code>ip rule add from 10.0.0.192 table main priority 5200</code>——強制 PVE 發出的封包走 main table（走 vmbr0）</li>
+<li><code>iptables -I INPUT 1 -s 100.64.0.0/10 -i vmbr0 -d 10.0.0.192 -j ACCEPT</code>——允許 CGNAT 來源的封包從 vmbr0 進入</li>
+<li>把 ip rule 寫進 <code>/etc/network/interfaces</code> 的 <code>post-up</code>——持久化</li>
+</ol>
+<p>每一步都有「道理」。但整個前提就是錯的。</p>
+<h2>tcpdump 告訴我真正的封包路徑</h2>
+<p>我應該在第一步就跑 tcpdump。不是第三步，不是修了一堆東西之後。</p>
+<p>實際的封包路徑：</p>
+<pre><code>MacBook → Tailscale → PVE 的 tailscale0（直連）
+</code></pre>
+<p>PVE 自己就是 subnet router，而且 PVE 就是目的地。Tailscale 直接把封包送到 PVE，根本不經過 mt6000。primary/failover 的指派只對「不是 subnet router 的目的地」才有意義。</p>
+<p>那我加的 <code>ip rule from 10.0.0.192 table main</code> 做了什麼？</p>
+<p>它把 PVE 透過 tailscale0 回覆給 MacBook 的封包（src=10.0.0.192, dst=100.89.162.36）劫持到 main table，從 vmbr0 送去預設閘道 10.0.0.1。10.0.0.1 不知道怎麼路由 Tailscale 的 CGNAT 位址。</p>
+<p>封包黑洞。我親手把回覆路徑炸掉了。</p>
+<p>那 iptables 規則呢？0 個封包命中。因為根本沒有 CGNAT 來源的封包從 vmbr0 進來過。完全是多餘的。</p>
+<h2>為什麼容器一直都通</h2>
+<p>有趣的是，整個過程中 10.0.0.172（PVE 上的容器）從來沒斷過。</p>
+<p>因為路徑完全不同：</p>
+<ol>
+<li>封包到 PVE 的 tailscale0（目的是 10.0.0.172）</li>
+<li>PVE 透過 vmbr0 轉發給容器（走 FORWARD chain，不是 INPUT）</li>
+<li>Tailscale 的 <code>ts-postrouting</code> 把來源 NAT 成 10.0.0.192</li>
+<li>容器回覆給 10.0.0.192，conntrack 反向 de-NAT 送回 tailscale0</li>
+<li>conntrack 處理了反向路徑，<code>ip rule</code> 根本沒機會介入</li>
+</ol>
+<p>所以容器的連線完全不受影響，這讓我更加確信問題出在 PVE 本機的路由，而不是 Tailscale 傳播延遲。</p>
+<p>錯誤的線索指向錯誤的方向。</p>
+<h2>還原</h2>
+<p>全部撤掉。ip rule 刪掉，iptables 規則刪掉，interfaces 的 post-up 刪掉。</p>
+<p>確認兩台都是 <code>--accept-routes=false</code>。</p>
+<p>MacBook ping 10.0.0.192。通了。</p>
+<p>控制平面的傳播早就完成了。我的「修正」才是唯一的問題。</p>
+<h2>學到的事</h2>
+<p><strong>Subnet router 不要 accept-routes 自己的網段。</strong> 你在 10.0.0.0/24 上，就不要接受別人告訴你 10.0.0.0/24 怎麼走。</p>
+<p><strong>Tailscale 控制平面的變更有傳播延遲。</strong> 在 Admin Console 改了東西之後，等。不是改完測一次失敗就代表沒用。</p>
+<p><strong>先跑 tcpdump。</strong> 不是最後才跑。不是疊了三層修正之後才想到要看封包。驗證實際路徑應該是第一步。</p>
+<p><strong>不要在傳播空窗期疊加修正。</strong> 每多加一個變數，除錯的複雜度就多一個維度。改一個東西，等，驗證，再決定要不要改下一個。</p>
+<p><strong>毯式 ip rule 在有 Tailscale 的環境下很危險。</strong> <code>from &lt;ip&gt; table main</code> 會蓋過 Tailscale 依賴的 table 52 路由。Tailscale 的回覆流量需要走 table 52 才能正確送回隧道。</p>
+<p>最後的設定很無聊：</p>
+<pre><code>PVE (10.0.0.192):
+  tailscale set --advertise-routes=10.0.0.0/24
+  accept-routes = false
+
+mt6000 (10.0.0.1):
+  tailscale set --advertise-routes=10.0.0.0/24
+  accept-routes = false
+</code></pre>
+<p>兩台都在 Admin Console 核准。沒有額外的 ip rule，沒有 iptables 規則。</p>
+<p>三小時的除錯，最後的答案是關掉一個參數然後等五分鐘。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

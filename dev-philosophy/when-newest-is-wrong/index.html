@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>當「取最新」是對的，但結果是錯的 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="一個合理的設計假設，被一個不合理的資料狀態炸開。反思自動化邏輯中「預設假設」的邊界。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/dev-philosophy/when-newest-is-wrong/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/dev-philosophy/when-newest-is-wrong/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="檔案管理">
   <meta property="article:tag" content="邊界條件">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/dev-philosophy/when-newest-is-wrong/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="一個合理的設計假設，被一個不合理的資料狀態炸開。反思自動化邏輯中「預設假設」的邊界。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%E3%80%8C%E5%8F%96%E6%9C%80%E6%96%B0%E3%80%8D%E6%98%AF%E5%B0%8D%E7%9A%84%EF%BC%8C%E4%BD%86%E7%B5%90%E6%9E%9C%E6%98%AF%E9%8C%AF%E7%9A%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="自動化, 設計決策, Python, os.walk, 檔案管理, 邊界條件" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"當「取最新」是對的，但結果是錯的","description":"一個合理的設計假設，被一個不合理的資料狀態炸開。反思自動化邏輯中「預設假設」的邊界。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-04-01T00:00:00Z","dateModified":"2026-04-01T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/dev-philosophy/when-newest-is-wrong/"},"url":"https://b-log.to/dev-philosophy/when-newest-is-wrong/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%E3%80%8C%E5%8F%96%E6%9C%80%E6%96%B0%E3%80%8D%E6%98%AF%E5%B0%8D%E7%9A%84%EF%BC%8C%E4%BD%86%E7%B5%90%E6%9E%9C%E6%98%AF%E9%8C%AF%E7%9A%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"自動化, 設計決策, Python, os.walk, 檔案管理, 邊界條件","articleSection":"開發哲學"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">當「取最新」是對的，但結果是錯的</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,49 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">開發哲學</p>
+            <h1 id="post-title">當「取最新」是對的，但結果是錯的</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Apr 1, 2026</span><span>3 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>自動化</span><span>設計決策</span><span>Python</span><span>os.walk</span><span>檔案管理</span><span>邊界條件</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>事情經過</h2>
+<p>我寫了一支自動化程式，用來處理工程專案的文件組裝。其中一個功能是從來源資料夾搜尋材質證明 PDF，按照批號配對後放進對應的檔案包裡。</p>
+<p>同一個批號可能存在多個版本的材證檔案，所以我設計了一個規則：<strong>從檔名中的日期判斷版本，取最新的那個。</strong></p>
+<p>這個邏輯在正常情況下完全沒問題——新版本取代舊版本，天經地義。程式跑了好幾個月，處理過上百個檔案包，從來沒出事。</p>
+<p>直到今天，業主打電話來問：「你們放的材證等級不對。」</p>
+<h2>發生了什麼</h2>
+<p>某個批號同時存在兩份材證：</p>
+<ul>
+<li>一份是正確的檢驗證書（第三方認證），檔名日期較早</li>
+<li>一份是較低等級的測試報告（供應商自簽），檔名日期較新</li>
+</ul>
+<p>那份錯的檔案，是檔案管理人員歸檔時放進 archive 資料夾的。問題是，我的程式用 Python 的 <code>os.walk</code> 遞迴搜尋整個來源目錄——包括 archive。</p>
+<p>程式忠實地執行了「取最新」的規則，選了日期較新但內容錯誤的那份。然後這個錯誤被複製到了三個不同的儲存位置，影響了七十幾個 PDF。</p>
+<h2>邏輯有錯嗎？</h2>
+<p>客觀來說，沒有。</p>
+<p>「同一份文件有多個版本，取最新的」是檔案管理的基本共識。版本控制系統、檔案同步工具、備份軟體，全都是這個邏輯。在正常的資料流中，新版本就是應該取代舊版本。</p>
+<p>問題出在<strong>搜尋範圍</strong>，不是<strong>選擇邏輯</strong>。</p>
+<p>archive 資料夾的語意是「不再使用」，但程式不知道這個語意。對 <code>os.walk</code> 來說，00 跟其他資料夾沒有任何區別——它就是一個子目錄，裡面有 PDF，符合條件就抓。</p>
+<h2>修法</h2>
+<p>兩行：</p>
+<pre><code class="language-python">for root, dirs, files in os.walk(source_folder):
+    dirs[:] = [d for d in dirs if d not in (&#39;00&#39;, &#39;archive&#39;)]
+</code></pre>
+<p>讓 <code>os.walk</code> 不再走進 archive 資料夾。邏輯本身不用改，只是補上搜尋範圍的語意邊界。</p>
+<h2>反思</h2>
+<p>這件事讓我想到一個更普遍的問題：<strong>當你的自動化邏輯建立在一個合理的假設上，而這個假設被資料端的意外打破時，錯的是誰？</strong></p>
+<p>答案是：沒有人「錯」。</p>
+<ul>
+<li>「取最新」是合理的預設</li>
+<li>把舊檔案放進 archive 是正確的檔案管理</li>
+<li>但這兩件事碰在一起，就炸了</li>
+</ul>
+<p>而且事後才知道，還有第三層：<strong>資訊不對稱</strong>。負責檔案管理的人，直到事發當天才知道有自動化程式在掃描那個目錄。在他的認知裡，把舊檔案丟進 archive 就是「收好了」——因為在人工作業的世界裡，沒有人會去 archive 拿檔案來用。他不知道有一支程式會走進每一個子資料夾。同樣地，我也不知道他會在 archive 裡留存同批號的舊檔案。</p>
+<p>兩邊各自做了合理的事，但因為不了解對方的運作方式，就撞在一起了。</p>
+<p>這種 bug 最難預防，因為每一個獨立的決策都是對的，問題出在<strong>它們的交集</strong>。你不可能為每一個尚未發生的邊界條件都寫防禦邏輯，那樣程式會變得不可維護。</p>
+<p>能做的是：在事後，把這個語意邊界補上，然後記住一件事——</p>
+<p><code>os.walk</code> 不懂「archive」是什麼意思。你的程式碼也不懂。<strong>資料夾結構的語意只存在於人的腦袋裡</strong>，除非你明確告訴程式。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

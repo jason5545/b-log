@@ -93,35 +93,27 @@ https://b-log.to/ai-analysis/openai-contradiction-dangerous-game/
 https://b-log.to/tech-development/unified-remote-evo-development-journey/
 ```
 
-### 查詢參數 URL（舊格式，仍支援）
+`post.html` 只保留為產生文章頁的模板，不再支援查詢參數文章入口。
 
-```
-https://b-log.to/post.html?slug=openai-contradiction-dangerous-game
-```
+## 舊分類重定向頁面範例
 
-**兩種格式都能正常使用！** 新格式會自動重定向到舊格式，確保向後相容。
-
-## 重定向頁面範例
-
-每個重定向頁面包含：
+當文章分類變更時，舊分類路徑會產生 `noindex` 重定向頁：
 
 ```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>文章標題 - b-log</title>
-  <!-- Meta refresh 重定向 -->
-  <meta http-equiv="refresh" content="0; url=/post.html?slug=article-slug">
-  <!-- Canonical URL -->
-  <link rel="canonical" href="https://b-log.to/post.html?slug=article-slug">
-  <!-- JavaScript 重定向（更快） -->
+  <meta http-equiv="refresh" content="0; url=/new-category/article-slug/">
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://b-log.to/new-category/article-slug/">
+  <title>重定向中...</title>
   <script>
-    window.location.replace('/post.html?slug=article-slug');
+    window.location.replace('/new-category/article-slug/');
   </script>
 </head>
 <body>
-  <p>正在重定向至 <a href="/post.html?slug=article-slug">文章標題</a>...</p>
+  <p>頁面已移動至 <a href="/new-category/article-slug/">新位置</a>...</p>
 </body>
 </html>
 ```

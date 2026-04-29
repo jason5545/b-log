@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤還原中的陷阱 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="批次處理 PDF OCR 時發現頁面旋轉異常，原因是 pdftk dump_data 輸出包含 PageMediaRotation，還原書籤時把原始的旋轉資訊寫回去，導致已被 ocrmypdf「烤入」正確方向的頁面被二次旋轉。解決方法是用 grep 過濾只保留 Info 和 Bookmark 資料。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/pdf-ocr-rotation-pdftk-trap/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/pdf-ocr-rotation-pdftk-trap/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="故障排除">
   <meta property="article:tag" content="bash">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/pdf-ocr-rotation-pdftk-trap/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="批次處理 PDF OCR 時發現頁面旋轉異常，原因是 pdftk dump_data 輸出包含 PageMediaRotation，還原書籤時把原始的旋轉資訊寫回去，導致已被 ocrmypdf「烤入」正確方向的頁面被二次旋轉。解決方法是用 grep 過濾只保留 Info 和 Bookmark 資料。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%A7%A3%E6%B1%BA%20PDF%20OCR%20%E5%BE%8C%E9%A0%81%E9%9D%A2%E6%97%8B%E8%BD%89%E7%95%B0%E5%B8%B8%E7%9A%84%E5%95%8F%E9%A1%8C%EF%BC%9A%E4%B8%80%E5%80%8B%E9%9A%B1%E8%97%8F%E5%9C%A8%20pdftk%20%E6%9B%B8%E7%B1%A4%E9%82%84%E5%8E%9F%E4%B8%AD%E7%9A%84%E9%99%B7%E9%98%B1,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="PDF, OCR, pdftk, ocrmypdf, 故障排除, bash" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤還原中的陷阱","description":"批次處理 PDF OCR 時發現頁面旋轉異常，原因是 pdftk dump_data 輸出包含 PageMediaRotation，還原書籤時把原始的旋轉資訊寫回去，導致已被 ocrmypdf「烤入」正確方向的頁面被二次旋轉。解決方法是用 grep 過濾只保留 Info 和 Bookmark 資料。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-01T00:00:00Z","dateModified":"2025-12-01T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/pdf-ocr-rotation-pdftk-trap/"},"url":"https://b-log.to/tech-analysis/pdf-ocr-rotation-pdftk-trap/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%A7%A3%E6%B1%BA%20PDF%20OCR%20%E5%BE%8C%E9%A0%81%E9%9D%A2%E6%97%8B%E8%BD%89%E7%95%B0%E5%B8%B8%E7%9A%84%E5%95%8F%E9%A1%8C%EF%BC%9A%E4%B8%80%E5%80%8B%E9%9A%B1%E8%97%8F%E5%9C%A8%20pdftk%20%E6%9B%B8%E7%B1%A4%E9%82%84%E5%8E%9F%E4%B8%AD%E7%9A%84%E9%99%B7%E9%98%B1,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"PDF, OCR, pdftk, ocrmypdf, 故障排除, bash","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤還原中的陷阱</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,195 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤還原中的陷阱</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Dec 1, 2025</span><span>10 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>PDF</span><span>OCR</span><span>pdftk</span><span>ocrmypdf</span><span>故障排除</span><span>bash</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>前言</h2>
+<p>最近在批次處理大量 PDF 文件的 OCR 工作時，遇到了一個非常棘手的問題：明明原始 PDF 頁面方向正常，OCR 處理後某些頁面卻莫名其妙地旋轉了。這個問題困擾了我好一陣子，最後發現罪魁禍首竟然是 pdftk 的書籤還原功能。在此記錄整個偵錯過程，希望能幫助遇到相同問題的人。</p>
+<h2>背景</h2>
+<p>我需要對大量 PDF 進行 OCR 處理，這些 PDF 包含中英文混合內容，且原始文件帶有書籤。我的處理流程是：</p>
+<ol>
+<li>使用 <code>pdftk dump_data</code> 提取原始書籤</li>
+<li>使用 <code>ocrmypdf</code> 進行 OCR 處理</li>
+<li>使用 <code>ghostscript</code> 壓縮檔案</li>
+<li>使用 <code>pdftk update_info</code> 還原書籤</li>
+</ol>
+<p>OCR 的參數設定如下：</p>
+<pre><code class="language-bash">ocrmypdf -l eng+chi_tra \
+         --force-ocr \
+         --optimize 3 \
+         --output-type pdf \
+         input.pdf output.pdf
+</code></pre>
+<h2>問題發現</h2>
+<p>處理完成後，我發現某些 PDF 的第 4、5 頁方向不對，原本正常的頁面變成了旋轉 90 度的狀態。奇怪的是，原始檔案開啟完全正常。</p>
+<p>我首先懷疑是 <code>ocrmypdf</code> 的 <code>--rotate-pages</code> 參數造成的問題（雖然我沒有使用這個參數），於是開始了漫長的偵錯之旅。</p>
+<h2>偵錯過程</h2>
+<h3>第一步：檢查原始 PDF 的頁面資訊</h3>
+<p>使用 <code>pdftk dump_data</code> 檢查原始 PDF：</p>
+<pre><code class="language-bash">pdftk original.pdf dump_data | grep -E &quot;PageMedia&quot;
+</code></pre>
+<p>輸出結果：</p>
+<pre><code>PageMediaNumber: 1
+PageMediaRotation: 0
+...
+PageMediaNumber: 4
+PageMediaRotation: 270
+PageMediaRect: 0 0 841.92 595.2
+...
+PageMediaNumber: 5
+PageMediaRotation: 270
+</code></pre>
+<p>這裡發現了關鍵資訊：<strong>原始 PDF 的第 4、5 頁帶有 <code>PageMediaRotation: 270</code> 的 metadata</strong>。這表示這些頁面在 PDF 結構中是以旋轉 270 度的方式儲存的，PDF 閱讀器會根據這個 metadata 將頁面旋轉回正確方向顯示。</p>
+<p>這種情況通常發生在掃描檔：第 4、5 頁可能是橫式文件，掃描時「躺著」進紙，同事後來用 PDF 編輯器（如 PDFelement）旋轉讓它顯示正常。但多數 PDF 編輯器的旋轉功能只修改 metadata，不會重新渲染像素內容——這樣處理速度快、不損失品質，但會留下 <code>PageMediaRotation</code> 記錄。</p>
+<p>換句話說，原始 PDF 的實際結構是：</p>
+<ul>
+<li><strong>內容層</strong>：第 4、5 頁的像素是「躺著的」</li>
+<li><strong>Metadata 層</strong>：<code>Rotation: 270</code> 告訴閱讀器「顯示時轉 270 度」</li>
+</ul>
+<p>兩者配合，顯示結果正常。但這個「表面正常」在後續處理中埋下了隱患。</p>
+<h3>第二步：檢查 OCR 後的輸出</h3>
+<p>對 OCR 處理後（但尚未還原書籤）的 PDF 進行檢查：</p>
+<pre><code class="language-bash">pdftk ocr_output.pdf dump_data | grep -E &quot;PageMediaRotation&quot;
+</code></pre>
+<p>輸出結果：</p>
+<pre><code>PageMediaRotation: 0
+PageMediaRotation: 0
+PageMediaRotation: 0
+PageMediaRotation: 0
+PageMediaRotation: 0
+</code></pre>
+<p><strong>所有頁面的 Rotation 都是 0！</strong> 這表示 <code>ocrmypdf</code> 在處理過程中已經將旋轉「烤入」(bake in) 頁面內容中，輸出的 PDF 不再需要 rotation metadata。</p>
+<h3>第三步：發現真正的問題</h3>
+<p>接下來檢查還原書籤後的 PDF：</p>
+<pre><code class="language-bash">pdftk final_with_bookmarks.pdf dump_data | grep -E &quot;PageMediaRotation&quot;
+</code></pre>
+<p>輸出結果：</p>
+<pre><code>PageMediaRotation: 0
+PageMediaRotation: 0
+PageMediaRotation: 0
+PageMediaRotation: 270  # 問題出現了！
+PageMediaRotation: 270
+</code></pre>
+<p><strong>第 4、5 頁的 rotation 又變回 270 了！</strong></p>
+<p>這時我才恍然大悟：<code>pdftk dump_data</code> 輸出的不只是書籤資訊，還包含了 <code>PageMedia</code> 資訊（包括 rotation）。當我使用 <code>pdftk update_info</code> 還原書籤時，它同時也把原始的 <code>PageMediaRotation: 270</code> 寫回去了。</p>
+<p>但此時 PDF 的實際內容已經是正確方向的（因為 ocrmypdf 已經處理過），再加上 rotation metadata 就導致頁面被「二次旋轉」，造成顯示異常。</p>
+<h2>解決方案</h2>
+<p>解決方法很簡單：<strong>在還原書籤時，過濾掉 PageMedia 相關的資訊，只保留 Info 和 Bookmark 資料</strong>。</p>
+<p>原本的書籤提取方式：</p>
+<pre><code class="language-bash">pdftk input.pdf dump_data &gt; bookmarks.txt
+</code></pre>
+<p>修改後：</p>
+<pre><code class="language-bash">pdftk input.pdf dump_data | grep -E &quot;^(InfoBegin|InfoKey:|InfoValue:|NumberOfPages:|BookmarkBegin|BookmarkTitle:|BookmarkLevel:|BookmarkPageNumber:)&quot; &gt; bookmarks.txt
+</code></pre>
+<p>這個 grep 命令只保留：</p>
+<ul>
+<li><code>InfoBegin</code>, <code>InfoKey:</code>, <code>InfoValue:</code> - PDF 文件資訊</li>
+<li><code>NumberOfPages:</code> - 頁數資訊</li>
+<li><code>BookmarkBegin</code>, <code>BookmarkTitle:</code>, <code>BookmarkLevel:</code>, <code>BookmarkPageNumber:</code> - 書籤資訊</li>
+</ul>
+<p>排除了所有 <code>PageMedia</code> 開頭的行，包括 <code>PageMediaRotation</code>。</p>
+<h2>完整的處理腳本</h2>
+<p>最終的處理腳本如下：</p>
+<pre><code class="language-bash">#!/bin/bash
+
+# OCR 處理 PDF
+# 書籤還原時過濾 PageMedia 避免旋轉問題
+
+process_pdf() {
+    local input=&quot;$1&quot;
+    local output=&quot;$2&quot;
+
+    # 步驟 1: 提取書籤 (過濾 PageMedia)
+    pdftk &quot;$input&quot; dump_data | \
+        grep -E &quot;^(InfoBegin|InfoKey:|InfoValue:|NumberOfPages:|BookmarkBegin|BookmarkTitle:|BookmarkLevel:|BookmarkPageNumber:)&quot; \
+        &gt; /tmp/bookmarks.txt
+
+    # 步驟 2: OCR 處理
+    ocrmypdf -l eng+chi_tra \
+             --force-ocr \
+             --optimize 3 \
+             --output-type pdf \
+             &quot;$input&quot; /tmp/ocr_output.pdf
+
+    # 步驟 3: 壓縮
+    gs -sDEVICE=pdfwrite \
+       -dCompatibilityLevel=1.7 \
+       -dPDFSETTINGS=/ebook \
+       -dNOPAUSE -dQUIET -dBATCH \
+       -sOutputFile=/tmp/compressed.pdf \
+       /tmp/ocr_output.pdf
+
+    # 步驟 4: 還原書籤
+    if grep -q &quot;BookmarkTitle&quot; /tmp/bookmarks.txt; then
+        pdftk /tmp/compressed.pdf update_info /tmp/bookmarks.txt output &quot;$output&quot;
+    else
+        mv /tmp/compressed.pdf &quot;$output&quot;
+    fi
+
+    # 清理暫存檔
+    rm -f /tmp/bookmarks.txt /tmp/ocr_output.pdf /tmp/compressed.pdf
+}
+</code></pre>
+<h2>技術要點總結</h2>
+<ol>
+<li><p><strong>PDF 的頁面旋轉有兩種方式</strong>：</p>
+<ul>
+<li>實際內容旋轉（像素層面）</li>
+<li>Rotation metadata（告訴閱讀器如何顯示）</li>
+</ul>
+</li>
+<li><p><strong>ocrmypdf 的 --force-ocr 會重新渲染頁面</strong>：</p>
+<ul>
+<li>輸出的 PDF 內容已經是正確方向</li>
+<li>Rotation metadata 會被設為 0</li>
+</ul>
+</li>
+<li><p><strong>pdftk dump_data 輸出包含多種資訊</strong>：</p>
+<ul>
+<li>Info（文件資訊）</li>
+<li>Bookmark（書籤）</li>
+<li>PageMedia（頁面尺寸、旋轉等）</li>
+</ul>
+</li>
+<li><p><strong>pdftk update_info 會覆蓋所有對應的 metadata</strong>：</p>
+<ul>
+<li>如果輸入檔包含 PageMedia 資訊，會一併寫入</li>
+<li>這可能導致與實際內容不符的 rotation 被寫入</li>
+</ul>
+</li>
+</ol>
+<h2>為什麼混用工具會出問題？</h2>
+<p>這個問題的根本原因是<strong>混用不同工具</strong>，而每個工具對 metadata 的處理邏輯不同：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>行為</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PDFelement</td>
+<td>旋轉時只改 metadata，保留原始像素</td>
+</tr>
+<tr>
+<td>ocrmypdf</td>
+<td>OCR 時「烤入」旋轉，重置 metadata 為 0</td>
+</tr>
+<tr>
+<td>pdftk</td>
+<td>還原書籤時連 PageMediaRotation 也一起寫回</td>
+</tr>
+</tbody></table>
+<p>如果全程使用同一個工具（例如 Wondershare PDFelement 從掃描、旋轉、OCR 到壓縮），它內部會保持一致性，知道自己的 metadata 狀態，應該不會出現這種問題。</p>
+<p>但當你像我一樣，用 PDFelement 編輯、ocrmypdf 做 OCR、pdftk 還原書籤時，每個工具各自為政，metadata 的不同步就會導致意外的結果。</p>
+<h2>結語</h2>
+<p>這個問題的根本原因是 <code>pdftk</code> 的 <code>dump_data</code> 和 <code>update_info</code> 功能設計上是處理所有 PDF metadata，而不只是書籤。在大多數情況下這不會造成問題，但當 PDF 經過 OCR 處理（內容被重新渲染）後，原始的 rotation metadata 就不再適用了。</p>
+<p>這次經驗讓我深刻體會到：<strong>在處理 PDF 時，要特別注意 metadata 和實際內容之間的一致性</strong>。看似簡單的「保留書籤」操作，如果沒有仔細過濾資料，可能會帶來意想不到的副作用。</p>
+<p>希望這篇文章能幫助到遇到類似問題的朋友。如果你也在進行 PDF OCR 處理並需要保留書籤，記得過濾掉 PageMedia 資訊！</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

@@ -77,7 +77,7 @@ const CONFIG = {
 </picture>
 ```
 
-**注意**：由於 Markdown 是在 `post.html`（根目錄）中動態渲染，圖片路徑會自動轉換為相對於根目錄的路徑（`content/img/...`）。
+**注意**：文章頁會在內容管線中預先渲染 Markdown，圖片路徑會自動轉換為根目錄絕對路徑（`/content/img/...`）。
 
 ## 🔧 GitHub Actions 觸發條件
 

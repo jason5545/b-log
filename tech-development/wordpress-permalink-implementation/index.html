@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>WordPress 永久連結實作：從概念到實踐 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="分享實作 WordPress 風格永久連結系統的經驗，包括架構設計、自動化流程與 SEO 最佳化策略。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/wordpress-permalink-implementation/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/wordpress-permalink-implementation/" id="og-url">
@@ -31,7 +31,7 @@
   <meta property="article:tag" content="URL設計">
   <meta property="article:tag" content="自動化">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/wordpress-permalink-implementation/" id="twitter-url">
@@ -39,7 +39,7 @@
   <meta property="twitter:description" content="分享實作 WordPress 風格永久連結系統的經驗，包括架構設計、自動化流程與 SEO 最佳化策略。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:WordPress%20%E6%B0%B8%E4%B9%85%E9%80%A3%E7%B5%90%E5%AF%A6%E4%BD%9C%EF%BC%9A%E5%BE%9E%E6%A6%82%E5%BF%B5%E5%88%B0%E5%AF%A6%E8%B8%90,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="WordPress, 永久連結, SEO, URL設計, 自動化" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -109,6 +109,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"WordPress 永久連結實作：從概念到實踐","description":"分享實作 WordPress 風格永久連結系統的經驗，包括架構設計、自動化流程與 SEO 最佳化策略。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-10-17T00:30:00Z","dateModified":"2025-10-17T00:30:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/wordpress-permalink-implementation/"},"url":"https://b-log.to/tech-development/wordpress-permalink-implementation/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:WordPress%20%E6%B0%B8%E4%B9%85%E9%80%A3%E7%B5%90%E5%AF%A6%E4%BD%9C%EF%BC%9A%E5%BE%9E%E6%A6%82%E5%BF%B5%E5%88%B0%E5%AF%A6%E8%B8%90,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"WordPress, 永久連結, SEO, URL設計, 自動化","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -118,7 +119,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">WordPress 永久連結實作：從概念到實踐</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -187,12 +188,427 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">WordPress 永久連結實作：從概念到實踐</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Oct 17, 2025</span><span>12 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>WordPress</span><span>永久連結</span><span>SEO</span><span>URL設計</span><span>自動化</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>前言</h2>
+<p>在網站開發中，URL 結構不僅影響使用者體驗，更直接關係到 SEO 效果。WordPress 風格的永久連結（Permalinks）是業界公認的最佳實踐之一。本文將分享我在實作 WordPress 風格永久連結系統時的經驗與心得。</p>
+<h2>什麼是 WordPress 風格的永久連結</h2>
+<h3>傳統 URL vs WordPress 風格</h3>
+<p><strong>傳統動態 URL：</strong></p>
+<pre><code>https://example.com/post.php?id=123
+https://example.com/article?type=tech&amp;date=2025-01-01
+</code></pre>
+<p><strong>WordPress 風格永久連結：</strong></p>
+<pre><code>https://example.com/tech-development/my-awesome-post/
+https://example.com/ai-analysis/openai-vs-anthropic/
+</code></pre>
+<h3>為什麼選擇 WordPress 風格</h3>
+<ol>
+<li><strong>SEO 友善</strong>：URL 包含關鍵字，提升搜尋引擎排名</li>
+<li><strong>使用者友善</strong>：URL 直觀易懂，便於分享和記憶</li>
+<li><strong>階層結構</strong>：反映網站內容的分類層次</li>
+<li><strong>穩定性</strong>：永久不變的連結，確保長期可用</li>
+</ol>
+<h2>實作架構設計</h2>
+<h3>系統需求</h3>
+<ol>
+<li><strong>URL 重寫</strong>：將友好 URL 轉換為內部參數</li>
+<li><strong>路由系統</strong>：根據 URL 解析對應的內容</li>
+<li><strong>資料庫設計</strong>：儲存文章與其永久連結的對應關係</li>
+<li><strong>自動生成</strong>：根據文章標題自動產生永久連結</li>
+</ol>
+<h3>技術選擇</h3>
+<p><strong>前端：</strong></p>
+<ul>
+<li>純 HTML/CSS/JavaScript（無框架依賴）</li>
+<li>Service Worker 實現快取機制</li>
+</ul>
+<p><strong>後端（模擬）：</strong></p>
+<ul>
+<li>GitHub Actions 作為自動化流程</li>
+<li>Node.js 腳本處理重定向頁面生成</li>
+</ul>
+<p><strong>資料結構：</strong></p>
+<pre><code class="language-json">{
+  &quot;slug&quot;: &quot;wordpress-permalink-implementation&quot;,
+  &quot;title&quot;: &quot;WordPress 永久連結實作：從概念到實踐&quot;,
+  &quot;category&quot;: &quot;技術開發&quot;,
+  &quot;publishedAt&quot;: &quot;2025-10-17T00:30:00.000Z&quot;
+}
+</code></pre>
+<h2>實作步驟詳解</h2>
+<h3>步驟 1：設計 URL 結構</h3>
+<p>根據 WordPress 的最佳實踐，我們選擇以下結構：</p>
+<pre><code>/{category}/{slug}/
+</code></pre>
+<p><strong>分類對應表：</strong></p>
+<pre><code class="language-javascript">const categoryMapping = {
+  &quot;AI 分析&quot;: &quot;ai-analysis&quot;,
+  &quot;技術開發&quot;: &quot;tech-development&quot;,
+  &quot;技術分析&quot;: &quot;tech-analysis&quot;,
+  &quot;開發哲學&quot;: &quot;dev-philosophy&quot;
+};
+</code></pre>
+<h3>步驟 2：實作路由系統</h3>
+<p><strong>前端路由邏輯：</strong></p>
+<pre><code class="language-javascript">// 解析當前 URL
+function parseCurrentPath() {
+  const path = window.location.pathname;
+
+  // 移除開頭和結尾的斜線
+  const cleanPath = path.replace(/^\/|\/$/g, &#39;&#39;);
+
+  // 分割路徑部分
+  const parts = cleanPath.split(&#39;/&#39;);
+
+  if (parts.length === 2) {
+    return {
+      category: parts[0],
+      slug: parts[1]
+    };
+  }
+
+  return null; // 不是永久連結格式
+}
+
+// 根據解析結果載入內容
+function loadContent(category, slug) {
+  // 轉換分類程式碼回中文
+  const reverseCategoryMap = {
+    &quot;ai-analysis&quot;: &quot;AI 分析&quot;,
+    &quot;tech-development&quot;: &quot;技術開發&quot;,
+    &quot;tech-analysis&quot;: &quot;技術分析&quot;,
+    &quot;dev-philosophy&quot;: &quot;開發哲學&quot;
+  };
+
+  const chineseCategory = reverseCategoryMap[category];
+
+  // 載入對應文章
+  loadPost(slug, chineseCategory);
+}
+</code></pre>
+<h3>步驟 3：自動生成重定向頁面</h3>
+<p><strong>Node.js 生成腳本：</strong></p>
+<pre><code class="language-javascript">// scripts/generate-redirects.js
+const fs = require(&#39;fs&#39;);
+const path = require(&#39;path&#39;);
+
+// 分類映射
+const categoryMapping = {
+  &quot;AI 分析&quot;: &quot;ai-analysis&quot;,
+  &quot;技術開發&quot;: &quot;tech-development&quot;,
+  &quot;技術分析&quot;: &quot;tech-analysis&quot;,
+  &quot;開發哲學&quot;: &quot;dev-philosophy&quot;
+};
+
+// 讀取文章資料
+const postsData = JSON.parse(fs.readFileSync(&#39;data/posts.json&#39;, &#39;utf8&#39;));
+
+// 為每篇文章生成重定向頁面
+postsData.forEach(post =&gt; {
+  const categorySlug = categoryMapping[post.category];
+  const redirectPath = `${categorySlug}/${post.slug}/`;
+  const fullPath = path.join(__dirname, &#39;..&#39;, redirectPath, &#39;index.html&#39;);
+
+  // 確保目錄存在
+  fs.mkdirSync(path.dirname(fullPath), { recursive: true });
+
+  // 生成重定向頁面內容
+  const redirectContent = generateRedirectPage(post, redirectPath);
+
+  // 寫入檔案
+  fs.writeFileSync(fullPath, redirectContent);
+  console.log(`Generated: ${redirectPath}`);
+});
+
+function generateRedirectPage(post, redirectPath) {
+  return `&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-TW&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;${post.title}&lt;/title&gt;
+  &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0; url=/post.html?slug=${post.slug}&quot;&gt;
+  &lt;link rel=&quot;canonical&quot; href=&quot;https://b-log.to/post.html?slug=${post.slug}&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;p&gt;正在重新導向至文章頁面...&lt;/p&gt;
+  &lt;p&gt;如果您的瀏覽器沒有自動重新導向，請點擊&lt;a href=&quot;/post.html?slug=${post.slug}&quot;&gt;這裡&lt;/a&gt;。&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;`;
+}
+</code></pre>
+<h3>步驟 4：設定 GitHub Actions 自動化</h3>
+<p><strong>工作流程配置：</strong></p>
+<pre><code class="language-yaml"># .github/workflows/generate-redirects.yml
+name: 生成重定向頁面
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ &#39;data/posts.json&#39; ]
+
+jobs:
+  generate-redirects:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: 設定 Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: &#39;16&#39;
+
+    - name: 生成重定向頁面
+      run: node scripts/generate-redirects.js
+
+    - name: 提交變更
+      run: |
+        git config --local user.email &quot;action@github.com&quot;
+        git config --local user.name &quot;GitHub Action&quot;
+        git add .
+        git commit -m &quot;自動生成重定向頁面&quot; || exit 0
+        git push
+</code></pre>
+<h2>實作過程中的挑戰與解決方案</h2>
+<h3>挑戰 1：中文分類轉換</h3>
+<p><strong>問題：</strong> 分類名稱包含中文字元，無法直接用於 URL</p>
+<p><strong>解決方案：</strong></p>
+<pre><code class="language-javascript">// 建立雙向映射表
+const categoryMapping = {
+  &quot;AI 分析&quot;: &quot;ai-analysis&quot;,
+  &quot;技術開發&quot;: &quot;tech-development&quot;,
+  &quot;技術分析&quot;: &quot;tech-analysis&quot;,
+  &quot;開發哲學&quot;: &quot;dev-philosophy&quot;
+};
+
+const reverseCategoryMapping = Object.fromEntries(
+  Object.entries(categoryMapping).map(([key, value]) =&gt; [value, key])
+);
+
+// 自動轉換函數
+function slugifyCategory(category) {
+  return categoryMapping[category] || category;
+}
+
+function unslugifyCategory(slug) {
+  return reverseCategoryMapping[slug] || slug;
+}
+</code></pre>
+<h3>挑戰 2：向後相容性</h3>
+<p><strong>問題：</strong> 舊的 URL 格式 (<code>/post.html?slug=xxx</code>) 仍需正常運作</p>
+<p><strong>解決方案：</strong></p>
+<pre><code class="language-javascript">// 檢測 URL 格式並統一處理
+function handleRouting() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const slugFromQuery = urlParams.get(&#39;slug&#39;);
+
+  if (slugFromQuery) {
+    // 舊格式：/post.html?slug=xxx
+    loadPost(slugFromQuery);
+  } else {
+    // 新格式：/{category}/{slug}/
+    const parsed = parseCurrentPath();
+    if (parsed) {
+      loadContent(parsed.category, parsed.slug);
+    } else {
+      // 首頁或其他頁面
+      loadHomepage();
+    }
+  }
+}
+</code></pre>
+<h3>挑戰 3：SEO 最佳化</h3>
+<p><strong>問題：</strong> 確保搜尋引擎能正確索引新的 URL 結構</p>
+<p><strong>解決方案：</strong></p>
+<pre><code class="language-html">&lt;!-- 在重定向頁面中加入 SEO 標籤 --&gt;
+&lt;meta name=&quot;description&quot; content=&quot;${post.summary}&quot;&gt;
+&lt;meta name=&quot;keywords&quot; content=&quot;${post.tags.join(&#39;, &#39;)}&quot;&gt;
+&lt;meta property=&quot;og:title&quot; content=&quot;${post.title}&quot;&gt;
+&lt;meta property=&quot;og:description&quot; content=&quot;${post.summary}&quot;&gt;
+&lt;meta property=&quot;og:url&quot; content=&quot;https://b-log.to/${redirectPath}&quot;&gt;
+&lt;meta property=&quot;og:type&quot; content=&quot;article&quot;&gt;
+&lt;meta name=&quot;twitter:card&quot; content=&quot;summary_large_image&quot;&gt;
+&lt;link rel=&quot;canonical&quot; href=&quot;https://b-log.to/post.html?slug=${post.slug}&quot;&gt;
+</code></pre>
+<h2>效能最佳化策略</h2>
+<h3>1. 預生成靜態頁面</h3>
+<p>不是每次請求都動態生成，而是在文章更新時預先生成所有重定向頁面。</p>
+<h3>2. 快取策略</h3>
+<pre><code class="language-javascript">// Service Worker 快取策略
+self.addEventListener(&#39;fetch&#39;, event =&gt; {
+  if (event.request.url.includes(&#39;/post.html?slug=&#39;)) {
+    event.respondWith(
+      caches.match(event.request)
+        .then(response =&gt; {
+          if (response) {
+            return response; // 返回快取版本
+          }
+          return fetch(event.request).then(response =&gt; {
+            // 快取新版本
+            return caches.open(&#39;posts-cache&#39;).then(cache =&gt; {
+              cache.put(event.request, response.clone());
+              return response;
+            });
+          });
+        })
+    );
+  }
+});
+</code></pre>
+<h3>3. 懶加載內容</h3>
+<pre><code class="language-javascript">// 只在需要時載入文章內容
+function loadPost(slug) {
+  // 顯示載入指示器
+  showLoadingIndicator();
+
+  // 懶加載文章內容
+  fetch(`content/posts/${slug}.md`)
+    .then(response =&gt; response.text())
+    .then(markdown =&gt; {
+      const html = parseMarkdown(markdown);
+      document.getElementById(&#39;content&#39;).innerHTML = html;
+      hideLoadingIndicator();
+    })
+    .catch(error =&gt; {
+      showError(&#39;無法載入文章內容&#39;);
+      hideLoadingIndicator();
+    });
+}
+</code></pre>
+<h2>測試與驗證</h2>
+<h3>測試案例</h3>
+<ol>
+<li><p><strong>新格式 URL 存取</strong></p>
+<ul>
+<li>輸入：<code>/tech-development/wordpress-permalink-implementation/</code></li>
+<li>預期：正確載入對應文章</li>
+</ul>
+</li>
+<li><p><strong>舊格式 URL 向後相容</strong></p>
+<ul>
+<li>輸入：<code>/post.html?slug=wordpress-permalink-implementation</code></li>
+<li>預期：正確載入對應文章</li>
+</ul>
+</li>
+<li><p><strong>無效 URL 處理</strong></p>
+<ul>
+<li>輸入：<code>/invalid-category/invalid-post/</code></li>
+<li>預期：導向 404 頁面</li>
+</ul>
+</li>
+<li><p><strong>分類頁面</strong></p>
+<ul>
+<li>輸入：<code>/tech-development/</code></li>
+<li>預期：顯示該分類下的所有文章</li>
+</ul>
+</li>
+</ol>
+<h3>自動化測試</h3>
+<pre><code class="language-javascript">// 測試腳本
+const testCases = [
+  {
+    name: &#39;新格式 URL&#39;,
+    url: &#39;/tech-development/wordpress-permalink-implementation/&#39;,
+    expectedSlug: &#39;wordpress-permalink-implementation&#39;
+  },
+  {
+    name: &#39;舊格式 URL&#39;,
+    url: &#39;/post.html?slug=wordpress-permalink-implementation&#39;,
+    expectedSlug: &#39;wordpress-permalink-implementation&#39;
+  }
+];
+
+testCases.forEach(test =&gt; {
+  console.log(`測試: ${test.name}`);
+
+  // 模擬 URL 解析
+  const result = parseUrl(test.url);
+
+  if (result.slug === test.expectedSlug) {
+    console.log(&#39;✅ 通過&#39;);
+  } else {
+    console.log(`❌ 失敗: 預期 ${test.expectedSlug}, 實際 ${result.slug}`);
+  }
+});
+</code></pre>
+<h2>維護與更新</h2>
+<h3>新增文章流程</h3>
+<ol>
+<li><p><strong>撰寫 Markdown 內容</strong></p>
+<pre><code>content/posts/new-article.md
+</code></pre>
+</li>
+<li><p><strong>更新文章目錄</strong></p>
+<pre><code class="language-json">// data/posts.json
+{
+  &quot;slug&quot;: &quot;new-article&quot;,
+  &quot;title&quot;: &quot;新文章標題&quot;,
+  &quot;category&quot;: &quot;技術開發&quot;,
+  // ... 其他欄位
+}
+</code></pre>
+</li>
+<li><p><strong>自動觸發重新生成</strong></p>
+<ul>
+<li>GitHub Actions 自動偵測 <code>data/posts.json</code> 變更</li>
+<li>執行 <code>scripts/generate-redirects.js</code></li>
+<li>生成新的重定向頁面</li>
+<li>自動提交變更</li>
+</ul>
+</li>
+</ol>
+<h3>新增分類</h3>
+<ol>
+<li><p><strong>更新分類映射</strong></p>
+<pre><code class="language-javascript">// scripts/generate-redirects.js
+const categoryMapping = {
+  // 現有分類...
+  &quot;新分類&quot;: &quot;new-category&quot;
+};
+</code></pre>
+</li>
+<li><p><strong>更新前端映射</strong></p>
+<pre><code class="language-javascript">// assets/main.js
+const categoryMapping = {
+  // 現有分類...
+  &quot;新分類&quot;: &quot;new-category&quot;
+};
+</code></pre>
+</li>
+<li><p><strong>重新生成所有頁面</strong></p>
+<pre><code class="language-bash">node scripts/generate-redirects.js
+</code></pre>
+</li>
+</ol>
+<h2>總結與心得</h2>
+<h3>實作成果</h3>
+<ol>
+<li><strong>SEO 提升</strong>：友好的 URL 結構提升搜尋引擎排名</li>
+<li><strong>使用者體驗改善</strong>：直觀的 URL 便於分享和記憶</li>
+<li><strong>自動化流程</strong>：GitHub Actions 確保一致性</li>
+<li><strong>向後相容</strong>：舊 URL 繼續正常運作</li>
+</ol>
+<h3>技術收穫</h3>
+<ol>
+<li><strong>URL 設計原則</strong>：學習了如何設計使用者友善的 URL 結構</li>
+<li><strong>自動化流程</strong>：掌握了 GitHub Actions 的實際應用</li>
+<li><strong>前後端協作</strong>：理解了如何在前端實現路由系統</li>
+<li><strong>效能最佳化</strong>：學習了靜態生成和快取策略</li>
+</ol>
+<h3>未來改進方向</h3>
+<ol>
+<li><strong>國際化支援</strong>：支援多語言 URL 結構</li>
+<li><strong>更靈活的路由</strong>：支援更深層的分類結構</li>
+<li><strong>自動化測試</strong>：建立完整的測試流程</li>
+<li><strong>效能監控</strong>：加入載入時間和錯誤追蹤</li>
+</ol>
+<p>WordPress 風格的永久連結實作不僅是技術問題，更是使用者體驗和 SEO 策略的重要組成部分。透過系統化的設計和自動化流程，我們可以建立一個既友善又高效的網站 URL 結構。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

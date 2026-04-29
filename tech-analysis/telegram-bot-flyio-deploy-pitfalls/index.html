@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>把 Telegram Bot 丟上 Fly.io：七個坑和一次 52 分鐘的強制等待 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="寫了一個 Telegram master bot 控制多個子 bot，想丟上 Fly.io 跑。Docker image 建置、session 檔持久化、Telegram 限速，每一步都有坑。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/telegram-bot-flyio-deploy-pitfalls/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/telegram-bot-flyio-deploy-pitfalls/" id="og-url">
@@ -36,7 +36,7 @@
   <meta property="article:tag" content="FloodWait">
   <meta property="article:tag" content="Session">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/telegram-bot-flyio-deploy-pitfalls/" id="twitter-url">
@@ -44,7 +44,7 @@
   <meta property="twitter:description" content="寫了一個 Telegram master bot 控制多個子 bot，想丟上 Fly.io 跑。Docker image 建置、session 檔持久化、Telegram 限速，每一步都有坑。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%8A%8A%20Telegram%20Bot%20%E4%B8%9F%E4%B8%8A%20Fly.io%EF%BC%9A%E4%B8%83%E5%80%8B%E5%9D%91%E5%92%8C%E4%B8%80%E6%AC%A1%2052%20%E5%88%86%E9%90%98%E7%9A%84%E5%BC%B7%E5%88%B6%E7%AD%89%E5%BE%85,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Telegram, Fly.io, Docker, Pyrogram, PyroTGFork, MTProto, 部署, 踩坑, FloodWait, Session" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -114,6 +114,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"把 Telegram Bot 丟上 Fly.io：七個坑和一次 52 分鐘的強制等待","description":"寫了一個 Telegram master bot 控制多個子 bot，想丟上 Fly.io 跑。Docker image 建置、session 檔持久化、Telegram 限速，每一步都有坑。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-03-05T00:00:00Z","dateModified":"2026-03-05T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/telegram-bot-flyio-deploy-pitfalls/"},"url":"https://b-log.to/tech-analysis/telegram-bot-flyio-deploy-pitfalls/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%8A%8A%20Telegram%20Bot%20%E4%B8%9F%E4%B8%8A%20Fly.io%EF%BC%9A%E4%B8%83%E5%80%8B%E5%9D%91%E5%92%8C%E4%B8%80%E6%AC%A1%2052%20%E5%88%86%E9%90%98%E7%9A%84%E5%BC%B7%E5%88%B6%E7%AD%89%E5%BE%85,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"Telegram, Fly.io, Docker, Pyrogram, PyroTGFork, MTProto, 部署, 踩坑, FloodWait, Session","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -123,7 +124,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">把 Telegram Bot 丟上 Fly.io：七個坑和一次 52 分鐘的強制等待</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -192,12 +193,113 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">把 Telegram Bot 丟上 Fly.io：七個坑和一次 52 分鐘的強制等待</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Mar 5, 2026</span><span>5 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Telegram</span><span>Fly.io</span><span>Docker</span><span>Pyrogram</span><span>PyroTGFork</span><span>MTProto</span><span>部署</span><span>踩坑</span><span>FloodWait</span><span>Session</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>背景</h2>
+<p>我有一個 Telegram Bot Controller——一個 master bot 加上一個 MTProto userbot，用來統一控制多個子 bot（OpenClaw 的 Izukibot、ClaudeBot 等）。使用者只跟 master bot 對話，userbot 當中間人轉發訊息和代理 inline button。</p>
+<p>技術棧是 PyroTGFork（Pyrogram 的活躍 fork，原版已停止維護），同時跑 Bot API client 和 MTProto User API client，用 <code>compose()</code> 同時啟動。</p>
+<p>本來在本機跑，但 bot 這種東西需要 24/7 運行。看了一圈 serverless 選項，Fly.io 免費方案（shared-cpu-1x / 256MB）剛好夠用，東京節點離台灣最近，延遲也可以接受。</p>
+<p>以下是部署過程中踩的每一個坑。</p>
+<h2>第一坑：tgcrypto 需要 gcc</h2>
+<p>Dockerfile 用了 <code>python:3.13-slim</code> 作為 base image——slim 嘛，輕量。<code>pip install</code> 一跑，tgcrypto 直接報錯：找不到 <code>gcc</code>。</p>
+<p>tgcrypto 是 C extension，需要編譯。slim image 裡沒有編譯器。</p>
+<p>解法是用多階段建置：builder stage 裝 gcc，編譯完再 copy 到乾淨的 slim image。這樣最終 image 不會帶著 200MB 的 gcc：</p>
+<pre><code class="language-dockerfile">FROM python:3.13-slim AS builder
+RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends gcc libc6-dev
+COPY requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+FROM python:3.13-slim
+COPY --from=builder /install /usr/local
+</code></pre>
+<p>但第一次我只加了 <code>gcc</code>，沒加 <code>libc6-dev</code>。</p>
+<h2>第二坑：gcc 有了但 stdint.h 沒有</h2>
+<p>tgcrypto 的 C code 裡 <code>#include &lt;stdint.h&gt;</code>，這個頭檔在 <code>libc6-dev</code> 裡。光裝 gcc 不夠，還需要 C standard library 的 header files。</p>
+<p>錯誤訊息倒是很直接：<code>fatal error: stdint.h: No such file or directory</code>。加上 <code>libc6-dev</code> 就解了。</p>
+<p>這兩個坑加在一起其實是一個概念：<strong>slim image 是真的 slim，連最基本的 C 開發工具鏈都沒有。</strong> 如果你的依賴裡有任何 C extension（tgcrypto、uvloop、numpy、cryptography...），都需要在 builder stage 裝 gcc + libc6-dev。</p>
+<h2>第三坑：fly.toml 的 [processes] 會覆蓋 Dockerfile CMD</h2>
+<p>我的 Dockerfile 最後一行是：</p>
+<pre><code class="language-dockerfile">CMD [&quot;/app/entrypoint.sh&quot;]
+</code></pre>
+<p><code>entrypoint.sh</code> 做兩件事：把 session 檔從 image 複製到持久化 volume，然後啟動 bot。</p>
+<p>部署後，bot 一啟動就報「Enter phone number or bot token」——session 檔不在預期的位置。</p>
+<p>查了半天，發現是 <code>fly.toml</code> 裡的 <code>[processes]</code> 覆蓋了 CMD：</p>
+<pre><code class="language-toml">[processes]
+  app = &quot;python -m bot_controller.main&quot;
+</code></pre>
+<p><strong><code>[processes]</code> 會完全取代 Dockerfile 的 CMD 和 ENTRYPOINT。</strong> 這不是「追加」，是「取代」。所以 <code>entrypoint.sh</code> 根本沒被執行，session 檔也就沒被複製到 volume。</p>
+<p>改成指向 entrypoint：</p>
+<pre><code class="language-toml">[processes]
+  app = &quot;/app/entrypoint.sh&quot;
+</code></pre>
+<h2>第四坑：Docker 快取不知道你改了 .dockerignore</h2>
+<p>改完 <code>[processes]</code> 之後重新部署，session 檔還是沒被打包進 image。</p>
+<p>因為之前的 <code>.dockerignore</code> 裡包含了 <code>*.session</code>（當時還沒打算把 session 打包進 image）。後來決定要打包，把 <code>.dockerignore</code> 裡的 <code>*.session</code> 刪了。</p>
+<p>但 Docker build cache 不在乎你改了 <code>.dockerignore</code>。<code>COPY *.session sessions/</code> 這一層已經被 cache 了，cache 裡的版本是空的 sessions 目錄。</p>
+<p>解法：<code>fly deploy --no-cache</code>。</p>
+<p><strong>任何時候你改了 <code>.dockerignore</code> 的排除規則，都必須清快取重建。</strong> Docker 的 cache invalidation 是基於 <code>COPY</code> 的來源檔案內容，不包括 <code>.dockerignore</code> 的變更。</p>
+<h2>第五坑：Crash-Restart 循環觸發 Telegram FloodWait</h2>
+<p>session 檔終於打包進去了，entrypoint 也跑了，但 bot 啟動後立刻 crash——因為 session 檔是空的（第四坑的殘留）。Fly.io 的 machine 會自動重啟 crash 的 process。</p>
+<p>每次重啟，Pyrogram 都會嘗試用 session 檔裡的 auth key 連線 Telegram。session 是空的，所以每次都走 <code>auth.ImportBotAuthorization</code>——相當於重新登入。</p>
+<p>Telegram 看到同一個帳號在幾秒內重複登入十幾次，直接觸發 <strong>FloodWait</strong>：</p>
+<pre><code>420 FLOOD_WAIT (caused by &quot;auth.ImportBotAuthorization&quot;)
+Must wait 3133 seconds (52 minutes)
+</code></pre>
+<p>三千一百三十三秒。將近一個小時。</p>
+<p>你什麼都不能做，只能等。而且<strong>必須先停掉 machine</strong>，否則 Fly.io 會繼續自動重啟，每次重啟都重新觸發 FloodWait，計時器重來。</p>
+<p>教訓很清楚：<strong>在部署 Telegram bot 之前，先確認 session 檔是正確的。</strong> 如果 bot 會 crash，先手動停掉 machine 而不是讓它自動重啟。Telegram 的限速是根據嘗試次數累加的，越多次等越久。</p>
+<h2>第六坑：entrypoint 的 &quot;不覆蓋&quot; 邏輯</h2>
+<p>等了 52 分鐘，FloodWait 過了。用 <code>--no-cache</code> 重建了 image，確認 session 檔正確打包。重新部署。</p>
+<p>bot 又 crash 了。一樣的 <code>&quot;Enter phone number or bot token&quot;</code>。</p>
+<p>SSH 進去看 <code>/data/</code>（volume 掛載點），session 檔存在、大小 40960 bytes。再看 <code>/app/sessions/</code>（image 裡打包的），也是 40960 bytes。</p>
+<p>問題在 entrypoint 的邏輯：</p>
+<pre><code class="language-sh">if [ ! -f &quot;$dest&quot; ]; then
+    cp &quot;$f&quot; &quot;$dest&quot;
+fi
+</code></pre>
+<p><strong>「如果目標不存在才複製」。</strong> 但之前的 crash 循環裡，Pyrogram 已經在 <code>/data/</code> 裡<strong>創建了新的 session 檔</strong>——空的、沒有有效 auth key 的 SQLite 資料庫。大小看起來一樣，但內容是壞的。</p>
+<p>entrypoint 看到檔案存在，就不覆蓋了。好心辦壞事。</p>
+<p>改成每次啟動都強制覆蓋，同時清除 SQLite journal 檔：</p>
+<pre><code class="language-sh">for f in /app/sessions/*.session; do
+    [ -f &quot;$f&quot; ] || continue
+    base=&quot;$(basename &quot;$f&quot;)&quot;
+    rm -f &quot;/data/${base}-journal&quot; &quot;/data/${base}-shm&quot; &quot;/data/${base}-wal&quot;
+    cp &quot;$f&quot; &quot;/data/$base&quot;
+done
+</code></pre>
+<p>這個設計取捨很明確：<strong>session 檔的 source of truth 永遠是 image 裡打包的那份。</strong> Volume 只是讓 Pyrogram 有地方寫 runtime 資料，但每次啟動都從 image 同步，確保不會因為 crash 產生的垃圾檔案而卡死。</p>
+<h2>第七坑：fly ssh console 裡的 glob 展開</h2>
+<p>發現第六坑之後，第一反應是 SSH 進去手動清理：</p>
+<pre><code class="language-bash">fly ssh console -C &quot;rm -f /data/*.session /data/*.session-shm&quot;
+</code></pre>
+<p>報錯：<code>rm: invalid option -- &#39;l&#39;</code>。</p>
+<p><code>-C</code> 參數傳進去的字串，glob 展開的行為跟你預期的不一樣。<code>*.session-shm</code> 被 shell 解析成奇怪的東西。</p>
+<p>解法是包一層 <code>sh -c</code>：</p>
+<pre><code class="language-bash">fly ssh console -C &quot;sh -c &#39;rm -f /data/*.session /data/*.session-shm&#39;&quot;
+</code></pre>
+<p>小坑，但在你焦頭爛額地想修一個已經 crash 了 20 次的 bot 時，多一個 parse error 真的很火。</p>
+<h2>教訓</h2>
+<ol>
+<li><p><strong>多階段建置不是可選的。</strong> 有 C extension 就得用。<code>gcc</code> + <code>libc6-dev</code> 是最低要求。</p>
+</li>
+<li><p><strong>fly.toml 的 <code>[processes]</code> 是 CMD 的替代品，不是補充。</strong> 如果你有 entrypoint 腳本，<code>[processes]</code> 必須指向它，不能直接指向 Python。</p>
+</li>
+<li><p><strong>改 <code>.dockerignore</code> 之後必須 <code>--no-cache</code>。</strong> Docker build cache 不追蹤 <code>.dockerignore</code> 的變更。</p>
+</li>
+<li><p><strong>Telegram bot crash 要手動停，不要讓平台自動重啟。</strong> FloodWait 的懲罰是累加的。十次失敗登入可以讓你等一個小時。</p>
+</li>
+<li><p><strong>「如果不存在才複製」不適合 crash recovery 場景。</strong> Crash 過程中產生的檔案會擋住正確檔案的恢復。要嘛用 force copy，要嘛用 checksum 驗證。</p>
+</li>
+<li><p><strong>Session 檔 = 帳號憑證。</strong> Pyrogram 的 <code>.session</code> 檔是 SQLite 資料庫，裡面存著 Telegram auth key。它壞了就等於沒有登入憑證，Pyrogram 會要求重新輸入手機號碼——在 Docker container 裡，這意味著 EOFError crash。</p>
+</li>
+</ol>
+<h2>目前狀態</h2>
+<p>Bot 跑在 Fly.io 東京節點（nrt），shared-cpu-1x / 256MB，用 persistent volume 存 session 檔但每次啟動都從 image 同步。Master bot 和 MTProto userbot 雙 client 正常運行，指令選單同步、訊息轉發、inline button 代理都正常。</p>
+<p>從開始部署到真正穩定運行，中間有大約兩個小時在等 FloodWait 和 debug session 檔問題。如果你看了這篇文章，應該可以在十五分鐘內部署完。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

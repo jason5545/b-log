@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>當你的顯卡在虛擬機裡消失了：一次技術偵探之旅 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="一個關於 RTX 4070 Ti Super 在 Proxmox VE 虛擬機中消失的故障排除之旅。從 D3cold 電源狀態問題到 PCIe 訊號品質測試，最後發現真正的罪魁禍首竟然只是接觸不良。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/gpu-passthrough-troubleshooting/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/gpu-passthrough-troubleshooting/" id="og-url">
@@ -31,7 +31,7 @@
   <meta property="article:tag" content="硬體故障排除">
   <meta property="article:tag" content="PCIe">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/gpu-passthrough-troubleshooting/" id="twitter-url">
@@ -39,7 +39,7 @@
   <meta property="twitter:description" content="一個關於 RTX 4070 Ti Super 在 Proxmox VE 虛擬機中消失的故障排除之旅。從 D3cold 電源狀態問題到 PCIe 訊號品質測試，最後發現真正的罪魁禍首竟然只是接觸不良。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2025/gpu-passthrough-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="GPU Passthrough, Proxmox, VFIO, 硬體故障排除, PCIe" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <link rel="preload" as="image" href="/content/img/2025/gpu-passthrough-cover.webp" imagesrcset="/content/img/2025/gpu-passthrough-cover-480w.webp 480w, /content/img/2025/gpu-passthrough-cover-828w.webp 828w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"當你的顯卡在虛擬機裡消失了：一次技術偵探之旅","description":"一個關於 RTX 4070 Ti Super 在 Proxmox VE 虛擬機中消失的故障排除之旅。從 D3cold 電源狀態問題到 PCIe 訊號品質測試，最後發現真正的罪魁禍首竟然只是接觸不良。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-10-19T15:00:00Z","dateModified":"2025-10-19T15:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/gpu-passthrough-troubleshooting/"},"url":"https://b-log.to/tech-analysis/gpu-passthrough-troubleshooting/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2025/gpu-passthrough-cover.webp"],"keywords":"GPU Passthrough, Proxmox, VFIO, 硬體故障排除, PCIe","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">當你的顯卡在虛擬機裡消失了：一次技術偵探之旅</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,73 @@
         <article class="article">
           <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2025/gpu-passthrough-cover.webp" srcset="/content/img/2025/gpu-passthrough-cover-480w.webp 480w, /content/img/2025/gpu-passthrough-cover-828w.webp 828w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">當你的顯卡在虛擬機裡消失了：一次技術偵探之旅</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Oct 19, 2025</span><span>10 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>GPU Passthrough</span><span>Proxmox</span><span>VFIO</span><span>硬體故障排除</span><span>PCIe</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>這是一個關於 RTX 4070 Ti Super、Proxmox VE、還有一條看起來很無辜的 PCIe 延長線的故事。更準確地說，這是一個關於「為什麼我的顯卡會在虛擬機裡憑空消失」的謎案。</p>
+<p>故事開始於 9/11 的晚上。我在 Microsoft Flight Simulator 裡飛了大約一小時，按下 ESC 準備去倒杯水。回來的時候，螢幕黑了。不是當機那種黑，是那種「什麼都沒了」的黑。</p>
+<p>我切到 Proxmox 宿主端，輸入 <code>lspci -s 01:00.0</code>。空白。什麼都沒有。一張價值兩萬八的顯卡，就這樣從 PCI 裝置樹上人間蒸發了。</p>
+<hr>
+<p>這不是第一次了。從 9/11 開始，每次飛行超過六十分鐘，進入暫停選單後就會發生同樣的事。<code>journalctl -k</code> 裡只留下一行冰冷的訊息：</p>
+<pre><code>vfio-pci 0000:01:00.1: Unable to change power state from D3cold to D0, device inaccessible
+</code></pre>
+<p>D3cold。這個詞在接下來的日子裡會變成我的噩夢。它是 PCIe 裝置的最深層睡眠狀態，理論上應該能被喚醒。但我的顯卡顯然不這麼想。</p>
+<p>我開始做功課。BIOS 裡關掉 ASPM，在 GRUB 加上 <code>pcie_aspm=off pcie_port_pm=off</code>，把 <code>d3cold_allowed</code> 設成 0，停用所有可能讓顯卡睡著的東西。測試。失敗。再測試。再失敗。</p>
+<p>然後我注意到一個細節：在裸機 Windows 的時候，HDMI 偶爾會閃一下。當時我以為是螢幕問題，沒多想。現在回頭看，那是第一個線索。</p>
+<hr>
+<p>我開始懷疑 PCIe Riser。Lian Li Q58 是個夾層結構的 ITX 機殼，顯卡必須透過一條 200mm 的延長線才能裝進去。這條線看起來很普通，就是隨機殼附送的那種。但 Gen4 訊號對線材品質要求很嚴格，會不會是它的問題？</p>
+<p>我跑了 3DMark Time Spy Stress Test。Gen4 模式下，穩定度只有 88.7%。標準是 97%。</p>
+<p>好吧，降到 Gen3 試試。93.2%。有改善，但還是不合格。</p>
+<p>這時候理論開始成形：PCIe 訊號品質不足 → 長時間運作後累積錯誤 → 電源狀態切換時無法正常 re-training → VFIO 放棄治療 → 顯卡消失。</p>
+<p>聽起來很合理對吧？我也這麼想。所以我開始研究要換哪條高品質的延長線，或者乾脆換個支援水平安裝顯卡的大機殼。</p>
+<hr>
+<p>10/5，我帶著電腦去了光華商場。第一站是原價屋。他們花了半小時測試：裸機 Windows，舊的 Riser，跑 CS2。一切正常。這證明顯卡本體沒問題，但也讓謎團更深了。</p>
+<p>我又去了另一家店，想測試一條 Lian Li 出的高階延長線 PW-PCI-520。店員拆開機殼，試著裝上去。「裝不進去，」他說，「角度不對。」</p>
+<p>好吧，那就算了。我拿回電腦，回家。</p>
+<p>到家後，按下電源鈕。沒反應。完全沒有過電的跡象。</p>
+<p>這下糟了。</p>
+<hr>
+<p>10/6 一早，我又回到原價屋。工程部的人打開機殼，檢查了不到五分鐘。</p>
+<p>「你的電源開關在 OFF，」他說。</p>
+<p>原來那家店在測試時把機殼內部的電源開關撥到了 OFF，還回去的時候忘了撥回來。虛驚一場，但也讓我對那家店的專業度打了個大問號。</p>
+<p>不過意外的是，這次拆裝之後，問題似乎... 改善了？</p>
+<p>10/6 晚上我測試了六十九分鐘，暫停兩次，都正常。這是從 9/11 以來第一次突破六十分鐘大關。我不敢太樂觀，畢竟之前也有過「以為好了結果又復發」的經驗。</p>
+<hr>
+<p>今天，10/19，我飛了整整四個小時。</p>
+<p>中間暫停過、恢復過、切換過視角、調整過設定。顯卡穩穩地待在 <code>lspci</code> 的輸出裡，沒有消失，沒有錯誤，沒有任何異常。</p>
+<p>四個小時。比之前的記錄多了快四倍。</p>
+<p>我終於明白發生了什麼：不是 Riser 壞了，不是訊號品質不足，不是需要降到 Gen3，也不是要換機殼。</p>
+<p>只是接觸不良。</p>
+<p>那條延長線在機殼裡躺了一段時間，金手指上可能累積了些微的氧化或灰塵。這些微小的污染在一般使用下沒問題，但在長時間高負載後，阻抗增加，訊號品質下降，再遇上電源狀態切換的關鍵時刻，就會失敗。</p>
+<p>原價屋的測試、那家店的拆裝，意外地多次插拔了這條線。摩擦帶走了氧化層，清除了灰塵，接觸品質改善了。問題就這樣被「意外」解決了。</p>
+<hr>
+<p>回顧 9/11 到 10/19 這一個多月的診斷過程，我學到了一些教訓：</p>
+<p>首先，複雜的症狀不一定需要複雜的解決方案。當我看到 <code>D3cold</code>、<code>vfio-pci reset</code>、<code>PCIe link retraining</code> 這些技術細節時，很容易陷入「這一定是個深層的技術問題」的思維。但有時候，答案就是「擦乾淨重新插」這麼簡單。</p>
+<p>其次，測試環境的差異很重要。10/5 在原價屋測試正常，但我家裡會失敗，這個線索我當時沒有深究。現在想想，測試時的拆裝就已經在改善接觸了，只是效果還不夠持久。</p>
+<p>第三，保養比升級重要。與其花三千塊換新機殼或買高階延長線，不如每半年打開機殼，用氣罐吹個灰塵，重新插拔一次所有接頭。預防勝於治療。</p>
+<p>最後，技術問題的解決有時候需要點運氣。如果 10/5 那天我沒去第二家店，沒有經歷那次「電源開關事件」，可能就不會有那麼多次的拆裝，接觸也不會改善，我可能還在跟這個問題搏鬥。</p>
+<hr>
+<p>現在我的 Proxmox 設定檔裡還保留著那些核心參數：<code>pcie_aspm=off</code>、<code>d3cold_allowed=0</code>。它們可能沒什麼作用，但我決定留著。就當作是 9/11 到 10/19 這段搏鬥的紀念碑吧。</p>
+<p>如果你也遇到類似的 GPU passthrough 問題，在深入研究 VFIO 驅動程式碼或考慮換硬體之前，試試這個最簡單的步驟：</p>
+<p>把顯卡拔下來，用乾淨的橡皮擦輕輕擦拭金手指，用氣罐吹掉灰塵，然後重新插回去。</p>
+<p>有時候，答案就是這麼簡單。</p>
+<hr>
+<p><strong>技術規格記錄（給需要的人）：</strong></p>
+<ul>
+<li>CPU: AMD Ryzen 9 9950X3D</li>
+<li>主機板: ASUS ROG STRIX B650E-I GAMING WIFI</li>
+<li>顯卡: NVIDIA GeForce RTX 4070 Ti SUPER</li>
+<li>宿主: Proxmox VE 9 / Debian 13 (kernel 6.14.11)</li>
+<li>機殼: Lian Li Q58 (搭配原廠 200mm PCIe Riser)</li>
+<li>VM: Windows 11 (UEFI/OVMF, Q35, vfio-pci)</li>
+</ul>
+<p>最終有效的 GRUB 參數（雖然可能不是關鍵）：</p>
+<pre><code>GRUB_CMDLINE_LINUX_DEFAULT=&quot;quiet amd_iommu=on iommu=pt pcie_aspm=off pcie_port_pm=off&quot;
+</code></pre>
+<p>真正的解決方案：重新插拔 PCIe Riser，改善接觸品質。成本：$0。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>解決 Waydroid 中酷安閃退問題：從 libndk_translation 切換到 libhoudini - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="在 Linux 上用 Waydroid 跑酷安，每次開啟都立刻閃退。Logcat 顯示 ANR 加上 68% kernel time，問題出在 libndk_translation 與酷安的 native 程式碼不相容。解法是用 waydroid_script 切換到 Google 的 libhoudini 轉譯層。其他 ARM App 閃退也可以試試這個方法。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/waydroid-arm-translation-fix/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/waydroid-arm-translation-fix/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="libhoudini">
   <meta property="article:tag" content="酷安">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/waydroid-arm-translation-fix/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="在 Linux 上用 Waydroid 跑酷安，每次開啟都立刻閃退。Logcat 顯示 ANR 加上 68% kernel time，問題出在 libndk_translation 與酷安的 native 程式碼不相容。解法是用 waydroid_script 切換到 Google 的 libhoudini 轉譯層。其他 ARM App 閃退也可以試試這個方法。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%A7%A3%E6%B1%BA%20Waydroid%20%E4%B8%AD%E9%85%B7%E5%AE%89%E9%96%83%E9%80%80%E5%95%8F%E9%A1%8C%EF%BC%9A%E5%BE%9E%20libndk_translation%20%E5%88%87%E6%8F%9B%E5%88%B0%20libhoudini,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Waydroid, Android, Linux, ARM, libhoudini, 酷安" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"解決 Waydroid 中酷安閃退問題：從 libndk_translation 切換到 libhoudini","description":"在 Linux 上用 Waydroid 跑酷安，每次開啟都立刻閃退。Logcat 顯示 ANR 加上 68% kernel time，問題出在 libndk_translation 與酷安的 native 程式碼不相容。解法是用 waydroid_script 切換到 Google 的 libhoudini 轉譯層。其他 ARM App 閃退也可以試試這個方法。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-26T00:00:00Z","dateModified":"2025-12-26T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/waydroid-arm-translation-fix/"},"url":"https://b-log.to/tech-analysis/waydroid-arm-translation-fix/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%A7%A3%E6%B1%BA%20Waydroid%20%E4%B8%AD%E9%85%B7%E5%AE%89%E9%96%83%E9%80%80%E5%95%8F%E9%A1%8C%EF%BC%9A%E5%BE%9E%20libndk_translation%20%E5%88%87%E6%8F%9B%E5%88%B0%20libhoudini,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"Waydroid, Android, Linux, ARM, libhoudini, 酷安","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">解決 Waydroid 中酷安閃退問題：從 libndk_translation 切換到 libhoudini</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,86 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">解決 Waydroid 中酷安閃退問題：從 libndk_translation 切換到 libhoudini</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Dec 26, 2025</span><span>4 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Waydroid</span><span>Android</span><span>Linux</span><span>ARM</span><span>libhoudini</span><span>酷安</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>在 Linux 上用 Waydroid 跑酷安，結果每次開啟都立刻閃退。</p>
+<h2>問題現象</h2>
+<p>啟動酷安後，應用程式視窗會短暫出現，然後立刻閃退。透過 <code>waydroid logcat</code> 查看日誌，發現大量錯誤訊息：</p>
+<pre><code>E LoadedApk: java.lang.ClassNotFoundException: Didn&#39;t find class
+    &quot;androidx.core.app.CoreComponentFactory&quot;
+</code></pre>
+<p>以及：</p>
+<pre><code>E ActivityManager: ANR in com.coolapk.market
+E ActivityManager: Reason: Input dispatching timed out
+E ActivityManager: 68% kernel
+</code></pre>
+<p>App 不斷出現 ANR（Application Not Responding），且 68% 的時間都花在 kernel 上，這暗示著問題出在 native 層。</p>
+<h2>問題分析</h2>
+<p>進一步查看日誌，發現了關鍵線索：</p>
+<pre><code>F .coolapk.market: runtime.cc:675] native: #10 pc ...
+    /system/lib64/libndk_translation.so
+</code></pre>
+<p>我的 Waydroid 使用的是 x86_64 架構，而酷安是 ARM 應用程式。Waydroid 需要透過轉譯層將 ARM 指令轉換為 x86 指令才能執行。</p>
+<p>檢查目前使用的轉譯層：</p>
+<pre><code class="language-bash">sudo waydroid shell getprop ro.dalvik.vm.native.bridge
+# 輸出: libndk_translation.so
+</code></pre>
+<p><code>libndk_translation</code> 是 Waydroid 預設的開源 ARM 轉譯層，但它與酷安的某些 native 程式碼不相容。</p>
+<h2>解決方案</h2>
+<p>切換到 <code>libhoudini</code>——Google 開發的 ARM 轉譯層，相容性通常比 libndk_translation 更好。</p>
+<h3>步驟 1：安裝 waydroid_script</h3>
+<pre><code class="language-bash">cd /tmp
+git clone https://github.com/casualsnek/waydroid_script.git
+cd waydroid_script
+sudo pip3 install --break-system-packages -r requirements.txt
+</code></pre>
+<h3>步驟 2：安裝 libhoudini</h3>
+<pre><code class="language-bash">sudo python3 main.py install libhoudini
+</code></pre>
+<p>腳本會自動下載並安裝 libhoudini 到 Waydroid 系統映像檔中。</p>
+<h3>步驟 3：重新啟動 Waydroid 容器</h3>
+<pre><code class="language-bash">sudo waydroid container restart
+</code></pre>
+<h3>步驟 4：驗證安裝</h3>
+<pre><code class="language-bash">sudo waydroid shell getprop ro.dalvik.vm.native.bridge
+# 輸出: libhoudini.so
+</code></pre>
+<p>確認已切換到 libhoudini 後，重新啟動酷安：</p>
+<pre><code class="language-bash">waydroid app launch com.coolapk.market
+</code></pre>
+<p>這次 App 成功啟動，不再閃退。</p>
+<h2>總結</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>問題</td>
+<td>酷安在 Waydroid 中閃退</td>
+</tr>
+<tr>
+<td>原因</td>
+<td>libndk_translation 與酷安 native 程式碼不相容</td>
+</tr>
+<tr>
+<td>解決</td>
+<td>切換到 libhoudini</td>
+</tr>
+<tr>
+<td>工具</td>
+<td>waydroid_script</td>
+</tr>
+</tbody></table>
+<p>其他 ARM App 閃退也可以試試這個方法。不過 libhoudini 是 Google 的閉源元件，可能存在授權問題。</p>
+<hr>
+<p><em>測試環境：Linux 6.14.0-37-generic, Waydroid MAINLINE, Android 13</em></p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

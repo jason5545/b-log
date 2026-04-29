@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>我把 GitHub Copilot 塞進手機裡，然後發現沒有人做過這件事 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="我自己做了一個 iOS app，把 GitHub Copilot 的聊天功能帶到手機上，還能跑 MCP 工具。做完之後去網路上找了一圈，發現這個組合真的沒有人做過。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/copilotchat-first-ios-native-mcp-client/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/copilotchat-first-ios-native-mcp-client/" id="og-url">
@@ -36,7 +36,7 @@
   <meta property="article:tag" content="tool call">
   <meta property="article:tag" content="Keychain">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/copilotchat-first-ios-native-mcp-client/" id="twitter-url">
@@ -44,7 +44,7 @@
   <meta property="twitter:description" content="我自己做了一個 iOS app，把 GitHub Copilot 的聊天功能帶到手機上，還能跑 MCP 工具。做完之後去網路上找了一圈，發現這個組合真的沒有人做過。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2026/copilotchat-coding-mode-workspace.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="CopilotChat, iOS, GitHub Copilot, Augment Code, MCP, SwiftUI, 開源, 多 Provider, tool call, Keychain" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -115,6 +115,7 @@
   <link rel="preload" as="image" href="/content/img/2026/copilotchat-coding-mode-workspace.webp" imagesrcset="/content/img/2026/copilotchat-coding-mode-workspace-480w.webp 480w, /content/img/2026/copilotchat-coding-mode-workspace-828w.webp 828w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我把 GitHub Copilot 塞進手機裡，然後發現沒有人做過這件事","description":"我自己做了一個 iOS app，把 GitHub Copilot 的聊天功能帶到手機上，還能跑 MCP 工具。做完之後去網路上找了一圈，發現這個組合真的沒有人做過。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-04-09T00:00:00Z","dateModified":"2026-04-11T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/copilotchat-first-ios-native-mcp-client/"},"url":"https://b-log.to/tech-analysis/copilotchat-first-ios-native-mcp-client/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/copilotchat-coding-mode-workspace.webp"],"keywords":"CopilotChat, iOS, GitHub Copilot, Augment Code, MCP, SwiftUI, 開源, 多 Provider, tool call, Keychain","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -124,7 +125,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我把 GitHub Copilot 塞進手機裡，然後發現沒有人做過這件事</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -193,12 +194,71 @@
         <article class="article">
           <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/copilotchat-coding-mode-workspace.webp" srcset="/content/img/2026/copilotchat-coding-mode-workspace-480w.webp 480w, /content/img/2026/copilotchat-coding-mode-workspace-828w.webp 828w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">我把 GitHub Copilot 塞進手機裡，然後發現沒有人做過這件事</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Apr 9, 2026</span><span>Updated Apr 11, 2026</span><span>6 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>CopilotChat</span><span>iOS</span><span>GitHub Copilot</span><span>Augment Code</span><span>MCP</span><span>SwiftUI</span><span>開源</span><span>多 Provider</span><span>tool call</span><span>Keychain</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>故事要從上次那篇文章說起。</p>
+<p>我離開了 claude.ai，走 GitHub Copilot 的路線繼續用 Claude。路是通了，但有一個問題：GitHub 沒有一個像樣的 iOS Copilot Chat 客戶端。</p>
+<p>官方的 Copilot for Xcode 是 macOS 限定，而且是 IDE 擴展，不是獨立的聊天 app。VS Code 裡的 Copilot Chat 更不用說——那是桌面的東西。我在手機上想跟 Claude 說句話，沒有辦法。</p>
+<p>所以我自己做了一個。用 Claude Code 做的。</p>
+<h2>CopilotChat</h2>
+<p><a href="https://github.com/jason5545/CopilotChat">CopilotChat</a> 是一個 iOS 原生 app，純 SwiftUI，不依賴任何第三方框架。你用 GitHub 帳號登入（Device Flow OAuth），就能直接跟 Copilot API 裡的所有模型聊天——Claude Opus 4.6、GPT-4o、Gemini，什麼都有。</p>
+<p>但這些只是基本款。我真正想做的是把手機變成一個完整的 AI 終端，不只是聊天框。不只是 GitHub Copilot——而是任何 LLM provider。</p>
+<h3>MCP 自動執行</h3>
+<p>CopilotChat 有一個原生的 MCP client，支援 Streamable HTTP transport。你把 MCP server 的 URL 和 headers 填進去，app 會自動連線、載入工具清單、注入到 API 的 <code>tools</code> 參數裡。當 AI 回傳 tool call 時，app 自動透過 MCP server 執行，最多 10 輪 completion loop——整個過程不需要人介入。</p>
+<p>這意味著什麼？意味著我在手機上就能讓 Claude 幫我搜尋記憶、查資料、操作外部服務。不是玩具，是真的能用的。</p>
+<h3>多 Provider</h3>
+<p>最近我又加了多 provider 系統，參考了 models.dev 的資料庫，支援 120 多個 provider。不僅限 GitHub Copilot——OpenRouter、Anthropic 直連、OpenAI 官方、Google Gemini、Ollama 本地，都可以。每個 provider 有自己的 headers 處理、thinking/reasoning token 邏輯，全部從 OpenCode 的 TypeScript 版本對齊過來。</p>
+<p>最新加入的是 <strong>Augment Code</strong>——一個走 NDJSON streaming 的 provider，使用 tenant-based 架構和 Session JSON 認證。這意味著它的串流格式、認證方式都跟其他 provider 不一樣，需要從頭寫一個獨立的 provider 實作。每加一個非 OpenAI-compatible 的 provider，都是這樣的工程量。</p>
+<h3>內建工具</h3>
+<p>除了 MCP，app 還有四個內建工具：<code>web_fetch</code>、<code>web_screenshot</code>、<code>brave_web_search</code>、<code>tool_search</code>。API key 存在 Keychain 裡，設定頁可以管理。<code>tool_search</code> 是一個特別的工具——它讓模型在 deferred loading 模式下按需搜尋和載入 MCP 工具，而不是一次把所有 tool schema 塞進 context。這些工具跟 MCP tools 一樣會自動被模型呼叫和執行。</p>
+<p>最近我又補上了一條更激進的路線：<strong>coding mode + workspace file tools</strong>。你在 iPhone 上切到 coding mode，選一個本機資料夾之後，模型就能直接用 <code>list_files</code>、<code>read_file</code>、<code>write_file</code>、<code>edit_file</code>、<code>create_file</code>、<code>delete_file</code>、<code>move_file</code> 這些工具操作檔案。不是透過遠端 MCP server，而是直接用 iOS 的 Folder Picker 和 security-scoped bookmark 拿到 workspace 權限。換句話說，手機現在不只是在聊天，也可以真的做 code editing。</p>
+<p><img src="/content/img/2026/copilotchat-coding-mode-workspace.webp" alt="CopilotChat coding mode workspace 選擇畫面"></p>
+<p>這件事比我原本想像的麻煩很多。除了 UI 要把 chat mode 和 coding mode 分開，還要做一個 coordinator flow，讓模型先用 <code>switch_mode</code> 切到 coding，再去找目前模式下可用的工具。<code>tool_search</code> 也不能只搜尋 MCP tools，否則模型明明在 coding mode，卻找不到 <code>edit_file</code>。另外還踩到一個很典型的 iOS 坑：workspace 根資料夾已經有 security scope 了，子檔案不能再各自 <code>startAccessingSecurityScopedResource()</code>，不然就會報 <code>Cannot access path</code>。這些細節修完之後，整個 workflow 才真的成立。</p>
+<h3>安全性</h3>
+<p>做完功能之後，我做了一次完整的安全性審計。結果修了兩個 HIGH level 的問題：MCP server 的自訂 headers（可能包含 Bearer token）原本跟 server config 一起存在 UserDefaults 的明文 plist 裡，現在改存 Keychain；Gemini API key 原本放在 URL query parameter 裡（會洩漏到 URL cache 和 proxy log），現在改用 <code>x-goog-api-key</code> HTTP header。整個 app 零第三方依賴，沒有供應鏈風險。</p>
+<h3>其他</h3>
+<p>對話歷史用 JSON 檔案持久化、context window 圓形指示器、MCP 權限控制（三層模型：tool &gt; server &gt; session）、對話自動命名、編輯訊息和重新生成、Carbon 設計系統（深炭黑 + 琥珀色，三重字型）。這些都是參考 claude.ai 和 OpenCode 的設計做出來的。</p>
+<h2>然後我去查了一下</h2>
+<p>文章寫到這裡，我想確認一件事：我是不是重複造輪子了？網路上是不是已經有人做過一樣的東西？</p>
+<p>我搜了好幾輪，把所有能想到的關鍵字組合都打了一遍：「GitHub Copilot iOS client MCP」「iOS app Copilot chat unofficial」「SwiftUI MCP client open source」。結果是：</p>
+<ul>
+<li><strong>GitHub 官方 Copilot for Xcode</strong>：macOS 限定，是 Xcode 的編輯器擴展，不是獨立 iOS app</li>
+<li><strong>CopilotForXcode</strong>（intitni）：第三方 Xcode 擴展，同樣是桌面端 IDE 整合</li>
+<li><strong>CopilotKit Open MCP Client</strong>：Web-based（React/Next.js），用 CopilotKit 框架 + LangGraph agent，不走 GitHub Copilot API</li>
+<li><strong>OpenCode</strong>：終端機工具（Go），完全不同平台</li>
+</ul>
+<p>沒有人做過「iOS 原生 app + GitHub Copilot API 認證 + MCP 自動執行」這個組合。</p>
+<h2>等等，Chatbox 呢？</h2>
+<p>有人可能會說：Chatbox 不就是嗎？</p>
+<p>對，Chatbox 確實是最接近的。跨平台（Windows/Mac/Linux/iOS/Android/Web）、開源、支援多 provider、有 MCP。概念上幾乎一樣——都是「通用 LLM chat client + MCP + 多 provider」。</p>
+<p>但 Chatbox 的 MCP 是<strong>桌面限定</strong>。我直接翻了它的原始碼，在 <code>feature-flags.ts</code> 裡寫得清清楚楚：</p>
+<pre><code class="language-typescript">export const featureFlags = {
+  mcp: platform.type === &#39;desktop&#39;,
+  knowledgeBase: platform.type === &#39;desktop&#39;,
+  skills: false,
+  taskMode: false,
+}
+</code></pre>
+<p><code>platform.type === &#39;desktop&#39;</code>——只有桌面版（Electron）才能用 MCP。iOS、Android、Web，全部沒有。</p>
+<p>而且內建的 MCP server 還需要 license key（付費功能）才能連線。在 <code>builtin.ts</code> 裡：</p>
+<pre><code class="language-typescript">headers: license ? { &#39;x-chatbox-license&#39;: license } : undefined,
+</code></pre>
+<p>沒有 license，header 不帶認證，Chatbox 的 MCP server 不會讓你連。</p>
+<p>所以如果你在 Mac 上開 Chatbox，免費版看到的 MCP 設定頁可能是空的或是被藏起來的。有人還因為同名爭議被從 iOS App Store 下架過。</p>
+<p>Chatbox 是一個很好的產品，我不否認。但在 iOS 上，它是一個不帶 MCP 的聊天客戶端。而 CopilotChat 在手機上就能跑完整的 MCP tool call loop。</p>
+<h2>所以這個東西特別在哪？</h2>
+<p>不是單一功能。是整合。</p>
+<p>CopilotChat 把 GitHub Copilot、多 provider、MCP 自動工具執行，和 iPhone 上的本機 workspace coding mode 放進了同一個原生 app。這些東西拆開來看，都不是新發明。但把整套 workflow 串起來，就是另一回事。</p>
+<p>我想做的也不是一個只能聊天的 mobile client，不是一個只能填 API key 的通用殼，也不是一個只能在桌面跑 agent mode 的 IDE 配件。我想做的是：在手機上就能進入工具調度、檔案編輯、provider 切換、MCP 呼叫完整循環的 LLM 終端。</p>
+<h2>我用 Claude 做了一個離開 Claude 的工具</h2>
+<p>上次那篇文章的結尾，我寫了這句話。現在它有了下半句：然後用這個工具，發現了一個沒有人填過的洞。</p>
+<p>CopilotChat 已經是我跟 Claude 對話的主力介面了。從 4 月 8 號開始，我在手機上開 CopilotChat 跟 Claude 聊天的時間，可能比在電腦上還多。context window 192K、34 個 MCP tool schemas、記憶系統——全部在 iPhone 上跑。</p>
+<p>如果你有 GitHub Copilot 訂閱，clone 下來、Xcode 打開、裝到手機上，用 GitHub 帳號登入就能用，不用帶 API key。如果你用其他 provider——OpenRouter、Anthropic、Augment Code——填個 API key 或 session JSON 就能切換。整個 app 零第三方依賴，MIT 授權。</p>
+<p>原始碼已經公開在 <a href="https://github.com/jason5545/CopilotChat">GitHub</a>，MIT 授權，歡迎試用。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

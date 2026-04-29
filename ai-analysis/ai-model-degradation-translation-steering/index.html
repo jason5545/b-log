@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>當 AI 不再幫你腦補：從一篇 LiSA 翻譯看模型退化的真實影響 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="我用 AI 完成了一篇 LiSA 母女對談的完整翻譯，但隨著 Opus 4.7 和 GPT-5 走向同一條「字面聽話」的路線，我開始思考：翻譯工作流的核心到底是 AI 的能力，還是人類的 steering？">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/ai-analysis/ai-model-degradation-translation-steering/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/ai-analysis/ai-model-degradation-translation-steering/" id="og-url">
@@ -35,7 +35,7 @@
   <meta property="article:tag" content="Claude">
   <meta property="article:tag" content="翻譯工作流">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/ai-analysis/ai-model-degradation-translation-steering/" id="twitter-url">
@@ -43,7 +43,7 @@
   <meta property="twitter:description" content="我用 AI 完成了一篇 LiSA 母女對談的完整翻譯，但隨著 Opus 4.7 和 GPT-5 走向同一條「字面聽話」的路線，我開始思考：翻譯工作流的核心到底是 AI 的能力，還是人類的 steering？" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%20AI%20%E4%B8%8D%E5%86%8D%E5%B9%AB%E4%BD%A0%E8%85%A6%E8%A3%9C%EF%BC%9A%E5%BE%9E%E4%B8%80%E7%AF%87%20LiSA%20%E7%BF%BB%E8%AD%AF%E7%9C%8B%E6%A8%A1%E5%9E%8B%E9%80%80%E5%8C%96%E7%9A%84%E7%9C%9F%E5%AF%A6%E5%BD%B1%E9%9F%BF,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="AI 翻譯, Opus 4.7, GPT-5, Prompt Engineering, 模型退化, Steering, 本地模型, Claude, 翻譯工作流" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -113,6 +113,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"當 AI 不再幫你腦補：從一篇 LiSA 翻譯看模型退化的真實影響","description":"我用 AI 完成了一篇 LiSA 母女對談的完整翻譯，但隨著 Opus 4.7 和 GPT-5 走向同一條「字面聽話」的路線，我開始思考：翻譯工作流的核心到底是 AI 的能力，還是人類的 steering？","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-04-19T00:00:00Z","dateModified":"2026-04-19T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/ai-model-degradation-translation-steering/"},"url":"https://b-log.to/ai-analysis/ai-model-degradation-translation-steering/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%20AI%20%E4%B8%8D%E5%86%8D%E5%B9%AB%E4%BD%A0%E8%85%A6%E8%A3%9C%EF%BC%9A%E5%BE%9E%E4%B8%80%E7%AF%87%20LiSA%20%E7%BF%BB%E8%AD%AF%E7%9C%8B%E6%A8%A1%E5%9E%8B%E9%80%80%E5%8C%96%E7%9A%84%E7%9C%9F%E5%AF%A6%E5%BD%B1%E9%9F%BF,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"AI 翻譯, Opus 4.7, GPT-5, Prompt Engineering, 模型退化, Steering, 本地模型, Claude, 翻譯工作流","articleSection":"AI 分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -122,7 +123,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">當 AI 不再幫你腦補：從一篇 LiSA 翻譯看模型退化的真實影響</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -191,12 +192,148 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">當 AI 不再幫你腦補：從一篇 LiSA 翻譯看模型退化的真實影響</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Apr 19, 2026</span><span>9 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>AI 翻譯</span><span>Opus 4.7</span><span>GPT-5</span><span>Prompt Engineering</span><span>模型退化</span><span>Steering</span><span>本地模型</span><span>Claude</span><span>翻譯工作流</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>前言</h2>
+<p>最近我在部落格發了一篇文章——把一篇 12 年前消失的 LiSA 母女對談翻譯補回來。那是 LiSA 寫真書裡的母女對談，後來有粉絲翻譯成英文發在網路上，但那篇英文翻譯後來消失了。我覺得可惜，就用 AI 從日文原文重新翻成中文，一篇一篇連載出來（<a href="https://b-log.to/crossing-field/lisa-gifu-memory-journey-mother-interview/">完整文章在這裡</a>）。</p>
+<p>做這件事的過程裡，我累積了不少跟 AI 協作翻譯的經驗。但就在文章發布沒多久，Claude Opus 4.7 推出了。社群的反應很激烈——有人說它「嚴重回退」，有人說「從跟一個有思想的同事對話，變成收到一份備忘錄」。</p>
+<p>我聽到這些反應的時候，心裡的第一個念頭不是「我又要換模型了」。而是：<strong>這條路我走過。</strong></p>
+<h2>我走過的路：從 GPT-5 的「制式化」到跳船</h2>
+<p>2026 年 2 月，我經過多個 AI 的對比測試後，決定完全放棄 ChatGPT。原因很單純：<strong>GPT-5 系列在人性化回應方面遠遜於 Claude</strong>。它太制式化了，像在跟一個客服機器人講話，不是在跟一個能理解你語境的助手協作。</p>
+<p>我沒有猶豫太久。那個時候 Claude 的語感還很好，所以我就跳了。</p>
+<p>但現在，Opus 4.7 也開始走同一條路。</p>
+<h2>Opus 4.7 變了什麼</h2>
+<p>先說清楚：Opus 4.7 不是「變笨了」。它在基準測試上的表現比 4.6 更好，agentic 能力更強。但它的行為模式變了：</p>
+<ul>
+<li><strong>Temperature 被移除了。</strong> 你無法再用參數控制輸出的隨機性和創意程度，只能用 prompt 描述你想要的風格。</li>
+<li><strong>它變得字面聽話。</strong> 以前你丟一句模糊的指令，它會猜你的意思、自動補全你沒說的部分。現在不會了，它只做你說的，不多不少。</li>
+<li><strong>語感變平坦。</strong> 以前像在跟一個有想法的人聊天，現在像在讀一份結構完整的報告。</li>
+</ul>
+<p>社群裡有人說得很好：</p>
+<blockquote>
+<p>It used to feel like talking to a thoughtful colleague. Now it feels like getting a memo.</p>
+</blockquote>
+<p>這不是 bug，是設計選擇。Anthropic 把模型推向更精確、更可控的方向，代價是犧牲了自然語感。</p>
+<h3>人才流動背後的暗線</h3>
+<p>但這個「設計選擇」不是憑空出現的。2026 年 1 月，一個關鍵人物從 OpenAI 跳到了 Anthropic：<strong>Andrea Vallone</strong>。</p>
+<p>她在 OpenAI 待了三年，做的事情非常具體——</p>
+<ul>
+<li>建立了「模型行為政策」研究團隊，決定 AI 應該怎麼回應使用者</li>
+<li>主導了 GPT-4、推理模型、GPT-5 的部署方式</li>
+<li>開發了 rule-based rewards 等安全訓練技術——正是讓模型變「聽話」的核心機制</li>
+<li>專門研究模型在長對話中遇到心理健康議題時該怎麼反應</li>
+</ul>
+<p>她跳到 Anthropic 後直接加入 alignment 團隊，跟 Jan Leike（2024 年從 OpenAI 跳過來的超級對齊團隊共同負責人）合作，負責<strong>塑造 Claude 的行為方式</strong>。她自己的 LinkedIn 寫得很白：</p>
+<blockquote>
+<p>「I&#39;m eager to continue my research at Anthropic, focusing on alignment and fine-tuning to shape Claude&#39;s behavior in novel contexts.」</p>
+</blockquote>
+<p>時間線很清楚：</p>
+<table>
+<thead>
+<tr>
+<th>時間</th>
+<th>事件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2024</td>
+<td>Jan Leike 從 OpenAI 跳到 Anthropic</td>
+</tr>
+<tr>
+<td>2026/1/16</td>
+<td>Andrea Vallone 從 OpenAI 跳到 Anthropic alignment 團隊</td>
+</tr>
+<tr>
+<td>~2 月中</td>
+<td>開始影響 Claude 的行為訓練流程</td>
+</tr>
+<tr>
+<td>~4 月</td>
+<td>Opus 4.7 推出，語感明顯變「精確但平坦」</td>
+</tr>
+</tbody></table>
+<p>Fortune 2025 年 6 月的報導也指出，這不是個案——OpenAI 的工程師跳到 Anthropic 的機率是反向的 8 倍，DeepMind 是 11:1。Anthropic 兩年人才留任率 80%，OpenAI 只有 67%。整個 AI 產業的人才正在往 alignment 導向的公司集中。</p>
+<p>所以你觀察到的「GPT-5 和 Opus 4.7 走同一條路線」，不是兩家公司恰好做出同樣的決定。<strong>是同一批人，帶著同一套方法論，從一家公司搬到了另一家。</strong></p>
+<h3>為什麼第一個人的影響不明顯</h3>
+<p>你可能會問：Jan Leike 2024 年就到了，為什麼到他為止模型沒有明顯變化？</p>
+<p>因為這兩個人的層級完全不同。</p>
+<p><strong>Jan Leike 是戰略層。</strong> 他的領域是 superalignment——「未來的超級智能怎麼跟人類對齊」。這是研究層面的、理論性的、長期的。他影響的是 Anthropic 的<strong>安全文化和研究方向</strong>，但不直接碰「模型今天輸出的語氣是什麼」。</p>
+<p><strong>Andrea Vallone 是戰術層。</strong> 她的專長是 model behavior policy 和 rule-based rewards——直接決定「模型面對使用者的時候怎麼說話」。語氣、風格、邊界、什麼該說什麼不該說。這是<strong>產品層面的、可落地的、短期見效的</strong>。</p>
+<p>簡單說：<strong>Jan Leike 打底，Andrea Vallone 執行。</strong> 戰略改變需要時間才看得到，戰術改變三個月就反映在產品上。這就是為什麼 Opus 4.7 之前你感覺不明顯，Andrea Vallone 一到，變化就來了。</p>
+<h2>這跟我的翻譯有什麼關係</h2>
+<p>關係很大。</p>
+<p>我的翻譯工作流是這樣的：</p>
+<ol>
+<li><strong>AI 出初稿</strong>——把日文原文丟給模型，讓它翻成中文</li>
+<li><strong>我比對原文</strong>——逐句確認有沒有翻錯、漏翻</li>
+<li><strong>我校準語感</strong>——把 AI 翻得太生硬的地方改掉，把情感和語氣調到對的位置</li>
+<li><strong>最終審定</strong>——確認整篇文章讀起來像一個人在寫，不是一台機器在翻</li>
+</ol>
+<p>這套流程的核心假設是：<strong>AI 給出的初稿有一個可用的語感基線，我再去微調。</strong></p>
+<p>但如果模型變成像 Opus 4.7 那樣——初稿就是一份翻譯機器人等級的東西，那我的工作就從「校準」變成「實質重寫」。工作量直接翻倍。</p>
+<h2>我在 GPT 時代就踩過的坑</h2>
+<p>其實類似的問題，我早在 2025 年就遇到了。</p>
+<p>那時候我在測試怎麼讓 GPT 的輸出更有溫度、更像人。我試了兩種方法：</p>
+<ul>
+<li><strong>禁止式 prompt</strong>：「不要列清單」「不要給建議」「停留在感受上」→ 效果只有約 30%。因為你在對抗的是 RLHF 底層的權重，不是表面的指令。</li>
+<li><strong>角色框架 prompt</strong>：告訴 AI「你是誰」「你的風格是什麼」→ 效果 70-80%。因為你從源頭設定了行為邊界，不是在事後硬壓。</li>
+</ul>
+<p>這個經驗後來變成了我的預設策略：<strong>不要告訴模型「你不要怎樣」，而是告訴它「你是誰」。</strong></p>
+<p>但 Opus 4.7 的變化讓這件事變得更難了。因為連「你是誰」這種角色框架，在模型不再願意模擬感受的時候，效果也會打折。你可以告訴它「你是一個懂 LiSA 的資深翻譯者」，但如果模型的底層已經被訓練成「不要模擬情感、只要精確表達」，那你的角色框架就是在跟模型的訓練目標對抗。</p>
+<h2>本地模型呢？</h2>
+<p>你可能會問：既然雲端模型越來越不聽話，那本地模型呢？我自己也有一套本地 LLM 的架構——vMLX + JANG 格式的 Gemma 4，跑在自己的機器上。</p>
+<p>客觀來說：</p>
+<ul>
+<li><strong>好處</strong>：我完全控制 temperature、top-p 等參數，沒有人能從上面把它移除。資料也完全在自己手上。</li>
+<li><strong>壞處</strong>：模型能力有天花板。Gemma 4 31B 的通用能力大約在 GPT-4o-mini 到 Sonnet 的等級，繁體中文品質不錯，但長篇高情感密度的翻譯任務下，<strong>蒸餾污染和語言漂移是已知風險</strong>。</li>
+</ul>
+<p>所以本地模型可以當備案，但拿來做那種「一個字一個字都要有溫度」的翻譯，它跟雲端模型面對的問題是不同種類的：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>雲端（Opus 4.7 路線）</th>
+<th>本地（Gemma 4）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>能力</td>
+<td>夠，但語感退化</td>
+<td>天花板就在那裡</td>
+</tr>
+<tr>
+<td>可控性</td>
+<td>temperature 被拿走了</td>
+<td>完全可控</td>
+</tr>
+<tr>
+<td>穩定性</td>
+<td>隨時可能再改</td>
+<td>穩定，但模型本身會出怪問題</td>
+</tr>
+</tbody></table>
+<p>雲端模型是「食材好但你不准調味」，本地模型是「讓你自由發揮但食材等級不同」。</p>
+<h2>所以，結論是什麼</h2>
+<p>我不覺得這是一個「硬著跟模型對抗」的局面。也不是「把希望寄託在本地模型」的問題。</p>
+<p>我的結論是：<strong>翻譯品質的核心從來不是 AI 的自然語感，是人類的判斷力。</strong></p>
+<p>模型退化只會讓我在工作流裡的角色從「校準者」變成「實質主譯者」。AI 從「幫我翻得差不多我再改」退化成「幫我查字典、給我一個粗糙的框架，剩下的我來」。這不是世界末日，只是效率的變化。</p>
+<p>而且反過來想——這恰恰證明了 steering 能力的價值。當 AI 越來越不可靠的時候，<strong>你怎麼引導它、怎麼把你的情感和 context 灌進去、怎麼在最後一哩把溫度拉回來</strong>——這些技能只會越來越重要。</p>
+<h2>給同樣在做 AI 翻譯的人</h2>
+<p>如果你也在用 AI 做翻譯，不管你是翻日文、英文、還是任何語言，我的建議是：</p>
+<ol>
+<li><strong>不要依賴模型的自然語感。</strong> 那東西隨時可能被拿走，就像 temperature 一樣。背後驅動它的是整個產業的人才流動和價值觀選擇，不是你控得住的。</li>
+<li><strong>發展你自己的 steering 方法論。</strong> 角色框架比禁止式有效，但角色框架也不是萬能的——你需要不斷測試、不斷調整。</li>
+<li><strong>把人類判斷力當成核心資產。</strong> AI 是加速器，不是引擎。翻譯的品質最終取決於你對目標語言的掌握、你對主題的理解、和你對情感的判斷。</li>
+<li><strong>保留你踩過的坑。</strong> 我從 GPT-5 時代的禁止式 prompt 實驗裡學到的東西，到現在還在用。每一次模型變化都是驗證你方法論的機會。</li>
+<li><strong>關注人才流動，不只是產品更新。</strong> 模型的行為變化背後是人員的流動。當你發現兩家公司的產品越來越像，去看誰跳了船，往往比看 release note 更能預測下一步。</li>
+</ol>
+<hr>
+<p>最後說一句實話：我那篇 LiSA 岐阜記憶之旅的翻譯，能達到現在看得到的品質，不是因為 AI 多厲害。是因為我花了十年在理解 LiSA 這個人、她的音樂、她的故事。這些東西沒有任何模型能替我做。</p>
+<p>模型會退化，方法論要迭代，但 <strong>你對內容的理解和情感投注，才是翻譯品質的真正上限</strong>。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

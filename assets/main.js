@@ -569,9 +569,9 @@ const AudioPlayerManager = {
     const audio = audioPlayer.querySelector('audio');
     if (!audio) return;
 
-    // 如果已經初始化過，先清理
+    // 靜態文章正文會先出現在 HTML 裡，避免重複綁定播放器事件。
     if (audioPlayer.dataset.initialized === 'true') {
-      this.cleanup();
+      return;
     }
 
     audioPlayer.dataset.initialized = 'true';
@@ -1315,12 +1315,6 @@ async function renderArticle() {
     slug = pathParts[pathParts.length - 1];
   }
 
-  // 向後相容：如果從路徑中找不到 slug，嘗試從查詢參數中獲取
-  if (!slug) {
-    const params = new URLSearchParams(window.location.search);
-    slug = params.get('slug');
-  }
-
   const contentEl = document.querySelector('#post-content');
 
   if (!slug) {
@@ -1678,6 +1672,12 @@ function populateTagCloud(posts) {
 
 async function renderMarkdownContent(slug, contentEl) {
   if (!contentEl) return;
+
+  if (contentEl.dataset.prerendered === 'true' && contentEl.innerHTML.trim()) {
+    enhanceRenderedContent(contentEl);
+    return;
+  }
+
   let markdown = null;
   const cachedMarkdown = markdownCache.get(slug);
 
@@ -1729,6 +1729,12 @@ async function renderMarkdownContent(slug, contentEl) {
     }
   });
 
+  enhanceRenderedContent(contentEl);
+}
+
+function enhanceRenderedContent(contentEl) {
+  if (!contentEl || contentEl.dataset.enhanced === 'true') return;
+
   // 增強程式碼區塊
   enhanceCodeBlocks(contentEl);
 
@@ -1740,6 +1746,8 @@ async function renderMarkdownContent(slug, contentEl) {
   if (articleEl) {
     styleInterviewQA(contentEl);
   }
+
+  contentEl.dataset.enhanced = 'true';
 }
 
 function styleInterviewQA(contentEl) {
@@ -2334,15 +2342,8 @@ function applyCategoryTheme(element, post) {
 
 function slugToPath(slug, category) {
   const mapping = getCategoryMapping();
-
-  // 如果有分類，生成 WordPress 風格的 URL（絕對路徑）
-  if (category && mapping[category]) {
-    const categorySlug = mapping[category];
-    return `/${categorySlug}/${slug}/`;
-  }
-
-  // 向後相容：如果沒有分類或未知分類，使用舊格式（絕對路徑）
-  return `/post.html?slug=${encodeURIComponent(slug)}`;
+  const categorySlug = category && mapping[category] ? mapping[category] : 'uncategorized';
+  return `/${categorySlug}/${slug}/`;
 }
 
 function setupCopyLink(container, url) {
@@ -2521,19 +2522,12 @@ function setupViewTransitionNames() {
  * 從 URL 提取 slug
  */
 function extractSlugFromUrl(urlObj) {
-  // 從查詢參數提取
-  const params = new URLSearchParams(urlObj.search);
-  let slug = params.get('slug');
-
-  // 從路徑提取（WordPress 風格）
-  if (!slug) {
-    const pathParts = urlObj.pathname.split('/').filter(p => p && p !== 'index.html' && p !== 'post.html');
-    if (pathParts.length >= 2) {
-      slug = pathParts[pathParts.length - 1];
-    }
+  const pathParts = urlObj.pathname.split('/').filter(p => p && p !== 'index.html' && p !== 'post.html');
+  if (pathParts.length >= 2) {
+    return pathParts[pathParts.length - 1];
   }
 
-  return slug;
+  return null;
 }
 
 // 在頁面載入完成後設定 View Transition Names

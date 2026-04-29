@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>我把 Mac 的「查詢／字典」功能徹底關掉了（而且保留 Force Click） - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="Mac 的 Look Up 彈窗一直干擾我，但它不是單一 App，而是系統 XPC 服務鏈。我用 launchctl disable 加 LaunchAgent 自動維護，徹底關掉它又保留 Force Click。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/macos-disable-lookup-forever/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/macos-disable-lookup-forever/" id="og-url">
@@ -31,7 +31,7 @@
   <meta property="article:tag" content="LaunchAgent">
   <meta property="article:tag" content="XPC">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/macos-disable-lookup-forever/" id="twitter-url">
@@ -39,7 +39,7 @@
   <meta property="twitter:description" content="Mac 的 Look Up 彈窗一直干擾我，但它不是單一 App，而是系統 XPC 服務鏈。我用 launchctl disable 加 LaunchAgent 自動維護，徹底關掉它又保留 Force Click。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E6%8A%8A%20Mac%20%E7%9A%84%E3%80%8C%E6%9F%A5%E8%A9%A2%EF%BC%8F%E5%AD%97%E5%85%B8%E3%80%8D%E5%8A%9F%E8%83%BD%E5%BE%B9%E5%BA%95%E9%97%9C%E6%8E%89%E4%BA%86%EF%BC%88%E8%80%8C%E4%B8%94%E4%BF%9D%E7%95%99%20Force%20Click%EF%BC%89,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="macOS, 無障礙, 系統設定, LaunchAgent, XPC" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -109,6 +109,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我把 Mac 的「查詢／字典」功能徹底關掉了（而且保留 Force Click）","description":"Mac 的 Look Up 彈窗一直干擾我，但它不是單一 App，而是系統 XPC 服務鏈。我用 launchctl disable 加 LaunchAgent 自動維護，徹底關掉它又保留 Force Click。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-02-07","dateModified":"2026-02-07","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/macos-disable-lookup-forever/"},"url":"https://b-log.to/tech-analysis/macos-disable-lookup-forever/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E6%8A%8A%20Mac%20%E7%9A%84%E3%80%8C%E6%9F%A5%E8%A9%A2%EF%BC%8F%E5%AD%97%E5%85%B8%E3%80%8D%E5%8A%9F%E8%83%BD%E5%BE%B9%E5%BA%95%E9%97%9C%E6%8E%89%E4%BA%86%EF%BC%88%E8%80%8C%E4%B8%94%E4%BF%9D%E7%95%99%20Force%20Click%EF%BC%89,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"macOS, 無障礙, 系統設定, LaunchAgent, XPC","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -118,7 +119,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我把 Mac 的「查詢／字典」功能徹底關掉了（而且保留 Force Click）</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -187,12 +188,112 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">我把 Mac 的「查詢／字典」功能徹底關掉了（而且保留 Force Click）</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Feb 7, 2026</span><span>5 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>macOS</span><span>無障礙</span><span>系統設定</span><span>LaunchAgent</span><span>XPC</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>最近我有個很煩的問題：Mac 的「查詢（Look Up）」視窗會突然跳出來，有時甚至直接冒出字典。</p>
+<p>我平常根本不需要用系統字典。要查中英字典或 Wikipedia，我會直接開瀏覽器，或用我常用的工具。這個功能對我來說不是效率加成，反而是干擾。</p>
+<p>這篇是我實際處理這件事的完整紀錄：我怎麼判斷觸發來源、怎麼關掉、怎麼做到「登入後自動維持 disabled」。</p>
+<h2>問題長相</h2>
+<p>我遇到的狀況有兩類：</p>
+<ul>
+<li>文字附近突然彈出「查詢」面板</li>
+<li>不小心觸發字典視窗</li>
+</ul>
+<p>一開始直覺會以為是 Trackpad 手勢，但查完我才發現，真正容易誤觸的是快捷鍵：</p>
+<ul>
+<li><code>Control + Command + D</code></li>
+</ul>
+<h2>我做的第一層處理：先封掉常見入口</h2>
+<p>我先做了三件事：</p>
+<ul>
+<li>關閉 <code>Look Up &amp; data detectors</code> 手勢（避免點按誤觸）</li>
+<li>把 <code>Control + Command + D</code> 改成 <code>noop</code>（無動作）</li>
+<li>一度關掉 Force Click（後來再調整回來）</li>
+</ul>
+<p><code>Control + Command + D</code> 的攔截是透過：</p>
+<ul>
+<li><code>/Users/jianruicheng/Library/KeyBindings/DefaultKeyBinding.dict</code></li>
+</ul>
+<p>內容如下：</p>
+<pre><code class="language-plist">{
+    &quot;^@d&quot; = &quot;noop:&quot;;
+}
+</code></pre>
+<p>這樣就算我誤按該組合鍵，也不會再跳字典。</p>
+<h2>關鍵認知：不是 Dictionary.app，而是系統 XPC 服務</h2>
+<p>我本來也想過「乾脆把 App 刪掉」，但實際上觸發這件事的不是單一 App，而是系統服務。</p>
+<p>我查到主要是兩個服務：</p>
+<ul>
+<li><code>com.apple.LookupViewService</code>（查詢彈窗 UI）</li>
+<li><code>com.apple.DictionaryServiceHelper</code>（字典資料服務）</li>
+</ul>
+<p>所以真正有效的方式不是刪 App，而是把服務層停用。</p>
+<h2>我最後採用的方案</h2>
+<p>我的目標很明確：</p>
+<ul>
+<li>保留 <code>Force Click</code> 在其他場景可用（例如預覽）</li>
+<li>讓 <code>Look Up / 字典</code> 完全不會跳出</li>
+</ul>
+<p>我最後組合是：</p>
+<ul>
+<li><code>launchctl disable</code> 這兩個 Lookup 服務</li>
+<li>保持 <code>Control + Command + D</code> 為 <code>noop</code></li>
+<li>重新啟用 Force Click（不讓它影響其他功能）</li>
+</ul>
+<h2>長期方案：登入自動維持 disabled</h2>
+<p>我不想每次更新後手動重做，所以加了一層自動化。</p>
+<p>我建立了：</p>
+<ul>
+<li>Script: <code>~/Library/Scripts/ensure_lookup_disabled.sh</code></li>
+<li>LaunchAgent: <code>~/Library/LaunchAgents/com.jianruicheng.lookup-disable-enforcer.plist</code></li>
+</ul>
+<p>設定內容是：</p>
+<ul>
+<li><code>RunAtLoad = true</code>（登入就跑）</li>
+<li><code>StartInterval = 600</code>（每 10 分鐘重檢）</li>
+</ul>
+<p>腳本會做幾件事：</p>
+<ul>
+<li>重新 <code>disable</code> 這兩個服務</li>
+<li>如果服務進程已啟動就嘗試關掉</li>
+<li>確保 <code>Control + Command + D</code> 還是 <code>noop</code></li>
+<li>保持 Force Click 為可用</li>
+</ul>
+<h2>我怎麼驗證</h2>
+<p>我用這行確認服務狀態：</p>
+<pre><code class="language-bash">launchctl print-disabled gui/$(id -u) | rg &#39;LookupViewService|DictionaryServiceHelper&#39;
+</code></pre>
+<p>我期望看到：</p>
+<ul>
+<li><code>com.apple.LookupViewService =&gt; disabled</code></li>
+<li><code>com.apple.DictionaryServiceHelper =&gt; disabled</code></li>
+</ul>
+<p>另外，我也實測兩件事：</p>
+<ul>
+<li><code>Control + Command + D</code> 不再有反應</li>
+<li>Force Click 在預覽等用途仍可用</li>
+</ul>
+<h2>這樣做的取捨</h2>
+<p>我接受的取捨是：</p>
+<ul>
+<li>我放棄系統層的文字查詢入口</li>
+<li>我換回乾淨、不中斷的操作流程</li>
+</ul>
+<p>對我來說這是明顯正收益，因為我本來就不會用系統字典。我查東西寧可去瀏覽器或其他工具。</p>
+<h2>結論</h2>
+<p>這次我學到一件事：</p>
+<p>Mac 的「Look Up」不是單一 App 功能，而是系統服務鏈的一部分。要徹底關閉，不能只在 UI 裡關手勢，必須連服務層一起處理，最好再加登入自動維護。</p>
+<p>現在我的狀態是：</p>
+<ul>
+<li>不再被字典彈窗干擾</li>
+<li>Force Click 仍保留我想要的用途</li>
+<li>就算系統重啟或日常使用，也能自動維持設定</li>
+</ul>
+<p>如果未來大版本更新把設定蓋掉，我的 LaunchAgent 也會把它拉回我要的狀態。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

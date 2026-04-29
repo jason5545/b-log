@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>從 ViaVoice 到 xvoice：一個非標準發音者的語音辨識之路 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="90 年代的 ViaVoice 要我念一小時標準文章來訓練，結果越念越爛。現在 Whisper 不用訓練了，但幻覺問題一樣災難。於是我做了 xvoice：Whisper 負責聽，LLM 負責想，專門修正那些「我講 A 它聽成 B」的固定錯誤。構音障礙分五級，我大概在 mild 到 moderate 之間——機器聽不準但人能懂的灰色地帶。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/xvoice-speech-input-tool/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/xvoice-speech-input-tool/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="無障礙">
   <meta property="article:tag" content="構音障礙">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/xvoice-speech-input-tool/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="90 年代的 ViaVoice 要我念一小時標準文章來訓練，結果越念越爛。現在 Whisper 不用訓練了，但幻覺問題一樣災難。於是我做了 xvoice：Whisper 負責聽，LLM 負責想，專門修正那些「我講 A 它聽成 B」的固定錯誤。構音障礙分五級，我大概在 mild 到 moderate 之間——機器聽不準但人能懂的灰色地帶。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%BE%9E%20ViaVoice%20%E5%88%B0%20xvoice%EF%BC%9A%E4%B8%80%E5%80%8B%E9%9D%9E%E6%A8%99%E6%BA%96%E7%99%BC%E9%9F%B3%E8%80%85%E7%9A%84%E8%AA%9E%E9%9F%B3%E8%BE%A8%E8%AD%98%E4%B9%8B%E8%B7%AF,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="語音輸入, Whisper, LLM, Python, 無障礙, 構音障礙" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"從 ViaVoice 到 xvoice：一個非標準發音者的語音辨識之路","description":"90 年代的 ViaVoice 要我念一小時標準文章來訓練，結果越念越爛。現在 Whisper 不用訓練了，但幻覺問題一樣災難。於是我做了 xvoice：Whisper 負責聽，LLM 負責想，專門修正那些「我講 A 它聽成 B」的固定錯誤。構音障礙分五級，我大概在 mild 到 moderate 之間——機器聽不準但人能懂的灰色地帶。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-13T14:00:00Z","dateModified":"2025-12-15T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/xvoice-speech-input-tool/"},"url":"https://b-log.to/tech-development/xvoice-speech-input-tool/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%BE%9E%20ViaVoice%20%E5%88%B0%20xvoice%EF%BC%9A%E4%B8%80%E5%80%8B%E9%9D%9E%E6%A8%99%E6%BA%96%E7%99%BC%E9%9F%B3%E8%80%85%E7%9A%84%E8%AA%9E%E9%9F%B3%E8%BE%A8%E8%AD%98%E4%B9%8B%E8%B7%AF,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"語音輸入, Whisper, LLM, Python, 無障礙, 構音障礙","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">從 ViaVoice 到 xvoice：一個非標準發音者的語音辨識之路</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,111 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">從 ViaVoice 到 xvoice：一個非標準發音者的語音辨識之路</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Dec 13, 2025</span><span>Updated Dec 15, 2025</span><span>8 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>語音輸入</span><span>Whisper</span><span>LLM</span><span>Python</span><span>無障礙</span><span>構音障礙</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>那個年代，是技術欠我的</h2>
+<p>90 年代末到 2000 年代初，語音辨識軟體開始進入消費市場。IBM ViaVoice、Dragon NaturallySpeaking 是當時的代表。我還記得那個「Speaker Adaptation」的過程——打開軟體，然後被要求朗讀一篇又一篇的制式文章，持續一個小時甚至更久，只為了讓系統「學會」我的聲音。</p>
+<p>對一般人來說，這可能只是枯燥。對我來說，這是折磨。</p>
+<p>我天生肌肉張力的問題，發音跟「標準」有落差。那些制式文章要求的是標準發音，而我念出來的，系統學到的就是錯的。惡性循環。念得越多，錯得越離譜。</p>
+<p>那時候我以為是自己的問題很嚴重。</p>
+<p>現在回頭看，不是的。是那個年代的技術根本不是為我們設計的。</p>
+<h2>舊系統為什麼注定失敗</h2>
+<p>ViaVoice 用的是 HMM（Hidden Markov Model）聲學模型，搭配 trigram 語言模型。這種架構有幾個致命限制：</p>
+<ul>
+<li><strong>幾乎從零學習</strong>：沒有預訓練，每個使用者都要從頭訓練</li>
+<li><strong>只看前後 2-3 個詞</strong>：語言模型太短視，無法從上下文消歧義</li>
+<li><strong>假設使用者會配合機器</strong>：念標準文章、發標準音</li>
+</ul>
+<p>這套邏輯的前提是「使用者會配合機器」。我不符合這個前提，所以我被系統判定為「有問題」。</p>
+<p>2003 年，IBM 把 ViaVoice 桌面版授權給 ScanSoft（後來的 Nuance），自己只留嵌入式版本。2021 年，Microsoft 以 197 億美元收購 Nuance。這條技術線繞了一大圈，最後被併入巨頭，然後基本上被放棄了。</p>
+<p>諷刺的是，現在 Windows 11 內建的語音辨識其實還不錯，我用起來大概有 70% 的準確率。但 70% 不夠。每 10 個字錯 3 個，修正成本太高。</p>
+<h2>現代系統好在哪裡，又差在哪裡</h2>
+<p>Whisper 這類基於 Transformer 的模型，跟舊時代完全不同：</p>
+<ul>
+<li>預訓練資料是數十萬小時的多語者語音</li>
+<li>有 attention 機制，能回頭看前面講了什麼</li>
+<li>不需要針對個人做長時間的 enrollment</li>
+</ul>
+<p>理論上，我的聲音只是它「見過的變異之一」，不需要特別學。</p>
+<p>但實際用起來，還是有問題。</p>
+<p>**幻覺（Hallucination）**是最大的痛點。Whisper 遇到不確定的音訊片段時，不會留白，而是傾向生成「流暢但錯誤」的文字。我看過它輸出「字幕組提供」「感謝收看」這種完全不存在的內容——因為它的訓練資料包含大量 YouTube 字幕，這些 pattern 出現頻率很高，所以它「覺得」這樣輸出是安全的。</p>
+<p>對模型來說，loss 低、機率高，是「安全」的。對我來說，這是災難。</p>
+<p>我在 ChatGPT 網頁介面上也用過 Whisper，幻覺一樣嚴重。這代表不是我的實作有問題，是模型本身的特性。OpenAI 沒有修，可能也不會修——訓練資料污染太深，他們的重心也已經轉向 GPT 系列。</p>
+<h2>xvoice：讓機器配合我</h2>
+<p>既然上游不會修，我自己來。</p>
+<p>我開發了 xvoice，一個跨平台的語音輸入系統。架構很簡單：</p>
+<pre><code>Silero VAD（語音活動偵測）
+    ↓
+faster-whisper（語音轉文字）
+    ↓
+LLM 校正層（用大語言模型修正錯誤）
+    ↓
+OpenCC（簡繁轉換）
+</code></pre>
+<p>核心邏輯是：Whisper 負責「聽」，LLM 負責「想」。</p>
+<p>Whisper 對我的發音會有固定的錯誤 pattern——「我常講 A，它常聽成 B」。LLM 校正層的工作就是學會這些 pattern，然後補回來。</p>
+<p>我還寫了幻覺過濾程式，專門攔截那些「字幕組提供」之類的輸出。</p>
+<p>現在這個系統已經是我日常使用的工具。我打這篇文章的時候，也是用它。一開電腦就開啟，每一句話都是在幫它累積訓練資料。</p>
+<h2>發現：整段話一起講，效果更好</h2>
+<p>有一個有趣的發現：我原本習慣一句一句講，後來試著整段話一起講，辨識效果反而更好。</p>
+<p>原因是兩層都受益於更長的上下文：</p>
+<ul>
+<li><strong>Whisper</strong>：聽到前面的詞，可以回頭確認後面沒聽錯</li>
+<li><strong>LLM 校正層</strong>：看到整段，更容易判斷哪裡是筆誤、哪裡該斷句</li>
+</ul>
+<p>一句一句講是 hard mode，每句都是孤立的，模型只能瞎猜。</p>
+<p>這改變了我的使用習慣——不用一口氣講五分鐘，但至少一個完整的意思講完再送出。</p>
+<h2>關於構音障礙的分級</h2>
+<p>在研究這個領域的過程中，我查了一些醫學文獻。構音障礙（dysarthria）在臨床上通常分成五級：</p>
+<table>
+<thead>
+<tr>
+<th>等級</th>
+<th>描述</th>
+<th>語音可懂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Normal</td>
+<td>正常</td>
+<td>接近 100%</td>
+</tr>
+<tr>
+<td>Mild</td>
+<td>輕度</td>
+<td>大部分可懂，偶爾需要重複</td>
+</tr>
+<tr>
+<td>Moderate</td>
+<td>中度</td>
+<td>需要聽者努力，部分可懂</td>
+</tr>
+<tr>
+<td>Severe</td>
+<td>重度</td>
+<td>大部分難以理解</td>
+</tr>
+<tr>
+<td>Profound</td>
+<td>極重度</td>
+<td>幾乎無法理解</td>
+</tr>
+</tbody></table>
+<p>以我的情況來說，ASR 能抓到 70% 左右，大概落在 mild 到 moderate 之間。這個區間正好是「機器聽不準但人能懂」的灰色地帶。</p>
+<p>我有一個朋友，他的情況比我嚴重很多，可能接近 severe 或 profound。他的家人聽得懂他說話，但外人（包括我）很難理解。他跟我抱怨過 Siri 都聽不懂他，我說：「連我都聽不懂了，你說呢？」</p>
+<p>很直接，但也是事實。</p>
+<p>這讓我意識到 xvoice 的極限。我的系統依賴一個前提：ASR 輸出的錯誤是「有規律可循」的。如果 ASR 準確率掉到 30% 以下，錯誤開始變得隨機、無規律，LLM 拿到的輸入接近亂碼，就沒有足夠的「骨架」可以修正了。</p>
+<p>xvoice 的天花板大概在 moderate。再往下的群體，需要的是完全不同的技術路線——可能是專屬聲學模型，或者非語音輸入（眼控、腦機介面等）。</p>
+<h2>目標：讓更多人不用受這種苦</h2>
+<p>我的目標是有一天達到 100% 的辨識準確率。</p>
+<p>這聽起來很狂妄，但我覺得是可行的。現在每一句話都在累積資料，每一次錯誤都是 correction pair。等資料量夠了，可以整理成 few-shot example，強化校正層的 prompt，甚至做更進一步的微調。</p>
+<p>xvoice 目前還是私人專案，放在 GitHub 上但還沒公開。等核心穩定、自己用得順了再開放原始碼，比丟出半成品讓人踩雷好。</p>
+<p>當年沒有人幫我鋪路。我現在在幫未來的人鋪。</p>
+<p>下一個遇到同樣問題的人，不用再從零開始。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

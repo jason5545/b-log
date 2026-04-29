@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>在 KVM 虛擬機上修復 macOS Sequoia 的 Apple ID 登入問題 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="在 KVM 跑 macOS Sequoia，想登 Xcode 結果 Apple ID 死活過不了。問題在 kern.hv_vmm_present 旗標、SMBIOS 序號、還有 VM 偵測。解法是三管齊下：核心補丁把 hv_vmm_present 偽裝成 0、裝 VMHide kext、再用 GenSMBIOS 生成唯一序號。Sequoia 比之前的版本嚴格很多，少一個都不行。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/macos-sequoia-kvm-apple-id/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/macos-sequoia-kvm-apple-id/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="虛擬機">
   <meta property="article:tag" content="Hackintosh">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/macos-sequoia-kvm-apple-id/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="在 KVM 跑 macOS Sequoia，想登 Xcode 結果 Apple ID 死活過不了。問題在 kern.hv_vmm_present 旗標、SMBIOS 序號、還有 VM 偵測。解法是三管齊下：核心補丁把 hv_vmm_present 偽裝成 0、裝 VMHide kext、再用 GenSMBIOS 生成唯一序號。Sequoia 比之前的版本嚴格很多，少一個都不行。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%9C%A8%20KVM%20%E8%99%9B%E6%93%AC%E6%A9%9F%E4%B8%8A%E4%BF%AE%E5%BE%A9%20macOS%20Sequoia%20%E7%9A%84%20Apple%20ID%20%E7%99%BB%E5%85%A5%E5%95%8F%E9%A1%8C,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="macOS, KVM, Apple ID, OpenCore, 虛擬機, Hackintosh" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"在 KVM 虛擬機上修復 macOS Sequoia 的 Apple ID 登入問題","description":"在 KVM 跑 macOS Sequoia，想登 Xcode 結果 Apple ID 死活過不了。問題在 kern.hv_vmm_present 旗標、SMBIOS 序號、還有 VM 偵測。解法是三管齊下：核心補丁把 hv_vmm_present 偽裝成 0、裝 VMHide kext、再用 GenSMBIOS 生成唯一序號。Sequoia 比之前的版本嚴格很多，少一個都不行。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-21T00:00:00Z","dateModified":"2025-12-21T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/macos-sequoia-kvm-apple-id/"},"url":"https://b-log.to/tech-analysis/macos-sequoia-kvm-apple-id/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%9C%A8%20KVM%20%E8%99%9B%E6%93%AC%E6%A9%9F%E4%B8%8A%E4%BF%AE%E5%BE%A9%20macOS%20Sequoia%20%E7%9A%84%20Apple%20ID%20%E7%99%BB%E5%85%A5%E5%95%8F%E9%A1%8C,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"macOS, KVM, Apple ID, OpenCore, 虛擬機, Hackintosh","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">在 KVM 虛擬機上修復 macOS Sequoia 的 Apple ID 登入問題</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,331 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">在 KVM 虛擬機上修復 macOS Sequoia 的 Apple ID 登入問題</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Dec 21, 2025</span><span>15 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>macOS</span><span>KVM</span><span>Apple ID</span><span>OpenCore</span><span>虛擬機</span><span>Hackintosh</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>在 Linux 主機上用 KVM 跑 macOS 虛擬機，想登入 Xcode 開發 iOS App，結果 Apple ID 死活登不進去。</p>
+<p>錯誤訊息不是「Unable to sign you in to your Apple ID. Try again later.」就是「There was an error connecting to the Apple ID server.」</p>
+<p>查了一堆資料，踩了一堆坑，最後終於搞定了。</p>
+<h2>環境</h2>
+<ul>
+<li><strong>Host OS</strong>: KDE neon</li>
+<li><strong>虛擬化</strong>: KVM/QEMU + libvirt</li>
+<li><strong>Guest OS</strong>: macOS Sequoia (15.x)</li>
+<li><strong>Bootloader</strong>: OpenCore</li>
+<li><strong>專案</strong>: <a href="https://github.com/kholia/OSX-KVM">OSX-KVM</a></li>
+</ul>
+<h2>問題在哪</h2>
+<p>Apple ID 在 VM 上登不進去，主要是三個原因：</p>
+<h3>1. <code>kern.hv_vmm_present</code> 旗標</h3>
+<p>macOS 會檢查 <code>kern.hv_vmm_present</code> 這個核心參數。當系統偵測到自己運行在虛擬機中時，這個值會是 <code>1</code>。許多 Apple 服務（包括 iCloud、App Store、Xcode 登入）會檢查這個旗標，如果發現是在 VM 中運行，就會拒絕認證。</p>
+<pre><code class="language-bash">sysctl kern | grep &#39;kern.hv_vmm_present&#39;
+# 輸出: kern.hv_vmm_present: 1  ← 這就是問題所在
+</code></pre>
+<h3>2. SMBIOS 序號問題</h3>
+<p>OSX-KVM 預設的 SMBIOS 資訊（序號、MLB、UUID 等）是公開的範例值，很可能已經被無數人使用過。Apple 的伺服器會標記這些被濫用的序號，導致認證失敗。</p>
+<h3>3. 網路介面卡類型</h3>
+<p>某些網路介面卡（如 <code>vmxnet3</code>）可能會觸發 Apple 的偵測機制，導致認證失敗。</p>
+<h2>解決方案</h2>
+<p>macOS Sequoia 對 VM 偵測特別嚴格，<strong>三種方法要同時用</strong>才會過：</p>
+<ol>
+<li>✅ 核心補丁：修改 <code>kern.hv_vmm_present</code> 返回值</li>
+<li>✅ VMHide kext：選擇性地對特定進程隱藏 VM 狀態</li>
+<li>✅ 正確的 SMBIOS 資訊：唯一的序號、MLB、UUID</li>
+</ol>
+<p>少一個都不行。</p>
+<h3>步驟一：生成新的 SMBIOS 資訊</h3>
+<h4>1. 下載 GenSMBIOS 工具</h4>
+<pre><code class="language-bash">cd ~/OSX-KVM
+git clone https://github.com/corpnewt/GenSMBIOS
+</code></pre>
+<h4>2. 執行工具生成序號</h4>
+<pre><code class="language-bash">cd GenSMBIOS
+python3 GenSMBIOS.py
+</code></pre>
+<p>在互動式選單中：</p>
+<ol>
+<li>選擇 <code>1</code> - Install/Update MacSerial</li>
+<li>選擇 <code>3</code> - Generate SMBIOS</li>
+<li>輸入 <code>iMacPro1,1</code>（或你使用的機型）</li>
+</ol>
+<p>工具會輸出類似這樣的資訊：</p>
+<pre><code>Type:         iMacPro1,1
+Serial:       C02YG0KQHX87
+Board Serial: C02912303QXJG36JA
+SmUUID:       D1868CF8-4F9A-551A-9A6B-0D46B121971C
+Apple ROM:    8863DFFD43B0
+</code></pre>
+<p><strong>重要提示</strong>：你可以到 <a href="https://checkcoverage.apple.com/">Apple 查詢序號頁面</a> 驗證生成的序號。如果顯示「We&#39;re sorry, but this serial number is not valid」，代表這個序號沒有被註冊過，可以安全使用。</p>
+<h4>3. 更新 config.plist</h4>
+<p>編輯 <code>~/OSX-KVM/OpenCore/config.plist</code>，找到 <code>PlatformInfo &gt; Generic</code> 區段，更新以下欄位：</p>
+<pre><code class="language-xml">&lt;key&gt;Generic&lt;/key&gt;
+&lt;dict&gt;
+    &lt;key&gt;MLB&lt;/key&gt;
+    &lt;string&gt;C02912303QXJG36JA&lt;/string&gt;
+    &lt;key&gt;ROM&lt;/key&gt;
+    &lt;string&gt;8863DFFD43B0&lt;/string&gt;
+    &lt;key&gt;SystemProductName&lt;/key&gt;
+    &lt;string&gt;iMacPro1,1&lt;/string&gt;
+    &lt;key&gt;SystemSerialNumber&lt;/key&gt;
+    &lt;string&gt;C02YG0KQHX87&lt;/string&gt;
+    &lt;key&gt;SystemUUID&lt;/key&gt;
+    &lt;string&gt;D1868CF8-4F9A-551A-9A6B-0D46B121971C&lt;/string&gt;
+&lt;/dict&gt;
+</code></pre>
+<h3>步驟二：添加核心補丁隱藏 VM 偵測</h3>
+<p>這是最關鍵的一步。我們需要添加核心補丁，讓 <code>kern.hv_vmm_present</code> 返回 <code>0</code> 而不是 <code>1</code>。</p>
+<p>原理是將 <code>kern.hv_vmm_present</code> 替換成 <code>kern.hibernatecount</code>（這個值在 VM 中通常是 0，因為休眠功能被禁用）。</p>
+<h4>在 config.plist 中添加補丁</h4>
+<p>找到 <code>Kernel &gt; Patch</code> 陣列，在結尾添加以下兩個補丁：</p>
+<p><strong>補丁 1（適用於 Big Sur 11.3+）：</strong></p>
+<pre><code class="language-xml">&lt;dict&gt;
+    &lt;key&gt;Arch&lt;/key&gt;
+    &lt;string&gt;x86_64&lt;/string&gt;
+    &lt;key&gt;Base&lt;/key&gt;
+    &lt;string&gt;&lt;/string&gt;
+    &lt;key&gt;Comment&lt;/key&gt;
+    &lt;string&gt;VM Apple ID Fix - PART 1 of 2 - Patch kern.hv_vmm_present=0&lt;/string&gt;
+    &lt;key&gt;Count&lt;/key&gt;
+    &lt;integer&gt;1&lt;/integer&gt;
+    &lt;key&gt;Enabled&lt;/key&gt;
+    &lt;true/&gt;
+    &lt;key&gt;Find&lt;/key&gt;
+    &lt;data&gt;aGliZXJuYXRlaGlkcmVhZHkAaGliZXJuYXRlY291bnQA&lt;/data&gt;
+    &lt;key&gt;Identifier&lt;/key&gt;
+    &lt;string&gt;kernel&lt;/string&gt;
+    &lt;key&gt;Limit&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+    &lt;key&gt;Mask&lt;/key&gt;
+    &lt;data&gt;&lt;/data&gt;
+    &lt;key&gt;MaxKernel&lt;/key&gt;
+    &lt;string&gt;&lt;/string&gt;
+    &lt;key&gt;MinKernel&lt;/key&gt;
+    &lt;string&gt;20.4.0&lt;/string&gt;
+    &lt;key&gt;Replace&lt;/key&gt;
+    &lt;data&gt;aGliZXJuYXRlaGlkcmVhZHkAaHZfdm1tX3ByZXNlbnQA&lt;/data&gt;
+    &lt;key&gt;ReplaceMask&lt;/key&gt;
+    &lt;data&gt;&lt;/data&gt;
+    &lt;key&gt;Skip&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+&lt;/dict&gt;
+</code></pre>
+<p><strong>補丁 2（適用於 Ventura/Sonoma/Sequoia，MinKernel 22.0.0+）：</strong></p>
+<pre><code class="language-xml">&lt;dict&gt;
+    &lt;key&gt;Arch&lt;/key&gt;
+    &lt;string&gt;x86_64&lt;/string&gt;
+    &lt;key&gt;Base&lt;/key&gt;
+    &lt;string&gt;&lt;/string&gt;
+    &lt;key&gt;Comment&lt;/key&gt;
+    &lt;string&gt;VM Apple ID Fix - PART 2 of 2 - Patch kern.hv_vmm_present=0&lt;/string&gt;
+    &lt;key&gt;Count&lt;/key&gt;
+    &lt;integer&gt;1&lt;/integer&gt;
+    &lt;key&gt;Enabled&lt;/key&gt;
+    &lt;true/&gt;
+    &lt;key&gt;Find&lt;/key&gt;
+    &lt;data&gt;Ym9vdCBzZXNzaW9uIFVVSUQAaHZfdm1tX3ByZXNlbnQA&lt;/data&gt;
+    &lt;key&gt;Identifier&lt;/key&gt;
+    &lt;string&gt;kernel&lt;/string&gt;
+    &lt;key&gt;Limit&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+    &lt;key&gt;Mask&lt;/key&gt;
+    &lt;data&gt;&lt;/data&gt;
+    &lt;key&gt;MaxKernel&lt;/key&gt;
+    &lt;string&gt;&lt;/string&gt;
+    &lt;key&gt;MinKernel&lt;/key&gt;
+    &lt;string&gt;22.0.0&lt;/string&gt;
+    &lt;key&gt;Replace&lt;/key&gt;
+    &lt;data&gt;Ym9vdCBzZXNzaW9uIFVVSUQAaGliZXJuYXRlY291bnQA&lt;/data&gt;
+    &lt;key&gt;ReplaceMask&lt;/key&gt;
+    &lt;data&gt;&lt;/data&gt;
+    &lt;key&gt;Skip&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+&lt;/dict&gt;
+</code></pre>
+<h3>步驟三：安裝 VMHide Kext</h3>
+<p><a href="https://github.com/Carnations-Botanica/VMHide">VMHide</a> 是一個 Lilu 插件，可以更智能地隱藏 VM 偵測。它會選擇性地對特定進程隱藏 VM 狀態。對於 macOS Sequoia，這個 kext 是必要的。</p>
+<h4>方法一：安裝到系統目錄（我使用的方法）</h4>
+<p>這個方法更直接，不需要每次都更新 OpenCore 映像。</p>
+<p><strong>前置條件</strong>：確保 SIP 已停用（在 OpenCore 的 <code>config.plist</code> 中應該已經設定好 <code>csr-active-config</code>）。</p>
+<pre><code class="language-bash"># 進入 macOS 後，下載 VMHide.kext
+# 從 https://github.com/Carnations-Botanica/VMHide/releases 下載
+
+# 將 VMHide.kext 複製到系統擴展目錄
+sudo cp -R ~/Downloads/VMHide.kext /Library/Extensions/
+
+# 重建 kext 快取
+sudo kextcache -i /
+
+# 重新開機
+sudo reboot
+</code></pre>
+<p><strong>優點</strong>：</p>
+<ul>
+<li>不需要每次更新 OpenCore 映像</li>
+<li>設定更簡單</li>
+</ul>
+<p><strong>缺點</strong>：</p>
+<ul>
+<li>需要停用 SIP</li>
+<li>系統更新後可能需要重新安裝</li>
+</ul>
+<h4>方法二：放入 OpenCore 的 Kexts 目錄</h4>
+<p>如果你想保持系統目錄乾淨，可以將 kext 放入 OpenCore：</p>
+<pre><code class="language-bash"># 確保 VM 已關閉
+virsh shutdown macOS
+
+# 掛載 OpenCore.qcow2
+sudo modprobe nbd max_part=8
+sudo qemu-nbd --connect=/dev/nbd0 ~/OSX-KVM/OpenCore/OpenCore.qcow2
+mkdir -p /tmp/opencore_efi
+sudo mount /dev/nbd0p1 /tmp/opencore_efi
+
+# 複製 VMHide.kext（需要先下載到 Host）
+sudo cp -R VMHide.kext /tmp/opencore_efi/EFI/OC/Kexts/
+
+# 還需要更新 config.plist，在 Kernel &gt; Add 陣列中添加：
+# &lt;dict&gt;
+#     &lt;key&gt;Arch&lt;/key&gt;
+#     &lt;string&gt;x86_64&lt;/string&gt;
+#     &lt;key&gt;BundlePath&lt;/key&gt;
+#     &lt;string&gt;VMHide.kext&lt;/string&gt;
+#     &lt;key&gt;Comment&lt;/key&gt;
+#     &lt;string&gt;Hide VM detection for Apple ID&lt;/string&gt;
+#     &lt;key&gt;Enabled&lt;/key&gt;
+#     &lt;true/&gt;
+#     &lt;key&gt;ExecutablePath&lt;/key&gt;
+#     &lt;string&gt;Contents/MacOS/VMHide&lt;/string&gt;
+#     &lt;key&gt;MaxKernel&lt;/key&gt;
+#     &lt;string&gt;&lt;/string&gt;
+#     &lt;key&gt;MinKernel&lt;/key&gt;
+#     &lt;string&gt;23.0.0&lt;/string&gt;
+#     &lt;key&gt;PlistPath&lt;/key&gt;
+#     &lt;string&gt;Contents/Info.plist&lt;/string&gt;
+# &lt;/dict&gt;
+
+# 卸載
+sudo umount /tmp/opencore_efi
+sudo qemu-nbd --disconnect /dev/nbd0
+</code></pre>
+<p><strong>優點</strong>：</p>
+<ul>
+<li>更乾淨，不影響系統目錄</li>
+<li>每次開機自動載入</li>
+</ul>
+<p><strong>缺點</strong>：</p>
+<ul>
+<li>需要更新 OpenCore 映像和 config.plist</li>
+<li>設定較繁瑣</li>
+</ul>
+<h3>步驟四：將更新後的設定檔寫入 OpenCore 映像</h3>
+<p>由於 OpenCore 的設定檔是存放在 <code>OpenCore.qcow2</code> 映像檔內部，我們需要掛載這個映像來更新它。</p>
+<h4>1. 確保 VM 已關閉</h4>
+<pre><code class="language-bash">virsh shutdown macOS
+# 或強制關閉
+virsh destroy macOS
+</code></pre>
+<h4>2. 使用 qemu-nbd 掛載映像</h4>
+<pre><code class="language-bash"># 載入 nbd 核心模組
+sudo modprobe nbd max_part=8
+
+# 連接 qcow2 映像
+sudo qemu-nbd --connect=/dev/nbd0 ~/OSX-KVM/OpenCore/OpenCore.qcow2
+
+# 建立掛載點並掛載 EFI 分區
+mkdir -p /tmp/opencore_efi
+sudo mount /dev/nbd0p1 /tmp/opencore_efi
+</code></pre>
+<h4>3. 複製更新後的設定檔</h4>
+<pre><code class="language-bash">sudo cp ~/OSX-KVM/OpenCore/config.plist /tmp/opencore_efi/EFI/OC/config.plist
+</code></pre>
+<h4>4. 驗證更新</h4>
+<pre><code class="language-bash"># 確認補丁已添加
+grep -c &quot;VM Apple ID Fix&quot; /tmp/opencore_efi/EFI/OC/config.plist
+# 應該輸出: 2
+</code></pre>
+<h4>5. 卸載映像</h4>
+<pre><code class="language-bash">sudo umount /tmp/opencore_efi
+sudo qemu-nbd --disconnect /dev/nbd0
+</code></pre>
+<h3>步驟五：啟動 VM 並驗證</h3>
+<pre><code class="language-bash">virsh start macOS
+</code></pre>
+<p>進入 macOS 後，打開終端機驗證補丁是否生效：</p>
+<pre><code class="language-bash">sysctl kern | grep &#39;kern.hv_vmm_present&#39;
+</code></pre>
+<p>如果輸出是 <code>kern.hv_vmm_present: 0</code>，代表補丁成功了！</p>
+<p>現在嘗試登入 Xcode 或 Apple ID，應該就能正常運作了。</p>
+<h2>其他可能有幫助的設定</h2>
+<h3>更換網路介面卡類型</h3>
+<p>有些使用者反映將網路介面卡從 <code>vmxnet3</code> 改成 <code>e1000-82545em</code> 可以解決問題。</p>
+<p>編輯 VM 的 XML 設定：</p>
+<pre><code class="language-bash">virsh edit macOS
+</code></pre>
+<p>找到 <code>&lt;interface&gt;</code> 區段，將：</p>
+<pre><code class="language-xml">&lt;model type=&#39;vmxnet3&#39;/&gt;
+</code></pre>
+<p>改成：</p>
+<pre><code class="language-xml">&lt;model type=&#39;e1000-82545em&#39;/&gt;
+</code></pre>
+<p>不過我測試過，對 Sequoia 沒用，核心補丁 + VMHide 才是真正的解法。</p>
+<h3>重置 NVRAM</h3>
+<p>在 OpenCore 開機選單中選擇「Reset NVRAM」，清除舊的 iCloud/Apple ID 快取資料，然後再嘗試登入。</p>
+<h3>清除 macOS 中的快取</h3>
+<p>進入 macOS 後，執行以下命令清除相關快取：</p>
+<pre><code class="language-bash">rm -rf ~/Library/Caches/com.apple.iCloudHelper*
+rm -rf ~/Library/Caches/com.apple.Messages*
+rm -rf ~/Library/Preferences/MobileMeAccounts.plist
+</code></pre>
+<h2>注意事項</h2>
+<ol>
+<li><p><strong>qemu-guest-agent 可能失效</strong>：核心補丁會讓 <code>kern.hv_vmm_present</code> 返回 0，這可能導致 qemu-guest-agent 無法正常運作，因為它也依賴這個旗標來判斷自己是否在 VM 中運行。</p>
+</li>
+<li><p><strong>不要使用公開的序號</strong>：永遠不要使用網路上分享的序號，這些序號很可能已經被 Apple 標記。一定要自己生成唯一的序號。</p>
+</li>
+<li><p><strong>帳號歷史很重要</strong>：如果你的 Apple ID 曾經在真實的 Apple 硬體上使用過，成功登入的機率會更高。全新的 Apple ID 可能會遇到更多障礙。</p>
+</li>
+<li><p><strong>Lilu 版本要求</strong>：VMHide 需要 Lilu 1.7.0 或更新版本才能正常運作。</p>
+</li>
+</ol>
+<h2>總結</h2>
+<table>
+<thead>
+<tr>
+<th>步驟</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. SMBIOS</td>
+<td>用 GenSMBIOS 生成唯一的序號、MLB、UUID</td>
+</tr>
+<tr>
+<td>2. 核心補丁</td>
+<td>把 <code>kern.hv_vmm_present</code> 偽裝成 0</td>
+</tr>
+<tr>
+<td>3. VMHide</td>
+<td>安裝 VMHide.kext 進一步隱藏 VM 偵測</td>
+</tr>
+<tr>
+<td>4. 更新 OpenCore</td>
+<td>用 qemu-nbd 掛載並更新設定</td>
+</tr>
+</tbody></table>
+<p>Sequoia 比之前的版本嚴格很多，核心補丁和 VMHide kext 要同時用才會過。</p>
+<h2>參考資源</h2>
+<ul>
+<li><a href="https://github.com/Carnations-Botanica/VMHide">VMHide GitHub</a></li>
+<li><a href="https://forum.proxmox.com/threads/anyone-can-make-bluetooth-work-on-sonoma.153301/">Proxmox Forum - Sonoma Bluetooth Fix</a></li>
+<li><a href="https://forum.proxmox.com/threads/macos-sequoia-cant-log-apple-id-and-its-services.154328/">Proxmox Forum - Sequoia Apple ID</a></li>
+<li><a href="https://dortania.github.io/OpenCore-Post-Install/universal/iservices.html">Dortania iServices Guide</a></li>
+<li><a href="https://github.com/kholia/OSX-KVM">OSX-KVM GitHub</a></li>
+<li><a href="https://github.com/corpnewt/GenSMBIOS">GenSMBIOS GitHub</a></li>
+<li><a href="https://oneclick-macos-simple-kvm.notaperson535.is-a.dev/docs/guide-Apple-ID/">OneClick macOS KVM - Apple ID Guide</a></li>
+</ul>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

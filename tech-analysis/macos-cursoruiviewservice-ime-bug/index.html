@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>macOS 輸入法突然卡死？CursorUIViewService 的 CPU 失控 bug - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="記錄一次 macOS 輸入法完全無法切換的除錯過程，從症狀追蹤到根因，最終找到永久修法。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/macos-cursoruiviewservice-ime-bug/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/macos-cursoruiviewservice-ime-bug/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="除錯">
   <meta property="article:tag" content="Squirrel">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/macos-cursoruiviewservice-ime-bug/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="記錄一次 macOS 輸入法完全無法切換的除錯過程，從症狀追蹤到根因，最終找到永久修法。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:macOS%20%E8%BC%B8%E5%85%A5%E6%B3%95%E7%AA%81%E7%84%B6%E5%8D%A1%E6%AD%BB%EF%BC%9FCursorUIViewService%20%E7%9A%84%20CPU%20%E5%A4%B1%E6%8E%A7%20bug,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="macOS, CursorUIViewService, 輸入法, IME, 除錯, Squirrel" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"macOS 輸入法突然卡死？CursorUIViewService 的 CPU 失控 bug","description":"記錄一次 macOS 輸入法完全無法切換的除錯過程，從症狀追蹤到根因，最終找到永久修法。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-03-26T00:00:00Z","dateModified":"2026-03-26T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/macos-cursoruiviewservice-ime-bug/"},"url":"https://b-log.to/tech-analysis/macos-cursoruiviewservice-ime-bug/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:macOS%20%E8%BC%B8%E5%85%A5%E6%B3%95%E7%AA%81%E7%84%B6%E5%8D%A1%E6%AD%BB%EF%BC%9FCursorUIViewService%20%E7%9A%84%20CPU%20%E5%A4%B1%E6%8E%A7%20bug,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"macOS, CursorUIViewService, 輸入法, IME, 除錯, Squirrel","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">macOS 輸入法突然卡死？CursorUIViewService 的 CPU 失控 bug</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,53 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">macOS 輸入法突然卡死？CursorUIViewService 的 CPU 失控 bug</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Mar 26, 2026</span><span>2 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>macOS</span><span>CursorUIViewService</span><span>輸入法</span><span>IME</span><span>除錯</span><span>Squirrel</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>症狀</h2>
+<p>正在用 Mac 工作，突然發現輸入法切不了。點選選單列的輸入法圖示，選了鼠鬚管（Squirrel），畫面閃一下就跳回英文。快捷鍵切換也一樣，切過去 0.1 秒馬上彈回 ABC。不只是特定 app，連瀏覽器裡也無法切換——整個系統層級的輸入法都鎖死在英文。</p>
+<h2>排查過程</h2>
+<h3>第一步：看程序狀態</h3>
+<pre><code class="language-bash">ps aux | grep -i -E &#39;SCIM|IMK|TextInput|input.*method&#39;
+</code></pre>
+<p>馬上看到異常：<strong>CursorUIViewService 吃掉 130% CPU</strong>，PressAndHold 也在吃 17%。</p>
+<h3>第二步：殺程序無效</h3>
+<p>嘗試 <code>kill</code> 和 <code>kill -9</code> 砍掉所有輸入法相關程序（TextInputMenuAgent、TextInputSwitcher、imklaunchagent、Squirrel、PressAndHold）。結果 CursorUIViewService 每次都會重生，而且重生後立刻又飆到 100% CPU。</p>
+<h3>第三步：確認 Squirrel 本身正常</h3>
+<p>查系統日誌，Squirrel 的 IMK XPC endpoint 成功註冊，啟動流程完全正常。Sparkle（自動更新框架）的 XPC 失敗是無關的。</p>
+<h3>第四步：用程式直接切換</h3>
+<p>寫了一段 Swift 呼叫 <code>TISSelectInputSource</code> API：</p>
+<pre><code class="language-swift">import Carbon
+// ... 找到 Squirrel.Hant 的 TISInputSource
+let err = TISSelectInputSource(source)
+print(&quot;result: \(err)&quot;)  // 回傳 0（成功）
+</code></pre>
+<p>API 回傳成功，但 <code>AppleSelectedInputSources</code> <strong>完全沒變</strong>。系統層級有東西在攔截。</p>
+<h3>第五步：找到根因</h3>
+<p>在 <code>/Library/Logs/DiagnosticReports/</code> 找到三份 <code>cpu_resource.diag</code> 報告。關鍵資訊：</p>
+<p><strong>view count 無限增長</strong>：從系統日誌看到 <code>updateCursorAccessories</code> 被持續呼叫，view count 從 2 一路漲到 1857+。</p>
+<p><strong>Call stack 卡在 Auto Layout</strong>：</p>
+<pre><code>NSStackView updateConstraints
+  → NSLayoutConstraint diff/sort
+    → qsort（排序 1800+ 個約束）
+</code></pre>
+<p>每次 <code>updateCursorAccessories</code> 都新增 view，Auto Layout 約束數量無上限增長，排版計算量指數增加，最終 CPU 100% 卡死。</p>
+<p><strong>觸發來源</strong>（報告中的 On Behalf Of）：Claude 桌面版和 Helium 瀏覽器。這兩個 app 的文字輸入區域持續觸發游標附件更新。</p>
+<h2>根因</h2>
+<p>這是 <strong>macOS Sonoma 引入的已知 bug</strong>，延續至 Sequoia 和 Tahoe（macOS 26）。</p>
+<p>macOS Sonoma 重新設計了文字游標，加入了語言指示器等視覺元素，由 CursorUIViewService 這個 XPC 服務負責渲染。但這個服務有記憶體洩漏的問題——cursor accessory 的 view 只增不減，Auto Layout 約束隨之無限累積，最終拖垮整個 TextInput 子系統。</p>
+<p>CursorUIViewService 佔滿 CPU 後，輸入法切換的事件處理被阻塞，導致全系統無法切換語言。登出也無法解決，只有重啟才行。</p>
+<h2>永久修法</h2>
+<p>停用重新設計的游標，從根源避免這個 bug：</p>
+<pre><code class="language-bash">sudo defaults write /Library/Preferences/FeatureFlags/Domain/UIKit.plist \
+  redesigned_text_cursor -dict-add Enabled -bool NO
+</code></pre>
+<p>執行後重啟即可。這會關掉 Sonoma 引入的新游標樣式（包括語言指示器小箭頭），回到傳統游標。CursorUIViewService 就不會再失控。</p>
+<h2>結論</h2>
+<p>這次除錯的收穫是：當輸入法切換失效時，不要只看輸入法本身，要往更底層的 TextInput 子系統查。<code>cpu_resource.diag</code> 報告裡的 call stack 和 On Behalf Of 資訊是找到根因的關鍵。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

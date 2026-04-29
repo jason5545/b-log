@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>我花了一整天才發現：SwiftUI @Observable 的子視圖陷阱 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="用 @Observable 管理下載進度，結果進度條完全不動。Debug Log 顯示狀態有更新，UI 卻紋風不動。查了一天才發現：把 struct 傳給子視圖會切斷觀察鏈，SwiftUI 只看 id 決定要不要重新渲染。解法是內聯 UI 或讓子視圖自己存取 Observable。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/swiftui-observable-gotcha/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/swiftui-observable-gotcha/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="除錯">
   <meta property="article:tag" content="狀態管理">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/swiftui-observable-gotcha/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="用 @Observable 管理下載進度，結果進度條完全不動。Debug Log 顯示狀態有更新，UI 卻紋風不動。查了一天才發現：把 struct 傳給子視圖會切斷觀察鏈，SwiftUI 只看 id 決定要不要重新渲染。解法是內聯 UI 或讓子視圖自己存取 Observable。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E8%8A%B1%E4%BA%86%E4%B8%80%E6%95%B4%E5%A4%A9%E6%89%8D%E7%99%BC%E7%8F%BE%EF%BC%9ASwiftUI%20%40Observable%20%E7%9A%84%E5%AD%90%E8%A6%96%E5%9C%96%E9%99%B7%E9%98%B1,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="SwiftUI, @Observable, iOS, Swift, 除錯, 狀態管理" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我花了一整天才發現：SwiftUI @Observable 的子視圖陷阱","description":"用 @Observable 管理下載進度，結果進度條完全不動。Debug Log 顯示狀態有更新，UI 卻紋風不動。查了一天才發現：把 struct 傳給子視圖會切斷觀察鏈，SwiftUI 只看 id 決定要不要重新渲染。解法是內聯 UI 或讓子視圖自己存取 Observable。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-24T00:00:00Z","dateModified":"2025-12-24T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/swiftui-observable-gotcha/"},"url":"https://b-log.to/tech-development/swiftui-observable-gotcha/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E8%8A%B1%E4%BA%86%E4%B8%80%E6%95%B4%E5%A4%A9%E6%89%8D%E7%99%BC%E7%8F%BE%EF%BC%9ASwiftUI%20%40Observable%20%E7%9A%84%E5%AD%90%E8%A6%96%E5%9C%96%E9%99%B7%E9%98%B1,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"SwiftUI, @Observable, iOS, Swift, 除錯, 狀態管理","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我花了一整天才發現：SwiftUI @Observable 的子視圖陷阱</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,134 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">我花了一整天才發現：SwiftUI @Observable 的子視圖陷阱</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Dec 24, 2025</span><span>8 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>SwiftUI</span><span>@Observable</span><span>iOS</span><span>Swift</span><span>除錯</span><span>狀態管理</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>故事開始</h2>
+<p>最近我在開發一個 iOS 影片下載 App「Otter」，用的是最新的 Swift 6 和 iOS 26 SDK。既然都用 Swift 6 了，自然要用 <code>@Observable</code> 宏來管理狀態，畢竟這已經是 Apple 推薦的標準做法。</p>
+<p>一切看起來都很美好，直到我發現——下載進度條完全不會動。</p>
+<h2>問題現象</h2>
+<p>我的 <code>DownloadManager</code> 是一個單例，負責管理所有下載任務：</p>
+<pre><code class="language-swift">@Observable
+@MainActor
+final class DownloadManager {
+    static let shared = DownloadManager()
+    private(set) var tasks: [DownloadTask] = []
+}
+</code></pre>
+<p>在 <code>DownloadView</code> 裡，我用 <code>@Environment</code> 注入它：</p>
+<pre><code class="language-swift">struct DownloadView: View {
+    @Environment(DownloadManager.self) private var downloadManager
+
+    var body: some View {
+        List {
+            ForEach(downloadManager.tasks) { task in
+                DownloadTaskRow(task: task)
+            }
+        }
+    }
+}
+</code></pre>
+<p>看起來很標準對吧？但當下載開始後，進度條永遠停在 0%，狀態永遠顯示「等待中」。</p>
+<p>我打開 Debug Log，發現狀態確實有在更新：</p>
+<pre><code>[DownloadManager] State updated · progress=0.15
+[DownloadManager] State updated · progress=0.32
+[DownloadManager] State updated · progress=0.58
+[DownloadManager] State updated · progress=1.0
+[DownloadManager] State updated · state=completed
+</code></pre>
+<p>資料明明更新了，UI 卻紋風不動。這是什麼巫術？</p>
+<h2>除錯之路</h2>
+<h3>第一個假設：@Observable 壞了</h3>
+<p>我先寫了一個測試視圖，把所有東西都內聯進去：</p>
+<pre><code class="language-swift">struct ObservableTestView: View {
+    @Environment(DownloadManager.self) private var downloadManager
+
+    var body: some View {
+        ForEach(Array(downloadManager.tasks.enumerated()), id: \.element.id) { index, _ in
+            let task = downloadManager.tasks[index]
+            Text(&quot;\(task.state.displayText) - \(Int(task.progress * 100))%&quot;)
+        }
+    }
+}
+</code></pre>
+<p>結果：<strong>測試視圖可以正常更新！</strong></p>
+<p>好，所以 <code>@Observable</code> 沒壞。那問題在哪？</p>
+<h3>第二個假設：陣列元素修改沒被偵測</h3>
+<p>我原本更新狀態的方式是：</p>
+<pre><code class="language-swift">tasks[index].state = .running(progress: 0.5, progressText: &quot;50%&quot;)
+</code></pre>
+<p>我懷疑 <code>@Observable</code> 無法偵測陣列元素的屬性變化，於是改成：</p>
+<pre><code class="language-swift">var updatedTask = tasks[index]
+updatedTask.state = .running(progress: 0.5, progressText: &quot;50%&quot;)
+tasks[index] = updatedTask
+</code></pre>
+<p>結果：<strong>測試視圖還是正常，DownloadView 還是不動。</strong></p>
+<h3>第三個假設（正確答案）：子視圖快取</h3>
+<p>我仔細比較了測試視圖和 DownloadView 的差異：</p>
+<p><strong>測試視圖（可以更新）：</strong></p>
+<pre><code class="language-swift">ForEach(...) { index, _ in
+    let task = downloadManager.tasks[index]
+    Text(task.state.displayText)  // 直接內聯
+}
+</code></pre>
+<p><strong>DownloadView（無法更新）：</strong></p>
+<pre><code class="language-swift">ForEach(downloadManager.tasks) { task in
+    DownloadTaskRow(task: task)  // 傳給子視圖
+}
+</code></pre>
+<p><strong>我終於懂了！</strong></p>
+<p>當我把 <code>task</code>（一個 struct）傳給 <code>DownloadTaskRow</code> 時，SwiftUI 會根據 <code>id</code> 來決定是否重新渲染這個 row。由於 <code>task.id</code> 沒變，SwiftUI 認為：「喔，這個 row 不需要更新。」</p>
+<p>但實際上 <code>task.state</code> 已經變了！SwiftUI 不知道，因為它只看 <code>id</code>。</p>
+<h2>解決方案</h2>
+<h3>方案一：完全內聯（我最終用的）</h3>
+<p>把所有 UI 都寫在 ForEach 裡面：</p>
+<pre><code class="language-swift">ForEach(Array(downloadManager.tasks.enumerated()), id: \.element.id) { index, _ in
+    let task = downloadManager.tasks[index]
+
+    HStack {
+        Text(task.viewState.title)
+        Spacer()
+        if let progress = task.state.progress {
+            ProgressView(value: Double(progress))
+            Text(&quot;\(Int(progress * 100))%&quot;)
+        }
+    }
+}
+</code></pre>
+<p>關鍵是每次都從 <code>downloadManager.tasks[index]</code> 重新取值，這樣 SwiftUI 才會追蹤到變化。</p>
+<h3>方案二：讓子視圖自己存取 Observable</h3>
+<p>如果你堅持要用子視圖，讓它自己去拿資料：</p>
+<pre><code class="language-swift">struct DownloadTaskRow: View {
+    let taskId: String
+    @Environment(DownloadManager.self) private var downloadManager
+
+    private var task: DownloadTask? {
+        downloadManager.tasks.first { $0.id == taskId }
+    }
+
+    var body: some View {
+        if let task = task {
+            // ...
+        }
+    }
+}
+</code></pre>
+<p>這樣子視圖會直接觀察 <code>downloadManager</code>，當 <code>tasks</code> 變化時就會重新渲染。</p>
+<h2>所以到底學到什麼</h2>
+<p><code>@Observable</code> 的觀察是基於「存取」的。只有在 view body 中直接存取 observable 的屬性，SwiftUI 才會追蹤變化。</p>
+<p>傳遞值類型給子視圖會切斷觀察鏈。當你把 struct 從 observable 取出來傳給子視圖，那個子視圖就不再觀察原始的 observable 了。</p>
+<p>SwiftUI 用 <code>id</code> 來判斷是否需要重新渲染。如果 <code>id</code> 沒變，SwiftUI 可能會跳過整個 view 的更新。</p>
+<p>內聯或許不夠優雅，但它能動。</p>
+<hr>
+<p>這個 bug 讓我抓狂了一整天。換成 <code>ObservableObject</code> 可以，但都用 Swift 6 了還回去用舊的？強制替換陣列元素沒用，重新賦值整個陣列也沒用。</p>
+<p>最後發現問題根本不在 <code>@Observable</code>，而是在 SwiftUI 的子視圖快取機制。</p>
+<p>反正就記住：<code>@Observable</code> UI 不更新的話，先檢查你是不是把值類型傳給了子視圖。</p>
+<hr>
+<p><em>寫於 2025 年 12 月，在 Linux 上用 xtool 交叉編譯 iOS App 的某個深夜。是的，我沒有 Mac。</em></p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

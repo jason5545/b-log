@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>反編譯 Scroll2 之後，我用 Apple 的私有框架寫了 TrackPal - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="macOS 觸控板號稱業界標杆，但沒有邊緣捲動。花十美元買了 Scroll2，反編譯後發現水平捲動根本不存在。用 Apple 的私有框架 MultitouchSupport.framework 自己寫了 TrackPal，還加上貝葉斯意圖預測讓系統學會判斷你是真的想捲動。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/touchpal/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/touchpal/" id="og-url">
@@ -35,7 +35,7 @@
   <meta property="article:tag" content="Apple">
   <meta property="article:tag" content="Swift">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/touchpal/" id="twitter-url">
@@ -43,7 +43,7 @@
   <meta property="twitter:description" content="macOS 觸控板號稱業界標杆，但沒有邊緣捲動。花十美元買了 Scroll2，反編譯後發現水平捲動根本不存在。用 Apple 的私有框架 MultitouchSupport.framework 自己寫了 TrackPal，還加上貝葉斯意圖預測讓系統學會判斷你是真的想捲動。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%8F%8D%E7%B7%A8%E8%AD%AF%20Scroll2%20%E4%B9%8B%E5%BE%8C%EF%BC%8C%E6%88%91%E7%94%A8%20Apple%20%E7%9A%84%E7%A7%81%E6%9C%89%E6%A1%86%E6%9E%B6%E5%AF%AB%E4%BA%86%20TrackPal,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="macOS, TrackPal, 無障礙, 邊緣捲動, 逆向工程, Bayesian, 觸控板, Apple, Swift" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -113,6 +113,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"反編譯 Scroll2 之後，我用 Apple 的私有框架寫了 TrackPal","description":"macOS 觸控板號稱業界標杆，但沒有邊緣捲動。花十美元買了 Scroll2，反編譯後發現水平捲動根本不存在。用 Apple 的私有框架 MultitouchSupport.framework 自己寫了 TrackPal，還加上貝葉斯意圖預測讓系統學會判斷你是真的想捲動。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-01-28T00:00:00Z","dateModified":"2026-01-28T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/touchpal/"},"url":"https://b-log.to/tech-development/touchpal/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%8F%8D%E7%B7%A8%E8%AD%AF%20Scroll2%20%E4%B9%8B%E5%BE%8C%EF%BC%8C%E6%88%91%E7%94%A8%20Apple%20%E7%9A%84%E7%A7%81%E6%9C%89%E6%A1%86%E6%9E%B6%E5%AF%AB%E4%BA%86%20TrackPal,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"macOS, TrackPal, 無障礙, 邊緣捲動, 逆向工程, Bayesian, 觸控板, Apple, Swift","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -122,7 +123,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">反編譯 Scroll2 之後，我用 Apple 的私有框架寫了 TrackPal</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -191,12 +192,122 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">反編譯 Scroll2 之後，我用 Apple 的私有框架寫了 TrackPal</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Jan 28, 2026</span><span>10 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>macOS</span><span>TrackPal</span><span>無障礙</span><span>邊緣捲動</span><span>逆向工程</span><span>Bayesian</span><span>觸控板</span><span>Apple</span><span>Swift</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>之前在 Windows 上已經<a href="https://b-log.to/tech-development/touchpad-advanced-tool/">解決了邊緣捲動的問題</a>，用 C# 寫了 Touchpad Advanced Tool，透過 Raw Input API 讀取精確式觸控板的原始資料。Windows 那邊算是告一段落。</p>
+<p>但我也用 Mac。</p>
+<p>macOS 的觸控板體驗一直被認為是業界標杆——多點觸控流暢、手勢豐富、慣性捲動自然。問題是，這一切都建立在「你有兩根手指」的假設上。</p>
+<p>我只有一根。</p>
+<h2>KDE Plasma 記得</h2>
+<p>在開始講 macOS 之前，有個有趣的對比。</p>
+<p>Linux 的 KDE Plasma 到現在還保留著邊緣捲動的選項。就在觸控板設定裡面，一個勾選就開了。不需要裝第三方軟體，不需要改設定檔，不需要編譯任何東西。</p>
+<p>三大桌面平台裡，只有開放原始碼社群記得這件事。</p>
+<p>之前<a href="https://b-log.to/business-insights/modernization-vs-accessibility/">那篇文章</a>分析過 Microsoft 為什麼拿掉邊緣捲動——「現代化」「統一體驗」「簡化介面」。Apple 的理由大概也差不多，只是他們連說都懶得說。</p>
+<h2>反編譯 Scroll2：十美元的失望</h2>
+<p>macOS 上有一個叫 Scroll2 的付費 App，賣十塊美金，號稱提供邊緣捲動功能。看到的時候真的有鬆一口氣的感覺——終於有人做了，不用自己來。買。</p>
+<p>垂直捲動沒問題——手指放在觸控板右側邊緣，上下滑，頁面跟著動。好，那水平捲動呢？</p>
+<p>完全不能用。</p>
+<p>所以我把它反編譯了。花了十美元，至少要知道為什麼不能用。</p>
+<h3>符號表說了什麼</h3>
+<p>從符號表和字串分析來看，Scroll2 的觸控板邊緣區域定義只有 <code>leftEdge</code> 和 <code>rightEdge</code>。沒有 <code>bottomEdge</code>，沒有 <code>topEdge</code>。從架構層級來看，它的座標系統就只在垂直軸上運作。水平邊緣區域在資料模型裡不存在。</p>
+<p>那它的「水平捲動」功能是什麼？</p>
+<p>是 <code>horizontalModScroll</code>——你需要按住一個修飾鍵（像是 Option），然後在垂直邊緣區域滑動，系統會把垂直的滑動事件轉換成水平捲動。</p>
+<p>一根手指的人，怎麼同時按住鍵盤上的鍵再去滑觸控板？這不是「不方便」，是「做不到」。</p>
+<h3>Magic Mouse 倒是有</h3>
+<p>有趣的是，Scroll2 對 Magic Mouse 做了專門的水平捲動支援。符號表裡有 <code>MagicMouseScrollZone</code> 和 <code>MagicMouseScrollSupport</code>——因為 Magic Mouse 的觸控表面夠寬，左右滑的手勢在物理上可行，所以開發者針對它寫了原生的水平捲動邏輯。</p>
+<p>但觸控板？沒有對應的設計。</p>
+<p>同一個 App 裡，Magic Mouse 有水平捲動，觸控板沒有。開發者不是不知道怎麼做水平捲動，是觸控板的邊緣架構從一開始就沒有預留這個維度。</p>
+<h3>不是沒花心力</h3>
+<p>公平地說，Scroll2 的工程量不小。從反編譯的結果來看：</p>
+<ul>
+<li>手勢辨識系統完整，有自己的觸控事件處理流程</li>
+<li>慣性捲動有做，鬆手後有減速效果</li>
+<li>每個 App 可以獨立設定，不同應用程式可以有不同的捲動行為</li>
+<li>用 SpriteKit 做了觸控視覺化，偵錯用的觸控點即時顯示</li>
+</ul>
+<p>這些都需要時間和功力。</p>
+<p>但要加上水平邊緣捲動，不是改個參數的事。整個邊緣區域的偵測邏輯、座標映射、事件轉換都只考慮了左右兩側邊緣的垂直移動。要支援上下邊緣的水平移動，等於重寫觸控區域的核心——座標系、邊界判斷、捲動方向的映射邏輯全部要重新設計。</p>
+<p>而且它是商業軟體，閉源，我沒辦法 fork。</p>
+<p>十美元，買到了一個「幾乎」能用的東西。最讓人無力的不是它做得爛——它做得不錯，只是從來沒有想過我這種人的存在。</p>
+<h2>用 Apple 不想讓你碰的框架</h2>
+<p>既然沒有現成的方案，那就自己寫吧。又不是第一次了。</p>
+<p>macOS 上要實現邊緣捲動，第一個問題是：怎麼拿到觸控板的原始觸控座標？</p>
+<p>Apple 的公開 API 不提供這個資料。你能拿到的是已經處理過的手勢事件——兩指捲動、三指滑動、捏合縮放——但觸控板上每根手指的確切位置？沒有公開介面。<code>NSEvent</code> 給你的是游標座標和手勢類型，不是觸控點的原始位置。</p>
+<p>但 Apple 內部有一個私有框架：<code>MultitouchSupport.framework</code>。</p>
+<p>這個框架沒有官方文件。不在 Apple Developer Documentation 裡，沒有公開的標頭檔，Xcode 的自動補全不會提示它。但它一直在 macOS 系統裡面，從多點觸控的 MacBook 出現以來就在那裡。</p>
+<p>透過逆向工程和開放原始碼社群多年累積的知識，可以拿到這個框架提供的資料：</p>
+<ul>
+<li>每個觸控點的 X/Y 座標（正規化到 0~1 範圍）</li>
+<li>觸控面積和接觸密度</li>
+<li>觸控狀態（接觸、移動、離開）</li>
+<li>多點觸控的完整資訊——每根手指分別在哪裡、壓多大力</li>
+</ul>
+<p>有了這些資料，剩下的就是邏輯問題了。</p>
+<p>核心邏輯和 Windows 版一樣——讀觸控座標，判斷是不是在邊緣區域，發出捲動事件。困難的部分不是演算法，是和平台 API 打交道：Windows 要處理 Raw Input 和 HID 報告，macOS 要用沒有文件的私有框架。但就算是這些，也不算真正困難。</p>
+<p>專案開放原始碼在 GitHub：<a href="https://github.com/jason5545/TrackPal">TrackPal</a></p>
+<p>Apple 要做這件事？大概就是在系統偏好設定裡加一個開關。他們不只有所有的 API——他們<strong>擁有</strong>這個框架。他們有所有的工程師，有所有的資源。</p>
+<p>他們只是不在乎。</p>
+<h2>貝葉斯意圖預測：讓邊緣捲動真正好用</h2>
+<p>把手指放在觸控板底部邊緣，左右滑動來水平捲動——聽起來簡單。但實際上系統需要回答一個問題：</p>
+<p>你是真的想捲動，還是手指剛好經過那個位置？</p>
+<p>這不是用一個固定閾值就能解決的事。我的手指角度每天不一樣，疲勞的時候手會歪，坐姿換了角度也會變。今天偏右邊滑的角度可能跟昨天差十度。如果系統不能適應這些變化，那邊緣捲動就只是一個理論上能用的功能。</p>
+<h3>每一幀都在判斷</h3>
+<p>我在 TrackPal 裡實現了一個貝葉斯信心模型。每一幀觸控資料進來，系統會根據三個獨立訊號更新信心值：</p>
+<p><strong>方向比例</strong>——手指移動方向和捲動軸的夾角。如果你在底部邊緣左右滑，理想情況下移動方向應該是水平的。但人的手指不是機器，不可能完美水平。所以這個訊號是連續的，越接近預期的捲動軸方向，似然比越高。</p>
+<p><strong>速度</strong>——移動速度是否達到「有意識操作」的門檻。手指無意間經過邊緣時通常速度很慢或方向雜亂；有意捲動時，速度比較穩定，方向一致性高。這個訊號不只看絕對速度，也看速度的穩定程度。</p>
+<p><strong>觸控品質</strong>——觸控點的密度和面積。輕觸（手指剛碰到表面）和掌觸（手掌邊緣擦過）的密度數值跟正常觸控明顯不同。<code>MultitouchSupport.framework</code> 提供的接觸面積資料讓這個判斷變得可靠。</p>
+<p>三個訊號各自獨立產生一個似然比，然後用貝葉斯更新組合起來。信心值超過門檻就啟動捲動，低於門檻就判定為游標移動。</p>
+<p>為什麼用貝葉斯而不是簡單的 if-else？因為三個訊號的可靠度不一樣。方向比例是最強的訊號，速度次之，觸控品質是輔助。用似然比組合可以讓強訊號主導判斷，弱訊號只做微調，而不是每個條件都要硬性滿足。</p>
+<h3>自適應學習</h3>
+<p>固定的判斷標準會有問題。</p>
+<p>每個人的手指角度不同。我的手因為肌力的關係，滑動的角度跟一般人差很多。如果把判斷的中心點設成「完美水平」，我的正常捲動動作會被判定為游標移動。</p>
+<p>所以我加了自適應學習。系統會記住每次成功捲動時的方向比例，用指數移動平均（EMA）慢慢調整判斷的中心點。</p>
+<p>假設你的手習慣偏右上方 15 度的角度滑動。前幾次可能需要刻意滑得比較水平，但幾次成功捲動之後，系統的「正中央」就會從 0 度飄移到 15 度附近。不需要打開設定頁面調參數，系統自己學。</p>
+<p>EMA 的衰減係數設得很保守，大概需要十到二十次成功捲動才會顯著調整中心點。這避免了偶爾一次異常角度就把模型帶歪。而且學習只在成功捲動時發生——被拒絕的嘗試不會影響模型，避免噪音汙染。</p>
+<h3>重試偵測</h3>
+<p>有一個場景我自己用的時候特別受不了：你想捲動，手指放到邊緣滑了一下，系統判定為游標移動，沒有觸發捲動。你試第二次，還是沒觸發。</p>
+<p>那個瞬間你會覺得：我自己寫的東西，連我自己都用不動。</p>
+<p>我加了重試偵測機制。邏輯是這樣的：如果你的捲動嘗試被拒絕之後，在短時間內（大約一到兩秒）又在同一個邊緣區域做了類似的動作，系統會推斷自己可能太嚴格了，稍微降低信心門檻。</p>
+<p>但這個調整有三層安全機制：</p>
+<ol>
+<li><strong>上限</strong>：門檻降低有最大幅度，不會無限放寬</li>
+<li><strong>衰減</strong>：調整會隨時間自動回復到原始門檻</li>
+<li><strong>區域綁定</strong>：只在同一個邊緣區域生效，不會影響其他區域的判斷</li>
+</ol>
+<p>設計原則是：寧可第一次太嚴格，也不要平時太鬆。使用者對「多試一次就成功」的容忍度，遠高於「老是誤觸」。</p>
+<h2>Apple 的無障礙劇場</h2>
+<p>Apple 每年 WWDC 都有 Accessibility 專場。Global Accessibility Awareness Day 會發新聞稿。Tim Cook 會在 Twitter 上說「Technology should be for everyone」。</p>
+<p>他們做了不少真東西：</p>
+<ul>
+<li><strong>VoiceOver</strong>：業界領先的螢幕閱讀器，盲人使用者幾乎離不開</li>
+<li><strong>Switch Control</strong>：用單一開關操作整個系統，適合嚴重肢體障礙者</li>
+<li><strong>Head Tracking</strong>：用前鏡頭追蹤頭部動作來控制游標</li>
+<li><strong>Eye Tracking</strong>：用眼球控制 iPhone（iPad 和 Mac 也陸續支援）</li>
+<li><strong>Voice Control</strong>：用語音指令操作整個系統，包括點擊、拖曳、文字輸入</li>
+<li><strong>AssistiveTouch</strong>：螢幕上的虛擬按鈕，減少實體按鍵的依賴</li>
+</ul>
+<p>這些功能技術門檻很高。Eye Tracking 要做到可用，背後是大量的機器學習和校準工程。Head Tracking 要在各種光線、角度下穩定運作，不是小事。Apple 在這些領域投入了真正的資源，值得肯定。</p>
+<p>但邊緣捲動呢？</p>
+<p>讀觸控座標。判斷是否在邊緣。發捲動事件。</p>
+<p>三步。</p>
+<p>他們自己的 <code>MultitouchSupport.framework</code> 已經提供了所有需要的資料。我用這個框架寫 TrackPal，核心邏輯幾百行。Apple 的工程師做同樣的事，可能更少——他們不需要透過私有框架繞路，直接在系統層級就能拿到觸控資料。</p>
+<p>Apple 做得出頭部追蹤、眼球控制這種高門檻的輔助功能，卻不肯在系統偏好設定裡加一個邊緣捲動的開關。</p>
+<p>這不是技術問題，不是資源問題，不是優先順序問題。</p>
+<p>這是他們的觸控板團隊根本沒有把「無法使用多點觸控的人」當成使用者。</p>
+<p>之前<a href="https://b-log.to/business-insights/modernization-vs-accessibility/">分析 Microsoft</a> 的時候講過，問題出在組織分工：無障礙部門做高調的創新產品，產品團隊移除基本功能，兩邊沒有交集。Apple 大概也是類似的結構——做 VoiceOver 的人不會去管觸控板設定，做觸控板的人不會去想「如果使用者只能用一根手指呢」。</p>
+<p>無障礙成為了行銷素材，而不是設計原則。</p>
+<h2>開放原始碼記得</h2>
+<p>兩個平台、兩個 App。Windows 上的 <a href="https://github.com/jason5545/Touchpad-Advanced-Tool">Touchpad Advanced Tool</a>，macOS 上的 <a href="https://github.com/jason5545/TrackPal">TrackPal</a>。</p>
+<p>不是什麼了不起的工程，任何寫過觸控相關程式的人都能做到。</p>
+<p>但我有時候會想，為什麼一個基本的無障礙需求，需要使用者自己在兩個平台上各寫一個 App 才能解決？我寫得動，所以我自己解決了。寫不動的人呢？</p>
+<p>Apple 和 Microsoft 每年都在發表會上講 Accessibility、講 Inclusion。但邊緣捲動——一個已經存在了幾十年、只需要一個設定開關的功能——他們直接拿掉了，連個替代方案都沒有。</p>
+<p>Linux 的 KDE Plasma 做到了。一個勾選框。</p>
+<p>開放原始碼社群記得。商業公司忘了。</p>
+<p>這就是現實。但至少現在，我能捲動頁面了。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

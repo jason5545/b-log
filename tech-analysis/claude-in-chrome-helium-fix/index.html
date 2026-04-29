@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>讓 Claude Code 的瀏覽器自動化功能在 Helium 上運作 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="Claude Code 的 Claude in Chrome 功能在 Helium 瀏覽器上無法運作。問題出在兩個地方：Native Messaging manifest 沒複製到 Helium 的設定目錄，以及 socket 路徑不一致——擴充套件找 ~/.claude-tmp，Native Host 卻建在 /tmp。解法是複製 manifest 加上 symlink，再用 systemd user service 讓它重開機後還能活。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/claude-in-chrome-helium-fix/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/claude-in-chrome-helium-fix/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="Linux">
   <meta property="article:tag" content="systemd">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/claude-in-chrome-helium-fix/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="Claude Code 的 Claude in Chrome 功能在 Helium 瀏覽器上無法運作。問題出在兩個地方：Native Messaging manifest 沒複製到 Helium 的設定目錄，以及 socket 路徑不一致——擴充套件找 ~/.claude-tmp，Native Host 卻建在 /tmp。解法是複製 manifest 加上 symlink，再用 systemd user service 讓它重開機後還能活。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%AE%93%20Claude%20Code%20%E7%9A%84%E7%80%8F%E8%A6%BD%E5%99%A8%E8%87%AA%E5%8B%95%E5%8C%96%E5%8A%9F%E8%83%BD%E5%9C%A8%20Helium%20%E4%B8%8A%E9%81%8B%E4%BD%9C,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Claude Code, Chrome, Helium, Native Messaging, Linux, systemd" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"讓 Claude Code 的瀏覽器自動化功能在 Helium 上運作","description":"Claude Code 的 Claude in Chrome 功能在 Helium 瀏覽器上無法運作。問題出在兩個地方：Native Messaging manifest 沒複製到 Helium 的設定目錄，以及 socket 路徑不一致——擴充套件找 ~/.claude-tmp，Native Host 卻建在 /tmp。解法是複製 manifest 加上 symlink，再用 systemd user service 讓它重開機後還能活。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-26T00:00:00Z","dateModified":"2025-12-26T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/claude-in-chrome-helium-fix/"},"url":"https://b-log.to/tech-analysis/claude-in-chrome-helium-fix/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%AE%93%20Claude%20Code%20%E7%9A%84%E7%80%8F%E8%A6%BD%E5%99%A8%E8%87%AA%E5%8B%95%E5%8C%96%E5%8A%9F%E8%83%BD%E5%9C%A8%20Helium%20%E4%B8%8A%E9%81%8B%E4%BD%9C,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"Claude Code, Chrome, Helium, Native Messaging, Linux, systemd","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">讓 Claude Code 的瀏覽器自動化功能在 Helium 上運作</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,82 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">讓 Claude Code 的瀏覽器自動化功能在 Helium 上運作</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Dec 26, 2025</span><span>5 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Claude Code</span><span>Chrome</span><span>Helium</span><span>Native Messaging</span><span>Linux</span><span>systemd</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>今天花了一點時間解決了一個有趣的問題：Claude Code 的全新瀏覽器自動化功能（Claude in Chrome）在我使用的 Helium 瀏覽器上無法運作。</p>
+<h2>問題背景</h2>
+<p>我用的是 <a href="https://github.com/nickhol/helium">Helium</a>，一個基於 Chromium 的瀏覽器 fork，以 AppImage 形式運行。當我嘗試使用 Claude Code 的 <code>/chrome</code> 指令時，一直顯示「Browser extension is not connected」。</p>
+<h2>調查過程</h2>
+<p>首先確認 Helium 確實有在運行，也已經安裝了 Claude in Chrome 擴充套件：</p>
+<pre><code class="language-bash">ps aux | grep helium
+ls ~/.config/net.imput.helium/Default/Extensions/
+</code></pre>
+<p>擴充套件 ID <code>fcoeoabgfenejglbffodgkkbkcdhcgfn</code> 確實存在。</p>
+<h3>問題一：Native Messaging 設定缺失</h3>
+<p>Chrome 擴充套件透過 Native Messaging 與本地程式溝通。檢查後發現：</p>
+<pre><code class="language-bash"># Chrome 有設定
+ls ~/.config/google-chrome/NativeMessagingHosts/
+# com.anthropic.claude_code_browser_extension.json ✓
+
+# Helium 沒有
+ls ~/.config/net.imput.helium/NativeMessagingHosts/
+# (空的)
+</code></pre>
+<p><strong>解法</strong>：複製 manifest 檔案</p>
+<pre><code class="language-bash">cp ~/.config/google-chrome/NativeMessagingHosts/com.anthropic.claude_code_browser_extension.json \
+   ~/.config/net.imput.helium/NativeMessagingHosts/
+</code></pre>
+<p>重啟 Helium 後，Native Host 進程成功啟動了，但還是連不上。</p>
+<h3>問題二：Socket 路徑不一致</h3>
+<p>查看 debug log 發現關鍵問題：</p>
+<pre><code>[Claude in Chrome] Attempting to connect to: /home/jason/.claude-tmp/claude-mcp-browser-bridge-jason
+[Claude in Chrome] Socket error: ENOENT
+</code></pre>
+<p>但 Native Host 實際建立 socket 的位置是：</p>
+<pre><code class="language-bash">ls /tmp/claude-mcp-browser-bridge-jason  # 存在！
+</code></pre>
+<p>路徑不一致導致 MCP 找不到 socket。</p>
+<p><strong>解法</strong>：建立 symlink</p>
+<pre><code class="language-bash">mkdir -p ~/.claude-tmp
+ln -sf /tmp/claude-mcp-browser-bridge-jason ~/.claude-tmp/claude-mcp-browser-bridge-jason
+</code></pre>
+<p>成功連線。</p>
+<h2>永久修復</h2>
+<p>為了讓修復在重開機後仍然有效，建立 systemd user service：</p>
+<pre><code class="language-bash">cat &gt; ~/.config/systemd/user/claude-chrome-bridge.service &lt;&lt; &#39;EOF&#39;
+[Unit]
+Description=Create Claude Chrome bridge symlink
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c &#39;mkdir -p ~/.claude-tmp &amp;&amp; ln -sf /tmp/claude-mcp-browser-bridge-%u ~/.claude-tmp/claude-mcp-browser-bridge-%u&#39;
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
+EOF
+
+systemctl --user daemon-reload
+systemctl --user enable claude-chrome-bridge.service
+</code></pre>
+<h2>Claude in Chrome 功能介紹</h2>
+<p>這個功能讓 Claude Code 可以直接操作瀏覽器，包括：</p>
+<ul>
+<li><strong>導航</strong>：開啟網頁、前進後退</li>
+<li><strong>截圖</strong>：擷取當前頁面畫面</li>
+<li><strong>點擊/輸入</strong>：與網頁元素互動</li>
+<li><strong>讀取頁面</strong>：取得 accessibility tree 或純文字內容</li>
+<li><strong>執行 JavaScript</strong>：在頁面 context 中執行程式碼</li>
+<li><strong>GIF 錄製</strong>：錄製操作過程</li>
+</ul>
+<p>實測在 Helium 上運作正常，成功開啟 example.com 並截圖。</p>
+<hr>
+<p>這次的問題本質上是 Claude Code 只針對標準 Chrome 設定了路徑，使用其他 Chromium fork 時需要手動橋接。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

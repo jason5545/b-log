@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>LINE 電腦版快取災難檢討：我挖出了 AES Key，但決定讓這些檔案進入「冷儲存」 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="備份工作群組 3000 多張照片，結果被 LINE 的 .eimg 加密格式卡住。Memdump 挖出 AES Key，發現 1892 個檔案共用同一組 IV，但解密後發現這根本不是標準加密——檔頭裝模作樣，中間塞沒加密的縮圖，本體用非標準模式鎖死。這不是資安，是築牆綁架使用者。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/line-pc-cache-encryption-disaster/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/line-pc-cache-encryption-disaster/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="快取">
   <meta property="article:tag" content="Walled Garden">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/line-pc-cache-encryption-disaster/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="備份工作群組 3000 多張照片，結果被 LINE 的 .eimg 加密格式卡住。Memdump 挖出 AES Key，發現 1892 個檔案共用同一組 IV，但解密後發現這根本不是標準加密——檔頭裝模作樣，中間塞沒加密的縮圖，本體用非標準模式鎖死。這不是資安，是築牆綁架使用者。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2025/line-encryption-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="LINE, 逆向工程, AES, 加密, 快取, Walled Garden" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -111,6 +111,7 @@
   <link rel="preload" as="image" href="/content/img/2025/line-encryption-cover.webp" imagesrcset="/content/img/2025/line-encryption-cover-480w.webp 480w, /content/img/2025/line-encryption-cover-828w.webp 828w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"LINE 電腦版快取災難檢討：我挖出了 AES Key，但決定讓這些檔案進入「冷儲存」","description":"備份工作群組 3000 多張照片，結果被 LINE 的 .eimg 加密格式卡住。Memdump 挖出 AES Key，發現 1892 個檔案共用同一組 IV，但解密後發現這根本不是標準加密——檔頭裝模作樣，中間塞沒加密的縮圖，本體用非標準模式鎖死。這不是資安，是築牆綁架使用者。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-09T00:00:00Z","dateModified":"2025-12-09T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/line-pc-cache-encryption-disaster/"},"url":"https://b-log.to/tech-analysis/line-pc-cache-encryption-disaster/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2025/line-encryption-cover.webp"],"keywords":"LINE, 逆向工程, AES, 加密, 快取, Walled Garden","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -120,7 +121,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">LINE 電腦版快取災難檢討：我挖出了 AES Key，但決定讓這些檔案進入「冷儲存」</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -189,12 +190,72 @@
         <article class="article">
           <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2025/line-encryption-cover.webp" srcset="/content/img/2025/line-encryption-cover-480w.webp 480w, /content/img/2025/line-encryption-cover-828w.webp 828w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">LINE 電腦版快取災難檢討：我挖出了 AES Key，但決定讓這些檔案進入「冷儲存」</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Dec 9, 2025</span><span>6 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>LINE</span><span>逆向工程</span><span>AES</span><span>加密</span><span>快取</span><span>Walled Garden</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>這不是教學文，這是一篇針對 LINE 軟體架構的檄文。</p>
+<hr>
+<h2>起因：一場原本很單純的備份</h2>
+<p>目標很簡單：我要備份某個工作群組裡的 3000 多張照片。</p>
+<p>這些是重要的工作資產。</p>
+<p>但 LINE 電腦版把圖片鎖死在 <code>%AppData%\Local\LINE\Cache</code> 裡，變成一堆打不開的 <code>.eimg</code> 垃圾。</p>
+<p>正常的軟體會給你「匯出」按鈕。</p>
+<p>LINE 給你的是 AES 加密，和一堆只有他們工程師才看得懂的私有格式。</p>
+<h2>為什麼要在本機加密？</h2>
+<p>這是我最不爽的一點。</p>
+<p>檔案都在我硬碟了，為什麼還要加密？</p>
+<p>只有一個原因：築牆 (Walled Garden)。</p>
+<p>他們不希望你輕易把資料搬走。這不是為了資安，這是為了綁架使用者。</p>
+<p>一旦你依賴它傳輸工作檔案，你就被鎖死在這個生態系裡。</p>
+<h2>過程：從暴力破解到看見真相</h2>
+<p>我不信邪。</p>
+<p>既然螢幕上能顯示，記憶體裡就一定有鑰匙。</p>
+<p>我對 LINE 進行了 Memdump（記憶體轉儲），寫了 Python 腳本去暴力枚舉。</p>
+<p>結果發現了什麼？</p>
+<p><strong>低級錯誤</strong>：有 1892 個檔案竟然共用同一組 IV (Initial Vector)。在密碼學上，這跟把鑰匙插在門上沒兩樣。</p>
+<p><strong>抓到 Key 了</strong>：電腦跑了一小時，我真的挖出了那把 32 bytes 的 AES Key。</p>
+<p>然後呢？</p>
+<p>我解開了檔案的頭（JPEG Header <code>FF D8</code> 出現了），但後面全是亂碼。</p>
+<h2>絕望的「瑞士起司」加密法</h2>
+<p>深入分析 Hex 後，我氣笑了。</p>
+<p>這根本不是標準的 AES 加密。</p>
+<p>有些檔案解不開，但我在檔案中間發現了「裸奔」的明文 JPEG。</p>
+<p>這意味著 LINE 的加密邏輯是：</p>
+<ul>
+<li><strong>檔頭</strong>：加密（裝模作樣）</li>
+<li><strong>中間</strong>：隨便塞張沒加密的縮圖（為了預覽快一點）</li>
+<li><strong>本體</strong>：用了某種非標準的模式（可能是分段加密、Chunked CBC 或 CTR）鎖起來</li>
+</ul>
+<p>這叫安全嗎？這叫髒 (Dirty)。</p>
+<p>這就像買了個保險箱，結果側面被人拿電鑽開了好幾個洞，只為了方便看裡面有沒有東西。</p>
+<h2>結論：最噁心的不是爛，是貪</h2>
+<p>這次逆向工程讓我看清了 LINE 的本質。</p>
+<p>我不反對加密，我反對的是「無法匯出」。</p>
+<p>我不反對收費，我反對的是「製造問題再賣解決方案」。</p>
+<h3>虛假的安全性</h3>
+<p>你說為了安全所以不給雲端同步？</p>
+<p>它又不是 Signal。</p>
+<p>Signal 是為了極致隱私才犧牲便利，伺服器不留痕跡。但 LINE 靠賣貼圖、賣廣告維生，數據早就被扒光了，這時候才拿「安全」當擋箭牌來說不能同步？</p>
+<h3>勒索式的備份</h3>
+<p>Telegram 和 Discord 早就把多裝置同步當成基本功能。</p>
+<p>LINE 卻到了 2026 年才打算推出完整的備份方案，而且還要付費。</p>
+<p>先把使用者的資料困在爛架構裡，造成備份困難，然後再跟你說：「付錢我就幫你備份喔。」</p>
+<p>這不叫服務，這叫勒索。</p>
+<h3>技術債與歧視</h3>
+<p>IV Reuse、部分加密、奇怪的 Container 格式。</p>
+<p>還有那個死不出 Linux 版的傲慢。</p>
+<p>這是一個縫合怪，完全無視電腦使用者的檔案管理需求。</p>
+<h2>Action Items</h2>
+<p>我不打算再花時間去猜它的加密模式了，ROI 太低。</p>
+<p>我已經備份了所有原始的 <code>.eimg</code> 檔案。</p>
+<p>它們現在躺在我的冷儲存硬碟裡，等待哪天有更閒的高手發布解密工具，或是等待哪天我心血來潮再去逆向它的 Assembly。</p>
+<p><strong>給所有人的建議</strong>：LINE PC 版是一個「不可信任的資料容器」。</p>
+<p>工作用的圖檔，落地後請立刻另存。</p>
+<p>不要相信它的備份機制，不要把這裡當成資料庫。</p>
+<p>趕羚羊。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

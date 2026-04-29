@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>修復音訊播放器點擊無反應：Promise 錯誤處理的重要性 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="記錄修復音訊播放器 bug 的完整過程，從 Chrome MCP 偵錯到發現 Promise 錯誤處理缺失，探討 JavaScript 異步操作的常見陷阱與最佳實踐。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/audio-player-promise-error-fix/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/audio-player-promise-error-fix/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="錯誤處理">
   <meta property="article:tag" content="Chrome MCP">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/audio-player-promise-error-fix/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="記錄修復音訊播放器 bug 的完整過程，從 Chrome MCP 偵錯到發現 Promise 錯誤處理缺失，探討 JavaScript 異步操作的常見陷阱與最佳實踐。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%BF%AE%E5%BE%A9%E9%9F%B3%E8%A8%8A%E6%92%AD%E6%94%BE%E5%99%A8%E9%BB%9E%E6%93%8A%E7%84%A1%E5%8F%8D%E6%87%89%EF%BC%9APromise%20%E9%8C%AF%E8%AA%A4%E8%99%95%E7%90%86%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="JavaScript, Promise, 音訊播放器, 偵錯, 錯誤處理, Chrome MCP" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"修復音訊播放器點擊無反應：Promise 錯誤處理的重要性","description":"記錄修復音訊播放器 bug 的完整過程，從 Chrome MCP 偵錯到發現 Promise 錯誤處理缺失，探討 JavaScript 異步操作的常見陷阱與最佳實踐。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-10-19T14:30:00Z","dateModified":"2025-10-19T14:30:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/audio-player-promise-error-fix/"},"url":"https://b-log.to/tech-development/audio-player-promise-error-fix/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%BF%AE%E5%BE%A9%E9%9F%B3%E8%A8%8A%E6%92%AD%E6%94%BE%E5%99%A8%E9%BB%9E%E6%93%8A%E7%84%A1%E5%8F%8D%E6%87%89%EF%BC%9APromise%20%E9%8C%AF%E8%AA%A4%E8%99%95%E7%90%86%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"JavaScript, Promise, 音訊播放器, 偵錯, 錯誤處理, Chrome MCP","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">修復音訊播放器點擊無反應：Promise 錯誤處理的重要性</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,272 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">修復音訊播放器點擊無反應：Promise 錯誤處理的重要性</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Oct 19, 2025</span><span>8 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>JavaScript</span><span>Promise</span><span>音訊播放器</span><span>偵錯</span><span>錯誤處理</span><span>Chrome MCP</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>在為部落格新增音訊播放器功能後不久，我遇到了一個看似簡單卻頗具啟發性的 bug：播放按鈕點擊後毫無反應。這篇文章記錄完整的偵錯過程，以及一個容易被忽略的 JavaScript 陷阱。</p>
+<h2>問題現象</h2>
+<p>使用者回報：「Claude nerf 文章的音訊播放器點擊播放沒有反應」。</p>
+<p>初步觀察：</p>
+<ul>
+<li>播放器 UI 正常顯示</li>
+<li>按鈕可以點擊，但沒有任何視覺或聽覺反饋</li>
+<li>沒有明顯的錯誤訊息彈出</li>
+</ul>
+<h2>偵錯過程</h2>
+<h3>第一步：使用 Chrome MCP 開啟網站</h3>
+<p>我使用 Chrome MCP（Model Context Protocol）直接在瀏覽器中進行偵錯：</p>
+<pre><code class="language-bash"># 開啟目標頁面
+chrome_navigate(&quot;https://b-log.to/ai-analysis/claude-nerf-analysis/&quot;)
+</code></pre>
+<h3>第二步：檢查 Console 錯誤</h3>
+<p>透過 <code>chrome_console</code> 工具擷取錯誤訊息，發現兩個關鍵線索：</p>
+<p><strong>錯誤 1：404 網路請求失敗</strong></p>
+<pre><code>Failed to load resource: the server responded with a status of 404 ()
+URL: /content/audio/Claude_AI_變笨還是被Nerf？...陷阱-part0.m4a
+</code></pre>
+<p>這個錯誤是誤報——系統嘗試載入分割檔案 <code>-part0.m4a</code>，但實際上只有完整的 <code>.m4a</code> 檔案存在。播放清單偵測邏輯正常返回原始檔案，這不是主要問題。</p>
+<p><strong>錯誤 2：未捕獲的 Promise 錯誤</strong></p>
+<pre><code>Uncaught (in promise)
+URL: https://b-log.to/assets/main.js
+Line: 243, Column: 14
+</code></pre>
+<p>這才是真正的罪魁禍首！</p>
+<h3>第三步：深入測試 Audio 元素</h3>
+<p>我注入測試腳本直接呼叫 <code>audio.play()</code>：</p>
+<pre><code class="language-javascript">const audio = document.querySelector(&#39;.audio-player audio&#39;);
+
+try {
+  await audio.play();
+  console.log(&#39;✅ Play succeeded!&#39;);
+} catch (error) {
+  console.error(&#39;❌ Play failed:&#39;, error);
+}
+</code></pre>
+<p>結果揭曉：</p>
+<pre><code>❌ Play failed: NotAllowedError: play() failed because
+the user didn&#39;t interact with the document first.
+Error name: NotAllowedError
+</code></pre>
+<h2>根本原因分析</h2>
+<p>問題出在 <code>assets/main.js</code> 的第 243 行：</p>
+<pre><code class="language-javascript">// 播放/暫停
+playPauseBtn.addEventListener(&#39;click&#39;, () =&gt; {
+  if (audio.paused) {
+    audio.play();  // ❌ 沒有處理 Promise 錯誤
+  } else {
+    audio.pause();
+  }
+});
+</code></pre>
+<h3>為什麼會失敗？</h3>
+<p>現代瀏覽器的 <code>HTMLMediaElement.play()</code> 方法返回一個 <strong>Promise</strong>，用於處理以下情況：</p>
+<ol>
+<li><strong>自動播放政策限制</strong>：未經使用者互動前不允許播放</li>
+<li><strong>媒體載入失敗</strong>：檔案不存在或格式不支援</li>
+<li><strong>權限問題</strong>：使用者拒絕媒體播放權限</li>
+</ol>
+<p>在我的案例中，雖然使用者確實點擊了按鈕（符合互動要求），但 Promise 仍然可能因為其他原因被拒絕。<strong>未處理的 Promise rejection 會導致靜默失敗</strong>——程式碼不會崩潰，但功能完全無法運作。</p>
+<h2>解決方案</h2>
+<p>修復非常簡單，為所有 <code>audio.play()</code> 調用加上 <code>.catch()</code> 錯誤處理：</p>
+<p><strong>修復 1：播放/暫停按鈕</strong>（main.js:243）</p>
+<pre><code class="language-javascript">playPauseBtn.addEventListener(&#39;click&#39;, () =&gt; {
+  if (audio.paused) {
+    audio.play().catch(error =&gt; {
+      console.error(&#39;播放失敗：&#39;, error);
+    });
+  } else {
+    audio.pause();
+  }
+});
+</code></pre>
+<p><strong>修復 2：播放清單自動播放</strong>（main.js:445）</p>
+<pre><code class="language-javascript">// 自動播放下一個片段
+audio.play().catch(error =&gt; {
+  console.error(&#39;自動播放失敗：&#39;, error);
+});
+</code></pre>
+<h2>技術要點總結</h2>
+<h3>1. Promise 必須處理錯誤</h3>
+<p>JavaScript 的 Promise 有三種狀態：pending、fulfilled、rejected。<strong>任何返回 Promise 的方法都應該處理 rejection</strong>，否則會導致：</p>
+<ul>
+<li>未捕獲的 Promise 錯誤（Uncaught in promise）</li>
+<li>靜默失敗（功能不運作但沒有明顯錯誤）</li>
+<li>難以偵錯（沒有堆疊追蹤）</li>
+</ul>
+<h3>2. 瀏覽器自動播放政策</h3>
+<p>Chrome、Firefox、Safari 等現代瀏覽器都實施嚴格的自動播放政策：</p>
+<ul>
+<li>✅ 允許：使用者互動後的播放（點擊、觸控、鍵盤）</li>
+<li>❌ 禁止：頁面載入時自動播放</li>
+<li>⚠️ 例外：靜音影片或已授權的網站</li>
+</ul>
+<p>即使符合政策，<code>play()</code> 仍可能因為其他原因失敗，因此<strong>錯誤處理不是可選的，而是必須的</strong>。</p>
+<h3>3. 偵錯工具的價值</h3>
+<p>這次偵錯過程中，Chrome MCP 發揮了關鍵作用：</p>
+<ul>
+<li><strong>遠端偵錯</strong>：無需開啟本機 DevTools</li>
+<li><strong>腳本注入</strong>：即時測試假設</li>
+<li><strong>Console 擷取</strong>：完整的錯誤記錄</li>
+</ul>
+<p>這類工具對於在生產環境中快速定位問題非常有幫助。</p>
+<h2>經驗教訓</h2>
+<ol>
+<li><p><strong>所有異步操作都應該有錯誤處理</strong></p>
+<ul>
+<li>不只是 <code>audio.play()</code>，任何返回 Promise 的方法都一樣</li>
+<li>使用 <code>.catch()</code> 或 <code>try-catch</code>（async/await）</li>
+</ul>
+</li>
+<li><p><strong>靜默失敗是最糟的失敗</strong></p>
+<ul>
+<li>至少在 console 輸出錯誤訊息</li>
+<li>考慮使用錯誤追蹤服務（Sentry、Rollbar）</li>
+</ul>
+</li>
+<li><p><strong>測試真實使用者場景</strong></p>
+<ul>
+<li>本機開發時可能沒有自動播放限制</li>
+<li>生產環境的政策可能更嚴格</li>
+</ul>
+</li>
+<li><p><strong>善用偵錯工具</strong></p>
+<ul>
+<li>Chrome DevTools、MCP、遠端偵錯</li>
+<li>不要只依賴 <code>console.log</code></li>
+</ul>
+</li>
+</ol>
+<h2>修復驗證</h2>
+<p>提交修復後（commit <code>51ce01e</code>），透過以下步驟驗證：</p>
+<ol>
+<li>清除快取並重新載入頁面</li>
+<li>點擊播放按鈕</li>
+<li>確認音訊正常播放</li>
+<li>檢查 console 無錯誤訊息</li>
+</ol>
+<p>✅ 播放器現已完全正常運作！</p>
+<h2>後續修復：自動略過內容問題（2025-10-19）</h2>
+<p>在 Promise 錯誤處理修復後，又發現了一個更隱蔽的問題：播放時會自動略過一些內容，但進度條顯示正常，原始檔案也正常。這個問題源於多個時序競爭條件（race condition）和事件處理器衝突。</p>
+<h3>發現的核心問題</h3>
+<p>經過深度分析（commit <code>dde7489</code>），找出了 5 個相互關聯的問題：</p>
+<p><strong>1. 播放進度還原時機錯誤</strong>（高嚴重性）</p>
+<pre><code class="language-javascript">// ❌ 錯誤：在音訊元數據載入前就設定 currentTime
+const savedTime = localStorage.getItem(storageKey + &#39;-time&#39;);
+if (savedTime &amp;&amp; parseFloat(savedTime) &gt; 0) {
+  audio.currentTime = parseFloat(savedTime);  // 太早設定！
+}
+</code></pre>
+<p>如果在 <code>loadedmetadata</code> 事件觸發前設定 <code>currentTime</code>，可能會失效或產生競爭條件，導致播放進度跳過或重置。</p>
+<p><strong>2. 進度儲存觸發條件不可靠</strong>（中嚴重性）</p>
+<pre><code class="language-javascript">// ❌ 錯誤：使用 % 5 判斷觸發時機
+if (Math.floor(audio.currentTime) % 5 === 0) {
+  localStorage.setItem(storageKey + &#39;-time&#39;, audio.currentTime.toString());
+}
+</code></pre>
+<p><code>timeupdate</code> 事件並非每秒精確觸發一次（通常是每 250ms），使用 <code>% 5 === 0</code> 判斷可能永遠不會觸發，尤其是在播放速度改變時。</p>
+<p><strong>3. 播放清單片段切換衝突</strong>（高嚴重性）</p>
+<p>播放清單模式下，<code>loadPart()</code> 會呼叫 <code>audio.load()</code>，這會觸發 <code>loadedmetadata</code> 事件，但此時播放進度可能已經被設定，導致進度被重置或跳到錯誤位置。</p>
+<p><strong>4. ended 事件處理器重複綁定</strong>（中嚴重性）</p>
+<p><code>init()</code> 中已經綁定了 <code>ended</code> 事件，<code>initPlaylist()</code> 又綁定了另一個處理器，兩者可能互相衝突，導致播放清單模式下行為異常。</p>
+<p><strong>5. 缺少 seeking/seeked 事件處理</strong>（低嚴重性）</p>
+<p>拖曳進度條時會觸發 <code>timeupdate</code> 事件，可能導致儲存錯誤的播放進度。</p>
+<h3>修復方案</h3>
+<p><strong>修復 1：正確的播放進度還原時機</strong></p>
+<pre><code class="language-javascript">// ✅ 正確：在元數據載入完成後還原播放進度
+audio.addEventListener(&#39;loadedmetadata&#39;, () =&gt; {
+  durationEl.textContent = this.formatTime(audio.duration);
+
+  const savedTime = localStorage.getItem(storageKey + &#39;-time&#39;);
+  if (savedTime &amp;&amp; parseFloat(savedTime) &gt; 0) {
+    const time = parseFloat(savedTime);
+    if (time &lt; audio.duration) {
+      audio.currentTime = time;  // 確保音訊已載入
+    }
+  }
+});
+</code></pre>
+<p><strong>修復 2：改用時間戳記節流機制</strong></p>
+<pre><code class="language-javascript">// ✅ 正確：使用節流避免過度儲存
+let lastSaveTime = 0;
+const SAVE_INTERVAL = 5000; // 5 秒
+
+audio.addEventListener(&#39;timeupdate&#39;, () =&gt; {
+  // ... 更新 UI ...
+
+  if (!isSeeking) {
+    const now = Date.now();
+    if (now - lastSaveTime &gt;= SAVE_INTERVAL) {
+      localStorage.setItem(storageKey + &#39;-time&#39;, audio.currentTime.toString());
+      lastSaveTime = now;
+    }
+  }
+});
+</code></pre>
+<p><strong>修復 3：新增 seeking/seeked 事件處理</strong></p>
+<pre><code class="language-javascript">// ✅ 正確：拖曳時暫停儲存，拖曳完成後立即儲存
+let isSeeking = false;
+
+audio.addEventListener(&#39;seeking&#39;, () =&gt; {
+  isSeeking = true;
+});
+
+audio.addEventListener(&#39;seeked&#39;, () =&gt; {
+  isSeeking = false;
+  localStorage.setItem(storageKey + &#39;-time&#39;, audio.currentTime.toString());
+  lastSaveTime = Date.now();
+});
+</code></pre>
+<p><strong>修復 4：使用 CSS class 標記播放清單模式</strong></p>
+<pre><code class="language-javascript">// ✅ 正確：統一處理 ended 事件
+audio.addEventListener(&#39;ended&#39;, () =&gt; {
+  if (!audioPlayer.classList.contains(&#39;playlist-mode&#39;)) {
+    localStorage.removeItem(storageKey + &#39;-time&#39;);
+    progressBar.value = 0;
+  }
+});
+
+// 在 initPlaylist() 中
+audioPlayer.classList.add(&#39;playlist-mode&#39;);
+audio.addEventListener(&#39;ended&#39;, () =&gt; {
+  if (!audioPlayer.classList.contains(&#39;playlist-mode&#39;)) return;
+  // ... 播放清單邏輯 ...
+});
+</code></pre>
+<h3>技術要點</h3>
+<ol>
+<li><p><strong>時序競爭條件（Race Condition）</strong>：異步操作必須確保正確的執行順序，尤其是媒體元素的載入和狀態設定。</p>
+</li>
+<li><p><strong>節流（Throttling）vs 去抖（Debouncing）</strong>：對於高頻事件（如 <code>timeupdate</code>），使用時間戳記節流比條件判斷更可靠。</p>
+</li>
+<li><p><strong>事件處理器管理</strong>：避免重複綁定同一事件，使用狀態標記（如 CSS class）區分不同模式。</p>
+</li>
+<li><p><strong>狀態同步</strong>：拖曳進度條時需要暫停自動儲存，避免儲存中間狀態。</p>
+</li>
+</ol>
+<h3>測試場景</h3>
+<p>修復後應測試以下場景：</p>
+<ul>
+<li>✅ 首次播放（無儲存進度）</li>
+<li>✅ 還原播放（有儲存進度）</li>
+<li>✅ 拖曳進度條</li>
+<li>✅ 播放速度變更</li>
+<li>✅ 播放清單模式（多個片段）</li>
+<li>✅ 頁面重新載入</li>
+</ul>
+<h2>結語</h2>
+<p>這個看似簡單的 bug 揭示了一個重要教訓：<strong>JavaScript 的 Promise 機制要求開發者主動處理錯誤</strong>。在異步操作日益普遍的現代 Web 開發中，忽略 Promise rejection 就像忽略 try-catch 一樣危險。</p>
+<p>記住：<strong>如果一個函數返回 Promise，你就有責任處理它的 rejection</strong>。這不僅能讓程式碼更健壯，也能讓偵錯過程更加順暢。</p>
+<hr>
+<p><strong>相關資源</strong>：</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play">MDN: HTMLMediaElement.play()</a></li>
+<li><a href="https://developer.chrome.com/blog/autoplay/">Chrome Autoplay Policy</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">JavaScript Promises 完全指南</a></li>
+</ul>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

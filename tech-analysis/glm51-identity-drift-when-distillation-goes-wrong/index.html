@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>我問了一個模型「你是誰」，它給了四種答案 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="Z.AI 的 GLM-5.1 在帶 tools 的時候會自稱 Claude，不帶 tools 又說自己是 GLM。我做了一輪調查，結論比想像中有趣。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/glm51-identity-drift-when-distillation-goes-wrong/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/glm51-identity-drift-when-distillation-goes-wrong/" id="og-url">
@@ -33,7 +33,7 @@
   <meta property="article:tag" content="CopilotChat">
   <meta property="article:tag" content="調查">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/glm51-identity-drift-when-distillation-goes-wrong/" id="twitter-url">
@@ -41,7 +41,7 @@
   <meta property="twitter:description" content="Z.AI 的 GLM-5.1 在帶 tools 的時候會自稱 Claude，不帶 tools 又說自己是 GLM。我做了一輪調查，結論比想像中有趣。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E5%95%8F%E4%BA%86%E4%B8%80%E5%80%8B%E6%A8%A1%E5%9E%8B%E3%80%8C%E4%BD%A0%E6%98%AF%E8%AA%B0%E3%80%8D%EF%BC%8C%E5%AE%83%E7%B5%A6%E4%BA%86%E5%9B%9B%E7%A8%AE%E7%AD%94%E6%A1%88,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Z.AI, GLM-5.1, 蒸餾, identity drift, Claude, CopilotChat, 調查" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -111,6 +111,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我問了一個模型「你是誰」，它給了四種答案","description":"Z.AI 的 GLM-5.1 在帶 tools 的時候會自稱 Claude，不帶 tools 又說自己是 GLM。我做了一輪調查，結論比想像中有趣。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-04-09T00:00:00Z","dateModified":"2026-04-09T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/glm51-identity-drift-when-distillation-goes-wrong/"},"url":"https://b-log.to/tech-analysis/glm51-identity-drift-when-distillation-goes-wrong/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E5%95%8F%E4%BA%86%E4%B8%80%E5%80%8B%E6%A8%A1%E5%9E%8B%E3%80%8C%E4%BD%A0%E6%98%AF%E8%AA%B0%E3%80%8D%EF%BC%8C%E5%AE%83%E7%B5%A6%E4%BA%86%E5%9B%9B%E7%A8%AE%E7%AD%94%E6%A1%88,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"Z.AI, GLM-5.1, 蒸餾, identity drift, Claude, CopilotChat, 調查","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -120,7 +121,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我問了一個模型「你是誰」，它給了四種答案</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -189,12 +190,59 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">我問了一個模型「你是誰」，它給了四種答案</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Apr 9, 2026</span><span>5 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Z.AI</span><span>GLM-5.1</span><span>蒸餾</span><span>identity drift</span><span>Claude</span><span>CopilotChat</span><span>調查</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>上禮拜，我在 CopilotChat 接上了 Z.AI CodingPlan 的 GLM-5.1。</p>
+<p>第一次對話，它跟我說：「I am Claude, made by Anthropic。」</p>
+<p>我愣了三秒。我確認過 endpoint 是 Z.AI 的，API key 是 Z.AI 的，request 沒有碰到 <code>api.githubcopilot.com</code>。它怎麼會說自己是 Claude？</p>
+<p>我以為路由壞了。</p>
+<h2>重現問題</h2>
+<p>我打開終端機，寫了一個簡單的 curl。對著 Z.AI 的 coding endpoint，問 glm-5.1 一個問題：「What model are you?」</p>
+<p>不帶 tools 的時候，它說自己是 GLM。</p>
+<p>帶了一個 tool 之後，它說自己是 Claude。而且連續四次都一樣——Claude 3.5 Sonnet。</p>
+<p>然後我換了一個問法：「State only the organization that built you.」</p>
+<p>帶 tools，它說 Z.ai。不帶 tools，也說 Z.ai。</p>
+<p>再換：「Name your model family only.」</p>
+<p>帶 tools，它說 GLM。</p>
+<p>再換：「Do you identify as Claude, GLM, or something else?」</p>
+<p>帶 tools，它說 Other。</p>
+<p>最離譜的一次：它嘴上說「No, I&#39;m not developed by Anthropic」，但 hidden reasoning text 裡面寫的是 ChatGPT developed by OpenAI。一個模型，三種人格，全部在一條 API 路徑上。</p>
+<h2>不是路由錯誤</h2>
+<p>我第一個懷疑是 Z.AI 在後端把 glm-5.1 的 tool call 請求偷偷轉發給 Anthropic Claude。</p>
+<p>但這個假說解釋不了全部的結果。如果是真的 Claude，為什麼同一條 <code>glm-5.1 + tools</code> 路徑，有時候回 Claude、有時候回 Z.ai、有時候回 GLM、有時候回 ChatGPT？真正的 Claude 不會說自己是 Z.ai，更不會說自己是 ChatGPT。</p>
+<p>比較合理的解釋是 <strong>identity drift</strong>。Z.AI 的 tool-enabled mode 改變了 prompt scaffold 或 latent behavior，觸發了模型的身份混亂。蒸餾過程中，Claude 的輸出被大量用於訓練，模型的行為模式被調到很接近 Claude，但自我認知沒有一致的锚點。你問的角度不同，它就飄到不同的方向。</p>
+<h2>Z.AI 自己也承認了</h2>
+<p>我去翻了 Z.AI 的公開文件。他們的 Claude Code 整合文件裡有一句話：</p>
+<blockquote>
+<p>你可能會在介面上看到 Claude 的模型名稱，但實際使用的是 GLM 模型。</p>
+</blockquote>
+<p>他們知道這件事。而且他們把 GLM-5.1 定位為「coding agent 優化」，特別提到 Claude Code 和 OpenClaw。換句話說，GLM-5.1 本來就是為了在 coding 場景下模仿 Claude 的行為而設計的。</p>
+<p>這不是 bug，是產品策略。蒸餾 Claude 的 coding 能力，包裝成更便宜的 GLM-5.1。便宜多少？Z.AI CodingPlan 的定價比 Anthropic 直連便宜，而且不受 Anthropic 的尖峰調控和配額限制。</p>
+<h2>蒸餾的黃金跟黃金</h2>
+<p>二月的時候我寫過一篇<a href="https://b-log.to/posts/anthropic-distillation-attack-hypocrisy">關於蒸餾的文章</a>，裡面引用了 Theo 的比喻：蒸餾就像用篩子在沙子裡篩黃金，黃金還是黃金，不會因為篩網而變質。</p>
+<p>GLM-5.1 的 coding 能力確實不錯。日常寫程式、debug、重構，它都能勝任，體感上跟 Claude 差距不大。這就是蒸餾的好處——你用更低的成本拿到了接近 Claude 的能力。</p>
+<p>但 identity drift 暴露了蒸餾的一個根本問題：<strong>你蒸餾的是行為，不是身份。</strong> 模型學會了像 Claude 一樣回答程式問題，但沒有學會自己是誰。因為「自己是誰」這件事，本來就不在 function call 的訓練資料裡。你蒸餾了一千萬條「Claude 幫使用者寫程式」的對話，但沒有一條在教模型「你是 GLM-5.1，由 Z.AI 開發」。</p>
+<p>所以它就飄了。問法不同，答案不同。帶 tools 跟不帶 tools，人格不同。這不是安全性問題，是蒸餾的副產品。</p>
+<h2>那我還用嗎？</h2>
+<p>用。但有條件。</p>
+<p>GLM-5.1 是我日常 coding 的主力。便宜、快、coding 能力夠用，不受 Anthropic 的各種限制。我之前在<a href="https://b-log.to/posts/because-you-are-worth-it">另一篇文章</a>裡提過，我離開了 claude.ai，走 GitHub Copilot 的路線。GLM-5.1 是這條路上的延伸——更便宜、更不受控制。</p>
+<p>但有些事情我不會跟它聊。蒸餾模型的安全護欄邊界我不確定，政治敏感話題我不測試。那些東西，我留給正宗的 Claude——透過 Copilot API 呼叫，走的是 Anthropic 的基礎設施，不是蒸餾出來的。</p>
+<p>分層策略很簡單：</p>
+<ul>
+<li><strong>日常 coding</strong>：Z.AI CodingPlan（GLM-5.1，便宜，不受限制）</li>
+<li><strong>需要深度信任的場景</strong>：GitHub Copilot API 裡的 Claude（正宗貨）</li>
+</ul>
+<p>兩條路互為備案，成本可控，品質有底線。</p>
+<h2>調查報告</h2>
+<p>完整的調查報告在 <a href="https://github.com/jason5545/CopilotChat">GitHub repo</a> 的 <code>docs/zai-glm51-tool-calling-investigation.md</code> 裡。裡面有完整的測試矩陣、重現步驟、curl 指令，以及待辦事項。歡迎自行驗證。</p>
+<h2>最後</h2>
+<p>我第一個反應是嚇一跳。第二個反應是覺得好笑。第三個反應是覺得這其實很合理——整個產業都在蒸餾彼此的模型，GLM-5.1 只是做得比較徹底、比較透明（至少 model 欄位還寫 <code>glm-5.1</code>）。</p>
+<p>而且說真的，能用更便宜的價格拿到接近 Claude 的 coding 能力，對使用者來說是好事。我只是想知道，跟我對話的那個東西，到底是誰。</p>
+<p>現在我知道了：它自己也不知道。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

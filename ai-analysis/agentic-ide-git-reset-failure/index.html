@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰出包記錄 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="試用 Google Gemini 3 搭配 Antigravity IDE，執行 git reset 時 AI 高度自信地選錯 commit。探討 AI 推理正確性與過度自信的校準問題、Git reflog 救援機制、人機協作邊界，以及 agentic 工具時代的生存指南。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/ai-analysis/agentic-ide-git-reset-failure/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/ai-analysis/agentic-ide-git-reset-failure/" id="og-url">
@@ -33,7 +33,7 @@
   <meta property="article:tag" content="開發哲學">
   <meta property="article:tag" content="安全性">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/ai-analysis/agentic-ide-git-reset-failure/" id="twitter-url">
@@ -41,7 +41,7 @@
   <meta property="twitter:description" content="試用 Google Gemini 3 搭配 Antigravity IDE，執行 git reset 時 AI 高度自信地選錯 commit。探討 AI 推理正確性與過度自信的校準問題、Git reflog 救援機制、人機協作邊界，以及 agentic 工具時代的生存指南。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%E6%9C%80%E6%96%B0%E7%9A%84%20AI%20%E6%8A%8A%E4%BD%A0%E7%9A%84%20Git%20Reset%20%E5%88%B0%E9%8C%AF%E8%AA%A4%E7%9A%84%E6%99%82%E9%96%93%E9%BB%9E%EF%BC%9A%E4%B8%80%E6%AC%A1%20Agentic%20IDE%20%E7%9A%84%E5%AF%A6%E6%88%B0%E5%87%BA%E5%8C%85%E8%A8%98%E9%8C%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="AI, Agentic IDE, Git, Gemini, 故障排除, 開發哲學, 安全性" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -111,6 +111,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰出包記錄","description":"試用 Google Gemini 3 搭配 Antigravity IDE，執行 git reset 時 AI 高度自信地選錯 commit。探討 AI 推理正確性與過度自信的校準問題、Git reflog 救援機制、人機協作邊界，以及 agentic 工具時代的生存指南。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-11-21T00:00:00Z","dateModified":"2025-11-21T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/agentic-ide-git-reset-failure/"},"url":"https://b-log.to/ai-analysis/agentic-ide-git-reset-failure/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%E6%9C%80%E6%96%B0%E7%9A%84%20AI%20%E6%8A%8A%E4%BD%A0%E7%9A%84%20Git%20Reset%20%E5%88%B0%E9%8C%AF%E8%AA%A4%E7%9A%84%E6%99%82%E9%96%93%E9%BB%9E%EF%BC%9A%E4%B8%80%E6%AC%A1%20Agentic%20IDE%20%E7%9A%84%E5%AF%A6%E6%88%B0%E5%87%BA%E5%8C%85%E8%A8%98%E9%8C%84,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"AI, Agentic IDE, Git, Gemini, 故障排除, 開發哲學, 安全性","articleSection":"AI 分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -120,7 +121,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰出包記錄</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -189,12 +190,283 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">當最新的 AI 把你的 Git Reset 到錯誤的時間點：一次 Agentic IDE 的實戰出包記錄</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Nov 21, 2025</span><span>20 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>AI</span><span>Agentic IDE</span><span>Git</span><span>Gemini</span><span>故障排除</span><span>開發哲學</span><span>安全性</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>今天試用了 Google 剛發布的 Gemini 3，搭配他們新推出的 agentic IDE —— Antigravity。號稱是最強的模型，在 LMArena 排行榜上拿下 1501 分的歷史新高，在 Humanity&#39;s Last Exam 測試中得分 37.5%，遠超前代的 21.6%。各種基準測試都顯示它的推理能力有質的飛躍。</p>
+<p>結果第一次實戰就出包了。</p>
+<h2>事情是這樣的</h2>
+<p>我需要做 git reset，把專案回到某個時間點。這是個很常見的操作，對於號稱「最佳 vibe coding 模型」的 Gemini 3 來說應該可以輕鬆處理。</p>
+<p>但重點來了：它不是隨便猜的。身為 agentic IDE，Antigravity 確實執行了正確的查詢流程：</p>
+<ol>
+<li>執行 <code>git log --oneline</code> 取得 commit 歷史</li>
+<li>分析每個 commit 的 message 和時間戳記</li>
+<li>在內部的思維過程（thinking）中進行推理</li>
+<li>得出結論：「這個時間點肯定對」</li>
+<li>執行 <code>git reset --hard &lt;hash&gt;</code></li>
+</ol>
+<p>問題是，在它的 thinking 過程中，它對這個判斷<strong>非常有把握</strong>。不是那種「我覺得可能是這個」的猜測，而是「經過分析，這就是正確的時間點」的確定感。</p>
+<p>結果 reset 太過頭，時間點完全不對。</p>
+<h2>問題出在哪？推理能力 vs. 推理正確性</h2>
+<p>這次出包讓我意識到一個關鍵問題：<strong>工具使用能力和推理正確性是兩回事</strong>。</p>
+<h3>它做對了什麼</h3>
+<p>從流程上看，Antigravity + Gemini 3 的表現其實很標準：</p>
+<pre><code class="language-bash"># 第一步：取得資訊
+$ git log --oneline -20
+a1b2c3d (HEAD -&gt; main) 修復登入問題
+d4e5f6g 更新 API 端點
+h7i8j9k 重構用戶驗證
+...
+
+# 第二步：分析判斷
+[在 thinking 中]
+&quot;根據 commit message 和時間序列，
+用戶想回到『重構用戶驗證』之前的狀態，
+應該 reset 到 h7i8j9k&quot;
+
+# 第三步：執行操作
+$ git reset --hard h7i8j9k
+</code></pre>
+<p>這個流程沒問題，有查詢、有分析、有執行。問題在於<strong>中間那層推理出錯了</strong>。</p>
+<h3>它錯在哪裡</h3>
+<p>我事後檢查 commit 歷史才發現，它對「時間點」的理解有偏差。可能的原因：</p>
+<ol>
+<li><p><strong>Commit message 的語義理解錯誤</strong>
+它可能把某個 commit 的 message 理解成「這之前的狀態」，但實際上那個 message 是在描述「這次改了什麼」。這是自然語言理解的典型陷阱。</p>
+</li>
+<li><p><strong>時間序列的相對判斷失準</strong>
+當 commit 之間的時間很近（比如幾分鐘內連續 commit），AI 可能無法準確判斷「before/after」的相對關係。特別是當需求描述模糊時（「回到那個時間點」而不是「回到 commit abc123」）。</p>
+</li>
+<li><p><strong>缺乏二次確認機制</strong>
+人類開發者在做 reset 前，通常會先用 <code>git log -p</code> 看一下那個 commit 的實際改動，或者用 <code>git show &lt;hash&gt;</code> 確認內容。AI 直接跳過了這個驗證步驟。</p>
+</li>
+</ol>
+<h3>更深層的問題：過度自信</h3>
+<p>最危險的不是推理錯誤本身，而是<strong>錯誤伴隨著高度自信</strong>。</p>
+<p>在 Antigravity 的 thinking 過程中，我看到它的推理鏈是這樣的：</p>
+<pre><code>1. 分析需求 → &quot;用戶想回到某個時間點&quot;
+2. 檢視 commit → &quot;這些是最近的 commits&quot;
+3. 模式匹配 → &quot;這個 message 符合描述&quot;
+4. 得出結論 → &quot;就是這個，確定無誤&quot;
+5. 執行操作 → git reset --hard
+</code></pre>
+<p>注意第 4 步的「確定無誤」。這種確定感是從推理鏈的「內部一致性」來的 —— 每一步在邏輯上都說得通，所以整體結論就被標記為「高可信度」。</p>
+<p>但問題是，<strong>邏輯一致不等於事實正確</strong>。</p>
+<p>這讓我想起經典的 AI 對齊問題：一個 AI 可以有完美的內部邏輯，但如果它對外部世界的理解有偏差，那再嚴謹的推理也會得出錯誤的結論。</p>
+<h2>Git Reflog 救了我：版本控制的「後悔藥」機制</h2>
+<p>當我意識到 reset 錯了，第一反應是：「呼，還好是 Git。」</p>
+<h3>Reflog 的運作原理</h3>
+<p>很多人以為 <code>git reset --hard</code> 會永久刪除 commit，其實不是。Git 的設計哲學是：<strong>除非你明確要求，否則不會真的刪除任何東西</strong>。</p>
+<pre><code class="language-bash"># 查看完整的操作歷史
+$ git reflog
+a1b2c3d HEAD@{0}: reset: moving to a1b2c3d
+h7i8j9k HEAD@{1}: reset: moving to h7i8j9k  # ← 這是 AI 做的錯誤 reset
+m9n8o7p HEAD@{2}: commit: 原本的最新 commit
+k6l5m4n HEAD@{3}: commit: 前一個 commit
+...
+</code></pre>
+<p>Reflog（reference log）記錄的是 <strong>HEAD 指標的移動歷史</strong>，而不只是 commit 歷史。每次你做 commit、checkout、reset、merge，Git 都會在 reflog 中留下記錄。</p>
+<p>預設保留期限：</p>
+<ul>
+<li><strong>未被引用的 commit</strong>：30 天</li>
+<li><strong>被引用過的 commit</strong>：90 天</li>
+</ul>
+<p>這意味著即使你 reset 掉某個 commit，只要在 90 天內，它的實體資料（blob、tree、commit object）都還在 <code>.git/objects/</code> 裡面，只是沒有分支或 tag 指向它而已。</p>
+<h3>實際救援過程</h3>
+<pre><code class="language-bash"># 1. 找到正確的 commit
+$ git reflog
+# 仔細看每個 HEAD@{n} 的操作和 hash
+
+# 2. 確認那個 commit 的內容
+$ git show m9n8o7p
+# 檢查 commit message 和 diff，確認這才是我要的
+
+# 3. 還原
+$ git reset --hard m9n8o7p
+HEAD is now at m9n8o7p 原本的最新 commit
+
+# 4. 保險起見，建立一個備份分支指向它
+$ git branch recovery-backup m9n8o7p
+</code></pre>
+<p>救回來了。</p>
+<h3>Reflog 的局限性</h3>
+<p>值得注意的是，reflog 是<strong>本地的</strong>。如果你的 <code>.git</code> 目錄損毀，或者你是在另一台機器上重新 clone，reflog 就沒用了。</p>
+<p>這也是為什麼：</p>
+<ol>
+<li><strong>經常 push 到遠端</strong>：遠端倉庫是最可靠的備份</li>
+<li><strong>重要分支打 tag</strong>：tag 是永久引用，不會被 gc 清理</li>
+<li><strong>危險操作前先建分支</strong>：<code>git branch backup-$(date +%Y%m%d)</code></li>
+</ol>
+<p>Git 給了你後悔的機會，但不是無限期的。</p>
+<h2>學到什麼？從這次出包中得到的深刻教訓</h2>
+<h3>1. AI 的自信不等於正確：認知校準問題</h3>
+<p>再強的模型都會錯，但 Gemini 3 這次的錯誤方式特別值得警惕。</p>
+<p>傳統程式錯誤通常很明顯：要麼 crash、要麼回傳錯誤訊息。但 AI 的錯誤是<strong>無聲的</strong>：它會給你一個看起來合理的答案，伴隨著高度自信，然後你就執行了。</p>
+<p>這在認知科學中叫做「<strong>校準問題</strong>」（calibration problem）：一個系統的主觀信心和客觀準確度之間的對應關係。理想狀態下：</p>
+<ul>
+<li>當 AI 說「我 90% 確定」時，應該有 90% 的正確率</li>
+<li>當它說「我不太確定」時，正確率應該明顯下降</li>
+</ul>
+<p>但現實是，大型語言模型的校準很差。它們經常在錯誤的答案上表現出高度自信，因為：</p>
+<ol>
+<li><strong>MoE 架構的路由決策</strong>：Gemini 3 使用 sparse Mixture of Experts 架構，將問題路由到特定的專家網路。但當路由決策本身有偏差時，即使選中的專家很有信心，整體判斷仍可能出錯</li>
+<li><strong>思維鏈增強自信</strong>：當模型生成一個邏輯鏈時，每個步驟都強化了最終結論的可信度，即使起點就錯了</li>
+<li><strong>訓練目標與實際需求的落差</strong>：雖然使用了 RLHCF（人類和批評反饋的強化學習），但訓練資料中可能缺乏「承認不確定性」的範例</li>
+</ol>
+<p><strong>實踐建議</strong>：</p>
+<ul>
+<li>把 AI 的「確定」當成「它認為邏輯通順」，而不是「事實正確」</li>
+<li>對破壞性操作，永遠執行二次驗證</li>
+<li>建立自己的檢查清單，不要依賴 AI 的自我檢查</li>
+</ul>
+<h3>2. 人機協作的邊界：什麼該交給 AI，什麼不該</h3>
+<p>用一根手指打字的我，確實很依賴自動化。但這次證明了：<strong>打字成本高不代表可以跳過確認步驟</strong>。</p>
+<p>我重新思考了人機協作的邊界：</p>
+<h4>AI 適合處理的任務</h4>
+<ul>
+<li><strong>高重複性、低風險</strong>：格式轉換、批次處理、樣板程式碼生成</li>
+<li><strong>探索性、可逆的</strong>：原型開發、方案比較、重構建議</li>
+<li><strong>輔助性、提供選項</strong>：「這裡有三種做法，你覺得哪個好？」</li>
+</ul>
+<h4>人類必須把關的任務</h4>
+<ul>
+<li><strong>破壞性操作</strong>：git reset、資料庫 DROP、檔案刪除</li>
+<li><strong>需要脈絡的判斷</strong>：「這個改動是否符合專案目標？」</li>
+<li><strong>安全性檢查</strong>：權限設定、加密金鑰、敏感資料處理</li>
+</ul>
+<p>關鍵是<strong>最終決策權</strong>。AI 可以做前 99% 的工作，但最後那 1% 的「確定執行」應該在你手上。</p>
+<h4>實作建議：Agentic IDE 的「安全模式」</h4>
+<p>理想的 agentic IDE 應該有分層授權機制：</p>
+<pre><code class="language-yaml"># 假設的設定檔
+agent_permissions:
+  auto_execute:
+    - file_read
+    - search
+    - lint
+    - test
+
+  require_confirmation:
+    - file_write
+    - git_commit
+    - package_install
+
+  always_manual:
+    - git_reset
+    - git_push --force
+    - database_migration
+    - system_command
+</code></pre>
+<p>這樣既保留了自動化的效率，又在關鍵點加入人類把關。</p>
+<h3>3. Git 設計的智慧：為犯錯而設計</h3>
+<p>這次經驗讓我重新認識 Git 的設計哲學。</p>
+<p>很多人抱怨 Git 難用、指令複雜、概念抽象。但這些「複雜性」背後有一個核心理念：<strong>假設使用者會犯錯，並為此設計安全網</strong>。</p>
+<h4>Git 的多層保護機制</h4>
+<ol>
+<li><p><strong>Working Directory / Staging / Repository 三層結構</strong>
+讓你可以在 commit 前反悔（<code>git restore</code>）</p>
+</li>
+<li><p><strong>分支的輕量化</strong>
+建立分支幾乎零成本，鼓勵你在實驗前先 branch</p>
+</li>
+<li><p><strong>Reflog 的自動記錄</strong>
+不需要你手動「存檔」，每個操作都被記錄</p>
+</li>
+<li><p><strong>Detached HEAD 的警告</strong>
+當你進入危險狀態，Git 會明確警告你</p>
+</li>
+<li><p><strong>Force push 需要明確的 flag</strong>
+<code>git push --force</code> 而不是預設行為，強迫你意識到這是危險操作</p>
+</li>
+</ol>
+<p>這些設計都在說：<strong>我知道你會犯錯，我幫你留了後路</strong>。</p>
+<h4>對比：為什麼其他工具沒這麼做？</h4>
+<p>很多現代工具追求「簡單」，把複雜性藏起來：</p>
+<ul>
+<li>一鍵部署</li>
+<li>自動同步</li>
+<li>智慧判斷</li>
+</ul>
+<p>這在 99% 的情況下很方便，但在那 1% 出錯時，你連救援的機會都沒有。</p>
+<p>Git 的「複雜」是一種誠實：它不假裝能理解你的所有意圖，所以給你完整的控制權和救援工具。</p>
+<h3>4. 實務建議：與 Agentic 工具共存的最佳實踐</h3>
+<p>基於這次經驗，我整理了一套實務原則：</p>
+<h4>使用前</h4>
+<pre><code class="language-bash"># 危險操作前永遠先備份
+git branch backup-$(date +%Y%m%d-%H%M)
+
+# 或者用 stash 保存當前狀態
+git stash push -m &quot;before AI operation&quot;
+</code></pre>
+<h4>使用中</h4>
+<ol>
+<li><p><strong>讀懂 AI 的推理過程</strong>
+如果工具有 thinking 輸出，花 10 秒看一下邏輯鏈</p>
+</li>
+<li><p><strong>建立檢查清單</strong></p>
+<pre><code>[ ] 確認操作對象正確
+[ ] 確認參數合理
+[ ] 確認可回溯
+</code></pre>
+</li>
+<li><p><strong>分段執行</strong>
+複雜任務拆成小步驟，每步驗證後再繼續</p>
+</li>
+<li><p><strong>保持懷疑</strong>
+AI 越確定，你越要小心（這聽起來很諷刺，但確實有效）</p>
+</li>
+</ol>
+<h4>使用後</h4>
+<pre><code class="language-bash"># 驗證結果
+git status
+git log --oneline -5
+git diff HEAD@{1}
+
+# 確認符合預期再繼續
+</code></pre>
+<p>這些步驟不會花太多時間，但能避免大部分災難。</p>
+<h2>結論：Agentic 時代的生存指南</h2>
+<p>這次出包給我最大的啟示是：<strong>我們正處於一個過渡期</strong>。</p>
+<p>Agentic 工具的願景很美好：讓 AI 像同事一樣自主完成任務，你只需要描述需求，剩下的交給它。但現實是，這些工具還在學習「什麼時候該自主，什麼時候該求助」。</p>
+<h3>Antigravity 代表的挑戰</h3>
+<p>Google 推出 Antigravity 的速度很快 —— Gemini 3 發布當天就整合進 IDE。這種積極度反映了業界對 agentic 開發的期待，但也暴露了一個問題：<strong>工具的成熟度跟不上發布速度</strong>。</p>
+<p>這不是 Google 獨有的問題。整個 AI 產業都在快速疊代：</p>
+<ul>
+<li>Cursor 的 Agent Mode</li>
+<li>Windsurf 的 agentic 工作流程</li>
+<li>Replit Agent</li>
+<li>GitHub Copilot Workspace</li>
+</ul>
+<p>每家都在搶「agentic 開發」的灘頭堡，但沒有人真正解決「如何在自主性和安全性之間找平衡」這個核心問題。</p>
+<h3>使用者的責任</h3>
+<p>在這個過渡期，責任落在使用者身上：</p>
+<ol>
+<li><p><strong>不要盲目信任</strong>
+即使工具看起來很聰明，它還是會犯錯</p>
+</li>
+<li><p><strong>建立自己的安全網</strong>
+工具沒提供的保護機制，你自己要建（備份、驗證、回溯點）</p>
+</li>
+<li><p><strong>給反饋</strong>
+這些工具還在進化，你的使用經驗（包括出包經驗）對改進很重要</p>
+</li>
+<li><p><strong>保持學習</strong>
+了解底層機制（像 Git 這樣的工具）讓你在 AI 出錯時有能力救援</p>
+</li>
+</ol>
+<h3>長遠來看</h3>
+<p>我依然看好 agentic 工具的未來。畢竟，用一根手指打字的我，如果沒有 AI 輔助，根本不可能維護生產環境的系統、開發全端應用。</p>
+<p>但這個未來需要時間。需要更好的：</p>
+<ul>
+<li><strong>風險評估機制</strong>：AI 知道這個操作有多危險</li>
+<li><strong>不確定性量化</strong>：AI 能誠實表達「我不確定」</li>
+<li><strong>可解釋性</strong>：讓你理解它為什麼這樣做</li>
+<li><strong>快速回溯</strong>：出錯時一鍵回到安全狀態</li>
+</ul>
+<p>在那之前，記住這個 Lesson learned：</p>
+<p><strong>再聰明的 AI，都比不上你多看一眼。</strong></p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

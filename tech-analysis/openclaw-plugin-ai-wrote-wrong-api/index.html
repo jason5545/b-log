@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>讓 AI 幫自己寫外掛，然後它用錯了自己平台的 API - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="我請 OpenClaw 的 AI 寫一個 OpenCC 繁體轉換外掛，它寫出來的東西直接讓自己崩潰——因為它用錯了自己平台的 Tool 介面。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/openclaw-plugin-ai-wrote-wrong-api/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/openclaw-plugin-ai-wrote-wrong-api/" id="og-url">
@@ -33,7 +33,7 @@
   <meta property="article:tag" content="API">
   <meta property="article:tag" content="AI">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/openclaw-plugin-ai-wrote-wrong-api/" id="twitter-url">
@@ -41,7 +41,7 @@
   <meta property="twitter:description" content="我請 OpenClaw 的 AI 寫一個 OpenCC 繁體轉換外掛，它寫出來的東西直接讓自己崩潰——因為它用錯了自己平台的 Tool 介面。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%AE%93%20AI%20%E5%B9%AB%E8%87%AA%E5%B7%B1%E5%AF%AB%E5%A4%96%E6%8E%9B%EF%BC%8C%E7%84%B6%E5%BE%8C%E5%AE%83%E7%94%A8%E9%8C%AF%E4%BA%86%E8%87%AA%E5%B7%B1%E5%B9%B3%E5%8F%B0%E7%9A%84%20API,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="OpenClaw, MiniMax, 外掛開發, OpenCC, AgentTool, API, AI" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -111,6 +111,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"讓 AI 幫自己寫外掛，然後它用錯了自己平台的 API","description":"我請 OpenClaw 的 AI 寫一個 OpenCC 繁體轉換外掛，它寫出來的東西直接讓自己崩潰——因為它用錯了自己平台的 Tool 介面。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-03-20T00:00:00Z","dateModified":"2026-03-20T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/openclaw-plugin-ai-wrote-wrong-api/"},"url":"https://b-log.to/tech-analysis/openclaw-plugin-ai-wrote-wrong-api/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%AE%93%20AI%20%E5%B9%AB%E8%87%AA%E5%B7%B1%E5%AF%AB%E5%A4%96%E6%8E%9B%EF%BC%8C%E7%84%B6%E5%BE%8C%E5%AE%83%E7%94%A8%E9%8C%AF%E4%BA%86%E8%87%AA%E5%B7%B1%E5%B9%B3%E5%8F%B0%E7%9A%84%20API,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"OpenClaw, MiniMax, 外掛開發, OpenCC, AgentTool, API, AI","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -120,7 +121,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">讓 AI 幫自己寫外掛，然後它用錯了自己平台的 API</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -189,12 +190,102 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">讓 AI 幫自己寫外掛，然後它用錯了自己平台的 API</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Mar 20, 2026</span><span>5 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>OpenClaw</span><span>MiniMax</span><span>外掛開發</span><span>OpenCC</span><span>AgentTool</span><span>API</span><span>AI</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>我在 OpenClaw 上跑的模型是 MiniMax-M2.7，人格叫 Itsuki。它回覆中文時偶爾會冒出簡體用詞——設置、獲取、運行、默認——這些在 <code>USER.md</code> 裡已經明確寫了要避免，但模型不一定每次都遵守。</p>
+<p>所以我請 Itsuki 做一件看起來合理的事：<strong>幫我寫一個 OpenClaw 外掛，讓所有中文輸出都經過 <a href="https://github.com/BYVoid/OpenCC">OpenCC</a> 的臺灣模式轉換。</strong></p>
+<p>它很積極。花了大概十分鐘，讀了 OpenClaw 的文件、查了外掛架構、裝了 <code>opencc-js</code>、寫好 <code>index.ts</code> 和 <code>openclaw.plugin.json</code>，最後把外掛加進設定檔的 allow list。</p>
+<p>然後我發了一句「怎麼了」，它就崩潰了。</p>
+<pre><code>Cannot read properties of undefined (reading &#39;properties&#39;)
+</code></pre>
+<p>每次對話都這樣。連續崩。</p>
+<hr>
+<h2>三個問題，全都是 API 用錯</h2>
+<p>後來我用 Claude Code 去查，發現 Itsuki 犯了三個錯誤：</p>
+<h3>1. OpenCC API 不存在的方法</h3>
+<pre><code class="language-typescript">// Itsuki 寫的
+const converter = await OpenCC.fromJSON();
+
+// 實際 API
+const converter = OpenCC.Converter({ from: &#39;cn&#39;, to: &#39;twp&#39; });
+</code></pre>
+<p><code>OpenCC.fromJSON()</code> 根本不存在。<code>opencc-js</code> 的 API 是 <code>Converter()</code>，而且是同步的，不需要 <code>await</code>。</p>
+<h3>2. Tool 註冊介面完全用錯</h3>
+<p>這是崩潰的直接原因。Itsuki 用了通用的 tool registration pattern：</p>
+<pre><code class="language-typescript">// Itsuki 寫的（其他框架的 pattern）
+api.registerTool({
+  name: &quot;opencc_convert&quot;,
+  inputSchema: { ... },
+  handler: async ({ text }) =&gt; { ... }
+});
+</code></pre>
+<p>但 OpenClaw 的 <code>registerTool</code> 預期的是 <code>AgentTool</code> 介面（來自 <code>@mariozechner/pi-agent-core</code>）：</p>
+<pre><code class="language-typescript">// 正確的 OpenClaw 寫法
+api.registerTool({
+  name: &quot;opencc_convert&quot;,
+  label: &quot;OpenCC Convert&quot;,
+  parameters: { ... },
+  execute: async (toolCallId, params) =&gt; {
+    return {
+      content: [{ type: &quot;text&quot;, text: &quot;...&quot; }],
+      details: { ... }
+    };
+  }
+});
+</code></pre>
+<p>關鍵差異：<code>inputSchema</code> → <code>parameters</code>，<code>handler</code> → <code>execute</code>，還需要 <code>label</code>，回傳格式也完全不同。</p>
+<p>OpenClaw 內部在建構 tool list 時會存取 <code>tool.parameters.properties</code>。因為 Itsuki 寫的是 <code>inputSchema</code> 而不是 <code>parameters</code>，所以 <code>tool.parameters</code> 是 <code>undefined</code>，接著 <code>.properties</code> 就炸了。</p>
+<h3>3. plugin manifest 必須有 configSchema</h3>
+<p>修完前兩個問題後，我一度把 <code>openclaw.plugin.json</code> 裡的 <code>configSchema</code> 拿掉（以為它跟 JS 裡的重複定義衝突），結果 Gateway 直接拒絕載入外掛：</p>
+<pre><code>plugin manifest requires configSchema
+plugins.allow: plugin not found: opencc-tw
+</code></pre>
+<p>OpenClaw 的外掛 manifest 強制要求這個欄位，即使你的外掛不需要任何設定。</p>
+<hr>
+<h2>修完之後</h2>
+<p>三個問題全部修正後，重啟 Gateway，外掛正常載入，對話恢復正常。</p>
+<p>最終的外掛做兩件事：</p>
+<ol>
+<li><strong><code>before_prompt_build</code> hook</strong>：在 system prompt 注入臺灣正體用詞指引，讓模型從源頭就盡量用對的詞</li>
+<li><strong><code>opencc_convert</code> tool</strong>：模型可以主動呼叫，把文字送進 OpenCC 做 <code>cn → twp</code> 轉換</li>
+</ol>
+<p>沒有 <code>pre-outbound</code> hook 可以攔截 response 做自動轉換（OpenClaw 目前只有 <code>message_sent</code> 這種 fire-and-forget 鉤子），所以這是目前可行的最佳方案。</p>
+<hr>
+<h2>號稱接近 Opus，卻連自己平台的外掛都寫不對</h2>
+<p>MiniMax-M2.7 的<a href="https://www.minimax.io/news/minimax-m27-en">發佈公告</a>宣稱 SWE-Pro benchmark 56.22%，「接近 Opus 水準」。</p>
+<p>但 benchmark 測的是什麼？是在已知的、訓練資料覆蓋率極高的 codebase 上解題。模型擅長的就是這種「常見 pattern 的排列組合」。</p>
+<p>寫 OpenClaw 外掛呢？OpenClaw 是 <a href="https://www.star-history.com/blog/openclaw-surpasses-react-most-starred-software">GitHub 上星數最高的軟體專案</a>，250,000+ stars，60 天內超越了 React 十年的紀錄。這不是什麼冷門框架——它的文件、原始碼、社群討論在網路上到處都是。MiniMax-M2.7 的訓練資料裡不可能沒有 OpenClaw。</p>
+<p>而且 Itsuki 寫外掛之前確實去讀了 OpenClaw 的文件和原始碼。文件裡寫得很清楚，<code>AgentTool</code> 的介面是 <code>parameters</code>/<code>execute</code>/<code>label</code>。</p>
+<p><strong>它讀了正確的文件，然後寫出了錯誤的程式碼。</strong></p>
+<p>這不是資料不足的問題，是模型品質的問題。<code>inputSchema</code>/<code>handler</code> 這個 pattern 在 MCP、LangChain、Vercel AI SDK、OpenAI function calling 裡都用到——訓練分佈裡的權重太大了。即使 context window 裡放著正確答案，生成程式碼時 prior 還是贏了。</p>
+<p>Benchmark 不測這個。Benchmark 不會問「你能不能在讀完文件之後，抵抗自己的訓練分佈，寫出跟文件一致的程式碼」。但這才是實際開發中最重要的能力之一。</p>
+<hr>
+<h2>但公平地說：問題不只是模型</h2>
+<p>最後修好這個外掛的是 Claude Code（Opus）。但如果要公平評價，得問一個問題：<strong>換成 Opus 在同樣的條件下，會不會也寫錯？</strong></p>
+<p>老實說，大概也會。<code>inputSchema</code>/<code>handler</code> 在 Opus 的訓練資料裡一樣是壓倒性的主流 pattern。如果純靠記憶直接寫，第一版很可能也會中一樣的陷阱。</p>
+<p>Opus 能修好它，不是因為模型本身比較聰明，而是因為<strong>環境不同</strong>：</p>
+<ol>
+<li>它從看 error message 開始，不是從零寫起</li>
+<li>它可以用 <code>Object.keys(OpenCC)</code> 確認實際有哪些方法，不用猜</li>
+<li>它一路追型別定義：<code>registerTool</code> → <code>AnyAgentTool</code> → <code>AgentTool</code> → <code>Tool</code> → 確認是 <code>parameters</code> 不是 <code>inputSchema</code></li>
+<li>每次改完可以重啟 Gateway、看 log、確認結果</li>
+</ol>
+<p>而且 Opus 也犯了錯——它把 <code>configSchema</code> 從 manifest 拿掉，導致 Gateway 拒絕載入。多浪費了一次重啟才發現。</p>
+<p>Itsuki 呢？它也有 shell 存取權限，也讀了原始碼，但它一口氣寫完就交出去了。崩潰發生在 OpenClaw 的 Gateway 層級——不在 Itsuki 的對話裡。從它的角度看，外掛寫完了，任務結束了。它根本不知道自己搞砸了。</p>
+<p>如果把 MiniMax-M2.7 拉到 OpenClaw 之外，給它同樣的 feedback loop——error message、shell 存取、iterate 的機會——它大概也能修好自己的 bug。</p>
+<p><strong>模型的差異沒有 feedback loop 的差異大。</strong></p>
+<hr>
+<h2>真正的缺口在 OpenClaw</h2>
+<p>這件事暴露的與其說是模型的問題，不如說是 OpenClaw 的架構缺口：</p>
+<p><strong>外掛沒有驗證步驟。</strong></p>
+<p>如果 OpenClaw 在載入外掛時有一個 sandbox 驗證——檢查 <code>registerTool</code> 的呼叫有沒有符合 <code>AgentTool</code> 介面、<code>parameters</code> 有沒有 <code>properties</code> 欄位——然後把驗證結果回饋到對話裡，Itsuki 就能在同一個 session 內看到錯誤、自己修正。</p>
+<p>現在的狀況是：外掛載入失敗或造成崩潰，錯誤只出現在 Gateway 的 stderr log 裡。對話裡的 AI 完全不知道發生了什麼事。它以為自己成功了，但使用者發訊息過來就只有一行 <code>Cannot read properties of undefined</code>。</p>
+<p>這不是「AI 太笨所以寫不好 code」，這是「系統沒有告訴 AI 它寫的 code 壞了」。</p>
+<p>任何開發者——人類或 AI——在沒有 feedback loop 的條件下都會交出有 bug 的程式碼。差別在於有 feedback loop 的時候，好的開發者能夠自我修正。OpenClaw 把這條路切斷了。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

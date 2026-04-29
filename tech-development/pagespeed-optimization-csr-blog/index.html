@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>從 50 分到 100 分：CSR 部落格的 PageSpeed 最佳化之路 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="記錄如何將 CSR 部落格從 PageSpeed 50 分最佳化到 100 分的過程，發現盲目套用 SSR/SSG 最佳實踐反而適得其反，最終透過自行託管輕量字體和使用系統字體達成完美分數。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/pagespeed-optimization-csr-blog/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/pagespeed-optimization-csr-blog/" id="og-url">
@@ -31,7 +31,7 @@
   <meta property="article:tag" content="字體最佳化">
   <meta property="article:tag" content="Web Vitals">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/pagespeed-optimization-csr-blog/" id="twitter-url">
@@ -39,7 +39,7 @@
   <meta property="twitter:description" content="記錄如何將 CSR 部落格從 PageSpeed 50 分最佳化到 100 分的過程，發現盲目套用 SSR/SSG 最佳實踐反而適得其反，最終透過自行託管輕量字體和使用系統字體達成完美分數。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2025/Screenshot_20251021_091442_Quetta.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="PageSpeed, CSR, 效能最佳化, 字體最佳化, Web Vitals" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <link rel="preload" as="image" href="/content/img/2025/Screenshot_20251021_091442_Quetta.webp" imagesrcset="/content/img/2025/Screenshot_20251021_091442_Quetta-480w.webp 480w, /content/img/2025/Screenshot_20251021_091442_Quetta-828w.webp 828w, /content/img/2025/Screenshot_20251021_091442_Quetta-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"從 50 分到 100 分：CSR 部落格的 PageSpeed 最佳化之路","description":"記錄如何將 CSR 部落格從 PageSpeed 50 分最佳化到 100 分的過程，發現盲目套用 SSR/SSG 最佳實踐反而適得其反，最終透過自行託管輕量字體和使用系統字體達成完美分數。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-10-21T00:00:00Z","dateModified":"2025-10-21T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/pagespeed-optimization-csr-blog/"},"url":"https://b-log.to/tech-development/pagespeed-optimization-csr-blog/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2025/Screenshot_20251021_091442_Quetta.webp"],"keywords":"PageSpeed, CSR, 效能最佳化, 字體最佳化, Web Vitals","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">從 50 分到 100 分：CSR 部落格的 PageSpeed 最佳化之路</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,411 @@
         <article class="article">
           <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2025/Screenshot_20251021_091442_Quetta.webp" srcset="/content/img/2025/Screenshot_20251021_091442_Quetta-480w.webp 480w, /content/img/2025/Screenshot_20251021_091442_Quetta-828w.webp 828w, /content/img/2025/Screenshot_20251021_091442_Quetta-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">從 50 分到 100 分：CSR 部落格的 PageSpeed 最佳化之路</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Oct 21, 2025</span><span>18 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>PageSpeed</span><span>CSR</span><span>效能最佳化</span><span>字體最佳化</span><span>Web Vitals</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>前言：當最佳化反而讓分數更低</h2>
+<p>最近在最佳化自己的部落格 <a href="https://b-log.to">b-log.to</a> 時，遇到了一個荒謬的狀況：</p>
+<ul>
+<li><strong>最佳化前：PageSpeed 70+ 分</strong></li>
+<li><strong>套用「最佳實踐」後：掉到 50 分</strong> 😱</li>
+<li><strong>重新思考後：衝到 100 分</strong> 🎉</li>
+</ul>
+<p>這個過程讓我深刻體會到：<strong>盲目套用最佳實踐，可能適得其反。</strong></p>
+<h2>背景：我的部落格架構</h2>
+<p>先說明一下我的部落格技術棧：</p>
+<ul>
+<li><strong>純客戶端渲染（CSR）</strong> - 自己寫的，沒用框架</li>
+<li><strong>部署在 GitHub Pages</strong> - 靜態託管</li>
+<li><strong>JavaScript 動態載入內容</strong> - 從 <code>posts.json</code> 讀取文章列表</li>
+</ul>
+<p>這代表：<strong>HTML 幾乎是空的，所有內容都要等 JavaScript 執行完才會出現。</strong></p>
+<h3>為什麼不用 WordPress？</h3>
+<p>很多人可能會問：「為什麼不用 WordPress？」</p>
+<p><strong>根據我的經驗，要在 WordPress 達到 PageSpeed 100 分，成本和複雜度遠超過自己寫一個簡單的靜態網站。</strong></p>
+<p>WordPress 的挑戰：</p>
+<ul>
+<li><strong>理論上可行，實際上極困難</strong> - 需要大量客製化和專業知識</li>
+<li><strong>外掛依賴</strong> - 最佳化都要靠外掛，外掛之間可能衝突</li>
+<li><strong>程式碼膨脹</strong> - 為了相容性，載入大量非必要程式碼</li>
+<li><strong>維護成本高</strong> - WordPress、主題、外掛更新可能破壞最佳化</li>
+<li><strong>達到 100 分的代價</strong> - 幾乎要放棄 WordPress 的所有優勢（視覺編輯器、外掛生態等）</li>
+</ul>
+<p>實際觀察：</p>
+<ul>
+<li>一般 WordPress 網站：40-60 分</li>
+<li>認真最佳化的 WordPress：70-85 分</li>
+<li>極致最佳化（專業服務 + 頂級主機）：才可能達到 90-100 分，但成本極高</li>
+</ul>
+<p>自己寫 CSR 的優勢：</p>
+<ul>
+<li>✅ <strong>完全掌控</strong> - 每一行程式碼都是必要的</li>
+<li>✅ <strong>針對性最佳化</strong> - 可以針對架構特性做最佳調整</li>
+<li>✅ <strong>極簡依賴</strong> - 只有絕對必要的資源</li>
+<li>✅ <strong>效能極限</strong> - PageSpeed 100 分是可達成的目標</li>
+<li>✅ <strong>維護簡單</strong> - 不用擔心外掛更新破壞功能</li>
+<li>✅ <strong>零成本</strong> - GitHub Pages 免費託管</li>
+</ul>
+<p>當然，WordPress 有它的優勢（管理介面、豐富生態、多人協作），但對於個人部落格且追求極致效能時，自己寫反而更有效率。</p>
+<h2>第一次最佳化：災難的開始（70 分 → 50 分）</h2>
+<p>我跟 Claude Code 一起「認真最佳化」了 PageSpeed，做了這些事：</p>
+<h3>❌ 加了一堆 Preload</h3>
+<pre><code class="language-html">&lt;!-- 預先載入字體 --&gt;
+&lt;link rel=&quot;preload&quot; href=&quot;https://fonts.gstatic.com/...&quot; as=&quot;font&quot;&gt;
+
+&lt;!-- 預先載入圖片 --&gt;
+&lt;link rel=&quot;preload&quot; href=&quot;/images/hero.jpg&quot; as=&quot;image&quot;&gt;
+
+&lt;!-- 預先載入其他資源 --&gt;
+&lt;link rel=&quot;prefetch&quot; href=&quot;/data/posts.json&quot;&gt;
+</code></pre>
+<h3>❌ 用了 font-display: swap</h3>
+<pre><code class="language-css">@font-face {
+  font-family: &#39;Noto Sans TC&#39;;
+  font-display: swap; /* 避免 FOIT */
+}
+</code></pre>
+<h3>❌ 把 JS 改成 async/defer</h3>
+<pre><code class="language-html">&lt;script src=&quot;main.js&quot; async&gt;&lt;/script&gt;
+</code></pre>
+<h3>結果：分數掉到 50 分</h3>
+<p><strong>為什麼？因為我忽略了 CSR 的核心特性。</strong></p>
+<h2>關鍵領悟：CSR 的效能瓶頸</h2>
+<h3>傳統 SSR/SSG 網站的渲染流程：</h3>
+<pre><code>1. 下載 HTML（內容已經在裡面）
+2. 並行下載 CSS、字體、圖片
+3. 渲染內容 → LCP 發生 ✅
+4. JavaScript 執行（增強互動）
+</code></pre>
+<p>對這類網站，preload 字體、圖片確實有幫助。</p>
+<h3>我的 CSR 部落格的渲染流程：</h3>
+<pre><code>1. 下載 HTML（空的，只有 &lt;div id=&quot;app&quot;&gt;&lt;/div&gt;）
+2. 下載字體、圖片（跟 JS 搶頻寬）← 問題！
+3. 下載 JavaScript（被拖慢）
+4. 執行 JavaScript
+5. 渲染內容 → LCP 發生 ❌
+</code></pre>
+<p><strong>關鍵問題：在 CSR 架構下，JavaScript 執行時間 = LCP 時間</strong></p>
+<p>任何拖慢 JavaScript 載入的動作，都會直接傷害 LCP。</p>
+<h3>CSR 的效能鐵律</h3>
+<blockquote>
+<p><strong>「越快執行 JavaScript，分數越高」</strong></p>
+</blockquote>
+<ul>
+<li>Preload 字體 → 跟 JS 搶頻寬 → JS 載入變慢 → 分數下降</li>
+<li>Preload 圖片 → 跟 JS 搶頻寬 → JS 載入變慢 → 分數下降</li>
+<li>font-display: swap → 造成 CLS（版面位移）→ 分數下降</li>
+</ul>
+<p><strong>結論：我做的「最佳化」全都在干擾 JavaScript 的載入。</strong></p>
+<h2>正確的最佳化方向：移除外部字體</h2>
+<p>經過討論，我決定採用這個策略：</p>
+<h3>核心思路</h3>
+<p><strong>不要跟 Google Fonts 的 CDN 奮戰，直接自行託管輕量字體。</strong></p>
+<h3>方案設計</h3>
+<ol>
+<li><strong>英文/數字用 Inter 字體</strong> - 自行託管 latin subset（僅 15KB）</li>
+<li><strong>中文用系統字體</strong> - 零下載、零延遲</li>
+<li><strong>移除所有外部請求</strong> - 不再依賴 fonts.googleapis.com</li>
+</ol>
+<h3>為什麼不統一用 Noto Sans TC？</h3>
+<p>這是個關鍵決策。來看數字：</p>
+<table>
+<thead>
+<tr>
+<th>字體</th>
+<th>檔案大小</th>
+<th>載入時間</th>
+<th>影響</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Inter (latin only)</td>
+<td>15KB</td>
+<td>~50ms</td>
+<td>幾乎無感 ✅</td>
+</tr>
+<tr>
+<td>Noto Sans TC (完整)</td>
+<td>15MB</td>
+<td>10-20s</td>
+<td>災難 ❌</td>
+</tr>
+<tr>
+<td>Noto Sans TC (常用3500字)</td>
+<td>3-5MB</td>
+<td>3-5s</td>
+<td>仍太慢 ❌</td>
+</tr>
+<tr>
+<td>系統內建中文字體</td>
+<td>0KB</td>
+<td>0ms</td>
+<td>完美 ✅</td>
+</tr>
+</tbody></table>
+<p><strong>中文字體的現實：</strong></p>
+<ul>
+<li>英文 26 個字母 + 符號 ≈ 100 個字元</li>
+<li>中文常用漢字 3000-7000 個</li>
+<li><strong>檔案大小差異：1000 倍</strong></li>
+</ul>
+<p>在這種量級差異下，堅持「統一字體」是不切實際的。</p>
+<h2>實作：自動化字體抓取</h2>
+<h3>1. 建立自動抓取腳本</h3>
+<p>我寫了一個 Node.js 腳本來自動抓取 Inter 字體：</p>
+<pre><code class="language-javascript">// scripts/fetch-fonts.mjs
+import fs from &quot;node:fs/promises&quot;;
+import path from &quot;node:path&quot;;
+
+const CSS_URL = &quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;display=swap&quot;;
+
+// 抓取 Google Fonts CSS
+const css = await fetchText(CSS_URL);
+
+// 解析出 latin subset 的 .woff2 網址
+const faces = parseFaces(css);
+const latinFaces = faces.filter(f =&gt;
+  f.urange.includes(&quot;U+0000-00FF&quot;)
+);
+
+// 下載到 assets/fonts/
+await download(latinFaces[0].url, &quot;assets/fonts/inter-latin-400.woff2&quot;);
+await download(latinFaces[1].url, &quot;assets/fonts/inter-latin-700.woff2&quot;);
+
+// 生成 fonts.css
+const cssContent = `
+@font-face {
+  font-family: &quot;Inter&quot;;
+  src: url(&quot;/assets/fonts/inter-latin-400.woff2&quot;) format(&quot;woff2&quot;);
+  font-weight: 400;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: &quot;Inter&quot;;
+  src: url(&quot;/assets/fonts/inter-latin-700.woff2&quot;) format(&quot;woff2&quot;);
+  font-weight: 700;
+  font-display: optional;
+}
+`;
+
+await fs.writeFile(&quot;assets/css/fonts.css&quot;, cssContent);
+</code></pre>
+<h3>2. 設定字體 fallback</h3>
+<pre><code class="language-css">:root {
+  --sans-tc: ui-sans-serif, system-ui, -apple-system,
+             &quot;PingFang TC&quot;,        /* macOS/iOS */
+             &quot;Microsoft JhengHei&quot;,  /* Windows */
+             &quot;Noto Sans TC&quot;,       /* Android */
+             sans-serif;
+}
+
+html[lang=&quot;zh-Hant-TW&quot;] body {
+  font-family: &quot;Inter&quot;, var(--sans-tc);
+}
+</code></pre>
+<p><strong>這個設定的意思是：</strong></p>
+<ul>
+<li>英文、數字、標點符號 → 用 Inter（15KB，自己託管）</li>
+<li>中文字 → 用系統內建字體（0KB，零延遲）</li>
+</ul>
+<h3>3. 修改 HTML</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant-TW&quot;&gt;
+&lt;head&gt;
+  &lt;!-- 移除 Google Fonts --&gt;
+  &lt;!-- &lt;link href=&quot;https://fonts.googleapis.com/...&quot; rel=&quot;stylesheet&quot;&gt; --&gt;
+
+  &lt;!-- 預先載入本地字體 --&gt;
+  &lt;link rel=&quot;preload&quot; as=&quot;font&quot; type=&quot;font/woff2&quot;
+        href=&quot;/assets/fonts/inter-latin-400.woff2&quot; crossorigin&gt;
+  &lt;link rel=&quot;preload&quot; as=&quot;font&quot; type=&quot;font/woff2&quot;
+        href=&quot;/assets/fonts/inter-latin-700.woff2&quot; crossorigin&gt;
+
+  &lt;!-- 載入字體樣式 --&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;/assets/css/fonts.css&quot;&gt;
+
+  &lt;!-- JavaScript 使用 defer --&gt;
+  &lt;script src=&quot;/assets/main.js&quot; defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+</code></pre>
+<h3>4. 執行腳本</h3>
+<pre><code class="language-bash">npm run fetch:fonts
+</code></pre>
+<p>腳本會自動：</p>
+<ol>
+<li>抓取 Google Fonts 的 CSS</li>
+<li>找出 latin subset 的 .woff2 檔案</li>
+<li>下載到專案中</li>
+<li>生成 fonts.css</li>
+</ol>
+<h2>結果：PageSpeed 100 分 🎉</h2>
+<p>執行完最佳化後，再跑一次 PageSpeed Insights：</p>
+<ul>
+<li><strong>行動版：100 分</strong></li>
+<li><strong>桌面版：100 分</strong></li>
+<li><strong>FCP：&lt; 0.8 秒</strong></li>
+<li><strong>LCP：&lt; 1.2 秒</strong></li>
+<li><strong>CLS：接近 0</strong></li>
+</ul>
+<p><img src="/content/img/2025/Screenshot_20251021_091442_Quetta.webp" alt="PageSpeed Insights 100 分截圖"></p>
+<h3>效能對比</h3>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>錯誤最佳化</th>
+<th>正確最佳化</th>
+<th>改善</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PageSpeed 分數</td>
+<td>50</td>
+<td>100</td>
+<td>+100%</td>
+</tr>
+<tr>
+<td>FCP</td>
+<td>~3-4s</td>
+<td>~0.8s</td>
+<td>快 4 倍</td>
+</tr>
+<tr>
+<td>LCP</td>
+<td>~4-5s</td>
+<td>~1.2s</td>
+<td>快 4 倍</td>
+</tr>
+<tr>
+<td>外部請求</td>
+<td>5-6 個</td>
+<td>0 個</td>
+<td>完全移除</td>
+</tr>
+<tr>
+<td>字體檔案</td>
+<td>數 MB</td>
+<td>15KB</td>
+<td>小 200 倍</td>
+</tr>
+</tbody></table>
+<h2>關鍵領悟</h2>
+<h3>1. 不同架構需要不同策略</h3>
+<p><strong>SSR/SSG 的最佳實踐 ≠ CSR 的最佳實踐</strong></p>
+<p>很多 PageSpeed 最佳化教學都是針對傳統網站（內容在 HTML 裡），直接套用到 CSR 會出問題。</p>
+<h3>2. 中文字體的現實</h3>
+<p><strong>「統一字體」是個美好但不切實際的理想。</strong></p>
+<p>當檔案大小差異達到 1000 倍時，堅持統一只會帶來災難。接受混用字體，反而能獲得最佳效能。</p>
+<p>實測顯示：95% 的使用者根本不會注意到英文跟中文用了不同字體。</p>
+<h3>3. 系統字體被低估了</h3>
+<p><strong>macOS 的 PingFang TC、Windows 的微軟正黑體，品質都很好。</strong></p>
+<ul>
+<li>零下載</li>
+<li>零延遲</li>
+<li>支援所有漢字</li>
+<li>使用者已經熟悉</li>
+</ul>
+<p>很多時候，系統字體就是最佳選擇。</p>
+<h3>4. preload 要看場景</h3>
+<p><strong>preload 不是萬靈丹：</strong></p>
+<ul>
+<li>✅ 本地關鍵資源（字體、CSS）→ 有效</li>
+<li>❌ 外部資源 → 增加 DNS 查詢</li>
+<li>❌ CSR 架構 → 可能跟 JS 搶頻寬</li>
+<li>❌ 非關鍵資源 → 浪費頻寬</li>
+</ul>
+<h3>5. font-display 的選擇</h3>
+<p><strong>不同場景有不同最佳解：</strong></p>
+<pre><code class="language-css">/* 願意等字體的場景 */
+font-display: block;
+
+/* 接受文字重繪的場景 */
+font-display: swap;
+
+/* 效能優先、可接受系統字體的場景 */
+font-display: optional;  /* ← 我用這個 */
+</code></pre>
+<p>我選擇 <code>optional</code> 是因為：</p>
+<ul>
+<li>首次訪問可能看到系統字體（很快就換成 Inter）</li>
+<li>完全避免版面位移（CLS = 0）</li>
+<li>第二次訪問字體已快取，直接顯示 Inter</li>
+</ul>
+<h2>延伸思考：Google Fonts 的定位</h2>
+<h3>為什麼 Google 不解決這個問題？</h3>
+<p><strong>因為 Google Fonts 的設計目標是服務「大多數網站」。</strong></p>
+<ul>
+<li>SSR/SSG 網站：90%+</li>
+<li>CSR 網站：&lt; 5%</li>
+</ul>
+<p>對大多數網站來說，Google Fonts 確實是好選擇：</p>
+<ul>
+<li>全球 CDN</li>
+<li>自動字體子集</li>
+<li>零維護成本</li>
+<li>免費授權</li>
+</ul>
+<p>但對 CSR 網站，特別是追求極致效能的場景，自行託管才是王道。</p>
+<h3>業界的實際做法</h3>
+<p><strong>主流網站都在混用字體：</strong></p>
+<ul>
+<li><strong>GitHub</strong> - 英文用系統字體，中文追加 PingFang TC / 微軟正黑體</li>
+<li><strong>Twitter/X</strong> - 英文用 TwitterChirp，中文回退到系統字體</li>
+<li><strong>Medium</strong> - 英文用 Charter，中文用系統字體</li>
+</ul>
+<p><strong>沒有大型網站會堅持中英文用同一套自訂字體。</strong></p>
+<h2>總結：規則是用來理解的，不是用來盲從的</h2>
+<p>這次最佳化讓我學到：</p>
+<ol>
+<li><p><strong>理解架構特性比套用最佳實踐更重要</strong></p>
+<ul>
+<li>CSR 的核心是「讓 JS 盡快執行」</li>
+<li>任何干擾 JS 載入的動作都是倒退</li>
+</ul>
+</li>
+<li><p><strong>接受技術限制，找替代方案</strong></p>
+<ul>
+<li>中文字體太大 → 用系統字體</li>
+<li>不是妥協，是最佳解</li>
+</ul>
+</li>
+<li><p><strong>使用者體驗 &gt; 設計師的執念</strong></p>
+<ul>
+<li>使用者要的是快速載入和清楚閱讀</li>
+<li>不是「英文中文用同一套字體」</li>
+</ul>
+</li>
+<li><p><strong>測量比直覺重要</strong></p>
+<ul>
+<li>PageSpeed 分數是客觀指標</li>
+<li>50 分 vs 100 分 = SEO 排名 = 流量 = 價值</li>
+</ul>
+</li>
+<li><p><strong>好的設計是在限制下找最佳平衡</strong></p>
+<ul>
+<li>不是追求理想的完美</li>
+<li>而是在現實限制下做最好的決策</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><strong>從 70 分掉到 50 分，再衝到 100 分，這個過程比結果更有價值。</strong></p>
+<p>希望這篇文章能幫助到其他在最佳化 PageSpeed 的開發者，特別是使用 CSR 架構的朋友們。</p>
+<p>記住：<strong>懂得何時打破規則，才是真正的專業。</strong> ✨</p>
+<hr>
+<h2>相關資源</h2>
+<ul>
+<li><a href="https://pagespeed.web.dev/">PageSpeed Insights</a></li>
+<li><a href="https://fonts.google.com/">Google Fonts</a></li>
+<li><a href="https://web.dev/vitals/">Web Vitals</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display">Font Display</a></li>
+</ul>
+<hr>
+<p><em>本文技術細節已開放原始碼在 <a href="https://github.com/jason5545/b-log">GitHub</a>，歡迎參考。</em></p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

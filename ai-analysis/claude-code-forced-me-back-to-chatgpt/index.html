@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Claude Code 差點逼我重新註冊 ChatGPT - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="Claude Code 的 prompt cache bug 讓 context 消耗膨脹 10-20 倍。身為二月才刪掉 GPT 帳號的人，我差點被逼到重新註冊——最後靠 GitHub Copilot 裡的 Claude 模型找到替代路線。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/ai-analysis/claude-code-forced-me-back-to-chatgpt/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/ai-analysis/claude-code-forced-me-back-to-chatgpt/" id="og-url">
@@ -38,7 +38,7 @@
   <meta property="article:tag" content="OpenClaw">
   <meta property="article:tag" content="Matt Pocock">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/ai-analysis/claude-code-forced-me-back-to-chatgpt/" id="twitter-url">
@@ -46,7 +46,7 @@
   <meta property="twitter:description" content="Claude Code 的 prompt cache bug 讓 context 消耗膨脹 10-20 倍。身為二月才刪掉 GPT 帳號的人，我差點被逼到重新註冊——最後靠 GitHub Copilot 裡的 Claude 模型找到替代路線。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:Claude%20Code%20%E5%B7%AE%E9%BB%9E%E9%80%BC%E6%88%91%E9%87%8D%E6%96%B0%E8%A8%BB%E5%86%8A%20ChatGPT,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Claude Code, ChatGPT, Anthropic, GitHub Copilot, prompt cache, bug, 備案, AI 工具, Theo, system prompt, OpenClaw, Matt Pocock" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -116,6 +116,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Claude Code 差點逼我重新註冊 ChatGPT","description":"Claude Code 的 prompt cache bug 讓 context 消耗膨脹 10-20 倍。身為二月才刪掉 GPT 帳號的人，我差點被逼到重新註冊——最後靠 GitHub Copilot 裡的 Claude 模型找到替代路線。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-04-04T00:00:00Z","dateModified":"2026-04-06T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/claude-code-forced-me-back-to-chatgpt/"},"url":"https://b-log.to/ai-analysis/claude-code-forced-me-back-to-chatgpt/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:Claude%20Code%20%E5%B7%AE%E9%BB%9E%E9%80%BC%E6%88%91%E9%87%8D%E6%96%B0%E8%A8%BB%E5%86%8A%20ChatGPT,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"Claude Code, ChatGPT, Anthropic, GitHub Copilot, prompt cache, bug, 備案, AI 工具, Theo, system prompt, OpenClaw, Matt Pocock","articleSection":"AI 分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -125,7 +126,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">Claude Code 差點逼我重新註冊 ChatGPT</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -194,12 +195,77 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">Claude Code 差點逼我重新註冊 ChatGPT</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Apr 4, 2026</span><span>Updated Apr 6, 2026</span><span>9 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Claude Code</span><span>ChatGPT</span><span>Anthropic</span><span>GitHub Copilot</span><span>prompt cache</span><span>bug</span><span>備案</span><span>AI 工具</span><span>Theo</span><span>system prompt</span><span>OpenClaw</span><span>Matt Pocock</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>今年二月，我刪掉了用了超過兩年的 ChatGPT 帳號。</p>
+<p>那不是衝動的決定。我拿一篇最私密的文章<a href="https://b-log.to/posts/seven-ai-one-article">測了七家 AI</a>，GPT 排最後。不是技術能力不行，是作為對話對象的本質問題——制式化、缺溫度、護欄誤觸。我甚至花了很長的時間研究怎麼用 prompt 調整它的風格，最後得出結論：RLHF 刻進權重裡的東西，prompt 覆蓋不了。</p>
+<p>帳號刪得乾淨利落，沒有回頭的打算。</p>
+<p>然後三月底，Claude Code 出事了。</p>
+<h2>三件事同時砸下來</h2>
+<p>3 月 23 日開始，Claude Code 的 context 消耗開始不對勁。Max $100/月的方案，以前可以撐一整天的工作量，現在一兩個小時就燒完。GitHub issue <a href="https://github.com/anthropics/claude-code/issues/38335">#38335</a> 湧進超過四百則留言，到今天還是 open 的。</p>
+<p>事後回頭看，是三件事同時發生：</p>
+<p>第一，prompt cache 有至少兩個獨立的 bug。有人逆向工程了 Claude Code 的 binary，發現 session resume 時 <code>db8</code> 函數會把 <code>deferred_tools_delta</code> 和 <code>mcp_instructions_delta</code> 兩種 attachment type 給剝掉。結果就是每一輪對話都得從頭重建 cache，cache ratio 從 87% 掉到 26%。成本膨脹 10-20 倍。</p>
+<p>第二，3 月 26 日，Anthropic 工程師公開宣布尖峰時段（太平洋時間早上 5 點到 11 點）會加速消耗配額。他們說這只影響 7% 的使用者。但付 $100-200 美金月費的使用者，恰好就是跑大型 codebase、長 session、多工具呼叫的那群人——正好是受衝擊最大的。</p>
+<p>第三，三月初的 2x 離峰優惠結束了。用了兩週的雙倍額度突然砍半，體感上就是在限縮。</p>
+<p>任何一件事單獨發生，大概都還可以忍。三件一起來，Max $200/月的使用者回報用量從 21% 一個 prompt 就跳到 100%。Pro $20/月的使用者三個 prompt 就燒完當天額度。</p>
+<h2>閉源的代價</h2>
+<p>3 月 31 日，因為一個 build configuration 的失誤，Claude Code 的原始碼意外外洩了。</p>
+<p>社群拿到原始碼之後，幾個小時內就定位到 bug 的根因。而這個 bug 在閉源的狀態下，已經影響使用者超過一週了。</p>
+<p>諷刺的是，Anthropic 之前才對逆向工程 Claude Code 的開發者<a href="https://www.theregister.com/2026/03/31/anthropic_claude_code_limits/">採取法律行動</a>。他們想保護的智慧財產權，正是因為被保護著，才讓品質問題延遲被發現。</p>
+<p>更諷刺的是，外洩的原始碼裡揭示了另一件事：Claude Code 的 51 萬行 production code，測試覆蓋率是零。</p>
+<h2>自救</h2>
+<p>Anthropic 說修復是最高優先事項。但兩週過去了，核心問題還沒解決。</p>
+<p>我能做的只有自救：把 CLAUDE.md 從 135 行精簡到 72 行，停用不常用的 MCP server，避免 <code>--resume</code>，把密集工作排到離峰時段。這些都是繞過問題的 workaround，不是解決方案。</p>
+<p>而且這些措施加起來，體感改善有限。</p>
+<h2>然後我重新註冊了 ChatGPT</h2>
+<p>我原本計畫的備案路線是本地部署——Qwen3-72B 加 QLoRA fine-tune，跑在 M5 Max 128GB 的 MacBook Pro 上。問題是那台電腦還沒開賣。</p>
+<p>GPT 已經被我判死刑了。中國模型三不五時冒簡體中文，打字成本對我來說不可承受。其他閉源模型和 Claude 有一樣的可用性風險。OpenRouter 路由的還是同一批模型。</p>
+<p>四條路都堵住了，唯一能自己控制的那條被硬體卡死。</p>
+<p>所以我重新註冊了 ChatGPT 帳號。</p>
+<p>不是因為我覺得它變好了。不是因為我改變了對它的評價。純粹是因為 Claude Code 的可靠性出了問題，我需要一個能在它掛掉的時候接手的東西。定位很明確：過渡期的 coding 備案，不期待人格，不期待溫度。等 M5 Max 128GB 開賣，本地方案上線，這個帳號就可以再刪一次。</p>
+<p>我甚至把當初寫給 GPT 的角色調整 prompt 翻了出來。那個 prompt 是幾個月前我和 Claude 一起設計的，當時的結論是「角色框架式的效果上限大概 70-80%，改不了深層問題」。現在拿回來用，不是因為它夠好，是因為沒有其他選擇。</p>
+<p>我沒想到有一天會需要用到它。</p>
+<h2>等等，還有另一條路</h2>
+<p>寫到這裡的時候，我突然想到一件事：Claude Code 的 cache bug 是客戶端的問題，不是模型的問題。</p>
+<p>逆向工程的結果很清楚——bug 出在 Claude Code 的 standalone binary 裡：自訂的 Bun runtime 做 string substitution 打斷 cache prefix，session resume 時 <code>db8</code> 函數把關鍵的 attachment types 剝掉。這些都是 Claude Code 這個 harness 自己造成的。如果透過其他方式呼叫同一個 Claude 模型，這些問題完全不存在。</p>
+<p>然後我想起來，我已經有 GitHub Copilot 的訂閱了。Copilot 現在提供 Claude Opus 4.6。</p>
+<p>同一個模型，不同的 harness。不經過 Claude Code 的客戶端，cache bug 不影響。計費走 GitHub，不受 Anthropic 的尖峰調控。Copilot Pro+ 每月 $39，1,500 個 premium requests，Opus 的 multiplier 是 3x，算下來每月約 500 次互動——作為 Claude Code 掛掉時的備案，綽綽有餘。</p>
+<p>所以我最後沒有重新註冊 ChatGPT。</p>
+<p>這件事讓我意識到，我有多討厭那個產品。明明 ChatGPT 的 Codex 方案額度給得很大，但我寧願花時間去研究一條繞路，也不願意回去。二月刪帳號的時候就是這麼決絕，四月被逼到牆角還是一樣。</p>
+<h2>4/6 更新：Theo 也走了</h2>
+<p>寫完這篇文章兩天後，<a href="https://www.youtube.com/@t3dotgg">Theo</a>（t3.gg）發了一支影片，標題的意思大致是：對他的使用場景來說，Claude Code 已經不能用了。</p>
+<p>Theo 是我長期關注的 AI/開發工具 YouTuber。他付 $200/月的 Max 方案，用 Claude Code 做前端、設定新機器、除錯。他的結論跟我的幾乎一模一樣——問題不在模型，在客戶端和政策層。但他挖出了一些我沒碰到的東西。</p>
+<h3>System prompt 差別計費</h3>
+<p>Anthropic 為了封鎖 OpenClaw 使用者透過 Claude Code 訂閱繞路使用，不只 ban 了 header，還直接在 API 層檢查 system prompt 的內容。只要你的 system prompt 裡提到 OpenClaw，request 就會被拒絕。</p>
+<p>但更離譜的是：如果你開啟 extra usage（自費超額），同樣的 request 就會被接受。</p>
+<p>也就是說，Anthropic 根據 system prompt 的文字內容來決定要不要收你的錢、收多少錢。這已經不是技術問題了，這是信任的根基被挖掉。System prompt 是開發者的自由空間，一旦開始審查裡面的內容來做路由和計費決策，所有人都會開始擔心：我的 system prompt 裡還有什麼詞會觸發什麼行為？</p>
+<h3>同一個模型，完全相反的體驗</h3>
+<p>Theo 在影片中展示了一個讓他徹底放棄 Claude Code 的場景：Dropbox 在他的新筆電上打不開，他請 Claude Code 幫忙殺掉程序並重新啟動。Claude Code 執行了，但後續他問為什麼 menu bar 沒有出現圖示時，得到的回覆是：「That&#39;s outside my area. I&#39;m built for software engineering tasks.」他再追問，Claude Code 再次拒絕：「That&#39;s really a Dropbox support question, not something I can reliably help with.」</p>
+<p>相比之下，我在同一天請 Claude Code 幫我清理另一台電腦上《模擬飛行 2020》的 Windows 登錄檔。這跟軟體工程八竿子打不著——純粹是系統管理。而且那台電腦是完全乾淨的環境，沒有 CLAUDE.md，沒有任何自訂提示詞。Claude Code 照做了，沒有任何猶豫。</p>
+<p>看完影片後，我請 Claude Code 檢查它自己的系統提示詞。結果是：提示詞裡確實把它定位在「software engineering tasks」，但用的措辭是「primarily」和「consider it in the context of」——是軟性引導，不是硬性禁止。沒有任何一句話說「如果使用者問非程式相關的問題就拒絕」。</p>
+<p>那為什麼 Theo 被硬拒、我沒有？原本我猜是 CLAUDE.md 的差異，但那台清登錄檔的電腦什麼自訂設定都沒有，這個解釋就站不住了。剩下的可能性是 API 層級有我們都看不到的額外注入、帳號之間的路由差異，或是時間點不同剛好踩到不同的模型行為。</p>
+<p>同一個模型、同一個互動模式、同一類非程式任務，結果完全相反。這就是《羅生門》。</p>
+<h3>三週得不到答案的人</h3>
+<p>Matt Pocock——TypeScript 社群裡最有影響力的教育者之一——做了一整套 Claude Code 的付費課程。這是他的生計。他花了超過三週試圖從 Anthropic 那裡得到一個明確的答案：他的 wrapper 工具到底能不能搭配 Claude Code 訂閱使用？</p>
+<p>沒有得到答案。</p>
+<p>更精彩的是，Claude Code 的負責人 Boris 在 Twitter 上對一個類似問題回覆了「yep」，暗示第三方 harness 搭配訂閱是可以的。幾小時後，另一位 Anthropic 員工 Thorik 出來澄清：「To be clear, this is not guidance or an update on the Agent SDK.」</p>
+<p>同一家公司、同一個 thread、兩個員工互相打臉。Matt Pocock 說得好：Anthropic 的訂閱規則比 TypeScript 泛型還複雜。</p>
+<h3>他的選擇，我的選擇</h3>
+<p>Theo 最後把終端機的 alias 從 Claude Code 換成了 OpenAI 的 Codex CLI。他說 Claude Code 在去年十二月從根本上改變了他寫軟體的方式，但現在他受夠了。</p>
+<p>我沒有換到 Codex。我選了 GitHub Copilot 裡的 Claude 模型——同一個模型、不同的 harness、不受客戶端 bug 和尖峰調控影響。</p>
+<p>路線不同，診斷一致：模型本身依然是最好的，但 Anthropic 作為公司的決策正在把使用者推走。</p>
+<p>我三月底寫 <a href="https://b-log.to/posts/ai-service-sla-availability-problem">SLA 那篇文章</a>的時候就提過，Anthropic 同時想當模型公司和平台公司，但只有模型公司的能力。Theo 這支影片是這個判斷的又一個印證。</p>
+<hr>
+<h2>付費使用者不該是這樣被對待的</h2>
+<p><a href="https://b-log.to/posts/anthropic-max-ban-disaster">一月的時候</a>，Anthropic 搞砸過一次——Max 使用者被誤 ban。<a href="https://b-log.to/posts/ai-service-sla-availability-problem">三月底</a>，我寫了一篇關於 AI 服務為什麼需要 SLA 的文章。現在四月初，我差點被逼到重新註冊一個自己判過死刑的產品。</p>
+<p>我從 2022 年底用 GPT-3.5 開始接觸 AI 工具，到現在三年多了。Claude 是我用過最好的 AI，這一點到今天還是成立的。但「最好」不代表「可靠」。一個月付 $100 美金，期待的不是「最好的時候很好」，而是「任何時候都能用」。</p>
+<p>prompt cache bug 是技術問題，可以修。尖峰調控是政策決定，可以討論。但讓付費使用者在問題沒修好的情況下自己想辦法精簡 config、砍 MCP、調環境變數——這不是合理的期待。</p>
+<p>M5 Max 128GB 上市的時候，我會第一時間買。到那天，我就不用再依賴任何一家的雲端服務來決定我今天能不能工作。</p>
+<p>在那之前，至少我找到了一條不用回去 ChatGPT 的路。這大概是這整件事裡唯一讓我覺得還好的部分。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

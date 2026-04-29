@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>IK512 到底壞了沒？一次從表象到根因的系統診斷 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="IK512 從 USB 斷線、zombie bearer 到每次換 IP，問題一個接一個。追完之後才發現硬體從頭到尾沒壞過，三個問題來自三個完全不同的層次。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/ik512-firmware-diagnosis/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/ik512-firmware-diagnosis/" id="og-url">
@@ -34,7 +34,7 @@
   <meta property="article:tag" content="Watchdog">
   <meta property="article:tag" content="ModemManager">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/ik512-firmware-diagnosis/" id="twitter-url">
@@ -42,7 +42,7 @@
   <meta property="twitter:description" content="IK512 從 USB 斷線、zombie bearer 到每次換 IP，問題一個接一個。追完之後才發現硬體從頭到尾沒壞過，三個問題來自三個完全不同的層次。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:IK512%20%E5%88%B0%E5%BA%95%E5%A3%9E%E4%BA%86%E6%B2%92%EF%BC%9F%E4%B8%80%E6%AC%A1%E5%BE%9E%E8%A1%A8%E8%B1%A1%E5%88%B0%E6%A0%B9%E5%9B%A0%E7%9A%84%E7%B3%BB%E7%B5%B1%E8%A8%BA%E6%96%B7,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="IK512, 5G, Proxmox, Homelab, Networking, Failover, Watchdog, ModemManager" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -112,6 +112,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"IK512 到底壞了沒？一次從表象到根因的系統診斷","description":"IK512 從 USB 斷線、zombie bearer 到每次換 IP，問題一個接一個。追完之後才發現硬體從頭到尾沒壞過，三個問題來自三個完全不同的層次。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-03-01T00:00:00Z","dateModified":"2026-03-01T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/ik512-firmware-diagnosis/"},"url":"https://b-log.to/tech-analysis/ik512-firmware-diagnosis/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:IK512%20%E5%88%B0%E5%BA%95%E5%A3%9E%E4%BA%86%E6%B2%92%EF%BC%9F%E4%B8%80%E6%AC%A1%E5%BE%9E%E8%A1%A8%E8%B1%A1%E5%88%B0%E6%A0%B9%E5%9B%A0%E7%9A%84%E7%B3%BB%E7%B5%B1%E8%A8%BA%E6%96%B7,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"IK512, 5G, Proxmox, Homelab, Networking, Failover, Watchdog, ModemManager","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -121,7 +122,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">IK512 到底壞了沒？一次從表象到根因的系統診斷</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -190,12 +191,48 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">IK512 到底壞了沒？一次從表象到根因的系統診斷</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Mar 1, 2026</span><span>5 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>IK512</span><span>5G</span><span>Proxmox</span><span>Homelab</span><span>Networking</span><span>Failover</span><span>Watchdog</span><span>ModemManager</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>IK512 從上線到現在，我們碰到的麻煩不少：USB 間歇斷線、bearer 假死、每次 reconnect 都換 IP。每次出問題，第一反應都是「這東西是不是壞了」。把所有問題拉出來一起看，結論反而讓人意外：硬體從頭到尾沒壞過。</p>
+<h2>三個問題，三個層次</h2>
+<p>先把事件整理出來。</p>
+<p><strong>USB 間歇斷線</strong>：IK512 每隔幾小時出現 MBIM <code>NotOpened</code>，bearer 斷掉，需要手動 USB rebind 才能恢復。最初懷疑是 modem 不穩定，追下去才發現是 Linux 核心的 USB hub autosuspend——USB Root Hub 閒置後進入休眠，把整個 hub 連同下掛的 IK512 一起掛起來。解法是 GRUB 加上 <code>usbcore.autosuspend=-1</code>，全域關掉 USB 省電。這不是硬體問題，也不是 IK512 特有的問題，任何 USB 網卡在同樣設定下都會中招。</p>
+<p><strong>Zombie bearer</strong>：bearer 狀態顯示 <code>connected: yes</code>、訊號品質正常、IP 也有分配，但 ping 8.8.8.8 100% loss，tx/rx 近乎為零。資料通道死了，但 firmware 對 ModemManager 保持沉默。從 2/28 晚上 20:55 reconnect 後進入殭屍狀態，到 3/1 早上 08:26 才手動發現，持續超過 11 小時，watchdog v2 完全沒有感知到。</p>
+<p><strong>每次換 IP</strong>：每次 reconnect 都拿到全新的 CGNAT 地址（10.x.x.x），週期大約 1.5 到 2 小時。</p>
+<p>三個問題看起來都指向 IK512，但根因完全不同：</p>
+<ul>
+<li>USB 斷線 → <strong>Linux 核心設定問題</strong>，已解決，與硬體無關</li>
+<li>Zombie bearer → <strong>firmware 缺陷</strong>，bearer 死亡時應該上報卻沒有</li>
+<li>每次換 IP → <strong>電信商 CGNAT 行為</strong>，session 到期就中斷重建，正常設計</li>
+</ul>
+<h2>Zombie Bearer 的本質</h2>
+<p>Zombie bearer 是這三個裡面最核心的問題，因為它無法從 host 端根本解決。</p>
+<p>MBIM 協定對 bearer 的設計期望是：當資料通道斷開時，modem firmware 應該更新 bearer state，讓 ModemManager 能感知並觸發重連。IK512 沒有實作這一塊——bearer 死了，firmware 維持 <code>connected: yes</code>，host 端完全不知道發生了什麼事。</p>
+<p>這不是 IK512 特有的問題，而是 consumer-grade USB dongle 的通病。廠商的開發資源有限，firmware 對 host 的 event notification 實作往往不完整，因為一般消費者感知不到這個層次的差異。工業級模組（如 Quectel RM520N-GL）才會嚴格實作 bearer failure notification，因為工業應用不能靠人眼監控。</p>
+<p>Watchdog v2.5 的補救方式是主動驗證：不相信 bearer status 的回報，每次都自己去 ping 確認資料通道真的通。這是從 host 端繞過 firmware 的缺口，有效，但本質上是在替 firmware 做它原本應該做的事。</p>
+<h2>這個裝置本來就不是設計來這樣用的</h2>
+<p>IK512 的設計使用情境是：插上 Windows 電腦，裝驅動程式，打開瀏覽器，上網。使用者不需要知道 bearer 是什麼，不需要知道 MBIM，不需要知道 session 斷了再連。那個層次的問題，Windows 驅動程式和電信商 app 都幫你處理掉了，使用者也不在乎 IP 有沒有換。</p>
+<p>我拿它來做的事情完全不同：裸接 Linux、ModemManager 直接管、當 Proxmox 的 failover 備援、要求 bearer failure 要能被偵測到、要求路由要能自動切換。這些需求在它的設計目標裡根本不存在。</p>
+<p>所以才需要用 watchdog 去補——本質上是在用一個消費級工具做工業級的工作，缺的部分只能自己加。這也解釋了為什麼工業模組貴那麼多：那些需求它原本就設計進去了，firmware 完整實作是預設，不是選配。</p>
+<h2>為什麼手機熱點不會有這個問題</h2>
+<p>很多人用手機熱點，從來不會碰到這種 zombie 狀態，但裝了 USB dongle 的 Linux 卻要自己想辦法。差別在架構。</p>
+<p>手機的基頻晶片和 Android/iOS 的電話堆疊（RIL，Radio Interface Layer）是緊密整合的。Bearer 一斷，電話堆疊馬上感知，自動重撥，整個恢復過程在手機內部完成。對外呈現的 WiFi hotspot 從來沒有真的斷掉，連接的設備感知不到任何異常。</p>
+<p>IK512 是裸 modem 透過 MBIM 暴露給 Linux，modem 和 ModemManager 之間的整合完整性完全取決於 firmware 實作。firmware 沒做的部分，就必須由 host 端自己補。</p>
+<h2>類比：HiNet PPPoE 的強制斷線</h2>
+<p>電信商 CGNAT session 週期性中斷、重建、換 IP，這件事本身和台灣的 HiNet PPPoE 三天強制斷線換 IP 是同一個概念——都是電信商在 session 層面主動管理連線生命週期，host 端只能被動應對。</p>
+<p>差別在於感知難度不同。PPPoE 斷線時 interface 狀態是真的掉的，OS 能感知到，重撥機制也跑得起來。IK512 的 CGNAT session 斷掉時，bearer 死了但 interface 仍然活著，感知難度高得多，才需要用 ping 主動探測。</p>
+<h2>那到底要不要換？</h2>
+<p>把問題追清楚之後，退貨的動機反而弱了。</p>
+<p>台灣市場買得到的消費級 5G USB dongle，firmware 品質普遍在同一個等級，換同類型的產品不會解決 zombie bearer 問題，只是換一個一樣的坑。降到 4G 也一樣——zombie bearer 是 consumer-grade firmware 通病，跟 4G/5G 無關。</p>
+<p>要根本解決，需要的是工業級模組，代表的是三四倍的成本加上自組 USB adapter board 的麻煩，對一個 homelab 備援線路而言不划算。</p>
+<p>GPS 不實廣告的退貨機會還在。但為了 firmware 品質去退、換同類型消費品，不值得。</p>
+<p>IK512 硬體沒壞，watchdog v2.5 已經把盲區補起來，系統穩定。最後的結論是：不換。</p>
+<hr>
+<p>相關文章：<a href="/blog/proxmox-failover-watchdog-v2">一條壞掉的路由，讓我重寫了整個 Failover Watchdog</a>　<a href="/blog/tcl-ik512-gps-false-advertising">TCL LINKKEY IK512 的 GPS 不實廣告：從技術驗證到代理商回應</a></p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

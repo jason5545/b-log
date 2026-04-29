@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>拆解一封冒用 DHL 的釣魚信：從寄件者到發信平台 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="收到一封看似來自 noreply@dhl.com 的通知信，從連結、發信機制到 SendGrid 濫用，完整拆解這封釣魚信的手法。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/dhl-phishing-email-analysis/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/dhl-phishing-email-analysis/" id="og-url">
@@ -31,7 +31,7 @@
   <meta property="article:tag" content="SMTP">
   <meta property="article:tag" content="SendGrid">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/dhl-phishing-email-analysis/" id="twitter-url">
@@ -39,7 +39,7 @@
   <meta property="twitter:description" content="收到一封看似來自 noreply@dhl.com 的通知信，從連結、發信機制到 SendGrid 濫用，完整拆解這封釣魚信的手法。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%8B%86%E8%A7%A3%E4%B8%80%E5%B0%81%E5%86%92%E7%94%A8%20DHL%20%E7%9A%84%E9%87%A3%E9%AD%9A%E4%BF%A1%EF%BC%9A%E5%BE%9E%E5%AF%84%E4%BB%B6%E8%80%85%E5%88%B0%E7%99%BC%E4%BF%A1%E5%B9%B3%E5%8F%B0,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="資安, 釣魚信, 電子郵件, SMTP, SendGrid" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -109,6 +109,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"拆解一封冒用 DHL 的釣魚信：從寄件者到發信平台","description":"收到一封看似來自 noreply@dhl.com 的通知信，從連結、發信機制到 SendGrid 濫用，完整拆解這封釣魚信的手法。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-03-30T00:00:00Z","dateModified":"2026-03-30T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/dhl-phishing-email-analysis/"},"url":"https://b-log.to/tech-analysis/dhl-phishing-email-analysis/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%8B%86%E8%A7%A3%E4%B8%80%E5%B0%81%E5%86%92%E7%94%A8%20DHL%20%E7%9A%84%E9%87%A3%E9%AD%9A%E4%BF%A1%EF%BC%9A%E5%BE%9E%E5%AF%84%E4%BB%B6%E8%80%85%E5%88%B0%E7%99%BC%E4%BF%A1%E5%B9%B3%E5%8F%B0,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"資安, 釣魚信, 電子郵件, SMTP, SendGrid","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -118,7 +119,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">拆解一封冒用 DHL 的釣魚信：從寄件者到發信平台</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -187,12 +188,102 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">拆解一封冒用 DHL 的釣魚信：從寄件者到發信平台</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Mar 30, 2026</span><span>3 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>資安</span><span>釣魚信</span><span>電子郵件</span><span>SMTP</span><span>SendGrid</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>事件起因</h2>
+<p>收到一封看起來來自 <code>noreply@dhl.com</code> 的 DHL 包裹通知信。寄件者地址完全正確，不是那種一眼就能識破的 <code>dhl.xyz</code> 或 <code>dh1.com</code>。公司的 ShareTech 郵件閘道把它判定為垃圾信攔截了下來，但我想搞清楚它到底是怎麼做到冒用正版網域的。</p>
+<h2>第一個破綻：連結指向俄羅斯伺服器</h2>
+<p>翻開信件原始碼，所有連結都指向同一個地址：</p>
+<pre><code>http://srv222256.hoster-test.ru/we/login.htm#sarah@sarahselections.com
+</code></pre>
+<p>幾個明顯的問題：</p>
+<ul>
+<li><strong>網域是 <code>.ru</code></strong>：<code>hoster-test.ru</code>，一台俄羅斯的測試伺服器，跟 DHL 毫無關係</li>
+<li><strong>HTTP 而非 HTTPS</strong>：正規企業不會用未加密的連結</li>
+<li><strong>FAQ 和 Help Centre 按鈕指向同一個網址</strong>：正常網站不會這樣設計</li>
+<li><strong>網址尾端附帶 email 地址</strong>：<code>#sarah@sarahselections.com</code> 是用來追蹤哪個受害者點了連結</li>
+</ul>
+<h2>核心問題：為什麼能冒用 dhl.com？</h2>
+<p>電子郵件協定 SMTP 設計於 1980 年代，天生不驗證寄件者身份。就像寄實體信時，你可以在信封上寫任何人的回郵地址一樣。</p>
+<p>SMTP 有兩層寄件者：</p>
+<ul>
+<li><strong>Envelope From</strong>（信封層）：實際發信伺服器的地址</li>
+<li><strong>Header From</strong>（顯示層）：收件者在信箱裡看到的「來自誰」</li>
+</ul>
+<p>攻擊者只要在 Header From 填上 <code>noreply@dhl.com</code>，信箱就會顯示這封信來自 DHL。</p>
+<h3>現代的三道防線</h3>
+<table>
+<thead>
+<tr>
+<th>機制</th>
+<th>功能</th>
+<th>為什麼沒擋住</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SPF</strong></td>
+<td>檢查發信伺服器 IP 是否被網域授權</td>
+<td>只驗證 Envelope From，不管 Header From</td>
+</tr>
+<tr>
+<td><strong>DKIM</strong></td>
+<td>用數位簽章驗證信件完整性</td>
+<td>偽造者可以不簽，部分收件伺服器不會因此拒收</td>
+</tr>
+<tr>
+<td><strong>DMARC</strong></td>
+<td>結合 SPF + DKIM，指示如何處理驗證失敗的信</td>
+<td>很多伺服器選擇隔離而非直接丟棄</td>
+</tr>
+</tbody></table>
+<h2>發信管道：SendGrid</h2>
+<p>查看郵件標頭，發現信件實際上是透過 <code>cdn.mc-auto.sendgrid.net</code> 發出的。</p>
+<p>SendGrid 是 Twilio 旗下的正規大量郵件發送平台，很多企業拿來發行銷信和通知信。攻擊者利用它的原因很明確：</p>
+<ul>
+<li>從 SendGrid 發出的信，SPF/DKIM <strong>驗證會通過</strong>（信確實是從 SendGrid 的授權伺服器發的）</li>
+<li>很多郵件伺服器信任 SendGrid 的 IP 信譽，不容易被擋</li>
+</ul>
+<p>這讓整封信在技術驗證上更難被攔截。</p>
+<h2>ShareTech 攔截後的黑名單問題</h2>
+<p>ShareTech 郵件閘道成功把這封信攔到隔離區，系統提供了「加入黑名單」的選項。但我選擇不加，原因是：</p>
+<p><strong>黑名單是基於寄件者地址比對的。</strong> 封鎖 <code>noreply@dhl.com</code> 意味著以後真正的 DHL 通知也會被擋。而攻擊者下次只要換成 <code>shipping@dhl.com</code> 就能繞過黑名單。</p>
+<p>這不是 ShareTech 的設計缺陷，而是黑名單機制本來就不適合對付寄件者偽造。真正該處理偽造的是伺服器層級的 SPF/DKIM/DMARC 驗證，不是使用者端的黑名單。</p>
+<h2>我做了什麼</h2>
+<p>把原始郵件（含完整標頭）轉寄到 <code>abuse@sendgrid.com</code> 進行檢舉。SendGrid 會調查並停用該帳號。雖然攻擊者可以重新註冊，但至少增加了他們的成本，而且 SendGrid 對重複違規者的驗證會越來越嚴格。</p>
+<h2>判斷釣魚信的檢查清單</h2>
+<table>
+<thead>
+<tr>
+<th>檢查項目</th>
+<th>怎麼做</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>連結指向</td>
+<td>懸停看實際網址，是否指向官方網域</td>
+</tr>
+<tr>
+<td>郵件標頭</td>
+<td>查看 SPF/DKIM/DMARC 驗證結果</td>
+</tr>
+<tr>
+<td>內容語氣</td>
+<td>催促「立即行動」、要求輸入個資或付款 → 高度可疑</td>
+</tr>
+<tr>
+<td>是否預期</td>
+<td>你最近有沒有透過該服務寄送或收取東西</td>
+</tr>
+<tr>
+<td>多個連結指向同一網址</td>
+<td>正常網站的 FAQ 和 Help 不會是同一個頁面</td>
+</tr>
+</tbody></table>
+<p>寄件者地址正確不代表信件是真的。這是最重要的一點。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

@@ -6,8 +6,8 @@ Content-Signal: ai-train=no, search=yes, ai-input=yes
 # 主要内容页面
 Allow: /*/
 
-# 排除查询参数版本的文章页面（使用新的目录结构）
-Disallow: /post.html?*
+# 排除舊文章入口（使用新的目录结构）
+Disallow: /post.html
 Disallow: /*?search=*
 
 # Sitemap

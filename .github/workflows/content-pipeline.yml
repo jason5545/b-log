@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'index.html'
+      - 'content/posts/**'
       - 'data/posts.json'
       - 'config/categories.json'
       - 'assets/main.js'
@@ -28,6 +29,7 @@ on:
       - main
     paths:
       - 'index.html'
+      - 'content/posts/**'
       - 'data/posts.json'
       - 'config/categories.json'
       - 'assets/main.js'

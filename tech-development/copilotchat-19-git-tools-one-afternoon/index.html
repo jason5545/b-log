@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>一個 libgit2 的 out 參數，燒了我四輪 deploy - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="CopilotChat 補上 19 個 git 工具，26/28 測試通過。唯一卡住的是 branch_create——`git_branch_create(nil, ...)` 看起來完全合理，但 libgit2 的 out 參數不能傳 NULL。四輪 deploy、三個錯誤假設，才找到這個文件沒寫的限制。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/copilotchat-19-git-tools-one-afternoon/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/copilotchat-19-git-tools-one-afternoon/" id="og-url">
@@ -34,7 +34,7 @@
   <meta property="article:tag" content="git">
   <meta property="article:tag" content="debug">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/copilotchat-19-git-tools-one-afternoon/" id="twitter-url">
@@ -42,7 +42,7 @@
   <meta property="twitter:description" content="CopilotChat 補上 19 個 git 工具，26/28 測試通過。唯一卡住的是 branch_create——`git_branch_create(nil, ...)` 看起來完全合理，但 libgit2 的 out 參數不能傳 NULL。四輪 deploy、三個錯誤假設，才找到這個文件沒寫的限制。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E5%80%8B%20libgit2%20%E7%9A%84%20out%20%E5%8F%83%E6%95%B8%EF%BC%8C%E7%87%92%E4%BA%86%E6%88%91%E5%9B%9B%E8%BC%AA%20deploy,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="CopilotChat, libgit2, GitHub, MCP, iOS, Swift, git, debug" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -112,6 +112,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"一個 libgit2 的 out 參數，燒了我四輪 deploy","description":"CopilotChat 補上 19 個 git 工具，26/28 測試通過。唯一卡住的是 branch_create——`git_branch_create(nil, ...)` 看起來完全合理，但 libgit2 的 out 參數不能傳 NULL。四輪 deploy、三個錯誤假設，才找到這個文件沒寫的限制。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-04-13T00:00:00Z","dateModified":"2026-04-13T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/copilotchat-19-git-tools-one-afternoon/"},"url":"https://b-log.to/tech-development/copilotchat-19-git-tools-one-afternoon/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E5%80%8B%20libgit2%20%E7%9A%84%20out%20%E5%8F%83%E6%95%B8%EF%BC%8C%E7%87%92%E4%BA%86%E6%88%91%E5%9B%9B%E8%BC%AA%20deploy,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"CopilotChat, libgit2, GitHub, MCP, iOS, Swift, git, debug","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -121,7 +122,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">一個 libgit2 的 out 參數，燒了我四輪 deploy</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -190,12 +191,67 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">一個 libgit2 的 out 參數，燒了我四輪 deploy</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Apr 13, 2026</span><span>6 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>CopilotChat</span><span>libgit2</span><span>GitHub</span><span>MCP</span><span>iOS</span><span>Swift</span><span>git</span><span>debug</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>今天下午我讓 AI 幫 CopilotChat 補了 19 個 git 工具。stash、merge、cherry-pick、revert、blame、reflog、tag、remote——一次全上，build 一次過，1,404 行新增。</p>
+<p>測試跑完，26/28 通過。剩下兩個小問題，config 那個改個 API 就修了。但 branch_create 卡了我很久。</p>
+<p>這篇文章只講這個 bug。</p>
+<h2>第一輪：error -1</h2>
+<p><code>github_branch_create</code> 回傳 <code>error -1</code>。</p>
+<p>我翻了程式碼，看到 <code>headRef as? Branch</code>。<code>HEAD()</code> 回傳的是 <code>ReferenceType</code> protocol，不保證是 <code>Branch</code> struct。如果轉型失敗，整個 branch creation 的 code path 根本不會執行。</p>
+<p>合理懷疑。我把整段重寫成用 <code>git_revparse_single(&quot;HEAD&quot;)</code> 直接解析 HEAD 到 commit object，繞過型別轉換。Deploy。</p>
+<h2>第二輪：還是 error -1</h2>
+<p>一樣的錯誤碼。</p>
+<p>我開始懷疑是不是手機上的 binary 沒有更新。跑去查 build timestamp 和 install timestamp，完全吻合——08:40 build，08:40 install。 deploy 沒問題，bug 是真的。</p>
+<h2>第三輪：加 diagnostic</h2>
+<p>我意識到 <code>error -1</code> 什麼都沒告訴我。libgit2 有 <code>git_error_last()</code> 可以拿到最後的錯誤訊息，但我從來沒想過要用——因為其他 27 個工具都不需要。</p>
+<p>加了一行：</p>
+<pre><code class="language-swift">let errPtr = git_error_last()
+let errMsg = errPtr != nil ? String(validatingUTF8: errPtr!.pointee.message) ?? &quot;unknown&quot; : &quot;unknown&quot;
+</code></pre>
+<p>Deploy。</p>
+<h2>第四輪：真相大白</h2>
+<p>錯誤訊息終於有意義了：</p>
+<blockquote>
+<p><code>Branch create failed (error -1): invalid argument: &#39;ref_out&#39;</code></p>
+</blockquote>
+<p><code>ref_out</code>。就是 <code>git_branch_create</code> 的第一個參數。</p>
+<p>libgit2 的 API 長這樣：</p>
+<pre><code class="language-c">int git_branch_create(
+    git_reference **out,    // &lt;-- 這個
+    git_repository *repo,
+    const char *branch_name,
+    const git_commit *target,
+    int force);
+</code></pre>
+<p>我的程式碼是這樣寫的：</p>
+<pre><code class="language-swift">git_branch_create(nil, repo.pointer, namePtr, commitObj, 0)
+</code></pre>
+<p><code>nil</code>。因為我不需要拿到新建的 reference，我後面會用 <code>repo.localBranch(named:)</code> 重新查。所以第一個參數傳 NULL，很合理吧？</p>
+<p>不合理。libgit2 的實作會直接對 <code>out</code> 寫入，不檢查 NULL。你傳 NULL，它就 segfault 或回傳 -1。而且這件事<strong>文件沒有明確寫</strong>——header 裡只說 <code>Pointer where to store the underlying reference</code>，沒有說「不能傳 NULL」。</p>
+<p>修正很簡單：</p>
+<pre><code class="language-swift">var refOut: OpaquePointer?
+git_branch_create(&amp;refOut, repo.pointer, namePtr, commitObj, 0)
+// 用完釋放
+git_reference_free(refOut)
+</code></pre>
+<p>就這樣。一個指標，四輪 deploy。</p>
+<h2>事後檢討</h2>
+<p>這個 bug 的每一層都讓人以為找到了答案：</p>
+<ol>
+<li><strong><code>as? Branch</code> 失敗</strong> → 以為是型別轉換的問題 → 改了之後還是錯</li>
+<li><strong><code>error -1</code></strong> → 以為是 HEAD 解析失敗 → 但 <code>git_revparse_single</code> 回傳了成功</li>
+<li><strong>質疑 deploy</strong> → 檢查 timestamp，確認 binary 是新的</li>
+<li><strong>加 diagnostic</strong> → 終於看到真正的錯誤訊息</li>
+</ol>
+<p>最根本的教訓是：<strong>在 C API 的世界裡，永遠不要假設一個 <code>out</code> 參數可以傳 NULL，除非文件明確說可以。</strong> Swift 的 <code>nil</code> 對應到 C 的 <code>NULL</code>，看起來很自然，但 C 函式庫不會像 Swift 那樣幫你做 optional checking。</p>
+<p>另外一個學到的事：debug 的第一步應該是拿到錯誤訊息，不是猜。我前三輪都在猜，第四輪才加了 <code>git_error_last()</code>，然後一分鐘就修好了。</p>
+<hr>
+<p><em>CopilotChat 是開源的，<a href="https://github.com/jason5545/CopilotChat">GitHub</a>，MIT 授權。這個 bug 的修復在 commit <code>90a4edbbc</code>。</em></p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

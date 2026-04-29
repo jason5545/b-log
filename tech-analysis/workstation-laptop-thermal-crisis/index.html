@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>三大廠工作站筆電的散熱危機：Dell、HP、Lenovo 都在騙你 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="Dell Precision 的 VRM 沒散熱片、HP ZBook 用 DPTF 強制節流、ThinkPad 韌體鎖功耗——技術手段不同，結果都一樣：付了 i9 的錢，只能當 i7 用。深入分析三大工作站筆電廠商的散熱設計問題，以及為什麼 100°C 不是故障，而是「設計如此」。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/workstation-laptop-thermal-crisis/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/workstation-laptop-thermal-crisis/" id="og-url">
@@ -34,7 +34,7 @@
   <meta property="article:tag" content="工作站">
   <meta property="article:tag" content="硬體分析">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/workstation-laptop-thermal-crisis/" id="twitter-url">
@@ -42,7 +42,7 @@
   <meta property="twitter:description" content="Dell Precision 的 VRM 沒散熱片、HP ZBook 用 DPTF 強制節流、ThinkPad 韌體鎖功耗——技術手段不同，結果都一樣：付了 i9 的錢，只能當 i7 用。深入分析三大工作站筆電廠商的散熱設計問題，以及為什麼 100°C 不是故障，而是「設計如此」。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2025/workstation-thermal-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Dell, HP, Lenovo, ThinkPad, 散熱, 筆電, 工作站, 硬體分析" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -113,6 +113,7 @@
   <link rel="preload" as="image" href="/content/img/2025/workstation-thermal-cover.webp" imagesrcset="/content/img/2025/workstation-thermal-cover-480w.webp 480w, /content/img/2025/workstation-thermal-cover-828w.webp 828w, /content/img/2025/workstation-thermal-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"三大廠工作站筆電的散熱危機：Dell、HP、Lenovo 都在騙你","description":"Dell Precision 的 VRM 沒散熱片、HP ZBook 用 DPTF 強制節流、ThinkPad 韌體鎖功耗——技術手段不同，結果都一樣：付了 i9 的錢，只能當 i7 用。深入分析三大工作站筆電廠商的散熱設計問題，以及為什麼 100°C 不是故障，而是「設計如此」。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-03T00:00:00Z","dateModified":"2025-12-03T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/workstation-laptop-thermal-crisis/"},"url":"https://b-log.to/tech-analysis/workstation-laptop-thermal-crisis/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2025/workstation-thermal-cover.webp"],"keywords":"Dell, HP, Lenovo, ThinkPad, 散熱, 筆電, 工作站, 硬體分析","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -122,7 +123,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">三大廠工作站筆電的散熱危機：Dell、HP、Lenovo 都在騙你</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -191,12 +192,162 @@
         <article class="article">
           <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2025/workstation-thermal-cover.webp" srcset="/content/img/2025/workstation-thermal-cover-480w.webp 480w, /content/img/2025/workstation-thermal-cover-828w.webp 828w, /content/img/2025/workstation-thermal-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">三大廠工作站筆電的散熱危機：Dell、HP、Lenovo 都在騙你</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Dec 3, 2025</span><span>12 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Dell</span><span>HP</span><span>Lenovo</span><span>ThinkPad</span><span>散熱</span><span>筆電</span><span>工作站</span><span>硬體分析</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><blockquote>
+<p><strong>時間背景</strong>：本文記錄的是 2022 年 Intel 第 11 代 CPU（Tiger Lake-H）時期的狀況。</p>
+</blockquote>
+<p>2022 年我買了一台 Dell Precision 做測試，兩天就退貨了。後來換了 ThinkPad P15 Gen 2 頂規（i9-11950H + RTX A5000 + 4K OLED），想說 ThinkPad 工作站應該不會有散熱問題。</p>
+<p>結果，CPU 一樣跑到 100°C，降頻到 2.6GHz。</p>
+<p>研究了一圈才發現：這不是個案，而是當時整個產業的問題。Dell、HP、Lenovo 三大工作站筆電廠商，技術手段不同，結果都一樣——付了頂規的錢，拿不到頂規的效能。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Dell Precision</th>
+<th>HP ZBook Fury G8</th>
+<th>ThinkPad P15 Gen 2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU 溫度</td>
+<td>100°C</td>
+<td>93-98°C</td>
+<td>100°C</td>
+</tr>
+<tr>
+<td>降頻幅度</td>
+<td>降到 0.8GHz</td>
+<td>降到 2.0GHz</td>
+<td>4.1→2.6GHz</td>
+</tr>
+<tr>
+<td>問題根源</td>
+<td>VRM 無散熱片</td>
+<td>DPTF 強制節流</td>
+<td>韌體鎖功耗</td>
+</tr>
+<tr>
+<td>官方態度</td>
+<td>BIOS 更新緩解</td>
+<td>建議重裝系統</td>
+<td>沉默</td>
+</tr>
+</tbody></table>
+<h2>Dell：硬體設計遺漏</h2>
+<p>Dell 的問題最明顯，也最荒謬。</p>
+<p>官方技術支援文件（KB000188343）明確承認 Precision 7550/7750 會出現「CPU 降頻至 1GHz 或更低」，建議升級 BIOS——但這只是緩解，不是根治。</p>
+<p>問題根源在於：主機板上的 VRM MOSFETs 和電容<strong>完全沒有散熱片覆蓋</strong>。這些黑色小晶片負責 CPU 供電，發熱量不小，但 Dell 的散熱模組完全跳過了它們。</p>
+<p>有人用 FLIR 熱像儀實測 XPS 9560（與 Precision 共用設計），發現：</p>
+<ul>
+<li>CPU 和 GPU 溫度約 65°C，看起來正常</li>
+<li>但 VRM MOSFETs 達到 <strong>115°C</strong></li>
+<li>系統偵測到的「Ambient Sensor」其實就是 VRM 溫度</li>
+<li>一旦超過 78°C 就開始降頻，最低可降到 0.8GHz</li>
+</ul>
+<p>受影響的機型橫跨多個世代：XPS 15 9560/9570、Precision 5510/5520/5530、Precision 7550/7750。使用者社群發展出各種改裝方案：堆疊 Arctic 導熱墊（約 5mm 厚度）連接到鋁製底蓋，或是更激進的 iunlock 銅板改裝。</p>
+<p>諷刺的是，即使到了 2022 年的 Precision 7670（第 12 代 CPU），使用者仍然回報「奇怪的節流行為」和「相當普通的效能」。Dell 似乎從未真正解決這個問題。</p>
+<h2>HP：DPTF 強制節流</h2>
+<p>HP ZBook Fury G8（同樣搭載 i9-11950H）的使用者回報更誇張：</p>
+<ul>
+<li>待機溫度就高達 <strong>93°C</strong>（室溫 22°C）</li>
+<li>播放 1080p YouTube 影片時飆到 <strong>98°C</strong> 並觸發降頻</li>
+<li>每天當機 2-3 次，HP 維修部門的建議是「重新安裝作業系統」</li>
+</ul>
+<p>HP 的問題來自 Intel Dynamic Tuning Platform Framework (DPTF)——這個驅動程式會在 CPU 超過功率限制後強制降頻，<strong>不管實際溫度如何</strong>。ZBook G6 使用者回報 PL1 被限制在 25W，導致 i9 基本上只能跑 2.0GHz。</p>
+<p>這個限制是 BIOS/EC 層級鎖定的，ThrottleStop 或 Intel XTU 都繞不過。</p>
+<p>NotebookCheck 的對比測試顯示：ZBook Fury 16 G9 在 CineBench R15 循環測試中，第 7-8 輪效能下降約 20%。</p>
+<h2>Lenovo：韌體鎖功耗</h2>
+<p>ThinkPad 的問題相對「優雅」——散熱系統本身是完整的，但 Lenovo 用韌體把功耗鎖死：</p>
+<ul>
+<li>PL1=66W、PL2=109W</li>
+<li>RTX A5000 也被限制在 100W（原本可以 140-165W）</li>
+<li>使用者改不了這些設定</li>
+</ul>
+<p>Dell 被罵翻，因為硬體偷工減料太明顯。ThinkPad 用韌體鎖功耗，看起來「比較專業」，媒體也傾向解讀為「保守的設計取捨」。</p>
+<p>但站在消費者角度：我付了 i9 的錢，實際上只能當 i7 用，這跟 Dell 使用者的處境有什麼不同？</p>
+<h2>為什麼選 i9 根本不值得？</h2>
+<p>如果功耗牆是固定的 66W，那：</p>
+<ul>
+<li>i9 被壓到 66W → 實際效能接近 i7</li>
+<li>i7 被壓到 66W → 降幅反而沒那麼大</li>
+</ul>
+<p>i9 的優勢只剩下：</p>
+<ul>
+<li>短時間 Burst（大概 10-30 秒）</li>
+<li>單核負載（不會撞功耗牆）</li>
+<li>矽品質稍好</li>
+</ul>
+<p>90% 的使用情境，i9 和 i7 的差距被功耗牆抹平了。</p>
+<h2>換散熱膏有用嗎？</h2>
+<p>研究過社群的回報，答案是：看品牌。</p>
+<p><strong>Dell</strong>：補上導熱墊就解決，因為問題是「缺零件」。</p>
+<p><strong>ThinkPad / HP</strong>：溫度還是會到 100°C，頻率穩定度可能略有改善，但韌體限制改變不了。</p>
+<p>真正有效的是 Linux 下降壓（-150mV），ThinkPad 可以從 2.7GHz 提升到 3.4-4.0GHz。但 Windows 下 Lenovo 鎖得比較死。</p>
+<h2>為什麼這些品牌沒被罵翻？</h2>
+<ol>
+<li><strong>使用者群體不同</strong>：工作站筆電多是企業採購，個人使用者聲量小</li>
+<li><strong>品牌光環</strong>：ThinkPad 有「企業級」「穩定可靠」的形象，同樣的問題更容易被解讀為「保守設計」</li>
+<li><strong>問題包裝方式</strong>：Dell 是硬體偷工減料，Lenovo 是「智慧散熱」，HP 是「平台電源管理」</li>
+</ol>
+<p>但更深層的原因是<strong>市場結構造成的回饋機制失靈</strong>：</p>
+<ul>
+<li>遊戲筆電：買單的人 = 用的人 → 散熱差會立刻被罵翻 → 廠商有壓力改善</li>
+<li>工作站筆電：採購者（IT 部門）≠ 使用者（工程師）→ 採購者看認證和合約，不在乎跑分 → 使用者抱怨被內部消化 → 廠商沒有壓力</li>
+</ul>
+<p>這解釋了一個弔詭的現象：ThinkPad P15 和 ROG Strix Scar 17 的厚度重量差不多（都是約 2.7kg、30mm），但散熱表現差很遠。不是技術做不到，是市場結構讓廠商敢用韌體鎖功耗、省 VRM 散熱片。</p>
+<p>本質上都一樣：<strong>在散熱能力不足以發揮處理器全部效能的機箱裡，用軟體/韌體限制來「解決」問題。</strong></p>
+<h2>那我後悔買 ThinkPad 嗎？</h2>
+<p>說實話，沒有。</p>
+<p>原因不是散熱問題可以接受，而是這台有其他優點：</p>
+<ul>
+<li>4K OLED 螢幕是真的漂亮，這才是讓我掏錢的主因</li>
+<li>128GB RAM + 2.5TB SSD 的擴充性</li>
+<li>ThinkPad 的鍵盤和 TrackPoint</li>
+<li>有 ADP 保固，出問題原廠處理</li>
+</ul>
+<p>但如果我當初知道 i9 會被壓成 i7 效能，可能會選 i7 配置省點錢。</p>
+<hr>
+<p>100°C 不是「故障」，是「設計如此」。</p>
+<p>廠商把高 TDP 處理器塞進散熱能力不足的機箱，然後用各種手段來避免過熱：Dell 忘了裝散熱片、HP 用 DPTF 強制節流、Lenovo 鎖功耗牆。行銷上寫著 i9-11950H，實際上跑起來像 i7。</p>
+<p>那工作站筆電還有什麼意義？</p>
+<p>如果純粹追求最高效能，工作站筆電確實不是最佳選擇——桌機散熱空間大、遊戲筆電散熱設計更激進。但工作站的價值不只是 CPU 跑分：ISV 認證（AutoCAD、SolidWorks、DaVinci Resolve 等專業軟體的官方支援）、專業繪圖卡（針對 OpenGL 優化的驅動、10-bit 色深輸出）、擴充性（4 個 RAM 插槽最高 128GB、多個 M.2 插槽）、企業級服務（現場維修、ADP 意外損壞保護、長期零件供應）。</p>
+<p>工作站筆電的真正定位是「平衡點」——在專業認證、企業服務、擴充性、可攜性之間取得妥協。不要期待它同時滿足「最強效能 + 專業認證 + 可攜性」；如果優先順序是極致效能，桌機或遊戲筆電可能更適合。</p>
+<p>那新一代 CPU 有改善嗎？</p>
+<p>查了一下，12-14 代的答案是：沒有想像中樂觀。Intel 第 12-14 代雖然能效比有改善（相同功耗下效能提升約 28-35%），但絕對功耗反而更高——12900HX 峰值可達 157W，比第 11 代的 45W 高出不少。NotebookCheck 對 ThinkPad P16 Gen 2 的評測仍然報告「表面溫度過高」、「GPU 節流 10%」、「噪音過大」。散熱問題並沒有因為換代而消失。</p>
+<p>不過 Core Ultra 200 系列（Arrow Lake）終於有比較實質的改進：</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>前代 14900HX</th>
+<th>Ultra 9 285HX</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>效率</td>
+<td>基準</td>
+<td>+40%</td>
+</tr>
+<tr>
+<td>多執行緒效能</td>
+<td>基準</td>
+<td>+41%</td>
+</tr>
+<tr>
+<td>峰值功耗</td>
+<td>157W</td>
+<td>160W</td>
+</tr>
+</tbody></table>
+<p>關鍵改進是移除超執行緒——少一半的執行緒，但大幅降低發熱。P-cores 和 E-cores 也改成分散排列，不再密集堆積，有助於散熱。高階工作站（如 ThinkPad P16 Gen 3）開始標配液金散熱和蒸氣腔。</p>
+<p>這次改進比 12→14 代之間的升級更有意義。但 160W 峰值功耗仍然很高，散熱好不好還是取決於 OEM 怎麼執行。薄型化機型仍需謹慎評估。</p>
+<p>這是筆電產業的結構性問題，不會因為 CPU 換代就自動解決——但 Core Ultra 200 系列至少在架構上做出了正確的取捨。</p>
+<p>至於我那台 ThinkPad P15 Gen 2？還在服役中。畢竟那塊 4K OLED 螢幕是真的香。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>我對 Typeless v1.0.0 進行了完整逆向分析——身為重度語音輸入使用者，這是我的發現 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="身為付費訂閱的重度語音輸入使用者，我對 Typeless v1.0.0 進行了完整逆向分析。發現螢幕文字擷取、瀏覽器 URL 追蹤、全域鍵盤監控、100% 雲端處理等問題。一個語音輸入工具，不該需要知道你螢幕上的一切。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/typeless-privacy-audit/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/typeless-privacy-audit/" id="og-url">
@@ -33,7 +33,7 @@
   <meta property="article:tag" content="macOS">
   <meta property="article:tag" content="資安">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/typeless-privacy-audit/" id="twitter-url">
@@ -41,7 +41,7 @@
   <meta property="twitter:description" content="身為付費訂閱的重度語音輸入使用者，我對 Typeless v1.0.0 進行了完整逆向分析。發現螢幕文字擷取、瀏覽器 URL 追蹤、全域鍵盤監控、100% 雲端處理等問題。一個語音輸入工具，不該需要知道你螢幕上的一切。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E5%B0%8D%20Typeless%20v1.0.0%20%E9%80%B2%E8%A1%8C%E4%BA%86%E5%AE%8C%E6%95%B4%E9%80%86%E5%90%91%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E8%BA%AB%E7%82%BA%E9%87%8D%E5%BA%A6%E8%AA%9E%E9%9F%B3%E8%BC%B8%E5%85%A5%E4%BD%BF%E7%94%A8%E8%80%85%EF%BC%8C%E9%80%99%E6%98%AF%E6%88%91%E7%9A%84%E7%99%BC%E7%8F%BE,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Typeless, 隱私, 逆向工程, 語音輸入, Electron, macOS, 資安" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -111,6 +111,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我對 Typeless v1.0.0 進行了完整逆向分析——身為重度語音輸入使用者，這是我的發現","description":"身為付費訂閱的重度語音輸入使用者，我對 Typeless v1.0.0 進行了完整逆向分析。發現螢幕文字擷取、瀏覽器 URL 追蹤、全域鍵盤監控、100% 雲端處理等問題。一個語音輸入工具，不該需要知道你螢幕上的一切。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-02-13T00:00:00Z","dateModified":"2026-02-13T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/typeless-privacy-audit/"},"url":"https://b-log.to/tech-analysis/typeless-privacy-audit/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E5%B0%8D%20Typeless%20v1.0.0%20%E9%80%B2%E8%A1%8C%E4%BA%86%E5%AE%8C%E6%95%B4%E9%80%86%E5%90%91%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E8%BA%AB%E7%82%BA%E9%87%8D%E5%BA%A6%E8%AA%9E%E9%9F%B3%E8%BC%B8%E5%85%A5%E4%BD%BF%E7%94%A8%E8%80%85%EF%BC%8C%E9%80%99%E6%98%AF%E6%88%91%E7%9A%84%E7%99%BC%E7%8F%BE,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"Typeless, 隱私, 逆向工程, 語音輸入, Electron, macOS, 資安","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -120,7 +121,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我對 Typeless v1.0.0 進行了完整逆向分析——身為重度語音輸入使用者，這是我的發現</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -189,12 +190,426 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">我對 Typeless v1.0.0 進行了完整逆向分析——身為重度語音輸入使用者，這是我的發現</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Feb 13, 2026</span><span>15 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Typeless</span><span>隱私</span><span>逆向工程</span><span>語音輸入</span><span>Electron</span><span>macOS</span><span>資安</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>前言</h2>
+<p>語音輸入是我的主要輸入方式，不是選配。我從今年 1 月開始用 Typeless，付費訂閱了 Pro 年費方案（144 美元）。中英混合的辨識準確率確實接近完美，一度是我的首選工具。</p>
+<p>然後日本工程師 @medmuspg 對 v0.9.3 做了逆向分析，發現嚴重的隱私問題，台灣科技媒體跟進報導。</p>
+<p>我決定對自己 Mac 上的 <strong>v1.0.0（build 79）</strong> 做一次獨立的完整審計。</p>
+<hr>
+<h2>審計環境</h2>
+<ul>
+<li><strong>裝置</strong>：MacBook Pro（Apple Silicon）</li>
+<li><strong>作業系統</strong>：macOS 26.2</li>
+<li><strong>Typeless 版本</strong>：v1.0.0（build 79），2026 年 2 月 10 日安裝</li>
+<li><strong>使用期間</strong>：2026/1/17 至 2026/2/12（審計時間點），累積約 2,100 筆語音輸入記錄</li>
+<li><strong>訂閱方案</strong>：Pro 年費（Stripe 付款）</li>
+<li><strong>審計工具</strong>：Claude Code + SQLite3 + npx asar + strings + otool</li>
+</ul>
+<hr>
+<h2>技術架構概述</h2>
+<p>Typeless 是一個 <strong>Electron 應用程式</strong>（<code>Info.plist</code> 中 <code>NSPrincipalClass</code> 為 <code>AtomApplication</code>，含 <code>ElectronAsarIntegrity</code>）。它的核心架構是：</p>
+<ul>
+<li><strong>前端</strong>：Electron 渲染程序（HTML/JS），包含浮動工具列、主介面、引導頁面</li>
+<li><strong>後端</strong>：Electron 主程序（<code>dist/main/index.js</code>，254KB 壓縮後）</li>
+<li><strong>原生模組</strong>：4 個自行編譯的 macOS 動態函式庫（<code>.dylib</code>），透過 <strong>koffi</strong>（Node.js FFI 函式庫）呼叫</li>
+<li><strong>資料庫</strong>：SQLite（透過 <code>@libsql</code> 和 <code>drizzle</code> ORM），本地檔案 160MB</li>
+<li><strong>錯誤追蹤</strong>：Sentry（100% 錯誤取樣率）</li>
+</ul>
+<p>4 個原生 dylib 分別負責：</p>
+<table>
+<thead>
+<tr>
+<th>模組</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>libContextHelper.dylib</code></td>
+<td>取得聚焦應用資訊、讀取螢幕可見文字、讀取輸入框內容</td>
+</tr>
+<tr>
+<td><code>libInputHelper.dylib</code></td>
+<td>文字插入、刪除、取得選取文字、模擬 Cmd+C</td>
+</tr>
+<tr>
+<td><code>libKeyboardHelper.dylib</code></td>
+<td>全域鍵盤事件監控</td>
+</tr>
+<tr>
+<td><code>libUtilHelper.dylib</code></td>
+<td>音訊裝置管理、靜音控制、權限檢查</td>
+</tr>
+</tbody></table>
+<p>這些 dylib 直接呼叫 macOS 的 Accessibility API 和 Core Graphics API，是整個隱私問題的核心。</p>
+<hr>
+<h2>發現一：螢幕可見文字擷取（風險等級：極高）</h2>
+<h3>技術細節</h3>
+<p><code>libContextHelper.dylib</code> 暴露了以下函式：</p>
+<ul>
+<li><code>getFocusedVisibleText(maxChars, timeout)</code> — 透過 Accessibility API 遞迴讀取目前聚焦視窗的所有可見文字</li>
+<li><code>getFocusedElementRelatedContent(beforeChars, afterChars, timeout)</code> — 讀取輸入框游標前後的文字內容</li>
+</ul>
+<p>程式碼中的呼叫參數：</p>
+<ul>
+<li>可見文字上限：<strong>10,000 字元</strong></li>
+<li>輸入框前後文字：各 <strong>1,000 字元</strong></li>
+</ul>
+<h3>這意味著什麼</h3>
+<p>每次你按下語音輸入的快捷鍵，Typeless 不只錄下你的聲音——它同時會：</p>
+<ol>
+<li>讀取你螢幕上目前視窗最多 10,000 字元的可見文字</li>
+<li>讀取你輸入框游標前後各 1,000 字元的內容</li>
+<li>將這些資料打包成 <code>audio_context</code>，連同錄音一起上傳到伺服器</li>
+</ol>
+<p>Typeless 聲稱這是為了「提高語音辨識準確率」——理解你正在做什麼，讓 AI 更準確地判斷你想輸入的內容。從技術角度，這確實有效。但代價是什麼？</p>
+<p>如果你在寫程式時用語音輸入，你的原始碼被上傳了。
+如果你在讀信時用語音回覆，信件內容被上傳了。
+如果你在查看公司內部系統時用語音輸入筆記，系統畫面上的文字被上傳了。</p>
+<h3>黑白名單機制</h3>
+<p>程式碼中確實有 app 黑白名單機制，控制哪些應用會收集可見文字：</p>
+<p><strong>硬編碼黑名單</strong>（不收集螢幕文字的 app）：</p>
+<ul>
+<li>Sublime Text</li>
+<li>微信（WeChat）</li>
+<li>Microsoft Excel</li>
+<li>WPS Office</li>
+<li>Zed 編輯器</li>
+</ul>
+<p><strong>硬編碼白名單</strong>（特別收集的 app）：</p>
+<ul>
+<li>Slack</li>
+<li>Apple Mail</li>
+<li>Figma</li>
+<li>ChatGPT（OpenAI）</li>
+<li>以及一個 <code>com.todesktop.230313mzl4w4u92</code>（未知應用）</li>
+</ul>
+<p>但關鍵問題是：<strong>這些名單會從伺服器動態更新</strong>（透過 <code>/app/get_blacklist_domain</code> 端點）。也就是說，Typeless 的伺服器可以隨時改變哪些 app 被監控、哪些不被監控。今天不在監控範圍的 app，明天可能就被加進去了，而你完全不會知道。</p>
+<h3>本地資料庫中的痕跡</h3>
+<p>資料庫 schema 中有 <code>ax_text</code> 和 <code>ax_html</code> 兩個欄位，設計用來儲存透過 Accessibility API 擷取的文字和 HTML 內容。在我的 v1.0.0 資料庫中，這兩個欄位全部為空（0 筆有資料）。</p>
+<p>但 <code>audio_context</code> 欄位每筆記錄都有平均約 17KB 的<strong>加密資料</strong>（格式為 Base64 編碼的 IV + 密文，範圍從 1.5KB 到 57KB 不等）。螢幕文字很可能就包含在這個加密的 context 中，只是不再以明文儲存在本地。</p>
+<hr>
+<h2>發現二：完整瀏覽器 URL 追蹤（風險等級：高）</h2>
+<h3>資料庫證據</h3>
+<p>在我的約 2,100 筆記錄中，<strong>76 筆包含完整的瀏覽器 URL</strong>。以下是部分被記錄的 URL（已移除涉及個人帳號的項目）：</p>
+<pre><code>https://adguard.com/zh_tw/adguard-browser-extension/edge/overview.html
+https://docs.google.com/document/d/docs/edit
+https://iterm2.com/
+https://support.apple.com/zh-tw/102589
+https://www.codeweavers.com/crossover/download
+https://www.google.com/search
+https://www.parallels.com/hk/products/desktop/trial/
+https://www.reddit.com/r/macapps/comments/...
+</code></pre>
+<p>上面只是看起來無害的部分。實際上資料庫裡還記錄了更敏感的內容——包括 OAuth 授權頁面的完整 URL、線上客服系統的 API 端點（URL 路徑中可能包含身份識別資訊）、個人信箱的完整路徑，以及社群平台的瀏覽記錄。這些我選擇不在此公開，但它們確實都被 Typeless 記錄在本地資料庫中。</p>
+<h3>資料庫 schema 的欄位設計</h3>
+<p>URL 追蹤不是意外——它是刻意設計的。history 表有 5 個專門的瀏覽器追蹤欄位：</p>
+<pre><code class="language-sql">focused_app_window_title      -- 視窗標題
+focused_app_window_web_title  -- 網頁標題
+focused_app_window_web_domain -- 網域
+focused_app_window_web_url    -- 完整 URL
+focused_app_bundle_id         -- 應用程式 Bundle ID
+</code></pre>
+<p>而且資料庫建了多個複合索引，專門用來按「使用者 + app + 網域」的組合查詢：</p>
+<pre><code class="language-sql">CREATE INDEX idx_history_user_app_name_web_domain_status_created_at
+ON history (user_id, focused_app_name, focused_app_window_web_domain, status, created_at);
+</code></pre>
+<p>這不是偶然的資料收集——這是結構化的使用者行為分析。</p>
+<hr>
+<h2>發現三：全域鍵盤事件監控（風險等級：高）</h2>
+<h3>技術細節</h3>
+<p><code>libKeyboardHelper.dylib</code> 暴露了以下函式：</p>
+<pre><code>startMonitor(callback)       // 開始監控全域鍵盤事件
+stopMonitor()                // 停止監控
+processEvents()              // 處理事件佇列
+updateTargetShortcuts(json)  // 更新監控的快捷鍵
+setWatcherInterval(ms)       // 設定監控間隔（程式碼中設為 5ms）
+</code></pre>
+<p>回調函式接收的資料包含：<code>keyCode</code>、<code>keyName</code>、<code>enKeyName</code>、<code>isKeydown</code>。</p>
+<p>程式碼中的啟動條件：</p>
+<pre><code class="language-javascript">ct.isTrustedAccessibilityClient(!1) &amp;&amp; this.startInputListener()
+</code></pre>
+<p>也就是說，只要 Typeless 有輔助功能權限（它運作所必需的），鍵盤監控就會自動啟動。</p>
+<h3>這是不是 Keylogger？</h3>
+<p>從技術基礎設施來說，它具備完整的鍵盤記錄能力。Typeless 可能只用它來偵測快捷鍵（如 Fn 鍵觸發語音輸入），但底層的 <code>CGEventTap</code> 是系統級的——它能看到所有按鍵事件，不只是 Typeless 的快捷鍵。</p>
+<p>配合定期同步機制：</p>
+<pre><code class="language-javascript">startPeriodicSync() {
+    this.syncIntervalId = setInterval(() =&gt; {
+        this.broadcastKeyboardEvent(this.pendingPressingKeys)
+    }, this.SYNC_INTERVAL)
+}
+</code></pre>
+<p>鍵盤狀態會定期廣播到 Electron 的渲染程序中。即使目前的程式碼可能只篩選特定快捷鍵，這個基礎設施隨時可以擴展為完整的按鍵記錄器，而使用者不會收到任何通知。</p>
+<hr>
+<h2>發現四：完整應用程式使用行為記錄</h2>
+<h3>資料庫統計</h3>
+<p>在 27 天的使用期間（2026/1/17–2026/2/12），Typeless 記錄了我在 <strong>35 個不同應用程式</strong>中的語音輸入行為：</p>
+<table>
+<thead>
+<tr>
+<th>應用程式</th>
+<th>使用次數</th>
+<th>佔比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iTerm2</td>
+<td>499</td>
+<td>23.8%</td>
+</tr>
+<tr>
+<td>Claude</td>
+<td>415</td>
+<td>19.8%</td>
+</tr>
+<tr>
+<td>Helium（瀏覽器）</td>
+<td>333</td>
+<td>15.9%</td>
+</tr>
+<tr>
+<td>Codex</td>
+<td>253</td>
+<td>12.1%</td>
+</tr>
+<tr>
+<td>LINE</td>
+<td>175</td>
+<td>8.3%</td>
+</tr>
+<tr>
+<td>終端機</td>
+<td>149</td>
+<td>7.1%</td>
+</tr>
+<tr>
+<td>Safari</td>
+<td>82</td>
+<td>3.9%</td>
+</tr>
+<tr>
+<td>訊息</td>
+<td>56</td>
+<td>2.7%</td>
+</tr>
+<tr>
+<td>QQ</td>
+<td>34</td>
+<td>1.6%</td>
+</tr>
+<tr>
+<td>VS Code</td>
+<td>24</td>
+<td>1.1%</td>
+</tr>
+<tr>
+<td>其他 25 個 app</td>
+<td>79</td>
+<td>3.8%</td>
+</tr>
+</tbody></table>
+<p>這張表揭示了我完整的數位生活輪廓：</p>
+<ul>
+<li>我大量使用終端機和 AI 工具（iTerm2 + Claude + Codex 佔 55%）→ 軟體工程師</li>
+<li>社交通訊以 LINE 和訊息為主 → 台灣使用者</li>
+<li>有使用 QQ → 可能與中國有聯繫</li>
+<li>使用 Helium 瀏覽器 → 偏好浮動視窗瀏覽</li>
+</ul>
+<p>光是這些 metadata，不需要看任何語音內容，就能建立出相當精確的使用者畫像。</p>
+<hr>
+<h2>發現五：100% 雲端處理，無本地模型</h2>
+<h3>驗證方式</h3>
+<ol>
+<li>搜尋整個 app bundle（186MB 的 app.asar + 原生模組），找不到任何 ASR 模型檔案（.bin、.onnx、whisper 相關檔案）</li>
+<li>所有語音辨識請求都發送到 <code>api.typeless.com</code></li>
+<li>主要有兩種傳輸方式：<ul>
+<li><strong>HTTP POST</strong>：音訊壓縮為 OGG/Opus 後上傳到 <code>/ai/voice_flow</code></li>
+<li><strong>WebSocket</strong>：即時音訊串流到 <code>wss://</code> 端點</li>
+</ul>
+</li>
+</ol>
+<h3>上傳的資料內容</h3>
+<p>每次語音輸入，以下資料會被打包傳送：</p>
+<pre><code>audio_file         → OGG/Opus 壓縮音訊
+audio_context      → JSON，包含：
+  ├── device_environment → OS版本、CPU、記憶體、語系
+  ├── active_application → app名稱、Bundle ID、視窗標題、瀏覽器URL
+  ├── visible_screen_content → 螢幕可見文字（最多 10,000 字元）
+  ├── text_insertion_point → 游標位置、選取文字、輸入框前後文字
+  └── context_metadata → 各項擷取時間戳和延遲
+audio_metadata     → 裝置名稱、音訊參數
+mode               → voice_transcript / voice_command / voice_translation
+</code></pre>
+<hr>
+<h2>發現六：使用者編輯行為追蹤</h2>
+<p>Typeless 不只追蹤你的語音輸入，還追蹤你之後<strong>怎麼修改 AI 的輸出</strong>。</p>
+<p><code>/user/traits</code> API 端點會傳送：</p>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>refined_inserted_text</code></td>
+<td>AI 原始插入的文字</td>
+</tr>
+<tr>
+<td><code>original_input_box</code></td>
+<td>插入時輸入框的狀態</td>
+</tr>
+<tr>
+<td><code>edited_input_box</code></td>
+<td>你修改後的輸入框狀態</td>
+</tr>
+<tr>
+<td><code>active_application</code></td>
+<td>當時使用的應用程式資訊</td>
+</tr>
+</tbody></table>
+<p>這意味著 Typeless 能夠學習到：你在什麼 app 裡、AI 給了你什麼文字、你改成了什麼。這是一個完整的使用者行為回饋迴圈。</p>
+<hr>
+<h2>發現七：加密方式與金鑰管理</h2>
+<h3>加密演算法</h3>
+<p>API 請求簽名和本地資料加密使用了兩套體系：</p>
+<ul>
+<li><strong>SM2/SM3/SM4</strong>：中國國家密碼管理局制定的密碼標準。其中 SM3 被用於每次 API 請求的簽名（<code>sm3_sign</code> 欄位），SM2 和 SM4 的加解密函式也已打包在程式碼中可供呼叫。</li>
+<li><strong>CryptoJS AES + HMAC-SHA1</strong>：用於本地資料加密和簽名流程的第一步。</li>
+</ul>
+<p>SM 系列本身是合法的密碼學標準，安全性沒有問題。但值得注意的是，這些算法主要用於<strong>中國合規場景</strong>（如金融系統、政府系統等需要符合中國國密標準的場合），國際軟體更常使用 SHA-256、AES-256、ECDSA 等標準。一個面向全球市場的語音輸入產品選用中國國密算法，是個不尋常的技術選擇，可能暗示開發團隊或後端基礎設施與中國有所關聯。</p>
+<p>此外，這三個算法的實作是直接內嵌在 JavaScript 原始碼中（不是來自獨立的 npm 套件），意味著這是刻意整合的選擇，而非偶然引入的依賴。</p>
+<h3>金鑰硬編碼</h3>
+<p>加密金鑰直接寫在 JavaScript 原始碼中：</p>
+<pre><code>AES Key: &quot;334bf19f92ebc362170cdceff72f7bddfae94cb8c84eb52a51131aa3&quot;
+HMAC Key: &quot;a55c8ee8615b1469a02e8acd36fd40397fd6e5f1b66b852222cc9fcd&quot;
+</code></pre>
+<p>這些金鑰可以被任何人從 app.asar 中提取。本地加密的 <code>audio_context</code> 和 <code>debug_info</code> 如果使用這些金鑰，那加密形同虛設——任何人拿到你的資料庫檔案都能解密。</p>
+<h3>Sentry 錯誤追蹤</h3>
+<p>Sentry 的設定中，<code>sendDefaultPii</code> 設為 <code>false</code>（聲稱不傳送個人識別資訊），但 <code>sampleRate</code> 設為 <code>1</code>（100% 的錯誤都會上報）。錯誤報告中可能包含使用者環境資訊和部分程式執行上下文。</p>
+<hr>
+<h2>發現八：Info.plist 權限宣告</h2>
+<p>Typeless 在 Info.plist 中宣告了以下權限：</p>
+<table>
+<thead>
+<tr>
+<th>權限</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>麥克風</td>
+<td>&quot;Typeless requires access to your microphone for voice commands.&quot;</td>
+</tr>
+<tr>
+<td>螢幕錄製</td>
+<td>&quot;Typeless requires screen recording permission to capture and share your screen.&quot;</td>
+</tr>
+<tr>
+<td>相機</td>
+<td>&quot;This app needs access to the camera&quot;</td>
+</tr>
+<tr>
+<td>藍牙</td>
+<td>&quot;This app needs access to Bluetooth&quot;</td>
+</tr>
+</tbody></table>
+<p>麥克風權限是核心功能所必需的。但<strong>螢幕錄製</strong>和<strong>相機</strong>權限的用途就值得質疑了。程式碼中確實匯入了 Electron 的 <code>desktopCapturer</code> API，雖然在目前版本中沒有找到直接的截圖呼叫，但宣告了權限就代表隨時可以啟用。</p>
+<p>此外，<code>NSAppTransportSecurity</code> 設定了 <code>NSAllowsArbitraryLoads: true</code>（允許任意網路連線），以及 localhost 的 HTTP 例外——後者用於 Electron 的本地開發伺服器。</p>
+<hr>
+<h2>與 v0.9.3 的比較</h2>
+<p>日本工程師 @medmuspg 分析的是 v0.9.3，我分析的是 v1.0.0。主要差異：</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>v0.9.3（報導）</th>
+<th>v1.0.0（我的分析）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>collectVisibleTexts</code> 函式</td>
+<td>存在，明確命名</td>
+<td>改名為 <code>getFocusedVisibleText</code>，功能相同</td>
+</tr>
+<tr>
+<td><code>CGEventTap</code> 字串</td>
+<td>在二進位檔中可見</td>
+<td>移入原生 dylib，JS 層看不到</td>
+</tr>
+<tr>
+<td><code>ax_text</code> 本地儲存</td>
+<td>明文儲存</td>
+<td>欄位存在但為空，可能改為只在加密的 <code>audio_context</code> 中</td>
+</tr>
+<tr>
+<td>URL 記錄</td>
+<td>有</td>
+<td>有，76 筆確認</td>
+</tr>
+<tr>
+<td>鍵盤監控</td>
+<td>有</td>
+<td>有，透過 <code>libKeyboardHelper.dylib</code></td>
+</tr>
+<tr>
+<td>本地 ASR 模型</td>
+<td>無</td>
+<td>無</td>
+</tr>
+</tbody></table>
+<p><strong>結論</strong>：v1.0.0 並沒有根本性地改善隱私行為。主要改變是把一些敏感操作從 JavaScript 移入原生 dylib（更難被逆向分析），以及可能將螢幕文字從本地明文儲存改為加密儲存。核心的資料收集行為沒有改變。</p>
+<hr>
+<h2>對我個人的影響評估</h2>
+<p>考慮到我的使用情境：</p>
+<ol>
+<li><strong>NDT 檢測報告系統</strong>：我日常開發和維護的是非破壞性檢測報告查詢系統（Next.js 全端應用）。用語音輸入時，螢幕上可能顯示檢測報告數據、客戶資訊、系統內部 API 等公司機密資料。</li>
+<li><strong>程式碼和 API 金鑰</strong>：我在 iTerm2 和 Claude 中的語音輸入佔了 43.5%。終端機畫面上可能包含環境變數、API 金鑰、資料庫連線字串等敏感資訊。</li>
+<li><strong>通訊內容</strong>：LINE 和訊息 app 的使用佔 11%，語音輸入時聊天視窗的內容可能被擷取。</li>
+<li><strong>登入和授權流程</strong>：資料庫中記錄了 OAuth 授權頁面和客服系統的完整 URL，這些都是涉及身份驗證的敏感操作。</li>
+</ol>
+<hr>
+<h2>我的因應措施</h2>
+<h3>立即行動</h3>
+<ol>
+<li><strong>停用 Typeless</strong>：關閉應用程式</li>
+<li><strong>撤銷權限</strong>：系統設定 → 隱私與安全性 → 撤銷輔助功能和螢幕錄製權限</li>
+<li><strong>保留資料庫</strong>：<code>typeless.db</code>（160MB）暫時保留作為證據，之後會刪除</li>
+<li><strong>檢查 Stripe 訂閱</strong>：考慮是否要求退費</li>
+</ol>
+<h3>短期替代方案</h3>
+<p><strong>Superwhisper</strong> 是目前最接近的替代品——支援完全本地推論模式（使用 Whisper 模型在本機運算），不需要將音訊上傳到雲端。這是最快能讓我恢復語音輸入工作流的方案。</p>
+<h3>長期方案</h3>
+<p>我之前開發了一個叫 <strong>xvoice</strong> 的跨平台語音輸入系統，架構是 Silero VAD（語音活動偵測） + faster-whisper（語音辨識） + LLM 語意校正。當時因為 Typeless 的準確率太好而暫停開發。</p>
+<p>現在有了充分的理由重啟它。而且這次我知道 Typeless 的「秘密武器」是什麼了——不是更好的 ASR 模型，而是用螢幕上下文資訊來校正辨識結果。這個思路完全可以用更隱私的方式實現：</p>
+<ul>
+<li>只讀取<strong>當前輸入框</strong>的文字（透過 Accessibility API 的 <code>AXValue</code>），不讀取整個螢幕</li>
+<li>上下文資料只餵給<strong>本地 LLM</strong>（如 Llama / Qwen / Gemma），永遠不離開電腦</li>
+<li>在 Apple Silicon 上用 <strong>MLX Whisper</strong> 做語音辨識，效能完全足夠</li>
+</ul>
+<hr>
+<h2>給其他 Typeless 使用者的建議</h2>
+<ol>
+<li><p><strong>如果你的工作涉及任何機密資料</strong>（公司內部系統、客戶資料、原始碼、財務資訊），請立即停用 Typeless。螢幕文字擷取功能意味著你的機密資料可能已經被傳送到 Typeless 的伺服器。</p>
+</li>
+<li><p><strong>如果你只是一般日常使用</strong>，也請認真考慮你是否願意讓一個透明度極低的公司擁有你的瀏覽記錄、應用程式使用習慣、以及螢幕上顯示的文字內容。</p>
+</li>
+<li><p><strong>檢查你的本地資料庫</strong>：<code>~/Library/Application Support/Typeless/typeless.db</code>，用 SQLite 可以查看所有被記錄的資料。</p>
+</li>
+<li><p><strong>撤銷權限後再移除</strong>：先到系統設定撤銷輔助功能和螢幕錄製權限，再解除安裝。</p>
+</li>
+</ol>
+<hr>
+<h2>結語</h2>
+<p>Typeless 的語音辨識確實很好用——但我現在知道了原因不只是他們的 AI 模型好，更是因為他們把我螢幕上的一切都送上去了。</p>
+<p>一個語音輸入工具，需要知道我在瀏覽什麼網頁嗎？需要讀取我螢幕上的 10,000 個字嗎？需要記錄我用了哪些 app 嗎？需要追蹤我怎麼修改它的輸出嗎？</p>
+<p>如果你的答案也是「不需要」，那該是停用的時候了。</p>
+<hr>
+<p><em>本文的技術分析透過 Claude Code 輔助進行。所有資料均來自本地安裝的 Typeless v1.0.0 app bundle 和本地 SQLite 資料庫，未涉及任何網路攔截或伺服器端分析。</em></p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

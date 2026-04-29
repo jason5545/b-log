@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Claude 真的被 nerf 了嗎？ - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="從技術角度分析 Claude Code 的品質問題與用量限制，探討 Anthropic 8-9 月的基礎設施 bug、修復時間表，以及使用方式對 AI 協作開發的關鍵影響。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/ai-analysis/claude-nerf-analysis/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/ai-analysis/claude-nerf-analysis/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="技術分析">
   <meta property="article:tag" content="開發哲學">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/ai-analysis/claude-nerf-analysis/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="從技術角度分析 Claude Code 的品質問題與用量限制，探討 Anthropic 8-9 月的基礎設施 bug、修復時間表，以及使用方式對 AI 協作開發的關鍵影響。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2025/claude-nerf-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Claude, Anthropic, AI分析, 用量限制, 技術分析, 開發哲學" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -111,6 +111,7 @@
   <link rel="preload" as="image" href="/content/img/2025/claude-nerf-cover.webp" imagesrcset="/content/img/2025/claude-nerf-cover-480w.webp 480w, /content/img/2025/claude-nerf-cover-828w.webp 828w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Claude 真的被 nerf 了嗎？","description":"從技術角度分析 Claude Code 的品質問題與用量限制，探討 Anthropic 8-9 月的基礎設施 bug、修復時間表，以及使用方式對 AI 協作開發的關鍵影響。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-10-18T11:05:00Z","dateModified":"2025-10-18T11:05:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/claude-nerf-analysis/"},"url":"https://b-log.to/ai-analysis/claude-nerf-analysis/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2025/claude-nerf-cover.webp"],"keywords":"Claude, Anthropic, AI分析, 用量限制, 技術分析, 開發哲學","articleSection":"AI 分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -120,7 +121,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">Claude 真的被 nerf 了嗎？</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -189,12 +190,262 @@
         <article class="article">
           <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2025/claude-nerf-cover.webp" srcset="/content/img/2025/claude-nerf-cover-480w.webp 480w, /content/img/2025/claude-nerf-cover-828w.webp 828w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">Claude 真的被 nerf 了嗎？</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Oct 18, 2025</span><span>20 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Claude</span><span>Anthropic</span><span>AI分析</span><span>用量限制</span><span>技術分析</span><span>開發哲學</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><div class="audio-player" data-audio-file="Claude_AI_變笨還是被Nerf？深入剖析技術真相、用量限制與「憑感覺編碼」的陷阱.m4a">
+  <audio preload="metadata">
+    <source src="/content/audio/Claude_AI_變笨還是被Nerf？深入剖析技術真相、用量限制與「憑感覺編碼」的陷阱.m4a" type="audio/mp4">
+    您的瀏覽器不支援音訊播放。
+  </audio>
+  <div class="audio-controls">
+    <button class="audio-btn play-pause" aria-label="播放/暫停">
+      <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+      <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+      </svg>
+    </button>
+    <div class="audio-progress-container">
+      <input type="range" class="audio-progress" min="0" max="100" value="0" step="0.1" aria-label="播放進度">
+      <div class="audio-time">
+        <span class="current-time">0:00</span>
+        <span class="duration">0:00</span>
+      </div>
+      <div class="playlist-info" style="display:none; font-size:0.75rem; color:var(--text-secondary, #666); margin-top:0.25rem;">
+        片段 <span class="current-part">1</span> / <span class="total-parts">1</span>
+      </div>
+    </div>
+    <div class="audio-speed">
+      <button class="speed-btn" aria-label="播放速度">1.0x</button>
+      <div class="speed-menu" style="display:none">
+        <button data-speed="0.75">0.75x</button>
+        <button data-speed="1.0" class="active">1.0x</button>
+        <button data-speed="1.25">1.25x</button>
+        <button data-speed="1.5">1.5x</button>
+        <button data-speed="2.0">2.0x</button>
+      </div>
+    </div>
+    <div class="audio-volume">
+      <button class="volume-btn" aria-label="音量">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+        </svg>
+      </button>
+      <input type="range" class="volume-slider" min="0" max="100" value="100" aria-label="音量控制">
+    </div>
+  </div>
+  <div class="audio-attribution">
+    Powered by <a href="https://notebooklm.google/" target="_blank" rel="noopener noreferrer">NotebookLM</a>. You may check facts.
+  </div>
+</div>
+
+<p>如果你最近逛過 Reddit 的 r/ClaudeAI 或相關論壇，一定看過這類抱怨：</p>
+<blockquote>
+<p>&quot;Claude Code 完全不能用了&quot;<br>&quot;連最簡單的 bug 都修不好&quot;<br>&quot;明顯被 nerf 了，一定是為了省成本&quot;</p>
+</blockquote>
+<p>但實際情況是什麼？作為一個高度依賴 AI 協作開發的人，我想從技術角度分析這個問題。</p>
+<hr>
+<h2>確實發生過的問題</h2>
+<p>首先要誠實說明：<strong>Anthropic 在 2025 年確實出過兩類問題。</strong></p>
+<h3>問題一：品質問題（8-9月，已修復）</h3>
+<p>Anthropic 在 9 月發布了詳細的技術 postmortem，揭露三個基礎設施 bug：</p>
+<h3>1. 路由錯誤（8/5 - 9/4）</h3>
+<p>短上下文請求被錯誤路由到為 1M token 上下文設計的伺服器。</p>
+<p><strong>影響:</strong></p>
+<ul>
+<li>初期影響 0.8% 的 Sonnet 4 請求</li>
+<li>8/29 的負載平衡變更放大了問題</li>
+<li><strong>最嚴重時（8/31）影響 16% 的請求</strong></li>
+<li>約 30% 的 Claude Code 使用者至少有一則訊息被路由錯誤</li>
+</ul>
+<p><strong>關鍵問題:</strong> 一旦被路由到錯誤的伺服器，後續請求會「黏」在同一個錯誤的伺服器上，讓使用者感覺問題持續存在。</p>
+<h3>2. 輸出損壞（8/25 - 9/2）</h3>
+<p>TPU 伺服器配置錯誤，導致 token 生成時出錯。</p>
+<p><strong>影響:</strong></p>
+<ul>
+<li>在英文 prompt 中生成泰文和中文字元</li>
+<li>影響 Opus 4.1 和 Opus 4（8/25-8/28）</li>
+<li>影響 Sonnet 4（8/25-9/2）</li>
+</ul>
+<h3>3. XLA 編譯器 bug（8/25 - 9/12）</h3>
+<p>改進 token 選擇的程式碼無意中觸發了 XLA 編譯器的潛在 bug。</p>
+<p><strong>影響:</strong></p>
+<ul>
+<li><strong>Claude 在生成文字時會排除最可能的 token</strong></li>
+<li>確認影響 Haiku 3.5</li>
+<li>可能也影響部分 Sonnet 4 和 Opus 3</li>
+</ul>
+<p><strong>Anthropic 強調:</strong></p>
+<blockquote>
+<p>&quot;我們從不會因為需求、時段或伺服器負載而降低模型品質。使用者回報的問題完全是基礎設施 bug 造成的。&quot;</p>
+</blockquote>
+<hr>
+<h2>問題已經修復</h2>
+<p><strong>修復時間表:</strong></p>
+<ul>
+<li><strong>9/2</strong>: 發現並回滾 TPU 配置問題</li>
+<li><strong>9/4</strong>: 修復路由邏輯、回滾 Haiku 3.5 的 XLA 問題</li>
+<li><strong>9/12</strong>: 回滾 Opus 3 的 XLA 問題</li>
+<li><strong>9/16</strong>: 在 Vertex AI 完成部署</li>
+</ul>
+<p><strong>現在是 10 月中旬，這些問題已經解決超過一個月了。</strong></p>
+<hr>
+<h2>為什麼還是有人持續抱怨？</h2>
+<p>如果品質問題已經修復，為什麼網路上還是充斥著「Claude 被 nerf」的討論？</p>
+<p><strong>原因可能是：</strong></p>
+<h3>1. 用量限制確實影響工作流程</h3>
+<p>這是真實的問題。即使你的使用方式正確，專案密集時還是可能撞限。</p>
+<p>但關鍵是：<strong>這不是「能力下降」，這是「配額管理」。</strong></p>
+<h3>2. 使用方式問題被放大</h3>
+<p>最近在 Reddit 上看到一篇很中肯的評論，分析了「agentic coding demo」的誤導性：</p>
+<blockquote>
+<p>&quot;所有 demo 都一樣：空專案開始，『嘿 Claude，幫我做個東西！』20 分鐘後就有個差不多能動的東西，帶著漂亮的 Tailwind 樣式。『哇，我已經完成 70% 了！』&quot;</p>
+<p>&quot;但這不是軟體工程！這是 template，而且是最簡單的部分。真正的複雜度在最後 30%。&quot;</p>
+</blockquote>
+<p><strong>評論作者指出關鍵問題:</strong></p>
+<blockquote>
+<p>&quot;如果你連系統的核心抽象、介面、資料模型、不變量都說不清楚，那 Claude 不是問題所在。&quot;</p>
+</blockquote>
+<h3>3. 工具跳槽的無限循環</h3>
+<p>更有趣的是，我注意到有些人開始說：</p>
+<ul>
+<li>&quot;Claude 不行了，我改用 Codex&quot;</li>
+<li>&quot;Codex 也不行，換 Cursor&quot;  </li>
+<li>&quot;Cursor 也開始爛了，試試 Windsurf&quot;</li>
+</ul>
+<p><strong>如果是因為用量限制，換工具是合理的。</strong></p>
+<p>但如果是因為「AI 修不好 bug」「程式碼越改越亂」，那他們會一直換下去。</p>
+<p>因為問題不在工具，在使用方式。當你不理解系統架構、期待 AI 一鍵搞定所有問題時，換任何工具都會遇到同樣的挫折。</p>
+<p>就像不會開車的人抱怨方向盤不好用，換一台車也不會突然學會開車。</p>
+<hr>
+<h2>使用方式的差異</h2>
+<p>從我自己的經驗來看，使用 AI 的方式決定了體驗。</p>
+<p><strong>有效的工作流程:</strong></p>
+<pre><code>1. 先想清楚架構
+   例：「BLE 接收器應該偵測 CH5 characteristic，不是字串比對」
+
+2. 給明確的情境和限制
+   例：「ESP32-S3, 用 USB HID, 要支援這些報告格式...」
+
+3. 主動偵錯 AI 的輸出
+   例：「這個邏輯不對，應該改成...」
+
+4. 迭代改進而非推翻重來
+   例：「CH5 偵測加上去，其他保持不變」
+</code></pre>
+<p><strong>無效的工作流程:</strong></p>
+<pre><code>1. 「幫我做個 XXX 系統」（需求不清楚）
+
+2. AI 生成一堆程式碼（看不懂）
+
+3. 跑不起來（不會偵錯）
+
+4. 「AI 怎麼這麼爛，連這都做不好」
+</code></pre>
+<p>Reddit 評論作者總結得很好：</p>
+<blockquote>
+<p>&quot;如果你只是不斷要求加功能，AI 會寫程式碼、寫程式碼、寫程式碼，直到你的專案變成打地鼠式的 bug 混亂，連 Claude 都理不清。你需要少用 Claude 來加有趣的新東西，多用它來維護日益增長的程式碼庫。&quot;</p>
+</blockquote>
+<p>這種差異會直接反映在「用量消耗」上：</p>
+<ul>
+<li>有效使用：迭代清晰、token 用得精準</li>
+<li>無效使用：來回修改、token 消耗快速</li>
+</ul>
+<p><strong>所以撞到用量限制的原因可能有兩種：</strong></p>
+<ol>
+<li>專案密度高、迭代頻繁（合理的高用量）</li>
+<li>使用方式不對、來回修改（無效的高用量）</li>
+</ol>
+<p>前者撞限是正常的，後者撞限是可以避免的。</p>
+<hr>
+<h2>客觀結論</h2>
+<p><strong>關於「被 nerf」的討論，需要區分兩件事：</strong></p>
+<h3>1. 品質問題（8-9月）</h3>
+<ul>
+<li>✅ 確實發生過</li>
+<li>✅ Anthropic 公開承認</li>
+<li>✅ 最嚴重時影響 16% 請求  </li>
+<li>✅ <strong>已在 9 月修復</strong></li>
+</ul>
+<h3>2. 用量限制（7月至今）</h3>
+<ul>
+<li>✅ 確實存在且持續</li>
+<li>✅ 7 月悄悄收緊，引發爭議</li>
+<li>✅ 8 月正式宣布每週限制</li>
+<li>✅ 10 月 Claude 4.5 後消耗更快</li>
+<li>⚠️ <strong>這是配額管理問題，不是能力下降</strong></li>
+</ul>
+<h3>3. 使用方式的影響</h3>
+<p>即使在用量限制內，不同的使用方式會有截然不同的體驗：</p>
+<p><strong>有效的使用方式:</strong></p>
+<ul>
+<li>理解系統架構</li>
+<li>給明確的需求和限制</li>
+<li>能看懂和偵錯程式碼</li>
+<li>迭代改進而非推翻重來</li>
+</ul>
+<p><strong>無效的使用方式:</strong></p>
+<ul>
+<li>需求不清楚就讓 AI 做</li>
+<li>看不懂 AI 生成的程式碼</li>
+<li>出問題就丟回去修</li>
+<li>不斷加功能直到變成 bug 打地鼠</li>
+</ul>
+<p><strong>關鍵區別：</strong></p>
+<ul>
+<li>前者用量限制是唯一問題（撞限就得等）</li>
+<li>後者即使沒限制也會覺得「AI 變差了」（因為方法不對）</li>
+</ul>
+<h3>現在還在抱怨的人</h3>
+<ul>
+<li><strong>合理的抱怨</strong>: 用量限制確實影響工作流程</li>
+<li><strong>可能誤判的</strong>: 把使用方式問題當成工具問題</li>
+<li><strong>會繼續換工具的</strong>: 不解決根本問題，換什麼都一樣</li>
+</ul>
+<p><strong>工具只是工具。</strong></p>
+<p>就像抱怨鋸子不好用的人，換成電鋸、鏈鋸、雷射切割機，還是不會砍樹。因為問題不在工具的鋒利度，在於不知道怎麼砍。</p>
+<hr>
+<h2>我的實際體驗</h2>
+<p>作為一個只能用單指打字、高度依賴 AI 協作的開發者，我在 10 月完成了：</p>
+<ul>
+<li>✅ Unified Remote Evo 完整重寫（Kotlin + Compose）</li>
+<li>✅ TouchBridge 技術設計（ESP32-S3 BLE→USB HID）</li>
+<li>✅ EmulStick 協議逆向（BLE GATT 架構分析）  </li>
+<li>✅ 多篇技術部落格文章</li>
+<li>✅ 生產環境系統的維護與最佳化</li>
+</ul>
+<p><strong>但上週我也撞到了每週用量上限。</strong></p>
+<p>24 小時沒有 Claude，只能用 Codex。工作還是完成了，但確實感受到限制的影響。</p>
+<p><strong>所以我的結論是：</strong></p>
+<ol>
+<li><strong>能力沒有被 nerf</strong> - 品質問題已修復，協作體驗依然很好</li>
+<li><strong>用量確實被限制</strong> - 這是真實的配額管理問題</li>
+<li><strong>使用方式很重要</strong> - 理解架構的人受限制影響較小</li>
+</ol>
+<p><strong>Reddit 評論作者說得對:</strong></p>
+<blockquote>
+<p>&quot;我從沒遇到使用限制（5X 方案，但 Sonnet 就夠了）。我很少看到它遇到無法解決的 bug。當遇到時，我就 esc-esc 倒回去，重新給予更好的上下文，總是能得到很好的結果。&quot;</p>
+<p>&quot;我發現我的成果遠超過同樣時間內獨自能做到的，因此 CC 物超所值。&quot;</p>
+</blockquote>
+<p><strong>但他說的「從沒遇到使用限制」，可能只是他的專案密度還沒那麼高。</strong></p>
+<p>如果你的專案夠密集、迭代夠頻繁，用量限制確實會是問題。</p>
+<p><strong>AI 協作開發需要兩個條件：</strong></p>
+<ol>
+<li><strong>足夠的配額</strong>（這是 Anthropic 要解決的）</li>
+<li><strong>正確的使用方式</strong>（這是使用者要學習的）</li>
+</ol>
+<p>缺一不可。</p>
+<hr>
+<h2>延伸閱讀</h2>
+<p>想更深入了解「理解能力」vs「執行能力」的討論，以及 AI 時代的開發哲學，可以參考：</p>
+<p><a href="https://b-log.to/dev-philosophy/understanding-vs-execution-vibe-coding/"><strong>理解與執行的分離：從 Vibe Coding 談起</strong></a></p>
+<hr>
+<p><em>本文基於 Anthropic 官方 postmortem、社群討論和個人開發經驗。如果你對 AI 協作開發、技術哲學有興趣，歡迎交流。</em></p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

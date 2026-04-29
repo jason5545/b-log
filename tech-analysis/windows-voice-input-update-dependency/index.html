@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>語音辨識進步了，但 Windows 還是那個 Windows - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="Windows 11 語音輸入突然失效，排查服務、權限、登錄檔都沒用，結果發現是 Windows Update 被停用導致的隱藏依賴問題。記錄完整的排查過程、最終解決方案（延遲更新到 2042 年），以及意外發現 Windows 繁體中文語音辨識已大幅進步。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/windows-voice-input-update-dependency/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/windows-voice-input-update-dependency/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="無障礙">
   <meta property="article:tag" content="WinUtil">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/windows-voice-input-update-dependency/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="Windows 11 語音輸入突然失效，排查服務、權限、登錄檔都沒用，結果發現是 Windows Update 被停用導致的隱藏依賴問題。記錄完整的排查過程、最終解決方案（延遲更新到 2042 年），以及意外發現 Windows 繁體中文語音辨識已大幅進步。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2025/windows-voice-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Windows, 語音輸入, 故障排除, Windows Update, 無障礙, WinUtil" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -111,6 +111,7 @@
   <link rel="preload" as="image" href="/content/img/2025/windows-voice-cover.webp" imagesrcset="/content/img/2025/windows-voice-cover-480w.webp 480w, /content/img/2025/windows-voice-cover-828w.webp 828w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"語音辨識進步了，但 Windows 還是那個 Windows","description":"Windows 11 語音輸入突然失效，排查服務、權限、登錄檔都沒用，結果發現是 Windows Update 被停用導致的隱藏依賴問題。記錄完整的排查過程、最終解決方案（延遲更新到 2042 年），以及意外發現 Windows 繁體中文語音辨識已大幅進步。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-11-30T00:00:00Z","dateModified":"2025-11-30T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/windows-voice-input-update-dependency/"},"url":"https://b-log.to/tech-analysis/windows-voice-input-update-dependency/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2025/windows-voice-cover.webp"],"keywords":"Windows, 語音輸入, 故障排除, Windows Update, 無障礙, WinUtil","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -120,7 +121,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">語音辨識進步了，但 Windows 還是那個 Windows</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -189,12 +190,170 @@
         <article class="article">
           <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2025/windows-voice-cover.webp" srcset="/content/img/2025/windows-voice-cover-480w.webp 480w, /content/img/2025/windows-voice-cover-828w.webp 828w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">語音辨識進步了，但 Windows 還是那個 Windows</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Nov 30, 2025</span><span>10 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Windows</span><span>語音輸入</span><span>故障排除</span><span>Windows Update</span><span>無障礙</span><span>WinUtil</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>前言</h2>
+<p>作為一個只能用單指打字的開發者，任何能減少鍵盤操作的工具對我來說都是剛需。Windows 11 的語音輸入（Win+H）本來用得好好的，結果某天突然就壞了。</p>
+<p>更詭異的是：語音輸入面板能正常叫出來，但麥克風按鈕完全按不下去。就像一個裝飾品一樣擺在那邊。</p>
+<h2>問題症狀</h2>
+<ul>
+<li>按 <code>Win + H</code> 可以叫出語音輸入面板 ✅</li>
+<li>面板正常顯示，沒有錯誤訊息 ✅</li>
+<li>但麥克風按鈕完全沒反應 ❌</li>
+<li>點擊後沒有任何回饋，不會變色、不會啟動 ❌</li>
+</ul>
+<h2>排查過程</h2>
+<h3>第一步：檢查服務狀態</h3>
+<p>我先確認相關服務是否正常運作：</p>
+<pre><code class="language-powershell">Get-Service TabletInputService, Audiosrv, AudioEndpointBuilder | Format-Table Name, Status, StartType
+</code></pre>
+<p>結果：<strong>全部正常執行中</strong>。</p>
+<h3>第二步：檢查麥克風權限</h3>
+<pre><code class="language-powershell"># 檢查麥克風權限
+Get-ItemProperty -Path &quot;HKCU:\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone&quot;
+</code></pre>
+<p>結果：<strong>權限正常開啟</strong>。</p>
+<h3>第三步：修改登錄檔設定</h3>
+<p>網路上找到一些語音輸入相關的登錄檔設定，試著手動啟用：</p>
+<pre><code class="language-powershell">$settings = @(
+    @(&quot;HKCU:\Software\Microsoft\Speech_OneCore&quot;, &quot;HasAccepted&quot;, 1),
+    @(&quot;HKCU:\Software\Microsoft\Speech_OneCore&quot;, &quot;VoiceActivationEnableAboveLock&quot;, 1),
+    @(&quot;HKCU:\Software\Microsoft\Speech_OneCore\Settings\SpeechRecognizer&quot;, &quot;UseRelaxedRecognition&quot;, 1),
+    @(&quot;HKCU:\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation&quot;, &quot;VoiceActivationEnableAboveLock&quot;, 1),
+    @(&quot;HKLM:\SOFTWARE\Policies\Microsoft\InputPersonalization&quot;, &quot;AllowInputPersonalization&quot;, 1)
+)
+
+foreach ($s in $settings) {
+    if (!(Test-Path $s[0])) { New-Item -Path $s[0] -Force | Out-Null }
+    Set-ItemProperty -Path $s[0] -Name $s[1] -Value $s[2]
+}
+</code></pre>
+<p>結果：<strong>還是沒用</strong>。</p>
+<h3>第四步：檢查麥克風硬體</h3>
+<p>測試其他使用麥克風的應用程式（Discord、錄音機等）：<strong>完全正常</strong>。</p>
+<p>確定不是硬體問題。</p>
+<h2>真正的原因</h2>
+<p>在快要放棄的時候，我突然想到一件事：</p>
+<p><strong>我之前用 WinUtil (Chris Titus Tech) 優化工具，把 Windows Update 服務完全停用了。</strong></p>
+<p>抱著試試看的心態，我把 Windows Update 改回自動啟動：</p>
+<pre><code class="language-powershell">Set-Service -Name wuauserv -StartupType Automatic
+Start-Service -Name wuauserv
+</code></pre>
+<p>重開機後... <strong>語音輸入復活了！</strong> 🎉</p>
+<h2>為什麼語音輸入會依賴 Windows Update？</h2>
+<p>這個問題我到現在還是百思不得其解。</p>
+<p>根據推測，可能的原因：</p>
+<ol>
+<li><p><strong>語音模型透過 Windows Update 更新</strong></p>
+<ul>
+<li>Windows 的雲端語音辨識需要定期下載更新的模型</li>
+<li>這些模型可能走 Windows Update 的通道</li>
+</ul>
+</li>
+<li><p><strong>服務依賴關係</strong></p>
+<ul>
+<li>語音輸入可能依賴某個由 Windows Update 啟動的元件</li>
+<li>系統檢查到 Update 服務完全停用，就不啟動相關功能</li>
+</ul>
+</li>
+<li><p><strong>功能檢查機制</strong></p>
+<ul>
+<li>系統認為「需要更新支援」的功能，在 Update 停用時會被禁用</li>
+</ul>
+</li>
+</ol>
+<p>無論如何，這種隱藏的依賴關係真的很反直覺。</p>
+<p>語音輸入跟 Windows Update 八竿子打不著關係，結果卻是這樣設計的。</p>
+<p><strong>Desktop Linux of the year.</strong> 🙃</p>
+<h2>最終解決方案</h2>
+<p>但我還是不想讓 Windows Update 亂跑，所以採用了折衷方案：</p>
+<h3>延遲更新到 2042 年 + WinUtil</h3>
+<p>透過群組原則編輯器或登錄檔，把更新延遲到遙遠的未來：</p>
+<pre><code>設定 → Windows Update → 進階選項 → 暫停更新
+→ 選擇日期：2042/12/31
+</code></pre>
+<p>或用登錄檔：</p>
+<pre><code class="language-powershell">New-ItemProperty -Path &quot;HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate&quot; -Name &quot;PauseDeferrals&quot; -Value 1 -PropertyType DWORD -Force
+New-ItemProperty -Path &quot;HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate&quot; -Name &quot;PauseFeatureUpdatesStartTime&quot; -Value &quot;2025-11-30T00:00:00Z&quot; -PropertyType String -Force
+New-ItemProperty -Path &quot;HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate&quot; -Name &quot;PauseFeatureUpdatesEndTime&quot; -Value &quot;2042-12-31T00:00:00Z&quot; -PropertyType String -Force
+</code></pre>
+<p>這樣做的好處：</p>
+<ul>
+<li>✅ Windows Update 服務狀態 = Running（滿足依賴關係）</li>
+<li>✅ 實際上不會檢查更新（還要 17 年）</li>
+<li>✅ 語音輸入正常運作</li>
+<li>✅ 系統不會被自動更新騷擾</li>
+</ul>
+<p>再搭配 WinUtil 關閉其他不需要的功能，完美。</p>
+<h2>意外的驚喜：辨識率大幅進步</h2>
+<p>修好語音輸入後，實際使用了一陣子，發現一件很驚喜的事：</p>
+<p><strong>Windows 語音輸入的繁體中文辨識率已經不輸 Gboard 了。</strong></p>
+<p>我記得幾年前試用時，Windows 的中文辨識還很糟糕，常常辨識錯誤或是完全聽不懂。但現在：</p>
+<ul>
+<li>✅ <strong>辨識準確度高</strong>：一般對話幾乎不會錯</li>
+<li>✅ <strong>標點符號智慧處理</strong>：能正確判斷逗號、句號的位置</li>
+<li>✅ <strong>反應速度快</strong>：幾乎即時轉換成文字</li>
+<li>✅ <strong>台灣用語支援</strong>：「程式設計」「檔案」「設定」都能正確辨識，不會變成簡體用語</li>
+</ul>
+<p>對比：</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>Windows 語音輸入</th>
+<th>Gboard 語音輸入</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>繁體中文準確度</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>標點符號處理</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>整合度</td>
+<td>⭐⭐⭐⭐⭐ (系統原生)</td>
+<td>⭐⭐⭐ (僅限行動裝置)</td>
+</tr>
+<tr>
+<td>隱私性</td>
+<td>⭐⭐⭐ (微軟雲端)</td>
+<td>⭐⭐⭐ (Google 雲端)</td>
+</tr>
+<tr>
+<td>啟動速度</td>
+<td>⭐⭐⭐⭐⭐ (Win+H)</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+</tbody></table>
+<p>對我這種單指打字的使用者來說，這是個重大進步。</p>
+<p>以前可能會想「反正辨識率不好，還是自己慢慢打」，但現在真的可以當成主要輸入方式了。</p>
+<h2>結論</h2>
+<p>這次經驗讓我學到：</p>
+<ol>
+<li><strong>Windows 的服務依賴關係很複雜</strong>，有時候完全不合邏輯</li>
+<li><strong>「完全停用」和「延遲/手動啟動」是不同的</strong>，前者可能影響依賴鏈</li>
+<li><strong>排查問題要從意想不到的角度思考</strong>，誰能想到語音輸入要靠 Windows Update？</li>
+<li><strong>技術在進步</strong>，幾年沒用的功能，現在可能已經變得很實用了</li>
+</ol>
+<p>如果你也遇到類似問題，希望這篇文章能幫到你。</p>
+<p>如果你跟我一樣需要減少鍵盤操作，強烈推薦試試看現在的 Windows 語音輸入。辨識率真的提升很多。</p>
+<p>至於為什麼 Windows 要這樣設計... 我也不知道。</p>
+<p><strong>2042 年的時候記得改回來。</strong> 😂</p>
+<hr>
+<p><em>延伸閱讀：</em></p>
+<ul>
+<li><a href="https://github.com/ChrisTitusTech/winutil">WinUtil - Chris Titus Tech</a></li>
+<li><a href="https://support.microsoft.com/zh-tw/windows/use-voice-typing-to-talk-instead-of-type-on-your-pc-fec94565-c4bd-329d-e59a-af033fa5689f">Windows 語音輸入官方文件</a></li>
+</ul>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

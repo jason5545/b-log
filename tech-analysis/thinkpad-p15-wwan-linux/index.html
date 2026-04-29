@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ThinkPad P15 Gen 2i 的 WWAN FCC Lock：QMI 繞過去了，重開機就通 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 明確拒絕支援這個型號，理由是「合規要求」——但硬體完全相同，FCC 法規也不適用於非美國地區。發現 QMI 介面可以繞過 FCC Lock，重開機後就通了。不需要 Windows，不需要官方工具。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/thinkpad-p15-wwan-linux/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/thinkpad-p15-wwan-linux/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="QMI">
   <meta property="article:tag" content="FCC Lock">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/thinkpad-p15-wwan-linux/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 明確拒絕支援這個型號，理由是「合規要求」——但硬體完全相同，FCC 法規也不適用於非美國地區。發現 QMI 介面可以繞過 FCC Lock，重開機後就通了。不需要 Windows，不需要官方工具。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:ThinkPad%20P15%20Gen%202i%20%E7%9A%84%20WWAN%20FCC%20Lock%EF%BC%9AQMI%20%E7%B9%9E%E9%81%8E%E5%8E%BB%E4%BA%86%EF%BC%8C%E9%87%8D%E9%96%8B%E6%A9%9F%E5%B0%B1%E9%80%9A,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="ThinkPad, WWAN, LTE, Linux, QMI, FCC Lock" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"ThinkPad P15 Gen 2i 的 WWAN FCC Lock：QMI 繞過去了，重開機就通","description":"筆電內建 Quectel EM160R-GL 數據機，想在 Linux 用 LTE。Lenovo 明確拒絕支援這個型號，理由是「合規要求」——但硬體完全相同，FCC 法規也不適用於非美國地區。發現 QMI 介面可以繞過 FCC Lock，重開機後就通了。不需要 Windows，不需要官方工具。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-12T12:00:00Z","dateModified":"2025-12-12T12:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/thinkpad-p15-wwan-linux/"},"url":"https://b-log.to/tech-analysis/thinkpad-p15-wwan-linux/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:ThinkPad%20P15%20Gen%202i%20%E7%9A%84%20WWAN%20FCC%20Lock%EF%BC%9AQMI%20%E7%B9%9E%E9%81%8E%E5%8E%BB%E4%BA%86%EF%BC%8C%E9%87%8D%E9%96%8B%E6%A9%9F%E5%B0%B1%E9%80%9A,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"ThinkPad, WWAN, LTE, Linux, QMI, FCC Lock","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">ThinkPad P15 Gen 2i 的 WWAN FCC Lock：QMI 繞過去了，重開機就通</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,88 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">ThinkPad P15 Gen 2i 的 WWAN FCC Lock：QMI 繞過去了，重開機就通</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Dec 12, 2025</span><span>4 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>ThinkPad</span><span>WWAN</span><span>LTE</span><span>Linux</span><span>QMI</span><span>FCC Lock</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>筆電內建 Quectel EM160R-GL 數據機，想在 Linux 上用 LTE。</p>
+<p>問題是：FCC Lock。</p>
+<p>Lenovo 有官方解鎖工具，但只支援特定機型，P15 Gen 2i 不在清單上。Windows 上用 Lenovo Vantage 可以解，但我主力系統是 Linux。</p>
+<hr>
+<h2>為什麼會有 FCC Lock</h2>
+<p>FCC（美國聯邦通訊委員會）要求無線電發射設備必須經過認證，認證綁定特定硬體組態。OEM 用 FCC Lock 確保數據機只在認證過的筆電裡運作——數據機開機後預設禁用，要收到官方軟體的解鎖指令才會啟動射頻。</p>
+<p>理論上合理。</p>
+<p>問題是：我的數據機就裝在原廠認證的筆電裡，天線是原廠的，硬體組態完全沒變。Quectel EM160R-GL 是標準 M.2 模組，裝在其他 ThinkPad 型號都能正常解鎖。唯獨 P15 Gen 2i 不在支援清單上。</p>
+<hr>
+<h2>Lenovo 明確拒絕支援</h2>
+<p>這不是疏忽，是刻意的。</p>
+<p>有人在 GitHub 回報過這個問題（<a href="https://github.com/lenovo/lenovo-wwan-unlock/issues/12">lenovo/lenovo-wwan-unlock#12</a>），要求支援 P15s Gen 2i + EM160R-GL。Lenovo 的回應：</p>
+<blockquote>
+<p>&quot;As of now, there is no plan to support Quectel EM160R-GL on a ThinkPad P15s Gen 2i for Linux.&quot;</p>
+</blockquote>
+<p>理由是「合規要求」。但報告者在澳洲——FCC 是美國法規，根本不適用。使用者說願意自己改程式碼，Lenovo 不給 source code。</p>
+<p>Issue 最後被標記為 &quot;COMPLETED&quot; 關閉。不是 &quot;won&#39;t fix&quot;，是裝作已經解決了。</p>
+<p>硬體完全相同，其他型號都支援，就是不打算處理這個 SKU。純粹的商業決策。</p>
+<hr>
+<h2>這可是 P 系列</h2>
+<p>如果是 E 系列（入門款）不支援，我還能理解——預算導向，砍功能省成本，買的人心裡有數。</p>
+<p>但 P15 是旗艦工作站。售價六七萬起跳，目標客群是專業用戶：工程師、開發者、資料科學家。這群人跑 Linux 的比例遠高於一般消費者。</p>
+<p>而且 P15 是主力機型，銷量不小。「沒有測試機所以沒辦法驗證」這種藉口根本站不住腳。</p>
+<p>真正的原因大概是：</p>
+<ul>
+<li>WWAN unlock 工具的團隊和 P 系列產品線沒有對接好</li>
+<li>Linux 支援本來就是二等公民，沒人催就不做</li>
+<li>加一個型號要走內部流程，沒人願意發起</li>
+<li>反正大多數人用 Windows，Lenovo Vantage 能解鎖就好</li>
+</ul>
+<p>不管是哪個，都不是「合規要求」。是組織問題，外部用戶買單。</p>
+<hr>
+<h2>突破點：QMI 可以繞過 FCC Lock</h2>
+<p>翻了一堆文件和論壇，發現 QMI 介面可以直接啟動數據機，不需要官方工具：</p>
+<pre><code class="language-bash"># 透過 QMI 啟動數據機
+sudo qmicli -d /dev/wwan0qmi0 --dms-set-operating-mode=online
+</code></pre>
+<p>這招有用。</p>
+<p>數據機起來了，可以註冊網路，連上台灣大哥大 LTE，拿到 IP。</p>
+<pre><code class="language-bash"># 取得連線狀態
+sudo qmicli -d /dev/wwan0qmi0 --wds-get-packet-service-status
+</code></pre>
+<p>顯示已連線。IP 也分配到了。</p>
+<hr>
+<h2>卡關：mhi_swip0 介面不通</h2>
+<p>QMI 層面一切正常，但實際網路流量走不出去。</p>
+<p>問題在 <code>mhi_swip0</code> 這個網路介面。有 IP，有路由，但 ping 不出去。tcpdump 看得到封包發出去，但沒有回應。</p>
+<p>試過的東西：</p>
+<ul>
+<li>手動設定 IP 和路由</li>
+<li>調整 MTU</li>
+<li>檢查防火牆規則</li>
+<li>用 <code>ip link set up</code> 重新啟動介面</li>
+</ul>
+<p>都沒用。</p>
+<hr>
+<h2>MBIM 介面：直接超時</h2>
+<p>另一個選項是 MBIM 介面（<code>/dev/cdc-wdm0</code>）。</p>
+<pre><code class="language-bash">sudo mbimcli -d /dev/cdc-wdm0 --query-device-caps
+</code></pre>
+<p>直接超時，完全沒回應。</p>
+<p>查了一下，這張卡的 MBIM 實作可能有問題，或者 FCC Lock 在 MBIM 層面還是有作用。</p>
+<hr>
+<h2>解法：重開機</h2>
+<p>折騰了一堆設定都沒用，最後試著重開機。</p>
+<p>通了。</p>
+<p>猜測是 kernel driver 需要完整重新初始化，或者某些設定要在開機時才會正確套用。總之，QMI 啟動數據機之後，重開機一次就好了。</p>
+<hr>
+<h2>最終狀態</h2>
+<p>✅ QMI 繞過 FCC Lock
+✅ 網路註冊成功（TWM LTE）
+✅ IP 分配正常
+✅ 實際網路流量正常
+❌ MBIM 介面仍然超時（但不需要了）
+❌ 官方 Lenovo 工具不支援此機型（但不需要了）</p>
+<p>不需要 Windows，不需要官方工具，純 Linux 搞定。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

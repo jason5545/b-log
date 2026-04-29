@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>cmux 的 Finder「在終端機中開啟」不帶路徑？用 wrapper app 解決 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="cmux（Ghostty fork）設為預設終端機後，Finder 右鍵「在終端機中開啟」不帶入路徑。追蹤根因後用一個小型 Swift wrapper app 透過 NSPerformService 轉發解決。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/cmux-finder-open-terminal-workaround/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/cmux-finder-open-terminal-workaround/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="Swift">
   <meta property="article:tag" content="workaround">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/cmux-finder-open-terminal-workaround/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="cmux（Ghostty fork）設為預設終端機後，Finder 右鍵「在終端機中開啟」不帶入路徑。追蹤根因後用一個小型 Swift wrapper app 透過 NSPerformService 轉發解決。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:cmux%20%E7%9A%84%20Finder%E3%80%8C%E5%9C%A8%E7%B5%82%E7%AB%AF%E6%A9%9F%E4%B8%AD%E9%96%8B%E5%95%9F%E3%80%8D%E4%B8%8D%E5%B8%B6%E8%B7%AF%E5%BE%91%EF%BC%9F%E7%94%A8%20wrapper%20app%20%E8%A7%A3%E6%B1%BA,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="cmux, Ghostty, macOS, Finder, Swift, workaround" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"cmux 的 Finder「在終端機中開啟」不帶路徑？用 wrapper app 解決","description":"cmux（Ghostty fork）設為預設終端機後，Finder 右鍵「在終端機中開啟」不帶入路徑。追蹤根因後用一個小型 Swift wrapper app 透過 NSPerformService 轉發解決。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-03-12T00:00:00Z","dateModified":"2026-03-12T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/cmux-finder-open-terminal-workaround/"},"url":"https://b-log.to/tech-development/cmux-finder-open-terminal-workaround/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:cmux%20%E7%9A%84%20Finder%E3%80%8C%E5%9C%A8%E7%B5%82%E7%AB%AF%E6%A9%9F%E4%B8%AD%E9%96%8B%E5%95%9F%E3%80%8D%E4%B8%8D%E5%B8%B6%E8%B7%AF%E5%BE%91%EF%BC%9F%E7%94%A8%20wrapper%20app%20%E8%A7%A3%E6%B1%BA,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"cmux, Ghostty, macOS, Finder, Swift, workaround","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">cmux 的 Finder「在終端機中開啟」不帶路徑？用 wrapper app 解決</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,151 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">cmux 的 Finder「在終端機中開啟」不帶路徑？用 wrapper app 解決</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Mar 12, 2026</span><span>2 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>cmux</span><span>Ghostty</span><span>macOS</span><span>Finder</span><span>Swift</span><span>workaround</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>問題</h2>
+<p>把 <a href="https://github.com/manaflow-ai/cmux">cmux</a>（Ghostty fork）設為 macOS 預設終端機後，Finder 路徑列右鍵「在終端機中開啟」只會開新視窗，<strong>不會帶入資料夾路徑</strong>。</p>
+<p>但從 Finder 右鍵選「服務 → New cmux Window Here」卻完全正常。iTerm2 也沒有這個問題。</p>
+<h2>根因分析</h2>
+<p>Finder 的「在終端機中開啟」透過 <code>kAEOpenDocuments</code>（odoc）Apple Event 把資料夾路徑送給預設終端機 app，對應到 <code>NSApplicationDelegate</code> 的 <code>application(_:openFile:)</code> 方法。</p>
+<p>查看 <a href="https://github.com/ghostty-org/ghostty">Ghostty 上游原始碼</a>，<code>AppDelegate.swift</code> 有完整的 <code>application(_:openFile:)</code> 實作：</p>
+<pre><code class="language-swift">func application(_ sender: NSApplication, openFile filename: String) -&gt; Bool {
+    // ...
+    if isDirectory.boolValue {
+        config.workingDirectory = filename
+    }
+    // ...
+}
+</code></pre>
+<p>但 cmux fork 的 <code>Sources/AppDelegate.swift</code> <strong>完全沒有這個方法</strong>。所以：</p>
+<ol>
+<li>Finder 送出 odoc 事件 → cmux 沒有 handler</li>
+<li>App 被啟動/激活 → 開預設新視窗</li>
+<li>路徑被忽略 → 工作目錄停在 <code>~</code></li>
+</ol>
+<p>Services 之所以正常，是因為走的是 <code>NSPasteboard</code> + <code>NSServices</code> 機制，跟 odoc Apple Event 完全不同。</p>
+<h2>嘗試 cmux CLI → 失敗</h2>
+<p>cmux 有 CLI 工具，支援 <code>new-window --command</code> 參數。從 cmux 終端機內部執行完全正常：</p>
+<pre><code class="language-bash">cmux --socket /tmp/cmux.sock new-window --command &quot;cd /tmp &amp;&amp; exec zsh&quot;
+# OK FF8F7F1F-...
+</code></pre>
+<p>但從外部 app 呼叫時，exit code 141（SIGPIPE）。原因是 cmux socket 的 <code>access_mode: &quot;cmuxOnly&quot;</code> 需要認證，外部 process 沒有憑證。</p>
+<h2>解法：CmuxOpener wrapper app</h2>
+<p>既然 Services 能正常運作，就做一個小型 Swift app 當中間人：</p>
+<ol>
+<li>接收 Finder 的 <code>application(_:openFile:)</code> 事件</li>
+<li>透過 <code>NSPerformService</code> 轉發給 cmux 的 Service</li>
+<li>設為預設終端機</li>
+</ol>
+<pre><code class="language-swift">import AppKit
+
+class AppDelegate: NSObject, NSApplicationDelegate {
+    private var didOpenFile = false
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self, !self.didOpenFile else { return }
+            NSWorkspace.shared.open(
+                URL(fileURLWithPath: &quot;/Applications/cmux.app&quot;))
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                NSApp.terminate(nil)
+            }
+        }
+    }
+
+    func application(_ sender: NSApplication,
+                     openFile filename: String) -&gt; Bool {
+        didOpenFile = true
+
+        var isDirectory = ObjCBool(false)
+        guard FileManager.default.fileExists(
+            atPath: filename, isDirectory: &amp;isDirectory) else {
+            return false
+        }
+
+        let directory = isDirectory.boolValue
+            ? filename
+            : (filename as NSString).deletingLastPathComponent
+        openViaPasteboard(directory: directory)
+        return true
+    }
+
+    private func openViaPasteboard(directory: String) {
+        let pb = NSPasteboard(
+            name: .init(&quot;com.cmuxterm.opener.service&quot;))
+        pb.clearContents()
+        pb.writeObjects(
+            [URL(fileURLWithPath: directory) as NSURL])
+        pb.setPropertyList([directory],
+            forType: NSPasteboard.PasteboardType(
+                &quot;NSFilenamesPboardType&quot;))
+        NSPerformService(&quot;New cmux Workspace Here&quot;, pb)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            NSApp.terminate(nil)
+        }
+    }
+}
+
+let app = NSApplication.shared
+let delegate = AppDelegate()
+app.delegate = delegate
+app.run()
+</code></pre>
+<h3>Info.plist</h3>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot;
+  &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+    &lt;key&gt;CFBundleIdentifier&lt;/key&gt;
+    &lt;string&gt;com.cmuxterm.opener&lt;/string&gt;
+    &lt;key&gt;CFBundleName&lt;/key&gt;
+    &lt;string&gt;CmuxOpener&lt;/string&gt;
+    &lt;key&gt;CFBundleExecutable&lt;/key&gt;
+    &lt;string&gt;CmuxOpener&lt;/string&gt;
+    &lt;key&gt;CFBundlePackageType&lt;/key&gt;
+    &lt;string&gt;APPL&lt;/string&gt;
+    &lt;key&gt;CFBundleVersion&lt;/key&gt;
+    &lt;string&gt;1&lt;/string&gt;
+    &lt;key&gt;LSBackgroundOnly&lt;/key&gt;
+    &lt;true/&gt;
+    &lt;key&gt;LSApplicationCategoryType&lt;/key&gt;
+    &lt;string&gt;public.app-category.developer-tools&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+<h3>編譯與部署</h3>
+<pre><code class="language-bash"># 建立 app bundle
+mkdir -p /Applications/CmuxOpener.app/Contents/MacOS
+
+# 編譯
+swiftc CmuxOpener.swift \
+  -o /Applications/CmuxOpener.app/Contents/MacOS/CmuxOpener \
+  -framework AppKit
+
+# 放入 Info.plist
+cp Info.plist /Applications/CmuxOpener.app/Contents/
+
+# 設為預設終端機
+swift -e &#39;
+import Foundation; import CoreServices
+let id = &quot;com.cmuxterm.opener&quot; as CFString
+for t in [&quot;public.unix-executable&quot;,
+          &quot;public.shell-script&quot;,
+          &quot;com.apple.terminal.shell-script&quot;] {
+    LSSetDefaultRoleHandlerForContentType(
+        t as CFString, .shell, id)
+}
+&#39;
+</code></pre>
+<h2>結果</h2>
+<p>Finder 路徑列右鍵「在終端機中開啟」→ CmuxOpener 接收路徑 → 透過 NSPerformService 觸發 cmux 的 Service → cmux 開新 tab 並帶入正確工作目錄。</p>
+<p>整個 wrapper app 編譯後只有幾十 KB，<code>LSBackgroundOnly</code> 讓它不會出現在 Dock，用完自動結束。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

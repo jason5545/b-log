@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>當網頁說「銀行拒刷」，但銀行說你付了四次 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="買東西付款時網頁顯示「銀行拒刷」，但打開信用卡 App 卻有三筆授權紀錄。從技術角度分析這個典型的「前端誤判」問題：payment gateway 回傳訊號出錯導致網站判定失敗，但銀行端授權早已通過。包含處理 SOP、開發者解決方案，以及「理性知道沒事」和「確定沒事」之間的焦慮。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/payment-gateway-bank-declined-authorization/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/payment-gateway-bank-declined-authorization/" id="og-url">
@@ -31,7 +31,7 @@
   <meta property="article:tag" content="信用卡">
   <meta property="article:tag" content="技術分析">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/payment-gateway-bank-declined-authorization/" id="twitter-url">
@@ -39,7 +39,7 @@
   <meta property="twitter:description" content="買東西付款時網頁顯示「銀行拒刷」，但打開信用卡 App 卻有三筆授權紀錄。從技術角度分析這個典型的「前端誤判」問題：payment gateway 回傳訊號出錯導致網站判定失敗，但銀行端授權早已通過。包含處理 SOP、開發者解決方案，以及「理性知道沒事」和「確定沒事」之間的焦慮。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%E7%B6%B2%E9%A0%81%E8%AA%AA%E3%80%8C%E9%8A%80%E8%A1%8C%E6%8B%92%E5%88%B7%E3%80%8D%EF%BC%8C%E4%BD%86%E9%8A%80%E8%A1%8C%E8%AA%AA%E4%BD%A0%E4%BB%98%E4%BA%86%E5%9B%9B%E6%AC%A1,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Payment Gateway, 故障排除, 電商, 信用卡, 技術分析" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -109,6 +109,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"當網頁說「銀行拒刷」，但銀行說你付了四次","description":"買東西付款時網頁顯示「銀行拒刷」，但打開信用卡 App 卻有三筆授權紀錄。從技術角度分析這個典型的「前端誤判」問題：payment gateway 回傳訊號出錯導致網站判定失敗，但銀行端授權早已通過。包含處理 SOP、開發者解決方案，以及「理性知道沒事」和「確定沒事」之間的焦慮。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-11-22T00:00:00Z","dateModified":"2025-11-25T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/payment-gateway-bank-declined-authorization/"},"url":"https://b-log.to/tech-analysis/payment-gateway-bank-declined-authorization/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%E7%B6%B2%E9%A0%81%E8%AA%AA%E3%80%8C%E9%8A%80%E8%A1%8C%E6%8B%92%E5%88%B7%E3%80%8D%EF%BC%8C%E4%BD%86%E9%8A%80%E8%A1%8C%E8%AA%AA%E4%BD%A0%E4%BB%98%E4%BA%86%E5%9B%9B%E6%AC%A1,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"Payment Gateway, 故障排除, 電商, 信用卡, 技術分析","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -118,7 +119,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">當網頁說「銀行拒刷」，但銀行說你付了四次</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -187,12 +188,205 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">當網頁說「銀行拒刷」，但銀行說你付了四次</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Nov 22, 2025</span><span>Updated Nov 25, 2025</span><span>12 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Payment Gateway</span><span>故障排除</span><span>電商</span><span>信用卡</span><span>技術分析</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>今天遇到一個經典的電商問題：買東西付款時網頁顯示「銀行拒刷」，但打開信用卡App一看，三筆授權紀錄整整齊齊地排在那裡。</p>
+<p>不是一筆，是三筆。每筆 NT$22,422。</p>
+<p>看到那三筆的瞬間，心跳漏了一拍。</p>
+<p><strong>（劇透:週一商城部門上班後，變成四筆。而問題的根本原因，離譜到讓人想笑。）</strong></p>
+<h2>發生了什麼事</h2>
+<p>事情是這樣的：我在 Lenovo 官網買延伸保固，填完資料、輸入信用卡號、按下送出，然後⋯⋯頁面轉啊轉，最後跳出「銀行拒刷」。</p>
+<p>「什麼？拒刷？」我確認了一下額度，明明是夠的。</p>
+<p>「可能是系統問題吧。」我想。</p>
+<p>於是再試一次。還是拒刷。</p>
+<p>再試一次。又是拒刷。</p>
+<p><strong>網頁三次都說「銀行拒刷」，但我明明額度夠啊？</strong></p>
+<p>這時候心裡開始毛毛的，打開信用卡 App 確認一下——</p>
+<p>三筆交易，全部都在。NT$22,422 x 3 = NT$67,266。</p>
+<p>我愣了好幾秒。<strong>網頁說「銀行拒刷」，但銀行明明授權通過了？</strong></p>
+<p>立即檢查 Lenovo 帳戶——沒有任何訂單記錄。
+檢查 Email——沒有確認信。</p>
+<p><strong>網頁說「銀行拒刷」，銀行說「授權成功」。而且是三次。</strong></p>
+<p>這到底是哪裡出了問題？老實說，那一刻我真的慌了。</p>
+<h2>冷靜下來後，技術上到底發生了什麼</h2>
+<p>花了點時間整理思緒，我開始從技術角度分析這個問題。</p>
+<p>這是一個典型的「前端誤判」問題。正常的線上付款流程應該是：</p>
+<pre><code>1. 網站 → 向銀行請求授權
+2. 銀行 → 檢查額度，回傳「成功」
+3. 網站 → 收到成功訊號，建立訂單
+4. 用戶 → 看到「付款成功」頁面
+</code></pre>
+<p>但實際上可能發生：</p>
+<pre><code>1. 網站 → 向銀行請求授權
+2. 銀行 → 檢查額度，回傳「成功」
+3. 網站 → 【收不到回傳訊號，或處理超時】
+4. 網站 → 判定為失敗，顯示「銀行拒刷」
+5. 用戶 → 以為真的被拒刷，再試一次
+6. 銀行 → 又一筆授權通過⋯⋯
+</code></pre>
+<p><strong>重點:網頁顯示「拒刷」，不代表銀行真的拒絕了。</strong></p>
+<p>很多時候是 payment gateway 的回傳訊號出問題，網站收不到確認，只好判定為失敗。但銀行那邊，授權早就通過了。</p>
+<p>這就是為什麼會出現「網頁說拒刷，銀行說成功」的詭異狀況。</p>
+<p>更糟的是，因為我試了三次，就產生了三筆授權。</p>
+<h2>我是怎麼處理的</h2>
+<h3>第一步:確認狀況</h3>
+<p>先不要慌，也<strong>不要再繼續嘗試付款</strong>。每試一次就多一筆授權。</p>
+<p>我做了這些確認：</p>
+<ol>
+<li>檢查 Lenovo 帳戶：沒有訂單</li>
+<li>檢查 Email：沒有確認信</li>
+<li>檢查信用卡：三筆授權都在</li>
+</ol>
+<h3>第二步:聯絡客服</h3>
+<p>打給 Lenovo 客服（0800-000-702），說明狀況：</p>
+<ul>
+<li>網頁顯示「銀行拒刷」</li>
+<li>但信用卡確實有三筆授權</li>
+<li>你們系統沒有我的訂單</li>
+</ul>
+<p>客服確認後表示：「商城部門週末不上班，週一會處理。」</p>
+<p><strong>週一。今天才週六。</strong></p>
+<h3>第三步:等待週末過去（以及焦慮）</h3>
+<p>掛掉電話後，我開始擔心各種可能性：</p>
+<ul>
+<li>會不會三筆都真的扣款？</li>
+<li>萬一系統錯誤，真的要我付 6.7 萬怎麼辦？</li>
+<li>授權保留會不會變成實際扣款？</li>
+<li>週一商城部門會不會說「都已經授權了，我們也沒辦法」？</li>
+</ul>
+<p><strong>雖然理性上知道機率很低，但看著信用卡裡那三筆授權，還是會不安。</strong></p>
+<p>（當時還不知道，週一還會再加一筆，變成將近九萬。）</p>
+<p>整個週末，我反覆搜尋類似案例，看看別人怎麼處理，試著讓自己冷靜下來。</p>
+<h3>第四步:週一，商城部門叫我再試一次（大錯特錯）</h3>
+<p>週一早上，商城部門終於上班了。</p>
+<p>我以為他們會先查 payment gateway 的記錄，確認問題在哪。</p>
+<p>結果對方說：「要不要再試一次看看？」</p>
+<p>我想說，好吧，也許週末是暫時性問題，現在應該修好了。</p>
+<p><strong>結果:第四筆授權。</strong></p>
+<p>網頁依然顯示「銀行拒刷」。但我立刻打給銀行確認——</p>
+<p>「先生，您這筆也有授權碼，有通過喔。」</p>
+<p><strong>四筆。NT$22,422 x 4 = NT$89,688。</strong></p>
+<p>這個金額已經超過我整台電腦加延保的預算了。</p>
+<p>我跟 Lenovo 說：「銀行確認四筆都有授權碼，問題在你們的系統，不是銀行拒刷。<strong>請先查你們的 payment gateway 記錄，不要再叫我嘗試付款。</strong>」</p>
+<p>這時候我才真正意識到：<strong>「再試一次」是最糟糕的建議。</strong></p>
+<p>商城部門上班後的第一個動作，不是先查系統記錄，而是叫客戶再試一次？</p>
+<p>每試一次，就多凍結兩萬多。而問題根本不在銀行端。</p>
+<p>週一商城部門會：</p>
+<ol>
+<li>查詢 payment gateway 的交易記錄</li>
+<li>確認授權有進來但訂單沒建立</li>
+<li>取消這四筆授權（或保留一筆成立訂單）</li>
+<li>通知我重新下單或確認訂單</li>
+</ol>
+<p><strong>理論上是這樣。但在確定之前，還是會擔心。</strong></p>
+<h2>如果你也遇到這種狀況</h2>
+<p>給個簡單的 SOP：</p>
+<h3>立即動作</h3>
+<ol>
+<li><strong>停止嘗試付款</strong> - 再試只會增加更多授權</li>
+<li><strong>即使客服叫你再試，也不要試</strong> - 我就是這樣從三筆變四筆的</li>
+<li><strong>截圖保留證據</strong> - 信用卡交易紀錄、網頁錯誤訊息</li>
+<li><strong>檢查訂單記錄</strong> - 確認商家那邊有沒有訂單</li>
+</ol>
+<h3>確認狀態</h3>
+<ul>
+<li>打開信用卡 App 看交易紀錄</li>
+<li>注意看是「授權保留」還是「已入帳」</li>
+<li>記下交易時間和金額</li>
+</ul>
+<h3>聯絡客服</h3>
+<p>準備好這些資訊：</p>
+<ul>
+<li>信用卡後四碼</li>
+<li>交易時間</li>
+<li>交易金額</li>
+<li>你要買的商品</li>
+</ul>
+<p>跟客服說明：「網頁顯示銀行拒刷，但信用卡有授權紀錄，請協助處理。」</p>
+<h3>理性分析（但還是會擔心）</h3>
+<ul>
+<li>授權保留不是真的扣款</li>
+<li>沒有訂單就不會請款</li>
+<li>通常 3-7 天會自動釋放</li>
+<li>客服處理這種狀況很有經驗</li>
+</ul>
+<p><strong>但說實話，即使知道這些，看著那些授權還是會不安。</strong></p>
+<p>萬一是系統 bug 呢？萬一後端其實有訂單呢？萬一商城部門說「我們查不到問題」呢？</p>
+<p>這些「萬一」在週末這兩天會反覆出現在腦海裡。</p>
+<p><strong>而且，「客服處理這種狀況很有經驗」這句話，在我被建議「再試一次」之後，已經不太相信了。</strong></p>
+<h2>為什麼這麼容易發生</h2>
+<p>Payment gateway 的運作環節很多，任何一個環節出問題都可能導致這種狀況：</p>
+<ul>
+<li>網路延遲或中斷</li>
+<li>伺服器處理超時</li>
+<li>資料庫寫入失敗</li>
+<li>回傳訊號遺失</li>
+</ul>
+<p>對一般網站來說，這種問題發生率可能只有 0.1-1%，但當你的網站每天有上萬筆交易時，就會有數十到上百個人遇到。</p>
+<h2>技術上可以怎麼避免</h2>
+<p>如果我是開發者，我會：</p>
+<ol>
+<li><strong>冪等性設計</strong> - 同一筆付款請求多次送出，只會產生一筆訂單</li>
+<li><strong>Transaction ID</strong> - 每筆交易給唯一識別碼，重複請求直接回傳結果</li>
+<li><strong>狀態機制</strong> - 清楚區分「授權中」「授權成功」「訂單建立」各階段</li>
+<li><strong>前端防呆</strong> - 送出後立即 disable 按鈕，防止重複點擊</li>
+<li><strong>對帳機制</strong> - 定期比對銀行授權和訂單記錄，自動處理不一致</li>
+</ol>
+<p>但說實話，要做到完全避免很難。各種 edge case 防不勝防。</p>
+<h2>這次事件最大的問題:錯誤訊息</h2>
+<p>技術問題難免會發生，但這次最離譜的是<strong>錯誤訊息完全牛頭不對馬嘴</strong>。</p>
+<p><strong>實際問題:</strong> 地址格式錯誤（鄉鎮市區填了郵遞區號）</p>
+<p><strong>系統顯示:</strong> 銀行拒刷</p>
+<p>這兩件事有什麼關係？完全沒有。</p>
+<p><strong>正確的錯誤訊息設計:</strong></p>
+<ul>
+<li>地址格式錯誤 → 顯示「請確認地址格式」</li>
+<li>銀行拒絕授權 → 顯示「銀行拒刷」</li>
+<li>網路逾時 → 顯示「連線逾時，請稍後再試」</li>
+</ul>
+<p><strong>錯誤的設計（就是這次遇到的）:</strong></p>
+<ul>
+<li>任何失敗 → 一律顯示「銀行拒刷」</li>
+</ul>
+<p>這種設計會導致：</p>
+<ol>
+<li>用戶誤以為是銀行問題 → 換卡、重試</li>
+<li>每次重試都產生新的授權</li>
+<li>問題根本沒被解決，因為用戶不知道真正的原因</li>
+</ol>
+<p><strong>錯誤訊息不是小事。一個誤導性的錯誤訊息，讓我多花了兩天焦慮，多產生了三筆不必要的授權。</strong></p>
+<p>如果一開始就顯示「地址格式錯誤」，整件事五分鐘內就結束了。</p>
+<h2>後記</h2>
+<p>寫這篇文章的當下，是週一。那<strong>四筆</strong>授權還靜靜地躺在信用卡紀錄裡。</p>
+<p>NT$89,688。快九萬了。</p>
+<p>原本以為週一商城部門上班就能解決，結果第一個動作是叫我「再試一次」，然後又多了一筆授權。</p>
+<p>作為工程師，我理解這種問題的技術成因，知道理論上應該會順利解決。但作為消費者，看著快九萬的授權紀錄，心裡怎麼可能不七上八下。</p>
+<p><strong>理性和感性是兩回事。</strong></p>
+<p>知道「應該」沒問題，和「確定」沒問題，中間隔著的是持續累積的焦慮。</p>
+<p>如果你也遇到類似狀況，希望這篇文章能幫你理解發生了什麼，知道該怎麼處理。但我也不會假裝說「完全不用擔心」——該緊張還是會緊張的。</p>
+<p>最重要的一課：<strong>當網頁顯示付款失敗，先查信用卡，不要急著重試。</strong></p>
+<p>我就是沒做到這點，才從一筆變三筆。然後週一又聽了商城部門的話「再試一次」，變成四筆。</p>
+<p>只能說，保留證據、聯絡客服、等待處理。然後試著不要一直想這件事（雖然很難）。</p>
+<p><strong>更新:問題找到了，結局出乎意料。</strong></p>
+<p>商城部門查完後回報：<strong>問題出在地址欄位。</strong></p>
+<p>我在「鄉鎮市區」那個欄位填了「112」（郵遞區號）。系統判定地址格式異常，所以訂單建立失敗。</p>
+<p>就這樣。</p>
+<p><strong>但問題是:為什麼錯誤訊息顯示「銀行拒刷」？</strong></p>
+<p>我填錯地址，系統應該告訴我「地址格式錯誤」，而不是「銀行拒刷」。</p>
+<p>如果錯誤訊息正確，我第一次就會發現問題，改一下地址就好。不會試第二次、第三次、第四次，也不會有將近九萬的授權卡在那邊，更不會焦慮一整個週末。</p>
+<p><strong>一個錯誤訊息，造成這麼大的連鎖反應。</strong></p>
+<hr>
+<p><strong>最後結果:</strong></p>
+<ul>
+<li>✅ 延保購買成功</li>
+<li>✅ 額外獲得 10% 折扣（算是補償）</li>
+<li>✅ 另外 3 筆授權會釋放</li>
+</ul>
+<p>算是有個好結局。但這整個過程，真的不應該發生。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>觸控板進階工具：我如何用 C# 找回失去的單指捲動功能 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="當 Microsoft 以「現代化」為名移除精確式觸控板的邊緣捲動功能後，我決定自己寫一個。從 Raw Input API 到慣性捲動，從事件區分到狀態機，記錄完整的技術實作過程與踩坑經驗。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/touchpad-advanced-tool/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/touchpad-advanced-tool/" id="og-url">
@@ -32,7 +32,7 @@
   <meta property="article:tag" content="觸控板">
   <meta property="article:tag" content="Windows">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/touchpad-advanced-tool/" id="twitter-url">
@@ -40,7 +40,7 @@
   <meta property="twitter:description" content="當 Microsoft 以「現代化」為名移除精確式觸控板的邊緣捲動功能後，我決定自己寫一個。從 Raw Input API 到慣性捲動，從事件區分到狀態機，記錄完整的技術實作過程與踩坑經驗。" id="twitter-description">
   <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%A7%B8%E6%8E%A7%E6%9D%BF%E9%80%B2%E9%9A%8E%E5%B7%A5%E5%85%B7%EF%BC%9A%E6%88%91%E5%A6%82%E4%BD%95%E7%94%A8%20C%23%20%E6%89%BE%E5%9B%9E%E5%A4%B1%E5%8E%BB%E7%9A%84%E5%96%AE%E6%8C%87%E6%8D%B2%E5%8B%95%E5%8A%9F%E8%83%BD,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="C#, WPF, Raw Input API, 無障礙, 觸控板, Windows" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -110,6 +110,7 @@
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"觸控板進階工具：我如何用 C# 找回失去的單指捲動功能","description":"當 Microsoft 以「現代化」為名移除精確式觸控板的邊緣捲動功能後，我決定自己寫一個。從 Raw Input API 到慣性捲動，從事件區分到狀態機，記錄完整的技術實作過程與踩坑經驗。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-11-07T00:00:00Z","dateModified":"2025-11-07T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/touchpad-advanced-tool/"},"url":"https://b-log.to/tech-development/touchpad-advanced-tool/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%A7%B8%E6%8E%A7%E6%9D%BF%E9%80%B2%E9%9A%8E%E5%B7%A5%E5%85%B7%EF%BC%9A%E6%88%91%E5%A6%82%E4%BD%95%E7%94%A8%20C%23%20%E6%89%BE%E5%9B%9E%E5%A4%B1%E5%8E%BB%E7%9A%84%E5%96%AE%E6%8C%87%E6%8D%B2%E5%8B%95%E5%8A%9F%E8%83%BD,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"C#, WPF, Raw Input API, 無障礙, 觸控板, Windows","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -119,7 +120,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">觸控板進階工具：我如何用 C# 找回失去的單指捲動功能</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -188,12 +189,283 @@
         <article class="article">
           <div id="post-hero" class="article-hero"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">觸控板進階工具：我如何用 C# 找回失去的單指捲動功能</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Nov 7, 2025</span><span>15 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>C#</span><span>WPF</span><span>Raw Input API</span><span>無障礙</span><span>觸控板</span><span>Windows</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>從問題開始</h2>
+<p>前陣子寫了一篇文章<a href="https://b-log.to/business-insights/modernization-vs-accessibility/">《當「現代化」成為無障礙的退步：精確式觸控板取消邊緣捲動功能》</a>抱怨 Microsoft 把精確式觸控板的邊緣捲動功能拔掉了，對我這種只能單指操作的使用者來說非常不便。當時我說「準備用 C# 寫一個小工具來解決」。</p>
+<p>現在這個工具完成了。</p>
+<blockquote>
+<p><strong>感謝元新電腦的影片給我的啟發</strong>
+這個專案的靈感來自<a href="https://www.youtube.com/watch?v=Fk6bacXyjEU">元新電腦老闆的影片</a>，他用 Claude 幫客戶寫小工具解決單指操作問題。那個故事讓我意識到：AI 時代，我們可以為自己的無障礙需求打造客製化解決方案。</p>
+</blockquote>
+<p>這不只是「功能增強」工具，更是<strong>無障礙輔助工具</strong>。當大廠以「現代化」為名移除基本功能時，我決定自己把它找回來。</p>
+<p>專案開放原始碼在 GitHub：<a href="https://github.com/jason5545/Touchpad-Advanced-Tool">Touchpad Advanced Tool</a></p>
+<h2>為什麼要自己寫？</h2>
+<p>很多人可能會問：「市面上沒有現成的方案嗎？」</p>
+<p>有，但都不符合我的需求：</p>
+<ul>
+<li><strong>AutoHotkey 腳本</strong>：延遲高、邏輯簡陋，容易誤觸</li>
+<li><strong>第三方驅動</strong>：需要信任憑證，安裝複雜，相容性問題多</li>
+<li><strong>Synaptics 舊驅動</strong>：新機器已經不支援，而且會和精確式觸控板衝突</li>
+</ul>
+<p>我需要的是：</p>
+<ol>
+<li><strong>精確的觸控追蹤</strong>：能正確區分觸控板和滑鼠</li>
+<li><strong>流暢的捲動體驗</strong>：要有慣性滑動，不能卡卡的</li>
+<li><strong>低延遲</strong>：&lt;10ms，不能有明顯的反應遲滯</li>
+<li><strong>穩定可靠</strong>：不會和系統衝突，也不會誤觸</li>
+</ol>
+<p>所以我決定從零開始寫。</p>
+<h2>技術架構：如何從原始輸入到捲動動作</h2>
+<h3>MVVM + 依賴注入</h3>
+<p>我採用 <strong>MVVM 架構搭配依賴注入</strong>，讓每個功能都有清晰的職責分離。整個系統由六個核心元件組成：</p>
+<ol>
+<li><strong>RawInputManager</strong>：抓取觸控板的原始輸入</li>
+<li><strong>MouseHookManager</strong>：攔截系統滑鼠事件</li>
+<li><strong>TouchpadTracker</strong>：追蹤觸控狀態和手勢</li>
+<li><strong>ScrollConverter</strong>：將觸控移動轉換成捲動事件</li>
+<li><strong>GestureRecognizer</strong>：辨識手勢（捲動、角落點擊等）</li>
+<li><strong>CornerActionExecutor</strong>：執行角落自訂動作</li>
+</ol>
+<p>每個元件都是獨立的，透過介面溝通，方便測試和維護。</p>
+<pre><code class="language-csharp">services.AddSingleton&lt;IRawInputManager, RawInputManager&gt;();
+services.AddSingleton&lt;IMouseHookManager, MouseHookManager&gt;();
+services.AddSingleton&lt;ITouchpadTracker, TouchpadTracker&gt;();
+services.AddSingleton&lt;IScrollConverter, ScrollConverter&gt;();
+</code></pre>
+<p>這種設計讓我能夠輕鬆取代或測試個別元件，而不會影響整體系統。</p>
+<h2>關鍵技術難題</h2>
+<h3>難題一：如何拿到觸控板的原始座標？</h3>
+<p>Windows 的問題是，當你用觸控板時，系統會自動把觸控事件轉換成滑鼠事件。你看到的只有游標移動，根本不知道手指是在觸控板的哪個位置。</p>
+<p>但邊緣捲動需要知道「手指是否在觸控板右側邊緣」，所以我必須繞過這層抽象，直接讀取觸控板的原始輸入。</p>
+<p><strong>解決方案：Windows Raw Input API</strong></p>
+<p>我使用 Raw Input API 註冊 HID 數位板裝置（Digitizer），這樣就能收到觸控板的原始 HID 報告：</p>
+<pre><code class="language-csharp">RAWINPUTDEVICE[] rid = new RAWINPUTDEVICE[1];
+rid[0].usUsagePage = 0x0D;  // HID_USAGE_PAGE_DIGITIZER
+rid[0].usUsage = 0x05;      // HID_USAGE_DIGITIZER_TOUCH_PAD
+rid[0].dwFlags = RIDEV_INPUTSINK | RIDEV_DEVNOTIFY;
+rid[0].hwndTarget = windowHandle;
+
+RegisterRawInputDevices(rid, 1, Marshal.SizeOf(typeof(RAWINPUTDEVICE)));
+</code></pre>
+<p>註冊後，每當手指在觸控板上移動，系統就會發送 <code>WM_INPUT</code> 訊息，我解析這些訊息就能拿到：</p>
+<ul>
+<li>聯絡點 ID（Contact ID）</li>
+<li>X/Y 座標（絕對座標）</li>
+<li>觸控狀態（Tip Switch：手指是否接觸）</li>
+</ul>
+<p>這些是系統抽象層之下的真實資料。</p>
+<h3>難題二：如何區分「真正的滑鼠」和「觸控板模擬的滑鼠」？</h3>
+<p>這是整個專案最棘手的問題。</p>
+<p>當你用觸控板時，Windows 會同時發送兩種事件：</p>
+<ol>
+<li><strong>Raw Input 事件</strong>（原始觸控資料）</li>
+<li><strong>滑鼠事件</strong>（系統合成的游標移動）</li>
+</ol>
+<p>但如果你真的接了一隻滑鼠，移動時只會有滑鼠事件，沒有 Raw Input。</p>
+<p>問題是：<strong>我要怎麼知道某個滑鼠事件是來自真實滑鼠，還是觸控板模擬的？</strong></p>
+<p>如果判斷錯誤：</p>
+<ul>
+<li>❌ 把真實滑鼠誤判成觸控板 → 用滑鼠會誤觸捲動</li>
+<li>❌ 把觸控板誤判成滑鼠 → 邊緣捲動失效</li>
+</ul>
+<p><strong>解決方案：30 毫秒時間視窗關聯</strong></p>
+<p>我的策略是：<strong>如果滑鼠事件的時間與 Raw Input 事件的時間差在 30ms 以內，而且當下有觸控活動，就判定這個滑鼠事件來自觸控板。</strong></p>
+<pre><code class="language-csharp">private bool IsMouseEventFromTouchpad(DateTime eventTime)
+{
+    var timeSinceLastRawInput = eventTime - _lastRawInputTime;
+    return timeSinceLastRawInput.TotalMilliseconds &lt; 30
+        &amp;&amp; _contactTracker.HasActiveContacts;
+}
+</code></pre>
+<p>為什麼是 30ms？</p>
+<ul>
+<li>觸控板輸入的輪詢頻率通常是 100-200Hz（5-10ms 間隔）</li>
+<li>加上系統處理延遲，Raw Input 和滑鼠事件之間通常差 10-20ms</li>
+<li>30ms 是一個安全的上限，既能容錯，又不會誤判</li>
+</ul>
+<p>這個機制在實測中表現非常穩定，幾乎沒有誤判。</p>
+<h3>難題三：如何實現流暢的慣性捲動？</h3>
+<p>邊緣捲動不只是「手指動多少就捲多少」，還要有<strong>慣性</strong>。當你快速滑動後鬆手，頁面應該繼續滑一段距離再慢慢停下，就像 macOS 或手機的捲動體驗。</p>
+<p><strong>物理模型：指數衰減</strong></p>
+<p>我參考了 macOS 的實作，使用<strong>指數衰減模型</strong>：</p>
+<pre><code class="language-csharp">private void UpdateInertialScroll(double deltaTime)
+{
+    if (_inertialVelocity == 0) return;
+
+    // 指數衰減：v(t) = v₀ × e^(-k×t)
+    double decayFactor = Math.Exp(-DecayCoefficient * deltaTime);
+    _inertialVelocity *= decayFactor;
+
+    // 速度太小就停止
+    if (Math.Abs(_inertialVelocity) &lt; 0.1)
+    {
+        _inertialVelocity = 0;
+        return;
+    }
+
+    // 產生捲動事件
+    int scrollAmount = (int)(_inertialVelocity * deltaTime);
+    SendScrollEvent(scrollAmount);
+}
+</code></pre>
+<p>衰減係數（<code>DecayCoefficient</code>）設為 <strong>0.20</strong>，這是經過多次實測調整的結果：</p>
+<ul>
+<li>太小（如 0.1）→ 滑太久，感覺失控</li>
+<li>太大（如 0.5）→ 立刻停，沒有慣性感</li>
+</ul>
+<p>0.20 剛好提供自然的減速曲線。</p>
+<p><strong>速度追蹤</strong></p>
+<p>為了計算鬆手瞬間的速度，我追蹤<strong>最近 100ms 的移動歷史</strong>：</p>
+<pre><code class="language-csharp">private void TrackVelocity(int deltaY, DateTime timestamp)
+{
+    _velocityHistory.Add((deltaY, timestamp));
+
+    // 只保留最近 100ms 的記錄
+    while (_velocityHistory.Count &gt; 0
+        &amp;&amp; (timestamp - _velocityHistory[0].timestamp).TotalMilliseconds &gt; 100)
+    {
+        _velocityHistory.RemoveAt(0);
+    }
+}
+</code></pre>
+<p>鬆手時，計算這 100ms 的平均速度作為初速度：</p>
+<pre><code class="language-csharp">private double CalculateInitialVelocity()
+{
+    if (_velocityHistory.Count &lt; 2) return 0;
+
+    int totalDelta = _velocityHistory.Sum(v =&gt; v.deltaY);
+    double totalTime = (_velocityHistory.Last().timestamp
+                     - _velocityHistory.First().timestamp).TotalSeconds;
+
+    return totalDelta / totalTime;  // pixels per second
+}
+</code></pre>
+<h3>難題四：如何避免手勢衝突？</h3>
+<p>觸控板上有很多可能的操作：</p>
+<ul>
+<li>單指邊緣捲動</li>
+<li>單指角落點擊（自訂動作）</li>
+<li>單指一般移動（游標）</li>
+</ul>
+<p>如果不加控制，很容易發生衝突：比如你想點角落，結果觸發了捲動。</p>
+<p><strong>解決方案：狀態機</strong></p>
+<p>我用<strong>狀態機</strong>管理觸控狀態，確保同一時間只有一種手勢生效：</p>
+<pre><code>[None] ──手指在角落停留──&gt; [CornerTap]
+  │
+  └──手指在邊緣移動──&gt; [Scrolling]
+  │
+  └──其他情況──&gt; [NormalCursor]
+</code></pre>
+<p>關鍵規則：</p>
+<ul>
+<li>一旦進入 <code>Scrolling</code> 狀態，就不會再切換到 <code>CornerTap</code></li>
+<li>一旦進入 <code>CornerTap</code>，就會等待手指離開才執行動作</li>
+<li>移動超過閾值（10 像素）才會進入 <code>Scrolling</code>，避免微小晃動觸發</li>
+</ul>
+<pre><code class="language-csharp">private void UpdateGestureState(Contact contact)
+{
+    switch (_currentState)
+    {
+        case GestureState.None:
+            if (IsInCornerZone(contact) &amp;&amp; !HasMoved(contact, 5))
+                _currentState = GestureState.CornerTap;
+            else if (IsInScrollZone(contact) &amp;&amp; HasMoved(contact, 10))
+                _currentState = GestureState.Scrolling;
+            else
+                _currentState = GestureState.NormalCursor;
+            break;
+
+        case GestureState.Scrolling:
+            // 捲動中，不切換狀態
+            break;
+
+        case GestureState.CornerTap:
+            if (HasMoved(contact, 10))
+                _currentState = GestureState.NormalCursor;  // 移動取消點擊
+            break;
+    }
+}
+</code></pre>
+<p>這個狀態機讓手勢辨識變得可預測，幾乎不會誤觸。</p>
+<h2>一些實作細節</h2>
+<h3>智慧初始偏移</h3>
+<p>觸控板有個問題：<strong>第一個座標事件的移動量永遠是 0</strong>。</p>
+<p>因為系統需要先確定手指的初始位置，才能計算移動量。但這會導致邊緣捲動的啟動有遲滯感。</p>
+<p>我的解決方案是：<strong>預測第一個 delta</strong>。</p>
+<p>根據後續移動的方向和速度，推測第一個 delta 應該是多少，然後補償進去：</p>
+<pre><code class="language-csharp">if (isFirstDelta)
+{
+    // 預測第一個 delta（根據第二個 delta）
+    int predictedDelta = nextDeltaY / 2;  // 保守估計
+    SendScrollEvent(predictedDelta);
+}
+</code></pre>
+<p>這個小優化讓捲動啟動變得更即時。</p>
+<h3>結構化日誌</h3>
+<p>偵錯觸控板程式非常痛苦，因為事件發生得很快，而且涉及多個子系統。</p>
+<p>我用 <strong>Serilog</strong> 做結構化日誌，每個事件都記錄完整的上下文：</p>
+<pre><code class="language-csharp">_logger.Information(
+    &quot;Raw Input: ContactID={ContactId} X={X} Y={Y} TipSwitch={TipSwitch} Time={Time:HH:mm:ss.fff}&quot;,
+    contactId, x, y, tipSwitch, DateTime.Now
+);
+</code></pre>
+<p>日誌每天自動輪替，保留 7 天：</p>
+<pre><code class="language-csharp">Log.Logger = new LoggerConfiguration()
+    .WriteTo.File(
+        &quot;logs/touchpad-.log&quot;,
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 7
+    )
+    .CreateLogger();
+</code></pre>
+<p>當使用者回報問題時，我可以直接要日誌檔案來重現問題。</p>
+<h3>CI/CD 自動化</h3>
+<p>我用 <strong>GitHub Actions</strong> 實現自動化發布：</p>
+<ol>
+<li>推送 tag（如 <code>v1.0.0</code>）</li>
+<li>自動建置 Release 和 Debug 版本</li>
+<li>執行單元測試</li>
+<li>發布到 GitHub Releases</li>
+</ol>
+<pre><code class="language-yaml">- name: Build Release
+  run: dotnet build --configuration Release
+
+- name: Run Tests
+  run: dotnet test --no-build --verbosity normal
+
+- name: Create Release
+  uses: softprops/action-gh-release@v1
+  with:
+    files: |
+      bin/Release/net8.0-windows/TouchpadAdvancedTool.exe
+</code></pre>
+<p>這樣每次發布新版本，我只需要推 tag，其他都自動完成。</p>
+<h2>效能表現</h2>
+<p>最終的效能指標：</p>
+<ul>
+<li><strong>CPU 使用率</strong>：0.5-1%（閒置時幾乎為 0）</li>
+<li><strong>記憶體佔用</strong>：約 35MB</li>
+<li><strong>輸入延遲</strong>：&lt;10ms（從觸控到捲動）</li>
+</ul>
+<p>對比 AutoHotkey 方案，CPU 使用率降低了 70%，延遲降低了 80%。</p>
+<h2>寫在最後</h2>
+<p>這個專案對我來說意義重大。</p>
+<p>當大廠以「現代化」為名移除基本功能時，我們不是只能被動接受。AI 的普及讓客製化開發變得可行，即使是像我這樣身體有限制的開發者，也能為自己的需求打造解決方案。</p>
+<p>如果你也是單指使用者，或者你也對這類技術感興趣，歡迎到 <a href="https://github.com/jason5545/Touchpad-Advanced-Tool">GitHub</a> 看看。程式碼完全開放原始碼，也歡迎提出改進建議。</p>
+<p><strong>技術統計</strong>：</p>
+<ul>
+<li>開發時間：約 3 天</li>
+<li>程式碼行數：約 5,200 行</li>
+<li>使用技術：C# / .NET 8.0 / WPF / ModernWpf</li>
+<li>架構模式：MVVM + DI</li>
+<li>授權：MIT</li>
+</ul>
+<p>這證明了一件事：<strong>科技應該為所有人服務，如果大廠做不到，我們就自己做。</strong></p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">

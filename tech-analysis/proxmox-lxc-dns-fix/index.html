@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼 - (b)-log</title>
-  
+
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="所有 LXC 容器的 DNS 會自己改掉，手動修好後過一陣子又壞。查了很久發現是 dhclient 在 DHCP 續租時偷偷改 DNS。記錄怎麼用 dhclient hook 把 host 和所有容器的 DNS 鎖住，讓它再也改不掉。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/" id="canonical-url">
-  
+
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/" id="og-url">
@@ -33,7 +33,7 @@
   <meta property="article:tag" content="系統管理">
   <meta property="article:tag" content="resolv.conf">
 <!-- ARTICLE_TAGS_END -->
-  
+
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/" id="twitter-url">
@@ -41,7 +41,7 @@
   <meta property="twitter:description" content="所有 LXC 容器的 DNS 會自己改掉，手動修好後過一陣子又壞。查了很久發現是 dhclient 在 DHCP 續租時偷偷改 DNS。記錄怎麼用 dhclient hook 把 host 和所有容器的 DNS 鎖住，讓它再也改不掉。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2025/proxmox-lxc-dns-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
-  
+
   <!-- 額外的 metadata -->
   <meta name="keywords" content="Proxmox, LXC, DNS, dhclient, 網路設定, 系統管理, resolv.conf" id="meta-keywords">
   <meta name="robots" content="index, follow">
@@ -112,6 +112,7 @@
   <link rel="preload" as="image" href="/content/img/2025/proxmox-lxc-dns-cover.webp" imagesrcset="/content/img/2025/proxmox-lxc-dns-cover-480w.webp 480w, /content/img/2025/proxmox-lxc-dns-cover-828w.webp 828w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼","description":"所有 LXC 容器的 DNS 會自己改掉，手動修好後過一陣子又壞。查了很久發現是 dhclient 在 DHCP 續租時偷偷改 DNS。記錄怎麼用 dhclient hook 把 host 和所有容器的 DNS 鎖住，讓它再也改不掉。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-11-16T00:00:00Z","dateModified":"2025-11-16T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/"},"url":"https://b-log.to/tech-analysis/proxmox-lxc-dns-fix/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2025/proxmox-lxc-dns-cover.webp"],"keywords":"Proxmox, LXC, DNS, dhclient, 網路設定, 系統管理, resolv.conf","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -121,7 +122,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current"></span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -190,12 +191,148 @@
         <article class="article">
           <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2025/proxmox-lxc-dns-cover.webp" srcset="/content/img/2025/proxmox-lxc-dns-cover-480w.webp 480w, /content/img/2025/proxmox-lxc-dns-cover-828w.webp 828w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
           <header class="article-header">
-            <p id="post-category" class="article-category"></p>
-            <h1 id="post-title">Loading</h1>
-            <div id="post-meta" class="article-meta"></div>
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">Proxmox LXC 的 DNS 一直跑掉：dhclient 在搞鬼</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Nov 16, 2025</span><span>12 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"></div>
-          <div id="post-content" class="article-body"></div>
+          <div id="post-tags" class="article-tags"><span>Proxmox</span><span>LXC</span><span>DNS</span><span>dhclient</span><span>網路設定</span><span>系統管理</span><span>resolv.conf</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>Proxmox 上所有 LXC 容器的 DNS 會自己改掉，手動修好後過一陣子又壞。查了很久才發現是 dhclient 在 DHCP 續租時偷偷改 DNS。</p>
+<hr>
+<p>CT 106 突然 ping 不到 google.com。進去看 <code>/etc/resolv.conf</code>，DNS 又變成 <code>10.0.0.1</code> 了。</p>
+<pre><code class="language-bash">ping google.com
+# ping: google.com: Temporary failure in name resolution
+</code></pre>
+<p>我想要的是：</p>
+<pre><code class="language-bash">nameserver 8.8.8.8
+nameserver 1.1.1.1
+</code></pre>
+<p>結果每次都變成：</p>
+<pre><code class="language-bash">nameserver 10.0.0.1
+</code></pre>
+<p>用 <code>pct exec</code> 改回來：</p>
+<pre><code class="language-bash">pct exec 106 -- sh -lc \
+  &#39;printf &quot;%s\n&quot; &quot;nameserver 8.8.8.8&quot; &quot;nameserver 1.1.1.1&quot; &gt; /etc/resolv.conf&#39;
+</code></pre>
+<p>DNS 會立刻恢復，但過一陣子又壞掉。而且不只 CT 106，檢查之後發現所有 LXC 都有這問題。</p>
+<hr>
+<h2>是誰在改 DNS</h2>
+<p>可能會動 <code>/etc/resolv.conf</code> 的有這幾個：</p>
+<ul>
+<li>Proxmox 自己（開機時寫 <code># --- BEGIN PVE ---</code> 區塊）</li>
+<li>容器裡的 <code>dhclient</code></li>
+<li><code>systemd-resolved</code></li>
+<li>VPN 工具（Tailscale、OpenVPN）</li>
+</ul>
+<p>先看 Proxmox 設定：</p>
+<pre><code class="language-bash">pct list
+pct config 104
+pct config 105
+# ...
+</code></pre>
+<p>有些容器沒設 <code>nameserver:</code>，有些設了 <code>8.8.8.8</code>，有些是 <code>1.1.1.1 8.8.8.8</code>。</p>
+<p>再看容器裡的 <code>/etc/resolv.conf</code>：</p>
+<pre><code class="language-bash">pct exec 106 -- cat /etc/resolv.conf
+pct exec 108 -- cat /etc/resolv.conf
+</code></pre>
+<p>有兩種情況：</p>
+<p><strong>PVE 版本</strong>（有標記）：</p>
+<pre><code class="language-bash"># --- BEGIN PVE ---
+search lan
+nameserver 8.8.8.8
+# --- END PVE ---
+</code></pre>
+<p><strong>被改掉的版本</strong>：</p>
+<pre><code class="language-bash">domain lan
+search lan
+nameserver 10.0.0.1
+</code></pre>
+<p>看哪些 process 在跑：</p>
+<pre><code class="language-bash">pct exec 106 -- ps aux | egrep &#39;dhclient|systemd-resolved&#39;
+</code></pre>
+<p>結果分成兩派：有些跑 <code>systemd-resolved</code>，有些跑 <code>dhclient</code>。而跑 <code>dhclient</code> 的那些容器，DNS 就是被改成 <code>10.0.0.1</code> 的那些。</p>
+<p>找到了：是容器裡的 <code>dhclient</code> 在搞鬼。每次 DHCP 續租，它就把 DNS 改成 gateway 給的 <code>10.0.0.1</code>。</p>
+<hr>
+<h2>先固定 Host 的 DNS</h2>
+<p>改 host 的 <code>/etc/resolv.conf</code>：</p>
+<pre><code class="language-bash">cat &gt;/etc/resolv.conf &lt;&lt; &#39;EOF&#39;
+search lan
+nameserver 8.8.8.8
+nameserver 1.1.1.1
+EOF
+</code></pre>
+<p>接著建立 <code>dhclient</code> hook：</p>
+<pre><code class="language-bash">mkdir -p /etc/dhcp/dhclient-enter-hooks.d
+cat &gt;/etc/dhcp/dhclient-enter-hooks.d/nodnsupdate &lt;&lt; &#39;EOF&#39;
+#!/bin/sh
+make_resolv_conf() { :; }
+EOF
+chmod +x /etc/dhcp/dhclient-enter-hooks.d/nodnsupdate
+</code></pre>
+<p><code>dhclient</code> 更新租約時會呼叫 <code>make_resolv_conf()</code>，用 hook 把它改成空函式，就不會動 DNS 了。</p>
+<pre><code class="language-bash">cat /etc/resolv.conf
+ping -c 2 google.com
+</code></pre>
+<p>搞定。</p>
+<hr>
+<h2>統一所有容器的 DNS</h2>
+<p>我有幾個 LXC：<code>104, 105, 106, 107, 108, 111</code>。在 host 上跑個 loop：</p>
+<pre><code class="language-bash">CT_LIST=&quot;104 105 106 107 108 111&quot;
+for CT in $CT_LIST; do
+  pct exec &quot;$CT&quot; -- sh -lc \
+    &#39;printf &quot;%s\n&quot; &quot;nameserver 8.8.8.8&quot; &quot;nameserver 1.1.1.1&quot; &gt; /etc/resolv.conf&#39;
+done
+</code></pre>
+<p>看一下：</p>
+<pre><code class="language-bash">pct exec 106 -- cat /etc/resolv.conf
+# nameserver 8.8.8.8
+# nameserver 1.1.1.1
+</code></pre>
+<hr>
+<h2>鎖住容器裡的 dhclient</h2>
+<p>在每個容器裡放同樣的 hook：</p>
+<pre><code class="language-bash">pct exec &quot;$CT&quot; -- mkdir -p /etc/dhcp/dhclient-enter-hooks.d
+pct exec &quot;$CT&quot; -- sh -lc &#39;cat &gt; /etc/dhcp/dhclient-enter-hooks.d/nodnsupdate &lt;&lt; &quot;EOF&quot;\n#!/bin/sh\nmake_resolv_conf() { :; }\nEOF&#39;
+pct exec &quot;$CT&quot; -- chmod +x /etc/dhcp/dhclient-enter-hooks.d/nodnsupdate
+</code></pre>
+<p>測試看看（CT 106）：</p>
+<pre><code class="language-bash">pct exec 106 -- sh -lc &#39;
+  echo &quot;Before:&quot;; cat /etc/resolv.conf; echo;
+  dhclient -v -r eth0 || echo &quot;dhclient -r failed&quot;;
+  dhclient -v eth0 || echo &quot;dhclient renew failed&quot;;
+  echo; echo &quot;After:&quot;; cat /etc/resolv.conf;
+&#39;
+</code></pre>
+<p>Before 是 <code>8.8.8.8</code> / <code>1.1.1.1</code>，DHCP 跑完後 After 還是一樣。搞定。</p>
+<hr>
+<h2>驗證</h2>
+<p>先看 Host：</p>
+<pre><code class="language-bash">cat /etc/resolv.conf
+ping -c 2 google.com
+</code></pre>
+<p>再看所有容器：</p>
+<pre><code class="language-bash">for CT in 104 105 106 107 108 111; do
+  pct exec &quot;$CT&quot; -- cat /etc/resolv.conf
+done
+</code></pre>
+<p>全部都是：</p>
+<pre><code class="language-bash">nameserver 8.8.8.8
+nameserver 1.1.1.1
+</code></pre>
+<p>試著 ping 看看：</p>
+<pre><code class="language-bash">pct exec 104 -- ping -c 2 google.com
+pct exec 106 -- ping -c 2 google.com
+pct exec 108 -- ping -c 2 google.com
+</code></pre>
+<p>都能正常解析。</p>
+<hr>
+<h2>新容器會自動繼承</h2>
+<p>Host 的 DNS 固定後，建立新 LXC 時如果沒指定 <code>-nameserver</code>，PVE 會用 host 的 <code>/etc/resolv.conf</code> 當模板。新容器一開始就會是 <code>8.8.8.8</code> / <code>1.1.1.1</code>。</p>
+<p>如果要更徹底，可以用 template：先在一個乾淨容器裡設好 <code>nodnsupdate</code>，轉成 template。之後 clone 出來的容器就內建這個設定。</p>
+<hr>
+<p>做完這些，DNS 終於穩了。</p>
+<p>這次踩坑發現，Proxmox 其實沒做什麼壞事，PVE 只是開機時寫一段 <code>/etc/resolv.conf</code>。真正會偷改 DNS 的是容器裡的 DHCP client。Host 的 DNS 設定雖然會被新容器繼承，但容器裡有 <code>dhclient</code> 或 <code>systemd-resolved</code> 在跑的話，還是會被改掉。</p>
+<p>用 <code>nodnsupdate</code> hook 就能阻止 DHCP 改寫 <code>/etc/resolv.conf</code>，幾行 shell 而已。之後所有容器都用同一組 DNS，debug 網路問題也輕鬆很多。</p>
+</div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
             <section class="comments-section" id="comments">
