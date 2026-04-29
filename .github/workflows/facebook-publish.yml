@@ -1,0 +1,71 @@
+name: Facebook 發文管線
+
+on:
+  workflow_run:
+    workflows:
+      - "內容資料管線"
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 指定要手動發佈的文章 slug，留空則只處理尚未發佈的新文章
+        required: false
+        type: string
+      dry_run:
+        description: 只列出將發佈的內容，不送出到 Facebook
+        required: false
+        default: true
+        type: boolean
+
+concurrency:
+  group: facebook-publish-main
+  cancel-in-progress: false
+
+jobs:
+  facebook-publish:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.event == 'push' &&
+        github.event.workflow_run.head_branch == 'main'
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 檢出 main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 設定 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 發佈新文章到 Facebook
+        run: node scripts/publish-facebook-post.js
+        env:
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_PAGE_ACCESS_TOKEN: ${{ secrets.FB_PAGE_ACCESS_TOKEN }}
+          FB_GRAPH_API_VERSION: ${{ vars.FB_GRAPH_API_VERSION || 'v25.0' }}
+          POST_SLUG: ${{ github.event.inputs.slug || '' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
+
+      - name: 提交 Facebook 發佈狀態
+        run: |
+          if [[ -z "$(git status --porcelain data/facebook-published.json)" ]]; then
+            echo "Facebook 發佈狀態沒有變更"
+            exit 0
+          fi
+
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/facebook-published.json
+          git commit -m "chore: record facebook publish state"
+          git pull --rebase origin main
+          git push origin HEAD:main

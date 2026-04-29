@@ -186,3 +186,18 @@ const categoryMapping = {
 ## 授權
 
 本系統為 b-log 專案的一部分，採用相同的授權條款。
+
+## Facebook 自動發文
+
+`.github/workflows/facebook-publish.yml` 會在「內容資料管線」成功跑完後檢查新文章，並透過 `scripts/publish-facebook-post.js` 將尚未發佈過的文章連結貼到 Facebook 粉絲專頁。
+
+需要在 GitHub Repository Secrets 設定：
+
+- `FB_PAGE_ID`：Facebook 粉絲專頁 ID
+- `FB_PAGE_ACCESS_TOKEN`：具備發佈權限的 Page Access Token
+
+可選 Repository Variable：
+
+- `FB_GRAPH_API_VERSION`：Meta Graph API 版本，預設 `v25.0`
+
+第一次執行時，若 `data/facebook-published.json` 不存在，腳本只會建立既有文章 baseline，不會把舊文章全部發出去。之後 `data/posts.json` 出現新的 slug 時才會自動發文。
