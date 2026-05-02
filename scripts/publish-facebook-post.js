@@ -19,6 +19,7 @@ const publishBaseline = args.has('--baseline') || process.env.PUBLISH_BASELINE =
 const includeOriginalDate = args.has('--include-original-date') || process.env.INCLUDE_ORIGINAL_DATE === '1';
 const postLimit = Number.parseInt(process.env.POST_LIMIT || '', 10);
 const publishDelayMs = Number.parseInt(process.env.PUBLISH_DELAY_MS || '0', 10);
+const pageCheckTimeout = Number.parseInt(process.env.PAGE_CHECK_TIMEOUT || '300', 10);
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -125,6 +126,36 @@ async function publishToFacebook({ pageId, pageAccessToken, post, postUrl }) {
   return payload;
 }
 
+async function waitForPageLive(postUrl, slug, timeoutSeconds) {
+  const start = Date.now();
+  const interval = 5000; // 5 seconds
+  
+  while (Date.now() - start < timeoutSeconds * 1000) {
+    try {
+      const response = await fetch(postUrl, {
+        redirect: 'follow',
+        headers: { 'User-Agent': 'b-log-fb-publisher' },
+      });
+      
+      if (response.status === 200) {
+        console.log(`  ✓ ${slug} 頁面已就緒 (HTTP ${response.status})`);
+        return true;
+      }
+      
+      const elapsed = Math.round((Date.now() - start) / 1000);
+      console.log(`  ⏳ ${slug} 頁面尚未就緒 (HTTP ${response.status})，已等待 ${elapsed}s，${interval / 1000}s 後重試...`);
+    } catch (err) {
+      const elapsed = Math.round((Date.now() - start) / 1000);
+      console.log(`  ⏳ ${slug} 頁面連線失敗 (${err.message})，已等待 ${elapsed}s，${interval / 1000}s 後重試...`);
+    }
+    
+    await new Promise(resolve => setTimeout(resolve, interval));
+  }
+  
+  console.log(`  ✗ ${slug} 頁面在 ${timeoutSeconds}s 內未就緒，跳過發文`);
+  return false;
+}
+
 async function main() {
   const posts = readJson(paths.posts);
   const { categoryMapping } = readJson(paths.categories);
@@ -189,6 +220,13 @@ async function main() {
 
     if (dryRun) {
       console.log(buildMessage(post));
+      continue;
+    }
+
+    // Wait for the page to be live before publishing to Facebook
+    const isLive = await waitForPageLive(postUrl, post.slug, pageCheckTimeout);
+    if (!isLive) {
+      console.log(`Skipping ${post.slug} — page not live`);
       continue;
     }
 
