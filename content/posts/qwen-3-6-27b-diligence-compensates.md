@@ -71,4 +71,4 @@ TrackPal 的 bug 是這樣修的。今天這篇文章也是這樣產出來的。
 
 ---
 
-*TrackPal 是開源的，[GitHub](https://github.com/jason5545/TrackPal)，MIT 授權。這個修復在 commit `6154d09`。*
+*TrackPal 是開放原始碼的，[GitHub](https://github.com/jason5545/TrackPal)，MIT 授權。這個修復在 commit `6154d09`。*
