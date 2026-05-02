@@ -53,7 +53,7 @@ NSApp.setActivationPolicy(.accessory)
 
 我知道 Qwen 3.6 27B 的參數量不大。它的知識庫沒有雲端模型那樣更新。它可能連 `setActivationPolicy` 的正確列舉值是什麼都不確定。但它沒有停在「我找不到文件」然後幫你寫一段講稿。它繼續跑，繼續試，繼續修正。
 
-## 這個模式可以复用
+## 這個模式可以復用
 
 TrackPal 的 bug 是這樣修的。今天這篇文章也是這樣產出來的。
 
