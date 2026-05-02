@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MTP 到底快在哪裡：Qwen 3.6 的推論加速實驗 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="標準 FP8 量化約 13 tok/s，加上 MTP 後跳到 17-18 tok/s。搞懂 MTP 不是量化格式、FP8 為什麼比 4-bit 好，以及本地模型真正的優勢是什麼。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/ai-analysis/qwen-3-6-mtp-fp8-inference-speed-research/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/ai-analysis/qwen-3-6-mtp-fp8-inference-speed-research/" id="og-url">
+  <meta property="og:title" content="MTP 到底快在哪裡：Qwen 3.6 的推論加速實驗" id="og-title">
+  <meta property="og:description" content="標準 FP8 量化約 13 tok/s，加上 MTP 後跳到 17-18 tok/s。搞懂 MTP 不是量化格式、FP8 為什麼比 4-bit 好，以及本地模型真正的優勢是什麼。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/qwen-3-6-mtp-fp8-inference-speed-research-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-05-02T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-05-02T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="AI 分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="Qwen 3.6">
+  <meta property="article:tag" content="MTP">
+  <meta property="article:tag" content="FP8">
+  <meta property="article:tag" content="Multi-Token Prediction">
+  <meta property="article:tag" content="本地模型">
+  <meta property="article:tag" content="MLX">
+  <meta property="article:tag" content="oMLX">
+  <meta property="article:tag" content="推論加速">
+  <meta property="article:tag" content="量化">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/ai-analysis/qwen-3-6-mtp-fp8-inference-speed-research/" id="twitter-url">
+  <meta property="twitter:title" content="MTP 到底快在哪裡：Qwen 3.6 的推論加速實驗" id="twitter-title">
+  <meta property="twitter:description" content="標準 FP8 量化約 13 tok/s，加上 MTP 後跳到 17-18 tok/s。搞懂 MTP 不是量化格式、FP8 為什麼比 4-bit 好，以及本地模型真正的優勢是什麼。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/qwen-3-6-mtp-fp8-inference-speed-research-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="Qwen 3.6, MTP, FP8, Multi-Token Prediction, 本地模型, MLX, oMLX, 推論加速, 量化" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/qwen-3-6-mtp-fp8-inference-speed-research-cover.webp" imagesrcset="/content/img/2026/qwen-3-6-mtp-fp8-inference-speed-research-cover-480w.webp 480w, /content/img/2026/qwen-3-6-mtp-fp8-inference-speed-research-cover-828w.webp 828w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"MTP 到底快在哪裡：Qwen 3.6 的推論加速實驗","description":"標準 FP8 量化約 13 tok/s，加上 MTP 後跳到 17-18 tok/s。搞懂 MTP 不是量化格式、FP8 為什麼比 4-bit 好，以及本地模型真正的優勢是什麼。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-02T00:00:00Z","dateModified":"2026-05-02T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/qwen-3-6-mtp-fp8-inference-speed-research/"},"url":"https://b-log.to/ai-analysis/qwen-3-6-mtp-fp8-inference-speed-research/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/qwen-3-6-mtp-fp8-inference-speed-research-cover.webp"],"keywords":"Qwen 3.6, MTP, FP8, Multi-Token Prediction, 本地模型, MLX, oMLX, 推論加速, 量化","articleSection":"AI 分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">MTP 到底快在哪裡：Qwen 3.6 的推論加速實驗</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/qwen-3-6-mtp-fp8-inference-speed-research-cover.webp" srcset="/content/img/2026/qwen-3-6-mtp-fp8-inference-speed-research-cover-480w.webp 480w, /content/img/2026/qwen-3-6-mtp-fp8-inference-speed-research-cover-828w.webp 828w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">MTP 到底快在哪裡：Qwen 3.6 的推論加速實驗</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 2, 2026</span><span>4 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>Qwen 3.6</span><span>MTP</span><span>FP8</span><span>Multi-Token Prediction</span><span>本地模型</span><span>MLX</span><span>oMLX</span><span>推論加速</span><span>量化</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>我最近一直在測 Qwen 3.6 27B 的各種版本，想搞懂一個問題：模型名稱後面那些字，到底代表什麼？</p>
+<p>MLX-8bit、UD-MLX-4bit、MXFP4、NVFP4、MTP——每次看到新的量化格式，都好像在猜謎。</p>
+<h2>從一個簡單的測試開始</h2>
+<p>事情是這樣開始的。我在 M5 Max 128GB 上跑了兩個版本的 Qwen 3.6 27B：</p>
+<ul>
+<li>標準 FP8 量化（沒有 MTP）：約 13 tok/s</li>
+<li>FP8 + MTP（Multi-Token Prediction）：約 17-18 tok/s</li>
+</ul>
+<p>差了差不多 30-40% 的速度。同樣的模型、同樣的硬體、同樣的量化精度，只是多了一個 MTP。</p>
+<p>這讓我很好奇。MTP 到底是什麼？它真的只是「快了一點」，還是背後有更重要的事？</p>
+<h2>MTP 不是量化格式</h2>
+<p>很多新手（包括一開始的我）會以為 MTP 是另一種量化方式——像是 4-bit 或 8-bit 那種。</p>
+<p>其實不是。</p>
+<p>MTP 是<strong>推論加速技術</strong>，不是權重壓縮。它不改模型的精度，不改模型的大小，只是讓模型在生成文字時，每次前向傳播可以同时預測多個 token，而不是只能一個一個來。</p>
+<p>具體來說：模型內建了一組「預測頭」，會同時猜接下來 2-3 個 token 可能是什麼。然後主模型驗證這些猜測，接受的留下，拒絕的重跑。</p>
+<p>所以 MTP 模型跟非 MTP 模型，輸出品質是一模一樣的。它只是變快了。</p>
+<h2>FP8 為什麼比 4-bit 好</h2>
+<p>另一個讓我困惑的事是：模型卡上寫「original FP8 variant」，那 FP8 到底算幾 bit？</p>
+<p>答案是：<strong>FP8 就是 8 bit</strong>，只是它是浮點數格式，不是整數。</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>位元數</th>
+<th>精度</th>
+<th>模型大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FP16 / BF16</td>
+<td>16 bit</td>
+<td>最高</td>
+<td>最大</td>
+</tr>
+<tr>
+<td>FP8</td>
+<td>8 bit（浮點）</td>
+<td>接近 FP16</td>
+<td>約一半</td>
+</tr>
+<tr>
+<td>INT4 / FP4</td>
+<td>4 bit</td>
+<td>明顯下降</td>
+<td>約四分之一</td>
+</tr>
+</tbody></table>
+<p>Qwen 官方的 FP8 量化用的是 block size 128 的細粒度方法，性能指標幾乎跟原始模型相同。這代表你在速度跟品質之間找到了一個很平衡的點。</p>
+<p>4-bit 當然更省記憶體，但品質損失是實打實的。如果你記憶體夠用，FP8 是明顯更好的選擇。</p>
+<h2>我的最終設定</h2>
+<p>經過這一輪測試，我現在跑的配置是：</p>
+<ul>
+<li><strong>模型</strong>：Qwen 3.6 27B MTP</li>
+<li><strong>量化</strong>：FP8</li>
+<li><strong>後端</strong>：oMLX（基於 MLX 的 OpenAI 相容 API）</li>
+<li><strong>速度</strong>：17-18 tok/s</li>
+</ul>
+<p>這個組合在我 M5 Max 128GB 上跑得穩，品質好，速度也夠用。寫程式、debug、寫文章，全都在這個環境下完成。</p>
+<h2>本地模型的真實優勢</h2>
+<p>很多人問我：本地模型跟雲端比，真的值得嗎？</p>
+<p>我的答案是：值得，但不是因為能力多強。</p>
+<p>本地模型的真正優勢是——<strong>你不怕花錢地犯錯</strong>。</p>
+<p>沒有 token 計費的壓力，沒有額度用盡的焦慮，沒有 API 限速的煩惱。你丟進去，它給你答案，錯了就再丟一次。因為是在本機跑，試錯成本趨近於零。</p>
+<p>這比什麼「跟雲端模型能力差不多」之類的說法重要得多。</p>
+<h2>這個模式可以復用</h2>
+<p>TrackPal 的 bug 是這樣修的。今天的 MTP 研究也是這樣跑出來的。</p>
+<p>不知道答案就寫程式去測，測出來了。不知道 MTP 快多少就實際跑兩次，數字擺在面前了。</p>
+<p>本地模型教會我一件事：很多時候你不需要更聰明的工具，你只需要更不怕犯錯的環境。</p>
+<p>而這個環境，現在就在你桌子上。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
