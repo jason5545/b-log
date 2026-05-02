@@ -1,6 +1,6 @@
 [
   {
-    "slug": "qwen-3.6-27b-diligence-compensates",
+    "slug": "qwen-3-6-27b-diligence-compensates",
     "title": "勤能補拙：Qwen 3.6 27B 幫我修好了 TrackPal",
     "summary": "TrackPal 在 macOS 26 突然打不開了。ChatGPT 額度用完，改用 Qwen 3.6 27B 本地模型調查。一開始它用了舊 API 編譯不過，但接著開始寫 Swift 去測哪個 API 才是對的。不知道答案就寫程式去測，測出來了。這不叫聰明，這叫勤。",
     "category": "AI 分析",
@@ -16,7 +16,7 @@
       "勤能補拙"
     ],
     "accentColor": "#2563eb",
-    "coverImage": "/content/img/2026/qwen-3.6-27b-diligence-compensates-cover.webp",
+    "coverImage": "/content/img/2026/qwen-3-6-27b-diligence-compensates-cover.webp",
     "readingTime": "5 min"
   },
   {
