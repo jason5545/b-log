@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "qwen-3-6-mtp-fp8-inference-speed-research",
+      "url": "https://b-log.to/ai-analysis/qwen-3-6-mtp-fp8-inference-speed-research/",
+      "image": "https://b-log.to/content/img/2026/qwen-3-6-mtp-fp8-inference-speed-research-cover.webp",
+      "title": "MTP 到底快在哪裡：Qwen 3.6 的推論加速實驗",
+      "content_text": "標準 FP8 量化約 13 tok/s，加上 MTP 後跳到 17-18 tok/s。搞懂 MTP 不是量化格式、FP8 為什麼比 4-bit 好，以及本地模型真正的優勢是什麼。",
+      "date_published": "2026-05-02T00:00:00.000Z",
+      "date_modified": "2026-05-02T00:00:00.000Z",
+      "tags": [
+        "Qwen 3.6",
+        "MTP",
+        "FP8",
+        "Multi-Token Prediction",
+        "本地模型",
+        "MLX",
+        "oMLX",
+        "推論加速",
+        "量化"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "qwen-3-6-27b-diligence-compensates",
       "url": "https://b-log.to/ai-analysis/qwen-3-6-27b-diligence-compensates/",
       "image": "https://b-log.to/content/img/2026/qwen-3-6-27b-diligence-compensates-cover.webp",
