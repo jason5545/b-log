@@ -1093,6 +1093,13 @@
       "postUrl": "https://b-log.to/ai-analysis/qwen-3-6-27b-diligence-compensates/",
       "facebookPostId": "1026818047191304_122100251427290922",
       "publishedAt": "2026-05-02T07:03:33.070Z"
+    },
+    "qwen-3-6-mtp-fp8-inference-speed-research": {
+      "status": "published",
+      "title": "MTP 到底快在哪裡：Qwen 3.6 的推論加速實驗",
+      "postUrl": "https://b-log.to/ai-analysis/qwen-3-6-mtp-fp8-inference-speed-research/",
+      "facebookPostId": "1026818047191304_122100389451290922",
+      "publishedAt": "2026-05-02T11:00:47.133Z"
     }
   }
 }
