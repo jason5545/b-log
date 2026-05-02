@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "qwen-3.6-27b-diligence-compensates",
+      "url": "https://b-log.to/ai-analysis/qwen-3.6-27b-diligence-compensates/",
+      "image": "https://b-log.to/content/img/2026/qwen-3.6-27b-diligence-compensates-cover.webp",
+      "title": "勤能補拙：Qwen 3.6 27B 幫我修好了 TrackPal",
+      "content_text": "TrackPal 在 macOS 26 突然打不開了。ChatGPT 額度用完，改用 Qwen 3.6 27B 本地模型調查。一開始它用了舊 API 編譯不過，但接著開始寫 Swift 去測哪個 API 才是對的。不知道答案就寫程式去測，測出來了。這不叫聰明，這叫勤。",
+      "date_published": "2026-05-02T00:00:00.000Z",
+      "date_modified": "2026-05-02T00:00:00.000Z",
+      "tags": [
+        "Qwen",
+        "本地模型",
+        "macOS 26",
+        "TrackPal",
+        "Swift",
+        "debug",
+        "勤能補拙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "lisa-accept-yourself-to-accept-love",
       "url": "https://b-log.to/crossing-field/lisa-accept-yourself-to-accept-love/",
       "title": "學會接受自己，才能接受愛",

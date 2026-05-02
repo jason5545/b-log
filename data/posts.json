@@ -1,5 +1,25 @@
 [
   {
+    "slug": "qwen-3.6-27b-diligence-compensates",
+    "title": "勤能補拙：Qwen 3.6 27B 幫我修好了 TrackPal",
+    "summary": "TrackPal 在 macOS 26 突然打不開了。ChatGPT 額度用完，改用 Qwen 3.6 27B 本地模型調查。一開始它用了舊 API 編譯不過，但接著開始寫 Swift 去測哪個 API 才是對的。不知道答案就寫程式去測，測出來了。這不叫聰明，這叫勤。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-05-02T00:00:00Z",
+    "tags": [
+      "Qwen",
+      "本地模型",
+      "macOS 26",
+      "TrackPal",
+      "Swift",
+      "debug",
+      "勤能補拙"
+    ],
+    "accentColor": "#2563eb",
+    "coverImage": "/content/img/2026/qwen-3.6-27b-diligence-compensates-cover.webp",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "lisa-accept-yourself-to-accept-love",
     "title": "學會接受自己，才能接受愛",
     "summary": "這篇整理《LiSA 15th Anniversary Book PRiSM》裡 2022 年到 2026 年的長訪談。從 10 週年後暫停演唱會、重新規劃未來，到 PATCH WALK、PRiSM 展與學會接受自己的過程，LiSA 終於比較能接受那些一直都在的愛。",
