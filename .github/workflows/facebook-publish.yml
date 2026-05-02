@@ -15,7 +15,7 @@ on:
       dry_run:
         description: 只列出將發佈的內容，不送出到 Facebook
         required: false
-        default: true
+        default: false
         type: boolean
 
 concurrency:
