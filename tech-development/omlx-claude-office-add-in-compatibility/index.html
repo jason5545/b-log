@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>本機模型接 Claude Office：偽裝成 gateway 的三段門檻 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="以為只是填 URL 接 oMLX，結果卡在 HTTPS、model name 和 built-in tools。這些相容性缺口堆在一起，才是真正的難關。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-development/omlx-claude-office-add-in-compatibility/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-development/omlx-claude-office-add-in-compatibility/" id="og-url">
+  <meta property="og:title" content="本機模型接 Claude Office：偽裝成 gateway 的三段門檻" id="og-title">
+  <meta property="og:description" content="以為只是填 URL 接 oMLX，結果卡在 HTTPS、model name 和 built-in tools。這些相容性缺口堆在一起，才是真正的難關。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/omlx-claude-office-add-in-compatibility-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-05-03T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-05-03T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術開發" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="oMLX">
+  <meta property="article:tag" content="Claude Office">
+  <meta property="article:tag" content="本地模型">
+  <meta property="article:tag" content="相容性">
+  <meta property="article:tag" content="CORS">
+  <meta property="article:tag" content="Tailscale">
+  <meta property="article:tag" content="Enterprise Gateway">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-development/omlx-claude-office-add-in-compatibility/" id="twitter-url">
+  <meta property="twitter:title" content="本機模型接 Claude Office：偽裝成 gateway 的三段門檻" id="twitter-title">
+  <meta property="twitter:description" content="以為只是填 URL 接 oMLX，結果卡在 HTTPS、model name 和 built-in tools。這些相容性缺口堆在一起，才是真正的難關。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/omlx-claude-office-add-in-compatibility-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="oMLX, Claude Office, 本地模型, 相容性, CORS, Tailscale, Enterprise Gateway" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/omlx-claude-office-add-in-compatibility-cover.webp" imagesrcset="/content/img/2026/omlx-claude-office-add-in-compatibility-cover-480w.webp 480w, /content/img/2026/omlx-claude-office-add-in-compatibility-cover-828w.webp 828w, /content/img/2026/omlx-claude-office-add-in-compatibility-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"本機模型接 Claude Office：偽裝成 gateway 的三段門檻","description":"以為只是填 URL 接 oMLX，結果卡在 HTTPS、model name 和 built-in tools。這些相容性缺口堆在一起，才是真正的難關。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-03T00:00:00Z","dateModified":"2026-05-03T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/omlx-claude-office-add-in-compatibility/"},"url":"https://b-log.to/tech-development/omlx-claude-office-add-in-compatibility/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/omlx-claude-office-add-in-compatibility-cover.webp"],"keywords":"oMLX, Claude Office, 本地模型, 相容性, CORS, Tailscale, Enterprise Gateway","articleSection":"技術開發"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">本機模型接 Claude Office：偽裝成 gateway 的三段門檻</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/omlx-claude-office-add-in-compatibility-cover.webp" srcset="/content/img/2026/omlx-claude-office-add-in-compatibility-cover-480w.webp 480w, /content/img/2026/omlx-claude-office-add-in-compatibility-cover-828w.webp 828w, /content/img/2026/omlx-claude-office-add-in-compatibility-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">本機模型接 Claude Office：偽裝成 gateway 的三段門檻</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 3, 2026</span><span>5 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>oMLX</span><span>Claude Office</span><span>本地模型</span><span>相容性</span><span>CORS</span><span>Tailscale</span><span>Enterprise Gateway</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>我原本以為這件事應該很單純。</p>
+<p>Claude for Excel / PowerPoint / Word 不是有 Enterprise Gateway 嗎？oMLX 不是有 Anthropic-compatible API 嗎？那理論上就是把 URL 填進去、API key 填進去，結束。</p>
+<p>實際做下去才發現，這種「compatible」通常只保證最基本的對話格式像，並不保證一個真實產品送出來的完整 payload 也能吃。</p>
+<p>我真正花時間的，是把它偽裝成 Office add-in 願意相信的 Claude gateway。</p>
+<p>最終跑起來的架構是：</p>
+<pre><code>Claude Office add-in
+  -&gt; Tailscale HTTPS endpoint (tailnet only)
+  -&gt; local compatibility gateway
+  -&gt; oMLX local API
+  -&gt; Qwen3.6-35B-A3B-8bit, alias 成 claude-sonnet-4-5-20250929
+</code></pre>
+<p>中間解了三個問題。第一個是 HTTPS，第二個是 model name，第三個——也是最卡的那個——是 built-in tools。</p>
+<hr>
+<h2>第一個門檻：Office add-in 不是 terminal client</h2>
+<p>Office add-in 跑在 Office 的 WebView 裡，不是在自己 terminal 打 curl。它對 endpoint 有幾個現實限制：</p>
+<ul>
+<li>Enterprise Gateway URL 需要 HTTPS，至少要是 WebView 願意呼叫的安全來源</li>
+<li>要能被 Office 的 WebView 存取</li>
+<li>CORS 要通</li>
+<li><code>/v1/models</code> 要回它能接受的 model name</li>
+<li><code>/v1/messages</code> 要能吃它實際送出的 payload，而不是自己測出來的那種最小 payload</li>
+</ul>
+<p>所以單純填 <code>http://127.0.0.1:8000</code> 是不夠的。</p>
+<p>我用 Tailscale Serve 幫本機 oMLX 套一層 tailnet 內可用的 HTTPS：</p>
+<pre><code class="language-bash">/Applications/Tailscale.app/Contents/MacOS/Tailscale serve --bg 8010
+</code></pre>
+<p>設定成 tailnet only，不開 Funnel。endpoint 只在自己的 network 裡面能連，不會公開到 Internet。</p>
+<p>這一步解決的是 WebView 可達性問題。但它還沒有解掉 model name 的檢查。</p>
+<hr>
+<h2>第二個門檻：Office add-in 會挑 model name</h2>
+<p>oMLX 的 <code>/v1/models</code> 原本回的是：</p>
+<pre><code>Qwen3.6-27B-mtp
+Qwen3.6-35B-A3B-MLX-8bit
+</code></pre>
+<p>但 Office add-in 直接回：</p>
+<pre><code>Unsupported model — use Claude Opus or Sonnet 4.5 or later
+</code></pre>
+<p>它不是只看 endpoint 有沒有回模型，而是會檢查 model id 像不像 Claude 官方支援的版本。</p>
+<p>解法是建立一個 alias。原本模型不能動，因為其他地方也在用。所以我要在 oMLX 裡面新增一個名為 <code>claude-sonnet-4-5-20250929</code> 的 model，指向同一份模型檔案。</p>
+<p>不複製 36GB 的模型，用 hard link：</p>
+<pre><code>~/.lmstudio/models/Qwen3.6-35B-A3B-MLX-8bit
+~/.lmstudio/models/claude-sonnet-4-5-20250929
+</code></pre>
+<p>兩個資料夾看起來是兩個 model id，但大型檔案是 hard link，共享同一份 inode 和 disk blocks。不會再多吃一份 36GB。</p>
+<p>建立完要讓 oMLX reload model pool。oMLX 的 <code>/admin/api/reload</code> 需要 admin session，所以流程是先用 API key login admin，再呼叫 reload。</p>
+<p>reload 之後 <code>/v1/models</code> 就包含這個 alias 了。Office add-in 的 model name 檢查可以過。</p>
+<hr>
+<h2>第三個門檻：payload 不是你 curl 的那種最小 payload</h2>
+<p>當我在 Office add-in 裡送了一個簡單的 <code>hi</code>，畫面出現：</p>
+<pre><code>Something went wrong with your request.
+</code></pre>
+<p>看 oMLX server log，真正的錯誤是：</p>
+<pre><code>POST /v1/messages → 422:
+  [
+    {
+      &#39;type&#39;: &#39;missing&#39;,
+      &#39;loc&#39;: (&#39;body&#39;, &#39;tools&#39;, 4, &#39;input_schema&#39;),
+      &#39;msg&#39;: &#39;Field required&#39;,
+      &#39;input&#39;: {&#39;type&#39;: &#39;web_search_20250305&#39;, &#39;name&#39;: &#39;web_search&#39;}
+    },
+    {
+      &#39;type&#39;: &#39;missing&#39;,
+      &#39;loc&#39;: (&#39;body&#39;, &#39;tools&#39;, 5, &#39;input_schema&#39;),
+      &#39;msg&#39;: &#39;Field required&#39;,
+      &#39;input&#39;: {&#39;type&#39;: &#39;code_execution_20250825&#39;, &#39;name&#39;: &#39;code_execution&#39;}
+    }
+  ]
+</code></pre>
+<p>這個錯誤很關鍵。</p>
+<p>我只是送 <code>hi</code>，但 Office add-in 自己在 request 裡塞了兩個工具：<code>web_search_20250305</code> 和 <code>code_execution_20250825</code>。在 Anthropic 官方 API 裡，這類 built-in tools 的 schema 和一般 custom tool 不同，不一定會帶 <code>input_schema</code>。但 oMLX 0.3.8 的 request validation 沒有接受這種 tool item，直接回 422。</p>
+<p>Office add-in 送的是 Claude API 裡 built-in tools 風格的 payload。oMLX 的相容層在這個 case 沒有接受。兩邊都不是連線錯誤，但 schema 細節沒有對齊，接起來就炸掉。</p>
+<p>這就是 <code>Something went wrong</code> 背後真正的原因。</p>
+<hr>
+<h2>解法：在 oMLX 前面加一層 compat gateway</h2>
+<p>Tailscale Serve 只能做 reverse proxy，不能改 request body。所以我在 oMLX 前面加了一個很薄的 Python middleware。</p>
+<p>新的架構：</p>
+<pre><code>Claude Office add-in
+  -&gt; Tailscale HTTPS
+  -&gt; local compat gateway (8010)
+      - 處理 CORS preflight
+      - 移除缺少 input_schema 的 built-in tools
+  -&gt; oMLX (8000)
+</code></pre>
+<p>這個 middleware 只做兩件事：</p>
+<p><strong>第一，處理 CORS。</strong></p>
+<p>Office add-in 的 WebView 會發 preflight（OPTIONS）請求。middleware 原本手列了允许的 headers，但太窄了。Office add-in 在某些情況下可能會帶更多 header，如果 <code>Access-Control-Allow-Headers</code> 沒包含 preflight 要求的 header，WebView 就會擋掉真正的 POST。</p>
+<p>後來的做法是動態 echo：OPTIONS 時讀取 <code>Access-Control-Request-Headers</code>，直接回傳回去。加上 <code>Access-Control-Allow-Private-Network: true</code>，處理瀏覽器 Private Network Access preflight。</p>
+<p>這解了一個很微妙的情況：我後來 unload model 的時候，gateway 收到連續四個 OPTIONS 204，但沒有後續的 POST。看起來像無法連線，實際上是 preflight 沒過。</p>
+<p><strong>第二，移除 oMLX 不支援的 built-in tools。</strong></p>
+<p>遇到缺少 <code>input_schema</code> 的 tool items，先 strip 掉再轉給 oMLX。不是全部關掉 tool calling，而是移除 oMLX 目前會拒絕的那類。</p>
+<p>我沒有選擇塞假的 <code>input_schema</code> 給 built-in tools。那樣雖然可能通過驗證，但模型可能真的產生 tool_use，Office add-in 又會以為後端支援 web search 和 code execution。那只是把錯誤往後延。</p>
+<p>直接 strip 比較誠實。這套本機接法沒有提供 Claude 官方那些工具的對應實作，那就不要讓它們進去。</p>
+<p>Log 裡會看到：</p>
+<pre><code>POST /v1/messages -&gt; 200 stripped_tools=2
+</code></pre>
+<p>request 成功送到 oMLX，回 200。</p>
+<hr>
+<h2>讓它常駐</h2>
+<p>用 macOS LaunchAgent 讓 gateway 一直跑：</p>
+<pre><code>~/Library/LaunchAgents/com.jason.omlx-office-gateway.plist
+</code></pre>
+<p>關掉和啟動的指令：</p>
+<pre><code class="language-bash"># 停止
+launchctl bootout gui/$(id -u)/com.jason.omlx-office-gateway
+
+# 啟動
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.jason.omlx-office-gateway.plist
+
+# 看 log
+tail -f ~/.omlx/logs/office_gateway.err.log
+</code></pre>
+<hr>
+<h2>目前 Office add-in 的設定</h2>
+<pre><code>Gateway URL: https://macbook-pro.tailb20be.ts.net
+Model: claude-sonnet-4-5-20250929
+API token: oMLX API key
+</code></pre>
+<p>後端狀態：</p>
+<pre><code>oMLX: 127.0.0.1:8000
+compat gateway: 127.0.0.1:8010
+/v1/models 包含: claude-sonnet-4-5-20250929
+middleware: POST /v1/messages -&gt; 200, stripped_tools=2
+</code></pre>
+<p>基本聊天和文件處理可以跑。但這個解法有明確的限制：</p>
+<ul>
+<li>Claude web search 不會真的可用</li>
+<li>Claude code execution 不會真的可用</li>
+<li>如果 Office add-in 某個功能強依賴 built-in tools，還是可能遇到相容性問題</li>
+</ul>
+<p>這不是讓 oMLX 完整變成 Anthropic 官方 Claude API。它只是讓 Office add-in 不要在還沒送進模型前就把 request 打死。</p>
+<hr>
+<h2>本機 LLM 的難題常常不是推理，而是產品邊界的相容性</h2>
+<p>我原本以為只要 endpoint 是 Anthropic-compatible 就可以接。事實上是：</p>
+<ul>
+<li>Office add-in 要 HTTPS，不是 HTTP</li>
+<li>Office add-in 要特定的 model name，不是隨便什麼模型</li>
+<li>Office add-in 會送 built-in tools，不是只有基本對話</li>
+<li>Office add-in 跑在 WebView 裡，CORS preflight 的行為跟 curl 完全不同</li>
+<li>built-in tools 缺 <code>input_schema</code>，oMLX 0.3.8 不接受</li>
+</ul>
+<p>這些每一個單獨看都不難解。但疊在一起，就變成一整個 compat shim。</p>
+<p>本地模型的難題常常不在推理能力，而在產品邊界。一個「compatible」的 API，跟一個真實產品實際送出來的 payload，中間隔的不是幾行 code。</p>
+<p>但至少它跑起來了。在 oMLX 前面加一層薄薄的 middleware，解決了最卡的那個 422。後面如果還有問題，就看它是不是送了其他 oMLX 還不相容的欄位。</p>
+<p>慢慢補就好。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>

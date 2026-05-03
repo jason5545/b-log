@@ -10,7 +10,7 @@
       "url": "https://b-log.to/tech-development/omlx-claude-office-add-in-compatibility/",
       "image": "https://b-log.to/content/img/2026/omlx-claude-office-add-in-compatibility-cover.webp",
       "title": "本機模型接 Claude Office：偽裝成 gateway 的三段門檻",
-      "content_text": "以為只是填 URL 接 oMLX，結果卡在 HTTPS、model name 和 built-in tools。Office add-in 跑在 WebView 裡，送出來的 payload 和 curl 測試的完全不同。最後在 oMLX 前面加一層薄薄的 middleware，解決了最卡的 422。本機模型的難題常常不在推理能力，而在產品邊界的相容性。",
+      "content_text": "以為只是填 URL 接 oMLX，結果卡在 HTTPS、model name 和 built-in tools。這些相容性缺口堆在一起，才是真正的難關。",
       "date_published": "2026-05-03T00:00:00.000Z",
       "date_modified": "2026-05-03T00:00:00.000Z",
       "tags": [
