@@ -297,7 +297,7 @@ Qwen3.6-35B-A3B-MLX-8bit
 </code></pre>
 <p>這個 middleware 現在做三件事：</p>
 <p><strong>第一，處理 CORS。</strong></p>
-<p>Office add-in 的 WebView 會發 preflight（OPTIONS）請求。middleware 原本手列了允许的 headers，但太窄了。Office add-in 在某些情況下可能會帶更多 header，如果 <code>Access-Control-Allow-Headers</code> 沒包含 preflight 要求的 header，WebView 就會擋掉真正的 POST。</p>
+<p>Office add-in 的 WebView 會發 preflight（OPTIONS）請求。middleware 原本手列了允許的 headers，但太窄了。Office add-in 在某些情況下可能會帶更多 header，如果 <code>Access-Control-Allow-Headers</code> 沒包含 preflight 要求的 header，WebView 就會擋掉真正的 POST。</p>
 <p>後來的做法是動態 echo：OPTIONS 時讀取 <code>Access-Control-Request-Headers</code>，直接回傳回去。加上 <code>Access-Control-Allow-Private-Network: true</code>，處理瀏覽器 Private Network Access preflight。</p>
 <p>這解了一個很微妙的情況：我後來 unload model 的時候，gateway 收到連續四個 OPTIONS 204，但沒有後續的 POST。看起來像無法連線，實際上是 preflight 沒過。</p>
 <p><strong>第二，移除 oMLX 不支援的 built-in tools。</strong></p>
