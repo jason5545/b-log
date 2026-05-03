@@ -193,7 +193,7 @@
           <header class="article-header">
             <p id="post-category" class="article-category">技術開發</p>
             <h1 id="post-title">本機模型接 Claude Office：偽裝成 gateway 的三段門檻</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 3, 2026</span><span>5 min</span></div>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 3, 2026</span><span>6 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>oMLX</span><span>Claude Office</span><span>本地模型</span><span>相容性</span><span>CORS</span><span>Tailscale</span><span>Enterprise Gateway</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>我原本以為這件事應該很單純。</p>
@@ -246,7 +246,7 @@ Qwen3.6-35B-A3B-MLX-8bit
 </code></pre>
 <p>大型模型檔案是 hard link，共享同一份 inode，不會再多吃一份 36GB。reload 後 Office add-in 的 model name 檢查確實過了。</p>
 <p><strong>但後來我發現這是一個陷阱。</strong></p>
-<p>hard link 只能省磁碟空間，不等於省 runtime memory。如果 Office add-in 用 <code>claude-sonnet-4-5-20250929</code>，Pi agent 用 <code>Qwen3.6-35B-A3B-MLX-8bit</code>，oMLX 可能把它們當成兩個不同的 model id，各自載入一次。雖然底層檔案相同，但 runtime 仍然是两份記憶體。</p>
+<p>hard link 只能省磁碟空間，不等於省 runtime memory。如果 Office add-in 用 <code>claude-sonnet-4-5-20250929</code>，Pi agent 用 <code>Qwen3.6-35B-A3B-MLX-8bit</code>，oMLX 可能把它們當成兩個不同的 model id，各自載入一次。雖然底層檔案相同，但 runtime 仍然是兩份記憶體。</p>
 <p>35B 模型已經夠吃記憶體了，雙載風險不值得冒。所以我後來把 <code>claude-sonnet-4-5-20250929</code> 的 alias folder 刪掉了，不再在 oMLX 裡保留兩個 model id。</p>
 <h3>最新做法：middleware 做 model rewrite</h3>
 <p>Office add-in 需要看到 <code>claude-sonnet-4-5-20250929</code> 才肯過 model name 檢查，但 oMLX 只需要收到 <code>Qwen3.6-35B-A3B-MLX-8bit</code> 就行了。</p>
@@ -286,15 +286,6 @@ Qwen3.6-35B-A3B-MLX-8bit
 <hr>
 <h2>解法：在 oMLX 前面加一層 compat gateway</h2>
 <p>Tailscale Serve 只能做 reverse proxy，不能改 request body。所以我在 oMLX 前面加了一個很薄的 Python middleware。</p>
-<p>新的架構變成：</p>
-<pre><code>Claude Office add-in
-  -&gt; Tailscale HTTPS
-  -&gt; local middleware (8010)
-      - CORS / preflight compatibility
-      - strip unsupported built-in tools
-      - model alias &amp; rewrite
-  -&gt; oMLX (8000)
-</code></pre>
 <p>這個 middleware 現在做三件事：</p>
 <p><strong>第一，處理 CORS。</strong></p>
 <p>Office add-in 的 WebView 會發 preflight（OPTIONS）請求。middleware 原本手列了允許的 headers，但太窄了。Office add-in 在某些情況下可能會帶更多 header，如果 <code>Access-Control-Allow-Headers</code> 沒包含 preflight 要求的 header，WebView 就會擋掉真正的 POST。</p>
@@ -356,7 +347,7 @@ middleware: 127.0.0.1:8010
 <li>Office add-in 會送 built-in tools，不是只有基本對話</li>
 <li>Office add-in 跑在 WebView 裡，CORS preflight 的行為跟 curl 完全不同</li>
 <li>built-in tools 缺 <code>input_schema</code>，oMLX 0.3.8 不接受</li>
-<li>oMLX 原生有 Claude-compatible API，但 Office add-in 的實際 request 還需要 middleware 處理 CORS、built-in tools schema，以及 model id compatibility</li>
+<li>oMLX 原生有 Claude-compatible API，但 Office add-in 的實際 request 還需要 middleware 處理 CORS、built-in tools schema，以及 model id 相容性</li>
 </ul>
 <p>這些每一個單獨看都不難解。但疊在一起，就變成一整個 compat shim。</p>
 <p>本地模型的難題常常不在推理能力，而在產品邊界。一個「compatible」的 API，跟一個真實產品實際送出來的 payload，中間隔的不是幾行 code。</p>
