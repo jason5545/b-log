@@ -1100,6 +1100,13 @@
       "postUrl": "https://b-log.to/ai-analysis/qwen-3-6-mtp-fp8-inference-speed-research/",
       "facebookPostId": "1026818047191304_122100389451290922",
       "publishedAt": "2026-05-02T11:00:47.133Z"
+    },
+    "omlx-claude-office-add-in-compatibility": {
+      "status": "published",
+      "title": "本機模型接 Claude Office：偽裝成 gateway 的三段門檻",
+      "postUrl": "https://b-log.to/tech-development/omlx-claude-office-add-in-compatibility/",
+      "facebookPostId": "1026818047191304_122100548667290922",
+      "publishedAt": "2026-05-03T02:23:46.042Z"
     }
   }
 }
