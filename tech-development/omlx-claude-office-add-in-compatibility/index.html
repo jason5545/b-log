@@ -193,7 +193,7 @@
           <header class="article-header">
             <p id="post-category" class="article-category">技術開發</p>
             <h1 id="post-title">本機模型接 Claude Office：偽裝成 gateway 的三段門檻</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 3, 2026</span><span>9 min</span></div>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 3, 2026</span><span>11 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>oMLX</span><span>Claude Office</span><span>本地模型</span><span>相容性</span><span>CORS</span><span>Tailscale</span><span>Enterprise Gateway</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>我原本以為這件事應該很單純。</p>
@@ -431,6 +431,47 @@ middleware: 127.0.0.1:8010
 </ul>
 <p>但對 Excel agent 常見的需求——用 Python 做計算、統計、表格整理、資料轉換——已經夠先用。</p>
 <p><code>web_search_20250305</code> 目前仍然先 strip 掉，還沒有接搜尋 API。下一步可以用類似方式接成 middleware search augmentation，但這次更新先專注在 Python code execution。</p>
+<hr>
+<h2>更新：從「能回文字」到「能操作 Excel」</h2>
+<p>接上 code execution 之後，以為差不多了。結果又踩了一整晚。</p>
+<p>問題的起點是 Excel 有時候等很久，然後顯示 Rate Limit Exceeded。</p>
+<p>看 gateway log，不是真的 rate limit。是 Office add-in 自己在 retry。Office 大概等 15 秒沒看到 meaningful response 就會重送一次。本機 Qwen 35B 加上 Python tool loop，一個 request 跑超過 15 秒很正常。</p>
+<p>第一版的應對是加 single-flight：同一時間只跑一個 code execution。結果 Office retry 進來撞到 single-flight，gateway 直接回 429。Excel 看到 429 就顯示 Rate Limit Exceeded，使用者不知道發生什麼事。</p>
+<h3>先修 heartbeat</h3>
+<p>原本的 SSE 只是送 comment：</p>
+<pre><code>: keepalive
+</code></pre>
+<p>Office 的 JS SDK 根本不把 SSE comment 當成有效進度，該 retry 還是 retry。</p>
+<p>改成真的送 Anthropic-style ping，每 2 秒一次：</p>
+<pre><code>event: ping
+data: {&quot;type&quot;:&quot;ping&quot;}
+</code></pre>
+<p>這讓 Office 在等模型推理和 Python tool loop 的時候，比較不會誤判成 timeout。</p>
+<h3>再修 retry 撞 429</h3>
+<p>光有 heartbeat 還不夠。Office 在連線重建的瞬間還是會重送，single-flight 還是讓 retry 吃到 429。</p>
+<p>後來改成用 request body hash 做 coalescing：</p>
+<ul>
+<li>第一個 request 正常跑</li>
+<li>Office retry 帶著一模一樣的 body 進來，不回 429</li>
+<li>gateway 開一條新的 SSE 連線，掛著等原本那個 request 跑完</li>
+<li>完成後把同一份結果 stream 回給 retry 連線</li>
+</ul>
+<p>這樣本機 35B 不會被多重 generation 打爆，Office 也不會看到 429。</p>
+<h3>然後才發現真正的問題</h3>
+<p>以為這樣就修完了。結果有一次 Excel 顯示「資料已計算完成，現在寫入 Excel。」但什麼都沒寫進去。</p>
+<p>看 gateway log，模型最後其實有回 <code>tool_use</code>，stop_reason 也是 <code>tool_use</code>。但 gateway 的 SSE serializer 只把 text block 串成文字 stream 出去，<code>tool_use</code> block 完全沒送給 add-in。</p>
+<p>Excel 只看到那段文字，沒有收到 <code>set_cell_range</code> 或 <code>execute_office_js</code>，根本不知道自己應該寫入什麼。那段「資料已計算完成」是模型在 tool_use 之前自己生成的說明文字，不是結果。</p>
+<h3>把 SSE serializer 補完整</h3>
+<p>問題很清楚了，就是 SSE serializer 沒有處理 tool_use 的 streaming format。補起來：</p>
+<ul>
+<li>text block 用 <code>text_delta</code></li>
+<li>tool_use block 用 <code>content_block_start</code>，帶 <code>id</code>、<code>name</code>、<code>input: {}</code></li>
+<li>input 的內容用 <code>input_json_delta</code> 送 <code>partial_json</code></li>
+<li>最後維持 <code>message_delta</code> 和 <code>message_stop</code></li>
+</ul>
+<p>補完後再測，Excel 成功建立銷售資料表、寫入公式和分析摘要。整條鏈才真的通了。</p>
+<p>回頭想，這個過程有點像洋蔥：以為是 timeout → 其實是 Office retry 太 aggressive → heartbeat comment 根本沒用 → 換成 ping 之後 retry 減少了，但 single-flight 還是讓它看到 429 → 加了 coalescing 之後 retry 不再是問題 → 然後才發現原來 SSE serializer 從一開始就沒有把 tool_use 送出去。</p>
+<p>每一層都以為是最後一層。</p>
 <p>補充一點：寫這篇之前我查過，網路上找不到任何人公開記錄過這個問題的全貌——oMLX 的 issue tracker 和 claude-code repo 都沒有 Office add-in 相容性的討論，更不用說解法。GitHub 上有一個 issue 專門在釐清 LiteLLM 只對 Claude Code CLI 有效、對 Office add-in 是另一套邏輯，但沒有人繼續往下走。這篇算是目前唯一把這三個門檻和 compat shim 的來龍去脈寫完整的公開資料。</p>
 </div>
           <footer class="article-footer">
