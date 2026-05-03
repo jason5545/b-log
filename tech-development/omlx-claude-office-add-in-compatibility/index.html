@@ -193,7 +193,7 @@
           <header class="article-header">
             <p id="post-category" class="article-category">技術開發</p>
             <h1 id="post-title">本機模型接 Claude Office：偽裝成 gateway 的三段門檻</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 3, 2026</span><span>6 min</span></div>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 3, 2026</span><span>7 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>oMLX</span><span>Claude Office</span><span>本地模型</span><span>相容性</span><span>CORS</span><span>Tailscale</span><span>Enterprise Gateway</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>我原本以為這件事應該很單純。</p>
@@ -353,6 +353,7 @@ middleware: 127.0.0.1:8010
 <p>本地模型的難題常常不在推理能力，而在產品邊界。一個「compatible」的 API，跟一個真實產品實際送出來的 payload，中間隔的不是幾行 code。</p>
 <p>但至少它跑起來了。在 oMLX 前面加一層薄薄的 middleware，解決了最卡的那個 422。後面如果還有問題，就看它是不是送了其他 oMLX 還不相容的欄位。</p>
 <p>慢慢補就好。</p>
+<p>補充一點：寫這篇之前我查過，網路上找不到任何人公開記錄過這個問題的全貌——oMLX 的 issue tracker 和 claude-code repo 都沒有 Office add-in 相容性的討論，更不用說解法。GitHub 上有一個 issue 專門在釐清 LiteLLM 只對 Claude Code CLI 有效、對 Office add-in 是另一套邏輯，但沒有人繼續往下走。這篇算是目前唯一把這三個門檻和 compat shim 的來龍去脈寫完整的公開資料。</p>
 </div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
