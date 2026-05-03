@@ -158,7 +158,7 @@ Claude Office add-in
 
 **第一，處理 CORS。**
 
-Office add-in 的 WebView 會發 preflight（OPTIONS）請求。middleware 原本手列了允许的 headers，但太窄了。Office add-in 在某些情況下可能會帶更多 header，如果 `Access-Control-Allow-Headers` 沒包含 preflight 要求的 header，WebView 就會擋掉真正的 POST。
+Office add-in 的 WebView 會發 preflight（OPTIONS）請求。middleware 原本手列了允許的 headers，但太窄了。Office add-in 在某些情況下可能會帶更多 header，如果 `Access-Control-Allow-Headers` 沒包含 preflight 要求的 header，WebView 就會擋掉真正的 POST。
 
 後來的做法是動態 echo：OPTIONS 時讀取 `Access-Control-Request-Headers`，直接回傳回去。加上 `Access-Control-Allow-Private-Network: true`，處理瀏覽器 Private Network Access preflight。
 
