@@ -193,7 +193,7 @@
           <header class="article-header">
             <p id="post-category" class="article-category">技術開發</p>
             <h1 id="post-title">本機模型接 Claude Office：偽裝成 gateway 的三段門檻</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 3, 2026</span><span>11 min</span></div>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 3, 2026</span><span>10 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>oMLX</span><span>Claude Office</span><span>本地模型</span><span>相容性</span><span>CORS</span><span>Tailscale</span><span>Enterprise Gateway</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>我原本以為這件事應該很單純。</p>
@@ -354,124 +354,36 @@ middleware: 127.0.0.1:8010
 <p>但至少它跑起來了。在 oMLX 前面加一層薄薄的 middleware，解決了最卡的那個 422。後面如果還有問題，就看它是不是送了其他 oMLX 還不相容的欄位。</p>
 <p>慢慢補就好。</p>
 <hr>
-<h2>更新：middleware 接上 Python code execution</h2>
-<p>最初的做法是把 <code>code_execution_20250825</code> 直接 strip 掉——oMLX 不認識沒有 <code>input_schema</code> 的 Anthropic built-in tools，送進去會 422，所以先移除再說。</p>
-<p>後來查了 Anthropic 文件才確認：<code>web_search_20250305</code> 和 <code>code_execution_20250825</code> 是 Anthropic <strong>server-side tools</strong>，不是一般 client-side custom tools。在官方 Claude API 裡，執行這些工具是 server 的責任，response 裡可能出現的是：</p>
-<ul>
-<li><code>server_tool_use</code></li>
-<li><code>web_search_tool_result</code></li>
-<li><code>bash_code_execution_tool_result</code></li>
-<li><code>text_editor_code_execution_tool_result</code></li>
-<li>最後才是 final text answer</li>
-</ul>
-<p>也就是說，光補 <code>input_schema</code> 是不夠的。oMLX 只負責推理，不會自己去執行程式碼。要在本機支援這些工具，middleware 就得自己變成一個簡化版 tool orchestrator，把完整的 tool execution loop 接起來。</p>
-<p>這次先接了 Python-only code execution 的 MVP。</p>
-<h3>轉換流程</h3>
-<p>Office add-in 送來的是 Anthropic server-side format：</p>
-<pre><code class="language-json">{&quot;type&quot;: &quot;code_execution_20250825&quot;, &quot;name&quot;: &quot;code_execution&quot;}
-</code></pre>
-<p>middleware 把它轉成 oMLX 可以理解的 custom tool：</p>
+<h2>middleware 後來做了什麼</h2>
+<p>最初把 <code>code_execution_20250825</code> 直接 strip 掉只是為了讓 422 消失。但這樣 Excel 的 code execution 功能就完全沒用，後來還是決定把它接起來。</p>
+<p>查了 Anthropic 文件才弄清楚：<code>code_execution_20250825</code> 和 <code>web_search_20250305</code> 是 Anthropic <strong>server-side tools</strong>，不是一般 client-side custom tool。在官方 API 裡，server 負責執行，response 裡回的是 <code>bash_code_execution_tool_result</code> 之類的 block。光補 <code>input_schema</code> 沒用——oMLX 只管推理，不會自己去跑程式碼。要在本機支援，middleware 就得自己變成一個簡化版 tool orchestrator。</p>
+<p>做法是把 <code>code_execution_20250825</code> 翻譯成 oMLX 能理解的 custom tool：</p>
 <pre><code class="language-json">{
   &quot;name&quot;: &quot;code_execution&quot;,
   &quot;description&quot;: &quot;Run Python 3 code in a temporary local sandbox...&quot;,
   &quot;input_schema&quot;: {
     &quot;type&quot;: &quot;object&quot;,
-    &quot;properties&quot;: {
-      &quot;code&quot;: { &quot;type&quot;: &quot;string&quot; }
-    },
+    &quot;properties&quot;: { &quot;code&quot;: { &quot;type&quot;: &quot;string&quot; } },
     &quot;required&quot;: [&quot;code&quot;]
   }
 }
 </code></pre>
-<p>完整流程：</p>
-<ol>
-<li>Office add-in 發 request，裡面包含 <code>code_execution_20250825</code></li>
-<li>middleware 把 model 從 <code>claude-sonnet-4-5-20250929</code> rewrite 成 <code>Qwen3.6-35B-A3B-MLX-8bit</code></li>
-<li>middleware 把 <code>code_execution_20250825</code> 轉成 custom tool <code>code_execution</code></li>
-<li>oMLX / Qwen 回 <code>tool_use</code></li>
-<li>middleware 取出 tool input 裡的 Python code</li>
-<li>middleware 在本機 sandbox 裡執行 Python</li>
-<li>middleware 把 stdout / stderr / return code 包成 <code>tool_result</code></li>
-<li>middleware 再呼叫 oMLX 一次</li>
-<li>final answer 回給 Office add-in</li>
-<li>response 裡的 model 改回 <code>claude-sonnet-4-5-20250929</code></li>
-</ol>
-<p>oMLX 本身不理解 Anthropic server-side tools；這一層是 middleware 做的 compatibility translation 加上 local Python execution loop。</p>
-<h3>安全限制</h3>
-<p>這不是把模型產生的程式碼拿去本機無限制執行。目前的最小 sandbox：</p>
-<ul>
-<li>Python only，不提供任意 shell 存取</li>
-<li>每次跑在 temporary directory</li>
-<li>使用 macOS <code>sandbox-exec</code></li>
-<li>不允許 network</li>
-<li>不允許讀取使用者 home directory（<code>~/.ssh</code>、<code>~/.omlx/settings.json</code> 等）</li>
-<li>不允許寫入 temporary directory 以外的位置</li>
-<li>timeout 20 秒</li>
-<li>stdout / stderr 有長度上限</li>
-</ul>
-<h3>測試結果</h3>
-<p>用 gateway smoke test 驗證過：</p>
-<ul>
-<li><code>code_execution_20250825</code> 可被轉成 local <code>code_execution</code></li>
-<li>Qwen 會產生 <code>tool_use</code></li>
-<li>middleware 能執行 Python 並回送 <code>tool_result</code></li>
-<li>final answer 能正常回給 Office-compatible client</li>
-<li>streaming request 也會被 middleware 包成簡化 SSE 回應</li>
-<li>model rewrite 仍正常，oMLX 實際只載入 <code>Qwen3.6-35B-A3B-MLX-8bit</code></li>
-</ul>
-<h3>目前限制</h3>
-<p>這只是 MVP，不是完整的 Anthropic Code Execution clone。還沒有：</p>
-<ul>
-<li><code>bash_code_execution</code></li>
-<li><code>text_editor_code_execution</code></li>
-<li>Files API upload / download</li>
-<li>container reuse</li>
-<li>產生圖檔後讓 Office 下載 artifact</li>
-<li>官方 server-side response block 的完整模擬</li>
-</ul>
-<p>但對 Excel agent 常見的需求——用 Python 做計算、統計、表格整理、資料轉換——已經夠先用。</p>
-<p><code>web_search_20250305</code> 目前仍然先 strip 掉，還沒有接搜尋 API。下一步可以用類似方式接成 middleware search augmentation，但這次更新先專注在 Python code execution。</p>
-<hr>
-<h2>更新：從「能回文字」到「能操作 Excel」</h2>
-<p>接上 code execution 之後，以為差不多了。結果又踩了一整晚。</p>
-<p>問題的起點是 Excel 有時候等很久，然後顯示 Rate Limit Exceeded。</p>
-<p>看 gateway log，不是真的 rate limit。是 Office add-in 自己在 retry。Office 大概等 15 秒沒看到 meaningful response 就會重送一次。本機 Qwen 35B 加上 Python tool loop，一個 request 跑超過 15 秒很正常。</p>
-<p>第一版的應對是加 single-flight：同一時間只跑一個 code execution。結果 Office retry 進來撞到 single-flight，gateway 直接回 429。Excel 看到 429 就顯示 Rate Limit Exceeded，使用者不知道發生什麼事。</p>
-<h3>先修 heartbeat</h3>
-<p>原本的 SSE 只是送 comment：</p>
-<pre><code>: keepalive
-</code></pre>
-<p>Office 的 JS SDK 根本不把 SSE comment 當成有效進度，該 retry 還是 retry。</p>
-<p>改成真的送 Anthropic-style ping，每 2 秒一次：</p>
+<p>Qwen 回 <code>tool_use</code> 的時候，middleware 取出 Python code，在本機 sandbox 裡跑，把 stdout / stderr / return code 包成 <code>tool_result</code>，再呼叫 oMLX 一次，拿到 final answer 後回給 Office add-in。oMLX 本身不知道這件事，它只看到標準的 custom tool 呼叫。</p>
+<h3>sandbox 的邊界</h3>
+<p>這不是讓模型隨意執行任意程式碼。目前的限制：Python only、每次跑在 temporary directory、用 macOS <code>sandbox-exec</code>、不允許 network、不允許讀取 home directory（<code>~/.ssh</code>、<code>~/.omlx/settings.json</code> 等）、不允許寫入 temp 以外的位置、timeout 20 秒、stdout / stderr 有長度上限。</p>
+<p><code>web_search_20250305</code> 目前仍然先 strip 掉，還沒有接搜尋 API。</p>
+<h3>接上 code execution 之後踩的坑</h3>
+<p>以為這樣就差不多了。結果 Excel 開始出現 Rate Limit Exceeded。</p>
+<p>看 gateway log 才發現不是真的 rate limit——是 Office add-in 自己在 retry。Office 大概等 15 秒沒看到 meaningful response 就重送一次，本機 Qwen 35B 加上 Python tool loop 跑超過 15 秒完全正常。第一版加了 single-flight 防止多重 generation 打爆記憶體，但 retry 進來撞到 single-flight 就直接吃到 429，Excel 那邊就顯示 Rate Limit Exceeded。</p>
+<p><strong>先修 heartbeat。</strong> 原本 SSE 只是送 <code>: keepalive</code> comment，Office 的 JS SDK 根本不把它當成有效進度，該 retry 還是 retry。改成每 2 秒送一次 Anthropic-style ping：</p>
 <pre><code>event: ping
 data: {&quot;type&quot;:&quot;ping&quot;}
 </code></pre>
-<p>這讓 Office 在等模型推理和 Python tool loop 的時候，比較不會誤判成 timeout。</p>
-<h3>再修 retry 撞 429</h3>
-<p>光有 heartbeat 還不夠。Office 在連線重建的瞬間還是會重送，single-flight 還是讓 retry 吃到 429。</p>
-<p>後來改成用 request body hash 做 coalescing：</p>
-<ul>
-<li>第一個 request 正常跑</li>
-<li>Office retry 帶著一模一樣的 body 進來，不回 429</li>
-<li>gateway 開一條新的 SSE 連線，掛著等原本那個 request 跑完</li>
-<li>完成後把同一份結果 stream 回給 retry 連線</li>
-</ul>
-<p>這樣本機 35B 不會被多重 generation 打爆，Office 也不會看到 429。</p>
-<h3>然後才發現真正的問題</h3>
-<p>以為這樣就修完了。結果有一次 Excel 顯示「資料已計算完成，現在寫入 Excel。」但什麼都沒寫進去。</p>
-<p>看 gateway log，模型最後其實有回 <code>tool_use</code>，stop_reason 也是 <code>tool_use</code>。但 gateway 的 SSE serializer 只把 text block 串成文字 stream 出去，<code>tool_use</code> block 完全沒送給 add-in。</p>
-<p>Excel 只看到那段文字，沒有收到 <code>set_cell_range</code> 或 <code>execute_office_js</code>，根本不知道自己應該寫入什麼。那段「資料已計算完成」是模型在 tool_use 之前自己生成的說明文字，不是結果。</p>
-<h3>把 SSE serializer 補完整</h3>
-<p>問題很清楚了，就是 SSE serializer 沒有處理 tool_use 的 streaming format。補起來：</p>
-<ul>
-<li>text block 用 <code>text_delta</code></li>
-<li>tool_use block 用 <code>content_block_start</code>，帶 <code>id</code>、<code>name</code>、<code>input: {}</code></li>
-<li>input 的內容用 <code>input_json_delta</code> 送 <code>partial_json</code></li>
-<li>最後維持 <code>message_delta</code> 和 <code>message_stop</code></li>
-</ul>
-<p>補完後再測，Excel 成功建立銷售資料表、寫入公式和分析摘要。整條鏈才真的通了。</p>
-<p>回頭想，這個過程有點像洋蔥：以為是 timeout → 其實是 Office retry 太 aggressive → heartbeat comment 根本沒用 → 換成 ping 之後 retry 減少了，但 single-flight 還是讓它看到 429 → 加了 coalescing 之後 retry 不再是問題 → 然後才發現原來 SSE serializer 從一開始就沒有把 tool_use 送出去。</p>
-<p>每一層都以為是最後一層。</p>
+<p><strong>再修 retry 撞 429。</strong> 光有 heartbeat 還不夠，Office 在連線重建的瞬間還是會重送。後來改成用 request body hash 做 coalescing：第一個 request 正常跑，retry 帶著一模一樣的 body 進來時，gateway 開一條新的 SSE 連線掛著等，原本的 request 跑完後把結果 stream 回給 retry 連線。這樣 35B 不會被多重 generation 打爆，Office 也不會看到 429。</p>
+<p><strong>然後才發現真正的問題。</strong> 有一次 Excel 顯示「資料已計算完成，現在寫入 Excel。」但什麼都沒寫進去。看 log，模型最後其實有回 <code>tool_use</code>，stop_reason 也是 <code>tool_use</code>，但 SSE serializer 只把 text block 串成文字 stream 出去，<code>tool_use</code> block 完全沒送給 add-in。Excel 只看到說明文字，沒收到 <code>set_cell_range</code> 或 <code>execute_office_js</code>，根本不知道要寫入什麼。</p>
+<p>把 SSE serializer 補完整：text block 用 <code>text_delta</code>，tool_use block 用 <code>content_block_start</code> 帶 <code>id</code>、<code>name</code>、<code>input: {}</code>，input 用 <code>input_json_delta</code> 送 <code>partial_json</code>，最後維持 <code>message_delta</code> 和 <code>message_stop</code>。補完後 Excel 成功建立銷售資料表、寫入公式和分析摘要，整條鏈才真的通了。</p>
+<p>這個過程有點像洋蔥：以為是 timeout → 其實是 Office retry 太 aggressive → heartbeat comment 根本沒用 → 換成 ping 之後 retry 減少了，但 single-flight 還是讓 Office 看到 429 → 加了 coalescing 之後 retry 不再是問題 → 然後才發現原來 SSE serializer 從一開始就沒有把 tool_use 送出去。每一層都以為是最後一層。</p>
+<p>目前 code execution 還只是 MVP，<code>bash_code_execution</code>、<code>text_editor_code_execution</code>、Files API、container reuse 都還沒有。但對 Excel 常見的需求——計算、統計、資料轉換——已經夠先用。</p>
 <p>補充一點：寫這篇之前我查過，網路上找不到任何人公開記錄過這個問題的全貌——oMLX 的 issue tracker 和 claude-code repo 都沒有 Office add-in 相容性的討論，更不用說解法。GitHub 上有一個 issue 專門在釐清 LiteLLM 只對 Claude Code CLI 有效、對 Office add-in 是另一套邏輯，但沒有人繼續往下走。這篇算是目前唯一把這三個門檻和 compat shim 的來龍去脈寫完整的公開資料。</p>
 </div>
           <footer class="article-footer">
