@@ -1,5 +1,25 @@
 [
   {
+    "slug": "omlx-claude-office-add-in-compatibility",
+    "title": "本機模型接 Claude Office：偽裝成 gateway 的三段門檻",
+    "summary": "以為只是填 URL 接 oMLX，結果卡在 HTTPS、model name 和 built-in tools。這些相容性缺口堆在一起，才是真正的難關。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-05-03T00:00:00Z",
+    "tags": [
+      "oMLX",
+      "Claude Office",
+      "本地模型",
+      "相容性",
+      "CORS",
+      "Tailscale",
+      "Enterprise Gateway"
+    ],
+    "accentColor": "#0891b2",
+    "coverImage": "/content/img/2026/omlx-claude-office-add-in-compatibility-cover.webp",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "qwen-3-6-mtp-fp8-inference-speed-research",
     "title": "MTP 到底快在哪裡：Qwen 3.6 的推論加速實驗",
     "summary": "標準 FP8 量化約 13 tok/s，加上 MTP 後跳到 17-18 tok/s。搞懂 MTP 不是量化格式、FP8 為什麼比 4-bit 好，以及本地模型真正的優勢是什麼。",

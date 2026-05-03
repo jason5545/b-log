@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "omlx-claude-office-add-in-compatibility",
+      "url": "https://b-log.to/tech-development/omlx-claude-office-add-in-compatibility/",
+      "image": "https://b-log.to/content/img/2026/omlx-claude-office-add-in-compatibility-cover.webp",
+      "title": "本機模型接 Claude Office：偽裝成 gateway 的三段門檻",
+      "content_text": "以為只是填 URL 接 oMLX，結果卡在 HTTPS、model name 和 built-in tools。Office add-in 跑在 WebView 裡，送出來的 payload 和 curl 測試的完全不同。最後在 oMLX 前面加一層薄薄的 middleware，解決了最卡的 422。本機模型的難題常常不在推理能力，而在產品邊界的相容性。",
+      "date_published": "2026-05-03T00:00:00.000Z",
+      "date_modified": "2026-05-03T00:00:00.000Z",
+      "tags": [
+        "oMLX",
+        "Claude Office",
+        "本地模型",
+        "相容性",
+        "CORS",
+        "Tailscale",
+        "Enterprise Gateway"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "qwen-3-6-mtp-fp8-inference-speed-research",
       "url": "https://b-log.to/ai-analysis/qwen-3-6-mtp-fp8-inference-speed-research/",
       "image": "https://b-log.to/content/img/2026/qwen-3-6-mtp-fp8-inference-speed-research-cover.webp",
