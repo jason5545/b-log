@@ -203,9 +203,13 @@
 <p>最終跑起來的架構是：</p>
 <pre><code>Claude Office add-in
   -&gt; Tailscale HTTPS endpoint (tailnet only)
-  -&gt; local compatibility gateway
-  -&gt; oMLX local API
-  -&gt; Qwen3.6-35B-A3B-8bit, alias 成 claude-sonnet-4-5-20250929
+  -&gt; local middleware (8010)
+      - CORS / preflight compatibility
+      - strip unsupported built-in tools
+      - public model alias: claude-sonnet-4-5-20250929
+      - upstream model rewrite: Qwen3.6-35B-A3B-MLX-8bit
+  -&gt; oMLX (8000)
+      - 只載入 Qwen3.6-35B-A3B-MLX-8bit
 </code></pre>
 <p>中間解了三個問題。第一個是 HTTPS，第二個是 model name，第三個——也是最卡的那個——是 built-in tools。</p>
 <hr>
@@ -234,14 +238,25 @@ Qwen3.6-35B-A3B-MLX-8bit
 <pre><code>Unsupported model — use Claude Opus or Sonnet 4.5 or later
 </code></pre>
 <p>它不是只看 endpoint 有沒有回模型，而是會檢查 model id 像不像 Claude 官方支援的版本。</p>
-<p>解法是建立一個 alias。原本模型不能動，因為其他地方也在用。所以我要在 oMLX 裡面新增一個名為 <code>claude-sonnet-4-5-20250929</code> 的 model，指向同一份模型檔案。</p>
-<p>不複製 36GB 的模型，用 hard link：</p>
+<h3>中途嘗試：hard link alias（後來放棄了）</h3>
+<p>一開始的直覺是建立一個 alias folder。原本的模型還要保留，因為 Pi agent 和其他本機 agent 用的是 <code>Qwen3.6-35B-A3B-MLX-8bit</code>，不能動。</p>
+<p>所以我在 <code>~/.lmstudio/models/</code> 下面建了一個同名但用 hard link 的資料夾：</p>
 <pre><code>~/.lmstudio/models/Qwen3.6-35B-A3B-MLX-8bit
 ~/.lmstudio/models/claude-sonnet-4-5-20250929
 </code></pre>
-<p>兩個資料夾看起來是兩個 model id，但大型檔案是 hard link，共享同一份 inode 和 disk blocks。不會再多吃一份 36GB。</p>
-<p>建立完要讓 oMLX reload model pool。oMLX 的 <code>/admin/api/reload</code> 需要 admin session，所以流程是先用 API key login admin，再呼叫 reload。</p>
-<p>reload 之後 <code>/v1/models</code> 就包含這個 alias 了。Office add-in 的 model name 檢查可以過。</p>
+<p>大型模型檔案是 hard link，共享同一份 inode，不會再多吃一份 36GB。reload 後 Office add-in 的 model name 檢查確實過了。</p>
+<p><strong>但後來我發現這是一個陷阱。</strong></p>
+<p>hard link 只能省磁碟空間，不等於省 runtime memory。如果 Office add-in 用 <code>claude-sonnet-4-5-20250929</code>，Pi agent 用 <code>Qwen3.6-35B-A3B-MLX-8bit</code>，oMLX 可能把它們當成兩個不同的 model id，各自載入一次。雖然底層檔案相同，但 runtime 仍然是两份記憶體。</p>
+<p>35B 模型已經夠吃記憶體了，雙載風險不值得冒。所以我後來把 <code>claude-sonnet-4-5-20250929</code> 的 alias folder 刪掉了，不再在 oMLX 裡保留兩個 model id。</p>
+<h3>最新做法：middleware 做 model rewrite</h3>
+<p>Office add-in 需要看到 <code>claude-sonnet-4-5-20250929</code> 才肯過 model name 檢查，但 oMLX 只需要收到 <code>Qwen3.6-35B-A3B-MLX-8bit</code> 就行了。</p>
+<p>所以 model alias 的任務從 oMLX 內部搬到了 middleware。middleware 現在做三件事：</p>
+<ol>
+<li><strong>public model alias</strong>：對 Office add-in 的 <code>/v1/models</code> 回應中，仍然包含 <code>claude-sonnet-4-5-20250929</code>，讓 Office add-in 通過檢查。</li>
+<li><strong>upstream model rewrite</strong>：<code>/v1/messages</code> 請求進來時，如果 model 欄位是 <code>claude-sonnet-4-5-20250929</code>，在轉給 oMLX 前改成 <code>Qwen3.6-35B-A3B-MLX-8bit</code>。</li>
+<li><strong>downstream response rewrite</strong>：oMLX 回傳結果裡的 model 欄位是 <code>Qwen3.6-35B-A3B-MLX-8bit</code>，middleware 再改回 <code>claude-sonnet-4-5-20250929</code> 回給 Office add-in。</li>
+</ol>
+<p>這樣 Office add-in 看到的是 Claude-compatible model id，但 oMLX runtime 實際只會載入 Qwen 原模型。Pi agent 也不需要改 default model，繼續用 <code>Qwen3.6-35B-A3B-MLX-8bit</code> 就好。兩邊最後都落到同一個 model id，不會重複載入 35B。</p>
 <hr>
 <h2>第三個門檻：payload 不是你 curl 的那種最小 payload</h2>
 <p>當我在 Office add-in 裡送了一個簡單的 <code>hi</code>，畫面出現：</p>
@@ -271,15 +286,16 @@ Qwen3.6-35B-A3B-MLX-8bit
 <hr>
 <h2>解法：在 oMLX 前面加一層 compat gateway</h2>
 <p>Tailscale Serve 只能做 reverse proxy，不能改 request body。所以我在 oMLX 前面加了一個很薄的 Python middleware。</p>
-<p>新的架構：</p>
+<p>新的架構變成：</p>
 <pre><code>Claude Office add-in
   -&gt; Tailscale HTTPS
-  -&gt; local compat gateway (8010)
-      - 處理 CORS preflight
-      - 移除缺少 input_schema 的 built-in tools
+  -&gt; local middleware (8010)
+      - CORS / preflight compatibility
+      - strip unsupported built-in tools
+      - model alias &amp; rewrite
   -&gt; oMLX (8000)
 </code></pre>
-<p>這個 middleware 只做兩件事：</p>
+<p>這個 middleware 現在做三件事：</p>
 <p><strong>第一，處理 CORS。</strong></p>
 <p>Office add-in 的 WebView 會發 preflight（OPTIONS）請求。middleware 原本手列了允许的 headers，但太窄了。Office add-in 在某些情況下可能會帶更多 header，如果 <code>Access-Control-Allow-Headers</code> 沒包含 preflight 要求的 header，WebView 就會擋掉真正的 POST。</p>
 <p>後來的做法是動態 echo：OPTIONS 時讀取 <code>Access-Control-Request-Headers</code>，直接回傳回去。加上 <code>Access-Control-Allow-Private-Network: true</code>，處理瀏覽器 Private Network Access preflight。</p>
@@ -288,6 +304,9 @@ Qwen3.6-35B-A3B-MLX-8bit
 <p>遇到缺少 <code>input_schema</code> 的 tool items，先 strip 掉再轉給 oMLX。不是全部關掉 tool calling，而是移除 oMLX 目前會拒絕的那類。</p>
 <p>我沒有選擇塞假的 <code>input_schema</code> 給 built-in tools。那樣雖然可能通過驗證，但模型可能真的產生 tool_use，Office add-in 又會以為後端支援 web search 和 code execution。那只是把錯誤往後延。</p>
 <p>直接 strip 比較誠實。這套本機接法沒有提供 Claude 官方那些工具的對應實作，那就不要讓它們進去。</p>
+<p><strong>第三，model alias 與 rewrite。</strong></p>
+<p>以前的做法是在 oMLX 內部建 hard link alias。後來放棄了，因為 hard link 只能省磁碟，不等於省 runtime memory——oMLX 可能把兩個 model id 當成不同的模型各自載入。</p>
+<p>所以現在 model alias 的任務移到 middleware。Office add-in 看到的 <code>/v1/models</code> 回應中包含 <code>claude-sonnet-4-5-20250929</code>，但 request 轉給 oMLX 之前，middleware 把 model 欄位改成 <code>Qwen3.6-35B-A3B-MLX-8bit</code>。oMLX 回傳的結果裡再改回去。</p>
 <p>Log 裡會看到：</p>
 <pre><code>POST /v1/messages -&gt; 200 stripped_tools=2
 </code></pre>
@@ -310,14 +329,16 @@ tail -f ~/.omlx/logs/office_gateway.err.log
 <hr>
 <h2>目前 Office add-in 的設定</h2>
 <pre><code>Gateway URL: https://macbook-pro.tailb20be.ts.net
-Model: claude-sonnet-4-5-20250929
+Model: claude-sonnet-4-5-20250929（由 middleware 提供 public alias）
 API token: oMLX API key
 </code></pre>
 <p>後端狀態：</p>
 <pre><code>oMLX: 127.0.0.1:8000
-compat gateway: 127.0.0.1:8010
-/v1/models 包含: claude-sonnet-4-5-20250929
-middleware: POST /v1/messages -&gt; 200, stripped_tools=2
+  只載入 Qwen3.6-35B-A3B-MLX-8bit
+middleware: 127.0.0.1:8010
+  - public alias: claude-sonnet-4-5-20250929
+  - upstream rewrite: Qwen3.6-35B-A3B-MLX-8bit
+  - POST /v1/messages -&gt; 200, stripped_tools=2
 </code></pre>
 <p>基本聊天和文件處理可以跑。但這個解法有明確的限制：</p>
 <ul>
@@ -325,7 +346,7 @@ middleware: POST /v1/messages -&gt; 200, stripped_tools=2
 <li>Claude code execution 不會真的可用</li>
 <li>如果 Office add-in 某個功能強依賴 built-in tools，還是可能遇到相容性問題</li>
 </ul>
-<p>這不是讓 oMLX 完整變成 Anthropic 官方 Claude API。它只是讓 Office add-in 不要在還沒送進模型前就把 request 打死。</p>
+<p>oMLX 原生有 Claude / Anthropic-compatible API，但不代表 Office add-in 可以直接接上。它跑在 WebView 裡，送出來的 request 除了基本的 API 相容性，還有額外條件。</p>
 <hr>
 <h2>本機 LLM 的難題常常不是推理，而是產品邊界的相容性</h2>
 <p>我原本以為只要 endpoint 是 Anthropic-compatible 就可以接。事實上是：</p>
@@ -335,6 +356,7 @@ middleware: POST /v1/messages -&gt; 200, stripped_tools=2
 <li>Office add-in 會送 built-in tools，不是只有基本對話</li>
 <li>Office add-in 跑在 WebView 裡，CORS preflight 的行為跟 curl 完全不同</li>
 <li>built-in tools 缺 <code>input_schema</code>，oMLX 0.3.8 不接受</li>
+<li>oMLX 原生有 Claude-compatible API，但 Office add-in 的實際 request 還需要 middleware 處理 CORS、built-in tools schema，以及 model id compatibility</li>
 </ul>
 <p>這些每一個單獨看都不難解。但疊在一起，就變成一整個 compat shim。</p>
 <p>本地模型的難題常常不在推理能力，而在產品邊界。一個「compatible」的 API，跟一個真實產品實際送出來的 payload，中間隔的不是幾行 code。</p>
