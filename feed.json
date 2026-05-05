@@ -6,6 +6,26 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "macbook-secondhand-pricing-lesson",
+      "url": "https://b-log.to/business-insights/macbook-secondhand-pricing-lesson/",
+      "title": "從 25,000 到 70,000：一台 MacBook 讓我看懂二手市場的本質",
+      "content_text": "一台 1 月 17 日啟用的 MacBook Pro M5，二手店最低開 25,000，最高 58,800，我自售拿到 70,000。這中間的差距，說的其實是同一件事。",
+      "date_published": "2026-05-05T00:00:00.000Z",
+      "date_modified": "2026-05-05T00:00:00.000Z",
+      "tags": [
+        "二手市場",
+        "MacBook",
+        "定價",
+        "資訊不對稱",
+        "商業模型"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "omlx-claude-office-add-in-compatibility",
       "url": "https://b-log.to/tech-development/omlx-claude-office-add-in-compatibility/",
       "image": "https://b-log.to/content/img/2026/omlx-claude-office-add-in-compatibility-cover.webp",
