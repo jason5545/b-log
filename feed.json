@@ -6,6 +6,27 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "macbook-charger-power-drain-silent",
+      "url": "https://b-log.to/life-stories/macbook-charger-power-drain-silent/",
+      "title": "充電器插著，電池默默在放電",
+      "content_text": "插著充電器打遊戲、跑本地模型，電量從 80% 掉到 8%。問題不是充電器壞了，是插錯孔，macOS 全程沒有任何警告。",
+      "date_published": "2026-05-11T00:00:00.000Z",
+      "date_modified": "2026-05-11T00:00:00.000Z",
+      "tags": [
+        "MacBook",
+        "M5 Max",
+        "充電",
+        "本地模型",
+        "macOS",
+        "使用心得"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "macbook-secondhand-pricing-lesson",
       "url": "https://b-log.to/business-insights/macbook-secondhand-pricing-lesson/",
       "title": "從 25,000 到 70,000：一台 MacBook 讓我看懂二手市場的本質",
