@@ -14,7 +14,9 @@
       "macOS",
       "使用心得"
     ],
-    "readingTime": "3 min"
+    "readingTime": "3 min",
+    "accentColor": "#e85d04",
+    "coverImage": "/content/img/2026/macbook-charger-power-drain-silent-cover.webp"
   },
   {
     "slug": "macbook-secondhand-pricing-lesson",
