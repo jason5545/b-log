@@ -192,7 +192,7 @@
           <header class="article-header">
             <p id="post-category" class="article-category">技術分析</p>
             <h1 id="post-title">充電器插著，電池默默在放電</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 11, 2026</span><span>3 min</span></div>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 11, 2026</span><span>4 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>MacBook</span><span>M5 Max</span><span>充電</span><span>本地模型</span><span>macOS</span><span>使用心得</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>4 月 30 日，我在台北 101 取了新的 MacBook Pro M5 Max，16 吋，128GB，4TB。</p>
@@ -206,6 +206,10 @@
 <p>這不只發生在遊戲。跑本地模型的時候，prompt processing 階段如果沒有 KV cache，功耗一樣會衝上去。只要是需要全力動用 CPU 或 GPU 的任務，這個缺口就會出現，安靜地出現，沒有人通知你。</p>
 <p>插錯孔是我自己的問題，這不需要為它辯護。但這件事讓我意識到：就算我插對了孔、充電器也完全正常，系統在「充電器跑不贏功耗」的狀態下，一樣不會告訴你任何事。</p>
 <p>問題解決。但我在想的是另一件事。</p>
+<hr>
+<h2>Apple 的設計邏輯</h2>
+<p>Apple 的設計前提是：高功耗是短暫的。CPU 或 GPU 衝到峰值，撐幾秒，電池吸收那一瞬間的差額，功耗隨即降回充電器能覆蓋的範圍。140W 充電器配上這個邏輯，大多數場景確實夠用。</p>
+<p>但這個前提在某些情況下不成立。打遊戲、跑本地模型做 prompt processing、影片渲染——這些是持續性的高負載，不是幾秒鐘的衝刺。電池不是在「吸收峰值」，是在長期補貼一個跑不贏的充電器。兩件事看起來一樣，系統的反應卻完全相同：沉默。</p>
 <hr>
 <h2>macOS 知道，但它沒說</h2>
 <p>在整個過程裡，系統完全沒有發出任何警告。</p>
