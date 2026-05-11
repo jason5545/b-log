@@ -7,7 +7,7 @@
   "items": [
     {
       "id": "macbook-charger-power-drain-silent",
-      "url": "https://b-log.to/life-stories/macbook-charger-power-drain-silent/",
+      "url": "https://b-log.to/tech-analysis/macbook-charger-power-drain-silent/",
       "title": "充電器插著，電池默默在放電",
       "content_text": "插著充電器打遊戲、跑本地模型，電量從 80% 掉到 8%。問題不是充電器壞了，是插錯孔，macOS 全程沒有任何警告。",
       "date_published": "2026-05-11T00:00:00.000Z",

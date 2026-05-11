@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>充電器插著，電池默默在放電 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="插著充電器打遊戲、跑本地模型，電量從 80% 掉到 8%。問題不是充電器壞了，是插錯孔，macOS 全程沒有任何警告。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-analysis/macbook-charger-power-drain-silent/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-analysis/macbook-charger-power-drain-silent/" id="og-url">
+  <meta property="og:title" content="充電器插著，電池默默在放電" id="og-title">
+  <meta property="og:description" content="插著充電器打遊戲、跑本地模型，電量從 80% 掉到 8%。問題不是充電器壞了，是插錯孔，macOS 全程沒有任何警告。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%85%85%E9%9B%BB%E5%99%A8%E6%8F%92%E8%91%97%EF%BC%8C%E9%9B%BB%E6%B1%A0%E9%BB%98%E9%BB%98%E5%9C%A8%E6%94%BE%E9%9B%BB,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-05-11T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-05-11T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="MacBook">
+  <meta property="article:tag" content="M5 Max">
+  <meta property="article:tag" content="充電">
+  <meta property="article:tag" content="本地模型">
+  <meta property="article:tag" content="macOS">
+  <meta property="article:tag" content="使用心得">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-analysis/macbook-charger-power-drain-silent/" id="twitter-url">
+  <meta property="twitter:title" content="充電器插著，電池默默在放電" id="twitter-title">
+  <meta property="twitter:description" content="插著充電器打遊戲、跑本地模型，電量從 80% 掉到 8%。問題不是充電器壞了，是插錯孔，macOS 全程沒有任何警告。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%85%85%E9%9B%BB%E5%99%A8%E6%8F%92%E8%91%97%EF%BC%8C%E9%9B%BB%E6%B1%A0%E9%BB%98%E9%BB%98%E5%9C%A8%E6%94%BE%E9%9B%BB,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="MacBook, M5 Max, 充電, 本地模型, macOS, 使用心得" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"充電器插著，電池默默在放電","description":"插著充電器打遊戲、跑本地模型，電量從 80% 掉到 8%。問題不是充電器壞了，是插錯孔，macOS 全程沒有任何警告。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-11T00:00:00Z","dateModified":"2026-05-11T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/macbook-charger-power-drain-silent/"},"url":"https://b-log.to/tech-analysis/macbook-charger-power-drain-silent/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%85%85%E9%9B%BB%E5%99%A8%E6%8F%92%E8%91%97%EF%BC%8C%E9%9B%BB%E6%B1%A0%E9%BB%98%E9%BB%98%E5%9C%A8%E6%94%BE%E9%9B%BB,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"MacBook, M5 Max, 充電, 本地模型, macOS, 使用心得","articleSection":"技術分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">充電器插著，電池默默在放電</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">充電器插著，電池默默在放電</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 11, 2026</span><span>3 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>MacBook</span><span>M5 Max</span><span>充電</span><span>本地模型</span><span>macOS</span><span>使用心得</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>4 月 30 日，我在台北 101 取了新的 MacBook Pro M5 Max，16 吋，128GB，4TB。</p>
+<p>昨天打遊戲，效能全開，幾個小時後抬頭看了一眼電量：8%。充電器插著。</p>
+<hr>
+<h2>過程</h2>
+<p>我事後去翻了 System Profiler，才發現充電器輸入只有 65W。</p>
+<p>我用的是一顆第三方 165W 多孔充電器，搭 MagSafe 線。理論上應該沒問題。但我沒注意到規格頁上有一行小字：只有 C1 支援 28V 5A，C2 和 C3 沒有。我插的是 C3。</p>
+<p>165W 的充電器，插錯孔，MacBook 只拿到 65W。M5 Max 高負載的時候功耗輕易超過這個數字，剩下的差額全由電池扛。扛了兩個小時，從 80% 扛到 8%。</p>
+<p>換回 C1 之後，System Profiler 顯示正常了。</p>
+<p>這不只發生在遊戲。跑本地模型的時候，prompt processing 階段如果沒有 KV cache，功耗一樣會衝上去。只要是需要全力動用 CPU 或 GPU 的任務，這個缺口就會出現，安靜地出現，沒有人通知你。</p>
+<p>問題解決。但我在想的是另一件事。</p>
+<hr>
+<h2>macOS 知道，但它沒說</h2>
+<p>在整個過程裡，系統完全沒有發出任何警告。</p>
+<p>不是「充電器功率不足」的提示，不是電量在不尋常地快速下降的警示，什麼都沒有。唯一會跳通知的情況，是電量低到快沒電了——那個時候，電已經快用完了。</p>
+<p>但系統手上握著所有資訊：當前充電器輸入瓦數、當前系統功耗、兩者之間的差距、電池正在反向放電這件事。iStat Menus 這類工具都讀得到，代表 API 是存在的，數據不是拿不到的。</p>
+<p>Apple 選擇不把這件事告訴你。</p>
+<p>我不確定這是設計決策還是疏忽，但結果是一樣的：插著充電器，讓用戶以為自己在充電，電池默默在扛，沒有人通知你。</p>
+<hr>
+<h2>14 吋更慘</h2>
+<p>這件事讓我想到另一個問題。</p>
+<p>如果我當初選的是 14 吋 M5 Max，同樣的晶片，功耗上限一樣，但韌體鎖在 96W。不是插錯孔，不是充電器選錯，就是 96W——這是天花板。</p>
+<p>我今天遇到的 65W 問題，換個孔就解決了。14 吋的用戶沒有這個選項，那個缺口是系統設計出來的，不是操作失誤造成的。</p>
+<p>買之前沒有人會跟你說這件事。買了之後要自己發現。</p>
+<hr>
+<h2>買前不知道的事</h2>
+<p>這台機器我很滿意，這不是在否定這個購買決定。</p>
+<p>但我在想的是，這類資訊的取得方式。跑分、電池續航、效能測試，這些資訊很豐富，你在購買前可以查到大量的評測。但「充電器插錯孔會發生什麼事」、「14 吋的充電上限是多少」、「高負載時系統會不會主動通知你」——這些問題，不踩到不會有人告訴你。</p>
+<p>不是沒有答案，是沒有人覺得這值得講清楚。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
