@@ -1,5 +1,22 @@
 [
   {
+    "slug": "macbook-charger-power-drain-silent",
+    "title": "充電器插著，電池默默在放電",
+    "summary": "插著充電器打遊戲、跑本地模型，電量從 80% 掉到 8%。問題不是充電器壞了，是插錯孔，macOS 全程沒有任何警告。",
+    "category": "生活記事",
+    "author": "Jason Chien",
+    "publishedAt": "2026-05-11T00:00:00Z",
+    "tags": [
+      "MacBook",
+      "M5 Max",
+      "充電",
+      "本地模型",
+      "macOS",
+      "使用心得"
+    ],
+    "readingTime": "3 min"
+  },
+  {
     "slug": "macbook-secondhand-pricing-lesson",
     "title": "從 25,000 到 70,000：一台 MacBook 讓我看懂二手市場的本質",
     "summary": "一台 1 月 17 日啟用的 MacBook Pro M5，二手店最低開 25,000，最高 58,800，我自售拿到 70,000。這中間的差距，說的其實是同一件事。",
