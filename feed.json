@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "omlx-mtplx-native-mtp-cache-rollback",
+      "url": "https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/",
+      "title": "我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路",
+      "content_text": "追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現真正的差距，是 partial reject 後 oMLX 用 backbone replay 修 cache。",
+      "date_published": "2026-05-18T00:00:00.000Z",
+      "date_modified": "2026-05-18T00:00:00.000Z",
+      "tags": [
+        "oMLX",
+        "MTPLX",
+        "Native MTP",
+        "Qwen",
+        "MLX",
+        "推論加速"
+      ],
+      "image": "https://b-log.to/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp",
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "macbook-charger-power-drain-silent",
       "url": "https://b-log.to/tech-analysis/macbook-charger-power-drain-silent/",
       "title": "充電器插著，電池默默在放電",
