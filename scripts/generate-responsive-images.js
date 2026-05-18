@@ -5,6 +5,7 @@ const sharp = require('sharp');
 const ROOT_DIR = path.join(__dirname, '..');
 const POSTS_PATH = path.join(ROOT_DIR, 'data/posts.json');
 const RESPONSIVE_WIDTHS = [480, 828, 1200];
+const FORCE = process.argv.includes('--force');
 
 function imageUrlToPath(imageUrl) {
   if (!imageUrl || /^https?:\/\//i.test(imageUrl)) return null;
@@ -16,16 +17,25 @@ function getVariantPath(imagePath, width) {
   return path.join(parsed.dir, `${parsed.name}-${width}w${parsed.ext}`);
 }
 
+function variantNeedsUpdate(imagePath, variantPath) {
+  if (FORCE || !fs.existsSync(variantPath)) return true;
+
+  const sourceStat = fs.statSync(imagePath);
+  const variantStat = fs.statSync(variantPath);
+  return sourceStat.mtimeMs > variantStat.mtimeMs;
+}
+
 async function generateVariant(imagePath, width, sourceWidth) {
   const variantPath = getVariantPath(imagePath, width);
-  if (sourceWidth <= width || fs.existsSync(variantPath)) return false;
+  const existed = fs.existsSync(variantPath);
+  if (sourceWidth <= width || !variantNeedsUpdate(imagePath, variantPath)) return false;
 
   await sharp(imagePath)
     .resize({ width, withoutEnlargement: true })
     .webp({ quality: 82, alphaQuality: 82, method: 6 })
     .toFile(variantPath);
 
-  console.log(`✅ 已產生 ${path.relative(ROOT_DIR, variantPath)}`);
+  console.log(`✅ 已${existed ? '更新' : '產生'} ${path.relative(ROOT_DIR, variantPath)}`);
   return true;
 }
 
