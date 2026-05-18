@@ -205,6 +205,62 @@ tok/s:       ~30 -> ~36.8
 
 它不是 approximate shortcut，也不是犧牲 correctness 換速度。它只是把已經存在的 speculative rollback API，接到真正需要它的 hot path。
 
+## 第二個坑：長 context 的 RoPE offset
+
+本來以為到這裡差不多了。
+
+cache replay 歸零，speculative rollback 有吃到，短 prompt acceptance 也回到 60% 到 70%。照理說，速度應該穩定很多。
+
+但後來看長 context log，又覺得不對。
+
+14k 左右 prompt 的時候，acceptance 會掉到 33.8%。不是一點點波動，是整個 MTP draft 品質垮掉。D3 drafted 只有 32/188，也就是大部分時間根本走不到深度 3。
+
+這次的問題不是 cache。
+
+log 很乾淨：
+
+```text
+fb_replay=0
+replay=0.0
+spec_rb_count 有值
+cache 約 1ms/cycle
+```
+
+所以只能繼續往 position 看。
+
+最後找到的點是 `base_offset = state.position`。
+
+這個寫法在短 context 看起來沒事，但它其實只追蹤 main token 的位置。Native MTP 一個 cycle 不一定只吐一個 token，它可能吐 accepted draft，也可能吐 bonus token，reject 時也可能吐 verify fallback token。
+
+也就是說，真實序列長度一直往前走，但 `state.position` 只像每個 cycle 加一。
+
+短 context 這個誤差還不明顯。到了 14k、15k context，MTP head 用錯 RoPE position，draft 品質就開始掉。這種 bug 很討厭，因為它不是一開場就炸，而是跑到夠長才慢慢變形。
+
+修法是改用已輸出的 token 數去推真正的 RoPE base。
+
+修完後，同一類長 context case 變成這樣：
+
+```text
+accept:     33.8% -> 62.9%
+D3 drafted: 32/188 -> 60/105
+cycles:     188 -> 105
+tok/s:      18.9 -> 22.6
+```
+
+這個改善很扎實。
+
+22.6 tok/s 看起來沒有短 prompt 那麼漂亮，但那是 15k prompt，本來就比較重。真正重要的是 cycles 從 188 掉到 105，acceptance 從 30% 多回到 60% 多。
+
+後來也補了 position diagnostics：
+
+```text
+pos[input=1 state=37 emitted=97 rope_base=132]
+```
+
+這裡 `input=1` 不是原始 prompt 長度，而是 batch generator init 當下看到的 input 長度。VLM 或 cache resume 路徑下，token buffer 可能已經被縮減，所以不能把它叫 `prompt_len`，不然以後看 log 又會被騙一次。
+
+我覺得這個小改名其實很重要。效能問題最怕的不是數字不夠，而是欄位名字讓你以為自己看懂了。
+
 ## VLM 也不能漏
 
 這次還特別測了 VLM。
@@ -232,6 +288,17 @@ forcing LM-only dispatch, vision components ignored
 
 VLM 圖片 prompt 的 tok/s 只有 15 左右，這不奇怪。那次 prompt 有 1774 tokens，還有 vision context，不能拿來跟純文字 Sieve prompt 直接比較。
 
+後來 RoPE offset 修完之後也再測過一次 VLM。MTP 路徑仍然是 active，speculative rollback 也還在：
+
+```text
+accept=62.7%
+fb_replay=0
+spec_rb_count=10
+pos[input=1 state=37 emitted=97 rope_base=132]
+```
+
+這代表 long-context 修正沒有把 VLM 路徑弄壞。
+
 ## 這次真正學到的東西
 
 這次追查最有價值的地方，不是最後多了幾 tok/s。
@@ -248,7 +315,7 @@ VLM 圖片 prompt 的 tok/s 只有 15 左右，這不奇怪。那次 prompt 有 
 
 也不是 fixed depth 3。
 
-真正的差異在 partial reject 後的 cache correction。
+真正的差異先是在 partial reject 後的 cache correction，後來又多抓到一個長 context RoPE position offset。
 
 oMLX 原本的做法是：
 
@@ -264,14 +331,29 @@ partial reject -> rollback_speculative_cache(gdn_states) -> 修 cache
 
 這個差別，就是秒級和毫秒級的差別。
 
+而長 context 那個問題，則是另一種更隱性的錯。
+
+```text
+只看 state.position -> RoPE base 慢慢偏掉
+看 emitted tokens -> RoPE base 跟著真實序列走
+```
+
+一個是 cache state 的正確性。
+
+一個是 position encoding 的正確性。
+
 我覺得這種 bug 很有意思。它不是那種「少寫一行所以壞掉」的 bug。原本的做法其實是正確的，只是太貴。它用一個完整 backbone replay 去買 correctness。
 
 MTPLX 讓我們看到，這個 correctness 不一定要用 replay 買。
 
 更妙的是，oMLX 需要的能力其實已經在旁邊了。只是 Native MTP 那條路沒有接上。
 
+RoPE offset 那個也類似。不是模型不會 draft，不是長 context 注定 acceptance 崩掉，是我們餵給 MTP head 的位置不夠誠實。
+
 這也是我喜歡這次追查的地方。最後不是靠一個很炫的新 kernel，也不是把一段 sampling code 搬過來就突然變快。
 
 答案比較樸素：
 
 把已經存在的正確狀態修復機制，接到真正需要它的地方。
+
+然後不要讓 position 欄位騙自己。

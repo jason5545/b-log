@@ -2,7 +2,7 @@
   {
     "slug": "omlx-mtplx-native-mtp-cache-rollback",
     "title": "我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路",
-    "summary": "追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現真正的差距，是 partial reject 後 oMLX 用 backbone replay 修 cache。",
+    "summary": "追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現差距藏在兩個地方：partial reject 後的 cache replay，以及長 context 下慢慢偏掉的 RoPE position。",
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2026-05-18T00:00:00Z",
@@ -14,7 +14,7 @@
       "MLX",
       "推論加速"
     ],
-    "readingTime": "8 min",
+    "readingTime": "10 min",
     "accentColor": "#0f766e",
     "coverImage": "/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp"
   },
