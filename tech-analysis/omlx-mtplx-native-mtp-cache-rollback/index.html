@@ -6,7 +6,7 @@
   <title>我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路 - (b)-log</title>
 
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現真正的差距，是 partial reject 後 oMLX 用 backbone replay 修 cache。">
+  <meta name="description" content="追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現差距藏在兩個地方：partial reject 後的 cache replay，以及長 context 下慢慢偏掉的 RoPE position。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/" id="canonical-url">
 
@@ -14,7 +14,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/" id="og-url">
   <meta property="og:title" content="我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路" id="og-title">
-  <meta property="og:description" content="追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現真正的差距，是 partial reject 後 oMLX 用 backbone replay 修 cache。" id="og-description">
+  <meta property="og:description" content="追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現差距藏在兩個地方：partial reject 後的 cache replay，以及長 context 下慢慢偏掉的 RoPE position。" id="og-description">
   <meta property="og:image" content="https://b-log.to/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -37,7 +37,7 @@
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/" id="twitter-url">
   <meta property="twitter:title" content="我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路" id="twitter-title">
-  <meta property="twitter:description" content="追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現真正的差距，是 partial reject 後 oMLX 用 backbone replay 修 cache。" id="twitter-description">
+  <meta property="twitter:description" content="追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現差距藏在兩個地方：partial reject 後的 cache replay，以及長 context 下慢慢偏掉的 RoPE position。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
 
@@ -111,7 +111,7 @@
   <link rel="preload" as="image" href="/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp" imagesrcset="/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover-480w.webp 480w, /content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover-828w.webp 828w, /content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路","description":"追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現真正的差距，是 partial reject 後 oMLX 用 backbone replay 修 cache。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-18T00:00:00Z","dateModified":"2026-05-18T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/"},"url":"https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp"],"keywords":"oMLX, MTPLX, Native MTP, Qwen, MLX, 推論加速","articleSection":"技術分析"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路","description":"追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現差距藏在兩個地方：partial reject 後的 cache replay，以及長 context 下慢慢偏掉的 RoPE position。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-18T00:00:00Z","dateModified":"2026-05-18T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/"},"url":"https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp"],"keywords":"oMLX, MTPLX, Native MTP, Qwen, MLX, 推論加速","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -192,7 +192,7 @@
           <header class="article-header">
             <p id="post-category" class="article-category">技術分析</p>
             <h1 id="post-title">我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 18, 2026</span><span>8 min</span></div>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 18, 2026</span><span>10 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>oMLX</span><span>MTPLX</span><span>Native MTP</span><span>Qwen</span><span>MLX</span><span>推論加速</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>這次追 oMLX 的 Native MTP，其實有點像在查一個很會偽裝的效能問題。</p>
@@ -309,6 +309,37 @@ tok/s:       ~30 -&gt; ~36.8
 </code></pre>
 <p>這就是我們要找的點。</p>
 <p>它不是 approximate shortcut，也不是犧牲 correctness 換速度。它只是把已經存在的 speculative rollback API，接到真正需要它的 hot path。</p>
+<h2>第二個坑：長 context 的 RoPE offset</h2>
+<p>本來以為到這裡差不多了。</p>
+<p>cache replay 歸零，speculative rollback 有吃到，短 prompt acceptance 也回到 60% 到 70%。照理說，速度應該穩定很多。</p>
+<p>但後來看長 context log，又覺得不對。</p>
+<p>14k 左右 prompt 的時候，acceptance 會掉到 33.8%。不是一點點波動，是整個 MTP draft 品質垮掉。D3 drafted 只有 32/188，也就是大部分時間根本走不到深度 3。</p>
+<p>這次的問題不是 cache。</p>
+<p>log 很乾淨：</p>
+<pre><code class="language-text">fb_replay=0
+replay=0.0
+spec_rb_count 有值
+cache 約 1ms/cycle
+</code></pre>
+<p>所以只能繼續往 position 看。</p>
+<p>最後找到的點是 <code>base_offset = state.position</code>。</p>
+<p>這個寫法在短 context 看起來沒事，但它其實只追蹤 main token 的位置。Native MTP 一個 cycle 不一定只吐一個 token，它可能吐 accepted draft，也可能吐 bonus token，reject 時也可能吐 verify fallback token。</p>
+<p>也就是說，真實序列長度一直往前走，但 <code>state.position</code> 只像每個 cycle 加一。</p>
+<p>短 context 這個誤差還不明顯。到了 14k、15k context，MTP head 用錯 RoPE position，draft 品質就開始掉。這種 bug 很討厭，因為它不是一開場就炸，而是跑到夠長才慢慢變形。</p>
+<p>修法是改用已輸出的 token 數去推真正的 RoPE base。</p>
+<p>修完後，同一類長 context case 變成這樣：</p>
+<pre><code class="language-text">accept:     33.8% -&gt; 62.9%
+D3 drafted: 32/188 -&gt; 60/105
+cycles:     188 -&gt; 105
+tok/s:      18.9 -&gt; 22.6
+</code></pre>
+<p>這個改善很扎實。</p>
+<p>22.6 tok/s 看起來沒有短 prompt 那麼漂亮，但那是 15k prompt，本來就比較重。真正重要的是 cycles 從 188 掉到 105，acceptance 從 30% 多回到 60% 多。</p>
+<p>後來也補了 position diagnostics：</p>
+<pre><code class="language-text">pos[input=1 state=37 emitted=97 rope_base=132]
+</code></pre>
+<p>這裡 <code>input=1</code> 不是原始 prompt 長度，而是 batch generator init 當下看到的 input 長度。VLM 或 cache resume 路徑下，token buffer 可能已經被縮減，所以不能把它叫 <code>prompt_len</code>，不然以後看 log 又會被騙一次。</p>
+<p>我覺得這個小改名其實很重要。效能問題最怕的不是數字不夠，而是欄位名字讓你以為自己看懂了。</p>
 <h2>VLM 也不能漏</h2>
 <p>這次還特別測了 VLM。</p>
 <p>因為這個 fork 之前最重要的一點，就是 VLM + Native MTP 不能退回 LM-only dispatch。<code>VLMModelAdapter</code> 要保留 <code>mtp_forward</code>、<code>make_mtp_cache</code>、<code>return_hidden=True</code> 這些 passthrough。</p>
@@ -324,6 +355,13 @@ spec_rb_count=25
 </code></pre>
 <p>這表示 VLM 路徑是通的，speculative rollback 也有吃到。</p>
 <p>VLM 圖片 prompt 的 tok/s 只有 15 左右，這不奇怪。那次 prompt 有 1774 tokens，還有 vision context，不能拿來跟純文字 Sieve prompt 直接比較。</p>
+<p>後來 RoPE offset 修完之後也再測過一次 VLM。MTP 路徑仍然是 active，speculative rollback 也還在：</p>
+<pre><code class="language-text">accept=62.7%
+fb_replay=0
+spec_rb_count=10
+pos[input=1 state=37 emitted=97 rope_base=132]
+</code></pre>
+<p>這代表 long-context 修正沒有把 VLM 路徑弄壞。</p>
 <h2>這次真正學到的東西</h2>
 <p>這次追查最有價值的地方，不是最後多了幾 tok/s。</p>
 <p>而是把幾個很容易誤判的方向排掉了。</p>
@@ -332,7 +370,7 @@ spec_rb_count=25
 <p>不是 NumPy sparse distribution。</p>
 <p>不是單純 <code>mx.eval</code> 太慢。</p>
 <p>也不是 fixed depth 3。</p>
-<p>真正的差異在 partial reject 後的 cache correction。</p>
+<p>真正的差異先是在 partial reject 後的 cache correction，後來又多抓到一個長 context RoPE position offset。</p>
 <p>oMLX 原本的做法是：</p>
 <pre><code class="language-text">partial reject -&gt; backbone replay -&gt; 修 cache
 </code></pre>
@@ -340,12 +378,20 @@ spec_rb_count=25
 <pre><code class="language-text">partial reject -&gt; rollback_speculative_cache(gdn_states) -&gt; 修 cache
 </code></pre>
 <p>這個差別，就是秒級和毫秒級的差別。</p>
+<p>而長 context 那個問題，則是另一種更隱性的錯。</p>
+<pre><code class="language-text">只看 state.position -&gt; RoPE base 慢慢偏掉
+看 emitted tokens -&gt; RoPE base 跟著真實序列走
+</code></pre>
+<p>一個是 cache state 的正確性。</p>
+<p>一個是 position encoding 的正確性。</p>
 <p>我覺得這種 bug 很有意思。它不是那種「少寫一行所以壞掉」的 bug。原本的做法其實是正確的，只是太貴。它用一個完整 backbone replay 去買 correctness。</p>
 <p>MTPLX 讓我們看到，這個 correctness 不一定要用 replay 買。</p>
 <p>更妙的是，oMLX 需要的能力其實已經在旁邊了。只是 Native MTP 那條路沒有接上。</p>
+<p>RoPE offset 那個也類似。不是模型不會 draft，不是長 context 注定 acceptance 崩掉，是我們餵給 MTP head 的位置不夠誠實。</p>
 <p>這也是我喜歡這次追查的地方。最後不是靠一個很炫的新 kernel，也不是把一段 sampling code 搬過來就突然變快。</p>
 <p>答案比較樸素：</p>
 <p>把已經存在的正確狀態修復機制，接到真正需要它的地方。</p>
+<p>然後不要讓 position 欄位騙自己。</p>
 </div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
