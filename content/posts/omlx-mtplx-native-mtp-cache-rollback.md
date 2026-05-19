@@ -5,7 +5,7 @@
 
 麻煩的是每條線索看起來都說得通。
 
-MTPLX 跑同一顆 Qwen3.6 27B 可以到三十幾 tok/s，oMLX 卡在二十幾。Native MTP 明明有開，acceptance 也沒有整個崩，但速度就是上不去。這種差距最容易讓人往「一定是哪個核心沒吃到」的方向想，然後開始懷疑 sampling。
+MTPLX 跑同一顆 Qwen3.6 27B 可以到三十幾 tok/s，oMLX 卡在二十幾。Native MTP 明明有開，acceptance 也不是低到不能看，但速度就是上不去。這種差距最容易讓人往「一定是哪個核心沒吃到」的方向想，然後開始懷疑 sampling。
 
 後來才發現，最要命的地方根本不在那裡。
 
