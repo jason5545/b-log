@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路 - (b)-log</title>
+  <title>我們以為問題在 MTPLX，最後發現 oMLX 只是少接了一條路 - (b)-log</title>
 
   <!-- 基本的 SEO metadata -->
   <meta name="description" content="追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現差距藏在兩個地方：partial reject 後的 cache replay，以及長 context 下慢慢偏掉的 RoPE position。">
@@ -13,7 +13,7 @@
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/" id="og-url">
-  <meta property="og:title" content="我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路" id="og-title">
+  <meta property="og:title" content="我們以為問題在 MTPLX，最後發現 oMLX 只是少接了一條路" id="og-title">
   <meta property="og:description" content="追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現差距藏在兩個地方：partial reject 後的 cache replay，以及長 context 下慢慢偏掉的 RoPE position。" id="og-description">
   <meta property="og:image" content="https://b-log.to/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp" id="og-image">
   <meta property="og:image:width" content="1200">
@@ -22,7 +22,7 @@
   <meta property="og:locale" content="zh_TW">
   <meta property="article:author" content="Jason Chien" id="og-author">
   <meta property="article:published_time" content="2026-05-18T00:00:00Z" id="og-published-time">
-  <meta property="article:modified_time" content="2026-05-18T00:00:00Z" id="og-modified-time">
+  <meta property="article:modified_time" content="2026-05-19T00:00:00Z" id="og-modified-time">
   <meta property="article:section" content="技術分析" id="og-section">
   <!-- ARTICLE_TAGS_START -->
   <meta property="article:tag" content="oMLX">
@@ -36,7 +36,7 @@
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/" id="twitter-url">
-  <meta property="twitter:title" content="我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路" id="twitter-title">
+  <meta property="twitter:title" content="我們以為問題在 MTPLX，最後發現 oMLX 只是少接了一條路" id="twitter-title">
   <meta property="twitter:description" content="追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現差距藏在兩個地方：partial reject 後的 cache replay，以及長 context 下慢慢偏掉的 RoPE position。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
@@ -111,7 +111,7 @@
   <link rel="preload" as="image" href="/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp" imagesrcset="/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover-480w.webp 480w, /content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover-828w.webp 828w, /content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路","description":"追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現差距藏在兩個地方：partial reject 後的 cache replay，以及長 context 下慢慢偏掉的 RoPE position。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-18T00:00:00Z","dateModified":"2026-05-18T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/"},"url":"https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp"],"keywords":"oMLX, MTPLX, Native MTP, Qwen, MLX, 推論加速","articleSection":"技術分析"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我們以為問題在 MTPLX，最後發現 oMLX 只是少接了一條路","description":"追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現差距藏在兩個地方：partial reject 後的 cache replay，以及長 context 下慢慢偏掉的 RoPE position。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-18T00:00:00Z","dateModified":"2026-05-19T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/"},"url":"https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp"],"keywords":"oMLX, MTPLX, Native MTP, Qwen, MLX, 推論加速","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -121,7 +121,7 @@
       <div class="wrapper">
         <div class="site-header__top">
           <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路</span></p>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我們以為問題在 MTPLX，最後發現 oMLX 只是少接了一條路</span></p>
             <h1 class="site-title"><a href="../../">(b)-log</a></h1>
             <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
           </div>
@@ -191,8 +191,8 @@
           <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover.webp" srcset="/content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover-480w.webp 480w, /content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover-828w.webp 828w, /content/img/2026/omlx-mtplx-native-mtp-cache-rollback-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
           <header class="article-header">
             <p id="post-category" class="article-category">技術分析</p>
-            <h1 id="post-title">我們以為在追 MTPLX，最後發現 oMLX 只是少接了一條路</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 18, 2026</span><span>7 min</span></div>
+            <h1 id="post-title">我們以為問題在 MTPLX，最後發現 oMLX 只是少接了一條路</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 18, 2026</span><span>Updated May 19, 2026</span><span>7 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>oMLX</span><span>MTPLX</span><span>Native MTP</span><span>Qwen</span><span>MLX</span><span>推論加速</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>這次查 oMLX 的 Native MTP 為什麼慢，麻煩的不是找不到線索。</p>
