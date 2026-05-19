@@ -19,7 +19,7 @@ MTPLX 做的也是這件事。
 
 所以問題不是要不要切去 external drafter。真正值得追的是：同樣是 native MTP，為什麼 MTPLX 比 oMLX 快這麼多？
 
-這個問題可以拆成兩件事：draft 準不準（每個 cycle 平均可以吐幾個 token），以及每個 cycle 到底花多少時間。log 裡最刺眼的是 sample time——每個 cycle 一大段時間都算在 sampling 裡。
+這個問題可以拆成兩件事：draft 準不準（每個 cycle 平均可以吐幾個 token），以及每個 cycle 到底花多少時間。log 裡最讓人停下來看的，是 sample time——每個 cycle 一大段時間都算在 sampling 裡。
 
 看起來很像找到了。
 
