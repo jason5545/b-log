@@ -63,7 +63,7 @@ MTPLX 有個 `MTPLX_LAZY_VERIFY_LOGITS` 設計，把 `verify_hidden` 和 `verify
 
 ## adaptive depth 一開始太保守
 
-這時候回頭看 tokens per cycle，發現一個比較扎眼的差異：D3 coverage。
+這時候回頭看 tokens per cycle，發現一個比較不對勁的差異：D3 coverage。
 
 MTPLX 幾乎每個 cycle 都 draft 到 D3，但 oMLX 的 adaptive depth 從 1 慢慢爬。有一次 log 很極端，花了 85 個 cycle 才爬到 depth 3。
 
@@ -141,9 +141,9 @@ cache 掉下來了，acceptance 也崩了。
 
 ## API 其實一直在旁邊
 
-漂亮的地方在這裡。
+妙的是，路其實一直在旁邊。
 
-mlx-vlm 其實已經有 `rollback_speculative_cache` 的能力，backbone forward 也有在捕捉 `gdn_states`。也就是說，partial reject 之後不一定要 replay backbone 才能修 GDN cache——可以直接用 speculative cache rollback 把狀態修回去。
+mlx-vlm 已經有 `rollback_speculative_cache` 的能力，backbone forward 也有在捕捉 `gdn_states`。也就是說，partial reject 之後不一定要 replay backbone 才能修 GDN cache——可以直接用 speculative cache rollback 把狀態修回去。
 
 oMLX 的 Native MTP batch generator 只是沒有把這條路接上，所以才走了昂貴的 replay。
 
@@ -244,5 +244,7 @@ long-context 修正沒有把 VLM 路徑弄壞。
 
 RoPE 那個更讓人挫折，因為不是 bug，是 position 欄位讓你覺得自己算對了。到夠長的 context 才開始偏，追到最後才發現餵給 MTP head 的位置根本不誠實。
 
-這次最後學到的東西，大概就是這個：效能問題最怕的不是找不到嫌疑人，而是找到一個很合理的嫌疑人之後，再也不往下看。
+所以這次真正麻煩的不是沒有線索。
+
+麻煩的是，sampling 這個嫌疑人太合理，合理到差點讓人不往下看。
 
