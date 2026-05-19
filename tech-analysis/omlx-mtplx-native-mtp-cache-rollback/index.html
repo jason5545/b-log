@@ -229,7 +229,7 @@
 <p>所以 <code>tdist/eval</code> 很大，不代表 sparse distribution 是瓶頸。那一大段主要是 backbone verify 本來就要付的 GPU 成本，oMLX 只是把帳記在 tdist 下面。</p>
 <p>又排掉一個。</p>
 <h2>adaptive depth 一開始太保守</h2>
-<p>這時候回頭看 tokens per cycle，發現一個比較扎眼的差異：D3 coverage。</p>
+<p>這時候回頭看 tokens per cycle，發現一個比較不對勁的差異：D3 coverage。</p>
 <p>MTPLX 幾乎每個 cycle 都 draft 到 D3，但 oMLX 的 adaptive depth 從 1 慢慢爬。有一次 log 很極端，花了 85 個 cycle 才爬到 depth 3。</p>
 <p>這不合理。因為 per-depth acceptance 其實很接近——</p>
 <pre><code class="language-text">D1: oMLX 約 90%，MTPLX 約 92%
@@ -275,8 +275,8 @@ cycles:     99 -&gt; 112
 <p>代表 replay 不是多餘的保守操作，它在維持 GDN/SSM state 正確。拿掉之後，下一輪 MTP head 看到的 state 就偏了，draft 品質跟著掉。</p>
 <p>不能用「關 replay」當修法，要找等價替代。</p>
 <h2>API 其實一直在旁邊</h2>
-<p>漂亮的地方在這裡。</p>
-<p>mlx-vlm 其實已經有 <code>rollback_speculative_cache</code> 的能力，backbone forward 也有在捕捉 <code>gdn_states</code>。也就是說，partial reject 之後不一定要 replay backbone 才能修 GDN cache——可以直接用 speculative cache rollback 把狀態修回去。</p>
+<p>妙的是，路其實一直在旁邊。</p>
+<p>mlx-vlm 已經有 <code>rollback_speculative_cache</code> 的能力，backbone forward 也有在捕捉 <code>gdn_states</code>。也就是說，partial reject 之後不一定要 replay backbone 才能修 GDN cache——可以直接用 speculative cache rollback 把狀態修回去。</p>
 <p>oMLX 的 Native MTP batch generator 只是沒有把這條路接上，所以才走了昂貴的 replay。</p>
 <p>接上之後：</p>
 <pre><code class="language-text">cache:      2622ms -&gt; 55ms
@@ -334,7 +334,8 @@ pos[input=1 state=37 emitted=97 rope_base=132]
 <p>真正的問題，一個是 partial reject 後的 cache correction，一個是長 context 下 RoPE position 慢慢偏掉。</p>
 <p>原本的做法其實並不是錯的——它用完整的 backbone replay 買 correctness，只是太貴。MTPLX 讓我們看到，這個 correctness 不一定要用 replay 買。更妙的是，oMLX 需要的能力其實一直在旁邊，只是 Native MTP 那條路沒有接上。</p>
 <p>RoPE 那個更讓人挫折，因為不是 bug，是 position 欄位讓你覺得自己算對了。到夠長的 context 才開始偏，追到最後才發現餵給 MTP head 的位置根本不誠實。</p>
-<p>這次最後學到的東西，大概就是這個：效能問題最怕的不是找不到嫌疑人，而是找到一個很合理的嫌疑人之後，再也不往下看。</p>
+<p>所以這次真正麻煩的不是沒有線索。</p>
+<p>麻煩的是，sampling 這個嫌疑人太合理，合理到差點讓人不往下看。</p>
 </div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
