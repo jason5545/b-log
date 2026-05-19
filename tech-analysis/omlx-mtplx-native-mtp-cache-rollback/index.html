@@ -204,7 +204,7 @@
 <p>官方最近也有 speculative decoding 的東西，但那條比較像另外放一顆 draft model。Qwen 這邊有趣的地方，是模型本身就有 MTP head——也就是說，不需要再找一顆小模型幫忙猜，直接用內建的 MTP head 做 native MTP。</p>
 <p>MTPLX 做的也是這件事。</p>
 <p>所以問題不是要不要切去 external drafter。真正值得追的是：同樣是 native MTP，為什麼 MTPLX 比 oMLX 快這麼多？</p>
-<p>這個問題可以拆成兩件事：draft 準不準（每個 cycle 平均可以吐幾個 token），以及每個 cycle 到底花多少時間。log 裡最刺眼的是 sample time——每個 cycle 一大段時間都算在 sampling 裡。</p>
+<p>這個問題可以拆成兩件事：draft 準不準（每個 cycle 平均可以吐幾個 token），以及每個 cycle 到底花多少時間。log 裡最讓人停下來看的，是 sample time——每個 cycle 一大段時間都算在 sampling 裡。</p>
 <p>看起來很像找到了。</p>
 <h2>sampling.py 很可疑，但不是兇手</h2>
 <p>第一步是把 top-k sparse path 打開。<code>top_k=0</code> 改成 <code>top_k=20</code>，讓 verify side 可以走 sparse distribution，不要每次都處理完整 vocab。改完有生效，log 裡看得到 sparse distribution 開始跑。</p>
