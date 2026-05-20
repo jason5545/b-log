@@ -43,6 +43,8 @@ MTPLX 做的也是這件事。
 
 ## `mx.eval` 看起來很像答案，但只對一半
 
+以下數字來自我們自己加的 profiling instrumentation，不是 oMLX 預設 log 會給的。
+
 把 target distribution 拆開看，數字有點誇張：
 
 ```text
