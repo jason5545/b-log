@@ -216,6 +216,7 @@
 <p>其實這一步不算白忙。它排掉了一個很直覺的猜測：CPU acceptance walk 不是瓶頸。後來 instrumentation 拆出來，walk 只有幾毫秒，是 0.02% 那種量級。換句話說，acceptance walk 寫得再漂亮，整體速度也不會動。</p>
 <p>那 sample time 到底在等什麼？</p>
 <h2><code>mx.eval</code> 看起來很像答案，但只對一半</h2>
+<p>以下數字來自我們自己加的 profiling instrumentation，不是 oMLX 預設 log 會給的。</p>
 <p>把 target distribution 拆開看，數字有點誇張：</p>
 <pre><code class="language-text">tdist = 7576.5ms
   tproc = 0.7ms
