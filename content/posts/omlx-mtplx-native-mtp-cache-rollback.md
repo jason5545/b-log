@@ -1,7 +1,9 @@
 # 我們以為問題在 MTPLX，最後發現 oMLX 只是少接了一條路
 
 
-oMLX 是一個開放原始碼 LLM 推論伺服器，跑在 Apple Silicon 上，用 MLX 做推論，透過 macOS 選單列管理，暴露 OpenAI 相容 API。我們 fork 的版本最近的重點是 Native MTP——讓 Qwen 系列模型用內建的 MTP head 做多 token 預測，不需要額外的 draft model。
+oMLX 是一個開放原始碼 LLM 推論伺服器，跑在 Apple Silicon 上，透過 MLX 做推論，暴露 OpenAI 相容 API。日常使用時，從 macOS 選單列就能管理。
+
+我們 fork 的版本最近的重點是 Native MTP——讓 Qwen 系列模型用內建的 MTP head 做多 token 預測，不需要額外的 draft model。
 
 這次查 oMLX 的 Native MTP 為什麼慢，麻煩的不是找不到線索。
 
