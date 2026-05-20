@@ -195,7 +195,9 @@
             <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 18, 2026</span><span>Updated May 19, 2026</span><span>7 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>oMLX</span><span>MTPLX</span><span>Native MTP</span><span>Qwen</span><span>MLX</span><span>推論加速</span></div>
-          <div id="post-content" class="article-body" data-prerendered="true"><p>這次查 oMLX 的 Native MTP 為什麼慢，麻煩的不是找不到線索。</p>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>oMLX 是一個開放原始碼 LLM 推論伺服器，跑在 Apple Silicon 上，透過 MLX 做推論，暴露 OpenAI 相容 API。日常使用時，從 macOS 選單列就能管理。</p>
+<p>我們 fork 的版本最近的重點是 Native MTP——讓 Qwen 系列模型用內建的 MTP head 做多 token 預測，不需要額外的 draft model。</p>
+<p>這次查 oMLX 的 Native MTP 為什麼慢，麻煩的不是找不到線索。</p>
 <p>麻煩的是每條線索看起來都說得通。</p>
 <p>MTPLX 跑同一顆 Qwen3.6 27B 可以到三十幾 tok/s，oMLX 卡在二十幾。Native MTP 明明有開，acceptance 也不是低到不能看，但速度就是上不去。這種差距最容易讓人往「一定是哪個核心沒吃到」的方向想，然後開始懷疑 sampling。</p>
 <p>後來才發現，最要命的地方根本不在那裡。</p>
