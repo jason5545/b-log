@@ -12,6 +12,8 @@ BLE 很誠實。能寫就是能寫，不能寫就回錯。真正麻煩的是 mac
 
 是它看起來像已經好了。
 
+相關背景：[Unified Remote Evo - 從遙控器到多功能輸入裝置的開發之旅](https://b-log.to/tech-development/unified-remote-evo-development-journey/)
+
 ## AES 過了，但 F80F 不能寫
 
 最早的 log 是這樣：
