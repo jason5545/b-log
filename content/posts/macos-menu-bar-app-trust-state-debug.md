@@ -115,6 +115,78 @@ tccutil reset ListenEvent com.jason5545.UnifiedRemoteEvo
 這反而是好事。
 因為那表示它終於不是快取出來的假 on。
 
+## menu bar 沒出現，是 bundle identity 被弄髒
+
+這段是後來才真的確認。
+
+那時候最該被相信的，其實是這句話：
+
+```text
+our initial push was working
+```
+
+這句是對的。
+
+最初那版可用時，app 的 bundle id 是：
+
+```text
+com.jason5545.UnifiedRemoteEvoMac
+```
+
+後來我為了隔離 menu bar 問題，試過換一個新的 bundle id：
+
+```text
+com.jason5545.UnifiedRemoteEvo
+```
+
+這個測試本身不是錯。
+
+錯的是，我把它和正式部署、DerivedData 裡的 build product、System Settings 裡的權限狀態混在同一台機器上反覆跑。最後 macOS 看到的是一堆名字都叫 `UnifiedRemoteEvoMac.app` 的東西，但它們不完全是同一個 app。
+
+LaunchServices 裡可以看到好幾份：
+
+```text
+/Applications/UnifiedRemoteEvoMac.app
+~/Library/Developer/Xcode/DerivedData/.../Release/UnifiedRemoteEvoMac.app
+~/Library/Developer/Xcode/DerivedData/.../Debug/UnifiedRemoteEvoMac.app
+```
+
+有些是 `com.jason5545.UnifiedRemoteEvoMac`。
+有些是 `com.jason5545.UnifiedRemoteEvo`。
+還有測試時留下的 probe id。
+
+對 Finder 來說，它們都叫 UnifiedRemoteEvoMac。
+
+但對 macOS 來說，這不是同一件事。
+
+menu extra 的可見性、LaunchServices 的 app URL、TCC 的授權、code signing 的 designated requirement，看的都不是「畫面上那個名字」。它們看的是 bundle id、實際 app path、Team ID、簽章要求，以及系統當下認為哪一份 bundle 才是這個 identity。
+
+所以才會出現很怪的結果。
+
+System Settings 裡那個 toggle 是 on。
+但 API 查出來是 no。
+
+SwiftUI `MenuBarExtra` 會被系統送 `NSStatusItemChangeVisibilityAction`，接著 app 沒有其他 window，就自己退出。
+
+改成最小 AppKit `NSStatusItem(title: "EVO")` 之後，process 活著，但 menu bar 還是不顯示。
+
+可是 unbundled 的 `swift -e` 測試可以顯示。
+
+這幾個現象放在一起，結論就很清楚：
+
+不是 SwiftUI 畫不出 menu bar。
+不是 icon 壞掉。
+不是使用者沒開權限。
+
+是這個 app identity 在 macOS 裡被我測髒了。
+
+initial push 會動，是因為那時候 identity 還乾淨。後來我一邊修 BLE、一邊加 CLI、一邊改 bundle id、一邊從 DerivedData 和 `/Applications` 交替啟動，macOS 其實已經不確定「UnifiedRemoteEvoMac」到底是哪一份。
+
+這也是為什麼後來不能只叫使用者去 System Settings 再打開一次。
+
+那只是把某一列開成 on。
+但真正要修的是：選定一個固定的正式 bundle id，清掉舊身份，讓 `/Applications` 裡那一份成為唯一被系統認得的 app。
+
 ## 權限要分兩段要求
 
 menu app 啟動時要自動把自己加進權限清單，但不能一次把 Accessibility 和 Input Monitoring 都丟出去。
@@ -221,6 +293,7 @@ Connected: EmulStick / mode=鍵盤/滑鼠
 真正麻煩的是 macOS 這邊。
 
 System Settings 可以顯示 on，但 API 回 no。
+menu bar item 可以不是程式畫不出來，而是 visibility state 套在另一個 identity 上。
 menu bar 可以顯示 grabbed，但 event tap 是 released。
 app 可以連上 EmulStick，但 mode 還沒同步回來。
 

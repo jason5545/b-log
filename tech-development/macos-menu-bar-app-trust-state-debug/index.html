@@ -194,7 +194,7 @@
           <header class="article-header">
             <p id="post-category" class="article-category">技術開發</p>
             <h1 id="post-title">我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 21, 2026</span><span>7 min</span></div>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 21, 2026</span><span>8 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>macOS</span><span>Swift</span><span>BLE</span><span>EmulStick</span><span>TCC</span><span>Accessibility</span><span>Input Monitoring</span><span>menu bar app</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>我一開始以為這只是把 EmulStick 的 BLE forwarding 接到 macOS。</p>
@@ -261,6 +261,46 @@ tccutil reset ListenEvent com.jason5545.UnifiedRemoteEvo
 <p>這次 System Settings 裡那列變成 off。</p>
 <p>這反而是好事。
 因為那表示它終於不是快取出來的假 on。</p>
+<h2>menu bar 沒出現，是 bundle identity 被弄髒</h2>
+<p>這段是後來才真的確認。</p>
+<p>那時候最該被相信的，其實是這句話：</p>
+<pre><code class="language-text">our initial push was working
+</code></pre>
+<p>這句是對的。</p>
+<p>最初那版可用時，app 的 bundle id 是：</p>
+<pre><code class="language-text">com.jason5545.UnifiedRemoteEvoMac
+</code></pre>
+<p>後來我為了隔離 menu bar 問題，試過換一個新的 bundle id：</p>
+<pre><code class="language-text">com.jason5545.UnifiedRemoteEvo
+</code></pre>
+<p>這個測試本身不是錯。</p>
+<p>錯的是，我把它和正式部署、DerivedData 裡的 build product、System Settings 裡的權限狀態混在同一台機器上反覆跑。最後 macOS 看到的是一堆名字都叫 <code>UnifiedRemoteEvoMac.app</code> 的東西，但它們不完全是同一個 app。</p>
+<p>LaunchServices 裡可以看到好幾份：</p>
+<pre><code class="language-text">/Applications/UnifiedRemoteEvoMac.app
+~/Library/Developer/Xcode/DerivedData/.../Release/UnifiedRemoteEvoMac.app
+~/Library/Developer/Xcode/DerivedData/.../Debug/UnifiedRemoteEvoMac.app
+</code></pre>
+<p>有些是 <code>com.jason5545.UnifiedRemoteEvoMac</code>。
+有些是 <code>com.jason5545.UnifiedRemoteEvo</code>。
+還有測試時留下的 probe id。</p>
+<p>對 Finder 來說，它們都叫 UnifiedRemoteEvoMac。</p>
+<p>但對 macOS 來說，這不是同一件事。</p>
+<p>menu extra 的可見性、LaunchServices 的 app URL、TCC 的授權、code signing 的 designated requirement，看的都不是「畫面上那個名字」。它們看的是 bundle id、實際 app path、Team ID、簽章要求，以及系統當下認為哪一份 bundle 才是這個 identity。</p>
+<p>所以才會出現很怪的結果。</p>
+<p>System Settings 裡那個 toggle 是 on。
+但 API 查出來是 no。</p>
+<p>SwiftUI <code>MenuBarExtra</code> 會被系統送 <code>NSStatusItemChangeVisibilityAction</code>，接著 app 沒有其他 window，就自己退出。</p>
+<p>改成最小 AppKit <code>NSStatusItem(title: &quot;EVO&quot;)</code> 之後，process 活著，但 menu bar 還是不顯示。</p>
+<p>可是 unbundled 的 <code>swift -e</code> 測試可以顯示。</p>
+<p>這幾個現象放在一起，結論就很清楚：</p>
+<p>不是 SwiftUI 畫不出 menu bar。
+不是 icon 壞掉。
+不是使用者沒開權限。</p>
+<p>是這個 app identity 在 macOS 裡被我測髒了。</p>
+<p>initial push 會動，是因為那時候 identity 還乾淨。後來我一邊修 BLE、一邊加 CLI、一邊改 bundle id、一邊從 DerivedData 和 <code>/Applications</code> 交替啟動，macOS 其實已經不確定「UnifiedRemoteEvoMac」到底是哪一份。</p>
+<p>這也是為什麼後來不能只叫使用者去 System Settings 再打開一次。</p>
+<p>那只是把某一列開成 on。
+但真正要修的是：選定一個固定的正式 bundle id，清掉舊身份，讓 <code>/Applications</code> 裡那一份成為唯一被系統認得的 app。</p>
 <h2>權限要分兩段要求</h2>
 <p>menu app 啟動時要自動把自己加進權限清單，但不能一次把 Accessibility 和 Input Monitoring 都丟出去。</p>
 <p>實際跑下來，macOS 比較像要這樣：</p>
@@ -328,6 +368,7 @@ Connected: EmulStick / mode=鍵盤/滑鼠
 <p>硬體那邊反而很乾脆。Android 版比對一下，補 <code>writeWithoutResponse</code> fallback，CLI 測一下，事情就往前走。</p>
 <p>真正麻煩的是 macOS 這邊。</p>
 <p>System Settings 可以顯示 on，但 API 回 no。
+menu bar item 可以不是程式畫不出來，而是 visibility state 套在另一個 identity 上。
 menu bar 可以顯示 grabbed，但 event tap 是 released。
 app 可以連上 EmulStick，但 mode 還沒同步回來。</p>
 <p>這些都不是很大的 bug。</p>
