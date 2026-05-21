@@ -1128,6 +1128,13 @@
       "postUrl": "https://b-log.to/tech-analysis/omlx-mtplx-native-mtp-cache-rollback/",
       "facebookPostId": "1026818047191304_122103386733290922",
       "publishedAt": "2026-05-18T01:34:22.852Z"
+    },
+    "macos-menu-bar-app-trust-state-debug": {
+      "status": "published",
+      "title": "我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app",
+      "postUrl": "https://b-log.to/tech-development/macos-menu-bar-app-trust-state-debug/",
+      "facebookPostId": "1026818047191304_122103813357290922",
+      "publishedAt": "2026-05-21T01:00:05.913Z"
     }
   }
 }
