@@ -1,5 +1,26 @@
 [
   {
+    "slug": "macos-menu-bar-app-trust-state-debug",
+    "title": "我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app",
+    "summary": "我以為 Unified Remote Evo Mac 卡在 BLE forwarding，最後真正確認的是 macOS 權限、bundle identity、menu bar UI 和裝置 mode 到底有沒有同步。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-05-21T00:00:00Z",
+    "tags": [
+      "macOS",
+      "Swift",
+      "BLE",
+      "EmulStick",
+      "TCC",
+      "Accessibility",
+      "Input Monitoring",
+      "menu bar app"
+    ],
+    "accentColor": "#2563eb",
+    "coverImage": "/content/img/2026/macos-menu-bar-app-trust-state-debug-cover.webp",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "omlx-mtplx-native-mtp-cache-rollback",
     "title": "我們以為問題在 MTPLX，最後發現 oMLX 只是少接了一條路",
     "summary": "追 Native MTP 加速時，我一開始以為問題在 sampling。最後才發現差距藏在兩個地方：partial reject 後的 cache replay，以及長 context 下慢慢偏掉的 RoPE position。",

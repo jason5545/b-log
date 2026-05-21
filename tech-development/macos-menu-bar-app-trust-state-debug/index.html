@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="我以為 Unified Remote Evo Mac 卡在 BLE forwarding，最後真正確認的是 macOS 權限、bundle identity、menu bar UI 和裝置 mode 到底有沒有同步。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-development/macos-menu-bar-app-trust-state-debug/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-development/macos-menu-bar-app-trust-state-debug/" id="og-url">
+  <meta property="og:title" content="我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app" id="og-title">
+  <meta property="og:description" content="我以為 Unified Remote Evo Mac 卡在 BLE forwarding，最後真正確認的是 macOS 權限、bundle identity、menu bar UI 和裝置 mode 到底有沒有同步。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/macos-menu-bar-app-trust-state-debug-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-05-21T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-05-21T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術開發" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="macOS">
+  <meta property="article:tag" content="Swift">
+  <meta property="article:tag" content="BLE">
+  <meta property="article:tag" content="EmulStick">
+  <meta property="article:tag" content="TCC">
+  <meta property="article:tag" content="Accessibility">
+  <meta property="article:tag" content="Input Monitoring">
+  <meta property="article:tag" content="menu bar app">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-development/macos-menu-bar-app-trust-state-debug/" id="twitter-url">
+  <meta property="twitter:title" content="我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app" id="twitter-title">
+  <meta property="twitter:description" content="我以為 Unified Remote Evo Mac 卡在 BLE forwarding，最後真正確認的是 macOS 權限、bundle identity、menu bar UI 和裝置 mode 到底有沒有同步。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/macos-menu-bar-app-trust-state-debug-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="macOS, Swift, BLE, EmulStick, TCC, Accessibility, Input Monitoring, menu bar app" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/macos-menu-bar-app-trust-state-debug-cover.webp" imagesrcset="/content/img/2026/macos-menu-bar-app-trust-state-debug-cover-480w.webp 480w, /content/img/2026/macos-menu-bar-app-trust-state-debug-cover-828w.webp 828w, /content/img/2026/macos-menu-bar-app-trust-state-debug-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app","description":"我以為 Unified Remote Evo Mac 卡在 BLE forwarding，最後真正確認的是 macOS 權限、bundle identity、menu bar UI 和裝置 mode 到底有沒有同步。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-21T00:00:00Z","dateModified":"2026-05-21T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/macos-menu-bar-app-trust-state-debug/"},"url":"https://b-log.to/tech-development/macos-menu-bar-app-trust-state-debug/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/macos-menu-bar-app-trust-state-debug-cover.webp"],"keywords":"macOS, Swift, BLE, EmulStick, TCC, Accessibility, Input Monitoring, menu bar app","articleSection":"技術開發"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/macos-menu-bar-app-trust-state-debug-cover.webp" srcset="/content/img/2026/macos-menu-bar-app-trust-state-debug-cover-480w.webp 480w, /content/img/2026/macos-menu-bar-app-trust-state-debug-cover-828w.webp 828w, /content/img/2026/macos-menu-bar-app-trust-state-debug-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 21, 2026</span><span>7 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>macOS</span><span>Swift</span><span>BLE</span><span>EmulStick</span><span>TCC</span><span>Accessibility</span><span>Input Monitoring</span><span>menu bar app</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>我一開始以為這只是把 EmulStick 的 BLE forwarding 接到 macOS。</p>
+<p>掃描、連線、AES 驗證、寫 HID report。Android 版已經有一條路，macOS 版照著協定補起來，應該就能跑。</p>
+<p>結果真正花時間的不是 BLE。</p>
+<p>BLE 很誠實。能寫就是能寫，不能寫就回錯。真正麻煩的是 macOS：System Settings 顯示已經授權，程式卻還是拿不到權限；menu bar 顯示 grabbed，event tap 卻說 released；裝置看起來連上了，但 mode 還停在上一個狀態。</p>
+<p>這種問題最討厭的地方，不是它壞。</p>
+<p>是它看起來像已經好了。</p>
+<h2>AES 過了，但 F80F 不能寫</h2>
+<p>最早的 log 是這樣：</p>
+<pre><code class="language-text">AES sent
+warn write f80f failed
+write is not permitted
+</code></pre>
+<p>AES 能送，代表連線不是完全壞掉。Device Information 讀得到，cipher request 也走到那一步。真正卡住的是 <code>F80F</code> command characteristic 的寫法。</p>
+<p>這時候 Android 版很重要。</p>
+<p>不是因為 macOS 要照抄 Android，而是 Android 版已經證明 EmulStick 期待哪一種 GATT write。比對後才發現，<code>F80F</code> 不能假設 <code>writeWithResponse</code> 可用。這條 command path 真正能走的是 <code>writeWithoutResponse</code>。</p>
+<p>所以第一個修法很小：</p>
+<p>withResponse 被拒，就改用 withoutResponse。</p>
+<p>修完後，CLI 可以掃到 EmulStick，也可以真的送 mouse move。那個「small down」測試很重要，因為它不是 UI 顯示成功，也不是 log 寫得漂亮，是游標真的動了。</p>
+<pre><code class="language-text">Mouse move sent.
+</code></pre>
+<p>這一刻 BLE 主線其實已經活了。</p>
+<p>但 app 還沒有。</p>
+<h2>CLI 不該偷偷啟動 menu app</h2>
+<p>我後來加了 CLI：</p>
+<pre><code class="language-bash">UnifiedRemoteEvoMac --cli scan
+UnifiedRemoteEvoMac --cli connect
+UnifiedRemoteEvoMac --cli move --dx 0 --dy 20
+</code></pre>
+<p>這本來是為了讓 device discovery、connection、mouse event 可以單獨測。結果它反而暴露另一個問題：<code>--cli</code> 還是會走 SwiftUI app startup。</p>
+<p>也就是說，我只是想測 BLE，結果 <code>AppModel</code> 被建立，<code>GlobalInputForwarder</code> 跟著啟動，macOS 開始跳 Accessibility 權限。</p>
+<p>這不是 CLI。</p>
+<p>這只是 menu app 順便多收了一個參數。</p>
+<p>所以後來把 <code>@main</code> 移到新的 entry point，先判斷 <code>--cli</code>。如果是 CLI，就只跑 BLE runner，不建立 SwiftUI app，不啟動 event tap，不碰 Accessibility。</p>
+<p>這一步很重要。</p>
+<p>因為測試不乾淨時，你會一直懷疑錯地方。你以為 BLE 還有問題，其實是另一條 input permission 流程一起進來亂。</p>
+<h2>System Settings 的 on，不等於 TCC 的 yes</h2>
+<p>menu app 真正麻煩的是權限。</p>
+<p>System Settings 裡，Accessibility 顯示 <code>UnifiedRemoteEvoMac</code> 是 on。Input Monitoring 也看起來有一列。</p>
+<p>但同一個 app bundle 裡跑 CLI 查 API：</p>
+<pre><code class="language-text">Bundle ID: com.jason5545.UnifiedRemoteEvo
+Accessibility trusted: no
+Input Monitoring trusted: no
+</code></pre>
+<p>這才是問題。</p>
+<p>不是「權限還沒開」。
+是 UI 說開了，API 說沒有。</p>
+<p>看 tccd log 之後，真正的線索出來了：</p>
+<pre><code class="language-text">failed to find an Application URL for bundle ID: com.jason5545.UnifiedRemoteEvo
+kLSApplicationNotFoundErr
+</code></pre>
+<p>macOS 不是只看畫面上的 app 名稱。TCC 查的是 bundle id、code requirement、LaunchServices 記錄，還有實際 app path。這幾個東西只要沒有對齊，System Settings 上那個 on 就可能只是舊狀態。</p>
+<p>畫面上看到的是 <code>UnifiedRemoteEvoMac</code>。
+真正的 bundle id 是 <code>com.jason5545.UnifiedRemoteEvo</code>。
+app 在 <code>/Applications/UnifiedRemoteEvoMac.app</code>。
+中間還有之前測過的 dev bundle id。</p>
+<p>看起來都合理，但 TCC 不一定覺得它們是同一個東西。</p>
+<p>最後我不是叫使用者再去重開一次開關，而是先把目前 bundle id 的狀態清掉：</p>
+<pre><code class="language-bash">tccutil reset Accessibility com.jason5545.UnifiedRemoteEvo
+tccutil reset ListenEvent com.jason5545.UnifiedRemoteEvo
+</code></pre>
+<p>然後重新啟動 menu app，讓它自己 request。</p>
+<p>這次 System Settings 裡那列變成 off。</p>
+<p>這反而是好事。
+因為那表示它終於不是快取出來的假 on。</p>
+<h2>權限要分兩段要求</h2>
+<p>menu app 啟動時要自動把自己加進權限清單，但不能一次把 Accessibility 和 Input Monitoring 都丟出去。</p>
+<p>實際跑下來，macOS 比較像要這樣：</p>
+<ol>
+<li>先 request Accessibility，讓 app 進清單</li>
+<li>使用者打開 Accessibility</li>
+<li>app 偵測到 Accessibility 已經 trusted</li>
+<li>再 request Input Monitoring</li>
+<li>使用者打開 Input Monitoring</li>
+<li>event tap 才建立</li>
+</ol>
+<p>這裡我加了一個 retry。</p>
+<p>不是為了繞過 macOS。app 不能自己幫自己開權限，這是對的。retry 的目的只是不要讓使用者打開開關後還要猜「是不是要重開 app」。</p>
+<p>你打開，app 自己看。
+看到了，就接下一步。
+兩個都 yes，event tap 才起來。</p>
+<p>最後 CLI 回：</p>
+<pre><code class="language-text">Accessibility trusted: yes
+Input Monitoring trusted: yes
+</code></pre>
+<p>到這裡，macOS 才是真的把這個 app 當成被允許的程式。</p>
+<h2>Grabbed 不能只相信 UI</h2>
+<p>後面又遇到一個更小，但更容易讓人不信任 app 的問題。</p>
+<p>Grab section 顯示 grabbed。
+Status 裡 Input tap 卻顯示：</p>
+<pre><code class="language-text">Forwarding released
+</code></pre>
+<p>這種狀態很糟。不是因為功能完全不能用，而是它讓使用者開始懷疑右上角那個 menu bar app 到底有沒有在說真話。</p>
+<p>根因是 <code>@Published</code> 的 timing。</p>
+<p><code>grabHotKey.$isGrabbed</code> sink 收到新值時，如果裡面又去讀 <code>grabHotKey.isGrabbed</code>，有機會讀到更新前的值。於是 UI 已經顯示 grabbed，但 AppModel 同步 forwarding 時拿到的是 false。</p>
+<p>修法不是加更多 UI 判斷，而是不要在 sink 裡回頭讀 property。</p>
+<p>直接用 publisher 傳進來的新值：</p>
+<pre><code class="language-swift">grabHotKey.$isGrabbed
+    .sink { [weak self] isGrabbed in
+        self?.isInputGrabbed = isGrabbed
+        self?.syncForwardingState()
+    }
+</code></pre>
+<p>這裡真正修的不是 Combine。
+是讓狀態不要各說各話。</p>
+<p>UI 覺得 grabbed、event tap 覺得 released、BLE connection 又是另一個狀態，這種 app 很快就會變成「看起來有在動，但你不知道它現在到底在哪裡」。</p>
+<h2>連上後一定要回到鍵盤滑鼠</h2>
+<p>EmulStick 可以是 Xbox 360 mode，也可以是 keyboard / mouse composite mode。</p>
+<p>我原本以為連線後送一次 KB / Mouse 就夠了。CLI 也讀回成功。</p>
+<p>但 menu app 實際用起來，還是會遇到需要手動點 KB / Mouse 才同步的狀況。這代表「送出指令」跟「裝置真的進入那個模式」中間還有一段不可靠。</p>
+<p>所以後來改成比較笨、但比較可信的做法：</p>
+<p>AES 驗證完成後，延遲送 KB / Mouse，查回 mode。
+如果沒有確認到，就重試。
+手動點 XInput 或 KB / Mouse，也送完後再查回。</p>
+<p>不是猜它成功。
+是讀回來確認。</p>
+<p>最後 log 是這樣：</p>
+<pre><code class="language-text">AES 密文驗證成功
+BLE 驗證完成，已連線
+已送出模式切換指令 VID=0x451 PID=0xe010
+查詢目前 EmulStick 模式
+目前裝置模式：鍵盤/滑鼠
+Connected: EmulStick / mode=鍵盤/滑鼠
+</code></pre>
+<p>這才是我想要的狀態。</p>
+<p>不是按鈕看起來在 KB / Mouse。
+是 EmulStick 自己回報它在 KB / Mouse。</p>
+<h2>最後修掉的是「到底是不是真的」</h2>
+<p>這趟最有意思的地方，不是 AES，也不是 HID report。</p>
+<p>硬體那邊反而很乾脆。Android 版比對一下，補 <code>writeWithoutResponse</code> fallback，CLI 測一下，事情就往前走。</p>
+<p>真正麻煩的是 macOS 這邊。</p>
+<p>System Settings 可以顯示 on，但 API 回 no。
+menu bar 可以顯示 grabbed，但 event tap 是 released。
+app 可以連上 EmulStick，但 mode 還沒同步回來。</p>
+<p>這些都不是很大的 bug。</p>
+<p>但它們會慢慢吃掉信任。</p>
+<p>menu bar app 最怕的不是功能少。最怕的是它安靜地站在右上角，然後你不知道它現在到底有沒有真的接管輸入、真的連到裝置、真的在正確模式。</p>
+<p>所以後來我才把每一層都補上實際確認。</p>
+<p>CLI 確認硬體真的動。
+TCC check 確認 macOS 真的信任。
+mode query 確認 EmulStick 真的切過去。
+AppModel 確認 UI 和 event tap 用同一個狀態。</p>
+<p>我不是不能接受它壞掉。</p>
+<p>寫這種東西本來就會壞。真正不能接受的是，它壞掉的時候看起來像已經好了。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
