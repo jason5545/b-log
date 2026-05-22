@@ -11,6 +11,7 @@ const POSTS_ROOT = '/content/posts/';
 const SITE_BASE_URL = 'https://b-log.to';
 const DEFAULT_META_DESCRIPTION = '用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。';
 const META_DATE_LOCALE = 'en-US';
+const META_DATE_TIME_ZONE = 'Asia/Taipei';
 const CLOUDINARY_OG_IMAGE_CONFIG = {
   cloudName: 'dynj7181i',
   backgroundId: 'og-background_cbst7j',
@@ -2231,6 +2232,7 @@ function formatDate(date) {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    timeZone: META_DATE_TIME_ZONE,
   }).format(date);
 }
 
