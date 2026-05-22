@@ -106,6 +106,14 @@ nodeRepl.write(JSON.stringify({ ok: true, tabCount: tabs.length }, null, 2));
 
 這是我這次最在意的地方。很多 browser automation 的錯誤看起來都像「頁面沒載好」，但其實前面根本沒有拿到控制權。你如果沒有先確認那條路是通的，後面的 debug 都會歪掉。
 
+後來我用 `gh` 去翻 openai/codex 的 issue，找到一個很像的外部錨點：[Chrome plugin file upload setFiles fails with Not allowed and upload forms can hang](https://github.com/openai/codex/issues/21597)。
+
+那個 issue 講的不是 trusted path，而是另一層 browser plugin 問題：`openTabs()` 會動，分頁可以列出來，導航也成功，甚至一開始還能讀到頁面文字。但進到 authenticated upload form 之後，`tab.playwright.locator()`、`tab.dom_cua.get_visible_dom()`、截圖、file chooser 這些呼叫開始 timeout，最後要等到 runtime reset。
+
+這件事剛好把問題講得更清楚：分頁還在，不等於 automation bridge 還健康；URL 導到了，不等於 DOM/CUA 那層真的可控。
+
+我喜歡那個 issue 裡真正指出的產品問題：Chrome plugin 不應該卡到 runtime reset，至少要 fail fast，給一個能判斷的錯誤。這跟我這次遇到的信任路徑問題是同一類成本。最麻煩的不是它失敗，而是它失敗時讓你不知道該查哪一層。
+
 ## 第二個問題：這個 tab 不是 Playwright page
 
 trusted path 通了之後，開新分頁其實很順：

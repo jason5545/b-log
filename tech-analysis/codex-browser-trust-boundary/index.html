@@ -192,7 +192,7 @@
           <header class="article-header">
             <p id="post-category" class="article-category">技術分析</p>
             <h1 id="post-title">我只是叫 Codex 開網頁，結果一路查到瀏覽器信任邊界</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 22, 2026</span><span>7 min</span></div>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 22, 2026</span><span>8 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>Codex</span><span>Chrome Extension</span><span>browser automation</span><span>Helium</span><span>Playwright</span><span>AI 工具</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>有時候一個技術問題最麻煩的地方，不是它看起來很難。</p>
@@ -251,6 +251,10 @@ nodeRepl.write(JSON.stringify({ ok: true, tabCount: tabs.length }, null, 2));
 <p>如果這裡過了，就代表問題不是 privileged bridge。後面如果導航失敗、DOM 操作失敗、分頁狀態不對，可以往 browser API 或頁面本身查。</p>
 <p>如果這裡沒過，就不要假裝是網站問題。</p>
 <p>這是我這次最在意的地方。很多 browser automation 的錯誤看起來都像「頁面沒載好」，但其實前面根本沒有拿到控制權。你如果沒有先確認那條路是通的，後面的 debug 都會歪掉。</p>
+<p>後來我用 <code>gh</code> 去翻 openai/codex 的 issue，找到一個很像的外部錨點：<a href="https://github.com/openai/codex/issues/21597">Chrome plugin file upload setFiles fails with Not allowed and upload forms can hang</a>。</p>
+<p>那個 issue 講的不是 trusted path，而是另一層 browser plugin 問題：<code>openTabs()</code> 會動，分頁可以列出來，導航也成功，甚至一開始還能讀到頁面文字。但進到 authenticated upload form 之後，<code>tab.playwright.locator()</code>、<code>tab.dom_cua.get_visible_dom()</code>、截圖、file chooser 這些呼叫開始 timeout，最後要等到 runtime reset。</p>
+<p>這件事剛好把問題講得更清楚：分頁還在，不等於 automation bridge 還健康；URL 導到了，不等於 DOM/CUA 那層真的可控。</p>
+<p>我喜歡那個 issue 裡真正指出的產品問題：Chrome plugin 不應該卡到 runtime reset，至少要 fail fast，給一個能判斷的錯誤。這跟我這次遇到的信任路徑問題是同一類成本。最麻煩的不是它失敗，而是它失敗時讓你不知道該查哪一層。</p>
 <h2>第二個問題：這個 tab 不是 Playwright page</h2>
 <p>trusted path 通了之後，開新分頁其實很順：</p>
 <pre><code class="language-js">globalThis.tab = await browser.tabs.new();
