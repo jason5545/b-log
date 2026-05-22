@@ -106,13 +106,17 @@ nodeRepl.write(JSON.stringify({ ok: true, tabCount: tabs.length }, null, 2));
 
 這是我這次最在意的地方。很多 browser automation 的錯誤看起來都像「頁面沒載好」，但其實前面根本沒有拿到控制權。你如果沒有先確認那條路是通的，後面的 debug 都會歪掉。
 
-後來我用 `gh` 去翻 openai/codex 的 issue，找到一個很像的外部錨點：[Chrome plugin file upload setFiles fails with Not allowed and upload forms can hang](https://github.com/openai/codex/issues/21597)。
+後來我用 `gh` 去翻 openai/codex 的 issue，真正對上的其實是另一個：[Chrome plugin fails after reinstall: browser-client is not trusted / native pipe bridge unavailable](https://github.com/openai/codex/issues/23884)。
 
-那個 issue 講的不是 trusted path，而是另一層 browser plugin 問題：`openTabs()` 會動，分頁可以列出來，導航也成功，甚至一開始還能讀到頁面文字。但進到 authenticated upload form 之後，`tab.playwright.locator()`、`tab.dom_cua.get_visible_dom()`、截圖、file chooser 這些呼叫開始 timeout，最後要等到 runtime reset。
+那個 issue 的環境是 Windows，使用者重裝 Chrome plugin 好幾次，Chrome 也確實有在跑，但 Codex 一叫 `@chrome open browser` 就失敗，錯誤就是這句：
 
-這件事剛好把問題講得更清楚：分頁還在，不等於 automation bridge 還健康；URL 導到了，不等於 DOM/CUA 那層真的可控。
+```text
+privileged native pipe bridge is not available; browser-client is not trusted
+```
 
-我喜歡那個 issue 裡真正指出的產品問題：Chrome plugin 不應該卡到 runtime reset，至少要 fail fast，給一個能判斷的錯誤。這跟我這次遇到的信任路徑問題是同一類成本。最麻煩的不是它失敗，而是它失敗時讓你不知道該查哪一層。
+這跟我這次遇到的點幾乎是同一條線。它不是「網站開不起來」，也不是「Chrome 沒開」。Chrome 在，plugin 也裝過，甚至 diagnostic script 還另外卡在 Windows 路徑權限問題。真正卡住的是 Codex 拿不到那條 privileged browser bridge。
+
+這個 issue 讓整件事更清楚：重裝 plugin 不一定會修好信任路徑。你可以把使用者可見的東西全部重來一次，但如果 runtime 仍然不信任現在 import 的 `browser-client.mjs`，那條 bridge 還是不會交出去。
 
 ## 第二個問題：這個 tab 不是 Playwright page
 
