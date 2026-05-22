@@ -1135,6 +1135,13 @@
       "postUrl": "https://b-log.to/tech-development/macos-menu-bar-app-trust-state-debug/",
       "facebookPostId": "1026818047191304_122103813357290922",
       "publishedAt": "2026-05-21T01:00:05.913Z"
+    },
+    "codex-browser-trust-boundary": {
+      "status": "published",
+      "title": "我只是叫 Codex 開網頁，結果一路查到瀏覽器信任邊界",
+      "postUrl": "https://b-log.to/tech-analysis/codex-browser-trust-boundary/",
+      "facebookPostId": "1026818047191304_122103926373290922",
+      "publishedAt": "2026-05-22T01:32:34.943Z"
     }
   }
 }
