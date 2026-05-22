@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "codex-browser-trust-boundary",
+      "url": "https://b-log.to/tech-analysis/codex-browser-trust-boundary/",
+      "image": "https://b-log.to/content/img/2026/codex-browser-trust-boundary-cover.webp",
+      "title": "我只是叫 Codex 開網頁，結果一路查到瀏覽器信任邊界",
+      "content_text": "我只是叫 Codex 開一個網頁，最後查到的不是導航，而是 trusted browser-client、Chrome extension、tab wrapper 和 finalize 控制權的邊界。",
+      "date_published": "2026-05-22T00:00:00.000Z",
+      "date_modified": "2026-05-22T00:00:00.000Z",
+      "tags": [
+        "Codex",
+        "Chrome Extension",
+        "browser automation",
+        "Helium",
+        "Playwright",
+        "AI 工具"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "macos-menu-bar-app-trust-state-debug",
       "url": "https://b-log.to/tech-development/macos-menu-bar-app-trust-state-debug/",
       "image": "https://b-log.to/content/img/2026/macos-menu-bar-app-trust-state-debug-cover.webp",

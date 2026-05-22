@@ -1,5 +1,24 @@
 [
   {
+    "slug": "codex-browser-trust-boundary",
+    "title": "我只是叫 Codex 開網頁，結果一路查到瀏覽器信任邊界",
+    "summary": "我只是叫 Codex 開一個網頁，最後查到的不是導航，而是 trusted browser-client、Chrome extension、tab wrapper 和 finalize 控制權的邊界。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-05-22T00:00:00Z",
+    "tags": [
+      "Codex",
+      "Chrome Extension",
+      "browser automation",
+      "Helium",
+      "Playwright",
+      "AI 工具"
+    ],
+    "accentColor": "#0f766e",
+    "coverImage": "/content/img/2026/codex-browser-trust-boundary-cover.webp",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "macos-menu-bar-app-trust-state-debug",
     "title": "我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app",
     "summary": "我以為 Unified Remote Evo Mac 卡在 BLE forwarding，最後真正確認的是 macOS 權限、bundle identity、menu bar UI 和裝置 mode 到底有沒有同步。",
