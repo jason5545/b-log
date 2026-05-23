@@ -6,6 +6,26 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "chicken-cutlet-workplace-exclusion",
+      "url": "https://b-log.to/cultural-insights/chicken-cutlet-workplace-exclusion/",
+      "title": "訂雞排沒揪，算霸凌嗎？從一則新聞想到的",
+      "content_text": "從職場霸凌新聞出發，談社交排斥的心理機制——為什麼我們明明知道自己在腦補，卻還是停不下來。",
+      "date_published": "2026-05-23T00:00:00.000Z",
+      "date_modified": "2026-05-23T00:00:00.000Z",
+      "tags": [
+        "職場",
+        "心理",
+        "社交排斥",
+        "文化觀察",
+        "ACT"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "codex-browser-trust-boundary",
       "url": "https://b-log.to/tech-analysis/codex-browser-trust-boundary/",
       "image": "https://b-log.to/content/img/2026/codex-browser-trust-boundary-cover.webp",
