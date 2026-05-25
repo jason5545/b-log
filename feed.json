@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "someone-guarded-the-last-check",
+      "url": "https://b-log.to/life-stories/someone-guarded-the-last-check/",
+      "title": "有人替我守過最後一關",
+      "content_text": "同事 B 調去 QA 之後，我才意識到，那道最後的人工 QC 不是流程而已，是有人替我承接過風險。這篇是把那份感謝、愧疚和工作方式的改變講清楚。",
+      "date_published": "2026-05-25T00:00:00.000Z",
+      "date_modified": "2026-05-25T00:00:00.000Z",
+      "tags": [
+        "職場",
+        "身心障礙",
+        "工作流",
+        "Codex",
+        "QC",
+        "生活記事"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/someone-guarded-the-last-check-cover.webp"
+    },
+    {
       "id": "lisa-yes-mahouka-yotsuba-interview",
       "url": "https://b-log.to/crossing-field/lisa-yes-mahouka-yotsuba-interview/",
       "image": "https://b-log.to/content/img/2026/lisa-yes-mahouka-yotsuba-interview-cover.webp",
