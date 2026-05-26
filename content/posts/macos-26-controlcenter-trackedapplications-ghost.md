@@ -222,11 +222,11 @@ Control Center 的 `trackedApplications` 有沒有把舊狀態套回來。
 
 它甚至可能把別的 app 的禁止紀錄，套到現在這個 app 身上。
 
-所以最後不是修 SwiftUI。
+修到最後，我沒有再碰 SwiftUI。
 
-也不是重寫 AppKit。
+AppKit 也沒有重寫。
 
-是把 Control Center 那份舊記憶清掉，讓系統重新看一次眼前這個 app。
+真正動到的是 Control Center 那份舊記憶。把它清掉之後，系統才重新看一次眼前這個 app。
 
 我不是不能接受 macOS 有這種內部狀態。
 
