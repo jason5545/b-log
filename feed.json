@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "macos-26-controlcenter-trackedapplications-ghost",
+      "url": "https://b-log.to/tech-analysis/macos-26-controlcenter-trackedapplications-ghost/",
+      "image": "https://b-log.to/content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover.webp",
+      "title": "macOS 26 把 TrackPal 藏起來，問題在 Control Center 的舊記憶",
+      "content_text": "我原本以為 TrackPal 的 menu bar icon 不見，是 SwiftUI 或 app 啟動問題。後來才發現 macOS 26 留著舊的 Control Center trackedApplications 狀態，最後得重建那份 allow-list。",
+      "date_published": "2026-05-26T00:00:00.000Z",
+      "date_modified": "2026-05-26T00:00:00.000Z",
+      "tags": [
+        "macOS 26",
+        "Control Center",
+        "MenuBarExtra",
+        "NSStatusItem",
+        "TrackPal",
+        "SwiftUI",
+        "debug"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "someone-guarded-the-last-check",
       "url": "https://b-log.to/life-stories/someone-guarded-the-last-check/",
       "title": "有人替我守過最後一關",

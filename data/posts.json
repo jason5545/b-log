@@ -1,5 +1,25 @@
 [
   {
+    "slug": "macos-26-controlcenter-trackedapplications-ghost",
+    "title": "macOS 26 把 TrackPal 藏起來，問題在 Control Center 的舊記憶",
+    "summary": "我原本以為 TrackPal 的 menu bar icon 不見，是 SwiftUI 或 app 啟動問題。後來才發現 macOS 26 留著舊的 Control Center trackedApplications 狀態，最後得重建那份 allow-list。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-05-26T00:00:00Z",
+    "tags": [
+      "macOS 26",
+      "Control Center",
+      "MenuBarExtra",
+      "NSStatusItem",
+      "TrackPal",
+      "SwiftUI",
+      "debug"
+    ],
+    "accentColor": "#0f766e",
+    "coverImage": "/content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover.webp",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "someone-guarded-the-last-check",
     "title": "有人替我守過最後一關",
     "summary": "同事 B 調去 QA 之後，我才意識到那道最後的人工 QC 不是流程而已。有人曾經替我承接過風險，而我只能用改流程的方式慢慢還。",

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>macOS 26 把 TrackPal 藏起來，問題在 Control Center 的舊記憶 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="我原本以為 TrackPal 的 menu bar icon 不見，是 SwiftUI 或 app 啟動問題。後來才發現 macOS 26 留著舊的 Control Center trackedApplications 狀態，最後得重建那份 allow-list。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-analysis/macos-26-controlcenter-trackedapplications-ghost/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-analysis/macos-26-controlcenter-trackedapplications-ghost/" id="og-url">
+  <meta property="og:title" content="macOS 26 把 TrackPal 藏起來，問題在 Control Center 的舊記憶" id="og-title">
+  <meta property="og:description" content="我原本以為 TrackPal 的 menu bar icon 不見，是 SwiftUI 或 app 啟動問題。後來才發現 macOS 26 留著舊的 Control Center trackedApplications 狀態，最後得重建那份 allow-list。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-05-26T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-05-26T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="macOS 26">
+  <meta property="article:tag" content="Control Center">
+  <meta property="article:tag" content="MenuBarExtra">
+  <meta property="article:tag" content="NSStatusItem">
+  <meta property="article:tag" content="TrackPal">
+  <meta property="article:tag" content="SwiftUI">
+  <meta property="article:tag" content="debug">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-analysis/macos-26-controlcenter-trackedapplications-ghost/" id="twitter-url">
+  <meta property="twitter:title" content="macOS 26 把 TrackPal 藏起來，問題在 Control Center 的舊記憶" id="twitter-title">
+  <meta property="twitter:description" content="我原本以為 TrackPal 的 menu bar icon 不見，是 SwiftUI 或 app 啟動問題。後來才發現 macOS 26 留著舊的 Control Center trackedApplications 狀態，最後得重建那份 allow-list。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="macOS 26, Control Center, MenuBarExtra, NSStatusItem, TrackPal, SwiftUI, debug" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover.webp" imagesrcset="/content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover-480w.webp 480w, /content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover-828w.webp 828w, /content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"macOS 26 把 TrackPal 藏起來，問題在 Control Center 的舊記憶","description":"我原本以為 TrackPal 的 menu bar icon 不見，是 SwiftUI 或 app 啟動問題。後來才發現 macOS 26 留著舊的 Control Center trackedApplications 狀態，最後得重建那份 allow-list。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-26T00:00:00Z","dateModified":"2026-05-26T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/macos-26-controlcenter-trackedapplications-ghost/"},"url":"https://b-log.to/tech-analysis/macos-26-controlcenter-trackedapplications-ghost/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover.webp"],"keywords":"macOS 26, Control Center, MenuBarExtra, NSStatusItem, TrackPal, SwiftUI, debug","articleSection":"技術分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">macOS 26 把 TrackPal 藏起來，問題在 Control Center 的舊記憶</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover.webp" srcset="/content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover-480w.webp 480w, /content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover-828w.webp 828w, /content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">macOS 26 把 TrackPal 藏起來，問題在 Control Center 的舊記憶</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 26, 2026</span><span>6 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>macOS 26</span><span>Control Center</span><span>MenuBarExtra</span><span>NSStatusItem</span><span>TrackPal</span><span>SwiftUI</span><span>debug</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>TrackPal 又不見了。</p>
+<p>不是 crash。</p>
+<p>不是 SwiftUI 畫不出 menu bar item。</p>
+<p>也不是我忘記把 <code>MenuBarExtra</code> 放進 app 裡。</p>
+<p>比較煩的是這種狀況：app 看起來有啟動，bundle id 也對，程式碼沒有明顯錯，System Settings 裡甚至看得到那個 app 的選項。可是右上角就是沒有出現。</p>
+<p>這種問題最容易讓人往程式碼裡查。</p>
+<p>我一開始也會想，是不是 <code>MenuBarExtra</code> 的 <code>.window</code> 又在 macOS 26 被改了？是不是 <code>NSStatusItem</code> 的 visibility 被 app 自己寫壞？是不是之前修 sudden termination 的地方又有副作用？</p>
+<p>後來發現不是。</p>
+<p>真正卡住的是 macOS 自己記住了一份舊的 menu bar allow-list，而且那份記憶比 app 目前的狀態還有力。</p>
+<h2>公開 API 只講到這裡</h2>
+<p>如果只看 Apple 的公開文件，這件事應該很單純。</p>
+<p><a href="https://developer.apple.com/documentation/swiftui/menubarextra"><code>MenuBarExtra</code></a> 是 SwiftUI 裡放在系統 menu bar 的 scene。你可以做一個只有 menu bar item 的 utility app，也可以用 <code>.menuBarExtraStyle(.window)</code> 做比較複雜的面板。</p>
+<p>AppKit 那邊，<a href="https://developer.apple.com/documentation/appkit/nsstatusitem"><code>NSStatusItem</code></a> 就是一個顯示在系統 menu bar 的項目；<a href="https://developer.apple.com/documentation/appkit/nsstatusbar"><code>NSStatusBar</code></a> 管理這些 status items。Apple 文件也很早就提醒過，menu bar 空間有限，status item 不保證永遠可用。</p>
+<p>照公開 API 看，責任邊界很清楚。</p>
+<p>但文件沒有講的是另一層：macOS 26 之後，System Settings 裡那個「Allow in the Menu Bar」狀態，到底被誰記著。</p>
+<p>不是只有你的 app。</p>
+<p>也不是只有 <code>defaults read com.your.bundle.id</code>。</p>
+<p>還有 Control Center。</p>
+<h2>舊 app 不會真的離開</h2>
+<p>我後來查到不少人遇到比較表層的版本：app 刪掉了，但 System Settings &gt; Menu Bar &gt; Allow in the Menu Bar 裡還留著它。</p>
+<p><a href="https://apple.stackexchange.com/questions/470374/remove-uninstalled-apps-from-macos-system-settings-menu-bar-allow-in-the-menu">Ask Different 上有一題</a>在問這個問題，答案提到的路徑是這個：</p>
+<pre><code class="language-text">~/Library/GroupContainersAlias/group.com.apple.controlcenter/Library/Preferences/group.com.apple.controlcenter.plist
+</code></pre>
+<p>我這台機器實際查到的是這條：</p>
+<pre><code class="language-text">~/Library/Group Containers/group.com.apple.controlcenter/Library/Preferences/group.com.apple.controlcenter.plist
+</code></pre>
+<p>裡面有一個 <code>trackedApplications</code>。麻煩在這裡。</p>
+<p>它不是一個好讀的 JSON，不是你打開就能看到「這個 app：允許／不允許」的設定表。它是一段 plist blob，裡面再包一層 app bundle 相關紀錄，還有 <code>isAllowed</code> 之類的狀態。</p>
+<p>所以你以為自己在改 menu bar。</p>
+<p>其實你是在碰 Control Center 自己維護的一份第三方 app 可見性資料庫。</p>
+<p>我不是不能接受 macOS 記住這件事。</p>
+<p>它當然要記。macOS 如果不記，第三方 menu bar app 每次更新、重裝、換路徑之後都重新冒出來，使用者會更煩。</p>
+<p>麻煩的是，我找不到一個明確的 per-app reset。</p>
+<p>我想要的其實很小：對單一 bundle id 說，「把這個 app 在 Allow in the Menu Bar 裡的歷史狀態清掉，重新認一次。」</p>
+<p>macOS 沒給我這個按鈕。</p>
+<h2>TrackPal 這次不是殘留，是覆蓋</h2>
+<p>如果只是刪掉的 app 留在設定裡，那還算煩，但不致命。</p>
+<p>TrackPal 這次更麻煩。</p>
+<p>它不是「舊 app 留在清單裡」。它是目前這個 app 的 menu bar item 會被舊狀態影響。</p>
+<p>我看到的線索包括：</p>
+<pre><code class="language-text">NSStatusItem VisibleCC Item-0 = 0
+</code></pre>
+<p>我看到 <code>VisibleCC</code> 的時候就停下來了。</p>
+<p><code>CC</code> 大概就是 Control Center。它不是單純 app 自己說「我要不要顯示」，而是 Control Center 介入了 status item 的可見性。</p>
+<p>後來 <a href="https://developer.apple.com/forums/thread/827337">Apple Developer Forums 上也有人貼出很接近的情境</a>。</p>
+<p>那個案例裡，<code>MenuBarExtra</code> app 啟動後，ControlCenter 讀 <code>trackedApplications</code>，把 status item host 放進 blocked list，送出 <code>NSStatusItemChangeVisibilityAction</code>，最後 visibility 變成 <code>0</code>。</p>
+<p>更麻煩的是，app 自己的紀錄是 <code>isAllowed: true</code>，但另一個被禁止的 app 紀錄裡，卻殘留了指向目前 app 的 menu item location。</p>
+<p>結果外來的 blocked record 蓋掉了目前 app 自己的 allowed record。</p>
+<p>這就不是「使用者沒打開開關」了。</p>
+<p>這是系統把一份舊關係套到新 app 身上。</p>
+<p><a href="https://github.com/p0deje/Maccy/issues/1029">Maccy 也有人</a>在 macOS 26.0.1 遇到 menu bar icon missing，issue 裡可以看到 <code>NSStatusItem VisibleCC Item-0</code>、<code>Item-1</code> 這種紀錄。</p>
+<p>那不一定跟 TrackPal 是同一個根因。</p>
+<p>但至少可以先把一件事釘住：macOS 26 的 menu bar visibility 不是只有 app 端一個開關。</p>
+<h2>我最後重設的是 allow-list，不是 app</h2>
+<p>這裡最容易做錯的是只刪 app 自己的 defaults。</p>
+<p>例如：</p>
+<pre><code class="language-bash">defaults delete com.jasonchien.TrackPal &quot;NSStatusItem VisibleCC Item-0&quot;
+</code></pre>
+<p>這可以清掉一個症狀，但不一定清掉來源。</p>
+<p>因為真正讓 System Settings 裡「Allow in the Menu Bar」重建的，是 Control Center 那份 <code>trackedApplications</code>。</p>
+<p>我最後採用的做法比較保守：</p>
+<ol>
+<li>先給 Terminal 或工具完整磁碟存取權。</li>
+<li>備份 <code>group.com.apple.controlcenter.plist</code>。</li>
+<li>用 plist parser 只移除外層 <code>trackedApplications</code> key。</li>
+<li>如果 app 自己 domain 裡有 stale 的 <code>NSStatusItem VisibleCC Item-0</code>，再刪掉。</li>
+<li>重啟 <code>cfprefsd</code>、<code>ControlCenter</code>、<code>SystemUIServer</code>。</li>
+</ol>
+<p>重點是第三步。</p>
+<p>不是整個 <code>com.apple.controlcenter</code> 亂砍。</p>
+<p>不是用 <code>defaults delete com.apple.controlcenter</code> 期待奇蹟。</p>
+<p>而是讓 Control Center 重新建立第三方 app 的 allow-list。</p>
+<p>我當時清掉之後，macOS 自己把 <code>trackedApplications</code> 從 90 筆重建成 30 筆。TrackPal 回來了，<code>com.jasonchien.TrackPal</code> 變成 <code>isAllowed: true</code>，而且 app 自己 defaults 裡那個 <code>NSStatusItem VisibleCC Item-0 = 0</code> 不再出現。</p>
+<p>這裡才是讓我改判斷的地方。</p>
+<p>TrackPal 原本不是不會建立 menu bar item。</p>
+<p>它是建立了，但 Control Center 用舊狀態把它按掉。</p>
+<h2>不要把這件事當一般偏好設定</h2>
+<p>我不太喜歡 macOS 26 這裡的設計。</p>
+<p>不是因為它有狀態。</p>
+<p>狀態一定要有。</p>
+<p>沒有狀態，menu bar 會變成另一種災難。</p>
+<p>我不喜歡的是這個狀態太像偏好設定，實際上卻比較像一份半隱藏的信任紀錄。</p>
+<p>System Settings 顯示的是一個簡單開關。</p>
+<p>背後卻牽到 bundle id、status item identity、Control Center 的 tracked record、app 自己的 defaults、甚至可能還有舊 app 留下來的 menu item location。</p>
+<p>壞掉的時候，使用者看到的是「menu bar app 不見」。</p>
+<p>開發者第一時間看到的是「我的 SwiftUI / AppKit 寫錯了嗎」。</p>
+<p>但真正錯的可能是系統把另一個 app 的舊禁止狀態套到你身上。</p>
+<p>這種 bug 最浪費時間。</p>
+<p>因為它會讓你一直在自己的程式碼裡找一個不存在的錯。</p>
+<h2>我會怎麼查下一次</h2>
+<p>下次遇到 macOS 26 menu bar app 不顯示，我不會先改 UI。</p>
+<p>我會先確認幾件事：</p>
+<pre><code class="language-bash">defaults read com.your.bundle.id | rg &#39;NSStatusItem|VisibleCC&#39;
+</code></pre>
+<p>看 app 自己 domain 裡有沒有 <code>NSStatusItem VisibleCC Item-* = 0</code>。</p>
+<p>再看這個檔案：</p>
+<pre><code class="language-text">~/Library/Group Containers/group.com.apple.controlcenter/Library/Preferences/group.com.apple.controlcenter.plist
+</code></pre>
+<p>尤其是 <code>trackedApplications</code>。</p>
+<p>如果 System Settings 裡有一堆刪掉的 app，或某個 app 明明 allowed 卻被送 visibility=0，那就不要只盯著 <code>MenuBarExtra</code>。</p>
+<p>那條線很可能在 Control Center。</p>
+<p>這不是說每次都該刪 <code>trackedApplications</code>。這個動作會重設 menu bar allow-list，做之前一定要備份，也要知道自己在碰什麼。</p>
+<p>至少下一次我會讓每一層只回答一個問題。</p>
+<p>程式碼到底有沒有建立 status item。</p>
+<p>app 自己的 <code>VisibleCC</code> 有沒有被寫成 0。</p>
+<p>Control Center 的 <code>trackedApplications</code> 有沒有把舊狀態套回來。</p>
+<p>這三個混在一起查，會很痛苦。</p>
+<h2>這次真正修掉的是 macOS 的舊答案</h2>
+<p>我之前寫過 TrackPal 在 macOS 26 會因為 <code>MenuBarExtra</code> <code>.window</code> 觸發 sudden termination。那次是程式碼真的需要補：<code>setActivationPolicy(.accessory)</code>，再用 <code>applicationShouldTerminate</code> 回 <code>.terminateCancel</code>。</p>
+<p>那是 app 的問題。</p>
+<p>這次不是。</p>
+<p>這次 TrackPal 卡住，是因為 macOS 記得一個它不該再相信的舊答案。</p>
+<p>它記得某個 item 不該顯示。</p>
+<p>它記得某個 app 曾經被禁止。</p>
+<p>它甚至可能把別的 app 的禁止紀錄，套到現在這個 app 身上。</p>
+<p>所以最後不是修 SwiftUI。</p>
+<p>也不是重寫 AppKit。</p>
+<p>是把 Control Center 那份舊記憶清掉，讓系統重新看一次眼前這個 app。</p>
+<p>我不是不能接受 macOS 有這種內部狀態。</p>
+<p>真正讓我不舒服的是，它壞掉的時候看起來像你的 app 壞了。</p>
+<p>但你的 app 其實只是被系統記錯了。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
