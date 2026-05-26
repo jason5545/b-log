@@ -1163,6 +1163,13 @@
       "postUrl": "https://b-log.to/life-stories/someone-guarded-the-last-check/",
       "facebookPostId": "1026818047191304_122104335213290922",
       "publishedAt": "2026-05-25T13:15:52.883Z"
+    },
+    "macos-26-controlcenter-trackedapplications-ghost": {
+      "status": "published",
+      "title": "macOS 26 把 TrackPal 藏起來，問題在 Control Center 的舊記憶",
+      "postUrl": "https://b-log.to/tech-analysis/macos-26-controlcenter-trackedapplications-ghost/",
+      "facebookPostId": "1026818047191304_122104394751290922",
+      "publishedAt": "2026-05-26T03:09:00.937Z"
     }
   }
 }
