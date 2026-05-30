@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>不是每個地方都有一個 B - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="B 調去 QA 後，我才看見真正被移動的不是一個會看文件的人，而是職場裡少數同時接住工作支援和日常人味的支點。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/cultural-insights/not-every-place-has-a-b/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/cultural-insights/not-every-place-has-a-b/" id="og-url">
+  <meta property="og:title" content="不是每個地方都有一個 B" id="og-title">
+  <meta property="og:description" content="B 調去 QA 後，我才看見真正被移動的不是一個會看文件的人，而是職場裡少數同時接住工作支援和日常人味的支點。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/not-every-place-has-a-b-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-05-30T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-05-30T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="文化觀察" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="職場">
+  <meta property="article:tag" content="身心障礙">
+  <meta property="article:tag" content="社交排斥">
+  <meta property="article:tag" content="文化觀察">
+  <meta property="article:tag" content="工作支援">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/cultural-insights/not-every-place-has-a-b/" id="twitter-url">
+  <meta property="twitter:title" content="不是每個地方都有一個 B" id="twitter-title">
+  <meta property="twitter:description" content="B 調去 QA 後，我才看見真正被移動的不是一個會看文件的人，而是職場裡少數同時接住工作支援和日常人味的支點。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/not-every-place-has-a-b-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="職場, 身心障礙, 社交排斥, 文化觀察, 工作支援" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/not-every-place-has-a-b-cover.webp" imagesrcset="/content/img/2026/not-every-place-has-a-b-cover-480w.webp 480w, /content/img/2026/not-every-place-has-a-b-cover-828w.webp 828w, /content/img/2026/not-every-place-has-a-b-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"不是每個地方都有一個 B","description":"B 調去 QA 後，我才看見真正被移動的不是一個會看文件的人，而是職場裡少數同時接住工作支援和日常人味的支點。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-30T00:00:00Z","dateModified":"2026-05-30T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/cultural-insights/not-every-place-has-a-b/"},"url":"https://b-log.to/cultural-insights/not-every-place-has-a-b/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/not-every-place-has-a-b-cover.webp"],"keywords":"職場, 身心障礙, 社交排斥, 文化觀察, 工作支援","articleSection":"文化觀察"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">不是每個地方都有一個 B</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/not-every-place-has-a-b-cover.webp" srcset="/content/img/2026/not-every-place-has-a-b-cover-480w.webp 480w, /content/img/2026/not-every-place-has-a-b-cover-828w.webp 828w, /content/img/2026/not-every-place-has-a-b-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">文化觀察</p>
+            <h1 id="post-title">不是每個地方都有一個 B</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 30, 2026</span><span>8 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>職場</span><span>身心障礙</span><span>社交排斥</span><span>文化觀察</span><span>工作支援</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>前一篇我寫過 B 幫我守最後一關。</p>
+<p>那篇講的是工作：焊道追溯、物料追溯、NDT、WID、WPS、竣工文件。每一個欄位、每一個版本都可能藏錯。B 是我的最後一道防線。</p>
+<p>但最近我才慢慢發現，這件事不只是在講工作。</p>
+<p>B 調走讓我反應那麼大，不是因為少了一個會幫我看文件的人。是因為他是我在這個環境裡，唯一一個同時跨過「工作支援」和「日常人味」兩邊的人。</p>
+<p>同事們對我還不錯。</p>
+<p>這句話我講過很多次，不是假的。但現在我想把它修得更準確一點：工作上，他們對我還不錯。</p>
+<p>這跟「社交上被自然納入」是兩件事。</p>
+<p>工作上對我不錯，意思是有人願意提醒我、協助我、讓我繼續留在這個位置上。公司沒有因為我錯誤率高、動作慢、身體限制多，就很快把我處理掉。</p>
+<p>B 當初面試的時候，組長就有跟他說過我的狀況，還半開玩笑講過：</p>
+<blockquote>
+<p>上廁所不要叫 B 幫忙喔。</p>
+</blockquote>
+<p>但 B 可以幫忙去叫我的照顧者。</p>
+<p>這句玩笑其實很有意思。它說明大家知道 B 不是我的照顧者，但他又不是完全普通的同事。</p>
+<p>他在這個場域裡是一個介面：不是負責照顧我身體的人，但可以在必要時幫我接上照顧者；不是我的主管，但會幫我看文件、抓錯、提醒；不是我私底下會約出去的朋友，但可以一起靠北、調侃、互嘴。</p>
+<p>一個人可以在工作上被支援，卻仍然在社交上感覺有距離。一個環境可以有善意，卻不一定真的讓你進到那個「我們」裡面。</p>
+<p>B 甚至不是離職。</p>
+<p>他只是從 QC 調去 QA。同一棟大樓，一樓到二樓。照理說還在同一個大部門裡。可是我反而對這件事有很大的反應。</p>
+<p>後來我才慢慢理解：我不是對「有人離開」反應大，我是對「唯一一個跨界支點被移動」反應大。</p>
+<p>他會幫我看文件、抓 NDT 時數、看 WID、提醒我竣工檔要同步更新。但他也會跟我靠北辦公室裡的人事物，丟貼圖，講一些只有在同一個現場待過才會懂的鳥事。</p>
+<p>很多同事工作上對我不差，但大多停在工作協助那一層。B 特別的地方，是他不只在流程裡支援我，也讓我在工作日裡多了一個可以互嘴的人。</p>
+<p>這種東西很難寫進職務說明，也很難在正式場合講出口。可是它是真的。</p>
+<p>一個人可以幫你守最後一關，已經很重要。但如果那個人同時也是你在辦公室裡唯一可以自然靠北的人，那他的移動就不只是工作分工改變。</p>
+<p>那是一個很小、很日常，但很關鍵的出口被移動了。</p>
+<p>我的照顧者曾經跟我說，部門聚餐乾脆不要去，還要花錢吃飯。偶爾的全部門全員召集會議，其實我也可以不用去。</p>
+<p>「大家會理解。」</p>
+<p>我知道他是為我好。從照顧者的角度來看，這些場合確實麻煩。出門要安排，場地不一定方便，吃飯不一定好處理。全員會議的內容，可能事後問也知道。</p>
+<p>可是我還是會想去。</p>
+<p>不是因為那餐飯多好吃，也不是因為那個會議非去不可。是因為我知道，如果我每一次都因為「大家會理解」就不去，我就會慢慢不在那個「我們」裡面。</p>
+<p>「大家會理解」聽起來很溫柔。</p>
+<p>第一次不去，大家會理解。第二次不去，大家也會理解。久了以後，大家不再期待你會出現。再久一點，你不在那裡也變成理所當然。</p>
+<p>這不是誰的惡意。甚至剛開始是善意。</p>
+<p>可是對一個本來就因為身體、移動、操作成本和社交距離，比一般人更容易被推到邊緣的人來說，這種善意有時候會讓我更快從共同場合裡消失。</p>
+<p>對很多人來說，合群可能是自然的。一起吃飯、一起開會、下班順路聊兩句，這些事不需要特別想。</p>
+<p>但我是 CP，身體能穩定操作的其實只有一隻手指頭。很多人覺得「只是電腦工作」的事情，對我來說都有額外成本。更不用說移動、聚餐、空間、廁所、照顧者、輪椅可不可以進去。</p>
+<p>所以合群不是自然發生的事。</p>
+<p>我只是合群的成本比較高。</p>
+<p>這也讓我常常處在一個很尷尬的位置：我不想要求大家特別對待我，但如果完全不提我的限制，我又會被一般人的標準吞掉。</p>
+<p>在工作上也是這樣。如果我出錯，我不想說「都是因為我身障」。錯就是錯，該改就是該改。但如果完全不把我的身體條件放進來看，又很容易變成：「為什麼三年了還會這樣？」</p>
+<p>問題是，這個環境本來就不是為我設計的。</p>
+<p>所以我只能自己設計。</p>
+<p>我做自動化，做 OCR，做本機模型二次複核，做 JSON hook，做 verify gate，做原生 PDF 輸出。這些東西看起來像技術，其實也是我讓自己能繼續留在這個工作裡的方法。</p>
+<p>我的工作流程需要 pipeline。</p>
+<p>我的社交存在感，其實也需要 pipeline。</p>
+<p>我不想把公司說成一個很糟的地方。事實上，我很珍惜這個機會。</p>
+<p>當有人聽到我要去諮商，問我是不是工作環境很不舒服時，我第一個反應是：「不是，是我的能力問題，不要牽拖公司。」</p>
+<p>這句話裡有一部分是真的。但後來我也發現，如果我只說「都是我的能力問題」，其實又把很多結構性的東西吞回自己身上了。</p>
+<p>公司和同事在工作上對我不是不好。但這個環境也不是完全適配我。很多支援是靠人、靠默契、靠善意在撐，而不是靠清楚的制度在撐。</p>
+<p>B 就是最明顯的例子。</p>
+<p>他不是正式支援員，不是我的照顧者，也不是主管指派給我的專屬協助者。可是實際上，他長期承擔了很多支援功能。</p>
+<p>這樣的支援很珍貴，但也很脆弱。</p>
+<p>因為它長在一個人身上。</p>
+<p>當這個人調動，整個支架就會晃。</p>
+<p>所以我現在越來越覺得，職場裡的善意很重要，但善意不能完全取代結構。</p>
+<p>一個環境可以有很多善良的人，但如果所有支援都靠某一個人剛好願意、剛好懂、剛好在，那這個支援其實不是穩定的。</p>
+<p>它像天氣很好時的目視進場。</p>
+<p>可是一旦天氣變差，你才會發現：原來沒有 ILS。</p>
+<p>有時候我會覺得，自己在意這些是不是有點太微小。部門聚餐想去，全員會議想出現，少了一個可以靠北的同事心裡會空一下。</p>
+<p>這些事情聽起來好像都不是什麼大事。</p>
+<p>但對我來說，它們是在問一個更基本的問題：</p>
+<p>我是不是還在這個「我們」裡？</p>
+<p>這個需求很小，但我不覺得它卑微。</p>
+<p>卑微是求別人施捨一點存在感。我不是在求施捨。我是在用自己能做到的方式，維持自己和這個團體之間的連結。</p>
+<p>我爸曾經跟我說，要不要考慮去 EGAT 做文件或電腦工作。最近也提到 NVIDIA 未來的新總部，叫我要往上看。</p>
+<p>航空是我的夢想，NVIDIA 也是很多人眼中的好公司。</p>
+<p>可是我腦中第一個反應不是「好棒」，而是：</p>
+<p>那裡有沒有一個 B？</p>
+<p>那裡的流程會不會理解我的限制？如果我出錯，會不會沒有任何人知道我為什麼會出錯？</p>
+<p>不是每個地方都有一個 B。</p>
+<p>也不是每一個「電腦工作」都適合我。電腦工作不等於低操作成本。文件工作不等於簡單。大公司不等於環境一定適配。</p>
+<p>如果前面有 CB，我不會一頭栽進去。我會 offset。</p>
+<p>這不是我不想往上看。這是我知道自己開的是哪一架飛機。</p>
+<p>也許這才是我最近真正想說的。</p>
+<p>我不是不珍惜公司給我的機會。我不是不想合群。我也不是因為 B 調動，就突然變得脆弱。</p>
+<p>我只是終於看見，自己在這個工作環境裡，其實一直很努力地維持一個位置。工作上努力不要錯，流程上努力建立自己的系統，社交上努力在能出現的場合出現。</p>
+<p>而那些我堅持出現的小地方，聚餐、全員會議，也不是小事。</p>
+<p>那是我在說：</p>
+<p>我還在這裡。</p>
+<p>只是我留在這裡的方式，比別人更需要設計，也更需要成本。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
