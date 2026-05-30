@@ -1,5 +1,23 @@
 [
   {
+    "slug": "not-every-place-has-a-b",
+    "title": "不是每個地方都有一個 B",
+    "summary": "B 調去 QA 後，我才看見真正被移動的不是一個會看文件的人，而是職場裡少數同時接住工作支援和日常人味的支點。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-05-30T00:00:00Z",
+    "tags": [
+      "職場",
+      "身心障礙",
+      "社交排斥",
+      "文化觀察",
+      "工作支援"
+    ],
+    "accentColor": "#7c6f64",
+    "coverImage": "/content/img/2026/not-every-place-has-a-b-cover.webp",
+    "readingTime": "8 min"
+  },
+  {
     "slug": "macos-26-controlcenter-trackedapplications-ghost",
     "title": "macOS 26 把 TrackPal 藏起來，問題在 Control Center 的舊記憶",
     "summary": "我原本以為 TrackPal 的 menu bar icon 不見，是 SwiftUI 或 app 啟動問題。後來才發現 macOS 26 留著舊的 Control Center trackedApplications 狀態，最後得重建那份 allow-list。",

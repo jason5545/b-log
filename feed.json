@@ -6,6 +6,27 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "not-every-place-has-a-b",
+      "url": "https://b-log.to/cultural-insights/not-every-place-has-a-b/",
+      "image": "https://b-log.to/content/img/2026/not-every-place-has-a-b-cover.webp",
+      "title": "不是每個地方都有一個 B",
+      "content_text": "B 調去 QA 後，我才看見真正被移動的不是一個會看文件的人，而是職場裡少數同時接住工作支援和日常人味的支點。",
+      "date_published": "2026-05-30T00:00:00.000Z",
+      "date_modified": "2026-05-30T00:00:00.000Z",
+      "tags": [
+        "職場",
+        "身心障礙",
+        "社交排斥",
+        "文化觀察",
+        "工作支援"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "macos-26-controlcenter-trackedapplications-ghost",
       "url": "https://b-log.to/tech-analysis/macos-26-controlcenter-trackedapplications-ghost/",
       "image": "https://b-log.to/content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover.webp",
