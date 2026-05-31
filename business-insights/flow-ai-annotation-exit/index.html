@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>當善意遇到市場：我從若水 AI 標註退場看見的事 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="我從若水 AI 標註退場回頭看社會企業的難題：善意撐不起失去市場需求的工作模式，真正可持續的支持，得讓人能轉銜並掌握自己的工具。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/business-insights/flow-ai-annotation-exit/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/business-insights/flow-ai-annotation-exit/" id="og-url">
+  <meta property="og:title" content="當善意遇到市場：我從若水 AI 標註退場看見的事" id="og-title">
+  <meta property="og:description" content="我從若水 AI 標註退場回頭看社會企業的難題：善意撐不起失去市場需求的工作模式，真正可持續的支持，得讓人能轉銜並掌握自己的工具。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/flow-ai-annotation-exit-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-05-31T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-05-31T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="商業觀察" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="若水">
+  <meta property="article:tag" content="社會企業">
+  <meta property="article:tag" content="AI 標註">
+  <meta property="article:tag" content="身心障礙就業">
+  <meta property="article:tag" content="居家工作">
+  <meta property="article:tag" content="工作流">
+  <meta property="article:tag" content="商業觀察">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/business-insights/flow-ai-annotation-exit/" id="twitter-url">
+  <meta property="twitter:title" content="當善意遇到市場：我從若水 AI 標註退場看見的事" id="twitter-title">
+  <meta property="twitter:description" content="我從若水 AI 標註退場回頭看社會企業的難題：善意撐不起失去市場需求的工作模式，真正可持續的支持，得讓人能轉銜並掌握自己的工具。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/flow-ai-annotation-exit-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="若水, 社會企業, AI 標註, 身心障礙就業, 居家工作, 工作流, 商業觀察" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/flow-ai-annotation-exit-cover.webp" imagesrcset="/content/img/2026/flow-ai-annotation-exit-cover-480w.webp 480w, /content/img/2026/flow-ai-annotation-exit-cover-828w.webp 828w, /content/img/2026/flow-ai-annotation-exit-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"當善意遇到市場：我從若水 AI 標註退場看見的事","description":"我從若水 AI 標註退場回頭看社會企業的難題：善意撐不起失去市場需求的工作模式，真正可持續的支持，得讓人能轉銜並掌握自己的工具。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-31T00:00:00Z","dateModified":"2026-05-31T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/business-insights/flow-ai-annotation-exit/"},"url":"https://b-log.to/business-insights/flow-ai-annotation-exit/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/flow-ai-annotation-exit-cover.webp"],"keywords":"若水, 社會企業, AI 標註, 身心障礙就業, 居家工作, 工作流, 商業觀察","articleSection":"商業觀察"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">當善意遇到市場：我從若水 AI 標註退場看見的事</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/flow-ai-annotation-exit-cover.webp" srcset="/content/img/2026/flow-ai-annotation-exit-cover-480w.webp 480w, /content/img/2026/flow-ai-annotation-exit-cover-828w.webp 828w, /content/img/2026/flow-ai-annotation-exit-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">商業觀察</p>
+            <h1 id="post-title">當善意遇到市場：我從若水 AI 標註退場看見的事</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 31, 2026</span><span>8 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>若水</span><span>社會企業</span><span>AI 標註</span><span>身心障礙就業</span><span>居家工作</span><span>工作流</span><span>商業觀察</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>若水很難只用「前公司」或「實習單位」來形容。</p>
+<p>在現在這份工作以前，若水大概是我和職場、身障就業、遠距工作、AI 標註、BIM、工程資料之間最重要的連結。不是一段單純的工作經驗，是一段讓我第一次比較具體看見「身障者怎麼透過數位工作參與產業」的過程。</p>
+<p>關係從 2018 年開始。</p>
+<p>那時候透過臺北榮總的職業重建，接觸到若水的實習。三個月後若水評估當時的工作複雜度跟我的操作條件不完全適配，我沒有繼續走原本那條職位路線，轉往後來的居家就業、AI 標註那條路。</p>
+<p>白話說，就是我在原本實習的工作裡沒有被留下來。</p>
+<p>這件事對我來說不是很輕鬆的記憶。不是單純「工作不適合」，而是很早就讓我碰到一個現實：對身體條件不同的人來說，一份工作能不能做，不只取決於意願，也取決於工作複雜度、操作成本、流程設計，還有環境有沒有真的準備好承接你。</p>
+<p>也因為這樣，我對若水的居家就業不是後來才聽說的。那個部門剛開始形成的時候，我其實就在附近。可以說，它就在我們隔壁門，中間只隔一堵牆。</p>
+<p>若水對我來說，不只是一份標註工作。是一段從職業重建、實習、工作適配、轉銜，到居家數位工作的完整經驗。我不是很多年後才回頭評論一個社會企業，而是曾經站在那個系統裡，看著它怎麼嘗試把身障者和數位工作接起來。</p>
+<hr>
+<p>居家就業在當時對很多身障者來說，是一條很重要的路。</p>
+<p>它讓一些不容易進入傳統職場的人可以在家工作，可以透過電腦參與產業，可以有收入，也可以有一種「我被職場納入」的感覺。</p>
+<p>不能只從「標註工作」四個字去理解這件事。</p>
+<p>對一般人來說，標註可能就是把圖片框起來、把資料分類、照規則做重複性工作。但對很多身障者來說，背後真正重要的是：工作可以被拆解、流程可以被遠距化、任務可以被模組化，身體條件不再完全決定一個人能不能參與產業。</p>
+<p>這件事在當時是有意義的。對我來說也是如此。</p>
+<p>我透過若水接觸到 AI 標註，也接觸到後來的 BIM、工程資料、數位流程。這些東西後來都沒有從我的生命裡消失，只是換了形式，成為我現在理解工作、錯誤、資料、流程和工具的底層語言。</p>
+<p>只是，跑道不是只靠理想就能一直開放。</p>
+<p>後來若水要把我們這批居家標註師退場。那時候的說明裡有一個數字讓我印象很深。</p>
+<p>他們提到，當時案源裡很大一部分不是業主案，而是「若水案」。不是外部客戶真的下案子，是若水自己派案給標註師，讓大家還有工作可以做。如果我沒記錯，說明會提到的比例大概是七成若水案、三成業主案，而且業主案未來還可能繼續下降。</p>
+<p>這個數字很關鍵。</p>
+<p>它代表那套模式已經不是正常市場需求支撐的就業，而是若水用自己的資源在補洞。短期來看很有溫度，長期來看其實很危險。一個工作模式需要公司長期自掏腰包才能維持，那它就不是健康的商業模型，是一種社會使命支出。可以撐一段時間，但很難無限撐。</p>
+<p>所以若水後來選擇結束這條線，從個人感受上很殘酷，但從商業角度看，我不能說它完全不合理。</p>
+<p>甚至幾年後回頭看，當初他們對 AI 和 LLM 會壓縮傳統標註作業量的判斷，方向上確實沒錯。很多單純、重複、低門檻的標註工作，後來真的不再像以前那樣有想像空間。</p>
+<p>這件事很冰冷，但也很真實。</p>
+<hr>
+<p>社會企業最難的地方，不是一般公司砍業務線那麼簡單。</p>
+<p>純商業公司可以直接說：這條線不賺錢，砍掉。純公益組織可以說：只要有資源，我們就補助。但社會企業卡在中間。它既要承接人，也要面對市場。它既要有使命，也要活得下去。它不能把人只當成本，也不能假裝市場不存在。</p>
+<p>若水的 AI 標註居家就業，曾經創造了一個很重要的可能性。可是當市場需求開始下降，當外部業主案越來越少，當七成工作量都需要若水自己補出來，就表示這條路已經不是一般營運狀態。</p>
+<p>如果繼續硬撐，表面上有情有義，實際上可能會變成另一種傷害：大家以為還有工作，但案源不穩、收入不穩、未來不穩，最後組織和工作者一起被拖進一個沒有出口的狀態。</p>
+<p>所以若水選擇退場，我不會簡單說它冷血。它做了一個很現實、也很痛苦的判斷：善意撐不起已經失去市場需求的工作模式。</p>
+<hr>
+<p>退場前若水有先詢問我們各自的工作狀況。</p>
+<p>我那時候其實已經在現在這間公司了，但一直沒辦法很有底氣地跟若水說「我有一份穩定工作了」。</p>
+<p>不是因為我沒有工作，是因為我自己很清楚，那時候狀態還不穩。我在公司遇到的問題是動作慢、錯誤率高、流程還不熟。公司也正在幫我處理支援、降低錯誤率、調整工作方式。但對我來說，那時候根本還不到「翅膀硬了可以飛」的狀態。</p>
+<p>我有工作，但 performance 不穩。
+我有職位，但流程不穩。
+我已經離開若水那條跑道，但還沒建立自己的飛行保護系統。</p>
+<p>所以一直不太敢說出來。</p>
+<p>直到若水實在要把整批人退場了，我才說我其實已經有工作，但動作慢、錯誤率高的問題還在。</p>
+<p>若水後來做了一件讓我到現在都記得的事。</p>
+<p>他們撥了一個人，幫我用 Google 試算表建立 pipeline。那個人甚至當時已經離職了，是若水特別請回來協助我的。</p>
+<p>這不是一般資遣流程會做的事。一般公司結束合作，大概就是通知、錢、文件，然後結束。若水不是。他們看見我不是「已經有工作就沒事」，而是在新工作裡還需要轉銜支持。</p>
+<p>這件事我到現在仍然感謝。</p>
+<hr>
+<p>可是，這件事也讓我看見另一個問題。</p>
+<p>那個 pipeline 一開始是有用的，讓我能比較有結構地處理工作。但它有一個很大的限制：它是一次性的客製化支援，不是一套可持續維護的系統。</p>
+<p>幫我做 pipeline 的人已經離職。公式很複雜，跨好幾個工作表。後續需求改變、欄位改變、公式壞掉、流程需要新增功能，我不可能一直去麻煩那位已離職的員工。</p>
+<p>於是那套 pipeline 很快就碰到一個問題：它生得出來，但沒有人長期養。</p>
+<p>不是若水沒有幫忙，也不是我不感謝。剛好相反，正因為那個支援對我真的有幫助，所以我後來更清楚看見它的限制。</p>
+<p>工具本身不是重點。重點是誰能維護它、誰能修改它、誰能把它變成長期可運作的制度。如果一套工具只能靠某個已經離開的人維修，那它本質上仍然是一種脆弱的支援。可以救急，但不一定能長期陪你走。</p>
+<hr>
+<p>現在回頭看，若水幫我搭的那個 Google 試算表 pipeline，很像我的第一代外部輔具。</p>
+<p>它不完美，但它讓我第一次意識到：流程可以被設計，錯誤可以被預防，人的限制可以透過系統被部分承接。</p>
+<p>後來我在現在公司裡，開始自己做更完整的流程。OCR、資料結構化、JSON hook、verify gate、本機模型二次複核、原生 PDF 輸出，也開始思考 full pipeline。這些東西看起來像技術工具，但對我來說不只是技術。</p>
+<p>它們是我在身體限制、工作壓力和低容錯環境裡，替自己建立的一套保護系統。</p>
+<p>差別在於：以前是若水幫我建立 pipeline，現在我自己開始建立。以前我依賴別人幫我搭一套能用的流程，現在我至少能自己判斷流程斷點、維護風險、輸出問題和後續可持續性。</p>
+<p>這個變化對我來說很大。</p>
+<hr>
+<p>所以若水那段經驗到底留下了什麼？</p>
+<p>不是 AI 標註，也不只是居家工作。是一種看事情的方法：不要只看一個人做不到什麼，要看流程能不能重新設計。</p>
+<p>這句話後來變成我工作裡很重要的底層邏輯。</p>
+<p>我現在看自己的工作錯誤，也不再只用「我很爛」「我動作慢」「我不夠細心」這種方式理解。那些當然有一部分是真的，但不是全部。</p>
+<p>我會開始問：錯誤是在哪個節點發生的？資料來源是不是混亂？公式是不是太脆弱？輸出工具是不是不穩？有沒有驗證 gate？有沒有二次複核？有沒有讓錯誤在輸出前被擋下來的機制？這個流程是不是太依賴某一個人？</p>
+<p>這些問題，很大一部分是從若水那段經驗一路長出來的。</p>
+<p>若水沒有給我一個永遠不會壞的工作系統。但它讓我知道，工作系統是可以被設計的。</p>
+<hr>
+<p>回頭看若水停掉標註師制度，我不會把它寫成一個單純的失敗故事。</p>
+<p>它比較像一個社會企業在 AI 技術變化前，面對市場退潮時做出的艱難決策。它曾經創造一條讓身障者參與 AI 產業的路，後來那條路的市場需求下降，若水沒有永遠硬撐，而是選擇退場。這對標註師來說是失去，但若水在退場時，至少對我做過轉銜支持。</p>
+<p>我不能說這一切完美。如果那套支持更制度化，如果 pipeline 有長期維護，如果每個人都有更清楚的下一條路，也許會更好。但現實是，社會企業常常就是在不完美裡做選擇。</p>
+<p>若水讓我看見一件事：善意撐不起已經失去市場需求的工作模式。支援不能只依賴某個人。如果市場真的不在了，硬撐不是永遠的善良。真正困難的是怎麼讓人不只是被安置，而是能轉銜、能學會、能逐漸掌握自己的工具。</p>
+<hr>
+<p>如果是當年的我，可能只會覺得失落。</p>
+<p>但幾年後，我比較能理解若水當時的選擇。也比較能理解自己當時為什麼不敢說「我已經穩了」。因為我真的還沒穩。那時候我還沒有自己的 pipeline，還沒有自己的錯誤阻擋機制，還沒有足夠的能力把工作流程拆解成系統。</p>
+<p>現在至少開始有了。</p>
+<p>這不代表我已經完全穩，也不代表我不會再錯。但我不再只是等別人替我搭一套流程。我開始知道怎麼自己設計流程，怎麼看見錯誤，怎麼建立 gate，怎麼讓工作不要完全靠人補救。</p>
+<p>沒有若水，我很可能不會以現在這種方式走到今天。</p>
+<p>若水不是我的終點，比較像第一段跑道。它讓我起飛，也讓我看見一件事：真正可持續的支持，不只是把人放進一個工作，而是讓人慢慢有能力理解、修改、維護自己的工作系統。</p>
+<p>不是每個支援都能永遠存在。不是每條跑道都會一直開放。</p>
+<p>但如果一段經驗能讓一個人從「被系統保護」走向「開始設計自己的保護系統」，那它留下的東西就不只是工作，也不只是回憶。</p>
+<p>我現在回頭看若水，心情其實很複雜。感謝它，因為它曾經接住我。知道它有侷限，因為社會企業終究不能只靠善意對抗市場。理解它退場的現實，也記得那段退場對人的衝擊。</p>
+<p>若水當年幫我建立的是第一代外部 pipeline。
+現在我正在學著建立自己的 pipeline。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>

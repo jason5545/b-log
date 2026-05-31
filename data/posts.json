@@ -1,5 +1,25 @@
 [
   {
+    "slug": "flow-ai-annotation-exit",
+    "title": "當善意遇到市場：我從若水 AI 標註退場看見的事",
+    "summary": "我從若水 AI 標註退場回頭看社會企業的難題：善意撐不起失去市場需求的工作模式，真正可持續的支持，得讓人能轉銜並掌握自己的工具。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-05-31T00:00:00Z",
+    "tags": [
+      "若水",
+      "社會企業",
+      "AI 標註",
+      "身心障礙就業",
+      "居家工作",
+      "工作流",
+      "商業觀察"
+    ],
+    "accentColor": "#3f7f72",
+    "coverImage": "/content/img/2026/flow-ai-annotation-exit-cover.webp",
+    "readingTime": "8 min"
+  },
+  {
     "slug": "not-every-place-has-a-b",
     "title": "不是每個地方都有一個 B",
     "summary": "B 調去 QA 後，我才看見真正被移動的不是一個會看文件的人，而是職場裡少數同時接住工作支援和日常人味的支點。",
