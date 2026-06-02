@@ -1,5 +1,26 @@
 [
   {
+    "slug": "tailscale-ha-lan-return-snat",
+    "title": "Tailscale HA 沒壞，壞的是切過去之後的 LAN 回程",
+    "summary": "我原本以為 Tailscale HA 又壞了，最後才確認 route 真的切到 MT6000；壞的是 subnet router 轉進 LAN 後少了 SNAT，封包出得去但回不來。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-06-02T00:00:00Z",
+    "tags": [
+      "Tailscale",
+      "OpenWRT",
+      "subnet router",
+      "HA",
+      "SNAT",
+      "nftables",
+      "Apollo",
+      "Sunshine"
+    ],
+    "accentColor": "#0f766e",
+    "coverImage": "/content/img/2026/tailscale-ha-lan-return-snat-cover.webp",
+    "readingTime": "8 min"
+  },
+  {
     "slug": "flow-ai-annotation-exit",
     "title": "當善意遇到市場：我從若水 AI 標註退場看見的事",
     "summary": "我從若水 AI 標註退場回頭看社會企業的難題：善意撐不起失去市場需求的工作模式，真正可持續的支持，得讓人能轉銜並掌握自己的工具。",

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tailscale HA 沒壞，壞的是切過去之後的 LAN 回程 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="我原本以為 Tailscale HA 又壞了，最後才確認 route 真的切到 MT6000；壞的是 subnet router 轉進 LAN 後少了 SNAT，封包出得去但回不來。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-analysis/tailscale-ha-lan-return-snat/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-analysis/tailscale-ha-lan-return-snat/" id="og-url">
+  <meta property="og:title" content="Tailscale HA 沒壞，壞的是切過去之後的 LAN 回程" id="og-title">
+  <meta property="og:description" content="我原本以為 Tailscale HA 又壞了，最後才確認 route 真的切到 MT6000；壞的是 subnet router 轉進 LAN 後少了 SNAT，封包出得去但回不來。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/tailscale-ha-lan-return-snat-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-06-02T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-06-02T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="Tailscale">
+  <meta property="article:tag" content="OpenWRT">
+  <meta property="article:tag" content="subnet router">
+  <meta property="article:tag" content="HA">
+  <meta property="article:tag" content="SNAT">
+  <meta property="article:tag" content="nftables">
+  <meta property="article:tag" content="Apollo">
+  <meta property="article:tag" content="Sunshine">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-analysis/tailscale-ha-lan-return-snat/" id="twitter-url">
+  <meta property="twitter:title" content="Tailscale HA 沒壞，壞的是切過去之後的 LAN 回程" id="twitter-title">
+  <meta property="twitter:description" content="我原本以為 Tailscale HA 又壞了，最後才確認 route 真的切到 MT6000；壞的是 subnet router 轉進 LAN 後少了 SNAT，封包出得去但回不來。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/tailscale-ha-lan-return-snat-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="Tailscale, OpenWRT, subnet router, HA, SNAT, nftables, Apollo, Sunshine" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/tailscale-ha-lan-return-snat-cover.webp" imagesrcset="/content/img/2026/tailscale-ha-lan-return-snat-cover-480w.webp 480w, /content/img/2026/tailscale-ha-lan-return-snat-cover-828w.webp 828w, /content/img/2026/tailscale-ha-lan-return-snat-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Tailscale HA 沒壞，壞的是切過去之後的 LAN 回程","description":"我原本以為 Tailscale HA 又壞了，最後才確認 route 真的切到 MT6000；壞的是 subnet router 轉進 LAN 後少了 SNAT，封包出得去但回不來。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-06-02T00:00:00Z","dateModified":"2026-06-02T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/tailscale-ha-lan-return-snat/"},"url":"https://b-log.to/tech-analysis/tailscale-ha-lan-return-snat/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/tailscale-ha-lan-return-snat-cover.webp"],"keywords":"Tailscale, OpenWRT, subnet router, HA, SNAT, nftables, Apollo, Sunshine","articleSection":"技術分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">Tailscale HA 沒壞，壞的是切過去之後的 LAN 回程</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/tailscale-ha-lan-return-snat-cover.webp" srcset="/content/img/2026/tailscale-ha-lan-return-snat-cover-480w.webp 480w, /content/img/2026/tailscale-ha-lan-return-snat-cover-828w.webp 828w, /content/img/2026/tailscale-ha-lan-return-snat-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">Tailscale HA 沒壞，壞的是切過去之後的 LAN 回程</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Jun 2, 2026</span><span>8 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>Tailscale</span><span>OpenWRT</span><span>subnet router</span><span>HA</span><span>SNAT</span><span>nftables</span><span>Apollo</span><span>Sunshine</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>這件事一開始看起來像同一個問題又回來了。</p>
+<p>昨天才把 MT6000 的 Tailscale subnet route 修好，今天早上又出現一樣的症狀：人在外面，Mac 走 Tailscale，要打家裡 LAN 裡的機器，結果不通。</p>
+<p>最直覺的反應是：Tailscale 又壞了。</p>
+<p>但這次真正麻煩的地方是，router 上的 Tailscale 其實有跑，而且 <code>10.0.0.0/24</code> 也真的切到 MT6000 了。</p>
+<p>也就是說，這次不是 HA 沒發生。</p>
+<p>是 HA 發生之後，切過去的那台 subnet router 沒有真的把 LAN 回程接好。</p>
+<hr>
+<p>前面其實已經有一個很像的教訓。</p>
+<p>Apollo / Sunshine 那次本地 IP 會影像黑畫面，Tailscale IP 卻正常。那時候很容易往「是不是 Tailscale route」「是不是防火牆」去想，因為同一台 Windows VM，一條路影像黑畫面，另一條路正常。</p>
+<p>後來才確認問題在 Windows VM 的 VirtIO / NIC offload 路徑。Discovery、start session、stop session、音效都可以，壞的是 UDP 影像串流那條資料路徑。</p>
+<p>那次讓我先修正一個判斷：同一台主機，不等於同一條資料路徑。</p>
+<p>這次 Tailscale HA 又把這件事演了一次。</p>
+<h2>昨天修的是 route 的形狀</h2>
+<p>昨天真正不對勁的是 MT6000 的 advertise route 設定。</p>
+<p>OpenWRT 上的 Tailscale 設定裡同時有幾組東西：</p>
+<pre><code class="language-text">advertiseRoutes=&#39;10.0.0.0/24&#39;
+advertise_routes=&#39;10.0.0.192/24&#39; &#39;10.0.0.172/32&#39; &#39;10.0.0.206/32&#39;
+</code></pre>
+<p>其中 <code>10.0.0.192/24</code> 是錯的。</p>
+<p><code>/24</code> 的 network address 應該是 <code>10.0.0.0/24</code>，不是拿一台主機的 IP 去寫 <code>/24</code>。所以 log 裡很直接：</p>
+<pre><code class="language-text">10.0.0.192/24 has non-address bits set; expected 10.0.0.0/24
+tailscale up failed.
+</code></pre>
+<p>這不是小 typo。它讓 MT6000 的 Tailscale 起不來，後面就全部不用談。</p>
+<p>同時還有另一個問題：<code>10.0.0.172/32</code> 這種更精確的 route，會蓋過 <code>10.0.0.0/24</code>。Tailscale 的 HA 是看 exact prefix，同樣 advertise <code>10.0.0.0/24</code> 的幾台可以互相 failover；但 <code>10.0.0.172/32</code> 不會自動理解成 <code>/24</code> 的一部分然後幫你切。</p>
+<p>所以昨天的修法是把 route 形狀整理乾淨：</p>
+<pre><code class="language-text">advertise_routes=&#39;10.0.0.0/24&#39;
+</code></pre>
+<p>不要混 <code>/32</code>，不要留錯的 <code>10.0.0.192/24</code>。</p>
+<p>修完後，MT6000 的 Tailscale 起來了。Web console approve 之後，Mac 也看得到 MT6000 可以 advertise <code>10.0.0.0/24</code>。</p>
+<p>到這裡，我以為事情大概結束了。</p>
+<p>結果沒有。</p>
+<h2>今天 route 真的切了，但 LAN 還是不通</h2>
+<p>今天早上症狀回來的時候，第一件事不是重開服務。</p>
+<p>我先看 Mac 現在到底怎麼走：</p>
+<pre><code class="language-text">route get 10.0.0.172
+destination: 10.0.0.0
+mask: 255.255.255.0
+interface: utun4
+</code></pre>
+<p>這代表 Mac 確實把 <code>10.0.0.0/24</code> 丟進 Tailscale。</p>
+<p>再看 Tailscale netmap，這次更清楚：</p>
+<pre><code class="language-text">mt6000
+allowed = 100.64.10.1/32, 10.0.0.0/24
+primary = 10.0.0.0/24
+online = true
+</code></pre>
+<p>也就是說，今天不是 PVE 在扛，也不是 route 沒 approve。</p>
+<p>今天 primary subnet router 是 MT6000。</p>
+<p>但測起來很怪：</p>
+<pre><code class="language-text">ping 10.0.0.1    # 通
+ping 10.0.0.172  # 不通
+ping 10.0.0.192  # 不通
+</code></pre>
+<p>這個結果很關鍵。</p>
+<p><code>10.0.0.1</code> 是 MT6000 自己，所以它會回。<br><code>10.0.0.172</code> 和 <code>10.0.0.192</code> 是 LAN 後面的機器，它們不回。</p>
+<p>所以問題不是「Mac 到 MT6000 不通」。</p>
+<p>問題是 MT6000 收到 Tailscale 來的封包之後，沒有成功把整段 LAN 連線完成。</p>
+<h2>讓每一層只回答一個問題</h2>
+<p>接下來要分層確認。</p>
+<p>第一層：MT6000 自己能不能打到 LAN 主機？</p>
+<pre><code class="language-text">MT6000 -&gt; 10.0.0.172
+4 packets transmitted, 4 packets received
+</code></pre>
+<p>可以。</p>
+<p>第二層：MT6000 到 <code>10.0.0.172</code> 的 route 怎麼走？</p>
+<pre><code class="language-text">10.0.0.172 dev br-lan src 10.0.0.1
+</code></pre>
+<p>走 <code>br-lan</code>，正常。</p>
+<p>第三層：IP forwarding 有沒有開？</p>
+<pre><code class="language-text">net.ipv4.ip_forward = 1
+</code></pre>
+<p>有。</p>
+<p>第四層：firewall 有沒有 tailscale 到 lan forwarding？</p>
+<p>OpenWRT UCI 和 nft ruleset 都看得到：</p>
+<pre><code class="language-text">tailscale -&gt; lan
+lan -&gt; tailscale
+</code></pre>
+<p>而且 nft counter 也證明了一件事：Mac ping <code>10.0.0.172</code> 的 ICMP request 有進到 MT6000，也有被轉出 <code>br-lan</code>。</p>
+<p>也就是說，封包不是卡在進 router，也不是卡在 firewall forward。</p>
+<p>封包有出去。</p>
+<p>但 reply 回不來。</p>
+<p>這才是今天真正的問題。</p>
+<h2>少的是 SNAT</h2>
+<p>這時候最合理的猜測是回程。</p>
+<p>如果 MT6000 把 Tailscale 來的封包直接轉進 LAN，LAN 主機看到的來源可能是 Mac 的 Tailscale IP，例如 <code>100.89.162.36</code>。</p>
+<p>理論上，如果 LAN 主機的 default gateway 是 <code>10.0.0.1</code>，它應該可以回去。但實際網路常常不是這麼乾淨。PVE、VM、旁邊的 mesh、不同 router、不同 route table，只要有一段不照你想像走，reply 就回不來。</p>
+<p>所以我先不改永久設定，只加一條 runtime 測試規則：</p>
+<pre><code class="language-nft">oifname &quot;br-lan&quot; ip saddr 100.64.0.0/10 masquerade
+</code></pre>
+<p>結果一加就通：</p>
+<pre><code class="language-text">10.0.0.172  0% loss
+10.0.0.192  0% loss
+</code></pre>
+<p>這一步幾乎就能定案了。</p>
+<p>不是 Tailscale 不會 HA。<br>不是 MT6000 到 LAN 不通。<br>不是 Mac route 沒走 <code>utun4</code>。  </p>
+<p>是 MT6000 當 subnet router 時，Tailscale-to-LAN 這條路缺有效的 SNAT。</p>
+<p>最後我沒有把整個 LAN zone 都開 masquerade。那太粗。</p>
+<p>我加的是精準的 fw4 custom nft 規則：</p>
+<pre><code class="language-text">/etc/nftables.d/20-tailscale-lan-snat.nft
+</code></pre>
+<p>內容是：</p>
+<pre><code class="language-nft">chain codex_ts_lan_snat {
+    type nat hook postrouting priority 99; policy accept;
+    oifname &quot;br-lan&quot; ip saddr 100.64.0.0/10 masquerade comment &quot;Tailscale-to-LAN SNAT for subnet routing&quot;
+}
+</code></pre>
+<p>這條只處理一件事：<br>Tailscale client 來源 <code>100.64.0.0/10</code>，要從 MT6000 轉進 <code>br-lan</code> 時，做 masquerade。</p>
+<p>修完後再測：</p>
+<pre><code class="language-text">10.0.0.172  0% loss, 約 7.7-11.3 ms
+10.0.0.192  0% loss, 約 7.7-10.4 ms
+</code></pre>
+<p>而且 Mac netmap 仍然顯示：</p>
+<pre><code class="language-text">MT6000 primary route: 10.0.0.0/24
+</code></pre>
+<p>這次是真的走 MT6000，也是真的通。</p>
+<h2><code>running</code> 不等於這條路可以用</h2>
+<p>這次最容易誤判的地方，是 router Tailscale 確實 running。</p>
+<p>甚至更精確一點，<code>tailscaled</code> 本體是 running，MT6000 也 online，route 也被選成 primary。</p>
+<p>但 OpenWRT 上 <code>/etc/init.d/tailscale status</code> 是：</p>
+<pre><code class="language-text">running (1/2)
+</code></pre>
+<p>查 procd 後看到：</p>
+<pre><code class="language-text">instance1: /usr/sbin/tailscaled  running
+instance2: /usr/sbin/tailscale_helper --advertise-routes=10.0.0.0/24  not running, exit_code=1
+</code></pre>
+<p>這很有意思。</p>
+<p>因為它剛好解釋了今天這種狀態：Tailscale daemon 本身沒壞，route 也成立，但 helper 沒有把整套 OpenWRT forwarding / NAT 狀態處理到我需要的樣子。</p>
+<p>如果只看「Tailscale running」，會以為這層已經排除了。</p>
+<p>但它其實只回答「daemon 有沒有活著」。<br>它沒有回答「這台 router 當 subnet router 時，LAN 回程有沒有接好」。</p>
+<p>這兩件事差很多。</p>
+<h2>這次改掉的判斷</h2>
+<p>昨天修的是 route 的定義。</p>
+<p>今天修的是 route 切過去以後，封包真的要怎麼回來。</p>
+<p>這兩件事很容易混在一起，因為症狀都像「Tailscale 又不通」。但它們不是同一個問題。</p>
+<p>昨天的問題是：<br>MT6000 advertise 的 prefix 有錯，還混了 <code>/32</code>，所以 HA 的前提不乾淨。</p>
+<p>今天的問題是：<br>HA 真的選了 MT6000，但 MT6000 作為 subnet router 的 LAN 回程沒有被 SNAT 補起來。</p>
+<p>Tailscale 的 HA 沒有笨到完全不會切。它切了。</p>
+<p>但它也不會幫你證明「切過去那台 router 後面的 LAN forwarding 一定完整」。它只知道這台 node online、這條 route 被允許、這個 prefix 可以走。至於 router 裡面的 firewall、NAT、LAN 回程，那是另一層。</p>
+<p>這就是我之後會改掉的檢查方式。</p>
+<p>我不會再停在：</p>
+<pre><code class="language-text">tailscale status: running
+route: utun4
+primary: 10.0.0.0/24
+</code></pre>
+<p>這些都只是前半段。</p>
+<p>後面還要確認：</p>
+<pre><code class="language-text">subnet router 自己能不能打到 LAN 主機
+ip_forward 有沒有開
+firewall forward 有沒有放
+封包有沒有真的出 br-lan
+reply 是不是回得來
+需要 SNAT 還是需要 LAN 端 route
+</code></pre>
+<p>昨天我以為問題是 route 沒整理乾淨。</p>
+<p>今天才補上真正缺的那一段：route 切過去之後，那台 router 要能讓封包回家。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "tailscale-ha-lan-return-snat",
+      "url": "https://b-log.to/tech-analysis/tailscale-ha-lan-return-snat/",
+      "title": "Tailscale HA 沒壞，壞的是切過去之後的 LAN 回程",
+      "content_text": "我原本以為 Tailscale HA 又壞了，最後才確認 route 真的切到 MT6000；壞的是 subnet router 轉進 LAN 後少了 SNAT，封包出得去但回不來。",
+      "date_published": "2026-06-02T00:00:00.000Z",
+      "date_modified": "2026-06-02T00:00:00.000Z",
+      "tags": [
+        "Tailscale",
+        "OpenWRT",
+        "subnet router",
+        "HA",
+        "SNAT",
+        "nftables",
+        "Apollo",
+        "Sunshine"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/tailscale-ha-lan-return-snat-cover.webp"
+    },
+    {
       "id": "flow-ai-annotation-exit",
       "url": "https://b-log.to/business-insights/flow-ai-annotation-exit/",
       "image": "https://b-log.to/content/img/2026/flow-ai-annotation-exit-cover.webp",
