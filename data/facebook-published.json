@@ -1184,6 +1184,13 @@
       "postUrl": "https://b-log.to/business-insights/flow-ai-annotation-exit/",
       "facebookPostId": "1026818047191304_122104915119290922",
       "publishedAt": "2026-05-31T01:06:36.604Z"
+    },
+    "tailscale-ha-lan-return-snat": {
+      "status": "published",
+      "title": "Tailscale HA 沒壞，壞的是切過去之後的 LAN 回程",
+      "postUrl": "https://b-log.to/tech-analysis/tailscale-ha-lan-return-snat/",
+      "facebookPostId": "1026818047191304_122105135127290922",
+      "publishedAt": "2026-06-02T01:52:10.691Z"
     }
   }
 }
