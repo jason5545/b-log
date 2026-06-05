@@ -201,14 +201,14 @@
 <p>麻煩的是每條線索看起來都說得通。</p>
 <p>MTPLX 跑同一顆 Qwen3.6 27B 可以到三十幾 tok/s，oMLX 卡在二十幾。Native MTP 明明有開，acceptance 也不是低到不能看，但速度就是上不去。這種差距最容易讓人往「一定是哪個核心沒吃到」的方向想，然後開始懷疑 sampling。</p>
 <p>後來才發現，最要命的地方根本不在那裡。</p>
-<h2>問題不在 external drafter</h2>
+<h2>先排除 external drafter</h2>
 <p>先把範圍講清楚，不然很容易一路查到別的方向。</p>
 <p>官方最近也有 speculative decoding 的東西，但那條比較像另外放一顆 draft model。Qwen 這邊有趣的地方，是模型本身就有 MTP head。換句話說，不需要再找一顆小模型幫忙猜，直接用內建的 MTP head 做 native MTP。</p>
 <p>MTPLX 做的也是這件事。</p>
 <p>所以問題不是要不要切去 external drafter。真正值得追的是：同樣是 native MTP，為什麼 MTPLX 比 oMLX 快這麼多？</p>
 <p>這個問題可以拆成兩件事：draft 準不準（每個 cycle 平均可以吐幾個 token），以及每個 cycle 到底花多少時間。log 裡最讓人停下來看的，是 sample time——每個 cycle 一大段時間都算在 sampling 裡。</p>
 <p>看起來很像找到了。</p>
-<h2>sampling.py 很可疑，但不是兇手</h2>
+<h2>sampling.py 很可疑，後來被排掉</h2>
 <p>第一步是把 top-k sparse path 打開。<code>top_k=0</code> 改成 <code>top_k=20</code>，讓 verify side 可以走 sparse distribution，不要每次都處理完整 vocab。改完有生效，log 裡看得到 sparse distribution 開始跑。</p>
 <p>但速度沒動。</p>
 <p>接著把 MTPLX 裡的 NumPy-based <code>SparseDistribution</code>、<code>acceptance_probability</code>、<code>residual_sample</code> 搬進來，取代原本比較直覺的 Python list 版本。</p>
@@ -254,7 +254,7 @@ never-decrease: tokens/cycle 3.19
 fixed depth=3:  tokens/cycle 3.09
 </code></pre>
 <p>反而更差。不是每個 cycle 都值得硬 draft 3 個，reject 之後塞的 D2/D3 很多都是錯的，cycles 反增。MTPLX 快，不是因為它盲目固定 depth。</p>
-<h2>真正的洞在 partial reject</h2>
+<h2>partial reject 後的 replay 才是差距</h2>
 <p>最後把 cache ops 拆開，問題就亮起來了：</p>
 <pre><code class="language-text">cache = 2622ms
   full   = 0.4ms  / 46
@@ -266,7 +266,7 @@ fixed depth=3:  tokens/cycle 3.09
 <p>oMLX 在 partial reject 的時候，例如 D1 accepted、D2 rejected，會為了修正被 draft token 污染的 cache state，再重跑一次 backbone，把 accepted token replay 回去。</p>
 <p>每次 reject 大概 48ms。53 次就是 2.58 秒。</p>
 <p>這幾乎就是跟 MTPLX 的全部差距。</p>
-<p>一直在追 sampling，結果根本不是 sampling。</p>
+<p>一直在追 sampling，後來才發現時間花在 cache correction。</p>
 <hr>
 <p>當然，第一個實驗就是把 replay 關掉：</p>
 <pre><code class="language-text">cache:      2622ms -&gt; 60ms
@@ -331,14 +331,14 @@ spec_rb_count=10
 pos[input=1 state=37 emitted=97 rope_base=132]
 </code></pre>
 <p>long-context 修正沒有把 VLM 路徑弄壞。</p>
-<h2>這次真正排掉的東西</h2>
+<h2>最後排掉的幾個嫌疑人</h2>
 <p>說起來有點無聊。</p>
-<p>答案不是 external draft model，不是 CPU acceptance walk，不是 NumPy sparse distribution，不是 <code>mx.eval</code> 太慢，也不是 fixed depth 3。</p>
-<p>真正的問題，一個是 partial reject 後的 cache correction，一個是長 context 下 RoPE position 慢慢偏掉。</p>
+<p>external draft model、CPU acceptance walk、NumPy sparse distribution、<code>mx.eval</code>、fixed depth 3，最後都被排掉了。</p>
+<p>剩下來的問題有兩個：partial reject 後的 cache correction 太貴，長 context 下 RoPE position 會慢慢偏掉。</p>
 <p>原本的做法其實並不是錯的。它用完整的 backbone replay 買 correctness，只是太貴。MTPLX 讓我們看到，這個 correctness 不一定要用 replay 買。更妙的是，oMLX 需要的能力其實一直在旁邊，只是 Native MTP 那條路沒有接上。</p>
 <p>RoPE 那個更讓人挫折，因為不是 bug，是 position 欄位讓你覺得自己算對了。到夠長的 context 才開始偏，追到最後才發現餵給 MTP head 的位置根本不誠實。</p>
-<p>所以這次真正麻煩的不是沒有線索。</p>
-<p>麻煩的是，sampling 這個嫌疑人太合理，合理到差點讓人不往下看。</p>
+<p>這次麻煩的不是沒有線索。</p>
+<p>是 sampling 這個嫌疑人太合理，合理到差點讓人不往下看。</p>
 </div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>

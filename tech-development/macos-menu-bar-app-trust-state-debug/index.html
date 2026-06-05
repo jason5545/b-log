@@ -199,10 +199,9 @@
           <div id="post-tags" class="article-tags"><span>macOS</span><span>Swift</span><span>BLE</span><span>EmulStick</span><span>TCC</span><span>Accessibility</span><span>Input Monitoring</span><span>menu bar app</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>我一開始以為這只是把 EmulStick 的 BLE forwarding 接到 macOS。</p>
 <p>掃描、連線、AES 驗證、寫 HID report。Android 版已經有一條路，macOS 版照著協定補起來，應該就能跑。</p>
-<p>結果真正花時間的不是 BLE。</p>
+<p>後來時間主要耗在 macOS。</p>
 <p>BLE 很誠實。能寫就是能寫，不能寫就回錯。真正麻煩的是 macOS：System Settings 顯示已經授權，程式卻還是拿不到權限；menu bar 顯示 grabbed，event tap 卻說 released；裝置看起來連上了，但 mode 還停在上一個狀態。</p>
-<p>這種問題最討厭的地方，不是它壞。</p>
-<p>是它看起來像已經好了。</p>
+<p>這種問題最討厭的地方，是它看起來像已經好了。</p>
 <p>相關背景：<a href="https://b-log.to/tech-development/unified-remote-evo-development-journey/">Unified Remote Evo - 從遙控器到多功能輸入裝置的開發之旅</a></p>
 <h2>AES 過了，但 F80F 不能寫</h2>
 <p>最早的 log 是這樣：</p>
@@ -241,7 +240,7 @@ UnifiedRemoteEvoMac --cli move --dx 0 --dy 20
 Accessibility trusted: no
 Input Monitoring trusted: no
 </code></pre>
-<p>這才是問題。</p>
+<p>問題出在這裡。</p>
 <p>不是「權限還沒開」。
 是 UI 說開了，API 說沒有。</p>
 <p>看 tccd log 之後，真正的線索出來了：</p>
@@ -260,9 +259,9 @@ tccutil reset ListenEvent com.jason5545.UnifiedRemoteEvo
 </code></pre>
 <p>然後重新啟動 menu app，讓它自己 request。</p>
 <p>這次 System Settings 裡那列變成 off。</p>
-<p>這反而是好事。
-因為那表示它終於不是快取出來的假 on。</p>
-<h2>menu bar 沒出現，是 bundle identity 被弄髒</h2>
+<p>這其實是好消息。
+那表示它終於不是快取出來的假 on。</p>
+<h2>menu bar 沒出現，後來查到 bundle identity 混在一起</h2>
 <p>這段是後來才真的確認。</p>
 <p>那時候最該被相信的，其實是這句話：</p>
 <pre><code class="language-text">our initial push was working
@@ -293,11 +292,8 @@ tccutil reset ListenEvent com.jason5545.UnifiedRemoteEvo
 <p>SwiftUI <code>MenuBarExtra</code> 會被系統送 <code>NSStatusItemChangeVisibilityAction</code>，接著 app 沒有其他 window，就自己退出。</p>
 <p>改成最小 AppKit <code>NSStatusItem(title: &quot;EVO&quot;)</code> 之後，process 活著，但 menu bar 還是不顯示。</p>
 <p>可是 unbundled 的 <code>swift -e</code> 測試可以顯示。</p>
-<p>這幾個現象放在一起，結論就很清楚：</p>
-<p>不是 SwiftUI 畫不出 menu bar。
-不是 icon 壞掉。
-不是使用者沒開權限。</p>
-<p>是這個 app identity 在 macOS 裡被我測髒了。</p>
+<p>這幾個現象放在一起，我才把 SwiftUI、icon、使用者開關先排掉。</p>
+<p>比較像是這個 app identity 在 macOS 裡被我測髒了。</p>
 <p>initial push 會動，是因為那時候 identity 還乾淨。後來我一邊修 BLE、一邊加 CLI、一邊改 bundle id、一邊從 DerivedData 和 <code>/Applications</code> 交替啟動，macOS 其實已經不確定「UnifiedRemoteEvoMac」到底是哪一份。</p>
 <p>這也是為什麼後來不能只叫使用者去 System Settings 再打開一次。</p>
 <p>那只是把某一列開成 on。
@@ -340,8 +336,8 @@ Status 裡 Input tap 卻顯示：</p>
         self?.syncForwardingState()
     }
 </code></pre>
-<p>這裡真正修的不是 Combine。
-是讓狀態不要各說各話。</p>
+<p>這裡表面上改的是 Combine。
+我要修的是狀態不要各說各話。</p>
 <p>UI 覺得 grabbed、event tap 覺得 released、BLE connection 又是另一個狀態，這種 app 很快就會變成「看起來有在動，但你不知道它現在到底在哪裡」。</p>
 <h2>連上後一定要回到鍵盤滑鼠</h2>
 <p>EmulStick 可以是 Xbox 360 mode，也可以是 keyboard / mouse composite mode。</p>
@@ -351,8 +347,8 @@ Status 裡 Input tap 卻顯示：</p>
 <p>AES 驗證完成後，延遲送 KB / Mouse，查回 mode。
 如果沒有確認到，就重試。
 手動點 XInput 或 KB / Mouse，也送完後再查回。</p>
-<p>不是猜它成功。
-是讀回來確認。</p>
+<p>不要只猜它成功。
+要讀回來確認。</p>
 <p>最後 log 是這樣：</p>
 <pre><code class="language-text">AES 密文驗證成功
 BLE 驗證完成，已連線
@@ -364,15 +360,15 @@ Connected: EmulStick / mode=鍵盤/滑鼠
 <p>這才是我想要的狀態。</p>
 <p>不是按鈕看起來在 KB / Mouse。
 是 EmulStick 自己回報它在 KB / Mouse。</p>
-<h2>最後修掉的是「到底是不是真的」</h2>
-<p>這趟最有意思的地方，不是 AES，也不是 HID report。</p>
+<h2>最後在確認的是「到底是不是真的」</h2>
+<p>這趟最花時間的地方，不在 AES，也不在 HID report。</p>
 <p>硬體那邊反而很乾脆。Android 版比對一下，補 <code>writeWithoutResponse</code> fallback，CLI 測一下，事情就往前走。</p>
-<p>真正麻煩的是 macOS 這邊。</p>
+<p>麻煩集中在 macOS 這邊。</p>
 <p>System Settings 可以顯示 on，但 API 回 no。
 menu bar item 可以不是程式畫不出來，而是 visibility state 套在另一個 identity 上。
 menu bar 可以顯示 grabbed，但 event tap 是 released。
 app 可以連上 EmulStick，但 mode 還沒同步回來。</p>
-<p>這些都不是很大的 bug。</p>
+<p>每一個 bug 單獨看都不大。</p>
 <p>但它們會慢慢吃掉信任。</p>
 <p>menu bar app 最怕的不是功能少。最怕的是它安靜地站在右上角，然後你不知道它現在到底有沒有真的接管輸入、真的連到裝置、真的在正確模式。</p>
 <p>所以後來我才把每一層都補上實際確認。</p>

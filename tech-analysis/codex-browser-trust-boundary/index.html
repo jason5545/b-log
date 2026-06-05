@@ -195,17 +195,15 @@
             <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 22, 2026</span><span>8 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>Codex</span><span>Chrome Extension</span><span>browser automation</span><span>Helium</span><span>Playwright</span><span>AI 工具</span></div>
-          <div id="post-content" class="article-body" data-prerendered="true"><p>有時候一個技術問題最麻煩的地方，不是它看起來很難。</p>
-<p>是它看起來太簡單。</p>
-<p>我只是叫 Codex 開一個網頁。照理說，這不應該是一件需要寫文章的事。瀏覽器在那裡，Chrome extension 也在那裡，native host 也連著，下一步不就是開 tab、goto URL、確認頁面載入嗎？</p>
-<p>結果真正卡住的不是「怎麼開網頁」。</p>
-<p>真正卡住的是：Codex 這次到底是透過哪一條被信任的路在控制瀏覽器。</p>
-<h2>這不是一般的瀏覽器自動化</h2>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>我本來以為這會是很簡單的一步。</p>
+<p>我只是叫 Codex 開一個網頁。照理說，這不應該是一件需要寫文章的事。瀏覽器在那裡，Chrome extension 也在那裡，native host 也連著，下一步看起來就是開 tab、goto URL、確認頁面載入。</p>
+<p>後來才發現，卡住的地方不是「怎麼開網頁」。</p>
+<p>是 Codex 這次到底透過哪一條被信任的路在控制瀏覽器。</p>
+<h2>這次碰到的是真實使用者瀏覽器</h2>
 <p>如果只是測本機頁面，Codex 有 in-app browser。那條路很乾淨，localhost、file URL、截圖、點選、驗證畫面，都可以放在一個相對隔離的環境裡做。</p>
 <p>但有些任務不能用那條路。</p>
 <p>使用者已經登入的網站、既有 Chrome 分頁、profile 裡的 extension、cookies、遠端服務的 session，這些東西不在 in-app browser 裡。要碰到它們，就得走使用者真正的 Chromium 瀏覽器，也就是 Chrome 或 Helium 這類環境。</p>
-<p>這時候問題就不只是「瀏覽器能不能被操作」。</p>
-<p>問題變成一條管線：</p>
+<p>事情到這裡就變成一條管線：</p>
 <pre><code class="language-text">Codex
   -&gt; Node REPL
   -&gt; browser-client.mjs
@@ -214,7 +212,7 @@
 </code></pre>
 <p>每一層都要對。</p>
 <p>模型會不會寫 JavaScript 反而不是重點。重點是那段 JavaScript 有沒有拿到真正被允許的 browser bridge。</p>
-<h2>第一個問題：不是 client 壞，是路徑不被信任</h2>
+<h2>第一個線索：runtime 不信任快取路徑</h2>
 <p>原本直覺會走 Chrome plugin 裡快取的 client：</p>
 <pre><code class="language-text">~/.codex/plugins/cache/openai-bundled/chrome/.../scripts/browser-client.mjs
 </code></pre>
@@ -225,10 +223,10 @@
 privileged native pipe bridge is not available
 </code></pre>
 <p>這句錯誤如果只看字面，很容易以為 extension 沒裝好、native host 沒連上、或是 Chrome 本身沒有回應。</p>
-<p>但真正的問題比較低階：不是瀏覽器不在，也不是 extension 不能用，而是目前 import 的 client 路徑沒有被授權拿那條 privileged bridge。</p>
-<p>這個差別很重要。</p>
+<p>後來確認到的原因比較低階：瀏覽器在，extension 也能用，但目前 import 的 client 路徑沒有被授權拿那條 privileged bridge。</p>
+<p>這個判斷會直接改變 debug 路線。</p>
 <p>因為如果判斷錯，你會去修錯東西。你會重裝 extension、重開瀏覽器、查 profile、甚至開始懷疑 Helium 和 Chrome 的差異。那些都可能有用，但這次最關鍵的不是那些。</p>
-<p>這次關鍵是改走 bundled marketplace 裡那份被信任的 client：</p>
+<p>這次要改走 bundled marketplace 裡那份被信任的 client：</p>
 <pre><code class="language-text">~/.codex/.tmp/bundled-marketplaces/openai-bundled/plugins/chrome/scripts/browser-client.mjs
 </code></pre>
 <p>同樣都是 <code>browser-client.mjs</code>，但 runtime 在意的是它從哪裡來。</p>
@@ -257,7 +255,7 @@ nodeRepl.write(JSON.stringify({ ok: true, tabCount: tabs.length }, null, 2));
 </code></pre>
 <p>這跟我這次遇到的點幾乎是同一條線。它不是「網站開不起來」，也不是「Chrome 沒開」。Chrome 在，plugin 也裝過，甚至 diagnostic script 還另外卡在 Windows 路徑權限問題。真正卡住的是 Codex 拿不到那條 privileged browser bridge。</p>
 <p>這個 issue 讓整件事更清楚：重裝 plugin 不一定會修好信任路徑。你可以把使用者可見的東西全部重來一次，但如果 runtime 仍然不信任現在 import 的 <code>browser-client.mjs</code>，那條 bridge 還是不會交出去。</p>
-<h2>第二個問題：這個 tab 不是 Playwright page</h2>
+<h2>第二個線索：tab 其實是 wrapper</h2>
 <p>trusted path 通了之後，開新分頁其實很順：</p>
 <pre><code class="language-js">globalThis.tab = await browser.tabs.new();
 await tab.goto(&quot;https://example.com&quot;);
@@ -280,11 +278,11 @@ const pageInfo = await tab.playwright.evaluate(() =&gt; ({
   url: location.href
 }));
 </code></pre>
-<p>這不是語法小事。</p>
-<p>它代表這個工具的抽象不是「把 Playwright 原封不動丟給你」。它包了一層，因為它同時要處理使用者分頁、extension backend、能力清單、clipboard、content export、CUA 操作。你如果把它當成標準 Playwright page，就會在一個看起來很熟的地方摔倒。</p>
+<p>這個錯誤小，可是很容易讓下一步走偏。</p>
+<p>這個工具沒有把 Playwright 原封不動丟給你。它包了一層，因為它同時要處理使用者分頁、extension backend、能力清單、clipboard、content export、CUA 操作。你如果把它當成標準 Playwright page，就會在一個看起來很熟的地方摔倒。</p>
 <p>我不討厭這層 wrapper。它有存在理由。</p>
 <p>但 skill 裡必須把這個邊界寫清楚。不然下一個 agent 看到 <code>tab.goto()</code> 可以用，就會自然假設 <code>tab.evaluate()</code> 也可以用。這就是小坑變成重複成本的方式。</p>
-<h2>第三個問題：finalize 不是裝飾</h2>
+<h2>第三個線索：finalize 會收掉控制權</h2>
 <p>Chrome browser tool 最後還有一個動作：</p>
 <pre><code class="language-js">await browser.tabs.finalize({ keep: [{ tab, status: &quot;deliverable&quot; }] });
 </code></pre>
@@ -303,20 +301,20 @@ const pageInfo = await tab.playwright.evaluate(() =&gt; ({
 </code></pre>
 <p>但那只是診斷，不是正常控制路徑。</p>
 <p>正常控制路徑還是 trusted <code>browser-client.mjs</code>。</p>
-<h2>這就是為什麼要寫成 skill</h2>
+<h2>後來我把它寫進 skill</h2>
 <p>我以前對這種 skill 的看法比較簡單：它就是把一段可重複操作記下來。</p>
 <p>這次比較明顯的是，skill 更像是把「不要再走錯路」記下來。</p>
-<p><code>chrome-trusted</code> 不需要寫成一本文件。它只需要把幾個會害人重踩的點釘住：</p>
-<p>第一，別 import plugin cache 裡那份 client。</p>
-<p>第二，走 bundled marketplace 的 trusted client。</p>
-<p>第三，通過 <code>openTabs()</code> 健康檢查後再做瀏覽器操作。</p>
-<p>第四，<code>tab</code> 不是 Playwright page，Playwright 能力在 <code>tab.playwright</code>。</p>
-<p>第五，finalize 之後不要假設舊 control object 還活著。</p>
-<p>這些都不是很深奧的技術。</p>
+<p><code>chrome-trusted</code> 不需要寫成一本文件。它只需要把幾個會害人重踩的點釘住。</p>
+<p>不要 import plugin cache 裡那份 client。</p>
+<p>要走 bundled marketplace 的 trusted client。</p>
+<p>先通過 <code>openTabs()</code> 健康檢查，再做瀏覽器操作。</p>
+<p><code>tab</code> 不是 Playwright page，Playwright 能力在 <code>tab.playwright</code>。</p>
+<p>finalize 之後不要假設舊 control object 還活著。</p>
+<p>技術本身不深。</p>
 <p>但它們很適合變成 skill，因為模型每次重來都會自然掉進同一個洞。不是因為模型笨，而是因為它看到的 API 形狀太像另一個熟悉的東西。<code>tab.goto()</code> 可以用，於是它以為 <code>tab.evaluate()</code> 也可以用。快取資料夾裡有 <code>browser-client.mjs</code>，於是它以為那就是該 import 的檔案。</p>
 <p>這些錯誤很合理。</p>
 <p>合理到你不把它寫下來，它下次一定還會發生。</p>
-<h2>我這次真正改變的判斷</h2>
+<h2>這次留下來的判斷</h2>
 <p>表面上，這只是一次開網頁。</p>
 <p>但我後來在意的不是那個頁面有沒有打開，而是 Codex 在打開它的時候，知不知道自己站在哪一條被允許的路上。</p>
 <p>AI coding agent 的信任問題，不只在模型會不會亂寫 code。</p>
