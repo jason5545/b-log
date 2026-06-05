@@ -2,11 +2,9 @@
 
 TrackPal 又不見了。
 
-不是 crash。
+app 沒有 crash。
 
-不是 SwiftUI 畫不出 menu bar item。
-
-也不是我忘記把 `MenuBarExtra` 放進 app 裡。
+SwiftUI 也有把 `MenuBarExtra` 放進去。
 
 比較煩的是這種狀況：app 看起來有啟動，bundle id 也對，程式碼沒有明顯錯，System Settings 裡甚至看得到那個 app 的選項。可是右上角就是沒有出現。
 
@@ -14,9 +12,7 @@ TrackPal 又不見了。
 
 我一開始也會想，是不是 `MenuBarExtra` 的 `.window` 又在 macOS 26 被改了？是不是 `NSStatusItem` 的 visibility 被 app 自己寫壞？是不是之前修 sudden termination 的地方又有副作用？
 
-後來發現不是。
-
-真正卡住的是 macOS 自己記住了一份舊的 menu bar allow-list，而且那份記憶比 app 目前的狀態還有力。
+後來發現，卡住的是 macOS 自己記住了一份舊的 menu bar allow-list，而且那份記憶比 app 目前的狀態還有力。
 
 ## 公開 API 只講到這裡
 
@@ -70,7 +66,7 @@ AppKit 那邊，[`NSStatusItem`](https://developer.apple.com/documentation/appki
 
 macOS 沒給我這個按鈕。
 
-## TrackPal 這次不是殘留，是覆蓋
+## TrackPal 這次被舊狀態覆蓋
 
 如果只是刪掉的 app 留在設定裡，那還算煩，但不致命。
 
@@ -106,7 +102,7 @@ NSStatusItem VisibleCC Item-0 = 0
 
 但至少可以先把一件事釘住：macOS 26 的 menu bar visibility 不是只有 app 端一個開關。
 
-## 我最後重設的是 allow-list，不是 app
+## 最後重設的是 allow-list
 
 這裡最容易做錯的是只刪 app 自己的 defaults。
 
@@ -130,27 +126,27 @@ defaults delete com.jasonchien.TrackPal "NSStatusItem VisibleCC Item-0"
 
 重點是第三步。
 
-不是整個 `com.apple.controlcenter` 亂砍。
+不要整個 `com.apple.controlcenter` 亂砍。
 
-不是用 `defaults delete com.apple.controlcenter` 期待奇蹟。
+也不要用 `defaults delete com.apple.controlcenter` 期待奇蹟。
 
-而是讓 Control Center 重新建立第三方 app 的 allow-list。
+這裡要做的是讓 Control Center 重新建立第三方 app 的 allow-list。
 
 我當時清掉之後，macOS 自己把 `trackedApplications` 從 90 筆重建成 30 筆。TrackPal 回來了，`com.jasonchien.TrackPal` 變成 `isAllowed: true`，而且 app 自己 defaults 裡那個 `NSStatusItem VisibleCC Item-0 = 0` 不再出現。
 
-這裡才是讓我改判斷的地方。
+這裡讓我改了判斷。
 
-TrackPal 原本不是不會建立 menu bar item。
+TrackPal 原本有建立 menu bar item。
 
-它是建立了，但 Control Center 用舊狀態把它按掉。
+只是 Control Center 用舊狀態把它按掉。
 
 ## 不要把這件事當一般偏好設定
 
 我不太喜歡 macOS 26 這裡的設計。
 
-不是因為它有狀態。
+我不是反對它有狀態。
 
-狀態一定要有。
+menu bar 一定要有狀態。
 
 沒有狀態，menu bar 會變成另一種災難。
 
@@ -206,7 +202,7 @@ Control Center 的 `trackedApplications` 有沒有把舊狀態套回來。
 
 這三個混在一起查，會很痛苦。
 
-## 這次真正修掉的是 macOS 的舊答案
+## 這次修掉的是 macOS 的舊答案
 
 我之前寫過 TrackPal 在 macOS 26 會因為 `MenuBarExtra` `.window` 觸發 sudden termination。那次是程式碼真的需要補：`setActivationPolicy(.accessory)`，再用 `applicationShouldTerminate` 回 `.terminateCancel`。
 
@@ -226,7 +222,7 @@ Control Center 的 `trackedApplications` 有沒有把舊狀態套回來。
 
 AppKit 也沒有重寫。
 
-真正動到的是 Control Center 那份舊記憶。把它清掉之後，系統才重新看一次眼前這個 app。
+最後動到的是 Control Center 那份舊記憶。把它清掉之後，系統才重新看一次眼前這個 app。
 
 我不是不能接受 macOS 有這種內部狀態。
 
