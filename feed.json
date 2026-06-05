@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "ai-writing-incident-voice-workflow",
+      "url": "https://b-log.to/ai-analysis/ai-writing-incident-voice-workflow/",
+      "title": "那篇被說 AI 味很重的文章，後來讓我修了整條工作流",
+      "content_text": "一篇 Facebook 文章被說 AI 味太重後，我回頭檢查自己的寫作 skill、hook、Voco 語音辨識和發布責任。這次事故讓我重新調整 AI 在工作流裡的位置。",
+      "date_published": "2026-06-05T00:00:00.000Z",
+      "date_modified": "2026-06-05T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "ChatGPT",
+        "語音輸入",
+        "Voco",
+        "ASR",
+        "寫作工作流",
+        "Facebook",
+        "hook"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/ai-writing-incident-voice-workflow-cover.webp"
+    },
+    {
       "id": "tailscale-ha-lan-return-snat",
       "url": "https://b-log.to/tech-analysis/tailscale-ha-lan-return-snat/",
       "title": "Tailscale HA 沒壞，壞的是切過去之後的 LAN 回程",

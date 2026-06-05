@@ -1,5 +1,26 @@
 [
   {
+    "slug": "ai-writing-incident-voice-workflow",
+    "title": "那篇被說 AI 味很重的文章，後來讓我修了整條工作流",
+    "summary": "一篇 Facebook 文章被說 AI 味太重後，我回頭檢查自己的寫作 skill、hook、Voco 語音辨識和發布責任。這次事故讓我重新調整 AI 在工作流裡的位置。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-06-05T00:00:00Z",
+    "tags": [
+      "AI",
+      "ChatGPT",
+      "語音輸入",
+      "Voco",
+      "ASR",
+      "寫作工作流",
+      "Facebook",
+      "hook"
+    ],
+    "accentColor": "#2563eb",
+    "coverImage": "/content/img/2026/ai-writing-incident-voice-workflow-cover.webp",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "tailscale-ha-lan-return-snat",
     "title": "Tailscale HA 沒壞，壞的是切過去之後的 LAN 回程",
     "summary": "我原本以為 Tailscale HA 又壞了，最後才確認 route 真的切到 MT6000；壞的是 subnet router 轉進 LAN 後少了 SNAT，封包出得去但回不來。",
