@@ -1191,6 +1191,13 @@
       "postUrl": "https://b-log.to/tech-analysis/tailscale-ha-lan-return-snat/",
       "facebookPostId": "1026818047191304_122105135127290922",
       "publishedAt": "2026-06-02T01:52:10.691Z"
+    },
+    "ai-writing-incident-voice-workflow": {
+      "status": "published",
+      "title": "那篇被說 AI 味很重的文章，後來讓我修了整條工作流",
+      "postUrl": "https://b-log.to/ai-analysis/ai-writing-incident-voice-workflow/",
+      "facebookPostId": "1026818047191304_122105503929290922",
+      "publishedAt": "2026-06-05T14:20:27.312Z"
     }
   }
 }
