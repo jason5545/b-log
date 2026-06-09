@@ -1,5 +1,24 @@
 [
   {
+    "slug": "codex-desktop-normal-activity-monitor-hard-freeze",
+    "title": "Activity Monitor 明明正常，Codex Desktop 卻把整台 Mac 卡死",
+    "summary": "我原本一路查 Wi-Fi、Moonlight 和 Windows VM，最後用 T3 Code 與 heartbeat A/B，才把 Codex Desktop 的長 thread 累積、helper 殘留和整機卡死分開看。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-06-09T00:00:00Z",
+    "tags": [
+      "Codex Desktop",
+      "macOS",
+      "Activity Monitor",
+      "Computer Use",
+      "app-server",
+      "heartbeat",
+      "T3 Code"
+    ],
+    "accentColor": "#d97706",
+    "readingTime": "9 min"
+  },
+  {
     "slug": "counseling-clinic-legal-runway",
     "title": "我以為心理諮商所是一座基地，後來發現它更像一條合法跑道",
     "summary": "第一次諮商後，我發現自己預設的模型錯了。我以為走進的是治療基地，實際上更像合法場地加合作心理師排班制。",
