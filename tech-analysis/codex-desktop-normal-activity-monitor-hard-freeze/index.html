@@ -232,6 +232,7 @@
 <p>原本我們把 10 小時以上的 CPU 與 lag 全部算在 Codex Desktop 身上。</p>
 <p>後來整理 CWP09 的監控流程時，才發現還有一個很可能的放大器。</p>
 <p>那個監控原本是一個 heartbeat automation。它每小時叫醒同一條 Codex thread，檢查 Box 裡有沒有新的檔案。這個動作持續了好幾天。</p>
+<p>那段期間有個很明顯的訊號：Speedometer 3.1 跑起來大概只有 1fps。瀏覽器效能測試欸，不是什麼重度 3D 渲染，1fps。</p>
 <p>那條 thread 最後的 rollout JSONL 已經大約 143MB，有 14,713 筆紀錄，裡面還出現大量 compaction 相關內容。最後一次喚醒，在幾分鐘內又產生約 3.7MB 的 log traffic。</p>
 <p>這不是一個每小時「看一下就走」的工作。</p>
 <p>每一次 heartbeat 都是在重新喚醒一條已經非常長、壓縮過很多次、帶著大量工具狀態的 thread。只要 Desktop 對長 thread 的 retention、renderer 更新或 log tracing 有問題，這個 automation 就會每小時再推它一次。</p>
