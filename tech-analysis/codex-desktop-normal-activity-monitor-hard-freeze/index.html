@@ -213,12 +213,12 @@
 <p>遠端畫面斷掉的同時，本機滑鼠和鍵盤也死了。Caps Lock 沒反應，代表問題已經不是 Moonlight 能解釋的範圍。</p>
 <p>而且只要關掉 Codex Desktop，其他東西就恢復正常。</p>
 <p>這個對照開始讓前面那些網路檢查變得很尷尬。我們繞了那麼大一圈，升韌體、查 route、查 VM、查串流，最後真正會改變結果的動作，是不要開官方 App。</p>
-<h2>T3 Code 讓責任範圍變小了</h2>
+<h2>T3 Code 跑得穩，問題就留在官方 Desktop 這一層</h2>
 <p>我後來先改用 T3 Code。</p>
 <p>它不是另一套模型，也不是把 Codex 整個換掉。它仍然透過 <code>codex app-server</code> 工作，只是沒有走官方 Desktop 的同一套介面、renderer 與 Computer Use helper 路徑。</p>
 <p>用了一陣子之後，問題沒有再出現。</p>
 <p>這不能告訴我官方 App 裡到底是哪一段有問題，但範圍已經小很多了。Codex 後端照樣在跑，Mac 卻沒有再卡死。</p>
-<p>同一台 Mac、同一套工作、同一個 app-server，換掉官方 Desktop shell 之後就穩定。問題比較像是官方 App 額外帶進來的 renderer、長 thread 狀態、Computer Use helper，或它們跟 macOS 圖形與輸入系統互動的方式。</p>
+<p>Mac 沒換，工作內容也沒換，<code>app-server</code> 還是照常在跑。換掉官方 Desktop shell 之後就穩定了。接下來要查的，自然是官方 App 額外帶進來的 renderer、長 thread 狀態、Computer Use helper，還有它們怎麼跟 macOS 的圖形與輸入系統互動。</p>
 <p>我原本只是想找一個暫時能用的替代 UI，結果它變成最有價值的 A/B test。</p>
 <h2>Activity Monitor 為什麼會看起來正常</h2>
 <p>我現在比較確定的，是這次不像一般的「資源總量用完」。</p>
@@ -258,13 +258,13 @@
 <p>新的監控不再叫醒任何 Codex thread。</p>
 <p>現在是 launchd 每小時啟動一次 Python：掃一次 Box，寫一份很小的 JSON 與文字狀態，然後退出。它不做 employer sync、不產生 package、不刪檔、不 git push，也不在記憶體裡留到下一個小時。</p>
 <p>舊的長 thread 已經封存。</p>
-<p>這不是正式修掉 Codex Desktop。它只是把一個確定會持續加熱的來源拿掉，讓後面的觀察有意義。</p>
+<p>Codex Desktop 當然還沒有修好。我只是先拿掉一個確定會持續加熱的來源，讓後面的觀察有意義。</p>
 <p>接下來看兩條線就夠了。</p>
 <p>先看那條 143MB thread 不再被喚醒之後，renderer、app-server、log growth 和十小時後的 lag 有沒有穩住。這一段改善，heartbeat 的放大效果就很明顯。</p>
 <p>另一條是完全不碰那條 thread，Computer Use helper 還會不會繼續累積，甚至再次造成整機輸入失效。這個現象如果還在，問題就仍然留在官方 Desktop 的 helper 與 macOS 整合路徑。</p>
-<h2>最頂硬體解決不了狀態沒有邊界</h2>
+<h2>硬體到頂，也清不掉沒結束的 process</h2>
 <p>買 M5 Max 的時候，我本來就預期這類工作不該再因為硬體不夠而卡住。</p>
-<p>現在看來，這個預期沒有錯。錯的是我一開始還把它當成可以靠更大記憶體、更快 CPU 解決的 loading 問題。</p>
+<p>現在看來，我一開始把方向想錯了。我還在想能不能靠更大記憶體、更快 CPU 撐過去，但這已經不是 loading 太重而已。</p>
 <p>硬體可以讓同樣的錯誤晚一點出現，但它不會替長 thread 設上限，不會清掉 41 小時前該結束的 process，也不會讓一個每小時醒來的 automation 突然知道自己應該是無狀態的。</p>
 <p>我只是覺得有夠無奈。</p>
 <p>我們之前為了這個重啟 Wi-Fi、升級路由器韌體，查系統參數，查 Windows VM，查轉發。結果繞了那麼大一圈，最後看到的卻是官方 App 裡真的留著一堆早該結束的 process，而且只要關掉 App，其他東西就恢復正常。</p>
