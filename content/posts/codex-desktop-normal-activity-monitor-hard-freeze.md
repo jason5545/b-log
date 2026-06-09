@@ -72,6 +72,8 @@ Mac 沒換，工作內容也沒換，`app-server` 還是照常在跑。換掉官
 
 那個監控原本是一個 heartbeat automation。它每小時叫醒同一條 Codex thread，檢查 Box 裡有沒有新的檔案。這個動作持續了好幾天。
 
+那段期間有個很明顯的訊號：Speedometer 3.1 跑起來大概只有 1fps。瀏覽器效能測試欸，不是什麼重度 3D 渲染，1fps。
+
 那條 thread 最後的 rollout JSONL 已經大約 143MB，有 14,713 筆紀錄，裡面還出現大量 compaction 相關內容。最後一次喚醒，在幾分鐘內又產生約 3.7MB 的 log traffic。
 
 這不是一個每小時「看一下就走」的工作。
