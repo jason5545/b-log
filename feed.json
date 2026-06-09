@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "codex-desktop-normal-activity-monitor-hard-freeze",
+      "url": "https://b-log.to/tech-analysis/codex-desktop-normal-activity-monitor-hard-freeze/",
+      "title": "Activity Monitor 明明正常，Codex Desktop 卻把整台 Mac 卡死",
+      "content_text": "我原本一路查 Wi-Fi、Moonlight 和 Windows VM，最後用 T3 Code 與 heartbeat A/B，才把 Codex Desktop 的長 thread 累積、helper 殘留和整機卡死分開看。",
+      "date_published": "2026-06-09T00:00:00.000Z",
+      "date_modified": "2026-06-09T00:00:00.000Z",
+      "tags": [
+        "Codex Desktop",
+        "macOS",
+        "Activity Monitor",
+        "Computer Use",
+        "app-server",
+        "heartbeat",
+        "T3 Code"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "counseling-clinic-legal-runway",
       "url": "https://b-log.to/business-insights/counseling-clinic-legal-runway/",
       "image": "https://b-log.to/content/img/2026/counseling-clinic-legal-runway-cover.webp",
