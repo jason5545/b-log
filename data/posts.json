@@ -2,7 +2,7 @@
   {
     "slug": "counseling-clinic-legal-runway",
     "title": "我以為心理諮商所是一座基地，後來發現它更像一條合法跑道",
-    "summary": "我第一次走進心理諮商所，才發現自己以為的治療基地，其實更像合法場地、行政系統和心理師排班組成的專業平台。真正影響感受的是切換時間和穩定感。",
+    "summary": "第一次諮商後，我發現自己預設的模型錯了。我以為走進的是治療基地，實際上更像合法場地加合作心理師排班制。",
     "category": "商業觀察",
     "author": "Jason Chien",
     "publishedAt": "2026-06-08T00:00:00Z",
@@ -17,7 +17,8 @@
     ],
     "accentColor": "#4f6f68",
     "coverImage": "/content/img/2026/counseling-clinic-legal-runway-cover.webp",
-    "readingTime": "4 min"
+    "readingTime": "3 min",
+    "updatedAt": "2026-06-09T00:00:00Z"
   },
   {
     "slug": "ai-writing-incident-voice-workflow",
