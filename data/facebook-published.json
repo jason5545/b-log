@@ -1205,6 +1205,13 @@
       "postUrl": "https://b-log.to/business-insights/counseling-clinic-legal-runway/",
       "facebookPostId": "1026818047191304_122105740641290922",
       "publishedAt": "2026-06-08T02:00:05.014Z"
+    },
+    "codex-desktop-normal-activity-monitor-hard-freeze": {
+      "status": "published",
+      "title": "Activity Monitor 明明正常，Codex Desktop 卻把整台 Mac 卡死",
+      "postUrl": "https://b-log.to/tech-analysis/codex-desktop-normal-activity-monitor-hard-freeze/",
+      "facebookPostId": "1026818047191304_122105848665290922",
+      "publishedAt": "2026-06-09T05:48:31.514Z"
     }
   }
 }
