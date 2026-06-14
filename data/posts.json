@@ -1,5 +1,26 @@
 [
   {
+    "slug": "agentic-coding-mac-assistive-workflow",
+    "title": "自從有了 Agentic Coding，我最好的輔助居然是一台 Mac",
+    "summary": "我從 CP 的操作限制、一路試輔具，寫到現在靠 Qwen3-ASR、adapter 和 Computer Use，把語音輸入接成自己的電腦操作工作流。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-06-14T00:00:00Z",
+    "tags": [
+      "Agentic Coding",
+      "Vibe Coding",
+      "Computer Use",
+      "Qwen3-ASR",
+      "ASR",
+      "語音輸入",
+      "輔具",
+      "macOS"
+    ],
+    "accentColor": "#0891b2",
+    "readingTime": "4 min",
+    "coverImage": "/content/img/2026/agentic-coding-mac-assistive-workflow-cover.webp"
+  },
+  {
     "slug": "codex-desktop-normal-activity-monitor-hard-freeze",
     "title": "Activity Monitor 明明正常，Codex Desktop 卻把整台 Mac 卡死",
     "summary": "我原本一路查 Wi-Fi、Moonlight 和 Windows VM。直到 T3 Code 一直穩，還查到 heartbeat 每小時叫醒同一條長 thread，問題才回到官方 App。",

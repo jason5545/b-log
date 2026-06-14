@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "agentic-coding-mac-assistive-workflow",
+      "url": "https://b-log.to/tech-development/agentic-coding-mac-assistive-workflow/",
+      "image": "https://b-log.to/content/img/2026/agentic-coding-mac-assistive-workflow-cover.webp",
+      "title": "自從有了 Agentic Coding，我最好的輔助居然是一台 Mac",
+      "content_text": "我從 CP 的操作限制、一路試輔具，寫到現在靠 Qwen3-ASR、adapter 和 Computer Use，把語音輸入接成自己的電腦操作工作流。",
+      "date_published": "2026-06-14T00:00:00.000Z",
+      "date_modified": "2026-06-14T00:00:00.000Z",
+      "tags": [
+        "Agentic Coding",
+        "Vibe Coding",
+        "Computer Use",
+        "Qwen3-ASR",
+        "ASR",
+        "語音輸入",
+        "輔具",
+        "macOS"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "codex-desktop-normal-activity-monitor-hard-freeze",
       "url": "https://b-log.to/tech-analysis/codex-desktop-normal-activity-monitor-hard-freeze/",
       "title": "Activity Monitor 明明正常，Codex Desktop 卻把整台 Mac 卡死",
