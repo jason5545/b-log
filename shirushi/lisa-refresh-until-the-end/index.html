@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>被染濁以後，我還是會刷到底 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="B 調走以後，我才發現原本靠著多少支架，才把工作和日常維持住。諮商、六月的票和 LiSA 疊在一起，最後只剩一件事：6 月 19 日，我還是會刷到底。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/shirushi/lisa-refresh-until-the-end/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/shirushi/lisa-refresh-until-the-end/" id="og-url">
+  <meta property="og:title" content="被染濁以後，我還是會刷到底" id="og-title">
+  <meta property="og:description" content="B 調走以後，我才發現原本靠著多少支架，才把工作和日常維持住。諮商、六月的票和 LiSA 疊在一起，最後只剩一件事：6 月 19 日，我還是會刷到底。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/lisa-refresh-until-the-end-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-06-17T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-06-17T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="シルシ" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="LiSA">
+  <meta property="article:tag" content="無色透明">
+  <meta property="article:tag" content="心理諮商">
+  <meta property="article:tag" content="演唱會">
+  <meta property="article:tag" content="輪椅席">
+  <meta property="article:tag" content="シルシ">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/shirushi/lisa-refresh-until-the-end/" id="twitter-url">
+  <meta property="twitter:title" content="被染濁以後，我還是會刷到底" id="twitter-title">
+  <meta property="twitter:description" content="B 調走以後，我才發現原本靠著多少支架，才把工作和日常維持住。諮商、六月的票和 LiSA 疊在一起，最後只剩一件事：6 月 19 日，我還是會刷到底。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/lisa-refresh-until-the-end-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="LiSA, 無色透明, 心理諮商, 演唱會, 輪椅席, シルシ" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/lisa-refresh-until-the-end-cover.webp" imagesrcset="/content/img/2026/lisa-refresh-until-the-end-cover-480w.webp 480w, /content/img/2026/lisa-refresh-until-the-end-cover-828w.webp 828w, /content/img/2026/lisa-refresh-until-the-end-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"被染濁以後，我還是會刷到底","description":"B 調走以後，我才發現原本靠著多少支架，才把工作和日常維持住。諮商、六月的票和 LiSA 疊在一起，最後只剩一件事：6 月 19 日，我還是會刷到底。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-06-17T00:00:00Z","dateModified":"2026-06-17T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/shirushi/lisa-refresh-until-the-end/"},"url":"https://b-log.to/shirushi/lisa-refresh-until-the-end/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/lisa-refresh-until-the-end-cover.webp"],"keywords":"LiSA, 無色透明, 心理諮商, 演唱會, 輪椅席, シルシ","articleSection":"シルシ"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">被染濁以後，我還是會刷到底</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/lisa-refresh-until-the-end-cover.webp" srcset="/content/img/2026/lisa-refresh-until-the-end-cover-480w.webp 480w, /content/img/2026/lisa-refresh-until-the-end-cover-828w.webp 828w, /content/img/2026/lisa-refresh-until-the-end-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">シルシ</p>
+            <h1 id="post-title">被染濁以後，我還是會刷到底</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Jun 17, 2026</span><span>3 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>LiSA</span><span>無色透明</span><span>心理諮商</span><span>演唱會</span><span>輪椅席</span><span>シルシ</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>想了很久，但我還是想把它寫在這邊。</p>
+<p>這陣子因為一些個人因素，我開始看身心科，也開始做心理諮商。</p>
+<p>有些東西我本來以為自己可以處理。</p>
+<p>B 調去 QA 之後，我才發現自己原本靠著多少支架，才勉強把工作和日常維持住。</p>
+<p>那不是單純少了一個會幫我看文件的人。</p>
+<p>比較像原本還看得清楚的東西，被一點一點染濁了。</p>
+<p>希望、餘裕、安心的地方，好像都變得不好找。</p>
+<p>後來我跟諮商師都發現一件事：當我走進諮商室的時候，常常是兩眼無神的狀態。</p>
+<p>可是只要一提到 LiSA，我的眼神跟神情就會馬上變了。</p>
+<p>也是因為她，才讓我覺得自己還能再撐一下。</p>
+<p>這幾天我一直想到她很早期的〈無色透明〉。</p>
+<p>那首歌對我來說不是單純在講追夢。</p>
+<p>它比較像在講，一個人曾經帶著夢、期待、不安往前走，可是後來被生活、藉口、城市的速度慢慢染開。</p>
+<p>不是哪一件事突然把我打倒，而是很多東西疊在一起，原本清楚的地方就開始看不清楚。</p>
+<p>但它最後不是停在那裡。</p>
+<p>那些本來會讓我有反應的東西，好像都被壓到很下面。</p>
+<p>不是消失，也不是不重要。</p>
+<p>只是很難自己浮上來。</p>
+<p>可是只要想到 LiSA，那個反應就會回來。</p>
+<p>後來我們也發現，只要想著她，我的焦慮感跟壓力感就會好很多。我們還開玩笑地說，大概等我看完演唱會，我就不用去他那邊了。</p>
+<p>今天是接機的前一天。</p>
+<p>可能也是我這一個月裡面，過得最舒服的一天。</p>
+<p>越接近下班的時候，我越開心。</p>
+<p>可能就像心理諮商師說的一樣。</p>
+<p>真的有效吧？</p>
+<p>但同時，這件事其實也變成了我另一邊的焦慮。</p>
+<p>有些人可能知道，之前有一個人抽到四次輪椅席，卻一次都沒有去。</p>
+<p>也是經過 2024 年被主辦單位放鳥之後，我才更清楚地意識到，我應該盡力去把握每一次能見到她的機會。</p>
+<p>因為我真的不想再讓自己留下遺憾。</p>
+<p>所以到現在，6 月 19 日那場，我其實還是沒有票，我也還在一直刷。</p>
+<p>如果是以前的我，可能就會跟自己說：只去一天也可以，只去一天就算了，至少還有一天已經很好了。</p>
+<p>可是現在的我不太想再這樣安慰自己了。</p>
+<p>我不是不知道能去一天已經很珍貴。只是我現在更知道，有些機會不是每次都會等你。</p>
+<p>能多見一次，就應該盡力多見一次。</p>
+<p>能多留一點回憶，就不要太早替自己放棄。</p>
+<p>但就算最後真的沒有票，我也還是會待在那邊。</p>
+<p>我要等到主辦單位說：「所有輪椅席的觀眾都已經入場了，我們真的沒有位置可以再安排你進去了。」</p>
+<p>到那個時候，我才會放心。</p>
+<p>至少我會知道，輪椅席是真的滿了，是真的沒有空間了。</p>
+<p>至少我不是又一次被放鳥。</p>
+<p>那樣我比較能夠開心地離開。</p>
+<p>老實講，如果只是我自己一個人沒有票，那也就算了。</p>
+<p>我不能接受的是，有人浪費了那麼珍貴的機會，把那張票當成兒戲。那不是一個可以隨便佔著、隨便放掉的位置。</p>
+<p>對我來說，那是很珍貴、很珍貴的一次機會。</p>
+<p>不過也正是因為那個人的出現，才讓我覺得，以後更應該認真把握每一次能看到她、能跟你們相處的時間。</p>
+<p>反正 6 月 19 日，我還是會刷到底。</p>
+<p>各位，我們禮拜四接機見。</p>
+<p>我可是會七早八早就去了哦。</p>
+<p>今日もいい日だっ</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
