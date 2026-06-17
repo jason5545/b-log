@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-refresh-until-the-end",
+      "url": "https://b-log.to/shirushi/lisa-refresh-until-the-end/",
+      "image": "https://b-log.to/content/img/2026/lisa-refresh-until-the-end-cover.webp",
+      "title": "被染濁以後，我還是會刷到底",
+      "content_text": "B 調走以後，我才發現原本靠著多少支架，才把工作和日常維持住。諮商、六月的票和 LiSA 疊在一起，最後只剩一件事：6 月 19 日，我還是會刷到底。",
+      "date_published": "2026-06-17T00:00:00.000Z",
+      "date_modified": "2026-06-17T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "無色透明",
+        "心理諮商",
+        "演唱會",
+        "輪椅席",
+        "シルシ"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "agentic-coding-mac-assistive-workflow",
       "url": "https://b-log.to/tech-development/agentic-coding-mac-assistive-workflow/",
       "image": "https://b-log.to/content/img/2026/agentic-coding-mac-assistive-workflow-cover.webp",

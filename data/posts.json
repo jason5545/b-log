@@ -1,5 +1,24 @@
 [
   {
+    "slug": "lisa-refresh-until-the-end",
+    "title": "被染濁以後，我還是會刷到底",
+    "summary": "B 調走以後，我才發現原本靠著多少支架，才把工作和日常維持住。諮商、六月的票和 LiSA 疊在一起，最後只剩一件事：6 月 19 日，我還是會刷到底。",
+    "category": "シルシ",
+    "author": "Jason Chien",
+    "publishedAt": "2026-06-17T00:00:00Z",
+    "tags": [
+      "LiSA",
+      "無色透明",
+      "心理諮商",
+      "演唱會",
+      "輪椅席",
+      "シルシ"
+    ],
+    "accentColor": "#4a6b8a",
+    "readingTime": "3 min",
+    "coverImage": "/content/img/2026/lisa-refresh-until-the-end-cover.webp"
+  },
+  {
     "slug": "agentic-coding-mac-assistive-workflow",
     "title": "自從有了 Agentic Coding，我最好的輔助居然是一台 Mac",
     "summary": "我從 CP 的操作限制、一路試輔具，寫到現在靠 Qwen3-ASR、adapter 和 Computer Use，把語音輸入接成自己的電腦操作工作流。",
