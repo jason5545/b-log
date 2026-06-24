@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-sounds-i-do-not-brace",
+      "url": "https://b-log.to/shirushi/lisa-sounds-i-do-not-brace/",
+      "image": "https://b-log.to/content/img/2026/lisa-sounds-i-do-not-brace-cover.webp",
+      "title": "跟她有關的聲音，我不防備",
+      "content_text": "我原本以為自己只是對突然刺激過度反應，直到坐進 LiSA 的小巨蛋場，整場高音量幾乎沒事。真正的差異不在分貝，而在身體有沒有把那個場域判定成安全。",
+      "date_published": "2026-06-24T00:00:00.000Z",
+      "date_modified": "2026-06-24T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "演唱會",
+        "腦性麻痺",
+        "感覺處理",
+        "驚嚇反射",
+        "身心障礙",
+        "シルシ"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "lisa-believe-in-myself-2026",
       "url": "https://b-log.to/shirushi/lisa-believe-in-myself-2026/",
       "title": "夢想成真了，很好",
