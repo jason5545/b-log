@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>接住我的人，也被接住了 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="諮商師那天先說自己狀態不好，我才看見接住我的人也需要被接住。從諮商室、後援會到自己的開口求助，真正重要的是修復機制有沒有長出來。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/cultural-insights/the-one-who-holds-me-is-held-too/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/cultural-insights/the-one-who-holds-me-is-held-too/" id="og-url">
+  <meta property="og:title" content="接住我的人，也被接住了" id="og-title">
+  <meta property="og:description" content="諮商師那天先說自己狀態不好，我才看見接住我的人也需要被接住。從諮商室、後援會到自己的開口求助，真正重要的是修復機制有沒有長出來。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/the-one-who-holds-me-is-held-too-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-06-29T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-06-29T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="文化觀察" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="心理諮商">
+  <meta property="article:tag" content="LiSA">
+  <meta property="article:tag" content="後援會">
+  <meta property="article:tag" content="身心障礙">
+  <meta property="article:tag" content="支持系統">
+  <meta property="article:tag" content="文化觀察">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/cultural-insights/the-one-who-holds-me-is-held-too/" id="twitter-url">
+  <meta property="twitter:title" content="接住我的人，也被接住了" id="twitter-title">
+  <meta property="twitter:description" content="諮商師那天先說自己狀態不好，我才看見接住我的人也需要被接住。從諮商室、後援會到自己的開口求助，真正重要的是修復機制有沒有長出來。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/the-one-who-holds-me-is-held-too-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="心理諮商, LiSA, 後援會, 身心障礙, 支持系統, 文化觀察" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/the-one-who-holds-me-is-held-too-cover.webp" imagesrcset="/content/img/2026/the-one-who-holds-me-is-held-too-cover-480w.webp 480w, /content/img/2026/the-one-who-holds-me-is-held-too-cover-828w.webp 828w, /content/img/2026/the-one-who-holds-me-is-held-too-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"接住我的人，也被接住了","description":"諮商師那天先說自己狀態不好，我才看見接住我的人也需要被接住。從諮商室、後援會到自己的開口求助，真正重要的是修復機制有沒有長出來。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-06-29T00:00:00Z","dateModified":"2026-06-29T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/cultural-insights/the-one-who-holds-me-is-held-too/"},"url":"https://b-log.to/cultural-insights/the-one-who-holds-me-is-held-too/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/the-one-who-holds-me-is-held-too-cover.webp"],"keywords":"心理諮商, LiSA, 後援會, 身心障礙, 支持系統, 文化觀察","articleSection":"文化觀察"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">接住我的人，也被接住了</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/the-one-who-holds-me-is-held-too-cover.webp" srcset="/content/img/2026/the-one-who-holds-me-is-held-too-cover-480w.webp 480w, /content/img/2026/the-one-who-holds-me-is-held-too-cover-828w.webp 828w, /content/img/2026/the-one-who-holds-me-is-held-too-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">文化觀察</p>
+            <h1 id="post-title">接住我的人，也被接住了</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Jun 29, 2026</span><span>6 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>心理諮商</span><span>LiSA</span><span>後援會</span><span>身心障礙</span><span>支持系統</span><span>文化觀察</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>這個禮拜進諮商室，她一開口就跟我說：「今天我的狀況不是最好的，請多包涵。」</p>
+<p>我說沒關係，大家都有狀況不好的時候。</p>
+<p>後來我才知道，她也在接受心理諮商。好像是家人突然有變故。她甚至跟我提到，她本來想跟我分享她遭遇了什麼，但連她自己都還在整理，所以決定先踩剎車。</p>
+<p>那天我們聊的主題是：對自己很重要的人，會影響自己的焦慮和情緒到什麼程度。她講到一半，突然卡了一下。她說這個話題觸動了她自己。</p>
+<p>我想，這種雙向的交流是沒有關係的。我是付費的沒錯，但諮商的本質是兩個人之間的真實關係。如果完全抽掉人的溫度，變成機械式的「我問你答」，那反而失去了諮商最有力量的部分。</p>
+<p>她願意在我面前展現真實的自己，而我願意接住。這份真實感，可能正是我們的諮商關係能夠深入的原因。</p>
+<p>說「深入」，是因為三次就好了八成。</p>
+<p>不是她不厲害，也不是我特別厲害。是我們兩個都把自己的部分拉到了很高的水準。</p>
+<p>我在進諮商室之前，寫了十多頁的自我分析報告。裡面寫了工作、同事、家庭。全都是問題。工作上，對某個同事開始出現輕微的迴避；被組長叫名字的時候，身體會自動進入警戒。這些都是身體層面的自動反應，不是認知分析。</p>
+<p>但報告裡有一個東西，我沒寫。</p>
+<p>不是刻意不寫。是我忘了。</p>
+<p>LiSA。</p>
+<p>我連她都忘了。</p>
+<p>第一次諮商，她讀完了我的報告，沒有照著報告走。她問了一個完全不同方向的問題：</p>
+<p>「除了這些事情以外，你最喜歡做什麼？或者你曾經最喜歡做什麼？」</p>
+<p>她問了兩個版本。現在式，跟過去式。她已經在猜：我現在可能已經沒有喜歡做的事了。</p>
+<p>我說，演唱會。LiSA 的演唱會。</p>
+<p>講到這個，我的神情都變了。她才發現，這個中了。</p>
+<p>她後來跟我說，一提到 LiSA，我整個神情語氣明顯不同。而那個時候，我們兩個同時意識到一件事：我的核心維持系統已經耗竭到，連我自己都跟它斷開了。</p>
+<p>她沒有在我的問題裡找答案。她從我的快樂裡找答案。而我遺失的東西，恰好就是解決問題的鑰匙。</p>
+<p>LiSA 對我來說不是偶像。在諮商中，我們共同辨識出來：她是我的宗教等價物。一個我在沒有宗教框架的條件下，自發建立的存在維持系統。</p>
+<p>這件事我寫過。在 <a href="https://b-log.to/shirushi/lisa-confirmation-to-imprint/">〈不要忘記我〉</a> 那篇裡談了十五年的重量，在 <a href="https://b-log.to/shirushi/lisa-sounds-i-do-not-brace/">〈跟她有關的聲音，我不防備〉</a> 那篇裡談了神經系統最底層的證據：6 月 20 日小巨蛋，高音量的場域，我的驚嚇反射幾乎沒有觸發。那不是心理層面的「覺得安心」，是腦幹層級的判定：這裡是安全的。</p>
+<p>而在日常生活中，我的神經系統幾乎找不到另一個這樣的空間。辦公室有警戒，公共場所有「特權」的焦慮，對自己說不出自己的價值。</p>
+<p>不是我把所有雞蛋放在一個籃子裡。是我的生活裡，真的只有這一個籃子能接住我。</p>
+<p>但我說「沒有修復機制」其實不夠準確。我有教友。後援會。</p>
+<p>超過十年的人，互助搶票、接機、紅地毯、見送會。<a href="https://b-log.to/shirushi/lisa-15th-anniversary-taipei-2026/">〈15週年，我們都還在〉</a> 寫的就是這群人。</p>
+<p>2024 年林口事件，我被拒絕入場。那個創傷沒有框架可以承接，最後轉嫁到 yanaginagi 身上，變成兩年的迴避。那時候後援會不知道這件事對我有多嚴重。他們後來很懊惱，說如果多了解一點來由，就可以硬把我調進去了，因為那個時候位置還很多。</p>
+<p>他們不是不願意幫。是不知道。</p>
+<p>而我沒有讓他們知道。因為我長期覺得「在用身體狀況換特權」而極度不適，我不想要因為自己的事去麻煩別人。這個信念讓我在最關鍵的時候選擇不說。不是因為我不在乎，是因為我覺得說了就是在要求特權。</p>
+<p>但結果是：我不說，別人就不知道。別人不知道，就幫不到我。然後我就一個人承受了那個崩潰。</p>
+<p>2026 年，會長幫我跟主辦單位調整到最後一刻，甚至把工作人員找到我面前。Sony 見面會，我被安排到很近的位置。我在 <a href="https://b-log.to/shirushi/lisa-believe-in-myself-2026/">〈夢想成真了，很好〉</a> 那篇寫過：「開口求助不一定是在造成麻煩，有時會多一個出口。」</p>
+<p>我的教友一直都在。缺的不是教友，是我願不願意在他們面前，把我最核心的需要說出來。</p>
+<p>回到她。</p>
+<p>她這個禮拜狀態不好。她也在接受諮商。她在我面前展現了脆弱，然後踩了剎車。</p>
+<p>她讓我看見的是：接住我的人，也是被接住的。</p>
+<p>這不是弱點。這是這件事能持續運作的條件。</p>
+<p>她的專業體系裡內建了修復機制：督導、同儕支持、個人諮商、專業倫理要求。這些東西，傳統宗教有，像牧師、教友、安息日；諮商師的專業體系也有。</p>
+<p>而我的系統裡，這一塊正在長出來。後援會是教友，諮商師是牧師。2026 年我開始學會開口，教友開始知道我需要什麼。</p>
+<p>任何接住別人的系統，都需要被接住。諮商師如此，社工如此，照服員如此。我自己，可能也是如此。</p>
+<p>她那天在我面前誠實地說自己狀態不好，其實是在示範一件事：被接住不是弱點，是被接住的人能繼續接住別人的前提。</p>
+<p>也許，這也是我正在學的事。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>

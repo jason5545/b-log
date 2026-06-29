@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "the-one-who-holds-me-is-held-too",
+      "url": "https://b-log.to/cultural-insights/the-one-who-holds-me-is-held-too/",
+      "image": "https://b-log.to/content/img/2026/the-one-who-holds-me-is-held-too-cover.webp",
+      "title": "接住我的人，也被接住了",
+      "content_text": "諮商師那天先說自己狀態不好，我才看見接住我的人也需要被接住。從諮商室、後援會到自己的開口求助，真正重要的是修復機制有沒有長出來。",
+      "date_published": "2026-06-29T00:00:00.000Z",
+      "date_modified": "2026-06-29T00:00:00.000Z",
+      "tags": [
+        "心理諮商",
+        "LiSA",
+        "後援會",
+        "身心障礙",
+        "支持系統",
+        "文化觀察"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "lisa-sounds-i-do-not-brace",
       "url": "https://b-log.to/shirushi/lisa-sounds-i-do-not-brace/",
       "image": "https://b-log.to/content/img/2026/lisa-sounds-i-do-not-brace-cover.webp",
