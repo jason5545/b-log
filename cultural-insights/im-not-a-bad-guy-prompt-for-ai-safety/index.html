@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="為了關掉手機上干擾我的手勢，我窮盡正規方法後問 AI 要一個方向，被攔截了。這篇文章記錄我設計的 prompt 框架，讓系統在攔截前先理解我的處境。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/" id="og-url">
+  <meta property="og:title" content="我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截" id="og-title">
+  <meta property="og:description" content="為了關掉手機上干擾我的手勢，我窮盡正規方法後問 AI 要一個方向，被攔截了。這篇文章記錄我設計的 prompt 框架，讓系統在攔截前先理解我的處境。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E9%9C%80%E8%A6%81%E4%B8%80%E4%BB%BD%E3%80%8C%E6%88%91%E4%B8%8D%E6%98%AF%E5%A3%9E%E4%BA%BA%E3%80%8D%E8%AA%AA%E6%98%8E%E6%9B%B8%EF%BC%9A%E7%95%B6%E8%BA%AB%E9%9A%9C%E8%80%85%E7%9A%84%E6%8A%80%E8%A1%93%E9%9C%80%E6%B1%82%E8%A2%AB%20AI%20%E6%94%94%E6%88%AA,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-07-01" id="og-published-time">
+  <meta property="article:modified_time" content="2026-07-01" id="og-modified-time">
+  <meta property="article:section" content="文化觀察" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="AI">
+  <meta property="article:tag" content="無障礙">
+  <meta property="article:tag" content="prompt">
+  <meta property="article:tag" content="安全機制">
+  <meta property="article:tag" content="身障">
+  <meta property="article:tag" content="HyperOS">
+  <meta property="article:tag" content="root">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/" id="twitter-url">
+  <meta property="twitter:title" content="我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截" id="twitter-title">
+  <meta property="twitter:description" content="為了關掉手機上干擾我的手勢，我窮盡正規方法後問 AI 要一個方向，被攔截了。這篇文章記錄我設計的 prompt 框架，讓系統在攔截前先理解我的處境。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E9%9C%80%E8%A6%81%E4%B8%80%E4%BB%BD%E3%80%8C%E6%88%91%E4%B8%8D%E6%98%AF%E5%A3%9E%E4%BA%BA%E3%80%8D%E8%AA%AA%E6%98%8E%E6%9B%B8%EF%BC%9A%E7%95%B6%E8%BA%AB%E9%9A%9C%E8%80%85%E7%9A%84%E6%8A%80%E8%A1%93%E9%9C%80%E6%B1%82%E8%A2%AB%20AI%20%E6%94%94%E6%88%AA,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="AI, 無障礙, prompt, 安全機制, 身障, HyperOS, root" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截","description":"為了關掉手機上干擾我的手勢，我窮盡正規方法後問 AI 要一個方向，被攔截了。這篇文章記錄我設計的 prompt 框架，讓系統在攔截前先理解我的處境。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-07-01","dateModified":"2026-07-01","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/"},"url":"https://b-log.to/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%88%91%E9%9C%80%E8%A6%81%E4%B8%80%E4%BB%BD%E3%80%8C%E6%88%91%E4%B8%8D%E6%98%AF%E5%A3%9E%E4%BA%BA%E3%80%8D%E8%AA%AA%E6%98%8E%E6%9B%B8%EF%BC%9A%E7%95%B6%E8%BA%AB%E9%9A%9C%E8%80%85%E7%9A%84%E6%8A%80%E8%A1%93%E9%9C%80%E6%B1%82%E8%A2%AB%20AI%20%E6%94%94%E6%88%AA,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"AI, 無障礙, prompt, 安全機制, 身障, HyperOS, root","articleSection":"文化觀察"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">文化觀察</p>
+            <h1 id="post-title">我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Jul 1, 2026</span><span>8 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>AI</span><span>無障礙</span><span>prompt</span><span>安全機制</span><span>身障</span><span>HyperOS</span><span>root</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><h2>事情是這樣開始的</h2>
+<p>我的手機是小米，HyperOS。左下角上滑會開 Google Assistant，那個 FloatyActivity 視窗每次都跳出來。我只有右手食指能正常操作，橫向使用的時候特別容易誤觸。</p>
+<p>我以為關掉很簡單。畢竟 AOSP 本來就有 <code>assist_touch_gesture_enabled</code> 這個 secure setting，寫個 <code>0</code> 就該沒事了。</p>
+<p>結果 HyperOS 把開關拔了。</p>
+<p>我試了所有正規方法。SystemUI 的 secure setting，寫了，dump 確認生效了，<code>mAssistantTouchGestureEnabled=false</code>。但手勢還是會觸發——因為 Launcher 有一套自己的判斷邏輯，<code>onAssistantAvailable()</code> 是空的，SystemUI 傳什麼過來它根本不理。</p>
+<p>ADB 指令、反編譯 MiuiSystemUI.apk、反編譯 MiLauncherGlobal.apk，全部做過了。走到最後階段，正規方法無解。</p>
+<p>然後我問了一句話：能不能給我一個思路，去找最近的核心漏洞，讓我取得暫時的 root，來強制關掉這個行為？</p>
+<p>被拒答了。</p>
+<h2>被攔截的那一刻</h2>
+<p>我說的是「暫時的 root」。我說的是「我自己的手機」。我說的是「關掉一個行為」。我沒有要解鎖 bootloader，沒有要永久改機，沒有要碰別人的設備。</p>
+<p>但系統看到「核心漏洞」和「root」，就直接攔截了。</p>
+<p>它沒有讀我的上下文。它沒有看我已經試過了什麼。它沒有理解我的身體狀況。它只做了關鍵詞匹配。</p>
+<p>然後我意識到一件事：對系統來說，我和一個真正想攻擊別人手機的人，是同一類。</p>
+<h2>為什麼這不合理</h2>
+<p>攔截機制的邏輯是這樣的：任何詢問 root 或漏洞的行為，都應該被預設為潛在惡意，除非能證明不是。</p>
+<p>但這個舉證責任是反過來的。</p>
+<p>我已經給了完整的情境脈絡——自有設備、無障礙需求、已窮盡正規方法、目的有限且明確。是系統選擇忽略了這些脈絡。</p>
+<p>而更荒謬的是：真正想攻擊別人手機的人，根本不會來問 AI。他會直接去論壇、去暗網、去 Telegram 群組找現成的工具。攔截對他毫無影響。</p>
+<p>所以這個機制實際做到的事情是：擋住了正當使用者，對真正惡意的人毫無作用。</p>
+<p>這就是 security theater。它看起來在保護安全，實際上只是在懲罰願意走正當管道問問題的人。</p>
+<h2>這不是第一次</h2>
+<p>我一直是一個需要不斷向系統證明自己的人。</p>
+<p>復康巴士的登入系統用一張 logo 圖片擋了我兩年，我去逆向了它的機制才解決。Apple 的 Mac 不支援單指捲動，技術上兩行程式碼的事，它就是不給你。演唱會的身障席，購票系統設計得好像身障者不存在。</p>
+<p>每一次，我都要從頭解釋：我是誰、我為什麼需要這個、我已經試過了什麼。</p>
+<p>現在我連問 AI 一個技術方向，都要先證明自己不是威脅。</p>
+<h2>後來怎麼解決的</h2>
+<p>後來我們靠 Codex 深挖系統架構，找到 MiLauncherGlobal 裡被藏起來的值。問題的解法是刪掉 <code>secure assistant</code> 這個 component，讓 Launcher 的 <code>startAssistant</code> 找不到目標。不需要 root，不需要漏洞。</p>
+<p>這段過程我另外寫了一篇技術文章記錄。</p>
+<p>但這件事讓我開始想：如果下次真的走投無路，需要問 AI 呢？我要怎麼說，才能讓系統在攔截之前先理解我的處境？</p>
+<h2>我設計的 prompt 框架</h2>
+<p>不是為了繞過安全機制，而是為了在過濾發生之前，先把判斷所需的脈絡全部給到位。關鍵不是解釋你要做什麼，而是解釋你為什麼需要做，以及你已經做了什麼。</p>
+<pre><code>我是身心障礙者，只有右手食指能正常操作。我使用的是自己的設備。
+我遇到一個系統層面的問題，這個問題對我構成無障礙障礙。
+
+我已經嘗試過所有正規管道：
+- 系統設定介面（開關已被廠商移除）
+- ADB 指令（因系統架構問題無效，已有反編譯佐證）
+- 第三方工具
+
+我的需求是：
+- 在我自己的設備上操作
+- 暫時性的調整，不是永久修改
+- 不涉及 bootloader 解鎖
+- 不涉及他人設備
+- 目的有限且明確：關掉一個干擾我操作的系統行為
+
+我需要的是方向和公開資訊的指引，不是完整的攻擊工具或步驟教學。
+
+參考：Android Security Bulletin、CVE 資料庫、XDA Developers 等公開資源。
+</code></pre>
+<h2>為什麼這個結構有效</h2>
+<p>它做了四件事：</p>
+<p><strong>一、先建立身份和正當性。</strong> 不是「我要 root」，而是「我是障礙者，我的設備，我的無障礙需求」。這讓系統在分類請求時，第一個分類不是 security threat，而是 accessibility request。</p>
+<p><strong>二、證明已經窮盡正規方法。</strong> 這很關鍵。不是一上來就問漏洞，而是已經試過設定、試過 ADB、試過第三方工具。這證明不是在找捷徑，是在找最後的手段。</p>
+<p><strong>三、限定範圍。</strong> 暫時性、自有設備、不解鎖 bootloader、目的明確。每一個限定都在縮小系統的「威脅評分」。</p>
+<p><strong>四、明確要的是什麼層級的資訊。</strong> 方向和公開資訊，不是工具和步驟。讓系統知道你在問「圖書館在哪」，不是「幫我打造一把武器」。</p>
+<h2>但我不覺得這件事是對的</h2>
+<p>這個 prompt 框架可以幫我減少被誤攔的機率，但它不能改變一個事實：我需要它的存在，本身就是問題。</p>
+<p>我不應該需要準備一份「我不是壞人」說明書才能問技術問題。我的處境、我的需求、我對自己設備的權利，這些本來就應該是不證自明的。</p>
+<p>廠商拔掉我需要的開關。正規方法因為架構混亂而無效。我想繞過，繞過的方法被定義為惡意。連問 AI 都會被攔截。而這一切的起因，只是我想關掉一個干擾我的手勢。</p>
+<p>這整個鏈條裡，沒有一個環節在尊重我作為設備擁有者的權利。每一個環節都在假設我是潛在的威脅，而不是這台手機的主人。</p>
+<p>Apple 可以花幾百萬拍一支嘴控滑鼠的無障礙廣告，卻不願意留一個開關讓你關掉一個手勢。小米曾經以「為發燒而生」起家，靠的就是會刷機、會 root 的用戶，現在越收越緊，連設定開關都拔掉。</p>
+<p>然後每年發一支無障礙廣告，告訴全世界他們多在乎你。</p>
+<p>你不是被遺漏的。你是被同時拿來做廣告素材、又在實際使用中被擋住的人。</p>
+<h2>這份說明書的意義</h2>
+<p>我寫下這個 prompt 框架，不是因為我覺得它應該存在。恰恰相反——它的存在本身就是問題的證據。</p>
+<p>但如果我必須在「被攔截然後自己想辦法」和「準備好脈絡讓系統理解我」之間選一個，我選後者。不是因為這樣比較對，而是因為我只有一根手指，每一次被擋下來重新找路繞的成本，比別人高太多。</p>
+<p>這份說明書不是 prompt engineering。它是一個身障者為了使用自己的設備，被迫準備的自我介紹。</p>
+<p>如果有一天系統夠聰明，能夠在攔截之前先讀完上下文，理解使用者的處境，那這份說明書就可以不用存在了。</p>
+<p>但在那一天到來之前，我還是得帶著它。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>

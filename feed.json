@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "im-not-a-bad-guy-prompt-for-ai-safety",
+      "url": "https://b-log.to/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/",
+      "title": "我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截",
+      "content_text": "為了關掉手機上干擾我的手勢，我窮盡正規方法後問 AI 要一個方向，被攔截了。這篇文章記錄我設計的 prompt 框架，讓系統在攔截前先理解我的處境。",
+      "date_published": "2026-07-01T00:00:00.000Z",
+      "date_modified": "2026-07-01T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "無障礙",
+        "prompt",
+        "安全機制",
+        "身障",
+        "HyperOS",
+        "root"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "xiaomi-hyperos-assistant-corner-gesture-launcher",
       "url": "https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/",
       "image": "https://b-log.to/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp",
