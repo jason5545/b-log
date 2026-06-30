@@ -1247,6 +1247,13 @@
       "postUrl": "https://b-log.to/cultural-insights/the-one-who-holds-me-is-held-too/",
       "facebookPostId": "1026818047191304_122107822857290922",
       "publishedAt": "2026-06-29T13:37:38.003Z"
+    },
+    "wingmate-sse-parser-space-tool-call-failure": {
+      "status": "published",
+      "title": "一個空格讓 tool call 全部失效：Wingmate 的 SSE parser 事故",
+      "postUrl": "https://b-log.to/tech-development/wingmate-sse-parser-space-tool-call-failure/",
+      "facebookPostId": "1026818047191304_122107861077290922",
+      "publishedAt": "2026-06-30T00:11:40.331Z"
     }
   }
 }
