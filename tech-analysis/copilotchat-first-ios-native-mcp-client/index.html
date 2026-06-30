@@ -31,7 +31,7 @@
   <meta property="article:tag" content="Augment Code">
   <meta property="article:tag" content="MCP">
   <meta property="article:tag" content="SwiftUI">
-  <meta property="article:tag" content="開源">
+  <meta property="article:tag" content="開放原始碼">
   <meta property="article:tag" content="多 Provider">
   <meta property="article:tag" content="tool call">
   <meta property="article:tag" content="Keychain">
@@ -46,7 +46,7 @@
   <meta property="twitter:creator" content="@jason5545">
 
   <!-- 額外的 metadata -->
-  <meta name="keywords" content="CopilotChat, iOS, GitHub Copilot, Augment Code, MCP, SwiftUI, 開源, 多 Provider, tool call, Keychain" id="meta-keywords">
+  <meta name="keywords" content="CopilotChat, iOS, GitHub Copilot, Augment Code, MCP, SwiftUI, 開放原始碼, 多 Provider, tool call, Keychain" id="meta-keywords">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#b45309">
 
@@ -115,7 +115,7 @@
   <link rel="preload" as="image" href="/content/img/2026/copilotchat-coding-mode-workspace.webp" imagesrcset="/content/img/2026/copilotchat-coding-mode-workspace-480w.webp 480w, /content/img/2026/copilotchat-coding-mode-workspace-828w.webp 828w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我把 GitHub Copilot 塞進手機裡，然後發現沒有人做過這件事","description":"我自己做了一個 iOS app，把 GitHub Copilot 的聊天功能帶到手機上，還能跑 MCP 工具。做完之後去網路上找了一圈，發現這個組合真的沒有人做過。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-04-09T00:00:00Z","dateModified":"2026-04-11T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/copilotchat-first-ios-native-mcp-client/"},"url":"https://b-log.to/tech-analysis/copilotchat-first-ios-native-mcp-client/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/copilotchat-coding-mode-workspace.webp"],"keywords":"CopilotChat, iOS, GitHub Copilot, Augment Code, MCP, SwiftUI, 開源, 多 Provider, tool call, Keychain","articleSection":"技術分析"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我把 GitHub Copilot 塞進手機裡，然後發現沒有人做過這件事","description":"我自己做了一個 iOS app，把 GitHub Copilot 的聊天功能帶到手機上，還能跑 MCP 工具。做完之後去網路上找了一圈，發現這個組合真的沒有人做過。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-04-09T00:00:00Z","dateModified":"2026-04-11T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/copilotchat-first-ios-native-mcp-client/"},"url":"https://b-log.to/tech-analysis/copilotchat-first-ios-native-mcp-client/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/copilotchat-coding-mode-workspace.webp"],"keywords":"CopilotChat, iOS, GitHub Copilot, Augment Code, MCP, SwiftUI, 開放原始碼, 多 Provider, tool call, Keychain","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -198,7 +198,7 @@
             <h1 id="post-title">我把 GitHub Copilot 塞進手機裡，然後發現沒有人做過這件事</h1>
             <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Apr 9, 2026</span><span>Updated Apr 11, 2026</span><span>6 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"><span>CopilotChat</span><span>iOS</span><span>GitHub Copilot</span><span>Augment Code</span><span>MCP</span><span>SwiftUI</span><span>開源</span><span>多 Provider</span><span>tool call</span><span>Keychain</span></div>
+          <div id="post-tags" class="article-tags"><span>CopilotChat</span><span>iOS</span><span>GitHub Copilot</span><span>Augment Code</span><span>MCP</span><span>SwiftUI</span><span>開放原始碼</span><span>多 Provider</span><span>tool call</span><span>Keychain</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>故事要從上次那篇文章說起。</p>
 <p>我離開了 claude.ai，走 GitHub Copilot 的路線繼續用 Claude。路是通了，但有一個問題：GitHub 沒有一個像樣的 iOS Copilot Chat 客戶端。</p>
 <p>官方的 Copilot for Xcode 是 macOS 限定，而且是 IDE 擴展，不是獨立的聊天 app。VS Code 裡的 Copilot Chat 更不用說——那是桌面的東西。我在手機上想跟 Claude 說句話，沒有辦法。</p>
@@ -233,7 +233,7 @@
 <p>沒有人做過「iOS 原生 app + GitHub Copilot API 認證 + MCP 自動執行」這個組合。</p>
 <h2>等等，Chatbox 呢？</h2>
 <p>有人可能會說：Chatbox 不就是嗎？</p>
-<p>對，Chatbox 確實是最接近的。跨平台（Windows/Mac/Linux/iOS/Android/Web）、開源、支援多 provider、有 MCP。概念上幾乎一樣——都是「通用 LLM chat client + MCP + 多 provider」。</p>
+<p>對，Chatbox 確實是最接近的。跨平台（Windows/Mac/Linux/iOS/Android/Web）、開放原始碼、支援多 provider、有 MCP。概念上幾乎一樣——都是「通用 LLM chat client + MCP + 多 provider」。</p>
 <p>但 Chatbox 的 MCP 是<strong>桌面限定</strong>。我直接翻了它的原始碼，在 <code>feature-flags.ts</code> 裡寫得清清楚楚：</p>
 <pre><code class="language-typescript">export const featureFlags = {
   mcp: platform.type === &#39;desktop&#39;,

@@ -116,7 +116,7 @@ MCP 端點藏在 URL 路徑裡：`/mcp/{一串隨機密鑰}`。密鑰存在 Clou
 
 ## 為什麼不用現成的
 
-GitHub 上有幾個 MCP memory server 的開源專案。但它們幾乎都是跑在本地的——Claude Desktop 連本地 server，資料存本機。代表你得開電腦才能用。
+GitHub 上有幾個 MCP memory server 的開放原始碼專案。但它們幾乎都是跑在本地的——Claude Desktop 連本地 server，資料存本機。代表你得開電腦才能用。
 
 我的版本跑在 Cloudflare Workers 上，接的是 claude.ai 的遠端 connector。手機能用，躺在床上也能用。
 

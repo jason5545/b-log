@@ -152,7 +152,7 @@ if (coverImage) {
 - 背景圖片: `og-background_cbst7j` (1200×630px SVG 漸層)
 - 字型: `notosanstc-bold.ttf` (authenticated raw file)
 
-**最佳配置：**
+**最佳設定：**
 - 字型大小: 60px
 - 文字寬度限制: 1000px
 - 對齊方式: center

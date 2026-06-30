@@ -250,7 +250,7 @@ git_reference_free(refOut)
 <p>最根本的教訓是：<strong>在 C API 的世界裡，永遠不要假設一個 <code>out</code> 參數可以傳 NULL，除非文件明確說可以。</strong> Swift 的 <code>nil</code> 對應到 C 的 <code>NULL</code>，看起來很自然，但 C 函式庫不會像 Swift 那樣幫你做 optional checking。</p>
 <p>另外一個學到的事：debug 的第一步應該是拿到錯誤訊息，不是猜。我前三輪都在猜，第四輪才加了 <code>git_error_last()</code>，然後一分鐘就修好了。</p>
 <hr>
-<p><em>CopilotChat 是開源的，<a href="https://github.com/jason5545/CopilotChat">GitHub</a>，MIT 授權。這個 bug 的修復在 commit <code>90a4edbbc</code>。</em></p>
+<p><em>CopilotChat 是開放原始碼，<a href="https://github.com/jason5545/CopilotChat">GitHub</a>，MIT 授權。這個 bug 的修復在 commit <code>90a4edbbc</code>。</em></p>
 </div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>

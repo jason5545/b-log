@@ -36,7 +36,7 @@
 - **美光 96GB DDR5-5600**：NT$11,499（+49%）
 - **GM7 4TB**：NT$6,899/支（+8.7%）
 
-如果現在才買同樣的配置：**NT$25,297**
+如果現在才買同樣的規格：**NT$25,297**
 
 **價差：NT$4,901**
 
@@ -177,9 +177,9 @@ Samsung 的次世代 NAND 還沒正式量產就幾乎訂光。Micron 的 HBM 產
 **相關數據來源**
 - DRAM 合約價走勢：TrendForce
 - AI 資料中心需求：PC Gamer, Tom's Hardware
-- 產能配置：Micron, Samsung, SK Hynix 財報
+- 產能分配：Micron, Samsung, SK Hynix 財報
 
-**我的硬體配置**
+**我的硬體規格**
 - CPU: AMD Ryzen 9 9950X3D
 - GPU: ASUS DUAL RTX 4070 Ti Super
 - RAM: Crucial PRO DDR5-5600 96GB (48GBx2)

@@ -264,7 +264,7 @@
 </ul>
 <p><strong>關鍵問題:</strong> 一旦被路由到錯誤的伺服器，後續請求會「黏」在同一個錯誤的伺服器上，讓使用者感覺問題持續存在。</p>
 <h3>2. 輸出損壞（8/25 - 9/2）</h3>
-<p>TPU 伺服器配置錯誤，導致 token 生成時出錯。</p>
+<p>TPU 伺服器設定錯誤，導致 token 生成時出錯。</p>
 <p><strong>影響:</strong></p>
 <ul>
 <li>在英文 prompt 中生成泰文和中文字元</li>
@@ -287,7 +287,7 @@
 <h2>問題已經修復</h2>
 <p><strong>修復時間表:</strong></p>
 <ul>
-<li><strong>9/2</strong>: 發現並回滾 TPU 配置問題</li>
+<li><strong>9/2</strong>: 發現並回滾 TPU 設定問題</li>
 <li><strong>9/4</strong>: 修復路由邏輯、回滾 Haiku 3.5 的 XLA 問題</li>
 <li><strong>9/12</strong>: 回滾 Opus 3 的 XLA 問題</li>
 <li><strong>9/16</strong>: 在 Vertex AI 完成部署</li>

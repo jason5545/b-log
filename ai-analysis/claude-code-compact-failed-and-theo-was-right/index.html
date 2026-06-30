@@ -209,7 +209,7 @@
 <p>我遇到過的：</p>
 <p><strong>無限 compact 迴圈。</strong> Context 顯示 102%，打任何東西包括「hi」都會觸發 compact，等完之後還是 100%，下一句又超過。重裝也沒用，因為是後端狀態損壞。</p>
 <p><strong>「Conversation too long」但 context 還剩很多。</strong> 手動跑 <code>/compact</code> 報錯說太長，但實際上 context window 還剩將近一半。</p>
-<p><strong>MCP 環境下 tool name 重複。</strong> 有配置 MCP server 時跑 compact，回傳「tool names must be unique」錯誤。</p>
+<p><strong>MCP 環境下 tool name 重複。</strong> 有設定 MCP server 時跑 compact，回傳「tool names must be unique」錯誤。</p>
 <p><strong>跨版本升級後 compact 壞掉。</strong> 升級後舊版本開的 session 無法 compact，API 回 400，原因是 compact 會動到 thinking blocks，但 API 規定那些 block 必須完全不變。</p>
 <p><strong>1 月 15 日的大當機。</strong> Anthropic 說修好了，但很多人包括我反映之後還是壞的。症狀是 prompt 送出去後默默退回輸入框，什麼都沒發生。</p>
 <hr>

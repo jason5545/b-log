@@ -4,7 +4,7 @@
 
 作者說他跑了自己寫的診斷腳本，發現背景跑著 287 個 iOS Simulator 處理程序、10 個 Flutter daemon、Gradle daemon、Kotlin LSP……合計超過 23 GB。他進一步研究，附上多個 GitHub issue 編號，得出結論：這是所有 AI coding tool 的共同問題，MCP server 子處理程序沒有被正確清理，而 macOS 缺少 Linux 的 `PR_SET_PDEATHSIG` 機制所以無解。
 
-然後他開源了一個叫 clean-orphans 的腳本。
+然後他把一個叫 clean-orphans 的腳本以開放原始碼釋出。
 
 乍看之下相當完整：有現象、有數據、有引用、有工具。我當時的第一反應也是展開貼文，準備找 GitHub repo 看看有沒有什麼值得參考的地方。
 
@@ -107,4 +107,3 @@ AI 工具降低了產出的門檻，但沒有降低判斷的門檻。
 這和 Apple 一直強調的「It just works」是矛盾的。使用者以為整個系統都被照顧到了，但孤兒處理程序的問題告訴你，Apple 的控制邊界其實比它宣傳的淺很多。
 
 **要嘛就從頭到尾都強制，這樣得到的體驗才會是高度一致的。選擇性強制，是一種對使用者的誤導。**
-

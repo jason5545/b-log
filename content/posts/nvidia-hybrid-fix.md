@@ -1,6 +1,6 @@
 # 切換 hybrid 模式後黑螢幕，然後我發現是 prime-select 埋的雷
 
-我的筆電是 ThinkPad P15 Gen 2，Intel + NVIDIA 雙顯卡配置（RTX A5000 Laptop GPU），跑 KDE neon（基於 Ubuntu 24.04）Wayland。裝好 `nvidia-driver-580-open` 和 `nvidia-prime` 之後，想切換到 hybrid 模式省電。
+我的筆電是 ThinkPad P15 Gen 2，Intel + NVIDIA 雙顯卡組合（RTX A5000 Laptop GPU），跑 KDE neon（基於 Ubuntu 24.04）Wayland。裝好 `nvidia-driver-580-open` 和 `nvidia-prime` 之後，想切換到 hybrid 模式省電。
 
 結果 `prime-select on-demand` 一執行，重開機就黑螢幕。
 

@@ -197,7 +197,7 @@
           <div id="post-tags" class="article-tags"><span>AI協作</span><span>Claude</span><span>ChatGPT</span><span>vibecoder</span><span>技術寫作</span><span>閉環</span><span>第二意見</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>最近在 Facebook 看到一篇貼文，標題大意是：「我有 64 GB 記憶體，macOS 告訴我用了 100+ GB，怎麼可能？」</p>
 <p>作者說他跑了自己寫的診斷腳本，發現背景跑著 287 個 iOS Simulator 處理程序、10 個 Flutter daemon、Gradle daemon、Kotlin LSP……合計超過 23 GB。他進一步研究，附上多個 GitHub issue 編號，得出結論：這是所有 AI coding tool 的共同問題，MCP server 子處理程序沒有被正確清理，而 macOS 缺少 Linux 的 <code>PR_SET_PDEATHSIG</code> 機制所以無解。</p>
-<p>然後他開源了一個叫 clean-orphans 的腳本。</p>
+<p>然後他把一個叫 clean-orphans 的腳本以開放原始碼釋出。</p>
 <p>乍看之下相當完整：有現象、有數據、有引用、有工具。我當時的第一反應也是展開貼文，準備找 GitHub repo 看看有沒有什麼值得參考的地方。</p>
 <p>結果留言區一片批評聲。</p>
 <hr>

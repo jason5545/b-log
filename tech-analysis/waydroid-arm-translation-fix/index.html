@@ -216,7 +216,7 @@ E ActivityManager: 68% kernel
 <pre><code class="language-bash">sudo waydroid shell getprop ro.dalvik.vm.native.bridge
 # 輸出: libndk_translation.so
 </code></pre>
-<p><code>libndk_translation</code> 是 Waydroid 預設的開源 ARM 轉譯層，但它與酷安的某些 native 程式碼不相容。</p>
+<p><code>libndk_translation</code> 是 Waydroid 預設的開放原始碼 ARM 轉譯層，但它與酷安的某些 native 程式碼不相容。</p>
 <h2>解決方案</h2>
 <p>切換到 <code>libhoudini</code>——Google 開發的 ARM 轉譯層，相容性通常比 libndk_translation 更好。</p>
 <h3>步驟 1：安裝 waydroid_script</h3>

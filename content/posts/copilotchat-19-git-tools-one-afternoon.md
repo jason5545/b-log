@@ -89,5 +89,4 @@ git_reference_free(refOut)
 
 ---
 
-*CopilotChat 是開源的，[GitHub](https://github.com/jason5545/CopilotChat)，MIT 授權。這個 bug 的修復在 commit `90a4edbbc`。*
-
+*CopilotChat 是開放原始碼，[GitHub](https://github.com/jason5545/CopilotChat)，MIT 授權。這個 bug 的修復在 commit `90a4edbbc`。*

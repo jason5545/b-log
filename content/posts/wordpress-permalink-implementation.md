@@ -172,7 +172,7 @@ function generateRedirectPage(post, redirectPath) {
 
 ### 步驟 4：設定 GitHub Actions 自動化
 
-**工作流程配置：**
+**工作流程設定：**
 ```yaml
 # .github/workflows/generate-redirects.yml
 name: 生成重定向頁面

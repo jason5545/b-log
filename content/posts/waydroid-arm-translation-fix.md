@@ -39,7 +39,7 @@ sudo waydroid shell getprop ro.dalvik.vm.native.bridge
 # 輸出: libndk_translation.so
 ```
 
-`libndk_translation` 是 Waydroid 預設的開源 ARM 轉譯層，但它與酷安的某些 native 程式碼不相容。
+`libndk_translation` 是 Waydroid 預設的開放原始碼 ARM 轉譯層，但它與酷安的某些 native 程式碼不相容。
 
 ## 解決方案
 

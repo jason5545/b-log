@@ -101,7 +101,7 @@ iPadOS 26 確實帶來重大改進：
 One UI 8 更新後，「OEM 解鎖」選項從開發者選項中消失。這不只影響美國版本，而是**全球性的政策改變**。
 
 **技術細節：**
-三星在 bootloader 配置中加入新程式碼行：
+三星在 bootloader 設定中加入新程式碼行：
 ```
 androidboot.other.locked=1
 ```
