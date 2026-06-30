@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "xiaomi-hyperos-assistant-corner-gesture-launcher",
+      "url": "https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/",
+      "image": "https://b-log.to/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp",
+      "title": "左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢",
+      "content_text": "我原本以為左下角上滑開 Google Assistant，只要關掉 SystemUI 的 assist_touch_gesture_enabled 就好。拆到最後才發現 HyperOS 這條手勢在 MiLauncherGlobal，Launcher 根本不理 SystemUI 的 availability。",
+      "date_published": "2026-06-30T00:00:00.000Z",
+      "date_modified": "2026-06-30T00:00:00.000Z",
+      "tags": [
+        "Xiaomi",
+        "HyperOS",
+        "Android 16",
+        "Google Assistant",
+        "SystemUI",
+        "MiLauncherGlobal",
+        "ADB",
+        "反編譯"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "wingmate-sse-parser-space-tool-call-failure",
       "url": "https://b-log.to/tech-development/wingmate-sse-parser-space-tool-call-failure/",
       "title": "一個空格讓 tool call 全部失效：Wingmate 的 SSE parser 事故",

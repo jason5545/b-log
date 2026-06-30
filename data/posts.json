@@ -1,5 +1,26 @@
 [
   {
+    "slug": "xiaomi-hyperos-assistant-corner-gesture-launcher",
+    "title": "左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢",
+    "summary": "我原本以為左下角上滑開 Google Assistant，只要關掉 SystemUI 的 assist_touch_gesture_enabled 就好。拆到最後才發現 HyperOS 這條手勢在 MiLauncherGlobal，Launcher 根本不理 SystemUI 的 availability。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-06-30T00:00:00Z",
+    "tags": [
+      "Xiaomi",
+      "HyperOS",
+      "Android 16",
+      "Google Assistant",
+      "SystemUI",
+      "MiLauncherGlobal",
+      "ADB",
+      "反編譯"
+    ],
+    "accentColor": "#0f766e",
+    "readingTime": "8 min",
+    "coverImage": "/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp"
+  },
+  {
     "slug": "wingmate-sse-parser-space-tool-call-failure",
     "title": "一個空格讓 tool call 全部失效：Wingmate 的 SSE parser 事故",
     "summary": "我 6 月 29 日晚上推完 Wingmate Android build，agent 還能思考、能 stream，tool call 卻全部發不出去。最後查到不是 executor 壞掉，而是 SSE parser 只認 data: 後面有空白，漏掉合法 chunk。",

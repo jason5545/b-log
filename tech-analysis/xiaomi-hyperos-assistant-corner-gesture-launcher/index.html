@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="我原本以為左下角上滑開 Google Assistant，只要關掉 SystemUI 的 assist_touch_gesture_enabled 就好。拆到最後才發現 HyperOS 這條手勢在 MiLauncherGlobal，Launcher 根本不理 SystemUI 的 availability。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/" id="og-url">
+  <meta property="og:title" content="左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢" id="og-title">
+  <meta property="og:description" content="我原本以為左下角上滑開 Google Assistant，只要關掉 SystemUI 的 assist_touch_gesture_enabled 就好。拆到最後才發現 HyperOS 這條手勢在 MiLauncherGlobal，Launcher 根本不理 SystemUI 的 availability。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-06-30T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-06-30T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="Xiaomi">
+  <meta property="article:tag" content="HyperOS">
+  <meta property="article:tag" content="Android 16">
+  <meta property="article:tag" content="Google Assistant">
+  <meta property="article:tag" content="SystemUI">
+  <meta property="article:tag" content="MiLauncherGlobal">
+  <meta property="article:tag" content="ADB">
+  <meta property="article:tag" content="反編譯">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/" id="twitter-url">
+  <meta property="twitter:title" content="左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢" id="twitter-title">
+  <meta property="twitter:description" content="我原本以為左下角上滑開 Google Assistant，只要關掉 SystemUI 的 assist_touch_gesture_enabled 就好。拆到最後才發現 HyperOS 這條手勢在 MiLauncherGlobal，Launcher 根本不理 SystemUI 的 availability。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="Xiaomi, HyperOS, Android 16, Google Assistant, SystemUI, MiLauncherGlobal, ADB, 反編譯" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp" imagesrcset="/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover-480w.webp 480w, /content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover-828w.webp 828w, /content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢","description":"我原本以為左下角上滑開 Google Assistant，只要關掉 SystemUI 的 assist_touch_gesture_enabled 就好。拆到最後才發現 HyperOS 這條手勢在 MiLauncherGlobal，Launcher 根本不理 SystemUI 的 availability。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-06-30T00:00:00Z","dateModified":"2026-06-30T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/"},"url":"https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp"],"keywords":"Xiaomi, HyperOS, Android 16, Google Assistant, SystemUI, MiLauncherGlobal, ADB, 反編譯","articleSection":"技術分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp" srcset="/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover-480w.webp 480w, /content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover-828w.webp 828w, /content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Jun 30, 2026</span><span>8 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>Xiaomi</span><span>HyperOS</span><span>Android 16</span><span>Google Assistant</span><span>SystemUI</span><span>MiLauncherGlobal</span><span>ADB</span><span>反編譯</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>裝置是 Xiaomi 25102PCBEG，<code>myron_tw_global</code>，HyperOS V816，Android 16。</p>
+<p>問題很簡單也很煩：從左下角往上滑，會開 Google Assistant。那個 <code>FloatyActivity</code> 視窗每次都跳出來，玩遊戲或橫向操作的時候特別容易誤觸。</p>
+<p>我以為關掉很簡單。</p>
+<p>畢竟 AOSP 本來就有 <code>assistant_touch_gesture_enabled</code> 這個 secure setting，寫個 <code>0</code> 就該沒事了。</p>
+<p>結果不是。</p>
+<h2>第一個坑：key 名字寫錯了</h2>
+<p>網路上流傳的解法大多長這樣：</p>
+<pre><code class="language-bash">settings put --user 0 secure assistant_touch_gesture_enabled 0
+</code></pre>
+<p>我寫了。</p>
+<p>沒用。</p>
+<p>後來把 <code>MiuiSystemUI.apk</code> 從 <code>/system_ext/priv-app/MiuiSystemUI/</code> 拉出來反編譯，才看到 SystemUI 真正讀的 key 是：</p>
+<pre><code class="language-text">secure assist_touch_gesture_enabled
+</code></pre>
+<p>不是 <code>assistant_touch_gesture_enabled</code>。少一個 <code>ant</code>，整個 key 就不對。</p>
+<p><code>NavBarHelper.java:402</code> 寫得很清楚：</p>
+<pre><code class="language-java">this.mAssistantTouchGestureEnabled =
+    Settings.Secure.getIntForUser(
+        this.mContentResolver,
+        &quot;assist_touch_gesture_enabled&quot;,
+        this.mContext.getResources().getBoolean(
+            R.bool.config_assistTouchGestureEnabledDefault) ? 1 : 0,
+        ((UserTrackerImpl) this.mUserTracker).getUserId()
+    ) != 0;
+</code></pre>
+<p>而且這個值有 live observer，寫進去就生效，不用重啟 SystemUI：</p>
+<pre><code class="language-java">this.mContentResolver.registerContentObserver(
+    Settings.Secure.getUriFor(&quot;assist_touch_gesture_enabled&quot;),
+    false, this.mAssistContentObserver, -1);
+</code></pre>
+<p>所以我寫了正確的 key：</p>
+<pre><code class="language-bash">settings put --user 0 secure assist_touch_gesture_enabled 0
+</code></pre>
+<p>dump 出來確認：</p>
+<pre><code class="language-text">NavbarTaskbarFriendster
+  longPressHomeEnabled=true
+  mAssistantTouchGestureEnabled=false
+  mAssistantAvailable=false
+  mNavBarMode=2
+</code></pre>
+<p>SystemUI 這邊確實關掉了。</p>
+<p>然後我從左下角上滑一次。</p>
+<p>Google Assistant 還是開了。</p>
+<h2>第二個坑：SystemUI 關了也沒用</h2>
+<p>這時候我開始覺得不對勁。</p>
+<p>SystemUI 已經回 <code>mAssistantAvailable=false</code>，為什麼手勢還會觸發？</p>
+<p><code>dumpsys activity activities</code> 看了一下，左下角上滑後前台是：</p>
+<pre><code class="language-text">com.google.android.googlequicksearchbox/
+com.google.android.apps.search.assistant.surfaces.voice.robin.ui.floaty.activity.FloatyActivity
+</code></pre>
+<p><code>launched-from</code> 指向：</p>
+<pre><code class="language-text">com.mi.android.globallauncher
+</code></pre>
+<p>不是 SystemUI。</p>
+<p>是 Launcher。</p>
+<p>HyperOS 的 Launcher 叫 <code>MiLauncherGlobal</code>，路徑在 <code>/product/priv-app/MiLauncherGlobal/</code>，版本 <code>RELEASE-6.01.03.1943-01051706</code>。</p>
+<p>所以這台機器上，左下角上滑這個手勢根本不是 SystemUI 在處理的，是 Launcher 自己有一套。</p>
+<h2>拆 MiLauncherGlobal</h2>
+<p>關鍵類別集中在這幾個：</p>
+<pre><code class="language-text">com.miui.home.recents.FsGestureAssistHelper
+com.miui.home.recents.FsGestureAssistEnableHelper
+com.miui.home.recents.NavStubView
+com.miui.home.recents.TouchInteractionService
+</code></pre>
+<p>真正呼叫 assistant 的地方在 <code>FsGestureAssistHelper.java:96</code>：</p>
+<pre><code class="language-java">Bundle bundle = new Bundle();
+bundle.putInt(&quot;triggered_by&quot;, 83);
+bundle.putInt(&quot;invocation_type&quot;, 1);
+MiuiSystemUiProxyWrapper.INSTANCE.onAssistantGestureCompletion();
+MiuiSystemUiProxyWrapper.INSTANCE.startAssistant(bundle);
+</code></pre>
+<p>gate 在 <code>canTriggerAssistantAction()</code>：</p>
+<pre><code class="language-java">public boolean canTriggerAssistantAction(float f, float f2, long j) {
+    if (FsGestureAssistEnableHelper.getInstance().supportAssistantGesture()
+            &amp;&amp; !isAssistantGestureDisabled(j)) {
+        int i = this.mAssistantWidth;
+        if (f &lt; i || f &gt; f2 - i) {
+            return true;
+        }
+    }
+    return false;
+}
+</code></pre>
+<p>判斷條件是 <code>supportAssistantGesture()</code>。</p>
+<p>這個值哪裡來？</p>
+<p><code>FsGestureAssistEnableHelper.java:67</code>：</p>
+<pre><code class="language-java">boolean zIsSupportGoogleAssist =
+    AssistManager.getInstance(Application.getInstance())
+        .isSupportGoogleAssist(LauncherUtils.getCurrentUserId());
+
+this.mIsSupportGoogleAssist = zIsSupportGoogleAssist;
+this.mIsAssistantAvailable = zIsSupportGoogleAssist;
+
+if (DeviceConfigs.IS_KDDI_BUILD) {
+    boolean z = false;
+    if (zIsSupportGoogleAssist
+            &amp;&amp; Settings.Secure.getInt(
+                Application.getInstance().getContentResolver(),
+                MiuiSettingsUtils.GOOGLE_ASSIST_ENABLE,
+                0
+            ) != 0) {
+        z = true;
+    }
+    this.mIsAssistantAvailable = z;
+}
+</code></pre>
+<p>看到那個 <code>IS_KDDI_BUILD</code> 了嗎？</p>
+<p>我這台是 <code>ro.miui.region=TW</code>、<code>ro.product.mod_device=myron_tw_global</code>。</p>
+<p>不是 KDDI build。</p>
+<p>所以 <code>google_assist_enable</code> 這個 key 在這台根本不會被拿來 gate <code>mIsAssistantAvailable</code>。我還是死馬當活馬醫試了一下：</p>
+<pre><code class="language-bash">settings put --user 0 secure google_assist_enable 0
+</code></pre>
+<p>左下角上滑還是會開。</p>
+<p>沒用。</p>
+<p>測完還原成 <code>null</code>。</p>
+<h2>SystemUI 傳來的 availability，Launcher 直接忽略</h2>
+<p>這段我覺得是最扯的。</p>
+<p>MiLauncherGlobal 的 <code>TouchInteractionService</code> 有收到 SystemUI 的 overview proxy callback：</p>
+<pre><code class="language-java">// TouchInteractionService.java:170
+public void onAssistantAvailable(boolean z, boolean z2) {
+}
+</code></pre>
+<p>空的。</p>
+<p>另一個 overload 也只是 log：</p>
+<pre><code class="language-java">// TouchInteractionService.java:248
+public void onAssistantAvailable(boolean z) {
+    Log.d(&quot;TouchInteractionService&quot;, &quot;onAssistantAvailable :&quot; + z);
+}
+</code></pre>
+<p>SystemUI 那邊已經把 <code>mAssistantAvailable</code> 設成 <code>false</code> 了，結果 Launcher 收到之後什麼都沒做。</p>
+<p>它照自己的 <code>FsGestureAssistEnableHelper</code> 判斷要不要觸發，完全不理 SystemUI 講什麼。</p>
+<p>所以你以為你關掉了，其實只關了一半。另一半在 Launcher 手裡，而 Launcher 根本沒在聽。</p>
+<h2>最後有效的組合</h2>
+<p>試到最後，真正能擋住的是：</p>
+<pre><code class="language-bash">settings put --user 0 secure assist_touch_gesture_enabled 0
+settings delete --user 0 secure assistant
+</code></pre>
+<p>把系統的 assistant component 直接刪掉。</p>
+<p>Launcher 還是會偵測到手勢，但 <code>startAssistant</code> 找不到目標，所以就不會開 <code>FloatyActivity</code> 了。</p>
+<p>驗證流程：</p>
+<pre><code class="language-bash">adb shell input keyevent HOME
+adb logcat -c
+adb shell input swipe 5 2570 180 2050 220
+adb shell dumpsys activity activities | rg -i &quot;topResumedActivity|FloatyActivity|globallauncher&quot;
+</code></pre>
+<p>前台還是 Launcher：</p>
+<pre><code class="language-text">topResumedActivity=... com.mi.android.globallauncher/com.miui.home.launcher.Launcher
+</code></pre>
+<p>沒有再進 Google Assistant。</p>
+<p>但這個做法有代價。</p>
+<p><code>voice_interaction_service</code> 我沒動：</p>
+<pre><code class="language-bash">settings get --user 0 secure voice_interaction_service
+# com.google.android.googlequicksearchbox/com.google.android.voiceinteraction.GsaVoiceInteractionService
+</code></pre>
+<p>理論上 OK Google 熱詞路徑還在。</p>
+<p>但 <code>secure assistant=null</code> 可能把某些 Google App 的 UI 入口或系統 <code>ASSIST</code> intent 弄壞了，這個要實際喊一次才知道。Google App 內部會不會有自己的綁定邏輯，我也還沒驗證。</p>
+<p>如果 OK Google 壞了，恢復很簡單：</p>
+<pre><code class="language-bash">settings put --user 0 secure assistant com.google.android.googlequicksearchbox/com.google.android.voiceinteraction.GsaVoiceInteractionService
+</code></pre>
+<p>但恢復 <code>assistant</code> 之後角落手勢會不會跟著回來？</p>
+<p>大概會。</p>
+<p>因為 MiLauncherGlobal 把「角落手勢能不能用」和「系統 assistant 是不是 Google」綁在一起了，沒有公開的 per-gesture key 可以單獨切。</p>
+<p>locked bootloader、沒 root 的前提下，這台機器的乾淨切分點有限。</p>
+<p>比較乾淨但需要更高權限的替代方案是 hook：用 LSPosed 把 <code>FsGestureAssistHelper.canTriggerAssistantAction()</code> 永遠回 <code>false</code>，或只對 corner gesture 把 <code>FsGestureAssistEnableHelper.supportAssistantGesture()</code> 回 <code>false</code>。</p>
+<p>至於直接改 MiLauncherGlobal 或 SystemUI 的 overlay，locked bootloader 下就別想了。</p>
+<h2>被排除的路</h2>
+<p>記一下，避免下次又繞進去。</p>
+<p><code>assistant_touch_gesture_enabled</code>：key 名字錯了，SystemUI 讀的是 <code>assist_touch_gesture_enabled</code>，少一個 <code>ant</code>。</p>
+<p><code>google_assist_enable</code>：這台不是 KDDI build，程式碼裡那個 gate 只在 <code>IS_KDDI_BUILD</code> 時生效。</p>
+<p><code>entity_config_key_voice_assistant</code>：這條是導航列長按 / 雙擊 shortcut，<code>onLongPress()</code> -&gt; <code>doAction(2)</code>、<code>onDoubleTap()</code> -&gt; <code>doAction(4)</code>，跟左下角上滑無關。</p>
+<p>重啟 SystemUI：不用，<code>assist_touch_gesture_enabled</code> 有 <code>ContentObserver</code>，live 生效。</p>
+<h2>學到的事</h2>
+<p>這次真正的坑不是「找不到 key」。</p>
+<p>第一個找到的 SystemUI key 其實是對的，寫進去也確實生效了。</p>
+<p>問題是那個 key 不是最後那個 gate。</p>
+<p>SystemUI 這邊已經照設定關掉、dump 也確認 <code>false</code> 了，但 MiLauncherGlobal 自己又做了一套 assistant gesture 判斷，而且擺明不甩 SystemUI 傳來的 <code>assistantAvailable=false</code>。callback 函式是空的，連 log 都只寫一行。</p>
+<p>所以之後遇到 HyperOS gesture 問題，不能只拆 SystemUI。</p>
+<p>只要觸發點跟 full-screen gesture、recents、home gesture 有關，就必須同時拆：</p>
+<pre><code class="language-text">MiuiSystemUI.apk
+MiLauncherGlobal.apk
+TouchInteractionService
+NavStubView
+FsGesture*
+</code></pre>
+<p>這才是這台機器上真正的手勢管線。</p>
+<p>SystemUI 只是其中一層，而且不一定是最後一層。</p>
+<p>至於那個「刪掉 secure assistant 會不會弄壞 OK Google」的疑問，我還沒驗證。等下次有機會喊一聲再補上。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
