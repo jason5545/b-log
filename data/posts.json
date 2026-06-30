@@ -1,5 +1,25 @@
 [
   {
+    "slug": "wingmate-sse-parser-space-tool-call-failure",
+    "title": "一個空格讓 tool call 全部失效：Wingmate 的 SSE parser 事故",
+    "summary": "我 6 月 29 日晚上推完 Wingmate Android build，agent 還能思考、能 stream，tool call 卻全部發不出去。最後查到不是 executor 壞掉，而是 SSE parser 只認 data: 後面有空白，漏掉合法 chunk。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-06-30T00:00:00Z",
+    "tags": [
+      "Wingmate",
+      "Android",
+      "SSE",
+      "OpenAI-compatible",
+      "tool call",
+      "LLM",
+      "debug",
+      "Gradle"
+    ],
+    "accentColor": "#0f766e",
+    "readingTime": "8 min"
+  },
+  {
     "slug": "the-one-who-holds-me-is-held-too",
     "title": "接住我的人，也被接住了",
     "summary": "諮商師那天先說自己狀態不好，我才看見接住我的人也需要被接住。從諮商室、後援會到自己的開口求助，真正重要的是修復機制有沒有長出來。",

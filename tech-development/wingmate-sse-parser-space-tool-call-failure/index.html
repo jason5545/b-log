@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>一個空格讓 tool call 全部失效：Wingmate 的 SSE parser 事故 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="我 6 月 29 日晚上推完 Wingmate Android build，agent 還能思考、能 stream，tool call 卻全部發不出去。最後查到不是 executor 壞掉，而是 SSE parser 只認 data: 後面有空白，漏掉合法 chunk。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-development/wingmate-sse-parser-space-tool-call-failure/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-development/wingmate-sse-parser-space-tool-call-failure/" id="og-url">
+  <meta property="og:title" content="一個空格讓 tool call 全部失效：Wingmate 的 SSE parser 事故" id="og-title">
+  <meta property="og:description" content="我 6 月 29 日晚上推完 Wingmate Android build，agent 還能思考、能 stream，tool call 卻全部發不出去。最後查到不是 executor 壞掉，而是 SSE parser 只認 data: 後面有空白，漏掉合法 chunk。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E5%80%8B%E7%A9%BA%E6%A0%BC%E8%AE%93%20tool%20call%20%E5%85%A8%E9%83%A8%E5%A4%B1%E6%95%88%EF%BC%9AWingmate%20%E7%9A%84%20SSE%20parser%20%E4%BA%8B%E6%95%85,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-06-30T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-06-30T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術開發" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="Wingmate">
+  <meta property="article:tag" content="Android">
+  <meta property="article:tag" content="SSE">
+  <meta property="article:tag" content="OpenAI-compatible">
+  <meta property="article:tag" content="tool call">
+  <meta property="article:tag" content="LLM">
+  <meta property="article:tag" content="debug">
+  <meta property="article:tag" content="Gradle">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-development/wingmate-sse-parser-space-tool-call-failure/" id="twitter-url">
+  <meta property="twitter:title" content="一個空格讓 tool call 全部失效：Wingmate 的 SSE parser 事故" id="twitter-title">
+  <meta property="twitter:description" content="我 6 月 29 日晚上推完 Wingmate Android build，agent 還能思考、能 stream，tool call 卻全部發不出去。最後查到不是 executor 壞掉，而是 SSE parser 只認 data: 後面有空白，漏掉合法 chunk。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E5%80%8B%E7%A9%BA%E6%A0%BC%E8%AE%93%20tool%20call%20%E5%85%A8%E9%83%A8%E5%A4%B1%E6%95%88%EF%BC%9AWingmate%20%E7%9A%84%20SSE%20parser%20%E4%BA%8B%E6%95%85,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="Wingmate, Android, SSE, OpenAI-compatible, tool call, LLM, debug, Gradle" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"一個空格讓 tool call 全部失效：Wingmate 的 SSE parser 事故","description":"我 6 月 29 日晚上推完 Wingmate Android build，agent 還能思考、能 stream，tool call 卻全部發不出去。最後查到不是 executor 壞掉，而是 SSE parser 只認 data: 後面有空白，漏掉合法 chunk。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-06-30T00:00:00Z","dateModified":"2026-06-30T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/wingmate-sse-parser-space-tool-call-failure/"},"url":"https://b-log.to/tech-development/wingmate-sse-parser-space-tool-call-failure/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E4%B8%80%E5%80%8B%E7%A9%BA%E6%A0%BC%E8%AE%93%20tool%20call%20%E5%85%A8%E9%83%A8%E5%A4%B1%E6%95%88%EF%BC%9AWingmate%20%E7%9A%84%20SSE%20parser%20%E4%BA%8B%E6%95%85,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"Wingmate, Android, SSE, OpenAI-compatible, tool call, LLM, debug, Gradle","articleSection":"技術開發"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">一個空格讓 tool call 全部失效：Wingmate 的 SSE parser 事故</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">一個空格讓 tool call 全部失效：Wingmate 的 SSE parser 事故</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Jun 30, 2026</span><span>8 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>Wingmate</span><span>Android</span><span>SSE</span><span>OpenAI-compatible</span><span>tool call</span><span>LLM</span><span>debug</span><span>Gradle</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>Wingmate 是我在做的 Android app。另一邊我還有個 CopilotChat，是 Apple 平台的原生 LLM chat client，SwiftUI 寫的。它的起點其實是 GitHub Copilot——當初我離開 claude.ai，走 Copilot 當中間層繼續用 Claude，然後發現 GitHub 沒有像樣的 iOS client，就自己做了一個。CopilotChat 從 Copilot device-flow OAuth 起家，再往外接 120 多家 provider，定位是 chat + coding mode 的桌面/手持 client：agent 能讀寫 workspace 檔案、跑 MCP tool、在 macOS 上跑 bash，但 build 這件事還是交給宿主機的 Android Studio / Xcode。</p>
+<p>但這條路走下來，我對 Copilot 這個 provider 的信任是遞減的。同一個 Claude Opus，Anthropic 官方 API 給 1M context window，GitHub 砍到 192K，第三方 client 再砍到 144K。我想查原因，用 VS Code 的 client ID 做 OAuth 測試，GitHub 直接 403，錯誤訊息只丟一個 TOS 首頁叫我自己去翻。然後 4 月 20 號，GitHub 把 Opus 從 Pro 完全移除，Pro+ 只留 Opus 4.7，同時暫停三個方案的新使用者註冊。洩漏的內部文件寫得很直白：有些使用者單一請求的成本已經超過他們整個月的訂閱費，長期要轉向按 token 計費。</p>
+<p>這不是 GitHub 特別惡意，是訂閱制的內建邏輯——你租的不是模型能力，是「今天這個版本的存取權」，條款隨時能改。我之前寫過一篇〈雲端 AI 的承諾有保存期限〉，結論是：出口只有降低對任何單一雲端服務的依賴深度。</p>
+<p>Wingmate 就是這個結論的 Android 版。它刻意不走 CopilotChat 的起點。GitHub Copilot 的 device-flow OAuth、<code>api.githubcopilot.com</code>、Copilot model sync，在 Wingmate 的產品邊界裡是 explicitly out of scope。provider 先接 OpenAI-compatible、Anthropic-compatible、Gemini——這些是你帶自己的 API key、自己控制計費的管道，不經過一個會隨時改條款的中間層。</p>
+<p>而且這一年下來，這條路已經不只是「理論上可以帶自己的 key」。有一批新的 coding plan 訂閱冒出來，正好填了「不想被單一平台綁，但又不想自己架推理」的中間地帶。OpenCode Go 一個月 $5 起跳，給你 GLM-5.2、MiniMax M3、DeepSeek V4、Kimi K2.7 這些開放原始碼 coding 模型的 quota 制存取。Z.AI 的 GLM Coding Plan 從 18 元人民幣起，走 OpenAI-compatible endpoint，base URL 是 <code>https://api.z.ai/api/coding/paas/v4</code>，直接塞進任何支援 custom base URL 的 client 就能用。MiniMax 也有自己的 Coding Plan，Starter / Plus / Max 三階，5 小時一個 prompt quota window，M2.1 為主力模型。</p>
+<p>這些 plan 的共通點是：你是跟模型方直接訂閱，不是跟一個會偷偷砍你 context window 的中間層訂閱；計費是 prompt quota 或 token quota，條款寫在明面上；endpoint 全部是 OpenAI-compatible 或 Anthropic-compatible，不需要特殊 OAuth。Wingmate 的 <code>ProviderTransform</code> 現在對 <code>opencode/glm-5.2</code> 這種 model id 有專門處理——GLM-5.2 雖然在 models.dev 上標 <code>reasoning: false</code>，但實際上吃 reasoning effort 參數，所以 hardcode 成暴露 High / Max 兩個 variant；MiniMax 的 model id 則走 no-effort 路線，因為它不吃 reasoning effort 欄位。這些差異就是 OpenAI-compatible 在現實裡長什麼樣——協議相容，不代表每個 provider 的 model 行為一致。</p>
+<p>這也是為什麼後面那個 SSE parser bug 對 Wingmate 特別痛。Wingmate 接的 provider 比 CopilotChat 雜得多：OpenAI 官方、Z.AI、MiniMax、OpenCode Go、OpenRouter、任何自架 OpenAI-compatible endpoint。每一家 stream 出來的 bytes 都可能有細微差異，而我的 parser 只認一種。</p>
+<p>但 Wingmate 真正更大的目標不只是換 provider。它想在手機上把「編譯環境」也吃進來。repo 裡有一個獨立的 <code>:builder</code> module，targetSdk 28、sideload-only，本質是一個 Termux-like runtime：在手機的 app-private prefix 裡跑 OpenJDK 21、Gradle 9.6.1、AAPT2、D8、apksig。主 app 有一個 <code>build_gradle_project</code> tool，會把目前 workspace 打成 zip、透過 signature-protected broadcast 交給 builder companion，builder 跑完 <code>assembleDebug</code> 再把 APK/AAB/AAR 連 log 寫回來。目前已在 Android 16 實機離線跑通 Compose、Room+KSP、Hilt+KSP、Hilt+KAPT、multi-module、version catalog、product flavors、custom signing、Kotlin DSL，連 Room query verifier 都靠自編的 <code>sqlite-jdbc:3.41.2.2-wingmate1</code> Android/aarch64 bionic native 打穿了。</p>
+<p>這個脈絡會直接影響後面怎麼讀這次事故。在 CopilotChat 那種純 chat client 上，tool call 掛掉大概就是少查一次網路、少讀一個檔案。在 Wingmate 上，tool call 是 build pipeline 的觸發器——agent 不呼叫 <code>build_gradle_project</code>，整個手機端編譯流程就不會啟動。所以「agent 看起來知道要用 tool 卻沒用」這個症狀，對 Wingmate 來說不是體驗問題，是核心功能斷線。</p>
+<p>6 月 29 號晚上推了一版 Android build 上去，裝完之後 agent 還能思考、能 stream 文字出來，但 tool call 不執行了。</p>
+<p>不是模型不決定呼叫 tool，也不是 executor 掛掉。Provider 那端 <code>finish_reason</code> 確實是 <code>tool_calls</code>，但我這邊重建不出一個完整可執行的 tool call——因為 SSE parser 把某些合法的 stream line 直接 skip 掉了。</p>
+<h2>症狀長什麼樣</h2>
+<p>最直觀的感受是：agent 看起來知道要用 tool，講了一堆「我來查一下」「我用某個 tool」，然後什麼都沒發生。對 Wingmate 來說，這代表 <code>build_gradle_project</code>、<code>git_commit</code>、<code>web_fetch</code> 這些動作全部發不出來，builder companion 再閒也沒事幹。</p>
+<p>重現之後 logcat 裡看到的是這個：</p>
+<pre><code class="language-text">Provider finished with tool_calls but ToolCallLoop built no executable tool calls.
+pending=index=0 idLen=0 nameLen=0 argumentsLen=17
+</code></pre>
+<p><code>idLen=0</code>、<code>nameLen=0</code>，但 <code>argumentsLen=17</code>。意思是：arguments 有收到 17 個字元，但 tool 的 id 和 name 是空的。這種狀態下我不可能去執行一個不知道是誰的 tool，只能 abort 那一輪。</p>
+<h2>根因：parser 對 SSE 格式太嚴</h2>
+<p>原本的判斷是這樣寫的：</p>
+<pre><code class="language-kotlin">if (!line.startsWith(&quot;data: &quot;)) continue
+val payload = line.removePrefix(&quot;data: &quot;)
+</code></pre>
+<p>只接受 <code>data: </code> 開頭——<code>data</code> 後面要有冒號、還要有空白。問題是有些 OpenAI-compatible provider 回的是 <code>data:{...}</code>，冒號後面沒空白。</p>
+<p>這兩種寫法在 SSE 規範裡都是合法的 data framing，空白不是強制。我的 parser 把它當成強制了。</p>
+<p>而且 tool call 是分 chunk stream 進來的，漏掉一個 chunk 就可能整個 reconstruct 失敗。這次剛好漏掉的是帶 tool name 和 id 的那幾行，arguments 因為在別的 chunk 裡反而收到了。</p>
+<h2>為什麼以前沒事</h2>
+<p>因為以前那個 provider / gateway 剛好回的就是 <code>data: {...}</code>，帶空白。我的 parser 跟它的格式對得上，就沒人發現我其實只認一種寫法。</p>
+<p>6 月 29 號 provider 那邊行為改了，stream 的 shape 變了，不是變成違規格式，只是變成我沒 cover 的那種合法格式。bug 一直在 Wingmate 這邊，是 provider 的改動把它暴露出來。</p>
+<p>所以正確的 framing 不是「provider 改壞了相容性」，而是「我的相容性本來就寫窄了，只是沒人踩到」。</p>
+<h2>修法</h2>
+<p><code>OpenAiSseParser</code> 現在用這個抽 payload：</p>
+<pre><code class="language-kotlin">private fun String.sseDataPayload(): String? {
+    if (!startsWith(&quot;data:&quot;)) return null
+    return removePrefix(&quot;data:&quot;).trimStart()
+}
+</code></pre>
+<p>只認 <code>data:</code> 開頭，後面有沒有空白都 <code>trimStart()</code> 吃掉。<code>data: {...}</code> 和 <code>data:{...}</code> 都進得來。</p>
+<p>另外 <code>ToolCallLoop</code> 也加了一層防禦：空的 tool id / name 不會再去覆蓋已經累積的 pending state，然後加了 diagnostic log，當 provider finish 在 <code>tool_calls</code> 但 reconstruct 不出可執行 tool call 時，會把 incomplete 狀態記下來。</p>
+<p>這 log 早該加。第一次發生時我花了不少時間才確定問題是出在 parser 跟 tool-call 之間，而不是 executor 或 model decision。</p>
+<h2>測試</h2>
+<p>補了 unit test 覆蓋這次 trigger 的 stream 格式，用 <code>./gradlew testDebugUnitTest assembleDebug</code> 驗過，debug build 裝上 device 確認 tool call 回來了，才推上 <code>main</code>。</p>
+<p>fix 本身很小，一個字串判斷的事。但暴露出來的問題是：我之前把 OpenAI-compatible API 當成 byte-for-byte 一樣在對，而不是 protocol-compatible 在對。協議相容不代表每個 provider 吐出來的 bytes 都長一樣。</p>
+<h2>還沒做的</h2>
+<ul>
+<li>更多 parser fixture：id、name、arguments 分別在不同 chunk 進來的 fragment 情況。</li>
+<li>舊版 <code>function_call</code> streaming 如果要支援的話也要測。</li>
+<li>開發 build 裡，當 <code>finish_reason=tool_calls</code> 但重建不出 tool call 時，直接 surface 一個內部 debug 訊息，不要像這次一樣安靜。</li>
+</ul>
+<p>這次的教訓其實很老派：parse 別人的協議時，不要假設對方會用你預期的精確格式。spec 寫的是 <code>data:</code>，不是 <code>data: </code>。一個空格的差，夠你 debug 一個晚上。在 Wingmate 這種 tool call 等於 build pipeline、而且 provider 橫跨十幾家的專案上，這種安靜的失敗成本特別高——agent 不呼叫 tool，你不會看到 build error，只會看到一個看似在思考卻什麼都沒做的 app。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
