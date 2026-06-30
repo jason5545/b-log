@@ -1254,6 +1254,13 @@
       "postUrl": "https://b-log.to/tech-development/wingmate-sse-parser-space-tool-call-failure/",
       "facebookPostId": "1026818047191304_122107861077290922",
       "publishedAt": "2026-06-30T00:11:40.331Z"
+    },
+    "xiaomi-hyperos-assistant-corner-gesture-launcher": {
+      "status": "published",
+      "title": "左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢",
+      "postUrl": "https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/",
+      "facebookPostId": "1026818047191304_122107884117290922",
+      "publishedAt": "2026-06-30T06:43:02.430Z"
     }
   }
 }
