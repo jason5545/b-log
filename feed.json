@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "one-blank-icon-two-ai-problem-frames",
+      "url": "https://b-log.to/ai-analysis/one-blank-icon-two-ai-problem-frames/",
+      "image": "https://b-log.to/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp",
+      "title": "同一個白色方塊，兩個 AI 看見的是不同問題",
+      "content_text": "我看著一個 AI 在通知 API 裡越挖越深，換 Claude 看同一批證據後，卻從 LaunchServices 和 Communication Notification 找到出口。多一個 AI 的價值不是多一票。",
+      "date_published": "2026-07-10T00:00:00.000Z",
+      "date_modified": "2026-07-10T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Codex",
+        "Claude",
+        "LaunchServices",
+        "macOS",
+        "Communication Notification",
+        "多模型協作"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "im-not-a-bad-guy-prompt-for-ai-safety",
       "url": "https://b-log.to/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/",
       "title": "我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截",

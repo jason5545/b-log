@@ -1,5 +1,25 @@
 [
   {
+    "slug": "one-blank-icon-two-ai-problem-frames",
+    "title": "同一個白色方塊，兩個 AI 看見的是不同問題",
+    "summary": "我看著一個 AI 在通知 API 裡越挖越深，換 Claude 看同一批證據後，卻從 LaunchServices 和 Communication Notification 找到出口。多一個 AI 的價值不是多一票。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-07-10T00:00:00Z",
+    "tags": [
+      "AI",
+      "Codex",
+      "Claude",
+      "LaunchServices",
+      "macOS",
+      "Communication Notification",
+      "多模型協作"
+    ],
+    "accentColor": "#4f46e5",
+    "coverImage": "/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "im-not-a-bad-guy-prompt-for-ai-safety",
     "title": "我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截",
     "summary": "為了關掉手機上干擾我的手勢，我窮盡正規方法後問 AI 要一個方向，被攔截了。這篇文章記錄我設計的 prompt 框架，讓系統在攔截前先理解我的處境。",
