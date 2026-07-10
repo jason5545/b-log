@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>同一個白色方塊，兩個 AI 看見的是不同問題 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="我看著一個 AI 在通知 API 裡越挖越深，換 Claude 看同一批證據後，卻從 LaunchServices 和 Communication Notification 找到出口。多一個 AI 的價值不是多一票。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/ai-analysis/one-blank-icon-two-ai-problem-frames/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/ai-analysis/one-blank-icon-two-ai-problem-frames/" id="og-url">
+  <meta property="og:title" content="同一個白色方塊，兩個 AI 看見的是不同問題" id="og-title">
+  <meta property="og:description" content="我看著一個 AI 在通知 API 裡越挖越深，換 Claude 看同一批證據後，卻從 LaunchServices 和 Communication Notification 找到出口。多一個 AI 的價值不是多一票。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-07-10T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-07-10T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="AI 分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="AI">
+  <meta property="article:tag" content="Codex">
+  <meta property="article:tag" content="Claude">
+  <meta property="article:tag" content="LaunchServices">
+  <meta property="article:tag" content="macOS">
+  <meta property="article:tag" content="Communication Notification">
+  <meta property="article:tag" content="多模型協作">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/ai-analysis/one-blank-icon-two-ai-problem-frames/" id="twitter-url">
+  <meta property="twitter:title" content="同一個白色方塊，兩個 AI 看見的是不同問題" id="twitter-title">
+  <meta property="twitter:description" content="我看著一個 AI 在通知 API 裡越挖越深，換 Claude 看同一批證據後，卻從 LaunchServices 和 Communication Notification 找到出口。多一個 AI 的價值不是多一票。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="AI, Codex, Claude, LaunchServices, macOS, Communication Notification, 多模型協作" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp" imagesrcset="/content/img/2026/one-blank-icon-two-ai-problem-frames-cover-480w.webp 480w, /content/img/2026/one-blank-icon-two-ai-problem-frames-cover-828w.webp 828w, /content/img/2026/one-blank-icon-two-ai-problem-frames-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"同一個白色方塊，兩個 AI 看見的是不同問題","description":"我看著一個 AI 在通知 API 裡越挖越深，換 Claude 看同一批證據後，卻從 LaunchServices 和 Communication Notification 找到出口。多一個 AI 的價值不是多一票。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-07-10T00:00:00Z","dateModified":"2026-07-10T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/one-blank-icon-two-ai-problem-frames/"},"url":"https://b-log.to/ai-analysis/one-blank-icon-two-ai-problem-frames/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp"],"keywords":"AI, Codex, Claude, LaunchServices, macOS, Communication Notification, 多模型協作","articleSection":"AI 分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">同一個白色方塊，兩個 AI 看見的是不同問題</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp" srcset="/content/img/2026/one-blank-icon-two-ai-problem-frames-cover-480w.webp 480w, /content/img/2026/one-blank-icon-two-ai-problem-frames-cover-828w.webp 828w, /content/img/2026/one-blank-icon-two-ai-problem-frames-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">同一個白色方塊，兩個 AI 看見的是不同問題</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Jul 10, 2026</span><span>7 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>AI</span><span>Codex</span><span>Claude</span><span>LaunchServices</span><span>macOS</span><span>Communication Notification</span><span>多模型協作</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>EdgeLink 最近在做 Android 通知轉送。</p>
+<p>我想要的效果很單純：LINE、Facebook 的通知第一次在 Mac 右上角跳出來時，要保留 Android 原本的圖示；進到 macOS 通知中心之後，左邊則顯示 EdgeLink 自己的 logo。</p>
+<p>結果第一次跳出的圖示修好了，通知中心裡卻一直是一個白色方塊。</p>
+<p>Codex 一開始查到 Android 11 之後的 package visibility。EdgeLink 沒有權限讀其他 App 的 application icon，所以送到 Mac 的 <code>iconPngBase64</code> 根本是空的。補上 <code>QUERY_ALL_PACKAGES</code> 之後，LINE、Facebook、Easy Wallet 的彩色圖示都拿得到了。</p>
+<p>這一段是對的。</p>
+<p>Mac 右上角第一次跳出的通知，後來也改成 EdgeLink 自己畫的 toast。Android 傳來什麼圖示，它就顯示什麼。這一段也真的能跑。</p>
+<p>麻煩從通知中心開始。</p>
+<p>Codex 先試 <code>UNNotificationAttachment</code>，沒用。接著去碰私有的 <code>UNNotificationIcon</code>，試過 Data、Path、<code>iconForApplicationURL</code>。指向 <code>/Applications/LINE.app</code> 時，通知中心真的出現了彩色 LINE logo；指向 EdgeLink 自己卻還是白色方塊。</p>
+<p>從這裡開始，它被自己的成功帶走了。</p>
+<p>既然 LINE.app 可以，它就認為答案一定在 App bundle identity。後面開始建立 icon helper App，補 <code>Info.plist</code>、<code>AppIcon.icns</code>、<code>Assets.car</code>、LaunchServices 註冊、ad-hoc signing、Apple Development signing。還測過拿掉 <code>LSUIElement</code>，啟動時再把 App 改成 <code>.accessory</code>；也換過新的 notification request identifier，想排除舊通知的快取。</p>
+<p>每一步都有 build，每一步都有截圖，每一步看起來都像在接近答案。</p>
+<p>通知中心還是白色方塊。</p>
+<p>我後來叫它先停，回退到上一版。不要再替每個 Android package 建代理 App，也不要再加新的 helper。我請它把需求、做過的測試、看到的現象整理成一份 prompt，拿去給其他 AI 看。</p>
+<p>Claude 看的是同一個問題，但它第一個查的不是通知 API。</p>
+<p>它去看 LaunchServices。</p>
+<p>系統裡的 <code>com.edgelink.mac</code> 當時有四筆 App 紀錄。一筆在 <code>/Applications</code>，有完整圖示；一筆在新的 <code>/private/tmp/edgelink-derived-data</code>，也正常；另外幾筆是舊的 DerivedData 和 debug build，其中一筆連 <code>Resources</code> 都沒有。</p>
+<p>通知系統的 <code>NOTIFICATION#MW4GWYGX56:com.edgelink.mac</code>，剛好綁在那筆沒有圖示資源的紀錄上。</p>
+<p>這個細節一出來，前面的畫面突然都對得上了。</p>
+<p>macOS 通知中心不是從通知內容裡拿寄件者圖示。<code>usernoted</code> 和 NotificationCenter 會先用 bundle ID 找 LaunchServices 的 App 紀錄，再交給 IconServices。它找到的是壞掉的 debug 副本，畫出來當然只剩白色方塊。</p>
+<p>而且 EdgeLink 的 <code>CFBundleVersion</code> 一直是 1。IconServices 用 App identity 和版本做快取，branding 加進去之後版本沒有變，那個空白結果也一直沒有理由失效。</p>
+<p>Claude 取消註冊三份舊 debug 副本，重新註冊 <code>/Applications/EdgeLinkMac.app</code>，再重啟 <code>usernoted</code> 和 NotificationCenter。</p>
+<p>沒有改通知程式碼。</p>
+<p>我從 Android 發了一則測試通知。通知中心左邊終於出現 EdgeLink 的 logo。</p>
+<p>最荒謬的證據，其實早就在 Codex 自己的 build log 裡。每次 <code>xcodebuild</code> 結尾都寫得很清楚：</p>
+<pre><code class="language-text">RegisterWithLaunchServices /tmp/edgelink-derived-data/Build/Products/Debug/EdgeLinkMac.app
+lsregister -f -R -trusted /tmp/edgelink-derived-data/Build/Products/Debug/EdgeLinkMac.app
+</code></pre>
+<p>Codex 不只沒有把這行當成線索，後面每重建一次，就再把同 bundle ID 的 tmp build 註冊一次。</p>
+<p>這不是它沒看到 log。它看到了，只是當時的問題框法裡沒有 LaunchServices，所以那兩行只是 build 成功前的背景雜訊。</p>
+<p>後來還有第二個改法。</p>
+<p>我原本想讓通知中心直接顯示 LINE、Facebook 的 Android 圖示。Codex 之前一直把這件事理解成「替換發文 App 的 icon」，所以只在 UserNotifications 和 App bundle 裡找。</p>
+<p>Claude 建議走 Apple 的 Communication Notification：用帶 <code>INImage</code> 的 <code>INPerson</code> 當成發送者，建立 <code>INSendMessageIntent</code>，再讓 <code>UNNotificationContent</code> 呼叫 <code>updating(from:)</code>。加上 communication entitlement 和 <code>NSUserActivityTypes</code> 之後，通知中心就能把 Android App 圖示當成 sender image 顯示。</p>
+<p>它沒有硬換 App icon。它換了表示方法。</p>
+<p>同一個畫面需求，一個 AI 看到的是「App icon 要怎麼改」，另一個看到的是「這張圖可以用哪一種 sender identity 放進通知」。差別不在記得多少 API，而是怎麼命名眼前的問題。</p>
+<p>我後來直接問 Codex：為什麼你當初沒有提到？</p>
+<p>它回頭看紀錄後承認，自己把搜尋範圍畫得太窄。查 Apple 文件時只沿著 UserNotifications 和 attachment 往下找，沒有把 Intents 拉進來；<code>iconForApplicationURL</code> 指向 LINE 成功後，又讓它更相信 App bundle identity 才是唯一方向。</p>
+<p>這次讓我重新確認，多一個 AI 的價值不是多一票。</p>
+<p>如果兩個模型都只在同一個假設裡投票，數量沒有用。真正有用的是第二個來源願意重新命名問題，把原本被當成背景雜訊的那行 log 拉到最前面。</p>
+<p>我也不能只看一個 agent 做了多少事。它可以 build 十次、產十張截圖、寫一堆看起來合理的解釋。我要看的還是那個白色方塊有沒有消失，還有每一輪測試到底改變了什麼判斷。</p>
+<p>修好之後，我講了一句很直覺的話：</p>
+<p>「所以，多一個來源還是有效的嘛。多個意見。」</p>
+<p>現在看，我還是這樣想。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
