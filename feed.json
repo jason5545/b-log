@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "trusted-access-codex-cyber-policy-visibility",
+      "url": "https://b-log.to/ai-analysis/trusted-access-codex-cyber-policy-visibility/",
+      "image": "https://b-log.to/content/img/2026/trusted-access-codex-cyber-policy-visibility-cover.webp",
+      "title": "Trusted Access 已經開了，Codex 還是說不清楚為什麼擋我",
+      "content_text": "我完成 Trusted Access 驗證後，Codex 仍以 cyber_policy 阻擋工作，卻無法說明資格是否生效。模型能力再高，使用者拿不到也沒有用。",
+      "date_published": "2026-07-20T00:00:00.000Z",
+      "date_modified": "2026-07-20T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Codex",
+        "OpenAI",
+        "Trusted Access",
+        "Cyber Safety",
+        "無障礙",
+        "產品設計"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "one-blank-icon-two-ai-problem-frames",
       "url": "https://b-log.to/ai-analysis/one-blank-icon-two-ai-problem-frames/",
       "image": "https://b-log.to/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp",

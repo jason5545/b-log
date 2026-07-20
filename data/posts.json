@@ -1,5 +1,25 @@
 [
   {
+    "slug": "trusted-access-codex-cyber-policy-visibility",
+    "title": "Trusted Access 已經開了，Codex 還是說不清楚為什麼擋我",
+    "summary": "我完成 Trusted Access 驗證後，Codex 仍以 cyber_policy 阻擋工作，卻無法說明資格是否生效。模型能力再高，使用者拿不到也沒有用。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-07-20T00:00:00Z",
+    "tags": [
+      "AI",
+      "Codex",
+      "OpenAI",
+      "Trusted Access",
+      "Cyber Safety",
+      "無障礙",
+      "產品設計"
+    ],
+    "accentColor": "#2563eb",
+    "coverImage": "/content/img/2026/trusted-access-codex-cyber-policy-visibility-cover.webp",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "one-blank-icon-two-ai-problem-frames",
     "title": "同一個白色方塊，兩個 AI 看見的是不同問題",
     "summary": "我看著一個 AI 在通知 API 裡越挖越深，換 Claude 看同一批證據後，卻從 LaunchServices 和 Communication Notification 找到出口。多一個 AI 的價值不是多一票。",
