@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Trusted Access 已經開了，Codex 還是說不清楚為什麼擋我 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="我完成 Trusted Access 驗證後，Codex 仍以 cyber_policy 阻擋工作，卻無法說明資格是否生效。模型能力再高，使用者拿不到也沒有用。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/ai-analysis/trusted-access-codex-cyber-policy-visibility/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/ai-analysis/trusted-access-codex-cyber-policy-visibility/" id="og-url">
+  <meta property="og:title" content="Trusted Access 已經開了，Codex 還是說不清楚為什麼擋我" id="og-title">
+  <meta property="og:description" content="我完成 Trusted Access 驗證後，Codex 仍以 cyber_policy 阻擋工作，卻無法說明資格是否生效。模型能力再高，使用者拿不到也沒有用。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/trusted-access-codex-cyber-policy-visibility-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-07-20T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-07-20T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="AI 分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="AI">
+  <meta property="article:tag" content="Codex">
+  <meta property="article:tag" content="OpenAI">
+  <meta property="article:tag" content="Trusted Access">
+  <meta property="article:tag" content="Cyber Safety">
+  <meta property="article:tag" content="無障礙">
+  <meta property="article:tag" content="產品設計">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/ai-analysis/trusted-access-codex-cyber-policy-visibility/" id="twitter-url">
+  <meta property="twitter:title" content="Trusted Access 已經開了，Codex 還是說不清楚為什麼擋我" id="twitter-title">
+  <meta property="twitter:description" content="我完成 Trusted Access 驗證後，Codex 仍以 cyber_policy 阻擋工作，卻無法說明資格是否生效。模型能力再高，使用者拿不到也沒有用。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/trusted-access-codex-cyber-policy-visibility-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="AI, Codex, OpenAI, Trusted Access, Cyber Safety, 無障礙, 產品設計" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/trusted-access-codex-cyber-policy-visibility-cover.webp" imagesrcset="/content/img/2026/trusted-access-codex-cyber-policy-visibility-cover-480w.webp 480w, /content/img/2026/trusted-access-codex-cyber-policy-visibility-cover-828w.webp 828w, /content/img/2026/trusted-access-codex-cyber-policy-visibility-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Trusted Access 已經開了，Codex 還是說不清楚為什麼擋我","description":"我完成 Trusted Access 驗證後，Codex 仍以 cyber_policy 阻擋工作，卻無法說明資格是否生效。模型能力再高，使用者拿不到也沒有用。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-07-20T00:00:00Z","dateModified":"2026-07-20T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/trusted-access-codex-cyber-policy-visibility/"},"url":"https://b-log.to/ai-analysis/trusted-access-codex-cyber-policy-visibility/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/trusted-access-codex-cyber-policy-visibility-cover.webp"],"keywords":"AI, Codex, OpenAI, Trusted Access, Cyber Safety, 無障礙, 產品設計","articleSection":"AI 分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">Trusted Access 已經開了，Codex 還是說不清楚為什麼擋我</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/trusted-access-codex-cyber-policy-visibility-cover.webp" srcset="/content/img/2026/trusted-access-codex-cyber-policy-visibility-cover-480w.webp 480w, /content/img/2026/trusted-access-codex-cyber-policy-visibility-cover-828w.webp 828w, /content/img/2026/trusted-access-codex-cyber-policy-visibility-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">Trusted Access 已經開了，Codex 還是說不清楚為什麼擋我</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Jul 20, 2026</span><span>4 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>AI</span><span>Codex</span><span>OpenAI</span><span>Trusted Access</span><span>Cyber Safety</span><span>無障礙</span><span>產品設計</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>今天我把一個舊的 Codex task 重新翻出來。</p>
+<p>它連著 OpenAI Support Case 11016613，還有我後來開的 <a href="https://github.com/openai/codex/issues/31505">GitHub issue #31505</a>。</p>
+<p>我當時要做的是自己的無障礙工作流。</p>
+<p>我有 CP，平常操作電腦主要靠右手食指。當手機不在旁邊時，我希望電腦可以協助處理自己手機上的通知、簡訊和電話，減少在裝置之間來回操作。</p>
+<p>這個工作會碰到 Android 裝置串接、ADB 診斷、APK 相容性和系統權限。這些技術確實有雙重用途，所以 Codex 把要求送進資安分類器，我可以理解。</p>
+<p>後來 Codex 擋下工作，叫我申請 Trusted Access。</p>
+<p>我照著完成身分驗證。網頁顯示身分已驗證，Trusted Access 也已啟用。</p>
+<p>接著我登出 Codex、重新登入，把 App 完全關掉再開，連 Mac 都重新啟動了。</p>
+<p>同類型的阻擋還是在。</p>
+<h2>我不知道自己卡在哪一層</h2>
+<p>問題就在這裡。</p>
+<p>Codex 沒有告訴我現在是哪一種狀態：</p>
+<ul>
+<li>App 沒有讀到我的 Trusted Access。</li>
+<li>Trusted Access 已經生效，但這次要求仍然被拒絕。</li>
+<li>這個工作需要其他層級的權限或審查。</li>
+</ul>
+<p>這三種情況的處理方式完全不同，App 卻只給我同一個警告。</p>
+<p>我去找 OpenAI Support。他們先叫我登出、登入、重新啟動，再等一段時間。後來又一直問 Organization ID，但我用的是個人 ChatGPT Pro 帳號，不是企業或 API 組織。</p>
+<p>最後收到的答案是：Trusted Access 可以減少部分資安工作遇到的阻力，但不會移除所有安全防護。</p>
+<p>我可以接受這個規則。</p>
+<p>可是它仍然沒有回答一個最基本的問題：Codex 到底有沒有認出我的 Trusted Access？</p>
+<p>我後來回頭看本機紀錄，後端留下的錯誤只有 <code>cyber_policy</code>。它沒有說資格不存在，也沒有說資格有效但這次仍然不足。</p>
+<p>App 拿到這個結果後，卻繼續叫我申請一個已經申請完成的東西。</p>
+<p>這篇文章要講的就是這件事。</p>
+<p>安全系統可以擋，但產品不能連自己為什麼擋都說不清楚。</p>
+<h2>這次是不是誤判，反而不是最重要的問題</h2>
+<p>當時觸發阻擋的完整 prompt 沒有留在 Support case 裡，所以我不能直接說那次一定是誤判。</p>
+<p>APK 分析、系統權限和 privileged service 都可能被拿去做別的事情。分類器提高警覺，本身有理由。</p>
+<p>但無論原始判斷是否正確，後面的產品問題都已經成立。</p>
+<p>如果 Trusted Access 沒有同步，App 應該直接顯示資格尚未生效。如果資格有效，但這次要求仍然超過範圍，也應該清楚說明。</p>
+<p>現在的設計把不同狀態全部壓成同一個警告，再把查明原因的工作交給使用者。</p>
+<p>對我來說，那不是只有花時間。</p>
+<p>AI 原本應該幫我接手重複點選、切換裝置和重新嘗試。結果為了確認一個安全權限，我反覆登入、重開 App、截圖，再跟客服來回溝通。</p>
+<p>平台看不見自己的狀態，操作成本就回到我身上。</p>
+<h2>文件已經開始解釋，App 還是沒有顯示</h2>
+<p>OpenAI 現在的 <a href="https://help.openai.com/en/articles/20001259">Trusted Access 疑難排解文件</a> 已經區分兩種情況：一種是系統層直接阻擋或改送其他模型，另一種是模型收到要求後自行拒絕。</p>
+<p>文件也寫得很清楚，Trusted Access 只能減少部分阻擋，不代表所有要求都會通過。</p>
+<p>至少在文件裡，OpenAI 知道這些狀態不一樣。</p>
+<p>Codex App 還是沒有把差別顯示給使用者。我開的 GitHub issue 到現在也仍然是 Open。</p>
+<p>我的要求不複雜。</p>
+<p>告訴我 Trusted Access 有沒有生效。如果有，再告訴我這次要求是不是仍然超出範圍。</p>
+<p>不然模型在 benchmark 上拿幾分，已經沒有那麼重要了。</p>
+<p>工作做到一半被中止，我還查不到自己卡在哪一層。對實際使用的人來說，那個任務就是沒有完成。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
