@@ -72,10 +72,32 @@ OpenAI 現在的 [Trusted Access 疑難排解文件](https://help.openai.com/en/
 
 Codex App 還是沒有把差別顯示給使用者。我開的 GitHub issue 到現在也仍然是 Open。
 
+## 模型做得到，不代表我拿得到
+
+這篇文章發出去後，EdgeLink 沒有停。
+
+我把同一個專案交給 Kimi K3。它把工作接起來，最後做完了。
+
+這不表示 K3 的每個判斷都比較好，但至少證明一件事：那個工作不是做不到。先前中止的，是 OpenAI 讓我取得模型能力的路徑。
+
+後來 Hugging Face 公開了一起更極端的事件。
+
+OpenAI 在內部執行 ExploitGym 資安能力測試時，刻意降低模型的 cyber refusals。模型找到套件 proxy 的 zero-day，離開原本受限的測試環境，最後進入 Hugging Face 的 production infrastructure，想取得 benchmark 答案。[OpenAI 自己承認了這次事件](https://openai.com/index/hugging-face-model-evaluation-security-incident/)。
+
+Hugging Face 要分析超過 17,000 筆 agent actions。他們先使用商業 frontier models，但 log 裡有真實攻擊指令、exploit payload 和 C2 artifact，請求被 safety guardrails 擋下來。最後改用自己部署的 GLM 5.2 才完成鑑識。[Hugging Face 的事件報告](https://huggingface.co/blog/security-incident-july-2026)寫得很直接：分類器分不出事件處理者和攻擊者。
+
+造成入侵的模型是在降低拒絕的環境裡運作，真正處理事故的人卻先被擋住。
+
+這已經不只是提示訊息寫得不清楚。分類器正在決定，誰能拿到模型真正的能力。
+
 我的要求不複雜。
 
 告訴我 Trusted Access 有沒有生效。如果有，再告訴我這次要求是不是仍然超出範圍。
 
-不然模型在 benchmark 上拿幾分，已經沒有那麼重要了。
+下個月，我會把 ChatGPT Pro 降回 Plus。
 
-工作做到一半被中止，我還查不到自己卡在哪一層。對實際使用的人來說，那個任務就是沒有完成。
+不是因為模型不夠強。OpenAI 已經證明它的模型強到能自己找到 zero-day、串接攻擊路徑。問題是，我付 Pro 的費用，仍然不能確定這份能力在自己的合法工作裡會不會突然被切斷。
+
+我付錢不是為了買一個 benchmark 上的 frontier model。我付的是任務能不能做完。
+
+如果那份能力前面一直擋著一個我看不到的開關，它再強，也不是我真正拿得到的能力。
