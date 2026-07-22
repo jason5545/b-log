@@ -1742,9 +1742,11 @@ function enhanceRenderedContent(contentEl) {
   // 增強表格（響應式包裝）
   enhanceTables(contentEl);
 
-  // 專訪 Q&A 樣式增強
-  const articleEl = contentEl.closest('[data-category-theme]');
-  if (articleEl) {
+  // Crossing Field 專訪 Q&A 樣式增強
+  // 不能只檢查 data-category-theme 是否存在，否則其他分類裡的短段落
+  // 也會被誤認成講者名稱，連帶套用訪談回答樣式。
+  const interviewArticleEl = contentEl.closest('[data-category-theme="crossing-field"]');
+  if (interviewArticleEl) {
     styleInterviewQA(contentEl);
   }
 
