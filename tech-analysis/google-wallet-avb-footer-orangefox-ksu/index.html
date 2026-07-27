@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>每一關都是綠的，Google 錢包還是說我 Root：兇手是 recovery 順手弄丟的 AVB footer - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="Play Integrity STRONG、bootloader 回鎖、偵測軟體全 clean，Google 錢包還是說我 root。拆到最後才發現是 OrangeFox 內建 patch 用 magiskboot 重打包 init_boot，把 AVB footer 弄丟了。能開機不代表結構完整。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-analysis/google-wallet-avb-footer-orangefox-ksu/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-analysis/google-wallet-avb-footer-orangefox-ksu/" id="og-url">
+  <meta property="og:title" content="每一關都是綠的，Google 錢包還是說我 Root：兇手是 recovery 順手弄丟的 AVB footer" id="og-title">
+  <meta property="og:description" content="Play Integrity STRONG、bootloader 回鎖、偵測軟體全 clean，Google 錢包還是說我 root。拆到最後才發現是 OrangeFox 內建 patch 用 magiskboot 重打包 init_boot，把 AVB footer 弄丟了。能開機不代表結構完整。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%AF%8F%E4%B8%80%E9%97%9C%E9%83%BD%E6%98%AF%E7%B6%A0%E7%9A%84%EF%BC%8CGoogle%20%E9%8C%A2%E5%8C%85%E9%82%84%E6%98%AF%E8%AA%AA%E6%88%91%20Root%EF%BC%9A%E5%85%87%E6%89%8B%E6%98%AF%20recovery%20%E9%A0%86%E6%89%8B%E5%BC%84%E4%B8%9F%E7%9A%84%20AVB%20footer,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-07-27T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-07-27T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="Google Wallet">
+  <meta property="article:tag" content="KernelSU">
+  <meta property="article:tag" content="AVB">
+  <meta property="article:tag" content="DroidGuard">
+  <meta property="article:tag" content="Play Integrity">
+  <meta property="article:tag" content="OrangeFox">
+  <meta property="article:tag" content="Android 16">
+  <meta property="article:tag" content="反編譯">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-analysis/google-wallet-avb-footer-orangefox-ksu/" id="twitter-url">
+  <meta property="twitter:title" content="每一關都是綠的，Google 錢包還是說我 Root：兇手是 recovery 順手弄丟的 AVB footer" id="twitter-title">
+  <meta property="twitter:description" content="Play Integrity STRONG、bootloader 回鎖、偵測軟體全 clean，Google 錢包還是說我 root。拆到最後才發現是 OrangeFox 內建 patch 用 magiskboot 重打包 init_boot，把 AVB footer 弄丟了。能開機不代表結構完整。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%AF%8F%E4%B8%80%E9%97%9C%E9%83%BD%E6%98%AF%E7%B6%A0%E7%9A%84%EF%BC%8CGoogle%20%E9%8C%A2%E5%8C%85%E9%82%84%E6%98%AF%E8%AA%AA%E6%88%91%20Root%EF%BC%9A%E5%85%87%E6%89%8B%E6%98%AF%20recovery%20%E9%A0%86%E6%89%8B%E5%BC%84%E4%B8%9F%E7%9A%84%20AVB%20footer,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="Google Wallet, KernelSU, AVB, DroidGuard, Play Integrity, OrangeFox, Android 16, 反編譯" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"每一關都是綠的，Google 錢包還是說我 Root：兇手是 recovery 順手弄丟的 AVB footer","description":"Play Integrity STRONG、bootloader 回鎖、偵測軟體全 clean，Google 錢包還是說我 root。拆到最後才發現是 OrangeFox 內建 patch 用 magiskboot 重打包 init_boot，把 AVB footer 弄丟了。能開機不代表結構完整。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-07-27T00:00:00Z","dateModified":"2026-07-27T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/google-wallet-avb-footer-orangefox-ksu/"},"url":"https://b-log.to/tech-analysis/google-wallet-avb-footer-orangefox-ksu/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E6%AF%8F%E4%B8%80%E9%97%9C%E9%83%BD%E6%98%AF%E7%B6%A0%E7%9A%84%EF%BC%8CGoogle%20%E9%8C%A2%E5%8C%85%E9%82%84%E6%98%AF%E8%AA%AA%E6%88%91%20Root%EF%BC%9A%E5%85%87%E6%89%8B%E6%98%AF%20recovery%20%E9%A0%86%E6%89%8B%E5%BC%84%E4%B8%9F%E7%9A%84%20AVB%20footer,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"Google Wallet, KernelSU, AVB, DroidGuard, Play Integrity, OrangeFox, Android 16, 反編譯","articleSection":"技術分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">每一關都是綠的，Google 錢包還是說我 Root：兇手是 recovery 順手弄丟的 AVB footer</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">每一關都是綠的，Google 錢包還是說我 Root：兇手是 recovery 順手弄丟的 AVB footer</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Jul 27, 2026</span><span>9 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>Google Wallet</span><span>KernelSU</span><span>AVB</span><span>DroidGuard</span><span>Play Integrity</span><span>OrangeFox</span><span>Android 16</span><span>反編譯</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>裝置是 myron，POCO F8 Ultra / Redmi K90 Pro Max（25102PCBEG），Snapdragon 8 Elite Gen 5。ROM 是 xiaomi.eu，從 OS3.0.306 升到 OS3.0.308，bootloader 用 ABL 的手段回鎖，KSU Next 是偽裝版本。</p>
+<p>症狀只有一個：Google 錢包加卡，最後一步跳出「這部裝置無法設定感應支付功能」，理由是「裝置已啟用 Root 權限，或執行了未經認證的軟體」。</p>
+<p>問題是，其他每一關都是綠的：</p>
+<ul>
+<li>Play 商店裝置認證：通過</li>
+<li>Play Integrity：STRONG</li>
+<li>Key integrity：STRONG</li>
+<li>Bootloader 狀態：系統判定已回鎖，verified boot green</li>
+<li>各種 root 偵測軟體：全 clean</li>
+</ul>
+<p>如果某一關不過，我還知道要去哪裡修。每關都過、只有錢包不過，這才是最煩的。</p>
+<h2>錢包根本不看 Play Integrity</h2>
+<p>先把錢包和 Play services 從手機拉出來拆。</p>
+<p>Wallet APK（<code>com.google.android.apps.walletnfcrel</code>）裡面跟 attestation 有關的東西其實很少，只有 <code>GetLastAttestationResultRequest</code> / <code>GetLastAttestationResultResponse</code> 這種 IPC stub。它只是跟 GMS 要結果，自己不做偵測。</p>
+<p>真正的偵測在 GMS（<code>com.google.android.gms</code> 26.26.34）的 tapandpay 模組。加卡的流程是：</p>
+<ol>
+<li>GMS 先向 Google server 拿一個 nonce</li>
+<li>呼叫 DroidGuard，flow 名稱 <code>tapandpay_attestation</code></li>
+<li>DroidGuard 的 native 引擎在 GMS 自己的 process 裡掃描環境，產生加密的 snapshot</li>
+<li>snapshot 連同 <code>Build.FINGERPRINT</code> 送 server，server 回 verdict</li>
+<li>verdict 是 fail 就 log <code>Device fails attestation</code>，並把結果快取在 <code>TapAndPayServiceStorage.xml</code> 的 <code>last_attestation_result=false</code></li>
+</ol>
+<p>關鍵在第二步。這條路跟 Play Integrity API 是完全獨立的兩條線。Play 商店那個「裝置認證通過」走的是 Play Integrity；錢包加卡走的是 DroidGuard 的支付級 attestation。兩邊的 verdict 互不參考。</p>
+<p>所以「Play Integrity 都 STRONG 了為什麼錢包還說我 root」這個問題，本身就是問錯的。錢包從來沒看過那個 STRONG。</p>
+<h2>排除法：不是快取、不是帳號、不是 ROM</h2>
+<p>接下來是一連串排除。</p>
+<p><strong>不是快取。</strong> 把 GMS 的 <code>last_attestation_result</code> 刪掉、force-stop GMS，它重啟後自動重跑一次 attestation，幾秒鐘內 server 又回 fail，新的失敗結果馬上寫回快取。完全可重現。</p>
+<p><strong>不是帳號。</strong> 306 的時候我也遇過一次類似的狀況，那時候換個 Google 帳號就好了。這次換了沒用。</p>
+<p><strong>不是 ROM。</strong> 手邊剛好有 306 和 308 的 ROM，把兩邊的 super 解開、各 partition 的 build.prop 抽出來對。結果兩版結構完全一樣：system 都是 missi 通用映像、vendor 都是 mivendor、build id 都是 <code>BQ2A.250705.001-BP2A.250605.031.A3</code> 這種兩個平台版本串在一起的寫法，build.host 都是 xiaomi.eu。只有版本號不同。306 能過的結構，308 沒有道理不能過。</p>
+<p>到這裡，裝置端「看起來」能查的都乾淨。當時下的結論是：server 端風控，可能是這台裝置被標記了，只能等。</p>
+<p>這個結論是錯的。</p>
+<h2>修好之後，才有資格找根本原因</h2>
+<p>後來我自己想到一件事：KSU 當初不是用官方 APK patch 的，是刷機的時候順手用 OrangeFox Recovery 內建的 KernelSU Next 選項裝的。</p>
+<p>而且官方管理器 APK 裝完之後，其實警告過「這個 IMG 有問題」。我當時只按了「重新修補」，修補完介面一切正常，就沒再管。</p>
+<p>這次從 ROM 裡提取原版 init_boot，用官方 APK 重新 patch，再刷一次。</p>
+<p>錢包馬上就好了。</p>
+<p>好了之後回頭拆，才看到根本原因。把原版 init_boot.img 拆開：</p>
+<pre><code class="language-text">magic ANDROID!, header_version 4
+kernel_size = 0
+ramdisk_size = 2917002
+ramdisk 結尾對齊後 offset 2924544: &quot;AVB0&quot;   ← vbmeta header
+檔案最後 64 bytes: &quot;AVBf&quot;                   ← AVB footer
+</code></pre>
+<p>myron 的原版 init_boot 不是單純的 boot image。ramdisk 後面還接著一段 AVB 的 vbmeta 和 footer，是 chained 結構，整個映像鋪到 8MB。</p>
+<p>再看 OrangeFox 那個安裝選項做了什麼。它的 <code>KernelSU_Next_Installer.zip</code> 裡的腳本很簡單，就是呼叫 recovery 內建的 ksud：</p>
+<pre><code class="language-sh">ksud boot-patch --module $FNAME --flash
+</code></pre>
+<p>問題在這個 ksud。它是 <code>3.2.1-mm-cn-z</code>，不是官方版本。翻它的字串，boot-patch 的實作是走外部 magiskboot：</p>
+<pre><code class="language-text">magiskboot unpack failed
+magiskboot repack failed
+</code></pre>
+<p>而且整支二進位裡找不到任何 <code>AVBf</code> 的處理。</p>
+<p>magiskboot 的 repack 只輸出 header + kernel + ramdisk。原版映像後面那段 vbmeta 和 footer，它根本不認得，也不會寫回去。</p>
+<p>所以 OrangeFox patch 出來的 init_boot，AVB footer 整段被丟掉。</p>
+<p>官方 KernelSU-Next 走的是另一條路。它的 boot_patch 用的是 <code>android_bootimg</code> 這個 Rust crate，parser 會讀出 avb_info，patcher 在重打包時會把 vbmeta 和 footer 寫回去，順便更新裡面的 size 欄位（patcher.rs 312-339）。</p>
+<p>這也解釋了為什麼官方 APK 的「重新修補」救不了。官方的修補是「parse 當前的 image → 換 ramdisk → repack」。footer 已經被 magiskboot 丟掉了，parse 的時候就沒有這個東西，repack 當然也不會憑空長回來。介面顯示正常，是因為 ramdisk 裡的 init 和 kernelsu.ko 換成官方的了；但 image 尾部的結構缺損，修補不會碰。</p>
+<p>只有從原版 image 重新 patch，footer 才會被完整保留下來。</p>
+<h2>為什麼能開機、為什麼全綠</h2>
+<p>這裡是整件事最陰險的地方。</p>
+<p>footer 被丟掉的 init_boot，照理說 locked bootloader 應該拒絕開機。但我這台的回鎖方式不會強制驗證 init_boot 那條鏈，所以照開。</p>
+<p>Play Integrity 也照過，因為它檢查的是 vbmeta 層的簽章和 locked 狀態，那層是好的。</p>
+<p>於是形成一個很詭異的狀態：bootloader 說 green、Play Integrity 說 STRONG、手機正常開機正常使用，但 init_boot 的 chained 結構其實是缺的。Google 的支付級 attestation 看的就是這種東西。</p>
+<p>能開機，不代表結構完整。每一盞綠燈，只證明它負責檢查的那一層沒問題。</p>
+<h2>為什麼 AI 查了那麼久，沒想到這一邊</h2>
+<p>最後這段值得記。</p>
+<p>這次排查大半是我跟 AI 一起做的。它拆 APK 很快、實驗設計也合理，但結論卡在「server 端風控」。事後我問它為什麼沒想到 boot image 這邊，它的回答整理起來是四個失誤：</p>
+<p>一是過早接受「server 是黑箱」。追到 DroidGuard 就認定本地無從驗證，停止挖裝置端的證據。但 server 判的是本地送出去的東西，它沒有去檢查送出去的東西本身。</p>
+<p>二是錯誤消去。306 和 308 的 ROM 同構，它就直接跳到「ROM 無罪，所以是裝置標記」。消去的是錯的變數。真正的變數不是 ROM，是 boot chain 的結構。</p>
+<p>三是把綠燈當完整。locked + green 只證明 vbmeta 層驗證通過，不證明 init_boot 結構完整。它把「驗證通過」誤讀成「沒被動過」。</p>
+<p>四是沒有早點問安裝方式。「KSU 怎麼裝的？」這個問題如果第一輪就問，OrangeFox 內建 patch、magiskboot、footer 丟失這條鏈會直接浮現。</p>
+<p>還有一個它不知道的：官方 APK 早就警告過「IMG 有問題」。那個警告就是結構異常的直接證據，我當時按了修補就放著了。</p>
+<p>所以這次真正的教訓不是「不要用 recovery 內建 patch」。是當 attestation 全過、但某一關死都不過的時候，該懷疑的是「過的那些關，檢查的是不是同一個東西」，然後去拆 artifact 本身，而不是繼續在 runtime 狀態裡打轉。</p>
+<p>runtime 會說謊。image 不會。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
