@@ -1,5 +1,25 @@
 [
   {
+    "slug": "google-wallet-avb-footer-orangefox-ksu",
+    "title": "每一關都是綠的，Google 錢包還是說我 Root：兇手是 recovery 順手弄丟的 AVB footer",
+    "summary": "Play Integrity STRONG、bootloader 回鎖、偵測軟體全 clean，Google 錢包還是說我 root。拆到最後才發現是 OrangeFox 內建 patch 用 magiskboot 重打包 init_boot，把 AVB footer 弄丟了。能開機不代表結構完整。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-07-27T00:00:00Z",
+    "tags": [
+      "Google Wallet",
+      "KernelSU",
+      "AVB",
+      "DroidGuard",
+      "Play Integrity",
+      "OrangeFox",
+      "Android 16",
+      "反編譯"
+    ],
+    "accentColor": "#c2410c",
+    "readingTime": "9 min"
+  },
+  {
     "slug": "trusted-access-codex-cyber-policy-visibility",
     "title": "Trusted Access 已經開了，Codex 還是說不清楚為什麼擋我",
     "summary": "我完成 Trusted Access 驗證後，Codex 仍以 cyber_policy 阻擋工作，卻無法說明資格是否生效。模型能力再高，使用者拿不到也沒有用。",

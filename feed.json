@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "google-wallet-avb-footer-orangefox-ksu",
+      "url": "https://b-log.to/tech-analysis/google-wallet-avb-footer-orangefox-ksu/",
+      "title": "每一關都是綠的，Google 錢包還是說我 Root：兇手是 recovery 順手弄丟的 AVB footer",
+      "content_text": "Play Integrity STRONG、bootloader 回鎖、偵測軟體全 clean，Google 錢包還是說我 root。拆到最後才發現是 OrangeFox 內建 patch 用 magiskboot 重打包 init_boot，把 AVB footer 弄丟了。能開機不代表結構完整。",
+      "date_published": "2026-07-27T00:00:00.000Z",
+      "date_modified": "2026-07-27T00:00:00.000Z",
+      "tags": [
+        "Google Wallet",
+        "KernelSU",
+        "AVB",
+        "DroidGuard",
+        "Play Integrity",
+        "OrangeFox",
+        "Android 16",
+        "反編譯"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "trusted-access-codex-cyber-policy-visibility",
       "url": "https://b-log.to/ai-analysis/trusted-access-codex-cyber-policy-visibility/",
       "image": "https://b-log.to/content/img/2026/trusted-access-codex-cyber-policy-visibility-cover.webp",
