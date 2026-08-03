@@ -1289,6 +1289,13 @@
       "postUrl": "https://b-log.to/tech-analysis/google-wallet-avb-footer-orangefox-ksu/",
       "facebookPostId": "1026818047191304_122110196295290922",
       "publishedAt": "2026-07-27T12:51:33.865Z"
+    },
+    "myron-taiwan-kernel-ghostlock-offsets": {
+      "status": "published",
+      "title": "同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來",
+      "postUrl": "https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/",
+      "facebookPostId": "1026818047191304_122110780971290922",
+      "publishedAt": "2026-08-03T23:11:07.478Z"
     }
   }
 }
