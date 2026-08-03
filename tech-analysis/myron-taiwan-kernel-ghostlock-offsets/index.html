@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="同一支手機,陸版的 GhostLock payload 一堆人算好了,臺版永遠對不上。拆開三個 ROM 才看到:同代號不等於同核心,陸版走 Google 官方 GKI 分支、臺版是小米自己編的。卡我一個月、一支手機錢的問題,最後半小時解掉,因為答案一直躺在自己的 ROM 裡。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/" id="og-url">
+  <meta property="og:title" content="同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來" id="og-title">
+  <meta property="og:description" content="同一支手機,陸版的 GhostLock payload 一堆人算好了,臺版永遠對不上。拆開三個 ROM 才看到:同代號不等於同核心,陸版走 Google 官方 GKI 分支、臺版是小米自己編的。卡我一個月、一支手機錢的問題,最後半小時解掉,因為答案一直躺在自己的 ROM 裡。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%90%8C%E4%B8%80%E6%94%AF%E6%89%8B%E6%A9%9F%EF%BC%8C%E5%85%A9%E9%A1%86%E6%A0%B8%E5%BF%83%EF%BC%9A%E8%87%BA%E7%89%88%E7%9A%84%20GhostLock%20%E5%81%8F%E7%A7%BB%E7%82%BA%E4%BB%80%E9%BA%BC%E6%B0%B8%E9%81%A0%E7%AE%97%E4%B8%8D%E5%87%BA%E4%BE%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-08-04T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-08-04T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="GhostLock">
+  <meta property="article:tag" content="CVE-2026-43499">
+  <meta property="article:tag" content="myron">
+  <meta property="article:tag" content="POCO F8 Ultra">
+  <meta property="article:tag" content="HyperOS">
+  <meta property="article:tag" content="kernel">
+  <meta property="article:tag" content="kallsyms">
+  <meta property="article:tag" content="BTF">
+  <meta property="article:tag" content="root">
+  <meta property="article:tag" content="Android 16">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/" id="twitter-url">
+  <meta property="twitter:title" content="同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來" id="twitter-title">
+  <meta property="twitter:description" content="同一支手機,陸版的 GhostLock payload 一堆人算好了,臺版永遠對不上。拆開三個 ROM 才看到:同代號不等於同核心,陸版走 Google 官方 GKI 分支、臺版是小米自己編的。卡我一個月、一支手機錢的問題,最後半小時解掉,因為答案一直躺在自己的 ROM 裡。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%90%8C%E4%B8%80%E6%94%AF%E6%89%8B%E6%A9%9F%EF%BC%8C%E5%85%A9%E9%A1%86%E6%A0%B8%E5%BF%83%EF%BC%9A%E8%87%BA%E7%89%88%E7%9A%84%20GhostLock%20%E5%81%8F%E7%A7%BB%E7%82%BA%E4%BB%80%E9%BA%BC%E6%B0%B8%E9%81%A0%E7%AE%97%E4%B8%8D%E5%87%BA%E4%BE%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="GhostLock, CVE-2026-43499, myron, POCO F8 Ultra, HyperOS, kernel, kallsyms, BTF, root, Android 16" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來","description":"同一支手機,陸版的 GhostLock payload 一堆人算好了,臺版永遠對不上。拆開三個 ROM 才看到:同代號不等於同核心,陸版走 Google 官方 GKI 分支、臺版是小米自己編的。卡我一個月、一支手機錢的問題,最後半小時解掉,因為答案一直躺在自己的 ROM 裡。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-04T00:00:00Z","dateModified":"2026-08-04T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/"},"url":"https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%90%8C%E4%B8%80%E6%94%AF%E6%89%8B%E6%A9%9F%EF%BC%8C%E5%85%A9%E9%A1%86%E6%A0%B8%E5%BF%83%EF%BC%9A%E8%87%BA%E7%89%88%E7%9A%84%20GhostLock%20%E5%81%8F%E7%A7%BB%E7%82%BA%E4%BB%80%E9%BA%BC%E6%B0%B8%E9%81%A0%E7%AE%97%E4%B8%8D%E5%87%BA%E4%BE%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"GhostLock, CVE-2026-43499, myron, POCO F8 Ultra, HyperOS, kernel, kallsyms, BTF, root, Android 16","articleSection":"技術分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Aug 4, 2026</span><span>10 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>GhostLock</span><span>CVE-2026-43499</span><span>myron</span><span>POCO F8 Ultra</span><span>HyperOS</span><span>kernel</span><span>kallsyms</span><span>BTF</span><span>root</span><span>Android 16</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>裝置是 myron,POCO F8 Ultra / Redmi K90 Pro Max,Snapdragon 8 Elite Gen 5。我手上有兩支。第一支是臺版,第二支也是臺版——會買第二支,就是因為第一支的 root 死活做不出來。</p>
+<p>2026 年 7 月 7 日,Nebula Security 公開了 GhostLock(CVE-2026-43499):Linux 核心 futex PI requeue 路徑的 use-after-free,2011 年就存在,影響幾乎所有核心,公開 exploit 成功率 97%,還是 Google kernelCTF 強制公開的那種。大陸社群反應很快,幾天內各機型的偏移量就算好了,包成 payload 在酷安到處發。K90 Pro Max 的現成品一堆。</p>
+<p>我的臺版,全部不能用。</p>
+<p>十幾天的嘗試、AI 陪跑三天三夜,都算不出來。最後我放棄,買了第二支手機走另一條路。直到這個月回頭拆開三個 ROM,才看到答案:同一支手機、同一個 codename,臺版和陸版的核心根本不是同一顆 binary。而那些 payload 寫死的,恰恰是跟著 binary 走的東西。</p>
+<h2>三個 ROM,三顆核心</h2>
+<p>手上的 ROM:臺版 3.0.1.0(出廠版本)、臺版 3.0.6.0、xiaomi.eu 306 和 308(陸版底)。把 boot.img 解開,先看核心版本字串:</p>
+<table>
+<thead>
+<tr>
+<th>ROM</th>
+<th>uname -r</th>
+<th>編譯時間</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>臺版 3.0.1.0.WPMTWXM</td>
+<td><code>...-ga5f232d1ead0-ab14083253-4k</code></td>
+<td>2025-09-11</td>
+</tr>
+<tr>
+<td>臺版 3.0.6.0.WPMTWXM</td>
+<td><code>...-g5a0e85dd9db0-ab14499855-4k</code></td>
+<td>2025-11-26</td>
+</tr>
+<tr>
+<td>陸版 306/308.WPMCNXM</td>
+<td><code>...-g16e473de48a3-abogki462654244-4k</code></td>
+<td>2025-11-19</td>
+</tr>
+</tbody></table>
+<p>base 都是 <code>6.12.23-android16-5</code>,但 git commit 三個都不同。更關鍵的是 build ID:陸版是 <code>abogki</code> 開頭,代表它貼著 Google 官方 GKI release 分支走;臺版是 <code>ab1xxxxxxx</code>,小米自己的整合分支自己編。</p>
+<p>接著把三顆核心的 kallsyms 整個抽出來,各約 12.5 萬個符號,直接對:</p>
+<table>
+<thead>
+<tr>
+<th>符號</th>
+<th>臺版(兩版相同)</th>
+<th>陸版</th>
+<th>差距</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>init_task</code></td>
+<td><code>...823ecf00</code></td>
+<td><code>...823fcf00</code></td>
+<td>+0x10000</td>
+</tr>
+<tr>
+<td><code>init_cred</code></td>
+<td><code>...82402a68</code></td>
+<td><code>...82412a68</code></td>
+<td>+0x10000</td>
+</tr>
+<tr>
+<td><code>selinux_state</code></td>
+<td><code>...826684f0</code></td>
+<td><code>...8267a5b8</code></td>
+<td>+0x120c8</td>
+</tr>
+<tr>
+<td><code>random_table</code></td>
+<td>三版全不同</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<p>注意 <code>selinux_state</code> 那行:差距是 0x120c8,不是跟別人一樣的 0x10000。這代表不是整體平移,是符號配置真的被洗亂了。而且連臺版自己 3.0.1 升 3.0.6,<code>rt_mutex</code> 那幾個漏洞相關函數的位置都已經換過。config 也有差:陸版多開了七個 <code>XIAOMI_*</code> 選項。</p>
+<h2>為什麼偏移量不能共用</h2>
+<p>GhostLock 是 data-only exploit。它要的不是 shellcode,是「這一次編譯出來的 init_cred 在哪個位址」。十幾個位址,寫死在 payload 裡。</p>
+<p>我用核心內嵌的 BTF 把三版的 struct 布局整個解析出來:<code>task_struct</code> 都是 5184 bytes,<code>cred</code> 都在 0x900,<code>pi_blocked_on</code> 都在 0xA18,一個 byte 都沒差。也就是說,觸發邏輯通用、結構欄位通用,唯一不通用的就是那張位址表。</p>
+<p>但 exploit 沒有那張表就是打空氣。打錯位址,最好的情況是沒反應,常見的情況是 kernel panic 直接重開機。</p>
+<p>所以結論很硬:所有為陸版 ogki 核心算的 payload,在臺版核心上永遠是錯的。不是小米故意擋,是兩條發版線本來就各編各的——陸版追官方 GKI 分支求快,國際版有自己的 patch queue 和認證凍結點,加上全部用 <code>+pgo +bolt +lto</code> 編譯,PGO/BOLT 會依 profiling 重排函數位置,任何一點程式碼差異都會把符號表整個洗亂。會被這件事打到的人,在小米的使用者統計裡小到不存在,所以永遠不會有人有動機對齊。</p>
+<h2>我付過的三種成本</h2>
+<p>回頭看,當時擺在面前的是三條路:</p>
+<p><strong>蹲官方解鎖名額。</strong> 小米國際版每天零點放名額,限量,跟你競爭的是一堆腳本。今晚蹲不到,明天再蹲。成本是健康,無上限,而且付了不保證有。我的身體狀況熬夜不了,這條路對我來說等於不存在。</p>
+<p><strong>算臺版偏移。</strong> 成本是時間。十幾天沒結果,AI 陪跑三天三夜也沒出來。當時等於無解。</p>
+<p><strong>買第二支。</strong> 成本是錢,一次性,確定性交付。兩支加起來四萬六,後來第一支便宜賣給家人,回收一萬五,淨成本三萬一。</p>
+<p>順帶一提過程裡的另一個變數:美國的模型看到 kernel exploit 就拒絕幫忙,不管你的理由是「自己的手機、要做無障礙工具、漏洞已公開」。最後是 DeepSeek 陪我耗那三天三夜。願意和能夠,是兩個獨立的軸。</p>
+<p>事後檢討這個決策:用當時掌握的資訊,買手機是對的——三個選項裡唯一成本可預測的。但誠實說,這筆錢有一部分是知識溢價。解法當時就存在,只是我和陪我的 AI 都不知道那條路。</p>
+<h2>三天三夜和半小時的差別,不是算力,是路線</h2>
+<p>當年卡死的原因是:想在沒有 root 的手機上,從執行期 leak 出符號位址。那是難路,要靠側信道、要靠運氣。</p>
+<p>這次走的路是靜態的:ROM 本來就躺在我自己的 Downloads 裡。boot.img 解開,完整 kallsyms 就在裡面,12.5 萬個符號全部直接可讀。不需要 root、不需要 leak、不需要運氣。</p>
+<p>而且靜態路線還有一個意料之外的好處:乾淨。我第二支手機後來刷了第三方核心、套了 KSU,從實機 dump 出來的 kallsyms 已經是被改過的。ROM 裡的 boot.img 才是沒被汙染的 ground truth。</p>
+<p>只抽符號還不夠,還要證明抽出來的是對的。交叉驗證的做法是:用抽出來的位址,回讀 binary 裡對應位置的內容——<code>init_task</code> 的 comm 欄位讀出來要是「swapper」、<code>init_cred</code> 的 usage 要是個小整數、<code>init_uts_ns</code> 的 release 欄位要逐字元等於這顆核心的 uname 字串。三個獨立來源(kallsyms 提取、BTF 欄位、原始 binary)互相對得上,臺版和陸版各自驗證都通過。到這裡,不需要實機就能信任這份偏移。</p>
+<p>後面的組裝就很順:以 ghostlock-oneplus 為底加一個臺版 target,它內建的 struct 偏移跟我從 BTF 算的逐欄吻合;反組譯確認 pselect 的棧配置,跟已驗證可行的 Xiaomi 17 完全相同;NDK 一次編過,零警告。</p>
+<p>從動手到編出 binary,半小時。</p>
+<h2>放出來,以及放出來的方式</h2>
+<p>東西在 <a href="https://github.com/jason5545/ghostlock-myron-tw">github.com/jason5545/ghostlock-myron-tw</a>:臺版偏移表、分析、編好的 binary,還有把我這次整套流程工具化的三支腳本——抽偏移、驗 struct、驗棧配置,都內建「驗證不過就不准用」的檢查。</p>
+<p>刻意沒放的東西:小米的專有韌體、別人的 EFI 工具、FRP 相關的步驟。原因是看過前車之鑑:之前有一套同類的一鍵解鎖工具,作者的封存公告寫得很直白——極大比例的使用者拿它只是為了跑遊戲外掛,還有人拿去收錢代刷、自己不懂原理把客戶手機刷成磚,最後一個學生開發者被白嫖到心累收攤。一鍵包養出那種生態,所以我發的是教科書,不是槍。會自己編譯的人,就是這些東西該到的人手上;「要自己編」這道門檻,恰好就是過濾器。</p>
+<p>還有一個已知限制:這份偏移只覆蓋 WPMTWXM。MIXM、EUXM 這些其他區域版本,核心可能又不同。但方法是可以帶走的,工具都公開了,任何冷門區域版本的持有者都能自己產生他那份表。</p>
+<h2>卡我最久的,不是技術難度</h2>
+<p>第一支手機現在在家人手上,我故意讓它停在 3.0.6.0 沒更新。這次編出來的東西,就是要拿去救它的。</p>
+<p>回頭看整件事,最貴的從來不是漏洞本身。是「會算偏移的人都在陸版」這個結構:漏洞在臺版核心裡躺著,會躺到 OTA 修補把它關掉為止,期間不會有人碰它,因為沒有人有動機為小眾區域版本算那張表。如果不是這次自己拆,臺版大概永遠不會有人解。</p>
+<p>知識不對稱的價格,是一支手機。現在臺版的表算出來了、工具也公開了,這個結構裡至少少一個要付這筆錢的人。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
