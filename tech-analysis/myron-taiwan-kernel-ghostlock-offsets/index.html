@@ -15,7 +15,7 @@
   <meta property="og:url" content="https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/" id="og-url">
   <meta property="og:title" content="同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來" id="og-title">
   <meta property="og:description" content="同一支手機，陸版的 GhostLock payload 一堆人算好了，臺版永遠對不上。拆開三個 ROM 才看到：同代號不等於同核心，陸版走 Google 官方 GKI 分支、臺版是小米自己編的。卡我一個月、一支手機錢的問題，最後半小時解掉，因為答案一直躺在自己的 ROM 裡。" id="og-description">
-  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%90%8C%E4%B8%80%E6%94%AF%E6%89%8B%E6%A9%9F%EF%BC%8C%E5%85%A9%E9%A1%86%E6%A0%B8%E5%BF%83%EF%BC%9A%E8%87%BA%E7%89%88%E7%9A%84%20GhostLock%20%E5%81%8F%E7%A7%BB%E7%82%BA%E4%BB%80%E9%BA%BC%E6%B0%B8%E9%81%A0%E7%AE%97%E4%B8%8D%E5%87%BA%E4%BE%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2.webp" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="(b)-log">
@@ -42,7 +42,7 @@
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/" id="twitter-url">
   <meta property="twitter:title" content="同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來" id="twitter-title">
   <meta property="twitter:description" content="同一支手機，陸版的 GhostLock payload 一堆人算好了，臺版永遠對不上。拆開三個 ROM 才看到：同代號不等於同核心，陸版走 Google 官方 GKI 分支、臺版是小米自己編的。卡我一個月、一支手機錢的問題，最後半小時解掉，因為答案一直躺在自己的 ROM 裡。" id="twitter-description">
-  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%90%8C%E4%B8%80%E6%94%AF%E6%89%8B%E6%A9%9F%EF%BC%8C%E5%85%A9%E9%A1%86%E6%A0%B8%E5%BF%83%EF%BC%9A%E8%87%BA%E7%89%88%E7%9A%84%20GhostLock%20%E5%81%8F%E7%A7%BB%E7%82%BA%E4%BB%80%E9%BA%BC%E6%B0%B8%E9%81%A0%E7%AE%97%E4%B8%8D%E5%87%BA%E4%BE%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
 
   <!-- 額外的 metadata -->
@@ -112,9 +112,10 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2.webp" imagesrcset="/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-480w.webp 480w, /content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-828w.webp 828w, /content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來","description":"同一支手機，陸版的 GhostLock payload 一堆人算好了，臺版永遠對不上。拆開三個 ROM 才看到：同代號不等於同核心，陸版走 Google 官方 GKI 分支、臺版是小米自己編的。卡我一個月、一支手機錢的問題，最後半小時解掉，因為答案一直躺在自己的 ROM 裡。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-04T00:00:00Z","dateModified":"2026-08-04T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/"},"url":"https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E5%90%8C%E4%B8%80%E6%94%AF%E6%89%8B%E6%A9%9F%EF%BC%8C%E5%85%A9%E9%A1%86%E6%A0%B8%E5%BF%83%EF%BC%9A%E8%87%BA%E7%89%88%E7%9A%84%20GhostLock%20%E5%81%8F%E7%A7%BB%E7%82%BA%E4%BB%80%E9%BA%BC%E6%B0%B8%E9%81%A0%E7%AE%97%E4%B8%8D%E5%87%BA%E4%BE%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"GhostLock, CVE-2026-43499, myron, POCO F8 Ultra, HyperOS, kernel, kallsyms, BTF, root, Android 16","articleSection":"技術分析"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來","description":"同一支手機，陸版的 GhostLock payload 一堆人算好了，臺版永遠對不上。拆開三個 ROM 才看到：同代號不等於同核心，陸版走 Google 官方 GKI 分支、臺版是小米自己編的。卡我一個月、一支手機錢的問題，最後半小時解掉，因為答案一直躺在自己的 ROM 裡。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-04T00:00:00Z","dateModified":"2026-08-04T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/"},"url":"https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2.webp"],"keywords":"GhostLock, CVE-2026-43499, myron, POCO F8 Ultra, HyperOS, kernel, kallsyms, BTF, root, Android 16","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -191,7 +192,7 @@
     <main class="wrapper article-shell">
       <div class="article-layout">
         <article class="article">
-          <div id="post-hero" class="article-hero"></div>
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2.webp" srcset="/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-480w.webp 480w, /content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-828w.webp 828w, /content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
           <header class="article-header">
             <p id="post-category" class="article-category">技術分析</p>
             <h1 id="post-title">同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來</h1>
