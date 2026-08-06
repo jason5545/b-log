@@ -1,5 +1,24 @@
 [
   {
+    "slug": "asian-sex-diary-no-longer-johns-diary",
+    "title": "從十八歲看到三十三歲，Asian Sex Diary 已經不是 John 的日記",
+    "summary": "我從十八歲一路看到三十三歲。以前是 John 一個人的旅行日記，現在畫面裡出現熟悉的台灣男、女優，還得講著蹩腳的英文。那一刻我才發現，我看了十五年的，也是一段成人內容從個人冒險變成跨國生產線的過程。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-08-06T00:00:00Z",
+    "tags": [
+      "成人產業",
+      "Asian Sex Diary",
+      "Trike Patrol",
+      "台灣成人產業",
+      "東南亞",
+      "內容平台"
+    ],
+    "accentColor": "#9f3f60",
+    "coverImage": "/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover.webp",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "myron-taiwan-kernel-ghostlock-offsets",
     "title": "同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來",
     "summary": "同一支手機，陸版的 GhostLock payload 一堆人算好了，臺版永遠對不上。拆開三個 ROM 才看到：同代號不等於同核心，陸版走 Google 官方 GKI 分支、臺版是小米自己編的。卡我一個月、一支手機錢的問題，最後半小時解掉，因為答案一直躺在自己的 ROM 裡。",

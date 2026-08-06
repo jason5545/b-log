@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "asian-sex-diary-no-longer-johns-diary",
+      "url": "https://b-log.to/cultural-insights/asian-sex-diary-no-longer-johns-diary/",
+      "image": "https://b-log.to/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover.webp",
+      "title": "從十八歲看到三十三歲，Asian Sex Diary 已經不是 John 的日記",
+      "content_text": "我從十八歲一路看到三十三歲。以前是 John 一個人的旅行日記，現在畫面裡出現熟悉的台灣男、女優，還得講著蹩腳的英文。那一刻我才發現，我看了十五年的，也是一段成人內容從個人冒險變成跨國生產線的過程。",
+      "date_published": "2026-08-06T00:00:00.000Z",
+      "date_modified": "2026-08-06T00:00:00.000Z",
+      "tags": [
+        "成人產業",
+        "Asian Sex Diary",
+        "Trike Patrol",
+        "台灣成人產業",
+        "東南亞",
+        "內容平台"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "myron-taiwan-kernel-ghostlock-offsets",
       "url": "https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/",
       "title": "同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來",
