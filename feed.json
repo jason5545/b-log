@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "edgelink-kde-connect-xiaomi-lyra-mac",
+      "url": "https://b-log.to/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/",
+      "image": "https://b-log.to/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp",
+      "title": "來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect",
+      "content_text": "我花五週寫了 EdgeLink，讓 Mac 直接接手機來電、傳檔、鏡像操作，再用 Touch ID 遠端解鎖。從 Lyra 協議、端對端加密到 380 個 commit，現在這套已經是我的日常。",
+      "date_published": "2026-08-15T00:00:00.000Z",
+      "date_modified": "2026-08-15T00:00:00.000Z",
+      "tags": [
+        "EdgeLink",
+        "KDE Connect",
+        "小米",
+        "Lyra",
+        "macOS",
+        "Android",
+        "Touch ID",
+        "協議逆向",
+        "端對端加密"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "php-1-4m-breast-cancer-benefit-cannot-reach-not-sick",
       "url": "https://b-log.to/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/",
       "image": "https://b-log.to/content/img/2026/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick-cover.webp",

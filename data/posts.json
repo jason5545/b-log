@@ -1,5 +1,27 @@
 [
   {
+    "slug": "edgelink-kde-connect-xiaomi-lyra-mac",
+    "title": "來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect",
+    "summary": "我花五週寫了 EdgeLink，讓 Mac 直接接手機來電、傳檔、鏡像操作，再用 Touch ID 遠端解鎖。從 Lyra 協議、端對端加密到 380 個 commit，現在這套已經是我的日常。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-08-15T00:00:00Z",
+    "tags": [
+      "EdgeLink",
+      "KDE Connect",
+      "小米",
+      "Lyra",
+      "macOS",
+      "Android",
+      "Touch ID",
+      "協議逆向",
+      "端對端加密"
+    ],
+    "accentColor": "#0e7490",
+    "coverImage": "/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "php-1-4m-breast-cancer-benefit-cannot-reach-not-sick",
     "title": "₱1.4M 的乳癌給付，接不到那句「我沒病」",
     "summary": "我在去諮商的路上，叫陪了我十五年的她上免費乳房攝影車，因此找到一顆 0.7 公分的腫瘤。查完菲律賓的 ₱1.4M 給付後，我才看見：醫療寫在制度裡，不代表它已經到了人的生活裡。",
