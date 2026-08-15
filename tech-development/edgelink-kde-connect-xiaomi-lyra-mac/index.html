@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="我花五週寫了 EdgeLink，讓 Mac 直接接手機來電、傳檔、鏡像操作，再用 Touch ID 遠端解鎖。從 Lyra 協議、端對端加密到 380 個 commit，現在這套已經是我的日常。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/" id="og-url">
+  <meta property="og:title" content="來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect" id="og-title">
+  <meta property="og:description" content="我花五週寫了 EdgeLink，讓 Mac 直接接手機來電、傳檔、鏡像操作，再用 Touch ID 遠端解鎖。從 Lyra 協議、端對端加密到 380 個 commit，現在這套已經是我的日常。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-08-15T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-08-15T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術開發" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="EdgeLink">
+  <meta property="article:tag" content="KDE Connect">
+  <meta property="article:tag" content="小米">
+  <meta property="article:tag" content="Lyra">
+  <meta property="article:tag" content="macOS">
+  <meta property="article:tag" content="Android">
+  <meta property="article:tag" content="Touch ID">
+  <meta property="article:tag" content="協議逆向">
+  <meta property="article:tag" content="端對端加密">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/" id="twitter-url">
+  <meta property="twitter:title" content="來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect" id="twitter-title">
+  <meta property="twitter:description" content="我花五週寫了 EdgeLink，讓 Mac 直接接手機來電、傳檔、鏡像操作，再用 Touch ID 遠端解鎖。從 Lyra 協議、端對端加密到 380 個 commit，現在這套已經是我的日常。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="EdgeLink, KDE Connect, 小米, Lyra, macOS, Android, Touch ID, 協議逆向, 端對端加密" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp" imagesrcset="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-480w.webp 480w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-828w.webp 828w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect","description":"我花五週寫了 EdgeLink，讓 Mac 直接接手機來電、傳檔、鏡像操作，再用 Touch ID 遠端解鎖。從 Lyra 協議、端對端加密到 380 個 commit，現在這套已經是我的日常。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-15T00:00:00Z","dateModified":"2026-08-15T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/"},"url":"https://b-log.to/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp"],"keywords":"EdgeLink, KDE Connect, 小米, Lyra, macOS, Android, Touch ID, 協議逆向, 端對端加密","articleSection":"技術開發"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp" srcset="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-480w.webp 480w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-828w.webp 828w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Aug 15, 2026</span><span>6 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>EdgeLink</span><span>KDE Connect</span><span>小米</span><span>Lyra</span><span>macOS</span><span>Android</span><span>Touch ID</span><span>協議逆向</span><span>端對端加密</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>手機丟在房間另一頭充電。電話響了，Mac 螢幕上跳出通話視窗，戴上耳機直接接，講完繼續打字。要傳檔案給手機，選單列點一下；要看手機畫面，鏡像開起來，畫面是活的，可以直接操作，鎖定了就按 Touch ID 遠端解鎖。Mac 上跳出的通知，手機那邊也有一份。剪貼簿兩邊是同一個。</p>
+<p>這些都不是小米官方 Mac app 在做的事。是我過去五個星期自己寫的。</p>
+<p>專案叫 EdgeLink。</p>
+<h2>為什麼要自己寫</h2>
+<p>起點很實際。我除了頭部以上和右手食指，其他部位沒辦法當成穩定的輸入來源。我大部分時間在 Mac 前，手機不一定在我伸手可及的地方。這對多數人是偶爾的不方便，對我不是多伸一次手而已，是工作流真的會斷。</p>
+<p>KDE Connect 那種「電腦和手機互相接住」的概念我喜歡很久了，但它進不了小米的生態；小米自己的互聯服務在 Mac 上能做的有限，而且有些功能是被協議層擋死的，不是還沒做。</p>
+<p>最具體的例子是通話。官方 Mac app 對手機登記的裝置類型是 14，而手機 TeleService 的 <code>RelayServiceFilterUtils</code> 會把 type 14 直接過濾掉。也就是說，官方 Mac 端永遠等不到電話接力，這是寫死在小米手機裡的規則。</p>
+<p>EdgeLink 的解法很直接：登記成 type 4（Windows PC），電話就來了。</p>
+<h2>Lyra：乾淨房間裡問出來的協議</h2>
+<p>整個專案是 clean-room 實作。沒有抄任何小米或 KDE Connect 的原始碼，反組譯的產物只留在本機研究目錄，不進 repo。協議是用三種方式問出來的：tcpdump 抓 pcap、jadx 反編譯手機裡的系統 app，加上一次一次的實機實驗。每一個主張都要有證據，密碼學行為另外寫成可重現的 test vectors 放在文件裡。</p>
+<p>系統分三塊：Mac 選單列 app、Android 端、一個 Cloudflare Worker。Worker 用 Durable Objects 做配對 rendezvous 和轉送，它是盲的，看不到任何內容，因為每條 transport 上面都是自己的端對端加密（P-256 key agreement、HKDF-SHA256、AES-256-GCM）。同一個網段走 LAN 直連，不在同網段就走 relay，功能不變。</p>
+<p>小米裝置之間的互聯協議，內部叫 Lyra。從 mDNS（<code>_lyra-mdns._udp.local.</code>）找到彼此之後，下面是 KCP over UDP 的 mesh transport，往上是實體連線、邏輯連線、keepalive、服務宣告，再上面還有 miexpress 的 TLV framing 和通道加密。檔案快傳的 request、response、completion、file stream 就住在這層通道裡，雙向都通了。</p>
+<p>最花時間的是信任層。Mac 按 Touch ID 之後往下送 562 事件，手機跑自己的 mitrust ceremony，中間有 <code>auth_token_A</code>（TLV 打包、per-peer 的 RSA-2048 簽章）、TDIF 配對狀態、KeyAgree fallback。這一段我 debug 最久，同一個「解鎖失敗 code=1」至少挖出四種不同根本原因：relay 斷線殺掉 in-flight 的 auth wait、閒置自動釋放留下的 zombie channel、手機把通道建立在錯的 transport 上，還有 redial 卡死後 authEvent 落空。每一種都修到有 pcap 或 log 證據才動手，修完就變成測試案例。</p>
+<p>鏡像是 HEVC 一路從手機 encoder 到 Mac 的 VideoToolbox。卡頓修過好幾輪，最後幾個根本原因都不在顯眼的地方：自寫 KCP 在 sender 來得及補洞前就宣告 loss，還有重建風暴。我也查過 HyperOS 在亮度 0 和 1 停編碼這條路，後來確認它不是根本原因，只是一路走過的坑。通話音訊後來也走通 native 路徑，DTMF、IVR 都驗過。</p>
+<p>通知和剪貼簿是另外兩塊拼圖。macOS 沒有跨 app 的通知 listener，這是系統邊界；我用 non-sandbox helper 讀 usernoted 的 SQLite DB，代價是要給 Full Disk Access，然後只鏡射真正顯示過的通知，用 UUID 去重。剪貼簿做到歷史視窗、縮圖、大檔分塊傳送，SQLite 加 LRU 回收。</p>
+<h2>五週 380 個 commit</h2>
+<p>從 7 月 8 日第一個 commit 到今天，380 個。能這樣推進，是因為測試在前面擋：Mac 端有完整測試套件，Android 端跑 <code>gradlew test</code>，鏡像另外有 E2E harness，用 mock 的手機角色重現各種怪行為：channel 建錯 transport、authEvent 逾時、redial 卡死。每個修掉的 bug 都留下對應的測試。沒有這層，五週只能寫 demo，寫不出能每天用的東西。</p>
+<p>現在這整套是我的日常。手機在不在身邊，不影響我接到電話、傳檔、看畫面。</p>
+<p>最大的收穫其實很具體：市面上每個互聯工具對我來說都是黑箱，這一個不是。每個 byte 走哪條路、誰看得到、誰看不到，我都有答案。封閉協議的牆沒有想像中那麼高，一個 packet 一個 packet 問它問題，它最後會回答。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
