@@ -2,6 +2,12 @@
 
 手機丟在房間另一頭充電。電話響了，Mac 螢幕上跳出通話視窗，戴上耳機直接接，講完繼續打字。要傳檔案給手機，選單列點一下；要看手機畫面，鏡像開起來，畫面是活的，可以直接操作，鎖定了就按 Touch ID 遠端解鎖。Mac 上跳出的通知，手機那邊也有一份。剪貼簿兩邊是同一個。
 
+最麻煩的一條路是 Cloudflare relay。Mac 在 HiNet 底下，Cloudflare 從 2016 年起就把非 Enterprise 的 HiNet 流量導到海外低成本 PoP——當年美西，現在是新加坡。同一個 Mac ping workers.dev 要 67ms，ping `turn.cloudflare.com` 只要 6.6ms。同一個台灣、同樣的 ISP，路由政策不同就差十倍。
+
+手機走遠傳，落點正常在台北。Mac 繞新加坡，手機在台北，e2e 延遲 p50 約 200ms，p90 到 764ms，尾巴就是可見的卡頓。解法是最後改走 TURN anycast——路由不經 workers.dev 那套分流，HiNet 也落台北，6.6ms。
+
+這件事最有意思的不是技術細節，而是你實際在 debug 的不是什麼封包遺失或編碼參數，是 HiNet 2016 年跟 Cloudflare 的 peering 吵架。系統整合的 bug 有時候長在 ISP 的帳務部門裡。
+
 這些都不是小米官方 Mac app 在做的事。是我過去五個星期自己寫的。
 
 專案叫 EdgeLink。
@@ -20,7 +26,7 @@ EdgeLink 的解法很直接：登記成 type 4（Windows PC），電話就來了
 
 整個專案是 clean-room 實作。沒有抄任何小米或 KDE Connect 的原始碼，反組譯的產物只留在本機研究目錄，不進 repo。協議是用三種方式問出來的：tcpdump 抓 pcap、jadx 反編譯手機裡的系統 app，加上一次一次的實機實驗。每一個主張都要有證據，密碼學行為另外寫成可重現的 test vectors 放在文件裡。
 
-系統分三塊：Mac 選單列 app、Android 端、一個 Cloudflare Worker。Worker 用 Durable Objects 做配對 rendezvous 和轉送，它是盲的，看不到任何內容，因為每條 transport 上面都是自己的端對端加密（P-256 key agreement、HKDF-SHA256、AES-256-GCM）。同一個網段走 LAN 直連，不在同網段就走 relay，功能不變。
+系統分三塊：Mac 選單列 app、Android 端、一個 Cloudflare Worker。Worker 用 Durable Objects 做配對 rendezvous 和轉送，它是盲的，看不到任何內容，因為每條 transport 上面都是自己的端對端加密（P-256 key agreement、HKDF-SHA256、AES-256-GCM）。同一個網段走 LAN 直連，不在同網段就走 relay，功能不變。不過 relay 有自己的麻煩。
 
 小米裝置之間的互聯協議，內部叫 Lyra。從 mDNS（`_lyra-mdns._udp.local.`）找到彼此之後，下面是 KCP over UDP 的 mesh transport，往上是實體連線、邏輯連線、keepalive、服務宣告，再上面還有 miexpress 的 TLV framing 和通道加密。檔案快傳的 request、response、completion、file stream 就住在這層通道裡，雙向都通了。
 
