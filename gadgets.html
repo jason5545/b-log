@@ -179,12 +179,13 @@
 
     .term__body {
       flex: 1 1 auto;
-      padding: 1.15em 1.25em 1.4em;
+      /* --fit 由 JS 依內容高度計算，等比放大所有內部元素 */
+      padding: calc(1rem * var(--fit, 1)) 1.15rem calc(1.2rem * var(--fit, 1));
       font-family: var(--mono);
-      font-size: 0.86rem;
+      font-size: calc(0.86rem * var(--fit, 1));
     }
 
-    /* 內容真的太短、字級放大後還有空隙時，垂直置中 */
+    /* 內容真的太短、字級到頂還有空隙時，垂直置中 */
     html.js .term__body.vfill {
       display: flex;
       flex-direction: column;
@@ -192,9 +193,9 @@
     }
 
     .term__cmd {
-      margin: 0 0 0.7em;
+      margin: 0 0 calc(0.6rem * var(--fit, 1));
       color: #8b93a1;
-      font-size: 0.92em;
+      font-size: calc(0.8rem * var(--fit, 1));
     }
 
     .term__ps {
@@ -206,7 +207,7 @@
 
     .term__line {
       margin: 0.12rem 0;
-      font-size: 0.88em;
+      font-size: calc(0.76rem * var(--fit, 1));
       color: #8b93a1;
     }
 
@@ -248,8 +249,8 @@
     .session { scroll-margin-top: 96px; }
 
     .session .term__name {
-      margin: 0 0 0.7em;
-      font-size: 1.18em;
+      margin: 0 0 calc(0.65rem * var(--fit, 1));
+      font-size: calc(1.05rem * var(--fit, 1));
       line-height: 1.45;
       color: #f2f4f8;
     }
@@ -269,7 +270,7 @@
     .tag {
       display: inline-block;
       margin-left: 0.4rem;
-      font-size: 0.72em;
+      font-size: calc(0.66rem * var(--fit, 1));
       font-weight: 600;
       letter-spacing: 0.05em;
       padding: 0.08em 0.5em;
@@ -291,7 +292,7 @@
 
     .spec {
       display: grid;
-      gap: 0.42em;
+      gap: calc(0.38rem * var(--fit, 1));
       margin: 0;
     }
 
@@ -303,7 +304,7 @@
     }
 
     .spec dt {
-      font-size: 0.8em;
+      font-size: calc(0.74rem * var(--fit, 1));
       letter-spacing: 0.04em;
       color: var(--device-color, #f59e0b);
     }
@@ -313,7 +314,7 @@
 
     .spec dd {
       margin: 0;
-      font-size: 0.94em;
+      font-size: calc(0.85rem * var(--fit, 1));
       line-height: 1.55;
       color: #d6dae2;
     }
@@ -343,8 +344,8 @@
     }
 
     .term__note {
-      margin: 0.7em 0 0;
-      font-size: 0.86em;
+      margin: calc(0.6rem * var(--fit, 1)) 0 0;
+      font-size: calc(0.78rem * var(--fit, 1));
       color: #8b93a1;
     }
 
@@ -354,9 +355,9 @@
 
     /* 相關文章輸出 */
     .term__posts {
-      margin-top: 1.05em;
+      margin-top: calc(0.85rem * var(--fit, 1));
       border-top: 1px dashed rgba(255, 255, 255, 0.14);
-      padding-top: 0.85em;
+      padding-top: calc(0.7rem * var(--fit, 1));
     }
 
     .term__posts ul {
@@ -366,7 +367,7 @@
     }
 
     .term__posts li {
-      font-size: 0.9em;
+      font-size: calc(0.82rem * var(--fit, 1));
       line-height: 1.55;
       color: #d6dae2;
       padding-left: 1.15em;
@@ -386,7 +387,7 @@
     .term__posts time {
       color: #566070;
       margin-right: 0.4em;
-      font-size: 0.84em;
+      font-size: calc(0.74rem * var(--fit, 1));
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -844,27 +845,27 @@
         })();
       }
 
-      /* 內容不足時放大字級填滿終端機 */
+      /* 內容不足時整體等比放大（字級＋間距）填滿終端機 */
+      function setFit(b, f) { b.style.setProperty('--fit', f); }
+
       function fitSession(body) {
         if (reduce || !body) return;
-        var base = 0.86, max = 2;
+        var MAX = 2.6;
         body.classList.remove('vfill');
-        body.style.fontSize = base + 'rem';
+        setFit(body, 1);
         var avail = body.clientHeight, h = body.scrollHeight;
         if (h >= avail - 1) return;
-        var snap = function (v) { return Math.round(v * 100) / 100; };
-        var s = snap(Math.min(base * (avail / Math.max(h, 1)), max));
-        body.style.fontSize = s + 'rem';
-        var guard = 60;
-        while (s < max && guard-- && body.scrollHeight <= avail + 1) {
-          s = snap(Math.min(s + 0.02, max));
-          body.style.fontSize = s + 'rem';
+        var f = Math.min(avail / Math.max(h, 1), MAX);
+        setFit(body, f);
+        var guard = 40;
+        while (body.scrollHeight > avail + 2 && guard--) {
+          f -= 0.04; setFit(body, f);
         }
-        if (body.scrollHeight > avail + 1) {
-          s = snap(s - 0.02);
-          body.style.fontSize = s + 'rem';
+        while (f < MAX && body.scrollHeight <= avail - 4 && guard--) {
+          f += 0.02; setFit(body, f);
+          if (body.scrollHeight > avail + 2) { f -= 0.02; setFit(body, f); break; }
         }
-        if (avail - body.scrollHeight > 90) body.classList.add('vfill');
+        if (avail - body.scrollHeight > 50) body.classList.add('vfill');
       }
 
       function connect(id, instant) {
@@ -990,6 +991,13 @@
           if (act) fitSession(body);
         }, 150);
       });
+
+      /* 網頁字型載入完成後重新對齊，避免字型度量差造成空隙 */
+      if (d.fonts && d.fonts.ready) {
+        d.fonts.ready.then(function () {
+          if (document.querySelector('.sessions > .session.active')) fitSession(body);
+        });
+      }
     })();
   </script>
   <!-- Cloudflare Web Analytics - 首屏後載入 -->
