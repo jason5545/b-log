@@ -37,13 +37,30 @@
       --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     }
 
+    /* 版面骨架：讓終端機精確撐到頁尾，內容多時再自然長高 */
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main > .content {
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
     .gadgets-layout {
+      flex: 1 0 auto;
       display: grid;
       grid-template-columns: 235px minmax(0, 1fr);
       gap: 1.75rem;
       align-items: stretch;
-      /* 讓終端機至少撐到接近頁尾，內容多時再自然長高 */
-      min-height: calc(100vh - 360px);
     }
 
     /* PVE 樹狀側欄 */
@@ -398,7 +415,6 @@
     @media (max-width: 900px) {
       .gadgets-layout {
         display: block;
-        min-height: 0;
       }
 
       .term {
@@ -848,24 +864,43 @@
       /* 內容不足時整體等比放大（字級＋間距）填滿終端機 */
       function setFit(b, f) { b.style.setProperty('--fit', f); }
 
+      /* body 本身會被 flex 撐高，scrollHeight 永遠 ≥ clientHeight，不能拿來量內容；
+         改為直接加總子元素實際高度 */
+      function contentH(b) {
+        var h = 0;
+        for (var i = 0; i < b.children.length; i++) {
+          var c = b.children[i], cs = getComputedStyle(c);
+          h += c.offsetHeight + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
+        }
+        return h;
+      }
+
+      function padV(b) {
+        var cs = getComputedStyle(b);
+        return parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+      }
+
       function fitSession(body) {
         if (reduce || !body) return;
         var MAX = 2.6;
         body.classList.remove('vfill');
         setFit(body, 1);
-        var avail = body.clientHeight, h = body.scrollHeight;
+        /* avail 只在 --fit=1 時量一次並固定下來：終端機高度會被放大後的內容撐高，
+           若每次都用即時 clientHeight，迴圈會追著長高的目標跑（回饋迴圈） */
+        var avail = body.clientHeight - padV(body), h = contentH(body);
         if (h >= avail - 1) return;
         var f = Math.min(avail / Math.max(h, 1), MAX);
         setFit(body, f);
-        var guard = 40;
-        while (body.scrollHeight > avail + 2 && guard--) {
+        var guard = 60;
+        while (guard-- && contentH(body) > avail + 2) {
           f -= 0.04; setFit(body, f);
         }
-        while (f < MAX && body.scrollHeight <= avail - 4 && guard--) {
+        while (guard-- && f < MAX) {
+          if (contentH(body) > avail - 4) break;
           f += 0.02; setFit(body, f);
-          if (body.scrollHeight > avail + 2) { f -= 0.02; setFit(body, f); break; }
+          if (contentH(body) > avail + 2) { f -= 0.02; setFit(body, f); break; }
         }
-        if (avail - body.scrollHeight > 50) body.classList.add('vfill');
+        if (avail - contentH(body) > 50) body.classList.add('vfill');
       }
 
       function connect(id, instant) {
@@ -962,6 +997,8 @@
           });
           blk.appendChild(ul);
           s.appendChild(blk);
+          /* 相關文章是非同步插入的，補上後要重新計算 --fit，否則留下空隙或溢出 */
+          if (s.classList.contains('active')) fitSession(body);
         });
       }
 
@@ -979,9 +1016,11 @@
       });
 
       var initial = location.hash && d.getElementById(location.hash.slice(1));
-      if (initial && initial.classList.contains('session')) {
-        connect(initial.id, true);
+      if (!(initial && initial.classList.contains('session'))) {
+        initial = d.querySelector('.sessions > .session.active');
       }
+      /* 首次載入也走 connect：補上相關文章並立即計算 --fit */
+      if (initial) connect(initial.id, true);
 
       var rT;
       window.addEventListener('resize', function () {
