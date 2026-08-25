@@ -99,6 +99,24 @@
       text-transform: uppercase;
       color: var(--text-muted);
       padding-left: 0.45rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* PVE 風格折疊：▾ 展開 / ▸ 收合 */
+    .pve-tree li.grp::before {
+      content: "▾";
+      margin-right: 0.3rem;
+      color: var(--accent);
+    }
+
+    .pve-tree li.grp.collapsed::before {
+      content: "▸";
+    }
+
+    /* 收合的群組只在有 JS 時隱藏；無 JS 全部列出 */
+    html.js .pve-tree li.is-hidden {
+      display: none;
     }
 
     .pve-tree a {
@@ -196,23 +214,73 @@
 
     .term__body {
       flex: 1 1 auto;
-      /* --fit 由 JS 依內容高度計算，等比放大所有內部元素 */
-      padding: calc(1rem * var(--fit, 1)) 1.15rem calc(1.2rem * var(--fit, 1));
+      padding: 1rem 1.15rem 1.2rem;
       font-family: var(--mono);
-      font-size: calc(0.86rem * var(--fit, 1));
+      font-size: 0.86rem;
     }
 
-    /* 內容真的太短、字級到頂還有空隙時，垂直置中 */
-    html.js .term__body.vfill {
+    /* 輸出結束後的待命 prompt 是真的指令列：底下的空白是「等待輸入」，不是沒填滿 */
+    .term__idle {
+      margin: 0.9rem 0 0;
+      color: #8b93a1;
+      font-size: 0.8rem;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
+      align-items: baseline;
+      gap: 0.45rem;
+      cursor: text;
+    }
+
+    /* 隱形 input 蓋在鏡像文字上，方塊游標停在 echo 尾端，看起來就是真的終端機 */
+    .term__inwrap {
+      position: relative;
+      min-width: 1ch;
+      color: #e8ebf0;
+    }
+
+    #term-echo {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .term__inwrap input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      opacity: 0;
+      font: inherit;
+      border: 0;
+      padding: 0;
+      outline: none;
+      cursor: text;
+    }
+
+    /* ls 輸出 */
+    .ls-dot {
+      color: #566070;
+      margin-right: 0.5em;
+    }
+
+    .ls-dot.ok { color: #4ade80; }
+
+    .ls-host {
+      display: inline-block;
+      min-width: 15ch;
+      color: #d6dae2;
+    }
+
+    .ls-name { color: #566070; }
+
+    /* 方向鍵導航時的焦點樣式 */
+    .pve-tree a:focus-visible {
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      outline: none;
     }
 
     .term__cmd {
-      margin: 0 0 calc(0.6rem * var(--fit, 1));
+      margin: 0 0 0.6rem;
       color: #8b93a1;
-      font-size: calc(0.8rem * var(--fit, 1));
+      font-size: 0.8rem;
     }
 
     .term__ps {
@@ -224,7 +292,7 @@
 
     .term__line {
       margin: 0.12rem 0;
-      font-size: calc(0.76rem * var(--fit, 1));
+      font-size: 0.76rem;
       color: #8b93a1;
     }
 
@@ -266,8 +334,8 @@
     .session { scroll-margin-top: 96px; }
 
     .session .term__name {
-      margin: 0 0 calc(0.65rem * var(--fit, 1));
-      font-size: calc(1.05rem * var(--fit, 1));
+      margin: 0 0 0.65rem;
+      font-size: 1.05rem;
       line-height: 1.45;
       color: #f2f4f8;
     }
@@ -287,7 +355,7 @@
     .tag {
       display: inline-block;
       margin-left: 0.4rem;
-      font-size: calc(0.66rem * var(--fit, 1));
+      font-size: 0.66rem;
       font-weight: 600;
       letter-spacing: 0.05em;
       padding: 0.08em 0.5em;
@@ -309,7 +377,7 @@
 
     .spec {
       display: grid;
-      gap: calc(0.38rem * var(--fit, 1));
+      gap: 0.38rem;
       margin: 0;
     }
 
@@ -321,7 +389,7 @@
     }
 
     .spec dt {
-      font-size: calc(0.74rem * var(--fit, 1));
+      font-size: 0.74rem;
       letter-spacing: 0.04em;
       color: var(--device-color, #f59e0b);
     }
@@ -331,7 +399,7 @@
 
     .spec dd {
       margin: 0;
-      font-size: calc(0.85rem * var(--fit, 1));
+      font-size: 0.85rem;
       line-height: 1.55;
       color: #d6dae2;
     }
@@ -361,8 +429,8 @@
     }
 
     .term__note {
-      margin: calc(0.6rem * var(--fit, 1)) 0 0;
-      font-size: calc(0.78rem * var(--fit, 1));
+      margin: 0.6rem 0 0;
+      font-size: 0.78rem;
       color: #8b93a1;
     }
 
@@ -372,9 +440,9 @@
 
     /* 相關文章輸出 */
     .term__posts {
-      margin-top: calc(0.85rem * var(--fit, 1));
+      margin-top: 0.85rem;
       border-top: 1px dashed rgba(255, 255, 255, 0.14);
-      padding-top: calc(0.7rem * var(--fit, 1));
+      padding-top: 0.7rem;
     }
 
     .term__posts ul {
@@ -384,7 +452,7 @@
     }
 
     .term__posts li {
-      font-size: calc(0.82rem * var(--fit, 1));
+      font-size: 0.82rem;
       line-height: 1.55;
       color: #d6dae2;
       padding-left: 1.15em;
@@ -404,7 +472,7 @@
     .term__posts time {
       color: #566070;
       margin-right: 0.4em;
-      font-size: calc(0.74rem * var(--fit, 1));
+      font-size: 0.74rem;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -440,6 +508,11 @@
 
       .pve-tree li.grp {
         display: none;
+      }
+
+      /* 手機版沒有群組標題可點，收合狀態不適用，全部晶片照列 */
+      html.js .pve-tree li.is-hidden {
+        display: block;
       }
 
       .pve-tree a {
@@ -527,7 +600,7 @@
   <main class="wrapper">
     <section class="content">
       <h1>我的裝置</h1>
-      <p>這裡記錄我目前使用的各種裝置。點左側任一台，終端機就會連線進去——綠點是 running，空心點是 stopped。沒有 JavaScript 時，所有輸出會像 scrollback 一樣全部列出。</p>
+      <p>這裡記錄我目前使用的各種裝置。點左側任一台，終端機就會連線進去——綠點是 running，空心點是 stopped。懶得點的話，底下的 prompt 可以直接打指令：<code>ls</code>、<code>ssh &lt;主機名&gt;</code>，Tab 補全、↑↓ 翻歷史；左邊清單也支援方向鍵移動、Enter 連線。沒有 JavaScript 時，所有輸出會像 scrollback 一樣全部列出。</p>
 
       <div class="gadgets-layout">
         <aside class="pve-tree" aria-label="裝置導航">
@@ -538,16 +611,16 @@
             <li><a href="#dev-mbp16"><i class="dot dot--run"></i>MacBook Pro 16"</a></li>
             <li><a href="#dev-f8u"><i class="dot dot--run"></i>POCO F8 Ultra</a></li>
             <li><a href="#dev-sam-m7"><i class="dot dot--run"></i>Samsung M7 32"</a></li>
-            <li class="grp">曾用裝置</li>
-            <li><a href="#dev-mbp14"><i class="dot dot--stop"></i>MacBook Pro 14"</a></li>
-            <li><a href="#dev-p15"><i class="dot dot--stop"></i>ThinkPad P15 Gen 2</a></li>
-            <li><a href="#dev-nh55"><i class="dot dot--stop"></i>Clevo NH55JNR</a></li>
-            <li><a href="#dev-ip17pm"><i class="dot dot--stop"></i>iPhone 17 Pro Max</a></li>
-            <li><a href="#dev-f7u"><i class="dot dot--stop"></i>POCO F7 Ultra</a></li>
-            <li><a href="#dev-akg-n9"><i class="dot dot--stop"></i>AKG N9 Hybrid</a></li>
-            <li><a href="#dev-ipad11"><i class="dot dot--stop"></i>iPad Pro M1 11"</a></li>
-            <li><a href="#dev-ipad129"><i class="dot dot--stop"></i>iPad Pro M2 12.9"</a></li>
-            <li><a href="#dev-tab-s9u"><i class="dot dot--stop"></i>Tab S9 Ultra</a></li>
+            <li class="grp collapsed">曾用裝置</li>
+            <li class="is-hidden"><a href="#dev-mbp14"><i class="dot dot--stop"></i>MacBook Pro 14"</a></li>
+            <li class="is-hidden"><a href="#dev-p15"><i class="dot dot--stop"></i>ThinkPad P15 Gen 2</a></li>
+            <li class="is-hidden"><a href="#dev-nh55"><i class="dot dot--stop"></i>Clevo NH55JNR</a></li>
+            <li class="is-hidden"><a href="#dev-ip17pm"><i class="dot dot--stop"></i>iPhone 17 Pro Max</a></li>
+            <li class="is-hidden"><a href="#dev-f7u"><i class="dot dot--stop"></i>POCO F7 Ultra</a></li>
+            <li class="is-hidden"><a href="#dev-akg-n9"><i class="dot dot--stop"></i>AKG N9 Hybrid</a></li>
+            <li class="is-hidden"><a href="#dev-ipad11"><i class="dot dot--stop"></i>iPad Pro M1 11"</a></li>
+            <li class="is-hidden"><a href="#dev-ipad129"><i class="dot dot--stop"></i>iPad Pro M2 12.9"</a></li>
+            <li class="is-hidden"><a href="#dev-tab-s9u"><i class="dot dot--stop"></i>Tab S9 Ultra</a></li>
             <li class="grp">音訊裝置</li>
             <li><a href="#dev-arc3"><i class="dot dot--run"></i>CLEER ARC 3</a></li>
             <li><a href="#dev-hd6xx"><i class="dot dot--run"></i>HD 6XX</a></li>
@@ -816,6 +889,8 @@
                 </section>
 
               </div>
+              <div id="term-stdout" aria-hidden="true"></div>
+              <p class="term__idle" id="term-prompt"><span class="term__ps">❯</span> <span class="term__inwrap"><span id="term-echo"></span><span class="cursor" aria-hidden="true"></span><input id="term-input" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="終端機指令列"></span></p>
             </div>
           </div>
         </div>
@@ -861,48 +936,7 @@
         })();
       }
 
-      /* 內容不足時整體等比放大（字級＋間距）填滿終端機 */
-      function setFit(b, f) { b.style.setProperty('--fit', f); }
-
-      /* body 本身會被 flex 撐高，scrollHeight 永遠 ≥ clientHeight，不能拿來量內容；
-         改為直接加總子元素實際高度 */
-      function contentH(b) {
-        var h = 0;
-        for (var i = 0; i < b.children.length; i++) {
-          var c = b.children[i], cs = getComputedStyle(c);
-          h += c.offsetHeight + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
-        }
-        return h;
-      }
-
-      function padV(b) {
-        var cs = getComputedStyle(b);
-        return parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
-      }
-
-      function fitSession(body) {
-        if (reduce || !body) return;
-        var MAX = 2.6;
-        body.classList.remove('vfill');
-        setFit(body, 1);
-        /* avail 只在 --fit=1 時量一次並固定下來：終端機高度會被放大後的內容撐高，
-           若每次都用即時 clientHeight，迴圈會追著長高的目標跑（回饋迴圈） */
-        var avail = body.clientHeight - padV(body), h = contentH(body);
-        if (h >= avail - 1) return;
-        var f = Math.min(avail / Math.max(h, 1), MAX);
-        setFit(body, f);
-        var guard = 60;
-        while (guard-- && contentH(body) > avail + 2) {
-          f -= 0.04; setFit(body, f);
-        }
-        while (guard-- && f < MAX) {
-          if (contentH(body) > avail - 4) break;
-          f += 0.02; setFit(body, f);
-          if (contentH(body) > avail + 2) { f -= 0.02; setFit(body, f); break; }
-        }
-        if (avail - contentH(body) > 50) body.classList.add('vfill');
-      }
-
+      /* 切換裝置＝開新畫面：清掉前一台的連線動畫與指令輸出，終端機不會越長越長 */
       function connect(id, instant) {
         var s = d.getElementById(id);
         if (!s) return false;
@@ -910,6 +944,7 @@
         var host = s.getAttribute('data-host') || id.replace(/^dev-/, '');
         sessions.forEach(function (x) { x.classList.remove('active'); });
         scrollback.innerHTML = '';
+        if (stdout) stdout.innerHTML = '';
         title.textContent = 'jason@' + host + ': ~/inventory';
         ensureMeta().then(function () {
           if (mine !== token) return;
@@ -917,7 +952,6 @@
         });
         if (instant || reduce) {
           s.classList.add('active');
-          fitSession(body);
           return true;
         }
         var line = make('p', 'term__cmd');
@@ -934,7 +968,7 @@
           scrollback.appendChild(make('p', 'term__line',
             relay ? 'transport relay · anycast TURN' : 'transport lan · direct'));
           setTimeout(function () {
-            if (mine === token) { s.classList.add('active'); fitSession(body); }
+            if (mine === token) { s.classList.add('active'); }
           }, 160);
         });
         return true;
@@ -997,10 +1031,189 @@
           });
           blk.appendChild(ul);
           s.appendChild(blk);
-          /* 相關文章是非同步插入的，補上後要重新計算 --fit，否則留下空隙或溢出 */
-          if (s.classList.contains('active')) fitSession(body);
         });
       }
+
+      /* 群組折疊（PVE 風格）：預設收合的群組已在 HTML 標記 collapsed/is-hidden */
+      [].slice.call(d.querySelectorAll('.pve-tree li.grp')).forEach(function (g) {
+        g.setAttribute('role', 'button');
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('aria-expanded', String(!g.classList.contains('collapsed')));
+        function toggle() {
+          var collapsed = g.classList.toggle('collapsed');
+          g.setAttribute('aria-expanded', String(!collapsed));
+          for (var n = g.nextElementSibling; n && !n.classList.contains('grp'); n = n.nextElementSibling) {
+            n.classList.toggle('is-hidden', collapsed);
+          }
+        }
+        g.addEventListener('click', toggle);
+        g.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+        });
+      });
+
+      /* ---- 可互動指令列：ls / ssh / edgefetch / clear / help，Tab 補全，↑↓ 歷史 ---- */
+      var promptLine = d.getElementById('term-prompt');
+      var input = d.getElementById('term-input');
+      var echo = d.getElementById('term-echo');
+      var stdout = d.getElementById('term-stdout');
+      var cmdHistory = [], hIdx = 0;
+      var COMMANDS = ['help', 'ls', 'ssh', 'edgefetch', 'clear'];
+
+      /* 裝置索引：顯示名稱取自樹狀選單文字 */
+      var devices = sessions.map(function (s) {
+        var link = d.querySelector('.pve-tree a[href="#' + s.id + '"]');
+        return {
+          id: s.id,
+          host: s.getAttribute('data-host') || s.id.replace(/^dev-/, ''),
+          name: link ? link.textContent.trim() : s.id,
+          state: s.getAttribute('data-state') || 'stopped'
+        };
+      });
+
+      function printLine(cls, txt) { stdout.appendChild(make('p', cls, txt)); }
+
+      function echoCmd(val) {
+        var l = make('p', 'term__cmd');
+        l.appendChild(make('span', 'term__ps', '❯ '));
+        l.appendChild(make('span', 'cmd', val));
+        stdout.appendChild(l);
+      }
+
+      function listDevices() {
+        devices.forEach(function (dev) {
+          var row = make('p', 'term__line');
+          row.appendChild(make('span', 'ls-dot' + (dev.state === 'running' ? ' ok' : ''), '●'));
+          row.appendChild(make('span', 'ls-host', dev.host));
+          row.appendChild(make('span', 'ls-name', dev.name));
+          stdout.appendChild(row);
+        });
+      }
+
+      function findDevice(q) {
+        q = q.replace(/^jason@/, '').replace(/\.local$/, '');
+        for (var i = 0; i < devices.length; i++) {
+          var x = devices[i];
+          if (x.host === q || x.id === q || x.id === 'dev-' + q) return x;
+        }
+        return null;
+      }
+
+      function runCommand(raw) {
+        var val = raw.trim();
+        /* 畫面只留最新一道指令的輸出，避免歷史把頁面越撐越長（↑↓ 的輸入歷史仍保留） */
+        stdout.innerHTML = '';
+        echoCmd(val);
+        if (val) { cmdHistory.push(val); hIdx = cmdHistory.length; }
+        if (!val) return;
+        var parts = val.split(/\s+/), cmd = parts[0], arg = parts[1] || '';
+        if (cmd === 'ls') {
+          listDevices();
+        } else if (cmd === 'ssh' || cmd === 'edgefetch') {
+          if (!arg) { printLine('term__line', 'usage: ' + cmd + ' <host>'); return; }
+          var dev = findDevice(arg);
+          if (!dev) { printLine('term__line', cmd + ': no such device: ' + arg); return; }
+          /* 都打指令了就是真 ssh：直接連線，不走示範動畫 */
+          connect(dev.id, true);
+          printLine('term__line ok', '✓ connected to ' + dev.host);
+        } else if (cmd === 'clear') {
+          stdout.innerHTML = ''; scrollback.innerHTML = '';
+        } else if (cmd === 'help') {
+          printLine('term__line', 'available commands:');
+          printLine('term__line', '  ls                 list all devices');
+          printLine('term__line', '  ssh <host>         connect to a device');
+          printLine('term__line', '  edgefetch <host>   show device specs');
+          printLine('term__line', '  clear              clear the screen');
+        } else {
+          printLine('term__line', 'zsh: command not found: ' + cmd);
+        }
+      }
+
+      function syncEcho() { echo.textContent = input.value; }
+
+      input.addEventListener('input', syncEcho);
+
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          var v = input.value;
+          input.value = ''; syncEcho();
+          runCommand(v);
+          promptLine.scrollIntoView({ block: 'nearest' });
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (hIdx > 0) { hIdx--; input.value = cmdHistory[hIdx] || ''; syncEcho(); }
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (hIdx < cmdHistory.length) { hIdx++; input.value = cmdHistory[hIdx] || ''; syncEcho(); }
+        } else if (e.key === 'Tab') {
+          e.preventDefault();
+          var val = input.value;
+          var first = val.indexOf(' ') === -1;
+          var frag = first ? val : val.slice(val.lastIndexOf(' ') + 1);
+          var cands = [];
+          if (first) {
+            cands = COMMANDS.filter(function (c) { return c.indexOf(frag) === 0; });
+          } else {
+            var c0 = val.split(/\s+/)[0];
+            if (c0 === 'ssh' || c0 === 'edgefetch') {
+              var f = frag.replace(/^jason@/, '');
+              cands = devices.map(function (x) { return x.host; })
+                .filter(function (h) { return h.indexOf(f) === 0; });
+            }
+          }
+          if (!cands.length) return;
+          var prefix = frag.indexOf('jason@') === 0 ? 'jason@' : '';
+          if (cands.length === 1) {
+            input.value = first ? cands[0] + ' '
+              : val.slice(0, val.length - frag.length) + prefix + cands[0] + ' ';
+            syncEcho();
+            return;
+          }
+          /* 多個候選：先補共同前綴，無法再補時列出候選（bash 風格） */
+          var stripped = first ? frag : frag.replace(/^jason@/, '');
+          var pfx = cands.reduce(function (a, b) {
+            var i = 0; while (i < a.length && a[i] === b[i]) i++;
+            return a.slice(0, i);
+          });
+          if (pfx.length > stripped.length) {
+            input.value = first ? pfx
+              : val.slice(0, val.length - frag.length) + prefix + pfx;
+            syncEcho();
+          } else {
+            /* 候選列表是暫態提示，同樣取代而非累積 */
+            stdout.innerHTML = '';
+            echoCmd(val);
+            printLine('term__line', cands.join('   '));
+          }
+        }
+      });
+
+      /* 點終端機空白處或 prompt → 聚焦指令列（點連結、選取文字時不搶焦點） */
+      d.getElementById('console-term').addEventListener('click', function (e) {
+        if (e.target.closest('a')) return;
+        if (!window.getSelection().isCollapsed) return;
+        input.focus({ preventScroll: true });
+      });
+
+      /* 方向鍵在樹狀清單移動（聚焦指令列或其他輸入框時讓位），Enter 由連結原生行為觸發連線 */
+      d.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+        if (e.target.closest && e.target.closest('input, textarea, [contenteditable]')) return;
+        var links = [].slice.call(d.querySelectorAll('.pve-tree a[href^="#dev-"]')).filter(function (a) {
+          return !a.closest('li').classList.contains('is-hidden');
+        });
+        if (!links.length) return;
+        var cur = links.indexOf(d.activeElement);
+        if (cur === -1) {
+          var act = d.querySelector('.sessions > .session.active');
+          var actLink = act && d.querySelector('.pve-tree a[href="#' + act.id + '"]');
+          cur = links.indexOf(actLink);
+        }
+        var next = cur + (e.key === 'ArrowDown' ? 1 : -1);
+        next = Math.max(0, Math.min(links.length - 1, next));
+        e.preventDefault();
+        links[next].focus({ preventScroll: true });
+      });
 
       [].slice.call(d.querySelectorAll('.pve-tree a[href^="#dev-"]')).forEach(function (a) {
         a.addEventListener('click', function (e) {
@@ -1015,28 +1228,26 @@
         });
       });
 
+      /* 若 hash 指向收合群組裡的裝置，先展開該組 */
+      var hashLink = location.hash && d.querySelector('.pve-tree a[href="' + location.hash + '"]');
+      if (hashLink) {
+        var hashLi = hashLink.closest('li');
+        if (hashLi && hashLi.classList.contains('is-hidden')) {
+          for (var p = hashLi.previousElementSibling; p; p = p.previousElementSibling) {
+            if (p.classList.contains('grp')) {
+              if (p.classList.contains('collapsed')) p.click();
+              break;
+            }
+          }
+        }
+      }
+
       var initial = location.hash && d.getElementById(location.hash.slice(1));
       if (!(initial && initial.classList.contains('session'))) {
         initial = d.querySelector('.sessions > .session.active');
       }
-      /* 首次載入也走 connect：補上相關文章並立即計算 --fit */
+      /* 首次載入也走 connect：預設裝置也要觸發相關文章配對 */
       if (initial) connect(initial.id, true);
-
-      var rT;
-      window.addEventListener('resize', function () {
-        clearTimeout(rT);
-        rT = setTimeout(function () {
-          var act = d.querySelector('.sessions > .session.active');
-          if (act) fitSession(body);
-        }, 150);
-      });
-
-      /* 網頁字型載入完成後重新對齊，避免字型度量差造成空隙 */
-      if (d.fonts && d.fonts.ready) {
-        d.fonts.ready.then(function () {
-          if (document.querySelector('.sessions > .session.active')) fitSession(body);
-        });
-      }
     })();
   </script>
   <!-- Cloudflare Web Analytics - 首屏後載入 -->
