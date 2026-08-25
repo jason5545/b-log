@@ -30,6 +30,180 @@
     main {
       min-height: 600px;
     }
+
+    /* 裝置規格卡 */
+    .gadget-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
+      gap: 1.25rem;
+      margin: 1rem 0 2.5rem;
+    }
+
+    .gadget-card {
+      position: relative;
+      overflow: hidden;
+      padding: 1.35rem 1.4rem 1.45rem;
+      background: var(--glass-tint);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+                  border-color 0.3s ease,
+                  box-shadow 0.3s ease;
+      contain: layout style;
+    }
+
+    .gadget-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), transparent 85%);
+      opacity: 0.55;
+      transition: opacity 0.3s ease;
+    }
+
+    .gadget-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-border);
+      box-shadow: var(--shadow-strong);
+    }
+
+    .gadget-card:hover::before {
+      opacity: 0.9;
+    }
+
+    .gadget-card--retired::before {
+      background: linear-gradient(90deg, var(--text-muted), transparent 85%);
+      opacity: 0.22;
+    }
+
+    .gadget-card--retired:hover {
+      transform: none;
+      border-color: var(--border);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .gadget-card--retired:hover::before {
+      opacity: 0.35;
+    }
+
+    .gadget-card__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .gadget-card__type {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      padding: 0.18rem 0.55rem;
+      border-radius: 20px;
+    }
+
+    .gadget-card--retired .gadget-card__type {
+      color: var(--text-muted);
+      background: transparent;
+      border-color: var(--border);
+    }
+
+    .gadget-card__status {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent-strong);
+      white-space: nowrap;
+    }
+
+    .gadget-card__status::before {
+      content: "";
+      display: inline-block;
+      width: 0.5em;
+      height: 0.5em;
+      margin-right: 0.4em;
+      border-radius: 50%;
+      background: currentColor;
+      vertical-align: 0.08em;
+    }
+
+    .gadget-card--retired .gadget-card__status {
+      color: var(--text-muted);
+    }
+
+    .gadget-card__name {
+      margin: 0 0 0.8rem;
+      font-family: var(--font-heading);
+      font-size: 1.18rem;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+
+    .gadget-card__name a {
+      color: inherit;
+    }
+
+    .gadget-card__name a:hover {
+      color: var(--accent);
+    }
+
+    .gadget-specs {
+      display: grid;
+      gap: 0.4rem;
+      margin: 0;
+    }
+
+    .gadget-specs > div {
+      display: grid;
+      grid-template-columns: 4.2em 1fr;
+      gap: 0.6rem;
+      align-items: baseline;
+    }
+
+    .gadget-specs dt {
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .gadget-specs dd {
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    .gadget-specs dd a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: var(--accent-border);
+      text-underline-offset: 3px;
+    }
+
+    .gadget-specs dd a:hover {
+      color: var(--accent);
+      text-decoration-color: currentColor;
+    }
+
+    .gadget-note {
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    @media (min-width: 700px) {
+      .gadget-card--wide {
+        grid-column: span 2;
+      }
+    }
   </style>
 
   <!-- 完整樣式表 -->
@@ -111,81 +285,273 @@
       <p>這裡記錄我目前使用的各種裝置。</p>
 
       <h2>主要裝置</h2>
+      <div class="gadget-grid">
+        <article class="gadget-card gadget-card--wide">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">桌機</span>
+            <span class="gadget-card__status">現役</span>
+          </div>
+          <h3 class="gadget-card__name">Proxmox VE 虛擬化主機</h3>
+          <dl class="gadget-specs">
+            <div><dt>CPU</dt><dd><a href="https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x3d.html" target="_blank" rel="noopener">AMD Ryzen 9 9950X3D</a></dd></div>
+            <div><dt>GPU</dt><dd><a href="https://www.asus.com/us/motherboards-components/graphics-cards/dual/dual-rtx4070tis-o16g/" target="_blank" rel="noopener">ASUS DUAL RTX 4070 Ti Super</a></dd></div>
+            <div><dt>RAM</dt><dd>96GB DDR5（48GB × 2）</dd></div>
+            <div><dt>儲存</dt><dd><a href="https://www.predatorstorage.com/products/pcie-m-2-ssd/predator-gm7-ps5-gaming-ssd/" target="_blank" rel="noopener">Predator GM7 4TB</a> × 2 + <a href="https://www.crucial.com/ssd/mx500/ct500mx500ssd1" target="_blank" rel="noopener">Crucial MX500 500GB</a> + <a href="https://www.crucial.com/ssd/bx500/ct1000bx500ssd1" target="_blank" rel="noopener">Crucial BX500 1TB</a></dd></div>
+            <div><dt>主機板</dt><dd><a href="https://rog.asus.com/motherboards/rog-strix/rog-strix-b650e-i-gaming-wifi-model/" target="_blank" rel="noopener">ASUS ROG STRIX B650E-I GAMING WIFI</a></dd></div>
+            <div><dt>用途</dt><dd>Proxmox VE，VM 包含 Windows（MSFS）、Nextcloud、Tailscale DERP</dd></div>
+          </dl>
+        </article>
 
-      <h3>桌機 (Proxmox VE 虛擬化主機)</h3>
-      <ul>
-        <li><strong>CPU</strong>：<a href="https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x3d.html" target="_blank" rel="noopener">AMD Ryzen 9 9950X3D</a></li>
-        <li><strong>GPU</strong>：<a href="https://www.asus.com/us/motherboards-components/graphics-cards/dual/dual-rtx4070tis-o16g/" target="_blank" rel="noopener">ASUS DUAL RTX 4070 Ti Super</a></li>
-        <li><strong>RAM</strong>：96GB DDR5 (48GB × 2)</li>
-        <li><strong>儲存</strong>：<a href="https://www.predatorstorage.com/products/pcie-m-2-ssd/predator-gm7-ps5-gaming-ssd/" target="_blank" rel="noopener">Predator SSD GM7 4TB</a> × 2 + <a href="https://www.crucial.com/ssd/mx500/ct500mx500ssd1" target="_blank" rel="noopener">Crucial MX500 500GB</a> + <a href="https://www.crucial.com/ssd/bx500/ct1000bx500ssd1" target="_blank" rel="noopener">Crucial BX500 1TB</a></li>
-        <li><strong>主機板</strong>：<a href="https://rog.asus.com/motherboards/rog-strix/rog-strix-b650e-i-gaming-wifi-model/" target="_blank" rel="noopener">ASUS ROG STRIX B650E-I GAMING WIFI</a></li>
-        <li><strong>用途</strong>：Proxmox VE，VM 包含 Windows (MSFS)、Nextcloud、Tailscale DERP</li>
-      </ul>
+        <article class="gadget-card">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">筆電・主力開發機</span>
+            <span class="gadget-card__status">現役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 16"（M5 Max）</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>晶片</dt><dd>Apple M5 Max</dd></div>
+            <div><dt>GPU</dt><dd>40 核心</dd></div>
+            <div><dt>RAM</dt><dd>128GB</dd></div>
+            <div><dt>儲存</dt><dd>4TB SSD</dd></div>
+          </dl>
+        </article>
 
-      <h3>筆電 (主力開發機)</h3>
-      <ul>
-        <li><strong>型號</strong>：<a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 16" (M5 Max)</a></li>
-        <li><strong>GPU</strong>：40 核心</li>
-        <li><strong>RAM</strong>：128GB</li>
-        <li><strong>儲存</strong>：4TB SSD</li>
-      </ul>
+        <article class="gadget-card">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">手機</span>
+            <span class="gadget-card__status">現役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.po.co/global/product/poco-f8-ultra/" target="_blank" rel="noopener">POCO F8 Ultra</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>SoC</dt><dd>Snapdragon 8 Elite Gen 5</dd></div>
+            <div><dt>螢幕</dt><dd>6.9 吋 AMOLED</dd></div>
+            <div><dt>RAM</dt><dd>16GB</dd></div>
+            <div><dt>儲存</dt><dd>512GB（UFS 4.1）</dd></div>
+            <div><dt>電池</dt><dd>6,500mAh 矽碳雙電芯</dd></div>
+          </dl>
+        </article>
 
-      <h3>手機</h3>
-      <ul>
-        <li><a href="https://www.po.co/global/product/poco-f8-ultra/" target="_blank" rel="noopener">POCO F8 Ultra</a> 16GB/512GB</li>
-      </ul>
-
-      <h3>螢幕</h3>
-      <ul>
-        <li><a href="https://www.samsung.com/us/computing/monitors/smart-monitors/32-m70b-uhd-usb-c-smart-monitor-streaming-tv-ls32bm702unxgo/" target="_blank" rel="noopener">Samsung Smart Monitor M7 32"</a> (2022)</li>
-      </ul>
+        <article class="gadget-card">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">螢幕</span>
+            <span class="gadget-card__status">現役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.samsung.com/us/computing/monitors/smart-monitors/32-m70b-uhd-usb-c-smart-monitor-streaming-tv-ls32bm702unxgo/" target="_blank" rel="noopener">Samsung Smart Monitor M7 32"</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>面板</dt><dd>VA，4K UHD（3,840 × 2,160）</dd></div>
+            <div><dt>更新率</dt><dd>60Hz</dd></div>
+            <div><dt>特色</dt><dd>內建 Smart TV 功能、USB-C</dd></div>
+            <div><dt>年份</dt><dd>2022</dd></div>
+          </dl>
+        </article>
+      </div>
 
       <h2>曾用裝置</h2>
+      <div class="gadget-grid">
+        <article class="gadget-card gadget-card--retired">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">筆電</span>
+            <span class="gadget-card__status">已退役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 14"（M5）</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>晶片</dt><dd>Apple M5</dd></div>
+            <div><dt>RAM</dt><dd>32GB</dd></div>
+            <div><dt>儲存</dt><dd>4TB SSD</dd></div>
+          </dl>
+        </article>
 
-      <h3>舊筆電</h3>
-      <ul>
-        <li><strong><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 14" (M5)</a></strong>：32GB RAM / 4TB SSD</li>
-        <li><strong><a href="https://www.lenovo.com/us/en/p/laptops/thinkpad/thinkpadp/thinkpad-p15-gen-2-(15-inch-intel)/wmd00000487" target="_blank" rel="noopener">Lenovo ThinkPad P15 Gen 2</a></strong>：i9-11950H / RTX A5000 16GB / 128GB DDR4 / 15.6" 4K OLED</li>
-        <li><strong><a href="https://www.notebookcheck.net/Clevo-NH55.491701.0.html" target="_blank" rel="noopener">Clevo NH55JNR</a></strong> (神舟 HASEE ZX9-DA5DA)：i5-12400 (桌面版) / RTX 3070 Mobile 8GB 140W</li>
-      </ul>
+        <article class="gadget-card gadget-card--retired">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">筆電</span>
+            <span class="gadget-card__status">已退役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.lenovo.com/us/en/p/laptops/thinkpad/thinkpadp/thinkpad-p15-gen-2-(15-inch-intel)/wmd00000487" target="_blank" rel="noopener">Lenovo ThinkPad P15 Gen 2</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>CPU</dt><dd>Intel i9-11950H</dd></div>
+            <div><dt>GPU</dt><dd>RTX A5000 16GB</dd></div>
+            <div><dt>RAM</dt><dd>128GB DDR4</dd></div>
+            <div><dt>螢幕</dt><dd>15.6 吋 4K OLED</dd></div>
+          </dl>
+        </article>
 
-      <h3>舊手機</h3>
-      <ul>
-        <li><a href="https://www.apple.com/iphone-17-pro/" target="_blank" rel="noopener">iPhone 17 Pro Max</a> 2TB</li>
-        <li><a href="https://www.po.co/global/product/poco-f7-ultra/" target="_blank" rel="noopener">POCO F7 Ultra</a> 16GB/512GB</li>
-      </ul>
+        <article class="gadget-card gadget-card--retired">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">筆電</span>
+            <span class="gadget-card__status">已退役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.notebookcheck.net/Clevo-NH55.491701.0.html" target="_blank" rel="noopener">Clevo NH55JNR</a>（神舟 HASEE ZX9-DA5DA）</h3>
+          <dl class="gadget-specs">
+            <div><dt>CPU</dt><dd>Intel i5-12400（桌面版）</dd></div>
+            <div><dt>GPU</dt><dd>RTX 3070 Mobile 8GB（140W）</dd></div>
+          </dl>
+        </article>
 
-      <h3>舊耳機</h3>
-      <ul>
-        <li><a href="https://www.akg.com/headphones/over-ear-and-on-ear/AKG-N9-HYBRID.html" target="_blank" rel="noopener">AKG N9 Hybrid</a></li>
-      </ul>
+        <article class="gadget-card gadget-card--retired">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">手機</span>
+            <span class="gadget-card__status">已退役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.apple.com/iphone-17-pro/" target="_blank" rel="noopener">iPhone 17 Pro Max</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>晶片</dt><dd>A19 Pro</dd></div>
+            <div><dt>螢幕</dt><dd>6.9 吋</dd></div>
+            <div><dt>RAM</dt><dd>12GB</dd></div>
+            <div><dt>儲存</dt><dd>2TB</dd></div>
+          </dl>
+        </article>
 
-      <h3>平板</h3>
-      <ul>
-        <li><a href="https://support.apple.com/en-us/111897" target="_blank" rel="noopener">iPad Pro M1 11"</a></li>
-        <li><a href="https://support.apple.com/en-us/111830" target="_blank" rel="noopener">iPad Pro M1 12.9"</a></li>
-        <li><a href="https://www.samsung.com/us/tablets/galaxy-tab-s9/all-galaxy-tab-s9/" target="_blank" rel="noopener">Samsung Galaxy Tab S9 Ultra</a></li>
-      </ul>
+        <article class="gadget-card gadget-card--retired">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">手機</span>
+            <span class="gadget-card__status">已退役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.po.co/global/product/poco-f7-ultra/" target="_blank" rel="noopener">POCO F7 Ultra</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>RAM</dt><dd>16GB</dd></div>
+            <div><dt>儲存</dt><dd>512GB</dd></div>
+          </dl>
+        </article>
+
+        <article class="gadget-card gadget-card--retired">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">耳機</span>
+            <span class="gadget-card__status">已退役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.akg.com/headphones/over-ear-and-on-ear/AKG-N9-HYBRID.html" target="_blank" rel="noopener">AKG N9 Hybrid</a></h3>
+          <p class="gadget-note">無線降噪耳機</p>
+        </article>
+
+        <article class="gadget-card gadget-card--retired">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">平板</span>
+            <span class="gadget-card__status">已退役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://support.apple.com/en-us/111897" target="_blank" rel="noopener">iPad Pro M1 11"</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>晶片</dt><dd>Apple M1</dd></div>
+            <div><dt>螢幕</dt><dd>11 吋 Liquid Retina</dd></div>
+          </dl>
+        </article>
+
+        <article class="gadget-card gadget-card--retired">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">平板</span>
+            <span class="gadget-card__status">已退役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://support.apple.com/en-us/111830" target="_blank" rel="noopener">iPad Pro M1 12.9"</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>晶片</dt><dd>Apple M1</dd></div>
+            <div><dt>螢幕</dt><dd>12.9 吋 Liquid Retina XDR（mini-LED）</dd></div>
+          </dl>
+        </article>
+
+        <article class="gadget-card gadget-card--retired">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">平板</span>
+            <span class="gadget-card__status">已退役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.samsung.com/us/tablets/galaxy-tab-s9/all-galaxy-tab-s9/" target="_blank" rel="noopener">Samsung Galaxy Tab S9 Ultra</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>SoC</dt><dd>Snapdragon 8 Gen 2</dd></div>
+            <div><dt>螢幕</dt><dd>14.6 吋 Super AMOLED</dd></div>
+            <div><dt>電池</dt><dd>11,200mAh</dd></div>
+          </dl>
+        </article>
+      </div>
 
       <h2>音訊裝置</h2>
-      <ul>
-        <li><a href="https://cleeraudio.com/earbuds/arc-3/" target="_blank" rel="noopener">CLEER ARC 3</a> × 2</li>
-        <li><a href="https://drop.com/buy/massdrop-sennheiser-hd6xx" target="_blank" rel="noopener">Sennheiser HD 6XX (HD 650)</a></li>
-      </ul>
+      <div class="gadget-grid">
+        <article class="gadget-card">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">耳機</span>
+            <span class="gadget-card__status">現役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://cleeraudio.com/earbuds/arc-3/" target="_blank" rel="noopener">CLEER ARC 3</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>類型</dt><dd>開放式真無線耳機</dd></div>
+            <div><dt>數量</dt><dd>× 2</dd></div>
+          </dl>
+        </article>
+
+        <article class="gadget-card">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">耳機</span>
+            <span class="gadget-card__status">現役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://drop.com/buy/massdrop-sennheiser-hd6xx" target="_blank" rel="noopener">Sennheiser HD 6XX（HD 650）</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>類型</dt><dd>開放式耳罩耳機</dd></div>
+          </dl>
+        </article>
+      </div>
 
       <h2>控制器</h2>
-      <ul>
-        <li><a href="https://www.8bitdo.com/lite-se/" target="_blank" rel="noopener">8BitDo Lite SE</a>（無障礙控制器，用於 MSFS 飛行）</li>
-      </ul>
+      <div class="gadget-grid">
+        <article class="gadget-card">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">控制器</span>
+            <span class="gadget-card__status">現役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.8bitdo.com/lite-se/" target="_blank" rel="noopener">8BitDo Lite SE</a></h3>
+          <p class="gadget-note">無障礙控制器，用於 MSFS 飛行</p>
+        </article>
+      </div>
 
       <h2>網路/周邊</h2>
-      <ul>
-        <li><strong>主路由器</strong>：<a href="https://www.gl-inet.com/products/gl-mt6000/" target="_blank" rel="noopener">GL.iNet GL-MT6000</a></li>
-        <li><strong>WDS 延伸</strong>：<a href="https://store.linksys.com/support-product?sku=MX4200" target="_blank" rel="noopener">Linksys MX4200</a></li>
-        <li><strong>UPS</strong>：<a href="https://www.se.com/us/en/product/BR1500MS/" target="_blank" rel="noopener">APC Back-UPS 1500MS</a></li>
-        <li><strong>KVM</strong>：<a href="https://www.gl-inet.com/products/gl-rm1/" target="_blank" rel="noopener">GL.iNet Comet RM1</a></li>
-        <li><strong>串流方案</strong>：<a href="https://moonlight-stream.org/" target="_blank" rel="noopener">Moonlight</a> + <a href="https://github.com/LizardByte/Sunshine" target="_blank" rel="noopener">Sunshine</a></li>
-      </ul>
+      <div class="gadget-grid">
+        <article class="gadget-card">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">主路由器</span>
+            <span class="gadget-card__status">現役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.gl-inet.com/products/gl-mt6000/" target="_blank" rel="noopener">GL.iNet GL-MT6000（Flint 2）</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>WiFi</dt><dd>WiFi 6 AX6000</dd></div>
+            <div><dt>SoC</dt><dd>MediaTek MT7986</dd></div>
+            <div><dt>網路孔</dt><dd>雙 2.5GbE</dd></div>
+            <div><dt>VPN</dt><dd>WireGuard 約 900Mbps</dd></div>
+          </dl>
+        </article>
+
+        <article class="gadget-card">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">WDS 延伸</span>
+            <span class="gadget-card__status">現役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://store.linksys.com/support-product?sku=MX4200" target="_blank" rel="noopener">Linksys MX4200</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>WiFi</dt><dd>Velop AX4200 Mesh</dd></div>
+          </dl>
+        </article>
+
+        <article class="gadget-card">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">UPS</span>
+            <span class="gadget-card__status">現役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.se.com/us/en/product/BR1500MS/" target="_blank" rel="noopener">APC Back-UPS 1500MS</a></h3>
+          <dl class="gadget-specs">
+            <div><dt>容量</dt><dd>1500VA / 900W</dd></div>
+          </dl>
+        </article>
+
+        <article class="gadget-card">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">KVM</span>
+            <span class="gadget-card__status">現役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://www.gl-inet.com/products/gl-rm1/" target="_blank" rel="noopener">GL.iNet Comet RM1</a></h3>
+        </article>
+
+        <article class="gadget-card">
+          <div class="gadget-card__top">
+            <span class="gadget-card__type">串流方案</span>
+            <span class="gadget-card__status">現役</span>
+          </div>
+          <h3 class="gadget-card__name"><a href="https://moonlight-stream.org/" target="_blank" rel="noopener">Moonlight</a> + <a href="https://github.com/LizardByte/Sunshine" target="_blank" rel="noopener">Sunshine</a></h3>
+        </article>
+      </div>
 
     </section>
   </main>
