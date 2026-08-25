@@ -179,13 +179,20 @@
 
     .term__body {
       flex: 1 1 auto;
-      padding: 0.95rem 1.05rem 1.15rem;
+      padding: 1.15em 1.25em 1.4em;
       font-family: var(--mono);
       font-size: 0.86rem;
     }
 
+    /* 內容真的太短、字級放大後還有空隙時，垂直置中 */
+    html.js .term__body.vfill {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
     .term__cmd {
-      margin: 0 0 0.55rem;
+      margin: 0 0 0.7em;
       color: #8b93a1;
       font-size: 0.92em;
     }
@@ -347,9 +354,9 @@
 
     /* 相關文章輸出 */
     .term__posts {
-      margin-top: 0.8rem;
+      margin-top: 1.05em;
       border-top: 1px dashed rgba(255, 255, 255, 0.14);
-      padding-top: 0.65rem;
+      padding-top: 0.85em;
     }
 
     .term__posts ul {
@@ -840,17 +847,24 @@
       /* 內容不足時放大字級填滿終端機 */
       function fitSession(body) {
         if (reduce || !body) return;
-        var base = 0.86, max = 1.28, step = 0.03;
-        var size = base;
-        for (var s = +(base + step).toFixed(2); s <= max; s = +(s + step).toFixed(2)) {
+        var base = 0.86, max = 2;
+        body.classList.remove('vfill');
+        body.style.fontSize = base + 'rem';
+        var avail = body.clientHeight, h = body.scrollHeight;
+        if (h >= avail - 1) return;
+        var snap = function (v) { return Math.round(v * 100) / 100; };
+        var s = snap(Math.min(base * (avail / Math.max(h, 1)), max));
+        body.style.fontSize = s + 'rem';
+        var guard = 60;
+        while (s < max && guard-- && body.scrollHeight <= avail + 1) {
+          s = snap(Math.min(s + 0.02, max));
           body.style.fontSize = s + 'rem';
-          if (body.scrollHeight > body.clientHeight + 1) {
-            body.style.fontSize = size + 'rem';
-            return;
-          }
-          size = s;
         }
-        body.style.fontSize = max + 'rem';
+        if (body.scrollHeight > avail + 1) {
+          s = snap(s - 0.02);
+          body.style.fontSize = s + 'rem';
+        }
+        if (avail - body.scrollHeight > 90) body.classList.add('vfill');
       }
 
       function connect(id, instant) {
