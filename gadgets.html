@@ -312,6 +312,18 @@
       text-decoration-color: currentColor;
     }
 
+    .term__posts a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: rgba(214, 218, 226, 0.32);
+      text-underline-offset: 3px;
+    }
+
+    .term__posts a:hover {
+      color: #ffffff;
+      text-decoration-color: currentColor;
+    }
+
     .term__note {
       margin: 0.6rem 0 0;
       font-size: 0.75rem;
@@ -320,6 +332,43 @@
 
     .term__note::before {
       content: "# ";
+    }
+
+    /* 相關文章輸出 */
+    .term__posts {
+      margin-top: 0.8rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.14);
+      padding-top: 0.65rem;
+    }
+
+    .term__posts ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .term__posts li {
+      font-size: 0.78rem;
+      line-height: 1.55;
+      color: #d6dae2;
+      padding-left: 1.15em;
+      text-indent: -1.15em;
+    }
+
+    .term__posts li::before {
+      content: "├── ";
+      color: #566070;
+      white-space: pre;
+    }
+
+    .term__posts li:last-child::before {
+      content: "└── ";
+    }
+
+    .term__posts time {
+      color: #566070;
+      margin-right: 0.4em;
+      font-size: 0.72rem;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -484,7 +533,7 @@
               <div id="term-scrollback" aria-hidden="true"></div>
               <div class="sessions">
 
-                <section class="session active" id="dev-pve-host" data-host="pve-host" data-state="running" style="--device-color:#8a8a8a;">
+                <section class="session active" id="dev-pve-host" data-host="pve-host" data-state="running" data-tags="Proxmox,Tailscale,HomeLab" style="--device-color:#8a8a8a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch pve-host --all</span></p>
                   <h3 class="term__name">Proxmox VE 虛擬化主機 <span class="tag tag--run">running</span></h3>
                   <dl class="spec">
@@ -498,7 +547,7 @@
                   </dl>
                 </section>
 
-                <section class="session" id="dev-mbp16" data-host="mbp16-m5max" data-state="running" style="--device-color:#b8bcc4;">
+                <section class="session" id="dev-mbp16" data-host="mbp16-m5max" data-state="running" data-tags="MacBook,M5 Max,macOS,cmux,EdgeLink" style="--device-color:#b8bcc4;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch mbp16-m5max</span></p>
                   <h3 class="term__name"><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 16"（M5 Max）</a> <span class="tag tag--run">running</span></h3>
                   <dl class="spec">
@@ -511,7 +560,7 @@
                   <p class="term__note">主力開發機</p>
                 </section>
 
-                <section class="session" id="dev-f8u" data-host="f8u-denim" data-state="running" style="--device-color:#46648c;">
+                <section class="session" id="dev-f8u" data-host="f8u-denim" data-state="running" data-tags="POCO F8 Ultra,myron,GhostLock,HyperOS,小米,EdgeLink" style="--device-color:#46648c;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch f8u-denim</span></p>
                   <h3 class="term__name"><a href="https://www.po.co/global/product/poco-f8-ultra/" target="_blank" rel="noopener">POCO F8 Ultra</a> <span class="tag tag--run">running</span></h3>
                   <dl class="spec">
@@ -536,7 +585,7 @@
                   </dl>
                 </section>
 
-                <section class="session" id="dev-mbp14" data-host="macbook14-m5" data-state="stopped" style="--device-color:#b8bcc4;">
+                <section class="session" id="dev-mbp14" data-host="macbook14-m5" data-state="stopped" data-tags="MacBook" style="--device-color:#b8bcc4;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch macbook14-m5</span></p>
                   <h3 class="term__name"><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 14"（M5）</a> <span class="tag tag--stop">stopped</span></h3>
                   <dl class="spec">
@@ -547,7 +596,7 @@
                   </dl>
                 </section>
 
-                <section class="session" id="dev-p15" data-host="thinkpad-p15" data-state="stopped" style="--device-color:#8a8a8a;">
+                <section class="session" id="dev-p15" data-host="thinkpad-p15" data-state="stopped" data-tags="ThinkPad,工作站" style="--device-color:#8a8a8a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch thinkpad-p15</span></p>
                   <h3 class="term__name"><a href="https://www.lenovo.com/us/en/p/laptops/thinkpad/thinkpadp/thinkpad-p15-gen-2-(15-inch-intel)/wmd00000487" target="_blank" rel="noopener">Lenovo ThinkPad P15 Gen 2</a> <span class="tag tag--stop">stopped</span></h3>
                   <dl class="spec">
@@ -571,7 +620,7 @@
                   </dl>
                 </section>
 
-                <section class="session" id="dev-ip17pm" data-host="iphone17pm" data-state="stopped" style="--device-color:#e8802a;">
+                <section class="session" id="dev-ip17pm" data-host="iphone17pm" data-state="stopped" data-tags="iPhone,iOS,AirDrop,iCloud" style="--device-color:#e8802a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch iphone17pm</span></p>
                   <h3 class="term__name"><a href="https://www.apple.com/iphone-17-pro/" target="_blank" rel="noopener">iPhone 17 Pro Max</a> <span class="tag tag--stop">stopped</span></h3>
                   <dl class="spec">
@@ -583,7 +632,7 @@
                   </dl>
                 </section>
 
-                <section class="session" id="dev-f7u" data-host="poco-f7u" data-state="stopped" style="--device-color:#8a8a8a;">
+                <section class="session" id="dev-f7u" data-host="poco-f7u" data-state="stopped" data-tags="POCO,小米" style="--device-color:#8a8a8a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch poco-f7u</span></p>
                   <h3 class="term__name"><a href="https://www.po.co/global/product/poco-f7-ultra/" target="_blank" rel="noopener">POCO F7 Ultra</a> <span class="tag tag--stop">stopped</span></h3>
                   <dl class="spec">
@@ -602,7 +651,7 @@
                   </dl>
                 </section>
 
-                <section class="session" id="dev-ipad11" data-host="ipad11-m1" data-state="stopped" style="--device-color:#b8bcc4;">
+                <section class="session" id="dev-ipad11" data-host="ipad11-m1" data-state="stopped" data-tags="iPadOS,平板" style="--device-color:#b8bcc4;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch ipad11-m1</span></p>
                   <h3 class="term__name"><a href="https://support.apple.com/en-us/111897" target="_blank" rel="noopener">iPad Pro M1 11"</a> <span class="tag tag--stop">stopped</span></h3>
                   <dl class="spec">
@@ -615,7 +664,7 @@
                   </dl>
                 </section>
 
-                <section class="session" id="dev-ipad129" data-host="ipad129-m2" data-state="stopped" style="--device-color:#b8bcc4;">
+                <section class="session" id="dev-ipad129" data-host="ipad129-m2" data-state="stopped" data-tags="iPadOS,平板" style="--device-color:#b8bcc4;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch ipad129-m2</span></p>
                   <h3 class="term__name"><a href="https://support.apple.com/en-us/111841" target="_blank" rel="noopener">iPad Pro M2 12.9"</a> <span class="tag tag--stop">stopped</span></h3>
                   <dl class="spec">
@@ -628,7 +677,7 @@
                   </dl>
                 </section>
 
-                <section class="session" id="dev-tab-s9u" data-host="tabs9-ultra" data-state="stopped" style="--device-color:#8a8a8a;">
+                <section class="session" id="dev-tab-s9u" data-host="tabs9-ultra" data-state="stopped" data-tags="平板,Samsung" style="--device-color:#8a8a8a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch tabs9-ultra</span></p>
                   <h3 class="term__name"><a href="https://www.samsung.com/us/tablets/galaxy-tab-s9/all-galaxy-tab-s9/" target="_blank" rel="noopener">Samsung Galaxy Tab S9 Ultra</a> <span class="tag tag--stop">stopped</span></h3>
                   <dl class="spec">
@@ -659,7 +708,7 @@
                   </dl>
                 </section>
 
-                <section class="session" id="dev-lite-se" data-host="8bitdo-litese" data-state="running" style="--device-color:#9d7bb8;">
+                <section class="session" id="dev-lite-se" data-host="8bitdo-litese" data-state="running" data-tags="8BitDo,模擬飛行" style="--device-color:#9d7bb8;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch 8bitdo-litese</span></p>
                   <h3 class="term__name"><a href="https://www.8bitdo.com/lite-se/" target="_blank" rel="noopener">8BitDo Lite SE</a> <span class="tag tag--run">running</span></h3>
                   <dl class="spec">
@@ -684,7 +733,7 @@
                   </dl>
                 </section>
 
-                <section class="session" id="dev-mt6000" data-host="glmt6000" data-state="running">
+                <section class="session" id="dev-mt6000" data-host="glmt6000" data-state="running" data-tags="OpenWrt,OpenWRT,路由器">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch glmt6000</span></p>
                   <h3 class="term__name"><a href="https://www.gl-inet.com/products/gl-mt6000/" target="_blank" rel="noopener">GL.iNet GL-MT6000（Flint 2）</a> <span class="tag tag--run">running</span></h3>
                   <dl class="spec">
@@ -714,13 +763,13 @@
                   </dl>
                 </section>
 
-                <section class="session" id="dev-rm1" data-host="comet-rm1" data-state="running">
+                <section class="session" id="dev-rm1" data-host="comet-rm1" data-state="running" data-tags="KVM">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch comet-rm1</span></p>
                   <h3 class="term__name"><a href="https://www.gl-inet.com/products/gl-rm1/" target="_blank" rel="noopener">GL.iNet Comet RM1</a> <span class="tag tag--run">running</span></h3>
                   <p class="term__note">KVM 遠端控制</p>
                 </section>
 
-                <section class="session" id="dev-stream" data-host="moonlight" data-state="running">
+                <section class="session" id="dev-stream" data-host="moonlight" data-state="running" data-tags="Sunshine,串流">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch moonlight</span></p>
                   <h3 class="term__name"><a href="https://moonlight-stream.org/" target="_blank" rel="noopener">Moonlight</a> + <a href="https://github.com/LizardByte/Sunshine" target="_blank" rel="noopener">Sunshine</a> <span class="tag tag--run">running</span></h3>
                   <p class="term__note">遊戲串流方案</p>
@@ -779,6 +828,10 @@
         sessions.forEach(function (x) { x.classList.remove('active'); });
         scrollback.innerHTML = '';
         title.textContent = 'jason@' + host + ': ~/inventory';
+        ensureMeta().then(function () {
+          if (mine !== token) return;
+          renderRelated(s, host);
+        });
         if (instant || reduce) {
           s.classList.add('active');
           return true;
@@ -801,6 +854,66 @@
           }, 160);
         });
         return true;
+      }
+
+      /* 相關文章：從 data/posts.json 依 data-tags 動態配對 */
+      var metaPromise = null;
+
+      function ensureMeta() {
+        if (!metaPromise) {
+          metaPromise = Promise.all([
+            fetch('/data/posts.json').then(function (r) { return r.ok ? r.json() : []; }),
+            fetch('/config/categories.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+          ]).then(function (res) {
+            return { posts: Array.isArray(res[0]) ? res[0] : [], cats: (res[1] && res[1].categoryMapping) || {} };
+          }).catch(function () { return { posts: [], cats: {} }; });
+        }
+        return metaPromise;
+      }
+
+      function postURL(p, cats) {
+        var c = cats[p.category];
+        return c ? '/' + c + '/' + p.slug + '/' : '/post.html?slug=' + p.slug;
+      }
+
+      function renderRelated(s, host) {
+        if (s.querySelector('.term__posts')) return;
+        var kws = (s.getAttribute('data-tags') || '').split(',')
+          .map(function (t) { return t.trim().toLowerCase(); })
+          .filter(Boolean);
+        if (!kws.length) return;
+        ensureMeta().then(function (meta) {
+          if (!meta.posts.length) return;
+          var hits = meta.posts.map(function (p) {
+            var tagsL = (p.tags || []).map(function (t) { return String(t).toLowerCase(); });
+            var hay = (tagsL.join(' ') + ' ' + (p.title || '')).toLowerCase();
+            var score = 0;
+            kws.forEach(function (k) {
+              if (tagsL.indexOf(k) !== -1) score += 2;
+              else if (hay.indexOf(k) !== -1) score += 1;
+            });
+            return { p: p, s: score };
+          }).filter(function (x) { return x.s > 0; })
+            .sort(function (a, b) { return b.s - a.s; })
+            .slice(0, 5)
+            .map(function (x) { return x.p; });
+          if (!hits.length) return;
+          var blk = make('div', 'term__posts');
+          var cmd = make('p', 'term__cmd');
+          cmd.appendChild(make('span', 'term__ps', '❯ '));
+          cmd.appendChild(make('span', 'cmd', 'ls ~/posts --device ' + host));
+          blk.appendChild(cmd);
+          var ul = make('ul');
+          hits.forEach(function (p) {
+            var li = make('li');
+            var a = make('a', null, p.title || p.slug);
+            a.href = postURL(p, meta.cats);
+            li.appendChild(a);
+            ul.appendChild(li);
+          });
+          blk.appendChild(ul);
+          s.appendChild(blk);
+        });
       }
 
       [].slice.call(d.querySelectorAll('.pve-tree a[href^="#dev-"]')).forEach(function (a) {
