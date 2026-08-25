@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Gadgets - (b)-log</title>
+  <script>document.documentElement.classList.add('js');</script>
 
   <!-- 基本 SEO -->
   <meta name="description" content="我目前使用的裝置與裝置清單，包含電腦、周邊、行動裝置等。">
@@ -31,7 +32,7 @@
       min-height: 600px;
     }
 
-    /* 裝置清單：PVE 樹狀導航 + 終端機視窗卡 */
+    /* 裝置清單：PVE 樹狀導航 + 單一互動式終端機 */
     main {
       --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     }
@@ -90,6 +91,7 @@
       color: var(--text);
       text-decoration: none;
       line-height: 1.45;
+      cursor: pointer;
     }
 
     .pve-tree a:hover {
@@ -114,14 +116,7 @@
       border: 1.5px solid var(--text-muted);
     }
 
-    /* 終端機視窗卡 */
-    .term-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr));
-      gap: 1.25rem;
-      margin: 1rem 0 2.5rem;
-    }
-
+    /* 主終端機 */
     .term {
       --term-bg: #16181d;
       background: var(--term-bg);
@@ -130,21 +125,12 @@
       border-radius: var(--radius-sm);
       box-shadow: var(--shadow-soft);
       overflow: hidden;
-      scroll-margin-top: 96px;
-      transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1),
-                  box-shadow 0.3s ease,
-                  border-color 0.3s ease;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
     }
 
     .term:hover {
-      transform: translateY(-3px);
       box-shadow: var(--shadow-strong);
       border-color: rgba(255, 255, 255, 0.16);
-    }
-
-    .term--stopped:hover {
-      transform: none;
-      box-shadow: var(--shadow-soft);
     }
 
     .term__bar {
@@ -172,10 +158,8 @@
     .term__lights i:nth-child(2) { background: #febc2e; }
     .term__lights i:nth-child(3) { background: #28c840; }
 
-    .term--stopped .term__lights i { background: #3d434f; }
-
     .term__title {
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       color: #8b93a1;
       white-space: nowrap;
       overflow: hidden;
@@ -183,15 +167,16 @@
     }
 
     .term__body {
-      padding: 0.85rem 0.95rem 1rem;
+      padding: 0.95rem 1.05rem 1.15rem;
       font-family: var(--mono);
-      font-size: 0.84rem;
+      font-size: 0.86rem;
+      min-height: 340px;
     }
 
     .term__cmd {
       margin: 0 0 0.55rem;
       color: #8b93a1;
-      font-size: 0.76rem;
+      font-size: 0.78rem;
     }
 
     .term__ps {
@@ -199,23 +184,64 @@
       font-weight: 700;
     }
 
-    .term--stopped .term__ps { color: #8b93a1; }
-
     .term__cmd .cmd { color: #e8ebf0; }
 
-    .term__name {
+    .term__line {
+      margin: 0.12rem 0;
+      font-size: 0.76rem;
+      color: #8b93a1;
+    }
+
+    .term__line.ok { color: #4ade80; }
+
+    .cursor {
+      display: inline-block;
+      width: 0.55em;
+      height: 1em;
+      margin-left: 1px;
+      background: #d6dae2;
+      vertical-align: -0.15em;
+      animation: blink 1s steps(1) infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* 工作階段：無 JS 時全部可見（像 scrollback），有 JS 只顯示作用中 */
+    .sessions > .session + .session {
+      margin-top: 1.1rem;
+      padding-top: 1.1rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.14);
+    }
+
+    html.js .sessions > .session {
+      display: none;
+    }
+
+    html.js .sessions > .session.active {
+      display: block;
+      animation: sessIn 0.28s ease both;
+    }
+
+    @keyframes sessIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .session { scroll-margin-top: 96px; }
+
+    .session .term__name {
       margin: 0 0 0.6rem;
-      font-size: 0.98rem;
+      font-size: 1rem;
       line-height: 1.45;
       color: #f2f4f8;
     }
 
-    .term__name a {
+    .session .term__name a {
       color: inherit;
       text-decoration: none;
     }
 
-    .term__name a:hover {
+    .session .term__name a:hover {
       color: var(--device-color, #f59e0b);
       text-decoration: underline;
       text-decoration-color: currentColor;
@@ -264,11 +290,12 @@
       color: var(--device-color, #f59e0b);
     }
 
-    .term--stopped .spec dt { color: #9aa2af; }
+    .session[data-state="stopped"] .spec dt,
+    .session[data-state="stopped"] .term__ps { color: #9aa2af; }
 
     .spec dd {
       margin: 0;
-      font-size: 0.79rem;
+      font-size: 0.8rem;
       line-height: 1.55;
       color: #d6dae2;
     }
@@ -287,7 +314,7 @@
 
     .term__note {
       margin: 0.6rem 0 0;
-      font-size: 0.74rem;
+      font-size: 0.75rem;
       color: #8b93a1;
     }
 
@@ -295,10 +322,9 @@
       content: "# ";
     }
 
-    @media (min-width: 720px) {
-      .term--wide {
-        grid-column: span 2;
-      }
+    @media (prefers-reduced-motion: reduce) {
+      .cursor { animation: none; }
+      html.js .sessions > .session.active { animation: none; }
     }
 
     @media (max-width: 900px) {
@@ -390,7 +416,6 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
                   </svg>
                 </button>
               </div>
@@ -413,7 +438,7 @@
   <main class="wrapper">
     <section class="content">
       <h1>我的裝置</h1>
-      <p>這裡記錄我目前使用的各種裝置。左側樹狀選單可以跳到任一台——綠點是 running，空心點是 stopped。</p>
+      <p>這裡記錄我目前使用的各種裝置。點左側任一台，終端機就會連線進去——綠點是 running，空心點是 stopped。沒有 JavaScript 時，所有輸出會像 scrollback 一樣全部列出。</p>
 
       <div class="gadgets-layout">
         <aside class="pve-tree" aria-label="裝置導航">
@@ -450,393 +475,259 @@
         </aside>
 
         <div class="device-area">
-          <h2>主要裝置</h2>
-          <div class="term-grid">
-            <article class="term term--wide" id="dev-pve-host" style="--device-color:#8a8a8a;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@pve-host: ~/inventory</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch pve-host --all</span></p>
-                <h3 class="term__name">Proxmox VE 虛擬化主機 <span class="tag tag--run">running</span></h3>
-                <dl class="spec">
-                  <div><dt>cpu</dt><dd><a href="https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x3d.html" target="_blank" rel="noopener">AMD Ryzen 9 9950X3D</a></dd></div>
-                  <div><dt>gpu</dt><dd><a href="https://www.asus.com/us/motherboards-components/graphics-cards/dual/dual-rtx4070tis-o16g/" target="_blank" rel="noopener">ASUS DUAL RTX 4070 Ti Super</a></dd></div>
-                  <div><dt>ram</dt><dd>96GB DDR5-5600 CL46（<a href="https://www.crucial.com/memory/desktop-dram/cp2k48g56c46u5" target="_blank" rel="noopener">Crucial Pro</a>，48GB × 2）</dd></div>
-                  <div><dt>storage</dt><dd><a href="https://www.predatorstorage.com/products/pcie-m-2-ssd/predator-gm7-ps5-gaming-ssd/" target="_blank" rel="noopener">Predator GM7 4TB</a> × 2 + <a href="https://www.crucial.com/ssd/mx500/ct500mx500ssd1" target="_blank" rel="noopener">Crucial MX500 500GB</a> + <a href="https://www.crucial.com/ssd/bx500/ct1000bx500ssd1" target="_blank" rel="noopener">Crucial BX500 1TB</a></dd></div>
-                  <div><dt>board</dt><dd><a href="https://rog.asus.com/motherboards/rog-strix/rog-strix-b650e-i-gaming-wifi-model/" target="_blank" rel="noopener">ASUS ROG STRIX B650E-I GAMING WIFI</a></dd></div>
-                  <div><dt>case</dt><dd><a href="https://lian-li.com/product/q58/" target="_blank" rel="noopener">Lian Li Q58</a>（黑）</dd></div>
-                  <div><dt>role</dt><dd>Proxmox VE，VM 包含 Windows（MSFS）、Nextcloud、Tailscale DERP</dd></div>
-                </dl>
-              </div>
-            </article>
+          <div class="term" id="console-term">
+            <div class="term__bar">
+              <span class="term__lights"><i></i><i></i><i></i></span>
+              <span class="term__title" id="term-title">jason@pve-host: ~/inventory</span>
+            </div>
+            <div class="term__body">
+              <div id="term-scrollback" aria-hidden="true"></div>
+              <div class="sessions">
 
-            <article class="term" id="dev-mbp16" style="--device-color:#b8bcc4;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@mbp16-m5max: ~/inventory</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch mbp16-m5max</span></p>
-                <h3 class="term__name"><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 16"（M5 Max）</a> <span class="tag tag--run">running</span></h3>
-                <dl class="spec">
-                  <div><dt>chip</dt><dd>Apple M5 Max</dd></div>
-                  <div><dt>gpu</dt><dd>40 核心</dd></div>
-                  <div><dt>ram</dt><dd>128GB</dd></div>
-                  <div><dt>storage</dt><dd>4TB SSD</dd></div>
-                  <div><dt>color</dt><dd>銀色（Silver）</dd></div>
-                </dl>
-                <p class="term__note">主力開發機</p>
-              </div>
-            </article>
+                <section class="session active" id="dev-pve-host" data-host="pve-host" data-state="running" style="--device-color:#8a8a8a;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch pve-host --all</span></p>
+                  <h3 class="term__name">Proxmox VE 虛擬化主機 <span class="tag tag--run">running</span></h3>
+                  <dl class="spec">
+                    <div><dt>cpu</dt><dd><a href="https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x3d.html" target="_blank" rel="noopener">AMD Ryzen 9 9950X3D</a></dd></div>
+                    <div><dt>gpu</dt><dd><a href="https://www.asus.com/us/motherboards-components/graphics-cards/dual/dual-rtx4070tis-o16g/" target="_blank" rel="noopener">ASUS DUAL RTX 4070 Ti Super</a></dd></div>
+                    <div><dt>ram</dt><dd>96GB DDR5-5600 CL46（<a href="https://www.crucial.com/memory/desktop-dram/cp2k48g56c46u5" target="_blank" rel="noopener">Crucial Pro</a>，48GB × 2）</dd></div>
+                    <div><dt>storage</dt><dd><a href="https://www.predatorstorage.com/products/pcie-m-2-ssd/predator-gm7-ps5-gaming-ssd/" target="_blank" rel="noopener">Predator GM7 4TB</a> × 2 + <a href="https://www.crucial.com/ssd/mx500/ct500mx500ssd1" target="_blank" rel="noopener">Crucial MX500 500GB</a> + <a href="https://www.crucial.com/ssd/bx500/ct1000bx500ssd1" target="_blank" rel="noopener">Crucial BX500 1TB</a></dd></div>
+                    <div><dt>board</dt><dd><a href="https://rog.asus.com/motherboards/rog-strix/rog-strix-b650e-i-gaming-wifi-model/" target="_blank" rel="noopener">ASUS ROG STRIX B650E-I GAMING WIFI</a></dd></div>
+                    <div><dt>case</dt><dd><a href="https://lian-li.com/product/q58/" target="_blank" rel="noopener">Lian Li Q58</a>（黑）</dd></div>
+                    <div><dt>role</dt><dd>Proxmox VE，VM 包含 Windows（MSFS）、Nextcloud、Tailscale DERP</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term" id="dev-f8u" style="--device-color:#46648c;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@f8u-denim: ~/inventory</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch f8u-denim</span></p>
-                <h3 class="term__name"><a href="https://www.po.co/global/product/poco-f8-ultra/" target="_blank" rel="noopener">POCO F8 Ultra</a> <span class="tag tag--run">running</span></h3>
-                <dl class="spec">
-                  <div><dt>soc</dt><dd>Snapdragon 8 Elite Gen 5</dd></div>
-                  <div><dt>panel</dt><dd>6.9 吋 AMOLED</dd></div>
-                  <div><dt>ram</dt><dd>16GB</dd></div>
-                  <div><dt>storage</dt><dd>512GB（UFS 4.1）</dd></div>
-                  <div><dt>battery</dt><dd>6,500mAh 矽碳雙電芯</dd></div>
-                  <div><dt>color</dt><dd>牛仔藍（Denim Blue）</dd></div>
-                </dl>
-              </div>
-            </article>
+                <section class="session" id="dev-mbp16" data-host="mbp16-m5max" data-state="running" style="--device-color:#b8bcc4;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch mbp16-m5max</span></p>
+                  <h3 class="term__name"><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 16"（M5 Max）</a> <span class="tag tag--run">running</span></h3>
+                  <dl class="spec">
+                    <div><dt>chip</dt><dd>Apple M5 Max</dd></div>
+                    <div><dt>gpu</dt><dd>40 核心</dd></div>
+                    <div><dt>ram</dt><dd>128GB</dd></div>
+                    <div><dt>storage</dt><dd>4TB SSD</dd></div>
+                    <div><dt>color</dt><dd>銀色（Silver）</dd></div>
+                  </dl>
+                  <p class="term__note">主力開發機</p>
+                </section>
 
-            <article class="term" id="dev-sam-m7" style="--device-color:#cfcfcf;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@samsung-m7: ~/inventory</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch samsung-m7</span></p>
-                <h3 class="term__name"><a href="https://www.samsung.com/us/computing/monitors/smart-monitors/32-m70b-uhd-usb-c-smart-monitor-streaming-tv-ls32bm702unxgo/" target="_blank" rel="noopener">Samsung Smart Monitor M7 32"</a> <span class="tag tag--run">running</span></h3>
-                <dl class="spec">
-                  <div><dt>panel</dt><dd>VA，4K UHD（3,840 × 2,160）</dd></div>
-                  <div><dt>refresh</dt><dd>60Hz</dd></div>
-                  <div><dt>extra</dt><dd>內建 Smart TV 功能、USB-C</dd></div>
-                  <div><dt>year</dt><dd>2022</dd></div>
-                  <div><dt>color</dt><dd>白色</dd></div>
-                </dl>
-              </div>
-            </article>
-          </div>
+                <section class="session" id="dev-f8u" data-host="f8u-denim" data-state="running" style="--device-color:#46648c;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch f8u-denim</span></p>
+                  <h3 class="term__name"><a href="https://www.po.co/global/product/poco-f8-ultra/" target="_blank" rel="noopener">POCO F8 Ultra</a> <span class="tag tag--run">running</span></h3>
+                  <dl class="spec">
+                    <div><dt>soc</dt><dd>Snapdragon 8 Elite Gen 5</dd></div>
+                    <div><dt>panel</dt><dd>6.9 吋 AMOLED</dd></div>
+                    <div><dt>ram</dt><dd>16GB</dd></div>
+                    <div><dt>storage</dt><dd>512GB（UFS 4.1）</dd></div>
+                    <div><dt>battery</dt><dd>6,500mAh 矽碳雙電芯</dd></div>
+                    <div><dt>color</dt><dd>牛仔藍（Denim Blue）</dd></div>
+                  </dl>
+                </section>
 
-          <h2>曾用裝置</h2>
-          <div class="term-grid">
-            <article class="term term--stopped" id="dev-mbp14" style="--device-color:#b8bcc4;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@macbook14-m5 — stopped</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch macbook14-m5</span></p>
-                <h3 class="term__name"><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 14"（M5）</a> <span class="tag tag--stop">stopped</span></h3>
-                <dl class="spec">
-                  <div><dt>chip</dt><dd>Apple M5</dd></div>
-                  <div><dt>ram</dt><dd>32GB</dd></div>
-                  <div><dt>storage</dt><dd>4TB SSD</dd></div>
-                  <div><dt>color</dt><dd>銀色（Silver）</dd></div>
-                </dl>
-              </div>
-            </article>
+                <section class="session" id="dev-sam-m7" data-host="samsung-m7" data-state="running" style="--device-color:#cfcfcf;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch samsung-m7</span></p>
+                  <h3 class="term__name"><a href="https://www.samsung.com/us/computing/monitors/smart-monitors/32-m70b-uhd-usb-c-smart-monitor-streaming-tv-ls32bm702unxgo/" target="_blank" rel="noopener">Samsung Smart Monitor M7 32"</a> <span class="tag tag--run">running</span></h3>
+                  <dl class="spec">
+                    <div><dt>panel</dt><dd>VA，4K UHD（3,840 × 2,160）</dd></div>
+                    <div><dt>refresh</dt><dd>60Hz</dd></div>
+                    <div><dt>extra</dt><dd>內建 Smart TV 功能、USB-C</dd></div>
+                    <div><dt>year</dt><dd>2022</dd></div>
+                    <div><dt>color</dt><dd>白色</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term term--stopped" id="dev-p15" style="--device-color:#8a8a8a;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@thinkpad-p15 — stopped</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch thinkpad-p15</span></p>
-                <h3 class="term__name"><a href="https://www.lenovo.com/us/en/p/laptops/thinkpad/thinkpadp/thinkpad-p15-gen-2-(15-inch-intel)/wmd00000487" target="_blank" rel="noopener">Lenovo ThinkPad P15 Gen 2</a> <span class="tag tag--stop">stopped</span></h3>
-                <dl class="spec">
-                  <div><dt>cpu</dt><dd>Intel i9-11950H</dd></div>
-                  <div><dt>gpu</dt><dd>RTX A5000 16GB</dd></div>
-                  <div><dt>ram</dt><dd>128GB DDR4</dd></div>
-                  <div><dt>panel</dt><dd>15.6 吋 4K OLED</dd></div>
-                  <div><dt>color</dt><dd>黑色</dd></div>
-                </dl>
-              </div>
-            </article>
+                <section class="session" id="dev-mbp14" data-host="macbook14-m5" data-state="stopped" style="--device-color:#b8bcc4;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch macbook14-m5</span></p>
+                  <h3 class="term__name"><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 14"（M5）</a> <span class="tag tag--stop">stopped</span></h3>
+                  <dl class="spec">
+                    <div><dt>chip</dt><dd>Apple M5</dd></div>
+                    <div><dt>ram</dt><dd>32GB</dd></div>
+                    <div><dt>storage</dt><dd>4TB SSD</dd></div>
+                    <div><dt>color</dt><dd>銀色（Silver）</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term term--stopped" id="dev-nh55" style="--device-color:#9a9a9a;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@clevo-nh55 — stopped</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch clevo-nh55</span></p>
-                <h3 class="term__name"><a href="https://www.notebookcheck.net/Clevo-NH55.491701.0.html" target="_blank" rel="noopener">Clevo NH55JNR</a>（神舟 HASEE ZX9-DA5DA）<span class="tag tag--stop">stopped</span></h3>
-                <dl class="spec">
-                  <div><dt>cpu</dt><dd>Intel i5-12400（桌面版）</dd></div>
-                  <div><dt>gpu</dt><dd>RTX 3070 Mobile 8GB（140W）</dd></div>
-                  <div><dt>ram</dt><dd>32GB（Crucial DDR4 SO-DIMM）</dd></div>
-                  <div><dt>storage</dt><dd>Kingston KC3000 2TB + Crucial P3 Plus 1TB + TeamGroup CX2 1TB</dd></div>
-                  <div><dt>color</dt><dd>灰色</dd></div>
-                </dl>
-              </div>
-            </article>
+                <section class="session" id="dev-p15" data-host="thinkpad-p15" data-state="stopped" style="--device-color:#8a8a8a;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch thinkpad-p15</span></p>
+                  <h3 class="term__name"><a href="https://www.lenovo.com/us/en/p/laptops/thinkpad/thinkpadp/thinkpad-p15-gen-2-(15-inch-intel)/wmd00000487" target="_blank" rel="noopener">Lenovo ThinkPad P15 Gen 2</a> <span class="tag tag--stop">stopped</span></h3>
+                  <dl class="spec">
+                    <div><dt>cpu</dt><dd>Intel i9-11950H</dd></div>
+                    <div><dt>gpu</dt><dd>RTX A5000 16GB</dd></div>
+                    <div><dt>ram</dt><dd>128GB DDR4</dd></div>
+                    <div><dt>panel</dt><dd>15.6 吋 4K OLED</dd></div>
+                    <div><dt>color</dt><dd>黑色</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term term--stopped" id="dev-ip17pm" style="--device-color:#e8802a;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@iphone17pm — stopped</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch iphone17pm</span></p>
-                <h3 class="term__name"><a href="https://www.apple.com/iphone-17-pro/" target="_blank" rel="noopener">iPhone 17 Pro Max</a> <span class="tag tag--stop">stopped</span></h3>
-                <dl class="spec">
-                  <div><dt>chip</dt><dd>A19 Pro</dd></div>
-                  <div><dt>panel</dt><dd>6.9 吋</dd></div>
-                  <div><dt>ram</dt><dd>12GB</dd></div>
-                  <div><dt>storage</dt><dd>2TB</dd></div>
-                  <div><dt>color</dt><dd>宇宙橘（Cosmic Orange）</dd></div>
-                </dl>
-              </div>
-            </article>
+                <section class="session" id="dev-nh55" data-host="clevo-nh55" data-state="stopped" style="--device-color:#9a9a9a;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch clevo-nh55</span></p>
+                  <h3 class="term__name"><a href="https://www.notebookcheck.net/Clevo-NH55.491701.0.html" target="_blank" rel="noopener">Clevo NH55JNR</a>（神舟 HASEE ZX9-DA5DA）<span class="tag tag--stop">stopped</span></h3>
+                  <dl class="spec">
+                    <div><dt>cpu</dt><dd>Intel i5-12400（桌面版）</dd></div>
+                    <div><dt>gpu</dt><dd>RTX 3070 Mobile 8GB（140W）</dd></div>
+                    <div><dt>ram</dt><dd>32GB（Crucial DDR4 SO-DIMM）</dd></div>
+                    <div><dt>storage</dt><dd>Kingston KC3000 2TB + Crucial P3 Plus 1TB + TeamGroup CX2 1TB</dd></div>
+                    <div><dt>color</dt><dd>灰色</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term term--stopped" id="dev-f7u" style="--device-color:#8a8a8a;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@poco-f7u — stopped</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch poco-f7u</span></p>
-                <h3 class="term__name"><a href="https://www.po.co/global/product/poco-f7-ultra/" target="_blank" rel="noopener">POCO F7 Ultra</a> <span class="tag tag--stop">stopped</span></h3>
-                <dl class="spec">
-                  <div><dt>ram</dt><dd>16GB</dd></div>
-                  <div><dt>storage</dt><dd>512GB</dd></div>
-                  <div><dt>color</dt><dd>黑色（Black）</dd></div>
-                </dl>
-              </div>
-            </article>
+                <section class="session" id="dev-ip17pm" data-host="iphone17pm" data-state="stopped" style="--device-color:#e8802a;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch iphone17pm</span></p>
+                  <h3 class="term__name"><a href="https://www.apple.com/iphone-17-pro/" target="_blank" rel="noopener">iPhone 17 Pro Max</a> <span class="tag tag--stop">stopped</span></h3>
+                  <dl class="spec">
+                    <div><dt>chip</dt><dd>A19 Pro</dd></div>
+                    <div><dt>panel</dt><dd>6.9 吋</dd></div>
+                    <div><dt>ram</dt><dd>12GB</dd></div>
+                    <div><dt>storage</dt><dd>2TB</dd></div>
+                    <div><dt>color</dt><dd>宇宙橘（Cosmic Orange）</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term term--stopped" id="dev-akg-n9" style="--device-color:#8a8a8a;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@akg-n9 — stopped</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch akg-n9</span></p>
-                <h3 class="term__name"><a href="https://www.akg.com/headphones/over-ear-and-on-ear/AKG-N9-HYBRID.html" target="_blank" rel="noopener">AKG N9 Hybrid</a> <span class="tag tag--stop">stopped</span></h3>
-                <dl class="spec">
-                  <div><dt>type</dt><dd>無線降噪耳機</dd></div>
-                  <div><dt>color</dt><dd>黑色</dd></div>
-                </dl>
-              </div>
-            </article>
+                <section class="session" id="dev-f7u" data-host="poco-f7u" data-state="stopped" style="--device-color:#8a8a8a;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch poco-f7u</span></p>
+                  <h3 class="term__name"><a href="https://www.po.co/global/product/poco-f7-ultra/" target="_blank" rel="noopener">POCO F7 Ultra</a> <span class="tag tag--stop">stopped</span></h3>
+                  <dl class="spec">
+                    <div><dt>ram</dt><dd>16GB</dd></div>
+                    <div><dt>storage</dt><dd>512GB</dd></div>
+                    <div><dt>color</dt><dd>黑色（Black）</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term term--stopped" id="dev-ipad11" style="--device-color:#b8bcc4;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@ipad11-m1 — stopped</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch ipad11-m1</span></p>
-                <h3 class="term__name"><a href="https://support.apple.com/en-us/111897" target="_blank" rel="noopener">iPad Pro M1 11"</a> <span class="tag tag--stop">stopped</span></h3>
-                <dl class="spec">
-                  <div><dt>chip</dt><dd>Apple M1</dd></div>
-                  <div><dt>ram</dt><dd>8GB</dd></div>
-                  <div><dt>storage</dt><dd>256GB</dd></div>
-                  <div><dt>cellular</dt><dd>5G</dd></div>
-                  <div><dt>panel</dt><dd>11 吋 Liquid Retina</dd></div>
-                  <div><dt>color</dt><dd>銀色（Silver）</dd></div>
-                </dl>
-              </div>
-            </article>
+                <section class="session" id="dev-akg-n9" data-host="akg-n9" data-state="stopped" style="--device-color:#8a8a8a;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch akg-n9</span></p>
+                  <h3 class="term__name"><a href="https://www.akg.com/headphones/over-ear-and-on-ear/AKG-N9-HYBRID.html" target="_blank" rel="noopener">AKG N9 Hybrid</a> <span class="tag tag--stop">stopped</span></h3>
+                  <dl class="spec">
+                    <div><dt>type</dt><dd>無線降噪耳機</dd></div>
+                    <div><dt>color</dt><dd>黑色</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term term--stopped" id="dev-ipad129" style="--device-color:#b8bcc4;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@ipad129-m2 — stopped</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch ipad129-m2</span></p>
-                <h3 class="term__name"><a href="https://support.apple.com/en-us/111841" target="_blank" rel="noopener">iPad Pro M2 12.9"</a> <span class="tag tag--stop">stopped</span></h3>
-                <dl class="spec">
-                  <div><dt>chip</dt><dd>Apple M2</dd></div>
-                  <div><dt>ram</dt><dd>8GB</dd></div>
-                  <div><dt>storage</dt><dd>256GB</dd></div>
-                  <div><dt>cellular</dt><dd>5G</dd></div>
-                  <div><dt>panel</dt><dd>12.9 吋 Liquid Retina XDR（mini-LED）</dd></div>
-                  <div><dt>color</dt><dd>銀色（Silver）</dd></div>
-                </dl>
-              </div>
-            </article>
+                <section class="session" id="dev-ipad11" data-host="ipad11-m1" data-state="stopped" style="--device-color:#b8bcc4;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch ipad11-m1</span></p>
+                  <h3 class="term__name"><a href="https://support.apple.com/en-us/111897" target="_blank" rel="noopener">iPad Pro M1 11"</a> <span class="tag tag--stop">stopped</span></h3>
+                  <dl class="spec">
+                    <div><dt>chip</dt><dd>Apple M1</dd></div>
+                    <div><dt>ram</dt><dd>8GB</dd></div>
+                    <div><dt>storage</dt><dd>256GB</dd></div>
+                    <div><dt>cellular</dt><dd>5G</dd></div>
+                    <div><dt>panel</dt><dd>11 吋 Liquid Retina</dd></div>
+                    <div><dt>color</dt><dd>銀色（Silver）</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term term--stopped" id="dev-tab-s9u" style="--device-color:#8a8a8a;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@tabs9-ultra — stopped</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch tabs9-ultra</span></p>
-                <h3 class="term__name"><a href="https://www.samsung.com/us/tablets/galaxy-tab-s9/all-galaxy-tab-s9/" target="_blank" rel="noopener">Samsung Galaxy Tab S9 Ultra</a> <span class="tag tag--stop">stopped</span></h3>
-                <dl class="spec">
-                  <div><dt>soc</dt><dd>Snapdragon 8 Gen 2</dd></div>
-                  <div><dt>panel</dt><dd>14.6 吋 Super AMOLED</dd></div>
-                  <div><dt>ram</dt><dd>16GB</dd></div>
-                  <div><dt>storage</dt><dd>512GB</dd></div>
-                  <div><dt>cellular</dt><dd>5G</dd></div>
-                  <div><dt>battery</dt><dd>11,200mAh</dd></div>
-                  <div><dt>color</dt><dd>黑色（Graphite）</dd></div>
-                </dl>
-              </div>
-            </article>
-          </div>
+                <section class="session" id="dev-ipad129" data-host="ipad129-m2" data-state="stopped" style="--device-color:#b8bcc4;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch ipad129-m2</span></p>
+                  <h3 class="term__name"><a href="https://support.apple.com/en-us/111841" target="_blank" rel="noopener">iPad Pro M2 12.9"</a> <span class="tag tag--stop">stopped</span></h3>
+                  <dl class="spec">
+                    <div><dt>chip</dt><dd>Apple M2</dd></div>
+                    <div><dt>ram</dt><dd>8GB</dd></div>
+                    <div><dt>storage</dt><dd>256GB</dd></div>
+                    <div><dt>cellular</dt><dd>5G</dd></div>
+                    <div><dt>panel</dt><dd>12.9 吋 Liquid Retina XDR（mini-LED）</dd></div>
+                    <div><dt>color</dt><dd>銀色（Silver）</dd></div>
+                  </dl>
+                </section>
 
-          <h2>音訊裝置</h2>
-          <div class="term-grid">
-            <article class="term" id="dev-arc3">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@cleer-arc3: ~/inventory</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch cleer-arc3</span></p>
-                <h3 class="term__name"><a href="https://cleeraudio.com/earbuds/arc-3/" target="_blank" rel="noopener">CLEER ARC 3</a> <span class="tag tag--run">running</span></h3>
-                <dl class="spec">
-                  <div><dt>type</dt><dd>開放式真無線耳機</dd></div>
-                  <div><dt>count</dt><dd>× 2</dd></div>
-                </dl>
-              </div>
-            </article>
+                <section class="session" id="dev-tab-s9u" data-host="tabs9-ultra" data-state="stopped" style="--device-color:#8a8a8a;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch tabs9-ultra</span></p>
+                  <h3 class="term__name"><a href="https://www.samsung.com/us/tablets/galaxy-tab-s9/all-galaxy-tab-s9/" target="_blank" rel="noopener">Samsung Galaxy Tab S9 Ultra</a> <span class="tag tag--stop">stopped</span></h3>
+                  <dl class="spec">
+                    <div><dt>soc</dt><dd>Snapdragon 8 Gen 2</dd></div>
+                    <div><dt>panel</dt><dd>14.6 吋 Super AMOLED</dd></div>
+                    <div><dt>ram</dt><dd>16GB</dd></div>
+                    <div><dt>storage</dt><dd>512GB</dd></div>
+                    <div><dt>cellular</dt><dd>5G</dd></div>
+                    <div><dt>battery</dt><dd>11,200mAh</dd></div>
+                    <div><dt>color</dt><dd>黑色（Graphite）</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term" id="dev-hd6xx">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@hd6xx: ~/inventory</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch hd6xx</span></p>
-                <h3 class="term__name"><a href="https://drop.com/buy/massdrop-sennheiser-hd6xx" target="_blank" rel="noopener">Sennheiser HD 6XX（HD 650）</a> <span class="tag tag--run">running</span></h3>
-                <dl class="spec">
-                  <div><dt>type</dt><dd>開放式耳罩耳機</dd></div>
-                </dl>
-              </div>
-            </article>
-          </div>
+                <section class="session" id="dev-arc3" data-host="cleer-arc3" data-state="running">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch cleer-arc3</span></p>
+                  <h3 class="term__name"><a href="https://cleeraudio.com/earbuds/arc-3/" target="_blank" rel="noopener">CLEER ARC 3</a> <span class="tag tag--run">running</span></h3>
+                  <dl class="spec">
+                    <div><dt>type</dt><dd>開放式真無線耳機</dd></div>
+                    <div><dt>count</dt><dd>× 2</dd></div>
+                  </dl>
+                </section>
 
-          <h2>控制器</h2>
-          <div class="term-grid">
-            <article class="term" id="dev-lite-se" style="--device-color:#9d7bb8;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@8bitdo-litese: ~/inventory</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch 8bitdo-litese</span></p>
-                <h3 class="term__name"><a href="https://www.8bitdo.com/lite-se/" target="_blank" rel="noopener">8BitDo Lite SE</a> <span class="tag tag--run">running</span></h3>
-                <dl class="spec">
-                  <div><dt>host</dt><dd>Switch／Switch Lite／Android／Raspberry Pi</dd></div>
-                  <div><dt>a11y</dt><dd>低阻力按鍵、高靈敏搖桿</dd></div>
-                  <div><dt>feat</dt><dd>震動、體感、L3/R3 分離、連發（D-input）</dd></div>
-                  <div><dt>link</dt><dd>藍牙</dd></div>
-                  <div><dt>color</dt><dd>紫色（Purple）</dd></div>
-                </dl>
-                <p class="term__note">用於 MSFS 飛行</p>
-              </div>
-            </article>
+                <section class="session" id="dev-hd6xx" data-host="hd6xx" data-state="running">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch hd6xx</span></p>
+                  <h3 class="term__name"><a href="https://drop.com/buy/massdrop-sennheiser-hd6xx" target="_blank" rel="noopener">Sennheiser HD 6XX（HD 650）</a> <span class="tag tag--run">running</span></h3>
+                  <dl class="spec">
+                    <div><dt>type</dt><dd>開放式耳罩耳機</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term" id="dev-iine" style="--device-color:#8a8a8a;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@iine-l1032: ~/inventory</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch iine-l1032</span></p>
-                <h3 class="term__name"><a href="https://www.iine.top/products/fu-gu-ka-pian-you-xi-shou-bing" target="_blank" rel="noopener">IINE 復古卡片遊戲手柄</a>（L1032）<span class="tag tag--run">running</span></h3>
-                <dl class="spec">
-                  <div><dt>host</dt><dd>Switch／iOS／Android／PC</dd></div>
-                  <div><dt>stick</dt><dd>霍爾搖桿，1,000Hz 回報率</dd></div>
-                  <div><dt>feat</dt><dd>連發可調、喚醒回連</dd></div>
-                  <div><dt>battery</dt><dd>8–12 小時</dd></div>
-                  <div><dt>color</dt><dd>黑色</dd></div>
-                </dl>
-              </div>
-            </article>
-          </div>
+                <section class="session" id="dev-lite-se" data-host="8bitdo-litese" data-state="running" style="--device-color:#9d7bb8;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch 8bitdo-litese</span></p>
+                  <h3 class="term__name"><a href="https://www.8bitdo.com/lite-se/" target="_blank" rel="noopener">8BitDo Lite SE</a> <span class="tag tag--run">running</span></h3>
+                  <dl class="spec">
+                    <div><dt>host</dt><dd>Switch／Switch Lite／Android／Raspberry Pi</dd></div>
+                    <div><dt>a11y</dt><dd>低阻力按鍵、高靈敏搖桿</dd></div>
+                    <div><dt>feat</dt><dd>震動、體感、L3/R3 分離、連發（D-input）</dd></div>
+                    <div><dt>link</dt><dd>藍牙</dd></div>
+                    <div><dt>color</dt><dd>紫色（Purple）</dd></div>
+                  </dl>
+                  <p class="term__note">用於 MSFS 飛行</p>
+                </section>
 
-          <h2>網路/周邊</h2>
-          <div class="term-grid">
-            <article class="term" id="dev-mt6000">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@glmt6000: ~/inventory</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch glmt6000</span></p>
-                <h3 class="term__name"><a href="https://www.gl-inet.com/products/gl-mt6000/" target="_blank" rel="noopener">GL.iNet GL-MT6000（Flint 2）</a> <span class="tag tag--run">running</span></h3>
-                <dl class="spec">
-                  <div><dt>wifi</dt><dd>WiFi 6 AX6000</dd></div>
-                  <div><dt>soc</dt><dd>MediaTek MT7986</dd></div>
-                  <div><dt>port</dt><dd>雙 2.5GbE</dd></div>
-                  <div><dt>vpn</dt><dd>WireGuard 約 900Mbps</dd></div>
-                </dl>
-                <p class="term__note">主路由器</p>
-              </div>
-            </article>
+                <section class="session" id="dev-iine" data-host="iine-l1032" data-state="running" style="--device-color:#8a8a8a;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch iine-l1032</span></p>
+                  <h3 class="term__name"><a href="https://www.iine.top/products/fu-gu-ka-pian-you-xi-shou-bing" target="_blank" rel="noopener">IINE 復古卡片遊戲手柄</a>（L1032）<span class="tag tag--run">running</span></h3>
+                  <dl class="spec">
+                    <div><dt>host</dt><dd>Switch／iOS／Android／PC</dd></div>
+                    <div><dt>stick</dt><dd>霍爾搖桿，1,000Hz 回報率</dd></div>
+                    <div><dt>feat</dt><dd>連發可調、喚醒回連</dd></div>
+                    <div><dt>battery</dt><dd>8–12 小時</dd></div>
+                    <div><dt>color</dt><dd>黑色</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term" id="dev-mx4200" style="--device-color:#cfcfcf;">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@linksys-mx4200: ~/inventory</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch linksys-mx4200</span></p>
-                <h3 class="term__name"><a href="https://store.linksys.com/support-product?sku=MX4200" target="_blank" rel="noopener">Linksys MX4200</a> <span class="tag tag--run">running</span></h3>
-                <dl class="spec">
-                  <div><dt>wifi</dt><dd>Velop AX4200 Mesh</dd></div>
-                  <div><dt>color</dt><dd>白色</dd></div>
-                </dl>
-                <p class="term__note">WDS 延伸</p>
-              </div>
-            </article>
+                <section class="session" id="dev-mt6000" data-host="glmt6000" data-state="running">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch glmt6000</span></p>
+                  <h3 class="term__name"><a href="https://www.gl-inet.com/products/gl-mt6000/" target="_blank" rel="noopener">GL.iNet GL-MT6000（Flint 2）</a> <span class="tag tag--run">running</span></h3>
+                  <dl class="spec">
+                    <div><dt>wifi</dt><dd>WiFi 6 AX6000</dd></div>
+                    <div><dt>soc</dt><dd>MediaTek MT7986</dd></div>
+                    <div><dt>port</dt><dd>雙 2.5GbE</dd></div>
+                    <div><dt>vpn</dt><dd>WireGuard 約 900Mbps</dd></div>
+                  </dl>
+                  <p class="term__note">主路由器</p>
+                </section>
 
-            <article class="term" id="dev-ups">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@apc-ups: ~/inventory</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch apc-ups</span></p>
-                <h3 class="term__name"><a href="https://www.se.com/us/en/product/BR1500MS/" target="_blank" rel="noopener">APC Back-UPS 1500MS</a> <span class="tag tag--run">running</span></h3>
-                <dl class="spec">
-                  <div><dt>capacity</dt><dd>1500VA / 900W</dd></div>
-                </dl>
-              </div>
-            </article>
+                <section class="session" id="dev-mx4200" data-host="linksys-mx4200" data-state="running" style="--device-color:#cfcfcf;">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch linksys-mx4200</span></p>
+                  <h3 class="term__name"><a href="https://store.linksys.com/support-product?sku=MX4200" target="_blank" rel="noopener">Linksys MX4200</a> <span class="tag tag--run">running</span></h3>
+                  <dl class="spec">
+                    <div><dt>wifi</dt><dd>Velop AX4200 Mesh</dd></div>
+                    <div><dt>color</dt><dd>白色</dd></div>
+                  </dl>
+                  <p class="term__note">WDS 延伸</p>
+                </section>
 
-            <article class="term" id="dev-rm1">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@comet-rm1: ~/inventory</span>
-              </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch comet-rm1</span></p>
-                <h3 class="term__name"><a href="https://www.gl-inet.com/products/gl-rm1/" target="_blank" rel="noopener">GL.iNet Comet RM1</a> <span class="tag tag--run">running</span></h3>
-                <p class="term__note">KVM 遠端控制</p>
-              </div>
-            </article>
+                <section class="session" id="dev-ups" data-host="apc-ups" data-state="running">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch apc-ups</span></p>
+                  <h3 class="term__name"><a href="https://www.se.com/us/en/product/BR1500MS/" target="_blank" rel="noopener">APC Back-UPS 1500MS</a> <span class="tag tag--run">running</span></h3>
+                  <dl class="spec">
+                    <div><dt>capacity</dt><dd>1500VA / 900W</dd></div>
+                  </dl>
+                </section>
 
-            <article class="term" id="dev-stream">
-              <div class="term__bar">
-                <span class="term__lights"><i></i><i></i><i></i></span>
-                <span class="term__title">jason@moonlight: ~/inventory</span>
+                <section class="session" id="dev-rm1" data-host="comet-rm1" data-state="running">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch comet-rm1</span></p>
+                  <h3 class="term__name"><a href="https://www.gl-inet.com/products/gl-rm1/" target="_blank" rel="noopener">GL.iNet Comet RM1</a> <span class="tag tag--run">running</span></h3>
+                  <p class="term__note">KVM 遠端控制</p>
+                </section>
+
+                <section class="session" id="dev-stream" data-host="moonlight" data-state="running">
+                  <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch moonlight</span></p>
+                  <h3 class="term__name"><a href="https://moonlight-stream.org/" target="_blank" rel="noopener">Moonlight</a> + <a href="https://github.com/LizardByte/Sunshine" target="_blank" rel="noopener">Sunshine</a> <span class="tag tag--run">running</span></h3>
+                  <p class="term__note">遊戲串流方案</p>
+                </section>
+
               </div>
-              <div class="term__body">
-                <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch moonlight</span></p>
-                <h3 class="term__name"><a href="https://moonlight-stream.org/" target="_blank" rel="noopener">Moonlight</a> + <a href="https://github.com/LizardByte/Sunshine" target="_blank" rel="noopener">Sunshine</a> <span class="tag tag--run">running</span></h3>
-                <p class="term__note">遊戲串流方案</p>
-              </div>
-            </article>
+            </div>
           </div>
         </div>
       </div>
@@ -853,6 +744,84 @@
   <script src="assets/main-static.min.js" type="module" defer></script>
   <!-- Service Worker 註冊 - 延長字型快取 -->
   <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- 裝置終端機：樹狀選單點擊 → ssh 連線動畫 → 顯示規格 -->
+  <script>
+    (function () {
+      var d = document;
+      var title = d.getElementById('term-title');
+      var scrollback = d.getElementById('term-scrollback');
+      var sessions = [].slice.call(d.querySelectorAll('.sessions > .session'));
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var token = 0;
+
+      function make(tag, cls, txt) {
+        var n = d.createElement(tag);
+        if (cls) n.className = cls;
+        if (txt != null) n.textContent = txt;
+        return n;
+      }
+
+      function typeText(el, text, done) {
+        if (reduce) { el.textContent = text; done(); return; }
+        var i = 0;
+        (function step() {
+          el.textContent = text.slice(0, ++i);
+          if (i < text.length) setTimeout(step, 16);
+          else done();
+        })();
+      }
+
+      function connect(id, instant) {
+        var s = d.getElementById(id);
+        if (!s) return false;
+        var mine = ++token;
+        var host = s.getAttribute('data-host') || id.replace(/^dev-/, '');
+        sessions.forEach(function (x) { x.classList.remove('active'); });
+        scrollback.innerHTML = '';
+        title.textContent = 'jason@' + host + ': ~/inventory';
+        if (instant || reduce) {
+          s.classList.add('active');
+          return true;
+        }
+        var line = make('p', 'term__cmd');
+        var ps = make('span', 'term__ps', '❯ ');
+        var t = make('span', 'cmd');
+        var cur = make('span', 'cursor');
+        line.appendChild(ps); line.appendChild(t); line.appendChild(cur);
+        scrollback.appendChild(line);
+        typeText(t, 'ssh jason@' + host + '.local', function () {
+          if (mine !== token) return;
+          cur.remove();
+          scrollback.appendChild(make('p', 'term__line ok', '✓ connected'));
+          var relay = Math.random() < 0.5;
+          scrollback.appendChild(make('p', 'term__line',
+            relay ? 'transport relay · anycast TURN' : 'transport lan · direct'));
+          setTimeout(function () {
+            if (mine === token) s.classList.add('active');
+          }, 160);
+        });
+        return true;
+      }
+
+      [].slice.call(d.querySelectorAll('.pve-tree a[href^="#dev-"]')).forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          var id = a.getAttribute('href').slice(1);
+          if (connect(id)) {
+            try { history.replaceState(null, '', '#' + id); } catch (_) {}
+            if (window.matchMedia('(max-width: 900px)').matches) {
+              d.getElementById('console-term').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+        });
+      });
+
+      var initial = location.hash && d.getElementById(location.hash.slice(1));
+      if (initial && initial.classList.contains('session')) {
+        connect(initial.id, true);
+      }
+    })();
+  </script>
   <!-- Cloudflare Web Analytics - 首屏後載入 -->
   <script>
     window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
