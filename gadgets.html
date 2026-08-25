@@ -41,13 +41,16 @@
       display: grid;
       grid-template-columns: 235px minmax(0, 1fr);
       gap: 1.75rem;
-      align-items: start;
+      align-items: stretch;
+      /* 讓終端機至少撐到接近頁尾，內容多時再自然長高 */
+      min-height: calc(100vh - 360px);
     }
 
     /* PVE 樹狀側欄 */
     .pve-tree {
       position: sticky;
       top: 90px;
+      align-self: start;
       font-family: var(--mono);
       font-size: 0.8rem;
       background: var(--glass-tint);
@@ -117,8 +120,16 @@
     }
 
     /* 主終端機 */
+    .device-area {
+      display: flex;
+      min-width: 0;
+    }
+
     .term {
       --term-bg: #16181d;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
       background: var(--term-bg);
       color: #d6dae2;
       border: 1px solid rgba(255, 255, 255, 0.09);
@@ -167,10 +178,10 @@
     }
 
     .term__body {
+      flex: 1 1 auto;
       padding: 0.95rem 1.05rem 1.15rem;
       font-family: var(--mono);
       font-size: 0.86rem;
-      min-height: 340px;
     }
 
     .term__cmd {
@@ -379,6 +390,11 @@
     @media (max-width: 900px) {
       .gadgets-layout {
         display: block;
+        min-height: 0;
+      }
+
+      .term {
+        min-height: 60vh;
       }
 
       .pve-tree {
