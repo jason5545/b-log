@@ -1317,6 +1317,13 @@
       "postUrl": "https://b-log.to/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/",
       "facebookPostId": "1026818047191304_122111727273290922",
       "publishedAt": "2026-08-15T12:28:47.114Z"
+    },
+    "corepatch-b619-bootloop-root-cause": {
+      "status": "published",
+      "title": "CorePatch 的 B619 是怎麼炸掉我兩次開機的",
+      "postUrl": "https://b-log.to/tech-analysis/corepatch-b619-bootloop-root-cause/",
+      "facebookPostId": "1026818047191304_122112675315290922",
+      "publishedAt": "2026-08-26T03:18:45.309Z"
     }
   }
 }
