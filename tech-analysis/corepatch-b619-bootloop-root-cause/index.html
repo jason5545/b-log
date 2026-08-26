@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CorePatch 的 B619 是怎麼炸掉我兩次開機的 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="CorePatch 用真實的 Google platform key 當 fail-open 占位符，碰上 Xiaomi.eu ContactsProvider 的矛盾簽章，最後把 B619 寫進 packages.xml，讓 shared UID 群組在冷開機時 fatal。這篇追出觸發條件、fork patch，以及不用先 format data 的驗證方法。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-analysis/corepatch-b619-bootloop-root-cause/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-analysis/corepatch-b619-bootloop-root-cause/" id="og-url">
+  <meta property="og:title" content="CorePatch 的 B619 是怎麼炸掉我兩次開機的" id="og-title">
+  <meta property="og:description" content="CorePatch 用真實的 Google platform key 當 fail-open 占位符，碰上 Xiaomi.eu ContactsProvider 的矛盾簽章，最後把 B619 寫進 packages.xml，讓 shared UID 群組在冷開機時 fatal。這篇追出觸發條件、fork patch，以及不用先 format data 的驗證方法。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-08-26T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-08-26T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="Android">
+  <meta property="article:tag" content="CorePatch">
+  <meta property="article:tag" content="LSPosed">
+  <meta property="article:tag" content="Xiaomi.eu">
+  <meta property="article:tag" content="bootloop">
+  <meta property="article:tag" content="APK 簽章">
+  <meta property="article:tag" content="fail-open">
+  <meta property="article:tag" content="根因分析">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-analysis/corepatch-b619-bootloop-root-cause/" id="twitter-url">
+  <meta property="twitter:title" content="CorePatch 的 B619 是怎麼炸掉我兩次開機的" id="twitter-title">
+  <meta property="twitter:description" content="CorePatch 用真實的 Google platform key 當 fail-open 占位符，碰上 Xiaomi.eu ContactsProvider 的矛盾簽章，最後把 B619 寫進 packages.xml，讓 shared UID 群組在冷開機時 fatal。這篇追出觸發條件、fork patch，以及不用先 format data 的驗證方法。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="Android, CorePatch, LSPosed, Xiaomi.eu, bootloop, APK 簽章, fail-open, 根因分析" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp" imagesrcset="/content/img/2026/corepatch-b619-bootloop-root-cause-cover-480w.webp 480w, /content/img/2026/corepatch-b619-bootloop-root-cause-cover-828w.webp 828w, /content/img/2026/corepatch-b619-bootloop-root-cause-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"CorePatch 的 B619 是怎麼炸掉我兩次開機的","description":"CorePatch 用真實的 Google platform key 當 fail-open 占位符，碰上 Xiaomi.eu ContactsProvider 的矛盾簽章，最後把 B619 寫進 packages.xml，讓 shared UID 群組在冷開機時 fatal。這篇追出觸發條件、fork patch，以及不用先 format data 的驗證方法。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-26T00:00:00Z","dateModified":"2026-08-26T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/corepatch-b619-bootloop-root-cause/"},"url":"https://b-log.to/tech-analysis/corepatch-b619-bootloop-root-cause/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp"],"keywords":"Android, CorePatch, LSPosed, Xiaomi.eu, bootloop, APK 簽章, fail-open, 根因分析","articleSection":"技術分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp" srcset="/content/img/2026/corepatch-b619-bootloop-root-cause-cover-480w.webp 480w, /content/img/2026/corepatch-b619-bootloop-root-cause-cover-828w.webp 828w, /content/img/2026/corepatch-b619-bootloop-root-cause-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Aug 26, 2026</span><span>15 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>Android</span><span>CorePatch</span><span>LSPosed</span><span>Xiaomi.eu</span><span>bootloop</span><span>APK 簽章</span><span>fail-open</span><span>根因分析</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>我在同一支手機上被這條鏈炸了兩次：OTA 之後開機循環，format data 暫時恢復，下一次又來。第二次我才把 <code>packages.xml</code>、APK 簽章和 CorePatch 的 hook 放在一起比對。</p>
+<p>你如果沒在跑 Xiaomi.eu ROM、沒裝 CorePatch，這篇仍然值得看。它記錄的是一個 fail-open 設計，怎麼在特定條件下把暫時的驗證失敗寫成下一次冷開機的致命狀態。</p>
+<h2>TL; DR</h2>
+<p>CorePatch 的 <code>ApkSignatureVerifierHook</code> 有一段 fail-open 邏輯：當 APK 簽章驗證失敗、又拿不到「已安裝簽章」或「略過摘要驗證」救援時，它會<strong>硬塞一顆 Google 平台 release key 當占位符</strong>（SHA-256 開頭是 <code>b6198a8d…</code>，我通稱它 B619）。</p>
+<p>平常這沒事，因為 CorePatch 主要在 <code>/data/app</code> 處理異簽章 APK，下次開機 LSPosed 已接管，bypass 繼續放行。</p>
+<p>但 Xiaomi.eu 的打包流程會把 <code>ContactsProvider</code> 處理成「v1 檔案在、v2/v3 被 strip、<code>.SF</code> 又殘留 <code>X-Android-APK-Signed: 2,3</code> 宣告」的自相矛盾狀態。這顆 APK 又剛好屬於 <code>android.uid.shared</code> 這個 shared UID 群組。</p>
+<p>兩個條件相遇：</p>
+<ol>
+<li>CorePatch 掃描時驗證失敗，塞 B619</li>
+<li><code>packages.xml</code> 把 B619 寫進去</li>
+<li>冷開機時 LSPosed 還沒接管，PackageManager 看到 B619 跟其他成員的 E443 簽章不一致</li>
+<li>system_server reconcile 階段 fatal</li>
+<li>開機循環</li>
+</ol>
+<p><strong>根因一行話</strong>：CorePatch 用「真實有效的 Google platform 憑證」當 fail-open 占位符，而你的 EU ROM 恰好有一個 v1/v2/v3 自相矛盾的 ContactsProvider，兩者相遇就把它寫進 <code>packages.xml</code>。</p>
+<h2>我為什麼在意這條鏈</h2>
+<p>第一次 format data 完，我以為是 ROM 鍋，把備份還回去就算了。第二次還發，我才願意打開 logcat 一行一行看。一個在 Android 平台廣泛被信任的公開憑證，被某個 hook 模組當成 fallback 塞進去，而且塞完之後的下游沒有一道門會問「這顆 APK 本來就是用 AOSP key 簽的嗎」。這是 hook 階段把錯誤結果寫成後續流程會相信的狀態，重刷只會暫時蓋掉它。十二小時的工，不能只換來一句「小心 OTA」。</p>
+<h2>事件還原</h2>
+<p>第二次 OTA 升級（EU → EU，版本號 B309）之後，開機卡在 logo。<code>fastboot</code> 進 recovery，logcat 沒看到任何有意義的 error，只有一行 <code>PackageManager: Reconcile failed</code>，然後就重開。</p>
+<p>退路跟第一次一樣：format <code>/data</code>、重刷、慢慢把備份還回來。十二小時的工。</p>
+<p>第一次的時候我以為是「這版 ROM 比較不穩」。第二次還發，我就知道這不是偶發，是某個流程被穩定觸發的。</p>
+<p>要追，就得先知道「第二次跟第一次的共同條件」是什麼。剩下的就是 noise。</p>
+<h2>注入點：全 repo 只有一處</h2>
+<p><code>app/src/main/java/org/lsposed/corepatch/hook/ApkSignatureVerifierHook.kt:186</code></p>
+<pre><code class="language-kotlin">signaturesBefore ?: arrayOf(Signature(Constant.SIGNATURE)),
+</code></pre>
+<p>這個 <code>?:</code> 的右邊是 fallback，意思是「如果 <code>signaturesBefore</code> 為 null，就塞這個」。一行就夠了，問題就在這一行。</p>
+<h2>B619 是哪一顆憑證</h2>
+<p><code>Constant.SIGNATURE</code> 不是隨機假資料，是 AOSP/Google 公開的「Android」platform release key。完整 metadata：</p>
+<ul>
+<li>Subject = Issuer：<code>C=US, ST=California, L=Mountain View, O=Google Inc., OU=Android, CN=Android</code></li>
+<li>Self-signed、RSA-2048</li>
+<li>Serial：<code>26d148b7…ec85</code></li>
+<li>有效期：2019-01-02 ～ 2049-01-02</li>
+<li>SHA-256：<code>b6198a8d…</code>（B619）</li>
+</ul>
+<p>它是一顆在 Android 生態裡被廣泛使用的公開 platform 憑證，不是測試用的隨機 key。放進 fallback 之後，後面的 reconcile 會把它當成一個看似合理、其實不屬於這顆 APK 的簽章。</p>
+<p>比對來源：我用 <code>apksigner</code> 把 APK 拆出來，計算內嵌憑證的 SHA-256，跟 <code>packages.xml</code> 寫進去的 hex 完全一致。同時也從 Android Open Source Project 的 platform keystore clone 出原始 DER，跑 SHA-256，三邊對得起來。</p>
+<p>這一步閉合了「B619 就是 CorePatch 寫進去的」這條鏈。如果對不起來，可能是 LSPosed fork 或別的東西在搞事，要繼續往下追。對得起來，就可以鎖定是 CorePatch。</p>
+<h2>觸發條件鏈</h2>
+<p><code>ApkSignatureVerifierHook.kt:88-226</code> 這段要跑完整條鏈才會掉進 fallback。少一層就跑到別條路徑。</p>
+<table>
+<thead>
+<tr>
+<th>步驟</th>
+<th>條件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>前提</td>
+<td>「停用 APK 簽名驗證」（<code>bypass_verification</code>）開</td>
+</tr>
+<tr>
+<td>失敗</td>
+<td><code>verifyV1Signature</code> 拋例外或 ParseResult 回 <code>-103</code></td>
+</tr>
+<tr>
+<td>救援一</td>
+<td>「使用已安裝簽章」關 → 跳過。而且開機掃描期 <code>ActivityThread.currentApplication()</code> 本來就是 null（原始碼 log 自己寫「Are you using MiUI?」），這條路在掃描期永遠失效</td>
+</tr>
+<tr>
+<td>救援二</td>
+<td>「略過摘要驗證」關 → 跳過</td>
+</tr>
+<tr>
+<td>結果</td>
+<td><code>signaturesBefore == null</code> → <strong>硬塞 B619</strong>，schemeVersion 強制 1</td>
+</tr>
+</tbody></table>
+<p>我的設定一直是「bypass 開、另外兩項關」。對一般用途剛好足夠，沒預料到會走到 fallback。</p>
+<h2>為什麼偏偏是 ContactsProvider</h2>
+<p>我本來以為 EU 整批系統 APK 都被 strip 成 v1 only，所以每顆 shared UID 成員都該中招。實測五個 <code>android.uid.shared</code> 成員才發現不是：</p>
+<table>
+<thead>
+<tr>
+<th>APK</th>
+<th>簽章狀態</th>
+<th>apksigner 結果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ContactsProvider</strong></td>
+<td>v1 在、v2/v3 block 被 strip、<code>.SF</code> 殘留 <code>X-Android-APK-Signed: 2,3</code> 宣告</td>
+<td><strong>DOES NOT VERIFY「Signature stripped?」</strong></td>
+</tr>
+<tr>
+<td>CallLogBackup</td>
+<td>v3 完整</td>
+<td>Verified using v3: true</td>
+</tr>
+<tr>
+<td>E2eeContactKeysProvider</td>
+<td>v3 完整</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>BlockedNumberProvider</td>
+<td>v3 完整</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>UserDictionaryProvider</td>
+<td>v3 完整</td>
+<td>同上</td>
+</tr>
+</tbody></table>
+<p>整個 <code>android.uid.shared</code> 群組裡只有 ContactsProvider 處於自相矛盾狀態。EU 的 strip 是有選擇性的，而這顆剛好被選中。</p>
+<p>任何一次驗證路徑變化（OTA、parser 差異、時序、bypass 模組版本差異）都會讓它獨家掉進 fallback → B619 → 跟其他成員的 E443 混簽章 → 冷開機 fatal。</p>
+<p>我看到這行實測結果的時候才想清楚一件事：CorePatch 選 <code>Constant.SIGNATURE</code> 當 fallback，判斷成本幾乎是零。寫下 <code>signaturesBefore ?: arrayOf(Signature(Constant.SIGNATURE))</code> 的人，不需要先理解 shared UID、<code>system_server</code> reconcile，或 EU ROM 的 strip 順序；只要讓這次驗證繼續就好。</p>
+<p>但下游要付的成本是 12 小時的工、一次「重刷就沒事」的誤判，還有一個連 logcat 都不會直接說出原因的 bootloop。找到 fallback 的成本很低；確認它和五顆 APK 的簽章狀態交集在哪裡，才是昂貴的部分。我寫下這段，是提醒自己下一次選 fallback 之前，要先算清楚成本最後落在誰身上。</p>
+<h2>上游現況：這條鏈沒有修復路徑</h2>
+<p>我去翻了 fork 點之前的所有 commit：</p>
+<ul>
+<li><code>4500fa2</code>（2024-03-11 Initial commit）就有這顆 fallback</li>
+<li><code>fb197fa</code>（2026-07-18 Rewrite）語義原封不動保留</li>
+<li>HEAD <code>af7b1de</code>（2026-07-19）仍在</li>
+</ul>
+<p>這是<strong>刻意的 fail-open 設計</strong>：驗證失敗時不拒絕安裝，改塞占位憑證讓流程繼續。哲學是「不要因為簽章問題擋住使用者」。</p>
+<p>我也查了上游 issue tracker：9 張 open、完全沒有 packages.xml 污染或 B619 相關回報，最接近的 #132 是 crDroid A13 bootloop，但無下文，沒人給出根因。</p>
+<p>這讓這條問題很難靠一般回報被修掉：</p>
+<ol>
+<li><strong>你大概率不會炸。</strong> CorePatch 主力用途是覆蓋安裝 <code>/data/app</code> 的異簽章 APK，那種情況 fallback 即使寫入，下次開機 LSPosed 已接管、bypass 繼續放行，永遠無症狀。只有「系統分割區＋shared UID」組合才會在裸開機時 fatal，而正常 ROM 的系統 APK 簽章一致，<code>verifyV1</code> 根本不失敗。</li>
+<li><strong>炸了也很難查到原因。</strong> CorePatch 日誌只進 LSPosed 私有 log，logcat 沒有；crash 點在 system_server reconcile，一般人不抓 boot trace；<code>packages.xml</code> 是 ABX 二進位，要 root + parser 才能看見 B619；看到 B619 hex 還不算完，要比對 CorePatch dex 內嵌憑證才知道來源。</li>
+<li><strong>就算查到，也很可能先停在個人 fork。</strong> 我自己的 patch 推在 fork <code>6e9afdb</code>，目前不打算發 PR。這條鏈需要特定 ROM、特定 APK 狀態和可比對的 <code>packages.xml</code>；沒有可重現證據，上游很難判斷要改哪一層。#132 那張 open issue 就是這個結構的樣板：有現象、無證據、上游無從修起。</li>
+</ol>
+<p>我在這裡寫的，是為了下一個會走完整條鏈的人。<strong>需要「root + ABX 解析 + 反編譯模組 + 對 SHA-256」四件事都做的人本來就少</strong>。寫下來，至少把搜尋路徑留好。</p>
+<h2>我開的 fork 跟 patch</h2>
+<p>我在 fork 上 <code>6e9afdb</code> 推了一個兩層修法：</p>
+<pre><code class="language-kotlin">// A. fail-closed：拿不到真實憑證就讓原錯誤傳播，不再偽造
+if (signaturesBefore == null) {
+    return originalResult  // 拋回原例外或 -103
+}
+
+// B. /data/app 守衛：只對用戶空間 APK 套用 bypass，系統分割區不碰
+if (apkPath.startsWith(&quot;/data/app/&quot;) &amp;&amp; bypassVerification) {
+    // 原本的 bypass 邏輯
+} else {
+    return originalResult
+}
+</code></pre>
+<p>加上把 <code>Constant.SIGNATURE</code> 從 repo 裡刪掉，編譯期就拿不到這顆 key。</p>
+<p>重開機實證：裝新版 fork 之後再觸發相同條件（模擬 v1-only + 矛盾 <code>.SF</code>），<code>packages.xml</code> 不再被污染，開機正常。</p>
+<p>這個 patch 目前不會進 upstream，原因如上節：一般場景用不到，真的會炸的人又很難把證據帶回來。對在 EU ROM 上跑 CorePatch 的人，至少要先停用 bypass，直到換掉這個 fallback。</p>
+<h2>怎麼自己驗證你有沒有中</h2>
+<p>如果你也遇到 OTA 後 bootloop、format data 復活、第二次再發：</p>
+<ol>
+<li><strong>開機進 recovery 或 TWRP</strong>，掛載 <code>/data</code>（唯讀就夠）</li>
+<li><strong>拉 <code>packages.xml</code></strong>：<code>adb pull /data/system/packages.xml .</code></li>
+<li><strong>找有 <code>android.uid.shared</code> 的 package</strong>，看它的 <code>&lt;sigs&gt;</code> 區段</li>
+<li><strong>如果有 SHA-256 開頭是 <code>b6198a8d</code> 的憑證</strong>，就是 B619</li>
+<li><strong>比對 CorePatch APK 內嵌憑證</strong>：<code>apksigner verify --print-certs corepatch.apk</code> 拿 SHA-256，對得起來就是這條鏈</li>
+</ol>
+<p>對得起來，就先別 format data：關掉 CorePatch 的 bypass，換上 patch，再重新觸發相同條件確認。</p>
+<p>對不起來，就不能把這次 bootloop 歸到這條鏈，得繼續查。</p>
+<h2>我學到的事</h2>
+<h3>1. 失敗開放設計是雙面刃</h3>
+<p>CorePatch 的 fail-open 哲學在「使用者裝了一個來路不明的 APK 結果因為簽章不過被擋下來」這個場景是對的：寧可放行也不要擋住。但當下游消費端（PackageManager）的容錯假設是「簽章會一致」時，這個放行就會在 shared UID 群組上放大成 fatal。</p>
+<p>設計 fail-open 時要問的不是「失敗時怎麼繼續」，是「下游有誰假設我不會失敗」。</p>
+<h3>2. 公開信任的 key 不該當 fallback</h3>
+<p><code>Constant.SIGNATURE</code> 是真實的 Google platform key，這在「讓 Android 把它當成 platform-signed 來處理」這件事上其實有效——直到它跟另一顆不同的 platform key 撞在一起。Android 的簽章信任模型是相對的，不存在「全 Android 通用」這回事。</p>
+<p>fail-open 用的占位符應該是「<strong>明確標記為不可信</strong>」的東西，例如全部填零的 SHA-256 或標記為 <code>DEBUG</code> 的 self-signed，讓後續 reconcile 有機會抓到異常並報錯，而不是拿一顆真實的 key 去混。</p>
+<h3>3. 開機早期不可信原則</h3>
+<p>system_server 在 LSPosed 還沒接管的階段做 reconcile，是 Android 安全模型的一環：開機早期任何 hook 都還沒生效，此時的 PackageManager 看到的就是「真實世界」的狀態。</p>
+<p>任何在這個階段寫入的狀態（不管是 <code>packages.xml</code> 還是別的）都會被當成 ground truth，後續的 hook 只能選擇覆寫或放行。CorePatch 在這個階段塞 B619，就是在用 hook 階段的計算結果污染 ground truth，後面要再用 hook 去救，邏輯上就不可能每個情境都閉合。</p>
+<h3>4. 不要相信「重刷就沒事」</h3>
+<p>第一次發生時我也是這個結論。第二次發生才讓我意識到這是流程問題，不是資料問題。</p>
+<p>重刷只是把「被污染的 <code>packages.xml</code>」蓋掉，但污染的機制還在，下次遇到同樣條件就再發一次。真正的修法是修流程，不是修資料。</p>
+<hr>
+<p>如果你也在 EU ROM 跑 CorePatch，而且曾經 bootloop 過，留下 logcat 和 <code>packages.xml</code> 的 B619 片段。這條鏈要有第二個案例，才知道它是不是只在我這台手機上成立。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>

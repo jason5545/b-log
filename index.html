@@ -134,7 +134,7 @@
 
   <!-- 首頁 featured preload 會由生成腳本注入到這裡 -->
   <!-- HOME_FEATURED_PRELOAD_START -->
-  <link rel="preload" as="image" href="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp" imagesrcset="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-480w.webp 480w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-828w.webp 828w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) 58vw, (min-width: 1200px) 54vw, 98vw" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp" imagesrcset="/content/img/2026/corepatch-b619-bootloop-root-cause-cover-480w.webp 480w, /content/img/2026/corepatch-b619-bootloop-root-cause-cover-828w.webp 828w, /content/img/2026/corepatch-b619-bootloop-root-cause-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) 58vw, (min-width: 1200px) 54vw, 98vw" fetchpriority="high">
 <!-- HOME_FEATURED_PRELOAD_END -->
 
   <!-- 完整樣式表 -->
@@ -242,18 +242,18 @@
       </section>
 
       <!-- HOME_FEATURED_START -->
-      <section id="featured" class="hero-card" data-category-theme="tech-development" data-featured-slug="edgelink-kde-connect-xiaomi-lyra-mac" data-featured-cover="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp">
-        <div class="hero-card__media article-hero--image" id="hero-media" data-category-theme="tech-development"><img class="article-hero__image" src="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp" srcset="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-480w.webp 480w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-828w.webp 828w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-1200w.webp 1200w" sizes="(min-width: 1600px) 58vw, (min-width: 1200px) 54vw, 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="sync"></div>
+      <section id="featured" class="hero-card" data-category-theme="tech-analysis" data-featured-slug="corepatch-b619-bootloop-root-cause" data-featured-cover="/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp">
+        <div class="hero-card__media article-hero--image" id="hero-media" data-category-theme="tech-analysis"><img class="article-hero__image" src="/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp" srcset="/content/img/2026/corepatch-b619-bootloop-root-cause-cover-480w.webp 480w, /content/img/2026/corepatch-b619-bootloop-root-cause-cover-828w.webp 828w, /content/img/2026/corepatch-b619-bootloop-root-cause-cover-1200w.webp 1200w" sizes="(min-width: 1600px) 58vw, (min-width: 1200px) 54vw, 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="sync"></div>
         <div class="hero-card__body">
-          <p class="hero-card__category" id="hero-category" style="color: #0e7490; border-color: rgba(14, 116, 144, 0.3); background: rgba(14, 116, 144, 0.1);">技術開發</p>
+          <p class="hero-card__category" id="hero-category" style="color: #dc2626; border-color: rgba(220, 38, 38, 0.3); background: rgba(220, 38, 38, 0.1);">技術分析</p>
           <h2 class="hero-card__title">
-            <a id="hero-link" href="/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/">來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect</a>
+            <a id="hero-link" href="/tech-analysis/corepatch-b619-bootloop-root-cause/">CorePatch 的 B619 是怎麼炸掉我兩次開機的</a>
           </h2>
-          <p class="hero-card__meta" id="hero-meta">By Jason Chien | Published Aug 15, 2026 | 5 min</p>
-          <p class="hero-card__summary" id="hero-summary">我花五週寫了 EdgeLink，讓 Mac 直接接手機來電、傳檔、鏡像操作，再用 Touch ID 遠端解鎖。從 Lyra 協議、端對端加密到 380 個 commit，現在這套已經是我的日常。</p>
+          <p class="hero-card__meta" id="hero-meta">By Jason Chien | Published Aug 26, 2026 | 15 min</p>
+          <p class="hero-card__summary" id="hero-summary">CorePatch 用真實的 Google platform key 當 fail-open 占位符，碰上 Xiaomi.eu ContactsProvider 的矛盾簽章，最後把 B619 寫進 packages.xml，讓 shared UID 群組在冷開機時 fatal。這篇追出觸發條件、fork patch，以及不用先 format data 的驗證方法。</p>
           <div class="hero-card__actions">
-            <a id="hero-read-more" class="button button--primary" href="/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/">Continue reading</a>
-            <a id="hero-open-discussion" class="button button--ghost" href="/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/#comments">Discuss</a>
+            <a id="hero-read-more" class="button button--primary" href="/tech-analysis/corepatch-b619-bootloop-root-cause/">Continue reading</a>
+            <a id="hero-open-discussion" class="button button--ghost" href="/tech-analysis/corepatch-b619-bootloop-root-cause/#comments">Discuss</a>
           </div>
         </div>
       </section>

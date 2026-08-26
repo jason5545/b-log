@@ -1,5 +1,27 @@
 [
   {
+    "slug": "corepatch-b619-bootloop-root-cause",
+    "title": "CorePatch 的 B619 是怎麼炸掉我兩次開機的",
+    "summary": "CorePatch 用真實的 Google platform key 當 fail-open 占位符，碰上 Xiaomi.eu ContactsProvider 的矛盾簽章，最後把 B619 寫進 packages.xml，讓 shared UID 群組在冷開機時 fatal。這篇追出觸發條件、fork patch，以及不用先 format data 的驗證方法。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-08-26T00:00:00Z",
+    "updatedAt": "2026-08-26T00:00:00Z",
+    "readingTime": "15 min",
+    "tags": [
+      "Android",
+      "CorePatch",
+      "LSPosed",
+      "Xiaomi.eu",
+      "bootloop",
+      "APK 簽章",
+      "fail-open",
+      "根因分析"
+    ],
+    "accentColor": "#dc2626",
+    "coverImage": "/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp"
+  },
+  {
     "slug": "edgelink-kde-connect-xiaomi-lyra-mac",
     "title": "來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect",
     "summary": "我花五週寫了 EdgeLink，讓 Mac 直接接手機來電、傳檔、鏡像操作，再用 Touch ID 遠端解鎖。從 Lyra 協議、端對端加密到 380 個 commit，現在這套已經是我的日常。",

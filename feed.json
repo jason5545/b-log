@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "corepatch-b619-bootloop-root-cause",
+      "url": "https://b-log.to/tech-analysis/corepatch-b619-bootloop-root-cause/",
+      "title": "CorePatch 的 B619 是怎麼炸掉我兩次開機的",
+      "content_text": "CorePatch 用真實的 Google platform key 當 fail-open 占位符，碰上 Xiaomi.eu ContactsProvider 的矛盾簽章，最後把 B619 寫進 packages.xml，讓 shared UID 群組在冷開機時 fatal。這篇追出觸發條件、fork patch，以及不用先 format data 的驗證方法。",
+      "date_published": "2026-08-26T00:00:00.000Z",
+      "date_modified": "2026-08-26T00:00:00.000Z",
+      "tags": [
+        "Android",
+        "CorePatch",
+        "LSPosed",
+        "Xiaomi.eu",
+        "bootloop",
+        "APK 簽章",
+        "fail-open",
+        "根因分析"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp"
+    },
+    {
       "id": "edgelink-kde-connect-xiaomi-lyra-mac",
       "url": "https://b-log.to/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/",
       "image": "https://b-log.to/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp",
