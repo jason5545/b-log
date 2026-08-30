@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "qwen-3-8-flash-next-preview-long-agent-control",
+      "url": "https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/",
+      "image": "https://b-log.to/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp",
+      "title": "Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有",
+      "content_text": "我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、關掉 MTP、跑兩次 32K 後才確認：真正留下來的是 Flash-Next 不知道何時該停。官方把它叫 Next，原來真的有邊界。",
+      "date_published": "2026-08-30T00:00:00.000Z",
+      "date_modified": "2026-08-30T00:00:00.000Z",
+      "tags": [
+        "Qwen3.8-Flash-Next",
+        "Qwen4",
+        "本地模型",
+        "Pi Agent",
+        "oMLX",
+        "xhigh",
+        "Gated DeltaNet",
+        "長程推理"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "corepatch-b619-bootloop-root-cause",
       "url": "https://b-log.to/tech-analysis/corepatch-b619-bootloop-root-cause/",
       "title": "CorePatch 的 B619 是怎麼炸掉我兩次開機的",

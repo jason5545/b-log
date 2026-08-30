@@ -1,5 +1,26 @@
 [
   {
+    "slug": "qwen-3-8-flash-next-preview-long-agent-control",
+    "title": "Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有",
+    "summary": "我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、關掉 MTP、跑兩次 32K 後才確認：真正留下來的是 Flash-Next 不知道何時該停。官方把它叫 Next，原來真的有邊界。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-08-30T00:00:00Z",
+    "readingTime": "8 min",
+    "tags": [
+      "Qwen3.8-Flash-Next",
+      "Qwen4",
+      "本地模型",
+      "Pi Agent",
+      "oMLX",
+      "xhigh",
+      "Gated DeltaNet",
+      "長程推理"
+    ],
+    "accentColor": "#b45309",
+    "coverImage": "/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp"
+  },
+  {
     "slug": "corepatch-b619-bootloop-root-cause",
     "title": "CorePatch 的 B619 是怎麼炸掉我兩次開機的",
     "summary": "CorePatch 用真實的 Google platform key 當 fail-open 占位符，碰上 Xiaomi.eu ContactsProvider 的矛盾簽章，最後把 B619 寫進 packages.xml，讓 shared UID 群組在冷開機時 fatal。這篇追出觸發條件、fork patch，以及不用先 format data 的驗證方法。",
