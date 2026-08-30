@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、關掉 MTP、跑兩次 32K 後才確認：真正留下來的是 Flash-Next 不知道何時該停。官方把它叫 Next，原來真的有邊界。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/" id="og-url">
+  <meta property="og:title" content="Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有" id="og-title">
+  <meta property="og:description" content="我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、關掉 MTP、跑兩次 32K 後才確認：真正留下來的是 Flash-Next 不知道何時該停。官方把它叫 Next，原來真的有邊界。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-08-30T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-08-30T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="AI 分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="Qwen3.8-Flash-Next">
+  <meta property="article:tag" content="Qwen4">
+  <meta property="article:tag" content="本地模型">
+  <meta property="article:tag" content="Pi Agent">
+  <meta property="article:tag" content="oMLX">
+  <meta property="article:tag" content="xhigh">
+  <meta property="article:tag" content="Gated DeltaNet">
+  <meta property="article:tag" content="長程推理">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/" id="twitter-url">
+  <meta property="twitter:title" content="Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有" id="twitter-title">
+  <meta property="twitter:description" content="我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、關掉 MTP、跑兩次 32K 後才確認：真正留下來的是 Flash-Next 不知道何時該停。官方把它叫 Next，原來真的有邊界。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="Qwen3.8-Flash-Next, Qwen4, 本地模型, Pi Agent, oMLX, xhigh, Gated DeltaNet, 長程推理" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp" imagesrcset="/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover-480w.webp 480w, /content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover-828w.webp 828w, /content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有","description":"我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、關掉 MTP、跑兩次 32K 後才確認：真正留下來的是 Flash-Next 不知道何時該停。官方把它叫 Next，原來真的有邊界。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-30T00:00:00Z","dateModified":"2026-08-30T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/"},"url":"https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp"],"keywords":"Qwen3.8-Flash-Next, Qwen4, 本地模型, Pi Agent, oMLX, xhigh, Gated DeltaNet, 長程推理","articleSection":"AI 分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp" srcset="/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover-480w.webp 480w, /content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover-828w.webp 828w, /content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Aug 30, 2026</span><span>8 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>Qwen3.8-Flash-Next</span><span>Qwen4</span><span>本地模型</span><span>Pi Agent</span><span>oMLX</span><span>xhigh</span><span>Gated DeltaNet</span><span>長程推理</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>我今天讓 Qwen3.8-Flash-Next 在 Pi 裡替一個 KernelSU Next 模組做 WebUI。</p>
+<p>任務不算簡單，但範圍最後已經很清楚：把手機上三個純 root 偵測工具加進排除清單，再做一個可以調整這份清單的 WebUI。</p>
+<p>我把範圍定死之後，它又跑了三十八分鐘。</p>
+<p>它讀了同一段 <code>build.sh</code> 很多次，一直在想 <code>webroot/index.html</code> 和 <code>config.json</code> 應該放進哪個打包變數。整個 session 最後有九十次 tool call，context 從大約 25K 長到 159K。它做出來的第一版 WebUI，甚至可以直接覆寫三支開機腳本，遠遠超過我要的功能。</p>
+<p>更麻煩的是，它把三個 package 寫進註解，真正會生效的 package 行反而沒加。HTML 裡還開始出現 <code>只выводит</code>、<code>已用過년에는</code>、<code>台سل圈</code> 這種跨語言碎片。</p>
+<p>我最後把它停掉了。</p>
+<p>這個畫面讓我回頭問了一個問題：Qwen3.8-Flash-Next 名字裡的 Next，到底代表什麼？</p>
+<h2>我一開始懷疑是 4-bit 和去對齊</h2>
+<p>我跑的是 OrcaRouter 的去對齊 4-bit 版本。Medium 幾乎都正常，xhigh 卻比較容易出現 token salad、重複，或一路想下去不肯交答案。</p>
+<p>第一個直覺很自然：是不是去對齊把權重弄傷了？或者 4-bit 精度太低，短任務撐得住，長推理才開始累積誤差？</p>
+<p>這個說法聽起來合理。我甚至已經在評估 6-bit。它大概要吃掉 101GB 記憶體，128GB 的 Mac 勉強塞得下。</p>
+<p>後來我把對照補齊了。</p>
+<p>我換成 Jundot 從官方權重製作、沒有去對齊的 oQ 混合精度版本，拿同一題非對稱 TSP 去跑 xhigh。題目要求它找出最優和次佳路線，還要做全域最優證明；如果計算互相矛盾，就持續回頭核對，不要提前停止。</p>
+<p>兩次都打滿 32,768 token。</p>
+<p>這兩次沒有亂碼，沒有數字沙拉，也沒有固定句子迴圈。模型到最後一個 token 都還在連貫地手工枚舉。第二次停在 <code>So E last is problematic due to</code>，就是算到一半被長度上限切掉。</p>
+<p>我也測過 MTP 開關。結果一樣。64K needle 可以精確取回，RoPE 也不像主因。</p>
+<p>到這裡，去對齊已經不是必要條件。OrcaRouter 那個 4-bit 版本，也不能再單獨解釋為什麼 Jundot 仍然會把完整 32K 用完。</p>
+<p>真正留下來的現象比較單純：這顆模型碰到「發現矛盾就回頭核對，而且不要停」的 prompt，會一直找到下一件可以算的事。xhigh 給它多少長度，它就用多少。</p>
+<h2>亂碼和不肯停，其實是兩件事</h2>
+<p>這一輪最容易誤判的地方，是我把所有異常都叫成「跑飛」。</p>
+<p>有些確實是 backend bug。oMLX 前幾天才修掉一個 <a href="https://github.com/jundot/omlx/pull/3232">PLE rollback 問題</a>：Lightning MTP 猜錯 token、主模型拒絕之後，GDN 和 QSA 有退回正確位置，PLE 的 n-gram history 與 short-convolution state 卻還留在被拒絕的 token 上。後面的生成當然會歪。</p>
+<p>這種問題可以修。RMSNorm 權重格式讀錯、tool parser 卡在 token 0、streaming 解碼拆壞字元，也都屬於推理管線的責任。</p>
+<p>Backend 修好之後，模型可以一路保持語意正常。Jundot 兩次跑滿 32K 就是證據。</p>
+<p>可是，語意正常不代表它知道該停。</p>
+<p>一個完美的 backend 可以保證模型正確地算，不能替它決定目前的證據已經夠了。它可以不再吐出垃圾，仍然連貫地浪費三萬多個 token。</p>
+<p>Pi 那輪又讓我看到另一層。公開討論裡已經有人遇到幾乎相同的狀況：同一顆 Flash-Next 直接用 llama.cpp CLI 時正常，接到 Pi／pi-web 之後卻開始錯讀檔名，混入隨機語言和符號。他也用了官方建議的 <code>top_k=20</code>，換過權重與 backend，問題仍然存在。<a href="https://www.reddit.com/r/LocalLLM/comments/1w1vb8v/qwen_38_flash_next_with_pi_receives_and_produces/">那篇回報</a></p>
+<p>這表示 agent harness 也有責任。Pi 把 system prompt、tool schema、AGENTS.md、歷史輸出和工具結果一路留在 context 裡。我的 WebUI session 在 100K 之後開始出現語言污染，到 159K 才被我中止。</p>
+<p>262K context 代表它放得下，不代表它到了 159K 還能好好管理一個專案。</p>
+<h2>官方從來沒有把它說成 Qwen4</h2>
+<p>Qwen 對這顆模型的定位其實寫得很直接。</p>
+<p>它是官方正式公開的 checkpoint，不是來路不明的測試檔。但官方稱它為「experimental preview of the architecture that will underpin Qwen4」，也就是 Qwen4 底層架構的實驗性預覽。<a href="https://github.com/QwenLM/Qwen3.8-Flash-Next">官方說明</a></p>
+<p>這個差別很重要。</p>
+<p>Flash-Next 已經有 125B 主模型，每個 token 啟用 6B，外加 51B 的 n-gram embedding。48 層裡有 36 層 Gated DeltaNet、12 層 Qwen Sparse Attention，還有四條 Gated Residual stream 和 MTP。</p>
+<p>能力已經可以拿來寫程式、讀 repo、操作工具，也能在本機跑出讓人驚訝的速度。問題是，這些新東西同時增加了很多 backend 必須維持一致的狀態。模型自己的長程控制，也還沒有到可以完全放手的程度。</p>
+<p>官方提早放出它，本來就是要讓社群在 Qwen4 正式登場前先檢查這套架構，推理框架也有時間準備。Qwen 自己在模型卡裡寫到，可以調高 <code>presence_penalty</code> 降低 endless repetition，但代價可能是語言混雜和輕微能力下降。<a href="https://huggingface.co/Qwen/Qwen3.8-Flash-Next#best-practices">官方 Best Practices</a></p>
+<p>所以 Next 不是比較新的宣傳字樣。</p>
+<p>它是在說：下一代的架構已經先拿出來了，正式世代還在後面。</p>
+<h2>我現在怎麼用它</h2>
+<p>6-bit 不需要再下載了。從 BF16 自己重做 oQ4，也不會教會模型什麼時候該收手。</p>
+<p>我會繼續用它，但工作方式要改。</p>
+<p>Medium 負責真正的改檔、測試、build 和部署。xhigh 留給範圍明確、context 乾淨，而且真的需要長推理的問題。任務中間改過幾次方向，我會直接開新 session，不讓它背著前面八萬個 token 的錯誤假設繼續工作。</p>
+<p>Backend 更新仍然重要。它可以把 token salad、state 污染和固定 token 迴圈修掉。Pi 也可以做 context 壓縮、重讀次數限制和完成條件檢查。</p>
+<p>但我不再期待一次 backend 更新，就讓 xhigh 自然知道什麼時候該停。</p>
+<p>那天它卡住的 <code>build.sh</code> 只有 173 行。它不是看不懂，也不是少一個 API。它缺的是在證據已經足夠時做決定，然後把工作交出來。</p>
+<p>這大概就是它現在叫 Next，而不是 Qwen4 的原因。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
