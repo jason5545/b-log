@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "hand-angel-service-stopped-after-two-year-wait",
+      "url": "https://b-log.to/cultural-insights/hand-angel-service-stopped-after-two-year-wait/",
+      "image": "https://b-log.to/content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover.webp",
+      "title": "我等了兩年多才輪到的那個服務，八月停了",
+      "content_text": "我等了兩年多，才在手天使官網那五十次服務裡留下其中一次。剩下兩次我一直讓著沒申請，六年後它停止受理；那條路關了，其他的路本來就沒開過。",
+      "date_published": "2026-09-03T00:00:00.000Z",
+      "date_modified": "2026-09-03T00:00:00.000Z",
+      "tags": [
+        "手天使",
+        "身障者性權",
+        "性義工",
+        "重度身障",
+        "長期照顧",
+        "性自主"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "qwen-3-8-flash-next-preview-long-agent-control",
       "url": "https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/",
       "image": "https://b-log.to/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp",
