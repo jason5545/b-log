@@ -6,6 +6,27 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "fable-5-1-relaxation-first-prompt-flagged",
+      "url": "https://b-log.to/ai-analysis/fable-5-1-relaxation-first-prompt-flagged/",
+      "title": "Fable 5.1 放寬的第一天，我的第一個 prompt 就被擋了",
+      "content_text": "Anthropic 放寬資安護欄，Theo 說一天只被擋一次，我第一個 prompt 就中。讀完細則才確認：開放的是原始碼漏洞發掘，binary 逆向維持封鎖。放寬是真實的，只是不是為我這種用途放寬的。",
+      "date_published": "2026-09-03T00:00:00.000Z",
+      "date_modified": "2026-09-03T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Anthropic",
+        "Claude Fable 5.1",
+        "Trusted Access",
+        "Cyber Safety",
+        "無障礙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "hand-angel-service-stopped-after-two-year-wait",
       "url": "https://b-log.to/cultural-insights/hand-angel-service-stopped-after-two-year-wait/",
       "image": "https://b-log.to/content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover.webp",

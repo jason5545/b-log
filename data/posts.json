@@ -1,5 +1,23 @@
 [
   {
+    "slug": "fable-5-1-relaxation-first-prompt-flagged",
+    "title": "Fable 5.1 放寬的第一天，我的第一個 prompt 就被擋了",
+    "summary": "Anthropic 放寬資安護欄，Theo 說一天只被擋一次，我第一個 prompt 就中。讀完細則才確認：開放的是原始碼漏洞發掘，binary 逆向維持封鎖。放寬是真實的，只是不是為我這種用途放寬的。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-09-03T00:00:00Z",
+    "tags": [
+      "AI",
+      "Anthropic",
+      "Claude Fable 5.1",
+      "Trusted Access",
+      "Cyber Safety",
+      "無障礙"
+    ],
+    "accentColor": "#2563eb",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "hand-angel-service-stopped-after-two-year-wait",
     "title": "我等了兩年多才輪到的那個服務，八月停了",
     "summary": "我等了兩年多，才在手天使官網那五十次服務裡留下其中一次。剩下兩次我一直讓著沒申請，六年後它停止受理；那條路關了，其他的路本來就沒開過。",
