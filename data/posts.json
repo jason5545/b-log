@@ -2048,7 +2048,8 @@
       "AI 工具",
       "結構性障礙"
     ],
-    "accentColor": "#6b7a8d"
+    "accentColor": "#6b7a8d",
+    "updatedAt": "2026-09-03T00:00:00.000Z"
   },
   {
     "slug": "ai-collaboration-why-resistance",
@@ -2439,7 +2440,7 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2026-01-10T00:00:00Z",
-    "updatedAt": "2026-01-10T00:00:00Z",
+    "updatedAt": "2026-09-03T00:00:00.000Z",
     "readingTime": "8 min",
     "tags": [
       "Apple",

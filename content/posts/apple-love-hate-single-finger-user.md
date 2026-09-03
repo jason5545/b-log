@@ -2,7 +2,7 @@
 
 說我討厭 Apple 嗎？其實也沒有。如果真的討厭，我就不會買 2TB 的 iPhone，也不會認真考慮入手 MacBook Pro。但要說喜歡？這中間有太多無奈了。
 
-我是一個全端工程師，平常在 Linux 環境下工作得很愉快。Proxmox VE 虛擬化、Tailscale 組網、PipeWire 音訊管理——開放原始碼生態給了我極大的自由度。
+我平常在 Linux 環境下工作得很愉快。Proxmox VE 虛擬化、Tailscale 組網、PipeWire 音訊管理——開放原始碼生態給了我極大的自由度。
 
 但最近我想開發 iOS App。
 
