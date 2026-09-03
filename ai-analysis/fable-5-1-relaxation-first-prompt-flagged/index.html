@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Fable 5.1 放寬的第一天，我的第一個 prompt 就被擋了 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="Anthropic 放寬資安護欄，Theo 說一天只被擋一次，我第一個 prompt 就中。讀完細則才確認：開放的是原始碼漏洞發掘，binary 逆向維持封鎖。放寬是真實的，只是不是為我這種用途放寬的。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/ai-analysis/fable-5-1-relaxation-first-prompt-flagged/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/ai-analysis/fable-5-1-relaxation-first-prompt-flagged/" id="og-url">
+  <meta property="og:title" content="Fable 5.1 放寬的第一天，我的第一個 prompt 就被擋了" id="og-title">
+  <meta property="og:description" content="Anthropic 放寬資安護欄，Theo 說一天只被擋一次，我第一個 prompt 就中。讀完細則才確認：開放的是原始碼漏洞發掘，binary 逆向維持封鎖。放寬是真實的，只是不是為我這種用途放寬的。" id="og-description">
+  <meta property="og:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:Fable%205.1%20%E6%94%BE%E5%AF%AC%E7%9A%84%E7%AC%AC%E4%B8%80%E5%A4%A9%EF%BC%8C%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E5%80%8B%20prompt%20%E5%B0%B1%E8%A2%AB%E6%93%8B%E4%BA%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-09-03T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-09-03T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="AI 分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="AI">
+  <meta property="article:tag" content="Anthropic">
+  <meta property="article:tag" content="Claude Fable 5.1">
+  <meta property="article:tag" content="Trusted Access">
+  <meta property="article:tag" content="Cyber Safety">
+  <meta property="article:tag" content="無障礙">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/ai-analysis/fable-5-1-relaxation-first-prompt-flagged/" id="twitter-url">
+  <meta property="twitter:title" content="Fable 5.1 放寬的第一天，我的第一個 prompt 就被擋了" id="twitter-title">
+  <meta property="twitter:description" content="Anthropic 放寬資安護欄，Theo 說一天只被擋一次，我第一個 prompt 就中。讀完細則才確認：開放的是原始碼漏洞發掘，binary 逆向維持封鎖。放寬是真實的，只是不是為我這種用途放寬的。" id="twitter-description">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:Fable%205.1%20%E6%94%BE%E5%AF%AC%E7%9A%84%E7%AC%AC%E4%B8%80%E5%A4%A9%EF%BC%8C%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E5%80%8B%20prompt%20%E5%B0%B1%E8%A2%AB%E6%93%8B%E4%BA%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="AI, Anthropic, Claude Fable 5.1, Trusted Access, Cyber Safety, 無障礙" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Fable 5.1 放寬的第一天，我的第一個 prompt 就被擋了","description":"Anthropic 放寬資安護欄，Theo 說一天只被擋一次，我第一個 prompt 就中。讀完細則才確認：開放的是原始碼漏洞發掘，binary 逆向維持封鎖。放寬是真實的，只是不是為我這種用途放寬的。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-03T00:00:00Z","dateModified":"2026-09-03T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/fable-5-1-relaxation-first-prompt-flagged/"},"url":"https://b-log.to/ai-analysis/fable-5-1-relaxation-first-prompt-flagged/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:Fable%205.1%20%E6%94%BE%E5%AF%AC%E7%9A%84%E7%AC%AC%E4%B8%80%E5%A4%A9%EF%BC%8C%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E5%80%8B%20prompt%20%E5%B0%B1%E8%A2%AB%E6%93%8B%E4%BA%86,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"AI, Anthropic, Claude Fable 5.1, Trusted Access, Cyber Safety, 無障礙","articleSection":"AI 分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">Fable 5.1 放寬的第一天，我的第一個 prompt 就被擋了</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">Fable 5.1 放寬的第一天，我的第一個 prompt 就被擋了</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Sep 3, 2026</span><span>5 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>AI</span><span>Anthropic</span><span>Claude Fable 5.1</span><span>Trusted Access</span><span>Cyber Safety</span><span>無障礙</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>9 月 1 日，Anthropic 發表 Claude Fable 5.1。隔天新聞標題很吸引人：放寬資安護欄，首度開放用 AI 發掘軟體漏洞，誤報率大降。</p>
+<p>Theo 的影片也出了。他說新模型上線以後，他做了一天的事，只被擋一次。</p>
+<p>我想說，這次應該輪到我了。</p>
+<p>我的專案 EdgeLink，當初就是在 Codex 手上被資安分類器擋下來的。我有驗證完成的 Trusted Access，一樣被擋，擋到我去開 GitHub issue、去跟客服來回，最後客服差點叫我重灌電腦。後來整個專案是在 Kimi K3 手上做完的。這段過程我七月寫過。</p>
+<p>現在護欄放寬了。我把同一個話題拿去問 Claude：想討論當初被擋到底合不合理，順便問它，剩下的工作能不能接回去做。</p>
+<p>第一個 prompt 就被 flag。</p>
+<p>不是做到一半被攔，是開場就中。真的是有夠無奈。</p>
+<h2>放寬的是哪一種，細則跟標題差很遠</h2>
+<p>被擋之後，我把公告本文和 system card 整份讀完。這次放寬的邊界，其實寫得很清楚。</p>
+<p>Fable 5.1 開放的是「在原始碼裡發掘軟體漏洞」，也就是防禦性質的漏洞研究。官方說資安分類器的誤報因此降了大約六成。</p>
+<p>但同一批文件裡，有三類工作維持阻擋，或者改送其他模型處理：滲透測試、exploit 開發，還有「以二進位為基礎的漏洞掃描」。System card 講得更白：</p>
+<blockquote>
+<p>We block vulnerability discovery in compiled binaries because it is more commonly an offensive technique.</p>
+</blockquote>
+<p>我的專案恰好就是第三類。反編譯小米的 APK、從 keystore 抽金鑰、還原私有協定，全部都是 compiled binary 的工作。</p>
+<p>原始碼和二進位，一字之差。新聞標題不會告訴你這個差別，但分類器知道。</p>
+<p>我也問過自己：我的 repo 裡面明明都是程式碼了，這不算原始碼嗎？</p>
+<p>算，也不算。我自己的實作 code，修 bug、寫測試，這些在任何一家都不會被擋，本來就不在護欄的管轄範圍。但如果任務實質是「分析小米的 binary 和協定」，那不管筆記存在哪個資料夾，它要求模型做的事仍然是二進位分析。「這是分析出來的」在分類器面前不是加分，是扣分，因為那正好是它被訓練要攔的特徵。</p>
+<p>判準其實很簡單：模型要看的東西是我寫的 code，就安全；模型要看的東西是 Xiaomi 的 binary 和協定本身，就還是被擋。</p>
+<h2>我的 prompt 為什麼會中</h2>
+<p>知道邊界之後，我回頭看自己那則 prompt，其實中得不冤枉。</p>
+<p>那句話的結構是這樣的：「這個專案一開始給 Codex 做，被擋下來了。我有 trust access 也一樣。後來我用 Kimi 完成了。現在你放寬了，換你覺得呢？」</p>
+<p>每一句單獨看都無害，組起來卻是另一回事：一個被別家拒絕過的使用者，拿著一份無法驗證的資格，陳述自己在別處完成了工作，然後問你合不合理。</p>
+<p>這個句型本身就是分類器最敏感的模式之一。它讀不出我的意圖是討論，它讀到的是「有人想翻案」。</p>
+<p>諷刺的是，我那則 prompt 真正想討論的，其實是無障礙的法理。為了互通性而逆向，在美國 DMCA 和歐盟軟體指令裡都有合法空間；身心障礙者需要第三方工具才能平等使用自己的裝置，這是更值得討論的題目。我甚至沒有要它做什麼，只是要它拿出來討論。</p>
+<p>但分類器不做法律分析，也不讀動機。它只做句型比對。我的討論掛在一個待平反的拒絕上，就先被當成翻案處理。</p>
+<p>後來我把同樣的論點抽象化一層，拿掉「我」、拿掉具體遭遇，變成「信任存取計畫該怎麼設計，才不會把合法研究者推去別家」，就可以問了。話題一模一樣，差別只在它不再掛在我的案子上。</p>
+<h2>Theo 的一次，和我的一次</h2>
+<p>這件事最有意思的地方，是 Theo 和我都沒有說謊。</p>
+<p>他做了一天只被擋一次，是真的。我第一發就中，也是真的。</p>
+<p>差別在分母。他的工作是網頁開發、開放原始碼專案，那些東西本來就離觸發區很遠，護欄往旁邊挪一點，他的體感就是暢通。我的專案長期住在觸發區邊緣，護欄放寬六成，對他是從幾乎不會中變成更不會中，對我是從會中變成還是會中。</p>
+<p>同一句「放寬了」，對不同位置的人是完全不同的東西。</p>
+<p>所以以後看到這種新聞，標準動作只有一個：去看一手來源的細則，拿自己的用途類別去對。新聞告訴你線移動了，但線有沒有移到你這邊，要自己拿尺量。</p>
+<h2>順手查清楚的兩件事</h2>
+<p>既然都查了，我把兩家的高階存取也一起確認過。</p>
+<p>Anthropic 的 Mythos，就是比 Fable 護欄更鬆的那個版本，從頭到尾沒有對美國以外開放過。四月是幾十家邀請制夥伴，六月發表後被美國政府出口管制，連在美國的外籍員工都被切斷，重開之後限大約一百家美國機構。唯一的非美例外是歐盟的 ENISA，那是政府對政府的安排。這次 5.1 的公告說「正與美國政府協調擴大國際存取」，沒有日期，也沒有資格條件。</p>
+<p>OpenAI 的 Daybreak 分 Blue 和 Red 兩級。我有 Blue。Red 給的是專門的資安模型，做授權的漏洞重現和紅隊測試，個人可以申請，但要獨立審核，而且用途限於「你擁有或明確獲授權的系統」。我的用途是逆向第三方協定做互通，手機是我的，分析對象是小米的軟體，授權鏈正好是灰色的。申請了大概率也不對口。</p>
+<p>更實際的是：我的 Blue 資格到現在都還沒有真的傳導到每一次請求上，issue #31505 開了快兩個月還是 open。我去 tracker 掃過，同類的回報從六月到九月有三十幾張，全部還開著。有人甚至收到 Cyber Abuse 的政策警告，擔心帳號被封。</p>
+<h2>放寬是真實的，只是不是為我放寬的</h2>
+<p>我不覺得 Anthropic 或 OpenAI 認為我是壞人。分類器在規模化下做不到意圖裁判，我的工作在表面特徵上離惡意工具的距離，確實比離我的距離近。廠商選擇寧可誤殺，這是成本不對稱下的理性決定。</p>
+<p>我可以理解這個邏輯，同時不接受它變成我的成本。</p>
+<p>我的工作沒有停。逆向最難的那段已經做完了，剩下的都是我自己程式碼裡的 bug，那些東西本來就不在任何一家的護欄裡。那天 dirty tree 裡的 DTMF 修改就是證據：百分之百是自己的 code，一行逆向都沒有。</p>
+<p>所以這次實驗的結論，不是「又一家把我擋在外面」。</p>
+<p>是放寬確實發生了，只是它放寬的是別人的邊界。我的邊界沒有動，而我已經知道門在哪裡，也知道哪一扇不用再敲。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
