@@ -8,6 +8,7 @@
     {
       "id": "fable-5-1-relaxation-first-prompt-flagged",
       "url": "https://b-log.to/ai-analysis/fable-5-1-relaxation-first-prompt-flagged/",
+      "image": "https://b-log.to/content/img/2026/fable-5-1-relaxation-first-prompt-flagged-cover.webp",
       "title": "Fable 5.1 放寬的第一天，我的第一個 prompt 就被擋了",
       "content_text": "Anthropic 放寬資安護欄，Theo 說一天只被擋一次，我第一個 prompt 就中。讀完細則才確認：開放的是原始碼漏洞發掘，binary 逆向維持封鎖。放寬是真實的，只是不是為我這種用途放寬的。",
       "date_published": "2026-09-03T00:00:00.000Z",
