@@ -104,4 +104,4 @@ Backend 更新仍然重要。它可以把 token salad、state 污染和固定 to
 
 它的弱點其實在別的地方。回報會失真：憑空生一段風險說明、把事件方向講反、驗過就不貼原文。程式碼可以信，它對程式碼的描述不能信，以 diff 為準。
 
-完整數據在 model-arena 的 README 和五份報告裡。
+完整數據在 [model-arena](https://github.com/jason5545/model-arena) 的 README 和五份報告裡：起點快照、參考解 patch、兩個模型每一輪的原始 prompt 與產出、隱藏測試都在，照 REPRODUCE.md 可以重跑。
