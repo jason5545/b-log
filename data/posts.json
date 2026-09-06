@@ -40,11 +40,11 @@
   {
     "slug": "qwen-3-8-flash-next-preview-long-agent-control",
     "title": "Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有",
-    "summary": "我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、關掉 MTP、跑兩次 32K 後才確認：真正留下來的是 Flash-Next 不知道何時該停。官方把它叫 Next，原來真的有邊界。",
+    "summary": "我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、跑兩次 32K 後才確認它不知道何時該停。後記：五輪對照實驗證明，範圍定死、驗收寫進 prompt，它就會自己停。",
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2026-08-30T00:00:00Z",
-    "readingTime": "8 min",
+    "readingTime": "9 min",
     "tags": [
       "Qwen3.8-Flash-Next",
       "Qwen4",
