@@ -6,7 +6,7 @@
   <title>Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有 - (b)-log</title>
 
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、關掉 MTP、跑兩次 32K 後才確認：真正留下來的是 Flash-Next 不知道何時該停。官方把它叫 Next，原來真的有邊界。">
+  <meta name="description" content="我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、跑兩次 32K 後才確認它不知道何時該停。後記：五輪對照實驗證明，範圍定死、驗收寫進 prompt，它就會自己停。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/" id="canonical-url">
 
@@ -14,7 +14,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/" id="og-url">
   <meta property="og:title" content="Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有" id="og-title">
-  <meta property="og:description" content="我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、關掉 MTP、跑兩次 32K 後才確認：真正留下來的是 Flash-Next 不知道何時該停。官方把它叫 Next，原來真的有邊界。" id="og-description">
+  <meta property="og:description" content="我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、跑兩次 32K 後才確認它不知道何時該停。後記：五輪對照實驗證明，範圍定死、驗收寫進 prompt，它就會自己停。" id="og-description">
   <meta property="og:image" content="https://b-log.to/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -39,7 +39,7 @@
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/" id="twitter-url">
   <meta property="twitter:title" content="Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有" id="twitter-title">
-  <meta property="twitter:description" content="我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、關掉 MTP、跑兩次 32K 後才確認：真正留下來的是 Flash-Next 不知道何時該停。官方把它叫 Next，原來真的有邊界。" id="twitter-description">
+  <meta property="twitter:description" content="我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、跑兩次 32K 後才確認它不知道何時該停。後記：五輪對照實驗證明，範圍定死、驗收寫進 prompt，它就會自己停。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
 
@@ -113,7 +113,7 @@
   <link rel="preload" as="image" href="/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp" imagesrcset="/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover-480w.webp 480w, /content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover-828w.webp 828w, /content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有","description":"我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、關掉 MTP、跑兩次 32K 後才確認：真正留下來的是 Flash-Next 不知道何時該停。官方把它叫 Next，原來真的有邊界。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-30T00:00:00Z","dateModified":"2026-08-30T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/"},"url":"https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp"],"keywords":"Qwen3.8-Flash-Next, Qwen4, 本地模型, Pi Agent, oMLX, xhigh, Gated DeltaNet, 長程推理","articleSection":"AI 分析"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有","description":"我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、跑兩次 32K 後才確認它不知道何時該停。後記：五輪對照實驗證明，範圍定死、驗收寫進 prompt，它就會自己停。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-30T00:00:00Z","dateModified":"2026-08-30T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/"},"url":"https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp"],"keywords":"Qwen3.8-Flash-Next, Qwen4, 本地模型, Pi Agent, oMLX, xhigh, Gated DeltaNet, 長程推理","articleSection":"AI 分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -194,7 +194,7 @@
           <header class="article-header">
             <p id="post-category" class="article-category">AI 分析</p>
             <h1 id="post-title">Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Aug 30, 2026</span><span>8 min</span></div>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Aug 30, 2026</span><span>9 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>Qwen3.8-Flash-Next</span><span>Qwen4</span><span>本地模型</span><span>Pi Agent</span><span>oMLX</span><span>xhigh</span><span>Gated DeltaNet</span><span>長程推理</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>我今天讓 Qwen3.8-Flash-Next 在 Pi 裡替一個 KernelSU Next 模組做 WebUI。</p>
@@ -242,6 +242,14 @@
 <p>但我不再期待一次 backend 更新，就讓 xhigh 自然知道什麼時候該停。</p>
 <p>那天它卡住的 <code>build.sh</code> 只有 173 行。它不是看不懂，也不是少一個 API。它缺的是在證據已經足夠時做決定，然後把工作交出來。</p>
 <p>這大概就是它現在叫 Next，而不是 Qwen4 的原因。</p>
+<h2>後記：範圍定死之後，它會自己停</h2>
+<p>這篇寫完之後，我用同一顆模型（Jundot oQ 混合精度版）做了五輪對照實驗，對手是 GLM-5.3 Flash。題目從六個檔案的 TypeScript 改到 Kotlin 佇列服務，每輪有隱藏測試。全部用 low 跑。</p>
+<p>結果跟上面那個三十八分鐘的 session 完全不像。五輪都是自己做完、跑完驗收、commit、停下，最長十五分鐘。四輪產出跟參考解逐 byte 相同。有一輪我什麼位置都不給，只給三個 bug 的症狀和驗收條件，它三個根因都找對，設計題也自己拍板，二十一條隱藏測試全過，跟 GLM 一樣。</p>
+<p>差別只有三件事。第一，範圍在開場就定死，不是做到一半才收斂。第二，每個任務開新 session，context 從來沒超過一份 prompt 加一個小專案。第三，prompt 裡有驗收清單：跑哪幾條指令、輸出應該長什麼樣。那份清單就是「證據已經足夠」的定義。</p>
+<p>所以上面說它缺的是「做決定然後交出來」，要修正成：它缺的是一個寫在 prompt 裡的完成條件。給了，它就會交。這件事不用等 Pi 做 completion check，自己寫就有。</p>
+<p>推理等級也不是重點。我後來請 Codex 分析 low 和 xhigh 的差別，結果只是 system prompt 多一句「想少一點」或「想詳細一點」，medium 連這句都沒有。上面那個 session 用 xhigh 跑飛，這五輪用 low 全過，差在題目的形狀，不在那一句。</p>
+<p>它的弱點其實在別的地方。回報會失真：憑空生一段風險說明、把事件方向講反、驗過就不貼原文。程式碼可以信，它對程式碼的描述不能信，以 diff 為準。</p>
+<p>完整數據在 model-arena 的 README 和五份報告裡。</p>
 </div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>

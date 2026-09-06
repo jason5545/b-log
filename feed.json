@@ -56,7 +56,7 @@
       "title": "Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有",
       "content_text": "我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、跑兩次 32K 後才確認它不知道何時該停。後記：五輪對照實驗證明，範圍定死、驗收寫進 prompt，它就會自己停。",
       "date_published": "2026-08-30T00:00:00.000Z",
-      "date_modified": "2026-09-06T00:00:00.000Z",
+      "date_modified": "2026-08-30T00:00:00.000Z",
       "tags": [
         "Qwen3.8-Flash-Next",
         "Qwen4",
