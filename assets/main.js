@@ -2504,11 +2504,11 @@ function getPostImage(post, baseUrl) {
   if (post.coverImage) {
     // 如果是相對路徑，加上基礎 URL
     if (post.coverImage.startsWith('/')) {
-      return `${baseUrl}${post.coverImage.substring(1)}`;
+      return `${baseUrl}${post.coverImage}`;
     }
     // 如果是相對路徑（不以 / 開頭）
     if (!post.coverImage.startsWith('http')) {
-      return `${baseUrl}${post.coverImage}`;
+      return `${baseUrl}/${post.coverImage}`;
     }
     // 如果是完整 URL，直接使用
     return post.coverImage;
