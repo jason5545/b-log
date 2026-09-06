@@ -22,7 +22,7 @@
   <meta property="og:locale" content="zh_TW">
   <meta property="article:author" content="Jason Chien" id="og-author">
   <meta property="article:published_time" content="2026-08-30T00:00:00Z" id="og-published-time">
-  <meta property="article:modified_time" content="2026-08-30T00:00:00Z" id="og-modified-time">
+  <meta property="article:modified_time" content="2026-09-07T00:00:00Z" id="og-modified-time">
   <meta property="article:section" content="AI 分析" id="og-section">
   <!-- ARTICLE_TAGS_START -->
   <meta property="article:tag" content="Qwen3.8-Flash-Next">
@@ -113,7 +113,7 @@
   <link rel="preload" as="image" href="/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp" imagesrcset="/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover-480w.webp 480w, /content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover-828w.webp 828w, /content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有","description":"我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、跑兩次 32K 後才確認它不知道何時該停。後記：五輪對照實驗證明，範圍定死、驗收寫進 prompt，它就會自己停。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-30T00:00:00Z","dateModified":"2026-08-30T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/"},"url":"https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp"],"keywords":"Qwen3.8-Flash-Next, Qwen4, 本地模型, Pi Agent, oMLX, xhigh, Gated DeltaNet, 長程推理","articleSection":"AI 分析"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有","description":"我原本以為 xhigh 亂碼是 4-bit 或去對齊弄壞，換成官方權重、跑兩次 32K 後才確認它不知道何時該停。後記：五輪對照實驗證明，範圍定死、驗收寫進 prompt，它就會自己停。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-30T00:00:00Z","dateModified":"2026-09-07T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/"},"url":"https://b-log.to/ai-analysis/qwen-3-8-flash-next-preview-long-agent-control/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/qwen-3-8-flash-next-preview-long-agent-control-cover.webp"],"keywords":"Qwen3.8-Flash-Next, Qwen4, 本地模型, Pi Agent, oMLX, xhigh, Gated DeltaNet, 長程推理","articleSection":"AI 分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -194,7 +194,7 @@
           <header class="article-header">
             <p id="post-category" class="article-category">AI 分析</p>
             <h1 id="post-title">Qwen3.8-Flash-Next 為什麼叫 Next：能力已經到了，長程控制還沒有</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Aug 30, 2026</span><span>9 min</span></div>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Aug 30, 2026</span><span>Updated Sep 7, 2026</span><span>9 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>Qwen3.8-Flash-Next</span><span>Qwen4</span><span>本地模型</span><span>Pi Agent</span><span>oMLX</span><span>xhigh</span><span>Gated DeltaNet</span><span>長程推理</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>我今天讓 Qwen3.8-Flash-Next 在 Pi 裡替一個 KernelSU Next 模組做 WebUI。</p>
@@ -249,7 +249,7 @@
 <p>所以上面說它缺的是「做決定然後交出來」，要修正成：它缺的是一個寫在 prompt 裡的完成條件。給了，它就會交。這件事不用等 Pi 做 completion check，自己寫就有。</p>
 <p>推理等級也不是重點。我後來請 Codex 分析 low 和 xhigh 的差別，結果只是 system prompt 多一句「想少一點」或「想詳細一點」，medium 連這句都沒有。上面那個 session 用 xhigh 跑飛，這五輪用 low 全過，差在題目的形狀，不在那一句。</p>
 <p>它的弱點其實在別的地方。回報會失真：憑空生一段風險說明、把事件方向講反、驗過就不貼原文。程式碼可以信，它對程式碼的描述不能信，以 diff 為準。</p>
-<p>完整數據在 model-arena 的 README 和五份報告裡。</p>
+<p>完整數據在 <a href="https://github.com/jason5545/model-arena">model-arena</a> 的 README 和五份報告裡：起點快照、參考解 patch、兩個模型每一輪的原始 prompt 與產出、隱藏測試都在，照 REPRODUCE.md 可以重跑。</p>
 </div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>
