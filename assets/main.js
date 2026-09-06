@@ -1495,7 +1495,7 @@ function parseDate(value) {
 
 function renderFeaturedPost(post) {
   const heroSection = document.querySelector('#featured');
-  const heroMedia = document.querySelector('#hero-media');
+  let heroMedia = document.querySelector('#hero-media');
   const heroCategory = document.querySelector('#hero-category');
   const heroLink = document.querySelector('#hero-link');
   const heroMeta = document.querySelector('#hero-meta');
@@ -1504,6 +1504,25 @@ function renderFeaturedPost(post) {
   const heroDiscuss = document.querySelector('#hero-open-discussion');
 
   if (!heroSection) return;
+
+  // media 元素與文章封面狀態保持一致：無封面用文字版型，有封面才渲染圖片區
+  if (post.coverImage && !heroMedia) {
+    heroMedia = document.createElement('div');
+    heroMedia.className = 'hero-card__media';
+    heroMedia.id = 'hero-media';
+    heroSection.prepend(heroMedia);
+  } else if (!post.coverImage && heroMedia) {
+    heroMedia.remove();
+    heroMedia = null;
+  }
+  heroSection.classList.toggle('hero-card--text-only', !post.coverImage);
+  // 無封面時 accent 漸層直接當 hero 背景；有封面時清除，避免殘留前一篇顏色
+  if (!post.coverImage) {
+    const heroAccent = post.accentColor || '#556bff';
+    heroSection.style.backgroundImage = `linear-gradient(135deg, ${shadeColor(heroAccent, -15)} 0%, ${heroAccent} 50%, ${shadeColor(heroAccent, 25)} 100%)`;
+  } else {
+    heroSection.style.backgroundImage = '';
+  }
 
   const isCurrentStaticFeatured =
     !hasActiveHomeFilter() &&
@@ -1522,7 +1541,8 @@ function renderFeaturedPost(post) {
     heroCategory.hidden = !post.category;
     // Accent-colored badge
     const accent = post.accentColor || '#556bff';
-    heroCategory.style.color = accent;
+    // 文字版型時 badge 前景交給主題 CSS（var(--text)）保對比
+    heroCategory.style.color = post.coverImage ? accent : '';
     const rgb = hexToRgb(accent);
     if (rgb) {
       heroCategory.style.borderColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`;
@@ -1660,15 +1680,35 @@ function populateTagCloud(posts) {
   const min = Math.min(...counts);
   const max = Math.max(...counts);
 
-  entries.forEach((entry) => {
-    const link = document.createElement('a');
-    link.textContent = `#${entry.label}`;
-    link.href = `index.html?tag=${encodeURIComponent(entry.label)}`;
+  // 首頁預設只顯示常用標籤，其餘收進 Show all，篩選功能不受影響
+  const visibleLimit = 14;
+  const renderTags = (list) => {
+    list.forEach((entry) => {
+      const link = document.createElement('a');
+      link.textContent = `#${entry.label}`;
+      link.href = `index.html?tag=${encodeURIComponent(entry.label)}`;
 
-    const size = max === min ? 0.95 : 0.85 + ((entry.count - min) / (max - min)) * 0.5;
-    link.style.fontSize = `${size.toFixed(2)}rem`;
-    cloudEl.appendChild(link);
-  });
+      const size = max === min ? 0.95 : 0.85 + ((entry.count - min) / (max - min)) * 0.5;
+      link.style.fontSize = `${size.toFixed(2)}rem`;
+      cloudEl.appendChild(link);
+    });
+  };
+
+  renderTags(entries.slice(0, visibleLimit));
+
+  const remainingTags = entries.slice(visibleLimit);
+  if (remainingTags.length > 0) {
+    const moreBtn = document.createElement('button');
+    moreBtn.type = 'button';
+    moreBtn.className = 'tag-cloud__more';
+    moreBtn.textContent = `Show all (${entries.length})`;
+    moreBtn.setAttribute('aria-expanded', 'false');
+    moreBtn.addEventListener('click', () => {
+      renderTags(remainingTags);
+      moreBtn.remove();
+    });
+    cloudEl.appendChild(moreBtn);
+  }
 }
 
 async function renderMarkdownContent(slug, contentEl) {

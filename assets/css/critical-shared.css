@@ -40,6 +40,10 @@
   --gradient-text-from: #1c1917;
   --gradient-text-to: #78350f;
 
+  /* Hero text-only scrim（無封面主打：accent 漸層上的文字對比層） */
+  --hero-scrim: rgba(250, 248, 245, 0.82);
+  --hero-scrim-soft: rgba(250, 248, 245, 0.38);
+
   /* Geometry */
   --radius-lg: 24px;
   --radius-md: 16px;
@@ -71,6 +75,8 @@
   --orb-opacity-2: 0.08;
   --gradient-text-from: #fafaf9;
   --gradient-text-to: #d6d3d1;
+  --hero-scrim: rgba(12, 10, 9, 0.82);
+  --hero-scrim-soft: rgba(12, 10, 9, 0.38);
 }
 
 /* Dark — auto (system preference) */
@@ -94,11 +100,13 @@
     --glass-tint: rgba(255, 255, 255, 0.05);
     --glass-tint-strong: rgba(255, 255, 255, 0.1);
     --glow-opacity: 0.08;
-    --orb-opacity-1: 0.12;
-    --orb-opacity-2: 0.08;
-    --gradient-text-from: #fafaf9;
-    --gradient-text-to: #d6d3d1;
-  }
+  --orb-opacity-1: 0.12;
+  --orb-opacity-2: 0.08;
+  --gradient-text-from: #fafaf9;
+  --gradient-text-to: #d6d3d1;
+  --hero-scrim: rgba(12, 10, 9, 0.82);
+  --hero-scrim-soft: rgba(12, 10, 9, 0.38);
+}
 }
 
 /* ---------- Baseline (fast first paint) ---------- */

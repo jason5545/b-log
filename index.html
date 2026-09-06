@@ -2,7 +2,7 @@
 <html lang="zh-Hant-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>(b)-log - 世界的預設值不包含我，所以我自己寫</title>
 
   <!-- 基本 SEO -->
@@ -105,6 +105,7 @@
     }
     .hero-card__media {
       min-height: 220px;
+      min-width: 0;
       aspect-ratio: 16 / 9;
       background: var(--surface-muted);
     }
@@ -116,19 +117,39 @@
     }
     @media (min-width: 1200px) {
       .hero-card {
-        grid-template-columns: 1.2fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       }
-      .hero-card__media {
+      .hero-card .hero-card__media {
         min-height: 320px;
+        aspect-ratio: auto;
+        position: relative;
+      }
+      .hero-card__media .article-hero__image {
+        position: absolute;
+        inset: 0;
       }
     }
     @media (min-width: 1600px) {
       .hero-card {
-        grid-template-columns: 1.5fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       }
-      .hero-card__media {
+      .hero-card .hero-card__media {
         min-height: 380px;
       }
+    }
+    /* 無封面：單欄文字為主版型，覆蓋桌面雙欄，不留巨大占位區 */
+    .hero-card--text-only {
+      grid-template-columns: minmax(0, 1fr);
+      min-height: 0;
+    }
+    /* 無封面：accent 漸層當背景，文字下方主題遮罩保對比 */
+    .hero-card--text-only .hero-card__body {
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(90deg, var(--hero-scrim) 0%, var(--hero-scrim) 45%, var(--hero-scrim-soft) 100%);
+    }
+    .hero-card--text-only .hero-card__category {
+      color: var(--text);
     }
   </style>
 
@@ -241,10 +262,9 @@
       </section>
 
       <!-- HOME_FEATURED_START -->
-      <section id="featured" class="hero-card" data-category-theme="ai-analysis" data-featured-slug="fable-5-1-relaxation-first-prompt-flagged" data-featured-cover="">
-        <div class="hero-card__media" id="hero-media" data-category-theme="ai-analysis" style="background-image: linear-gradient(135deg, #1f54c8 0%, #2563eb 50%, #2e7cff 100%);"></div>
+      <section id="featured" class="hero-card hero-card--text-only" data-category-theme="ai-analysis" style="background-image: linear-gradient(135deg, #1f54c8 0%, #2563eb 50%, #2e7cff 100%);" data-featured-slug="fable-5-1-relaxation-first-prompt-flagged" data-featured-cover="">
         <div class="hero-card__body">
-          <p class="hero-card__category" id="hero-category" style="color: #2563eb; border-color: rgba(37, 99, 235, 0.3); background: rgba(37, 99, 235, 0.1);">AI 分析</p>
+          <p class="hero-card__category" id="hero-category" style="border-color: rgba(37, 99, 235, 0.3); background: rgba(37, 99, 235, 0.1);">AI 分析</p>
           <h2 class="hero-card__title">
             <a id="hero-link" href="/ai-analysis/fable-5-1-relaxation-first-prompt-flagged/">Fable 5.1 放寬的第一天，我的第一個 prompt 就被擋了</a>
           </h2>
@@ -260,6 +280,24 @@
 
       <div class="content-grid">
         <section id="posts" class="post-stream" aria-live="polite">
+          <section class="start-here" aria-labelledby="start-here-title">
+            <h2 class="start-here__title" id="start-here-title">Start here</h2>
+            <p class="start-here__subtitle">第一次來，先讀這幾篇。</p>
+            <ol class="start-here__list">
+              <li>
+                <a href="/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/">來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect</a>
+                <p class="start-here__reason">五週從協議層寫出會說小米 Lyra 的 KDE Connect：來電在 Mac 接、鏡像用 Touch ID 解鎖，工具自己長出來的旗艦作。</p>
+              </li>
+              <li>
+                <a href="/tech-development/agentic-coding-mac-assistive-workflow/">自從有了 Agentic Coding，我最好的輔助居然是一台 Mac</a>
+                <p class="start-here__reason">語音模型 adapter 加 Computer Use 怎麼接成每天真的在用的輔助工作流，含實際成本與踩雷修正。</p>
+              </li>
+              <li>
+                <a href="/shirushi/lisa-concert-believe-in-myself/">Believe in myself - 獻給在某時某刻聽到這首歌的某個人</a>
+                <p class="start-here__reason">2015 年第一次進 LiSA 演唱會現場的完整故事，站上十週年紀念區塊連結的就是這一篇。</p>
+              </li>
+            </ol>
+          </section>
           <div class="stream-header">
             <h2 class="stream-title">Latest Dispatches</h2>
             <p class="stream-subtitle">Fresh experiments in tooling, process, and creative pacing.</p>

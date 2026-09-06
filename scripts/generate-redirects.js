@@ -22,7 +22,7 @@ const HOME_FEATURED_END = '<!-- HOME_FEATURED_END -->';
 const ARTICLE_TAGS_START = '<!-- ARTICLE_TAGS_START -->';
 const ARTICLE_TAGS_END = '<!-- ARTICLE_TAGS_END -->';
 const HERO_IMAGE_WIDTHS = [480, 828, 1200];
-const HOME_HERO_SIZES = '(min-width: 1600px) 58vw, (min-width: 1200px) 54vw, 98vw';
+const HOME_HERO_SIZES = '(min-width: 1600px) 50vw, (min-width: 1200px) 50vw, 98vw';
 const ARTICLE_HERO_SIZES = '(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw';
 
 // 從集中式設定檔載入分類映射
@@ -364,14 +364,15 @@ function buildStructuredData(post, fullUrl, imageUrl) {
   return `  <script type="application/ld+json">${escapeJsonForScript(schema)}</script>\n`;
 }
 
-function buildHeroCategoryStyle(post) {
+function buildHeroCategoryStyle(post, includeColor = true) {
   const accent = post.accentColor || '#556bff';
   const rgb = hexToRgb(accent);
   if (!rgb) {
     return '';
   }
 
-  return ` style="color: ${accent}; border-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3); background: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1);"`;
+  const colorDecl = includeColor ? `color: ${accent}; ` : '';
+  return ` style="${colorDecl}border-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3); background: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1);"`;
 }
 
 function buildCloudinaryOgImage(title) {
@@ -401,10 +402,8 @@ function buildHomepageHeroMedia(post, categoryThemeAttr) {
   if (post.coverImage) {
     return `        <div class="hero-card__media article-hero--image" id="hero-media"${categoryThemeAttr}><img class="article-hero__image" ${buildHeroImageAttributes(post.coverImage, HOME_HERO_SIZES, 'sync')}></div>`;
   }
-
-  const accent = post.accentColor || '#556bff';
-  const gradient = `linear-gradient(135deg, ${shadeColor(accent, -15)} 0%, ${accent} 50%, ${shadeColor(accent, 25)} 100%)`;
-  return `        <div class="hero-card__media" id="hero-media"${categoryThemeAttr} style="background-image: ${gradient};"></div>`;
+  // 無封面：不輸出 media 區塊，首頁主打改用文字為主版型
+  return '';
 }
 
 function buildHomepageFeaturedSection(post) {
@@ -436,11 +435,19 @@ function buildHomepageFeaturedSection(post) {
   const safeMeta = escapeHtml(formatStaticMetaParts(post).join(' | '));
   const safePath = escapeHtml(slugToPath(post.slug, post.category));
   const safeDiscussPath = escapeHtml(`${slugToPath(post.slug, post.category)}#comments`);
-  const categoryStyle = buildHeroCategoryStyle(post);
+  // 文字版型時 badge 前景交給主題 CSS（var(--text)）保對比，底色與框線保留 accent
+  const categoryStyle = buildHeroCategoryStyle(post, !!post.coverImage);
   const audioIndicator = post.hasAudio ? buildAudioIndicatorMarkup(true) : '';
 
-  return `      <section id="featured" class="hero-card"${categoryThemeAttr} data-featured-slug="${safeSlug}" data-featured-cover="${safeCoverImage}">
-${buildHomepageHeroMedia(post, categoryThemeAttr)}
+  const heroCardClass = post.coverImage ? 'hero-card' : 'hero-card hero-card--text-only';
+  const mediaBlock = post.coverImage ? `\n${buildHomepageHeroMedia(post, categoryThemeAttr)}` : '';
+  // 無封面：accent 漸層當整個 hero 背景（文字區由主題遮罩保對比）
+  const heroAccent = post.accentColor || '#556bff';
+  const heroGradientStyle = post.coverImage
+    ? ''
+    : ` style="background-image: linear-gradient(135deg, ${shadeColor(heroAccent, -15)} 0%, ${heroAccent} 50%, ${shadeColor(heroAccent, 25)} 100%);"`;
+
+  return `      <section id="featured" class="${heroCardClass}"${categoryThemeAttr}${heroGradientStyle} data-featured-slug="${safeSlug}" data-featured-cover="${safeCoverImage}">${mediaBlock}
         <div class="hero-card__body">
           <p class="hero-card__category" id="hero-category"${categoryStyle}>${safeCategory}</p>
           <h2 class="hero-card__title">
