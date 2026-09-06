@@ -1114,6 +1114,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 初始化 12 月生日特輯
     BirthdayTheme.init();
 
+    // 瀏覽器上一頁／下一頁時重新渲染，讓篩選狀態（含 Start here 顯示）與 URL 同步
+    window.addEventListener('popstate', () => {
+      renderHomepage().catch((error) => {
+        console.error('[home] failed to render', error);
+        const errorEl = document.querySelector('#posts-error');
+        if (errorEl) errorEl.hidden = false;
+      });
+    });
+
     renderHomepage().catch((error) => {
       console.error('[home] failed to render', error);
       const errorEl = document.querySelector('#posts-error');
@@ -1150,6 +1159,10 @@ async function renderHomepage() {
   const filterTag = params.get('tag');
   const filterCategory = params.get('category');
   const searchQuery = params.get('search');
+
+  // Start here 僅在未篩選首頁顯示：進入分類、標籤、搜尋時隱藏，清除篩選或返回時恢復
+  const startHereEl = document.querySelector('.start-here');
+  if (startHereEl) startHereEl.hidden = hasActiveHomeFilter();
 
   if (!posts.length) {
     if (postsEmptyEl) postsEmptyEl.hidden = false;
