@@ -1648,6 +1648,11 @@ function populateCategoryList(posts) {
     return;
   }
 
+  const categoryHints = {
+    'シルシ': '我和她的事',
+    'Crossing Field': '她說的話',
+  };
+
   Array.from(counts.entries())
     .sort((a, b) => b[1] - a[1])
     .forEach(([category, count]) => {
@@ -1656,6 +1661,7 @@ function populateCategoryList(posts) {
       if (link) {
         link.textContent = `${category} (${count})`;
         link.href = `index.html?category=${encodeURIComponent(category)}`;
+        if (categoryHints[category]) link.title = categoryHints[category];
       }
       listEl.appendChild(clone);
     });
