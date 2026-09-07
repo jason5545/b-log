@@ -79,10 +79,19 @@ function formatDate(value) {
   return date.toISOString().slice(0, 10);
 }
 
+const ORIGINAL_DATE_THRESHOLD_MS = 30 * 24 * 60 * 60 * 1000;
+
+function isBackdated(post) {
+  const date = new Date(post.publishedAt);
+  if (Number.isNaN(date.getTime())) return false;
+  return Date.now() - date.getTime() > ORIGINAL_DATE_THRESHOLD_MS;
+}
+
 function buildMessage(post) {
   const parts = [post.title];
 
-  if (includeOriginalDate) {
+  // 舊文搬移（發布日距今超過 30 天）自動標註原文日期，避免讀者誤以為是新文
+  if (includeOriginalDate || isBackdated(post)) {
     const dateText = formatDate(post.publishedAt);
     if (dateText) {
       parts.push(`原文發布：${dateText}`);
