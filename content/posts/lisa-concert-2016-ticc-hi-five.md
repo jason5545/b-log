@@ -47,6 +47,8 @@
 
 果然 LiSA 是本命。
 
+（2026 年補：這件事十年後我才想清楚為什麼，寫在[〈跟她有關的聲音，我不防備〉](https://b-log.to/shirushi/lisa-sounds-i-do-not-brace/)。）
+
 ## 開口跪
 
 ![開演前的舞台，藍光打在 Hi! FiVE 的幕布上](/content/img/2016/lisa-2016-ticc-11.webp)
