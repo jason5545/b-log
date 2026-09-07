@@ -5,7 +5,7 @@
 
 自從 5/22 簽名會過後，就公布了 LiSA 9/24 會來臺北國際會議中心開唱的消息。將近三個月的等待，說長也不長，說短也不短。隨著日期逼近，心中也越來越期待，會帶給大家又一次的感動。
 
-![5/22 安利美特簽名會，跟 LiSA 合照的插畫版](/content/img/2016/lisa-2016-0522-animate-illustration.png)
+![5/22 安利美特簽名會，跟 LiSA 合照的插畫版](/content/img/2016/lisa-2016-0522-animate-illustration.webp)
 
 ## 等待
 
@@ -13,31 +13,31 @@
 
 到了演唱會當天，我早早的 11:00 便從家裡出發，在捷運上也是聽著 LiSA 的歌，精神上已經完全沉浸在演唱會的狀態當中。
 
-![TICC 今日活動看板：大會堂 19:30 到 22:30，LiSA 2016 台北演唱會](/content/img/2016/lisa-2016-ticc-03.jpg)
+![TICC 今日活動看板：大會堂 19:30 到 22:30，LiSA 2016 台北演唱會](/content/img/2016/lisa-2016-ticc-03.webp)
 
 到了會場以後就開始等待物販的排隊安排。兩個小時的等待其實並不算長，幸好今年多了個 LiSA ッ子願意來跟我看演唱會，順便陪我聊天打發時間。
 
-![演唱會前在 TICC 大廳，和一起來的 LiSA ッ子們合照](/content/img/2016/lisa-2016-ticc-12.jpg)
+![演唱會前在 TICC 大廳，和一起來的 LiSA ッ子們合照](/content/img/2016/lisa-2016-ticc-12.webp)
 
 終於到了預定的排隊時間，大家很有秩序的依序整隊，而我則是排在隊伍中央。大家很照規矩在自己的位置上排隊，雖然時不時有警衛來要求調整位置，但整體過程還算順利。我在隊伍中央，看著眾多工作人員把一箱箱的物販運進場內，心裡突然有股暖意：「是啊！經過了一年的等待，終於能在今日把積累已久的思念，全都傾瀉而出了。」
 
-![物販排隊的人潮](/content/img/2016/lisa-2016-ticc-02.jpg)
+![物販排隊的人潮](/content/img/2016/lisa-2016-ticc-02.webp)
 
 買完物販以後，只能做的就是等待。坦白說，這三個小時的等待，給人的感覺跟三年一樣長。但人其實是一種很矛盾的生物，因為當你進了場以後，兩個多小時的時光，你會覺得根本短得不行。這就是俗話說的「歡樂的時光總是過得特別快」吧。
 
-![會場外的五週年氣球與花籃](/content/img/2016/lisa-2016-ticc-06.jpg)
+![會場外的五週年氣球與花籃](/content/img/2016/lisa-2016-ticc-06.webp)
 
-![手繪卡片：祝 5 周年おめでとう，LiSA 様へ，台湾のファンより](/content/img/2016/lisa-2016-ticc-07.jpg)
+![手繪卡片：祝 5 周年おめでとう，LiSA 様へ，台湾のファンより](/content/img/2016/lisa-2016-ticc-07.webp)
 
-![Sony Music Taiwan 國際部送的花籃](/content/img/2016/lisa-2016-ticc-05.jpg)
+![Sony Music Taiwan 國際部送的花籃](/content/img/2016/lisa-2016-ticc-05.webp)
 
-![花籃卡片：台湾にお帰りなさい！今日もいい日だっ](/content/img/2016/lisa-2016-ticc-04.jpg)
+![花籃卡片：台湾にお帰りなさい！今日もいい日だっ](/content/img/2016/lisa-2016-ticc-04.webp)
 
-![LiSA 台灣後援會送的花籃](/content/img/2016/lisa-2016-ticc-09.jpg)
+![LiSA 台灣後援會送的花籃](/content/img/2016/lisa-2016-ticc-09.webp)
 
-![後援會花籃卡片：御祝 台湾公演 LiVE is Smile Always ～Hi! FiVE～ Taipei 2016](/content/img/2016/lisa-2016-ticc-10.jpg)
+![後援會花籃卡片：御祝 台湾公演 LiVE is Smile Always ～Hi! FiVE～ Taipei 2016](/content/img/2016/lisa-2016-ticc-10.webp)
 
-![周洺甫與千田愛紗送的花籃](/content/img/2016/lisa-2016-ticc-08.jpg)
+![周洺甫與千田愛紗送的花籃](/content/img/2016/lisa-2016-ticc-08.webp)
 
 ## 進場前的擔心
 
@@ -49,7 +49,7 @@
 
 ## 開口跪
 
-![開演前的舞台，藍光打在 Hi! FiVE 的幕布上](/content/img/2016/lisa-2016-ticc-11.jpg)
+![開演前的舞台，藍光打在 Hi! FiVE 的幕布上](/content/img/2016/lisa-2016-ticc-11.webp)
 
 其實這次演唱會我淚崩了好幾次。從 believe in myself 一開口的那瞬間，我就知道「開口跪」這句網路用語形容得極其貼切。如果今天不是我坐著輪椅，恐怕我會真的跪著聽吧。
 
@@ -59,7 +59,7 @@
 
 天黑黑後的印記，我更是完全沒法控制，眼淚一直不停的流。想到我認識 LiSA 之後，第一次參加演唱會、第一次沒法參加見面會的遺憾、第一次近距離看到她、甚至第一次合照，都在我心裡留下了不可抹滅的印記。然而這個舉動讓我旁邊的大媽一直盯著我看，她大概心想「這個人瘋了」。
 
-![5/22 安利美特台北總店簽名會，跟 LiSA 的合照](/content/img/2016/lisa-2016-0522-animate-with-lisa.png)
+![5/22 安利美特台北總店簽名會，跟 LiSA 的合照](/content/img/2016/lisa-2016-0522-animate-with-lisa.webp)
 
 還好中間有不少 high 歌，又讓我跟著 high 了起來。沒辦法跟著打 call，就只好跟著擺動四肢、擺動身體。印象最深刻的是 Psychedelic Drive 的扇子舞，時而魅惑、時而俏皮，簡直不能再讚了。很喜歡！
 
@@ -81,7 +81,7 @@
 
 ## LiSA ッ子
 
-![隔天 9/25 Sony Store 一日店長活動結束後的大合照](/content/img/2016/lisa-2016-ticc-01.jpg)
+![隔天 9/25 Sony Store 一日店長活動結束後的大合照](/content/img/2016/lisa-2016-ticc-01.webp)
 
 結束以後跟來自中國的 LiSA ッ子合了一張照。說真的，如果是以前的我，絕對想不到能接觸到那麼多志同道合的一群人。然而入坑之後，我真的認識了很多來自不同國家的 LiSA ッ子，大家都為了一個相同的目標去支持著 LiSA，甚至不遠千里買機票飛來參與 LiSA 的演唱會。能夠認識一群那麼有愛的 LiSA ッ子，真的是太好了！
 
