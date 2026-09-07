@@ -17,6 +17,7 @@ const targetSlug = process.env.POST_SLUG || '';
 const graphApiVersion = process.env.FB_GRAPH_API_VERSION || 'v25.0';
 const publishBaseline = args.has('--baseline') || process.env.PUBLISH_BASELINE === '1';
 const includeOriginalDate = args.has('--include-original-date') || process.env.INCLUDE_ORIGINAL_DATE === '1';
+const rescrapeOnly = args.has('--rescrape') || process.env.RESCRAPE === '1';
 const postLimit = Number.parseInt(process.env.POST_LIMIT || '', 10);
 const publishDelayMs = Number.parseInt(process.env.PUBLISH_DELAY_MS || '0', 10);
 const pageCheckTimeout = Number.parseInt(process.env.PAGE_CHECK_TIMEOUT || '300', 10);
@@ -103,6 +104,66 @@ function buildMessage(post) {
   }
 
   return parts.join('\n\n');
+}
+
+function extractOgImage(html) {
+  const match = html.match(/<meta\s+property="og:image"\s+content="([^"]+)"/i);
+  return match ? match[1] : '';
+}
+
+// 確認文章頁的 og:image 已是 WebP 且可存取。
+// 圖片管線會把 JPG/PNG 轉成 WebP 並刪除原檔，若此時就發文，Facebook 會快取一個之後會 404 的網址。
+async function checkCoverReady(postUrl, slug) {
+  let html = '';
+  try {
+    const response = await fetch(postUrl, { cache: 'no-store' });
+    html = await response.text();
+  } catch (err) {
+    return { ok: false, reason: `無法讀取文章頁 (${err.message})` };
+  }
+
+  const ogImage = extractOgImage(html);
+  if (!ogImage) {
+    return { ok: true, ogImage: '' };
+  }
+
+  if (!/\.webp(\?|$)/i.test(ogImage)) {
+    return { ok: false, ogImage, reason: '封面尚未轉成 WebP，等待圖片管線完成後再發' };
+  }
+
+  try {
+    const head = await fetch(ogImage, { method: 'HEAD', cache: 'no-store' });
+    if (!head.ok) {
+      return { ok: false, ogImage, reason: `封面回應 HTTP ${head.status}` };
+    }
+  } catch (err) {
+    return { ok: false, ogImage, reason: `封面無法存取 (${err.message})` };
+  }
+
+  return { ok: true, ogImage };
+}
+
+// 要求 Facebook 重新抓取文章頁的 Open Graph 資料，避免使用過期快取
+async function scrapeUrl(postUrl, pageAccessToken) {
+  const endpoint = `https://graph.facebook.com/${graphApiVersion}/`;
+  const body = new URLSearchParams({
+    id: postUrl,
+    scrape: 'true',
+    access_token: pageAccessToken,
+  });
+
+  const response = await fetch(endpoint, { method: 'POST', body });
+  const payload = await response.json().catch(() => ({}));
+
+  if (!response.ok || payload.error) {
+    const error = payload.error;
+    const details = error
+      ? `${error.message || 'Unknown Facebook error'} (${error.type || 'unknown type'} ${error.code || 'unknown code'})`
+      : `HTTP ${response.status}`;
+    throw new Error(`Facebook scrape failed for ${postUrl}: ${details}`);
+  }
+
+  return payload;
 }
 
 async function publishToFacebook({ pageId, pageAccessToken, post, postUrl }) {
@@ -201,7 +262,7 @@ async function main() {
     });
   }
 
-  if (!force) {
+  if (!force && !rescrapeOnly) {
     candidates = candidates.filter((post) => state.items[post.slug]?.status !== 'published');
   }
 
@@ -237,6 +298,25 @@ async function main() {
     if (!isLive) {
       console.log(`Skipping ${post.slug} — page not live`);
       continue;
+    }
+
+    if (rescrapeOnly) {
+      const scraped = await scrapeUrl(postUrl, pageAccessToken);
+      const image = scraped?.image?.[0]?.url || scraped?.image?.[0]?.secure_url || '(none)';
+      console.log(`  🔄 已要求 Facebook 重新抓取 ${post.slug}，og:image = ${image}`);
+      continue;
+    }
+
+    const cover = await checkCoverReady(postUrl, post.slug);
+    if (!cover.ok) {
+      console.log(`Skipping ${post.slug} — ${cover.reason}${cover.ogImage ? ` (${cover.ogImage})` : ''}`);
+      continue;
+    }
+
+    try {
+      await scrapeUrl(postUrl, pageAccessToken);
+    } catch (err) {
+      console.log(`  ⚠️ 重新抓取 Open Graph 失敗，仍繼續發文 (${err.message})`);
     }
 
     const result = await publishToFacebook({

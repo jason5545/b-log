@@ -47,10 +47,23 @@ on:
       - 'scripts/generate-sitemap.js'
       - 'scripts/sync-feed.js'
       - 'scripts/validate-content.js'
+  # 圖片管線用 GITHUB_TOKEN 推送不會觸發 push 事件，
+  # 因此在它完成後再跑一次，讓靜態文章頁的 og:image 更新為 WebP 路徑
+  workflow_run:
+    workflows:
+      - "自動轉換圖片為 WebP"
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
   content-pipeline:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_branch == 'main'
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: write
