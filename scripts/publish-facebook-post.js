@@ -145,12 +145,9 @@ async function checkCoverReady(postUrl, slug) {
 
 // 要求 Facebook 重新抓取文章頁的 Open Graph 資料，避免使用過期快取
 async function scrapeUrl(postUrl, pageAccessToken) {
-  const endpoint = `https://graph.facebook.com/${graphApiVersion}/`;
-  const body = new URLSearchParams({
-    id: postUrl,
-    scrape: 'true',
-    access_token: pageAccessToken,
-  });
+  // 依官方文件格式：POST /?id={url}&scrape=true，參數放在 query string
+  const endpoint = `https://graph.facebook.com/${graphApiVersion}/?id=${encodeURIComponent(postUrl)}&scrape=true`;
+  const body = new URLSearchParams({ access_token: pageAccessToken });
 
   const response = await fetch(endpoint, { method: 'POST', body });
   const payload = await response.json().catch(() => ({}));
