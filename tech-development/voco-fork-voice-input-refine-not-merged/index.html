@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="Voco 是我從 VoiceInk fork 出來、只給自己用的語音輸入工具。這篇講它為什麼存在、辨識這層做到哪裡、旁邊那間 replay 實驗室在擋什麼，以及上游新出的 Refine 我測完為什麼沒接：它會把「等她回覆」整段刪掉，而我查不到是誰改的。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-development/voco-fork-voice-input-refine-not-merged/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-development/voco-fork-voice-input-refine-not-merged/" id="og-url">
+  <meta property="og:title" content="Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接" id="og-title">
+  <meta property="og:description" content="Voco 是我從 VoiceInk fork 出來、只給自己用的語音輸入工具。這篇講它為什麼存在、辨識這層做到哪裡、旁邊那間 replay 實驗室在擋什麼，以及上游新出的 Refine 我測完為什麼沒接：它會把「等她回覆」整段刪掉，而我查不到是誰改的。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/voco-fork-voice-input-refine-not-merged-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-09-08T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-09-08T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術開發" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="Voco">
+  <meta property="article:tag" content="VoiceInk">
+  <meta property="article:tag" content="Qwen3-ASR">
+  <meta property="article:tag" content="語音輸入">
+  <meta property="article:tag" content="MLX">
+  <meta property="article:tag" content="VocoReplayLab">
+  <meta property="article:tag" content="無障礙">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-development/voco-fork-voice-input-refine-not-merged/" id="twitter-url">
+  <meta property="twitter:title" content="Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接" id="twitter-title">
+  <meta property="twitter:description" content="Voco 是我從 VoiceInk fork 出來、只給自己用的語音輸入工具。這篇講它為什麼存在、辨識這層做到哪裡、旁邊那間 replay 實驗室在擋什麼，以及上游新出的 Refine 我測完為什麼沒接：它會把「等她回覆」整段刪掉，而我查不到是誰改的。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/voco-fork-voice-input-refine-not-merged-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="Voco, VoiceInk, Qwen3-ASR, 語音輸入, MLX, VocoReplayLab, 無障礙" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/voco-fork-voice-input-refine-not-merged-cover.webp" imagesrcset="/content/img/2026/voco-fork-voice-input-refine-not-merged-cover-480w.webp 480w, /content/img/2026/voco-fork-voice-input-refine-not-merged-cover-828w.webp 828w, /content/img/2026/voco-fork-voice-input-refine-not-merged-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接","description":"Voco 是我從 VoiceInk fork 出來、只給自己用的語音輸入工具。這篇講它為什麼存在、辨識這層做到哪裡、旁邊那間 replay 實驗室在擋什麼，以及上游新出的 Refine 我測完為什麼沒接：它會把「等她回覆」整段刪掉，而我查不到是誰改的。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-08T00:00:00Z","dateModified":"2026-09-08T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/voco-fork-voice-input-refine-not-merged/"},"url":"https://b-log.to/tech-development/voco-fork-voice-input-refine-not-merged/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/voco-fork-voice-input-refine-not-merged-cover.webp"],"keywords":"Voco, VoiceInk, Qwen3-ASR, 語音輸入, MLX, VocoReplayLab, 無障礙","articleSection":"技術開發"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/voco-fork-voice-input-refine-not-merged-cover.webp" srcset="/content/img/2026/voco-fork-voice-input-refine-not-merged-cover-480w.webp 480w, /content/img/2026/voco-fork-voice-input-refine-not-merged-cover-828w.webp 828w, /content/img/2026/voco-fork-voice-input-refine-not-merged-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Sep 8, 2026</span><span>6 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>Voco</span><span>VoiceInk</span><span>Qwen3-ASR</span><span>語音輸入</span><span>MLX</span><span>VocoReplayLab</span><span>無障礙</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>今天下午，Codex 把一句測試句丟給 Qwen3.5-4B：</p>
+<p>「報告先寄給怡安句號等她回覆」</p>
+<p>它回來的是：</p>
+<p>「報告先寄給怡安。」</p>
+<p>「句號」被轉成句號，這是我要的。但「等她回覆」整段不見了。換 seed 跑四次，四次都一樣。</p>
+<p>這一句大概就是 Voco 這個工具的全部問題，也是我到今天還在維護它的理由。</p>
+<h2>先講 Voco 是什麼</h2>
+<p>我的部落格提過 Voco 好幾次，但從來沒有一篇是在講它。</p>
+<p>Voco 是我從 VoiceInk fork 出來的 macOS 語音輸入工具。VoiceInk 是 Pax 做的開放原始碼專案，語音辨識全部在本機跑。我用它之前是 Typeless，Typeless 出了隱私爭議之後換過去，後來乾脆自己改。</p>
+<p>會走到自己改，理由跟一般人不一樣。我是 CP，全身能穩定操作電腦的只有右手食指。語音輸入對我不是打字打累了換一下，是主要的輸入方式。而我的肌肉張力讓發音結構跟別人不同，一般模型聽我講話，錯的方式很固定：捲舌音會掉，ㄥ 跟 ㄣ 會混，英文技術詞有一半聽不出來。</p>
+<p>所以 fork 之後改的東西，幾乎都是為了這件事：</p>
+<ul>
+<li>ASR 核心從 Whisper 換成 Qwen3-ASR，用 MLX 在 Mac 上跑，再掛一個用我自己的錄音訓練出來的 speaker adapter。</li>
+<li>中文後處理：OpenCC 簡轉正、拼音同音字修正、口語標點、重複偵測。</li>
+<li>Edit Mode：選一段文字，用講的改它。</li>
+<li>語音指令。「全部刪除」這種話是指令，不能被當成內容修掉。</li>
+<li>偵測前景 app 和視窗標題，同一句話在 Codex 裡和在 LINE 裡有不同處理。</li>
+<li>RNNoise 降噪、正體中文介面、拿掉付費授權。</li>
+</ul>
+<p>Voco 跟上游一樣是 GPL，<a href="https://github.com/jason5545/Voco">repo 是公開的</a>。但我從來沒有 PR 回去。那些改動只對我有意義，PR 回去只是製造 review 負擔，這件事我在<a href="https://b-log.to/tech-analysis/ai-breaking-open-source-social-contract/">講開放原始碼社會契約那篇</a>寫過。</p>
+<h2>聽這一層已經到邊界了</h2>
+<p>辨識這一層，adapter 能做的已經做完。日常國語句子的 CER 大約 0.02，錯的多半是標點跟簡繁。困難句的 CER 從 0.201 降到 0.174，之後再訓練幾版都降不下去。英文技術詞更慘：33 句困難句裡 35 個英文詞只認出 18 個，而且有些是聲學上就分不開的。我真的講 Brunch 的時候模型偏好 Branch，真的講 Branch 的時候模型偏好 Brunch。</p>
+<p>這種錯再訓練也沒用，只能靠規則。</p>
+<p>但規則要怎麼改字，才是 Voco 過去半年真正在處理的事。</p>
+<p>現在的分層是這樣。Qwen3-ASR 加 adapter 負責聽，聽完的 raw transcript 一定保留。上面一層是 deterministic 的 auto-apply 規則，每一條規則都要有證據，也就是我確認過的錯誤紀錄，要有 context 鎖、有負例 guard，而且在動 app 之前先對整個資料庫 replay 一遍。再上面才是 LLM，而 LLM 的 prompt 六月就從「幫我修 ASR 錯誤」降級成「保守的排版器」。</p>
+<p>六月那時我跟 Codex 講明的一件事：新的模型不能因為比較新就拿到比較高的優先權。優先權給證據跟 replay gate。</p>
+<h2>實驗室</h2>
+<p>證據跟 replay 不在 Voco 裡，在另一個 repo：VocoReplayLab。它是 private 的，裡面是我的錄音跟資料庫 snapshot，不會公開。</p>
+<p>它做的事很單純：把 Voco 的資料庫 snapshot 拿出來，用現在的模型跟規則重跑一遍，看哪些字被改了、誰改的、改對還是改錯。有幾組固定的關卡：33 句我親自標過的困難句、22 句代名詞句、493 句日常句，加上幾筆我指定的關鍵錄音。任何 adapter 或規則要進 Voco，先過這幾關。</p>
+<p>過不了就留在實驗室。六月那個文字清理 LoRA，有一版 held-out 分數更好，卻把「吉他譜」改成「GitHub 譜」，那一版直接擋掉；最後留下來的版本也只在實驗室做 shadow，沒有進 app。9/6 兩組新的 adapter 各只修好一句，其中一組把原本對的一句改錯，兩組都不裝。</p>
+<p>規則也會死。9/7 發現一條規則是為了一個已經拿掉的第二次解碼路徑寫的，前後段都零觸發，就 tombstone 掉。目前 active 的規則有八百多條，每一條都能查到當初是哪一筆紀錄撐起來的。</p>
+<p>實驗室的意義是：Voco 本體不用相信任何一個模型，它只要相信 replay 的結果。</p>
+<h2>然後上游加了 Refine</h2>
+<p>回到今天。</p>
+<p>VoiceInk 上游這幾個月更新很多。我先把穩定性修補挑進來：錄音生命週期、音訊佇列的背壓、Esc 取消的競態、詞界判斷的 Unicode 修正。這些跟我的客製沒衝突，Codex 分兩批做完，測試過了，部署，重開。</p>
+<p>比較難決定的是 Refine。上游用 Qwen3.5-2B 微調了一個本機文字整理模型，接在 ASR 後面，處理標點、贅詞、自我更正、口述換行。聽起來就是我要的東西。</p>
+<p>但它是整段重新生成。模型讀進一段文字，吐出另一段文字，中間發生什麼事沒有人知道。</p>
+<p>我沒有用上游的微調權重，直接拿官方 Qwen3.5 測。2B 會把問句變成陳述句，換 4B。BF16、8-bit、6-bit 三種都跑，結果 6-bit 跟 BF16 幾乎一樣，量化不是問題。問題就是開頭那句：「等她回覆」不見了。另一句「question mark 這個字串出現在規格裡」，它把 question mark 整個吃掉，剩「這個字串出現在規格裡」。</p>
+<p>後來換了一個做法：模型不准重寫，只准判斷。程式先把「句號」「換行」「我我」這種可疑片段圈出來，模型回答每一段是格式指令、口吃還是正文，最後由程式在原文那個位置替換。這樣模型就沒有機會刪掉「等她回覆」。</p>
+<p>漏文確實沒了。但判斷還是會錯。「不要換行，這是一條正文規則」被它做成真的換行；「下一段程式碼需要原樣保存」的「下一段」被吃掉；「等等，那其實」變成「等，那其實」。同一組保留測試，整段重寫反而保住 18 句，局部判斷只保住 14 句。</p>
+<p>所以今天的結論是：不接。4B 6-bit 的模型留在硬碟上。</p>
+<h2>今天真的進 Voco 的東西</h2>
+<p>只有一個很小的改動：句子邊界的「我我」「你你」會被刪成一個。「那個那個」不動，「等等」「看看」不動，引述跟改口不動。</p>
+<p>連這個都在 review 時抓到一個反例。Codex 原本把「可以」也加進去，Claude review 時丟了一句「可可可以喝」，「可可」被刪掉了。拿掉。</p>
+<p>316 個測試過了才部署。</p>
+<h2>為什麼這麼保守</h2>
+<p>因為改錯的成本不對稱。</p>
+<p>一個沒刪掉的「那個」，我看到會有點煩，但意思還在。一個被刪掉的「等她回覆」，我要用右手食指把它打回來，而且要先發現它不見了。發現這件事本身就要成本，因為整句讀起來是通的。</p>
+<p>所以 Voco 的規則從來不是輸出要多乾淨，是每一個被改的字，都要說得出是哪一層改的、憑什麼改。adapter 改的，有 gold-33 的數字；規則改的，有 replay 紀錄跟證據 ID；LLM 改的，只准動排版。</p>
+<p>Refine 說不出來。它的每個輸出都可能對，但你查不到是誰改的、憑什麼改。</p>
+<p>下一步大概是做一個專門的口述格式模式，講「換行」的時候我自己知道現在在下指令，而不是讓模型猜。多一個模式要切換，這對我也是成本。還沒決定。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
