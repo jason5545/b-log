@@ -1,5 +1,25 @@
 [
   {
+    "slug": "voco-fork-voice-input-refine-not-merged",
+    "title": "Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接",
+    "summary": "Voco 是我從 VoiceInk fork 出來、只給自己用的語音輸入工具。這篇講它為什麼存在、辨識這層做到哪裡、旁邊那間 replay 實驗室在擋什麼，以及上游新出的 Refine 我測完為什麼沒接：它會把「等她回覆」整段刪掉，而我查不到是誰改的。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-09-08T00:00:00Z",
+    "tags": [
+      "Voco",
+      "VoiceInk",
+      "Qwen3-ASR",
+      "語音輸入",
+      "MLX",
+      "VocoReplayLab",
+      "無障礙"
+    ],
+    "accentColor": "#0f766e",
+    "readingTime": "6 min",
+    "coverImage": "/content/img/2026/voco-fork-voice-input-refine-not-merged-cover.webp"
+  },
+  {
     "slug": "fable-5-1-relaxation-first-prompt-flagged",
     "title": "Fable 5.1 放寬的第一天，我的第一個 prompt 就被擋了",
     "summary": "Anthropic 放寬資安護欄，Theo 說一天只被擋一次，我第一個 prompt 就中。讀完細則才確認：開放的是原始碼漏洞發掘，binary 逆向維持封鎖。放寬是真實的，只是不是為我這種用途放寬的。",
