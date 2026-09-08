@@ -1352,6 +1352,13 @@
       "postUrl": "https://b-log.to/shirushi/lisa-concert-2016-ticc-hi-five/",
       "facebookPostId": "1026818047191304_122113674039290922",
       "publishedAt": "2026-09-07T12:15:57.394Z"
+    },
+    "voco-fork-voice-input-refine-not-merged": {
+      "status": "published",
+      "title": "Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接",
+      "postUrl": "https://b-log.to/tech-development/voco-fork-voice-input-refine-not-merged/",
+      "facebookPostId": "1026818047191304_122113754379290922",
+      "publishedAt": "2026-09-08T13:06:19.075Z"
     }
   }
 }
