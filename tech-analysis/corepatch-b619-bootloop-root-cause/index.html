@@ -194,7 +194,7 @@
           <header class="article-header">
             <p id="post-category" class="article-category">技術分析</p>
             <h1 id="post-title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Aug 26, 2026</span><span>15 min</span></div>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Aug 26, 2026</span><span>17 min</span></div>
           </header>
           <div id="post-tags" class="article-tags"><span>Android</span><span>CorePatch</span><span>LSPosed</span><span>Xiaomi.eu</span><span>bootloop</span><span>APK 簽章</span><span>fail-open</span><span>根因分析</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>我在同一支手機上被這條鏈炸了兩次：OTA 之後開機循環，format data 暫時恢復，下一次又來。第二次我才把 <code>packages.xml</code>、APK 簽章和 CorePatch 的 hook 放在一起比對。</p>
@@ -364,6 +364,16 @@ if (apkPath.startsWith(&quot;/data/app/&quot;) &amp;&amp; bypassVerification) {
 <h3>4. 不要相信「重刷就沒事」</h3>
 <p>第一次發生時我也是這個結論。第二次發生才讓我意識到這是流程問題，不是資料問題。</p>
 <p>重刷只是把「被污染的 <code>packages.xml</code>」蓋掉，但污染的機制還在，下次遇到同樣條件就再發一次。真正的修法是修流程，不是修資料。</p>
+<h3>5. 第一次的結論記錯了，第二次就是它害的</h3>
+<p>寫完這篇之後，我回頭翻了兩次的對話紀錄，發現事情跟我記得的不太一樣。</p>
+<p>第一次炸的那天，開始查十分鐘後我就跟 AI 說：「把 LSPosed 的模組列出來先，有一個修改系統的模組。」AI 列出四個，自己也標 CorePatch 最可疑。方向一開始就是對的。</p>
+<p>然後我們做了一個實驗：全部模組停用，重開。還是炸。</p>
+<p>這個實驗有問題。B619 那時候已經寫進 <code>packages.xml</code> 了，停用模組不會把它清掉，所以「停用還是炸」什麼都證明不了。當時我和 AI 都沒想到這一層。AI 有提過真正能區分的做法，從官方 308 映像抽 ContactsProvider 出來驗簽章，但手機還是磚，我選了先重刷救機，那個測試沒跑完。</p>
+<p>下午我還質疑過它的解釋：如果 APK 本身是壞的，那我清掉整個 data 之後也不該能開機才對。AI 承認推論有破洞，改了一版說法，但還是把來源歸給 ROM。最後寫進記憶系統的是「最終確認的根因」和「與 LSPosed 模組無關」。對話裡它明明說過「保持未定論」。</p>
+<p>一個月後 309 出了。升級前我有先叫 AI 把上次那場對話找出來看，這一步我做對了。但被找回來的結論是錯的。手機再炸的時候，第二個 AI 引用第一次的紀錄，「7/26 已驗證模組全停仍炸」，直接把 CorePatch 排除，跑去追 APEX 和 Mainline，165 次工具呼叫，中間還一度把 data 的解密搞壞，最後又 format 一次。</p>
+<p>隔天我把整份紀錄丟給另一個 AI，只說了一句：已經第二次了，總不能每次都重來吧。十幾分鐘就定案 CorePatch。</p>
+<p>所以第二次那十二小時，還有第二次清掉的 data，不是 ROM 害的，也不只是 CorePatch 害的。是第一次那個沒驗證過的結論，被當成事實記了下來。</p>
+<p>我後來把記憶系統裡那筆 7/26 的紀錄改成「已推翻」，也加了一條規則：根因類的紀錄要寫清楚跑過哪個區分測試，沒跑的就記成未定論。使用者質疑而 AI 承認有洞的時候，那筆要先降級，等驗證過再改寫。</p>
 <hr>
 <p>如果你也在 EU ROM 跑 CorePatch，而且曾經 bootloop 過，留下 logcat 和 <code>packages.xml</code> 的 B619 片段。這條鏈要有第二個案例，才知道它是不是只在我這台手機上成立。</p>
 </div>
