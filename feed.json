@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "agent-fatigue-touch-id-ungraded-judgment",
+      "url": "https://b-log.to/ai-analysis/agent-fatigue-touch-id-ungraded-judgment/",
+      "title": "打字的累沒了，agent 起來之後最累的是右上角那顆 Touch ID",
+      "content_text": "新聞說 AI 疲勞，我從 GPT-3.5 用到 GPT-5 沒累過，agent 起來才累。累的是看 diff、知道誰能做什麼，還有右上角那顆 Touch ID。有判分的判斷不累，沒判分的才累。",
+      "date_published": "2026-09-10T00:00:00.000Z",
+      "date_modified": "2026-09-10T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "agent",
+        "Claude Code",
+        "Codex",
+        "model-arena",
+        "本地模型",
+        "無障礙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "voco-fork-voice-input-refine-not-merged",
       "url": "https://b-log.to/tech-development/voco-fork-voice-input-refine-not-merged/",
       "image": "https://b-log.to/content/img/2026/voco-fork-voice-input-refine-not-merged-cover.webp",
