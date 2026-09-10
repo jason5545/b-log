@@ -1,5 +1,23 @@
 [
   {
+    "slug": "agent-fatigue-touch-id-ungraded-judgment",
+    "title": "打字的累沒了，agent 起來之後最累的是右上角那顆 Touch ID",
+    "summary": "新聞說 AI 疲勞，我從 GPT-3.5 用到 GPT-5 沒累過，agent 起來才累。累的是看 diff、知道誰能做什麼，還有右上角那顆 Touch ID。有判分的判斷不累，沒判分的才累。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-09-10T00:00:00Z",
+    "tags": [
+      "AI",
+      "agent",
+      "Claude Code",
+      "Codex",
+      "model-arena",
+      "本地模型",
+      "無障礙"
+    ],
+    "readingTime": "3 min"
+  },
+  {
     "slug": "voco-fork-voice-input-refine-not-merged",
     "title": "Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接",
     "summary": "Voco 是我從 VoiceInk fork 出來、只給自己用的語音輸入工具。這篇講它為什麼存在、辨識這層做到哪裡、旁邊那間 replay 實驗室在擋什麼，以及上游新出的 Refine 我測完為什麼沒接：它會把「等她回覆」整段刪掉，而我查不到是誰改的。",
