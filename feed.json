@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "mac-right-arrow-key-apple-repair",
+      "url": "https://b-log.to/business-insights/mac-right-arrow-key-apple-repair/",
+      "image": "https://b-log.to/content/img/2026/mac-right-arrow-key-apple-repair-cover.webp",
+      "title": "Mac 右方向鍵失靈，這次 Apple 幫我處理好了",
+      "content_text": "Mac 右方向鍵失靈，Hank 清出異物後當天處理好。這次維修沒有推翻我之前對 Apple 服務的抱怨，反而印證了它：流程裡有的問題處理得好，流程之外的問題才會卡住。",
+      "date_published": "2026-09-12T00:00:00.000Z",
+      "date_modified": "2026-09-12T00:00:00.000Z",
+      "tags": [
+        "Apple",
+        "Mac",
+        "Genius Bar",
+        "鍵盤",
+        "維修",
+        "Apple 服務"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "agent-fatigue-touch-id-ungraded-judgment",
       "url": "https://b-log.to/ai-analysis/agent-fatigue-touch-id-ungraded-judgment/",
       "title": "打字的累沒了，agent 起來之後最累的是右上角那顆 Touch ID",
