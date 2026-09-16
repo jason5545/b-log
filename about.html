@@ -25,6 +25,125 @@
     main {
       min-height: 600px;
     }
+
+    /* 學習紀錄：可驗證的完課徽章清單 */
+    .content .credentials {
+      list-style: none;
+      margin: 1rem 0 0;
+      padding: 0;
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .content .credential {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 0.9rem;
+      margin: 0;
+      padding: 0.9rem 1.1rem;
+      background: var(--glass-tint);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .content .credential:hover,
+    .content .credential:focus-within {
+      background: var(--glass-tint-strong);
+      border-color: var(--accent-border);
+      transform: translateY(-1px);
+    }
+
+    .content .credential__mark {
+      display: flex;
+      width: 2.25rem;
+      height: 2.25rem;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .content .credential__mark svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    .content .credential__body {
+      min-width: 0;
+    }
+
+    .content .credential__title {
+      display: block;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .content .credential__meta {
+      display: block;
+      margin-top: 0.15rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .content .credential .credential__verify {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .content .credential .credential__verify svg {
+      width: 0.95rem;
+      height: 0.95rem;
+    }
+
+    /* 整張卡片都是點擊區，不用瞄準小按鈕 */
+    .content .credential .credential__verify::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+    }
+
+    .content .credential .credential__verify:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 560px) {
+      .content .credential {
+        grid-template-columns: auto minmax(0, 1fr);
+        row-gap: 0.7rem;
+      }
+
+      .content .credential .credential__verify {
+        grid-column: 2;
+        justify-self: start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .content .credential {
+        transition: none;
+      }
+
+      .content .credential:hover,
+      .content .credential:focus-within {
+        transform: none;
+      }
+    }
   </style>
 
   <!-- 完整樣式表 -->
@@ -132,6 +251,38 @@
       <p><strong>開發</strong>: Next.js, TypeScript, Kotlin, Swift, Python<br>
       <strong>硬體</strong>: Proxmox VE (9950X3D + RTX 4070 Ti Super), Raspberry Pi, ESP32<br>
       <strong>協作</strong>: Claude Code (Fable 5.1), Codex, Kimi K3</p>
+
+      <h2>學習紀錄</h2>
+      <p>不是履歷裝飾，只是留個可以驗證的紀錄。</p>
+
+      <!-- 新增徽章：複製一個 <li class="credential">，改標題、發證單位、日期與驗證連結即可 -->
+      <ul class="credentials">
+        <li class="credential">
+          <span class="credential__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="9" r="6"></circle>
+              <path d="m9.5 9 1.8 1.8L15 7"></path>
+              <path d="M8.2 14.4 7 22l5-2.5L17 22l-1.2-7.6"></path>
+            </svg>
+          </span>
+          <span class="credential__body">
+            <span class="credential__title">AI Fluency: Framework &amp; Foundations</span>
+            <span class="credential__meta">Claude Academy<span aria-hidden="true"> · </span><time datetime="2026-09-16">2026 年 9 月</time></span>
+          </span>
+          <a class="credential__verify"
+             href="https://academy.claude.com/verify/0c3f3c7c2da298ae2a81f62083c7ec5d"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="驗證「AI Fluency: Framework &amp; Foundations」完課徽章（Claude Academy，另開新視窗）">
+            驗證
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 4h6v6"></path>
+              <path d="M20 4 11 13"></path>
+              <path d="M19 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 3 19V6a1.5 1.5 0 0 1 1.5-1.5H9"></path>
+            </svg>
+          </a>
+        </li>
+      </ul>
 
       <h2>為什麼寫</h2>
       <p>現實中偽裝的夠多了。這裡是我可以不裝的地方。</p>
