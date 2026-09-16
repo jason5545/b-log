@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "macos-27-facetime-audio-claude-fault",
+      "url": "https://b-log.to/ai-analysis/macos-27-facetime-audio-claude-fault/",
+      "title": "三版 macOS 第一次連 FaceTime 語音都壞了，我問 Claude 這算不算它的錯",
+      "content_text": "升到 macOS 27 當晚，FaceTime 語音就打不通，這是我用三版 macOS 第一次遇到。Kimi 查到是 Mac 的「電話」App 在背景自己結束，通話跟著被掛斷。回報交給 Claude 填，只有描述比較快。我問 Claude 這算不算它的錯，它先修正我的前提，我拿 Apple Support App 裡的 CLAUDE.md 新聞反駁後，它改口了。",
+      "date_published": "2026-09-16T00:00:00.000Z",
+      "date_modified": "2026-09-16T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Claude",
+        "Kimi",
+        "Apple",
+        "macOS 27",
+        "FaceTime",
+        "Feedback Assistant"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/macos-27-facetime-audio-claude-fault-cover.webp"
+    },
+    {
       "id": "theo-voice-computer-use-everyday-limits",
       "url": "https://b-log.to/ai-analysis/theo-voice-computer-use-everyday-limits/",
       "title": "Theo 開始把電腦操作交給 AI，我已經這樣很久了",
