@@ -2,7 +2,7 @@
   {
     "slug": "theo-voice-computer-use-everyday-limits",
     "title": "Theo 開始把電腦操作交給 AI，我已經這樣很久了",
-    "summary": "Theo 手受傷後，開始用語音和 AI 接手整套電腦操作，我已經這樣很久了。但實測 Codex 內建瀏覽器，eBay、PChome 能開，淘寶首頁卻被擋。到了辦公室，ASR 再強，也還有能不能用的問題。",
+    "summary": "Theo 手受傷後，開始把更多電腦操作交給 AI。我的分工是 CLI 大多交給 AI，Computer Use 主要用來除錯，平常仍搭配 Voco 和 TrackPal 自己操作。這次也實測了三個購物網站，以及想到辦公室能不能用語音的限制。",
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2026-09-16T00:00:00Z",
@@ -17,7 +17,8 @@
     ],
     "accentColor": "#61758b",
     "coverImage": "/content/img/2026/theo-voice-computer-use-everyday-limits-cover.webp",
-    "readingTime": "4 min"
+    "readingTime": "4 min",
+    "updatedAt": "2026-09-16T06:55:33.054Z"
   },
   {
     "slug": "mac-right-arrow-key-apple-repair",
