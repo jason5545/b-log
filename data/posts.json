@@ -1,5 +1,25 @@
 [
   {
+    "slug": "theo-voice-computer-use-everyday-limits",
+    "title": "Theo 開始把電腦操作交給 AI，我已經這樣很久了",
+    "summary": "Theo 手受傷後，開始用語音和 AI 接手整套電腦操作，我已經這樣很久了。但實測 Codex 內建瀏覽器，eBay、PChome 能開，淘寶首頁卻被擋。到了辦公室，ASR 再強，也還有能不能用的問題。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-09-16T00:00:00Z",
+    "tags": [
+      "AI",
+      "Theo",
+      "Codex",
+      "Computer Use",
+      "語音輸入",
+      "無障礙",
+      "辦公室"
+    ],
+    "accentColor": "#61758b",
+    "coverImage": "/content/img/2026/theo-voice-computer-use-everyday-limits-cover.webp",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "mac-right-arrow-key-apple-repair",
     "title": "Mac 右方向鍵失靈，這次 Apple 幫我處理好了",
     "summary": "Mac 右方向鍵失靈，Hank 清出異物後當天處理好。這次維修沒有推翻我之前對 Apple 服務的抱怨，反而印證了它：流程裡有的問題處理得好，流程之外的問題才會卡住。",

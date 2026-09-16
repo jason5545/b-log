@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "theo-voice-computer-use-everyday-limits",
+      "url": "https://b-log.to/ai-analysis/theo-voice-computer-use-everyday-limits/",
+      "title": "Theo 開始把電腦操作交給 AI，我已經這樣很久了",
+      "content_text": "Theo 手受傷後，開始用語音和 AI 接手整套電腦操作，我已經這樣很久了。但實測 Codex 內建瀏覽器，eBay、PChome 能開，淘寶首頁卻被擋。到了辦公室，ASR 再強，也還有能不能用的問題。",
+      "date_published": "2026-09-16T00:00:00.000Z",
+      "date_modified": "2026-09-16T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Theo",
+        "Codex",
+        "Computer Use",
+        "語音輸入",
+        "無障礙",
+        "辦公室"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/theo-voice-computer-use-everyday-limits-cover.webp"
+    },
+    {
       "id": "mac-right-arrow-key-apple-repair",
       "url": "https://b-log.to/business-insights/mac-right-arrow-key-apple-repair/",
       "image": "https://b-log.to/content/img/2026/mac-right-arrow-key-apple-repair-cover.webp",

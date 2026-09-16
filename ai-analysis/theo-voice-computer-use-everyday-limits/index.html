@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theo 開始把電腦操作交給 AI，我已經這樣很久了 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="Theo 手受傷後，開始用語音和 AI 接手整套電腦操作，我已經這樣很久了。但實測 Codex 內建瀏覽器，eBay、PChome 能開，淘寶首頁卻被擋。到了辦公室，ASR 再強，也還有能不能用的問題。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/ai-analysis/theo-voice-computer-use-everyday-limits/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/ai-analysis/theo-voice-computer-use-everyday-limits/" id="og-url">
+  <meta property="og:title" content="Theo 開始把電腦操作交給 AI，我已經這樣很久了" id="og-title">
+  <meta property="og:description" content="Theo 手受傷後，開始用語音和 AI 接手整套電腦操作，我已經這樣很久了。但實測 Codex 內建瀏覽器，eBay、PChome 能開，淘寶首頁卻被擋。到了辦公室，ASR 再強，也還有能不能用的問題。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/theo-voice-computer-use-everyday-limits-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-09-16T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-09-16T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="AI 分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="AI">
+  <meta property="article:tag" content="Theo">
+  <meta property="article:tag" content="Codex">
+  <meta property="article:tag" content="Computer Use">
+  <meta property="article:tag" content="語音輸入">
+  <meta property="article:tag" content="無障礙">
+  <meta property="article:tag" content="辦公室">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/ai-analysis/theo-voice-computer-use-everyday-limits/" id="twitter-url">
+  <meta property="twitter:title" content="Theo 開始把電腦操作交給 AI，我已經這樣很久了" id="twitter-title">
+  <meta property="twitter:description" content="Theo 手受傷後，開始用語音和 AI 接手整套電腦操作，我已經這樣很久了。但實測 Codex 內建瀏覽器，eBay、PChome 能開，淘寶首頁卻被擋。到了辦公室，ASR 再強，也還有能不能用的問題。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/theo-voice-computer-use-everyday-limits-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="AI, Theo, Codex, Computer Use, 語音輸入, 無障礙, 辦公室" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/theo-voice-computer-use-everyday-limits-cover.webp" imagesrcset="/content/img/2026/theo-voice-computer-use-everyday-limits-cover-480w.webp 480w, /content/img/2026/theo-voice-computer-use-everyday-limits-cover-828w.webp 828w, /content/img/2026/theo-voice-computer-use-everyday-limits-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Theo 開始把電腦操作交給 AI，我已經這樣很久了","description":"Theo 手受傷後，開始用語音和 AI 接手整套電腦操作，我已經這樣很久了。但實測 Codex 內建瀏覽器，eBay、PChome 能開，淘寶首頁卻被擋。到了辦公室，ASR 再強，也還有能不能用的問題。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-16T00:00:00Z","dateModified":"2026-09-16T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/theo-voice-computer-use-everyday-limits/"},"url":"https://b-log.to/ai-analysis/theo-voice-computer-use-everyday-limits/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/theo-voice-computer-use-everyday-limits-cover.webp"],"keywords":"AI, Theo, Codex, Computer Use, 語音輸入, 無障礙, 辦公室","articleSection":"AI 分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">Theo 開始把電腦操作交給 AI，我已經這樣很久了</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/theo-voice-computer-use-everyday-limits-cover.webp" srcset="/content/img/2026/theo-voice-computer-use-everyday-limits-cover-480w.webp 480w, /content/img/2026/theo-voice-computer-use-everyday-limits-cover-828w.webp 828w, /content/img/2026/theo-voice-computer-use-everyday-limits-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">Theo 開始把電腦操作交給 AI，我已經這樣很久了</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Sep 16, 2026</span><span>4 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>AI</span><span>Theo</span><span>Codex</span><span>Computer Use</span><span>語音輸入</span><span>無障礙</span><span>辦公室</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>今天看 Theo 講不打字寫程式，覺得很有意思。</p>
+<p>他的手受傷、打了石膏，原本打字很快，現在連 Command-Tab 切換視窗都會痛。為了繼續工作，他開始用語音輸入，也把更多電腦操作交給 AI。</p>
+<p>他說，最近做的事情甚至比受傷前更多。</p>
+<p>我的第一個反應是，他現在才這樣，而我這樣已經很久了。</p>
+<p>我從小就是 CP，主要靠右手的一根手指操作電腦。現在用語音輸入加上 Computer Use，這段經驗之前寫過：<a href="https://b-log.to/tech-development/agentic-coding-mac-assistive-workflow/">〈自從有了 Agentic Coding，我最好的輔助居然是一台 Mac〉</a>。</p>
+<p>所以他講的很多事情，我都很熟悉。但看下去，也有一些我實際用的時候，還在卡的地方。</p>
+<h2>他講的不只寫程式</h2>
+<p>Theo 花很多時間用電腦。手受傷之後，連切 app、複製貼上都變麻煩，語音辨識再準，也只能把話變成文字，後面的操作還在。</p>
+<p>他開始讓 agent 更早進場，也讓它做得更完整。</p>
+<p>以前要試一個開發中的版本，他可能先自己找 branch、把專案拉下來，再叫 AI 幫忙 build。現在他直接交代要哪個版本、裝在哪台電腦、不能影響既有安裝，讓 AI 把前後都做完。</p>
+<p>另一個對話有資料，就叫 agent 自己去找，別再由他複製貼上。</p>
+<p>這跟我一直要求 AI 的事情很接近。資料自己找，能操作的自己操作，能驗證的自己驗證。不要做到一半，又留幾個步驟叫我接手。</p>
+<p>對我來說，找資料夾、切視窗、重試，都有操作成本。「你自己點一下」不能當成沒什麼。</p>
+<p>Theo 是手受傷之後，開始重新計算這些事情。我用電腦的時候，本來就得算。</p>
+<h2>我叫 Codex 開淘寶試試</h2>
+<p>影片裡，Theo 說他讓 AI 到醫院網站，把幾十份病歷下載回來，後來又叫另一個對話把資料上傳到新醫院。</p>
+<p>這已經是日常電腦操作了。</p>
+<p>我看到這裡，想到自己連 Codex 外掛擋淘寶，都得跟它爭。所以寫這篇的時候，我直接叫 Codex 用內建瀏覽器開淘寶試試。</p>
+<p>連首頁都被工具的網站安全政策擋住。</p>
+<blockquote>
+<p>Browser use is not permitted on <a href="https://www.taobao.com">https://www.taobao.com</a>.</p>
+</blockquote>
+<p>沒有要登入，沒有要買東西，也沒有要付款。工具回傳的訊息還明確寫著，沒有跳出使用者授權，也沒有進入 Auto-review。</p>
+<p>那 eBay 呢？可以。PChome 呢？也可以。</p>
+<p>9/16 用同一個 Codex 內建瀏覽器，測到的結果是這樣：</p>
+<table>
+<thead>
+<tr>
+<th>網站</th>
+<th>開啟首頁的結果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>淘寶</td>
+<td>工具以網站安全政策拒絕開啟</td>
+</tr>
+<tr>
+<td>eBay</td>
+<td>首頁正常載入，讀得到搜尋框、商品和價格</td>
+</tr>
+<tr>
+<td>PChome 24h</td>
+<td>首頁正常載入，讀得到搜尋欄和商品分類</td>
+</tr>
+</tbody></table>
+<p>這次只測首頁，沒有測登入或結帳。不能說購物網站一律被擋，也不能拿這三次測試推測封鎖原因。工具沒有告訴我，為什麼淘寶不行。</p>
+<p>同樣只是開購物網站首頁，結果不一樣。</p>
+<p>我已經很習慣把電腦操作交給 AI，但能交到哪裡，還得一個網站、一個網站試。碰到這種封鎖，那段操作又回到我手上。</p>
+<h2>ASR 宇宙最強，辦公室也不一定能用</h2>
+<p>Theo 在影片裡花了很長一段講麥克風。</p>
+<p>他不喜歡在團隊旁邊對電腦講話，覺得會打擾別人。後來找到一支小麥克風，可以用很小的聲音口述，照他的示範，旁邊有人講話，辨識也接得住。</p>
+<p>這讓他願意在辦公室用語音輸入。他還讓整個團隊試，最後大家都買了一支。</p>
+<p>但我看到這段，想到的是：就算你的 ASR 宇宙最強，你在辦公室還是不能用，除非你自己就是老闆。</p>
+<p>Theo 可以讓團隊一起試這種工作方式。一般員工能不能在座位上持續對電腦說話，光靠一支麥克風，決定不了。</p>
+<p>而且對我的構音來說，「那你講小聲一點」也不能當成現成答案。我連正常說話，都需要針對自己的聲音調整辨識。這部分在前面那篇文章已經寫過。</p>
+<p>所以我很能理解他為什麼覺得這套方式好用，也認同把更多操作交給 AI。</p>
+<p>只是我已經這樣用了很久，現在還得確認：這個網站，工具讓不讓我開；這個辦公室，讓不讓我用語音工作。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
