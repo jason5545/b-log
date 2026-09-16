@@ -82,6 +82,9 @@ jobs:
       - name: 安裝相依套件
         run: npm install --no-package-lock
 
+      - name: 移除與發布日相同的 updatedAt
+        run: npm run fix:updatedat
+
       - name: 同步 minified assets
         run: npm run build:assets
 

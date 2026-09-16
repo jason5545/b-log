@@ -145,7 +145,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2026-08-26T00:00:00Z",
-    "updatedAt": "2026-08-26T00:00:00Z",
     "readingTime": "17 min",
     "tags": [
       "Android",
@@ -966,8 +965,7 @@
     ],
     "accentColor": "#4a6b8a",
     "readingTime": "4 min",
-    "coverImage": "/content/img/2026/lisa-confirmation-to-imprint-cover.webp",
-    "updatedAt": "2026-04-21T00:00:00Z"
+    "coverImage": "/content/img/2026/lisa-confirmation-to-imprint-cover.webp"
   },
   {
     "slug": "cloud-ai-promise-expiration-date",
@@ -1803,8 +1801,7 @@
       "台灣"
     ],
     "accentColor": "#2d6a8f",
-    "readingTime": "7 min",
-    "updatedAt": "2026-03-06T00:00:00Z"
+    "readingTime": "7 min"
   },
   {
     "slug": "rehabilitation-bus-login-reverse-engineering",
@@ -2266,7 +2263,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2026-02-13T00:00:00Z",
-    "updatedAt": "2026-02-13T00:00:00Z",
     "readingTime": "15 min",
     "tags": [
       "Typeless",
@@ -2286,7 +2282,6 @@
     "category": "生活記事",
     "author": "Jason Chien",
     "publishedAt": "2026-02-13T00:00:00Z",
-    "updatedAt": "2026-02-13T00:00:00Z",
     "readingTime": "5 min",
     "tags": [
       "身心障礙",
@@ -2302,7 +2297,6 @@
     "category": "文化觀察",
     "author": "Jason Chien",
     "publishedAt": "2026-02-10T00:00:00Z",
-    "updatedAt": "2026-02-10T00:00:00Z",
     "readingTime": "5 min",
     "tags": [
       "LiSA",
@@ -2339,7 +2333,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2026-02-06T00:00:00Z",
-    "updatedAt": "2026-02-06T00:00:00Z",
     "readingTime": "5 min",
     "tags": [
       "macOS",
@@ -2358,7 +2351,6 @@
     "category": "文化觀察",
     "author": "Jason Chien",
     "publishedAt": "2026-02-05T12:00:00Z",
-    "updatedAt": "2026-02-05T12:00:00Z",
     "readingTime": "8 min",
     "tags": [
       "LiSA",
@@ -2377,7 +2369,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2026-02-05T00:00:00Z",
-    "updatedAt": "2026-02-05T00:00:00Z",
     "readingTime": "10 min",
     "tags": [
       "AI",
@@ -2398,7 +2389,6 @@
     "category": "シルシ",
     "author": "Jason Chien",
     "publishedAt": "2026-01-31T00:00:00Z",
-    "updatedAt": "2026-01-31T00:00:00Z",
     "readingTime": "3 min",
     "tags": [
       "LiSA",
@@ -2417,7 +2407,6 @@
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2026-01-28T00:00:00Z",
-    "updatedAt": "2026-01-28T00:00:00Z",
     "readingTime": "10 min",
     "tags": [
       "macOS",
@@ -2439,7 +2428,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2026-01-24T00:00:00Z",
-    "updatedAt": "2026-01-24T00:00:00Z",
     "readingTime": "15 min",
     "tags": [
       "fnOS",
@@ -2460,7 +2448,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2026-01-16T12:00:00Z",
-    "updatedAt": "2026-01-16T12:00:00Z",
     "readingTime": "12 min",
     "tags": [
       "IPv6",
@@ -2481,7 +2468,6 @@
     "category": "商業觀察",
     "author": "Jason Chien",
     "publishedAt": "2026-01-16T00:00:00Z",
-    "updatedAt": "2026-01-16T00:00:00Z",
     "readingTime": "4 min",
     "tags": [
       "PayPal",
@@ -2501,7 +2487,6 @@
     "category": "文化觀察",
     "author": "Jason Chien",
     "publishedAt": "2026-01-11T12:00:00Z",
-    "updatedAt": "2026-01-11T12:00:00Z",
     "readingTime": "4 min",
     "tags": [
       "身心障礙",
@@ -2519,7 +2504,6 @@
     "category": "商業觀察",
     "author": "Jason Chien",
     "publishedAt": "2026-01-10T12:00:00Z",
-    "updatedAt": "2026-01-10T12:00:00Z",
     "readingTime": "6 min",
     "tags": [
       "Anthropic",
@@ -2538,7 +2522,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2026-01-10T00:00:00Z",
-    "updatedAt": "2026-01-10T00:00:00Z",
     "readingTime": "8 min",
     "tags": [
       "Apple",
@@ -2557,7 +2540,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2026-01-08T00:00:00Z",
-    "updatedAt": "2026-01-08T00:00:00Z",
     "readingTime": "5 min",
     "tags": [
       "語音辨識",
@@ -2635,7 +2617,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-26T00:00:00Z",
-    "updatedAt": "2025-12-26T00:00:00Z",
     "readingTime": "5 min",
     "tags": [
       "Claude Code",
@@ -2654,7 +2635,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-26T00:00:00Z",
-    "updatedAt": "2025-12-26T00:00:00Z",
     "readingTime": "4 min",
     "tags": [
       "Waydroid",
@@ -2673,7 +2653,6 @@
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2025-12-24T00:00:00Z",
-    "updatedAt": "2025-12-24T00:00:00Z",
     "readingTime": "8 min",
     "tags": [
       "SwiftUI",
@@ -2692,7 +2671,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-21T00:00:00Z",
-    "updatedAt": "2025-12-21T00:00:00Z",
     "readingTime": "15 min",
     "tags": [
       "macOS",
@@ -2751,7 +2729,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-13T12:00:00Z",
-    "updatedAt": "2025-12-13T12:00:00Z",
     "readingTime": "8 min",
     "tags": [
       "Wayland",
@@ -2771,7 +2748,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-13T00:00:00Z",
-    "updatedAt": "2025-12-13T00:00:00Z",
     "readingTime": "3 min",
     "tags": [
       "Steam",
@@ -2790,7 +2766,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-12T12:00:00Z",
-    "updatedAt": "2025-12-12T12:00:00Z",
     "readingTime": "4 min",
     "tags": [
       "ThinkPad",
@@ -2809,7 +2784,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-12T00:00:00Z",
-    "updatedAt": "2025-12-12T00:00:00Z",
     "readingTime": "4 min",
     "tags": [
       "KDE neon",
@@ -2828,7 +2802,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-09T00:00:00Z",
-    "updatedAt": "2025-12-09T00:00:00Z",
     "readingTime": "6 min",
     "tags": [
       "LINE",
@@ -2848,7 +2821,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-08T12:00:00Z",
-    "updatedAt": "2025-12-08T12:00:00Z",
     "readingTime": "8 min",
     "tags": [
       "AI",
@@ -2866,7 +2838,6 @@
     "category": "生活記事",
     "author": "Jason Chien",
     "publishedAt": "2025-12-08T00:00:00Z",
-    "updatedAt": "2025-12-08T00:00:00Z",
     "readingTime": "8 min",
     "tags": [
       "模擬飛行",
@@ -2888,7 +2859,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-07T00:00:00Z",
-    "updatedAt": "2025-12-07T00:00:00Z",
     "readingTime": "6 min",
     "tags": [
       "AI",
@@ -2907,7 +2877,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-06T18:00:00Z",
-    "updatedAt": "2025-12-06T18:00:00Z",
     "readingTime": "5 min",
     "tags": [
       "Anthropic",
@@ -2926,7 +2895,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-06T12:00:00Z",
-    "updatedAt": "2025-12-06T12:00:00Z",
     "readingTime": "12 min",
     "tags": [
       "AI",
@@ -2945,7 +2913,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-06T00:00:00Z",
-    "updatedAt": "2025-12-06T00:00:00Z",
     "readingTime": "12 min",
     "tags": [
       "Gemini",
@@ -2966,7 +2933,6 @@
     "category": "シルシ",
     "author": "Jason Chien",
     "publishedAt": "2025-12-04T00:00:00Z",
-    "updatedAt": "2025-12-04T00:00:00Z",
     "readingTime": "12 min",
     "tags": [
       "LiSA",
@@ -3008,7 +2974,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-02T12:00:00Z",
-    "updatedAt": "2025-12-02T12:00:00Z",
     "readingTime": "10 min",
     "tags": [
       "Claude",
@@ -3028,7 +2993,6 @@
     "category": "文化觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-12-02T00:00:00Z",
-    "updatedAt": "2025-12-02T00:00:00Z",
     "readingTime": "8 min",
     "tags": [
       "AI 繪圖",
@@ -3048,7 +3012,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-01T00:00:00Z",
-    "updatedAt": "2025-12-01T00:00:00Z",
     "readingTime": "10 min",
     "tags": [
       "PDF",
@@ -3067,7 +3030,6 @@
     "category": "文化觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-11-30T00:00:00Z",
-    "updatedAt": "2025-11-30T00:00:00Z",
     "readingTime": "10 min",
     "tags": [
       "二手交易",
@@ -3085,7 +3047,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-11-30T00:00:00Z",
-    "updatedAt": "2025-11-30T00:00:00Z",
     "readingTime": "10 min",
     "tags": [
       "Windows",
@@ -3125,7 +3086,6 @@
     "category": "文化觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-11-27T00:00:00Z",
-    "updatedAt": "2025-11-27T00:00:00Z",
     "readingTime": "15 min",
     "tags": [
       "詐騙",
@@ -3143,7 +3103,6 @@
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2025-11-25T00:00:00Z",
-    "updatedAt": "2025-11-25T00:00:00Z",
     "readingTime": "15 min",
     "tags": [
       "Android",
@@ -3182,7 +3141,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-11-21T00:00:00Z",
-    "updatedAt": "2025-11-21T00:00:00Z",
     "readingTime": "20 min",
     "tags": [
       "AI",
@@ -3202,7 +3160,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-11-16T00:00:00Z",
-    "updatedAt": "2025-11-16T00:00:00Z",
     "readingTime": "12 min",
     "tags": [
       "Proxmox",
@@ -3223,7 +3180,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-11-16T00:00:00Z",
-    "updatedAt": "2025-11-16T00:00:00Z",
     "readingTime": "15 min",
     "tags": [
       "網路診斷",
@@ -3244,7 +3200,6 @@
     "category": "商業觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-11-15T00:00:00Z",
-    "updatedAt": "2025-11-15T00:00:00Z",
     "readingTime": "15 min",
     "tags": [
       "RMT",
@@ -3263,7 +3218,6 @@
     "category": "文化觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-11-13T00:00:00Z",
-    "updatedAt": "2025-11-13T00:00:00Z",
     "readingTime": "12 min",
     "tags": [
       "VTuber",
@@ -3282,7 +3236,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-11-13T00:00:00Z",
-    "updatedAt": "2025-11-13T00:00:00Z",
     "readingTime": "9 min",
     "tags": [
       "平板",
@@ -3302,7 +3255,6 @@
     "category": "文化觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-11-12T00:00:00Z",
-    "updatedAt": "2025-11-12T00:00:00Z",
     "readingTime": "20 min",
     "tags": [
       "AI",
@@ -3322,7 +3274,6 @@
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2025-11-07T00:00:00Z",
-    "updatedAt": "2025-11-07T00:00:00Z",
     "readingTime": "15 min",
     "tags": [
       "C#",
@@ -3341,7 +3292,6 @@
     "category": "商業觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-11-04T00:00:00Z",
-    "updatedAt": "2025-11-04T00:00:00Z",
     "readingTime": "12 min",
     "tags": [
       "無障礙",
@@ -3360,7 +3310,6 @@
     "category": "文化觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-10-30T00:00:00Z",
-    "updatedAt": "2025-10-30T00:00:00Z",
     "readingTime": "18 min",
     "tags": [
       "宗教",
@@ -3380,7 +3329,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-10-29T00:00:00Z",
-    "updatedAt": "2025-10-29T00:00:00Z",
     "readingTime": "12 min",
     "tags": [
       "AI",
@@ -3401,7 +3349,6 @@
     "category": "文化觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-10-27T00:00:00Z",
-    "updatedAt": "2025-10-27T00:00:00Z",
     "readingTime": "15 min",
     "tags": [
       "VTuber",
@@ -3420,7 +3367,6 @@
     "category": "商業觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-10-27T00:00:00Z",
-    "updatedAt": "2025-10-27T00:00:00Z",
     "readingTime": "10 min",
     "tags": [
       "硬體價格",
@@ -3439,7 +3385,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-10-23T01:00:00Z",
-    "updatedAt": "2025-10-23T01:00:00Z",
     "readingTime": "20 min",
     "tags": [
       "Proxmox",
@@ -3458,7 +3403,6 @@
     "category": "文化觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-10-22T00:00:00Z",
-    "updatedAt": "2025-10-22T00:00:00Z",
     "readingTime": "25 min",
     "tags": [
       "政治倫理",
@@ -3478,7 +3422,6 @@
     "category": "文化觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-10-22T00:00:00Z",
-    "updatedAt": "2025-10-22T00:00:00Z",
     "readingTime": "15 min",
     "tags": [
       "VTuber",
@@ -3497,7 +3440,6 @@
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2025-10-21T00:00:00Z",
-    "updatedAt": "2025-10-21T00:00:00Z",
     "readingTime": "18 min",
     "tags": [
       "PageSpeed",
@@ -3516,7 +3458,6 @@
     "category": "商業觀察",
     "author": "Jason Chien",
     "publishedAt": "2025-10-20T00:00:00Z",
-    "updatedAt": "2025-10-20T00:00:00Z",
     "readingTime": "15 min",
     "tags": [
       "微軟",
@@ -3534,7 +3475,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-10-19T15:00:00Z",
-    "updatedAt": "2025-10-19T15:00:00Z",
     "readingTime": "10 min",
     "tags": [
       "GPU Passthrough",
@@ -3553,7 +3493,6 @@
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2025-10-19T14:30:00Z",
-    "updatedAt": "2025-10-19T14:30:00Z",
     "readingTime": "8 min",
     "tags": [
       "JavaScript",
@@ -3572,7 +3511,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-10-18T12:35:00Z",
-    "updatedAt": "2025-10-18T12:35:00Z",
     "readingTime": "15 min",
     "tags": [
       "AI",
@@ -3592,7 +3530,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-10-18T11:05:00Z",
-    "updatedAt": "2025-10-18T11:05:00Z",
     "readingTime": "20 min",
     "tags": [
       "Claude",
@@ -3613,7 +3550,6 @@
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2025-10-18T11:00:00Z",
-    "updatedAt": "2025-10-18T11:00:00Z",
     "readingTime": "20 min",
     "tags": [
       "WebP",
@@ -3632,7 +3568,6 @@
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2025-10-18T08:00:00Z",
-    "updatedAt": "2025-10-18T08:00:00Z",
     "readingTime": "15 min",
     "tags": [
       "Cloudinary",
@@ -3652,7 +3587,6 @@
     "previousCategory": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-10-17T09:00:00Z",
-    "updatedAt": "2025-10-17T09:00:00Z",
     "readingTime": "25 min",
     "tags": [
       "平板",
@@ -3673,7 +3607,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-10-17T08:30:00Z",
-    "updatedAt": "2025-10-17T08:30:00Z",
     "readingTime": "18 min",
     "tags": [
       "JavaScript",
@@ -3691,7 +3624,6 @@
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2025-10-17T00:30:00Z",
-    "updatedAt": "2025-10-17T00:30:00Z",
     "readingTime": "12 min",
     "tags": [
       "WordPress",
@@ -3709,7 +3641,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-10-16T12:20:00Z",
-    "updatedAt": "2025-10-16T12:20:00Z",
     "readingTime": "15 min",
     "tags": [
       "OpenAI",
@@ -3729,7 +3660,6 @@
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2025-10-16T06:30:00Z",
-    "updatedAt": "2025-10-16T06:30:00Z",
     "readingTime": "25 min",
     "tags": [
       "BLE",
@@ -3747,7 +3677,6 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-10-16T03:29:00Z",
-    "updatedAt": "2025-10-16T03:29:00Z",
     "readingTime": "15 min",
     "tags": [
       "前端驗證",
@@ -3765,7 +3694,6 @@
     "category": "開發哲學",
     "author": "Jason Chien",
     "publishedAt": "2025-10-16T00:52:00Z",
-    "updatedAt": "2025-10-16T00:52:00Z",
     "readingTime": "10 min",
     "tags": [
       "AI",
@@ -3784,7 +3712,6 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-10-15T23:38:00Z",
-    "updatedAt": "2025-10-15T23:38:00Z",
     "readingTime": "8 min",
     "tags": [
       "AI",
@@ -3804,7 +3731,6 @@
     "category": "シルシ",
     "author": "Jason Chien",
     "publishedAt": "2017-07-12T00:00:00Z",
-    "updatedAt": "2017-07-12T00:00:00Z",
     "readingTime": "12 min",
     "tags": [
       "LiSA",
@@ -3824,7 +3750,6 @@
     "category": "シルシ",
     "author": "Jason Chien",
     "publishedAt": "2016-09-28T00:00:00Z",
-    "updatedAt": "2016-09-28T00:00:00Z",
     "readingTime": "7 min",
     "tags": [
       "LiSA",
@@ -3844,7 +3769,6 @@
     "category": "シルシ",
     "author": "Jason Chien",
     "publishedAt": "2015-07-12T00:00:00Z",
-    "updatedAt": "2015-07-12T00:00:00Z",
     "readingTime": "12 min",
     "tags": [
       "LiSA",

@@ -4,6 +4,7 @@
   "scripts": {
     "build:assets": "node scripts/build-assets.js",
     "fetch:fonts": "node scripts/fetch-fonts.mjs",
+    "fix:updatedat": "node scripts/strip-redundant-updatedat.js",
     "validate": "node scripts/validate-content.js"
   },
   "dependencies": {

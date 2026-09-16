@@ -9,6 +9,7 @@
 - 只有 Jason 明確說要更新日期時才可以動。改字、補段落、修 typo、依回饋調整內文，都不構成理由。
 - repo 裡有 91 篇帶 `updatedAt` 的文章（多為 `YYYY-MM-DDT00:00:00Z` 形式），那是刻意的日期，不能拿來當作自己也可以加的理由。
 - 發生紀錄：2026/9/3 Claude Code 改三篇舊文後順手更新，Jason 說「dont use update at」，隨即還原；9/7 重申；9/16 Codex 改 `theo-voice-computer-use-everyday-limits` 時自己補了完整時間戳，以 commit `7fa7baf` 移除。這條已經三次發生，動這個欄位前先回頭確認一次。
+- 內容資料管線每次都會跑 `npm run fix:updatedat`（[scripts/strip-redundant-updatedat.js](scripts/strip-redundant-updatedat.js)），自動移除與 `publishedAt` 相同的 `updatedAt`。相同值不影響任何輸出，留著只會讓日期看起來像被改過。
 
 ## 送出前要同步產物
 
