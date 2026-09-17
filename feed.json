@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "rg-home-scan-box-drive-download",
+      "url": "https://b-log.to/tech-analysis/rg-home-scan-box-drive-download/",
+      "image": "https://b-log.to/content/img/2026/rg-home-scan-box-drive-download-cover.webp",
+      "title": "一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac",
+      "content_text": "一行 rg 搜尋整個家目錄，等待逾時後沒被停掉，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事。",
+      "date_published": "2026-09-17T00:00:00.000Z",
+      "date_modified": "2026-09-17T00:00:00.000Z",
+      "tags": [
+        "Box Drive",
+        "ripgrep",
+        "macOS",
+        "File Provider",
+        "Claude",
+        "背景處理程序"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "macos-27-facetime-audio-claude-fault",
       "url": "https://b-log.to/ai-analysis/macos-27-facetime-audio-claude-fault/",
       "title": "三版 macOS 第一次連 FaceTime 語音都壞了，我問 Claude 這算不算它的錯",

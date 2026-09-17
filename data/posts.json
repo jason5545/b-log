@@ -1,5 +1,24 @@
 [
   {
+    "slug": "rg-home-scan-box-drive-download",
+    "title": "一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac",
+    "summary": "一行 rg 搜尋整個家目錄，等待逾時後沒被停掉，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-09-17T00:00:00Z",
+    "tags": [
+      "Box Drive",
+      "ripgrep",
+      "macOS",
+      "File Provider",
+      "Claude",
+      "背景處理程序"
+    ],
+    "accentColor": "#0f766e",
+    "coverImage": "/content/img/2026/rg-home-scan-box-drive-download-cover.webp",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "macos-27-facetime-audio-claude-fault",
     "title": "三版 macOS 第一次連 FaceTime 語音都壞了，我問 Claude 這算不算它的錯",
     "summary": "升到 macOS 27 當晚，FaceTime 語音就打不通，這是我用三版 macOS 第一次遇到。Kimi 查到是 Mac 的「電話」App 在背景自己結束，通話跟著被掛斷。回報交給 Claude 填，只有描述比較快。我問 Claude 這算不算它的錯，它先修正我的前提，我拿 Apple Support App 裡的 CLAUDE.md 新聞反駁後，它改口了。",
