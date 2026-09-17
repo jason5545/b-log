@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "reseller-just-say-it",
+      "url": "https://b-log.to/business-insights/reseller-just-say-it/",
+      "title": "是店家也沒關係，直接說就好",
+      "content_text": "在臉書賣兩支全新 iPhone，買家都說是自用，往回翻才發現兩位好像認識。我本來對賣給店家有點感冒，現在覺得是店家也沒關係，直接說就好。",
+      "date_published": "2026-09-17T00:00:00.000Z",
+      "date_modified": "2026-09-17T00:00:00.000Z",
+      "tags": [
+        "二手交易",
+        "臉書",
+        "Marketplace",
+        "iPhone",
+        "收購商",
+        "自用",
+        "商業觀察"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "rg-home-scan-box-drive-download",
       "url": "https://b-log.to/tech-analysis/rg-home-scan-box-drive-download/",
       "image": "https://b-log.to/content/img/2026/rg-home-scan-box-drive-download-cover.webp",
