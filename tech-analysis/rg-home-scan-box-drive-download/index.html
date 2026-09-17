@@ -6,7 +6,7 @@
   <title>一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac - (b)-log</title>
 
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="一行 rg 搜尋整個家目錄，等待逾時後沒被停掉，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事。">
+  <meta name="description" content="一行 rg 搜尋整個家目錄，等待逾時、我按 Esc 中斷，它都沒停，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事；Codex Desktop 上也看不到 rg 還在跑。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-analysis/rg-home-scan-box-drive-download/" id="canonical-url">
 
@@ -14,7 +14,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-analysis/rg-home-scan-box-drive-download/" id="og-url">
   <meta property="og:title" content="一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac" id="og-title">
-  <meta property="og:description" content="一行 rg 搜尋整個家目錄，等待逾時後沒被停掉，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事。" id="og-description">
+  <meta property="og:description" content="一行 rg 搜尋整個家目錄，等待逾時、我按 Esc 中斷，它都沒停，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事；Codex Desktop 上也看不到 rg 還在跑。" id="og-description">
   <meta property="og:image" content="https://b-log.to/content/img/2026/rg-home-scan-box-drive-download-cover.webp" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -30,6 +30,7 @@
   <meta property="article:tag" content="macOS">
   <meta property="article:tag" content="File Provider">
   <meta property="article:tag" content="Claude">
+  <meta property="article:tag" content="Codex">
   <meta property="article:tag" content="背景處理程序">
 <!-- ARTICLE_TAGS_END -->
 
@@ -37,12 +38,12 @@
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-analysis/rg-home-scan-box-drive-download/" id="twitter-url">
   <meta property="twitter:title" content="一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac" id="twitter-title">
-  <meta property="twitter:description" content="一行 rg 搜尋整個家目錄，等待逾時後沒被停掉，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事。" id="twitter-description">
+  <meta property="twitter:description" content="一行 rg 搜尋整個家目錄，等待逾時、我按 Esc 中斷，它都沒停，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事；Codex Desktop 上也看不到 rg 還在跑。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2026/rg-home-scan-box-drive-download-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
 
   <!-- 額外的 metadata -->
-  <meta name="keywords" content="Box Drive, ripgrep, macOS, File Provider, Claude, 背景處理程序" id="meta-keywords">
+  <meta name="keywords" content="Box Drive, ripgrep, macOS, File Provider, Claude, Codex, 背景處理程序" id="meta-keywords">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#b45309">
 
@@ -111,7 +112,7 @@
   <link rel="preload" as="image" href="/content/img/2026/rg-home-scan-box-drive-download-cover.webp" imagesrcset="/content/img/2026/rg-home-scan-box-drive-download-cover-480w.webp 480w, /content/img/2026/rg-home-scan-box-drive-download-cover-828w.webp 828w, /content/img/2026/rg-home-scan-box-drive-download-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac","description":"一行 rg 搜尋整個家目錄，等待逾時後沒被停掉，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-17T00:00:00Z","dateModified":"2026-09-17T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/rg-home-scan-box-drive-download/"},"url":"https://b-log.to/tech-analysis/rg-home-scan-box-drive-download/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/rg-home-scan-box-drive-download-cover.webp"],"keywords":"Box Drive, ripgrep, macOS, File Provider, Claude, 背景處理程序","articleSection":"技術分析"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac","description":"一行 rg 搜尋整個家目錄，等待逾時、我按 Esc 中斷，它都沒停，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事；Codex Desktop 上也看不到 rg 還在跑。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-17T00:00:00Z","dateModified":"2026-09-17T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/rg-home-scan-box-drive-download/"},"url":"https://b-log.to/tech-analysis/rg-home-scan-box-drive-download/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/rg-home-scan-box-drive-download-cover.webp"],"keywords":"Box Drive, ripgrep, macOS, File Provider, Claude, Codex, 背景處理程序","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -194,7 +195,7 @@
             <h1 id="post-title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</h1>
             <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Sep 17, 2026</span><span>4 min</span></div>
           </header>
-          <div id="post-tags" class="article-tags"><span>Box Drive</span><span>ripgrep</span><span>macOS</span><span>File Provider</span><span>Claude</span><span>背景處理程序</span></div>
+          <div id="post-tags" class="article-tags"><span>Box Drive</span><span>ripgrep</span><span>macOS</span><span>File Provider</span><span>Claude</span><span>Codex</span><span>背景處理程序</span></div>
           <div id="post-content" class="article-body" data-prerendered="true"><p>有天早上，我發現 Box 在把整包雲端檔案同步到 Mac 上，丟給 Claude 一句：「i have some thing urgent」。</p>
 <p>它先看 Box Drive 的狀態。Box Drive 才啟動 9 分鐘，已經下載了 1.78 GB。</p>
 <p>它把 Box Drive 關掉，最後一筆下載完成在關掉的前一秒。</p>
@@ -216,14 +217,23 @@
 <p>它先拿一個檔案測，佔用的區塊從 528 變成 0，狀態變成 <code>dataless</code>。再測一個 16 個檔案、81 MB 的小資料夾，才去清那兩個大資料夾。</p>
 <p>跑了 7 分 21 秒，可用空間從 615 GB 變成 1,807 GB。</p>
 <p>清完之後，Claude 算出來已用 2.0 TB，跟我說的 2.5 TB 對不上。這個差距後來沒有再查。</p>
-<h3>等待時間到了，rg 沒有結束</h3>
+<h3>等待時間到了，我也按了 Esc，rg 都沒有結束</h3>
 <p>rg 被砍掉的時候已經跑了 1 天 18 小時，父處理程序是 PID 1。原本叫它起來的那個處理程序，早就不在了。</p>
 <p>我問 Claude：「its scheduled or a single session」。</p>
-<p>不是排程。執行紀錄裡，這行指令只出現在兩天前的一次工作階段。</p>
+<p>不是排程。執行紀錄裡，這行指令只出現在兩天前的一次 Codex Desktop 工作階段。</p>
 <p>那次工作階段在找幾個檔案。它先在 <code>/private/tmp</code> 和另一個資料夾裡找，10 秒後把範圍擴大到整個家目錄。</p>
 <p>腳本呼叫這行指令時，設定只等 10 秒。10.2 秒後拿到空的輸出，那次工作階段就當成找不到，繼續做下一步。</p>
-<p>等待時間到了，rg 沒有被停掉。它在背景繼續跑，一路讀進 Box 的資料夾。</p>
+<p>但 rg 其實還沒跑完。指令沒跑完時，工具會回傳一個 <code>session_id</code>，之後可以拿它回去讀輸出。這次的腳本只印了輸出，沒有印 <code>session_id</code>。同一輪裡其他指令都有完成的紀錄，只有 rg 沒有。</p>
+<p>rg 啟動後 1 分 55 秒，我按了 Esc，把那一輪中斷。</p>
+<p>中斷當下，Codex 在紀錄裡留了一句：「Any running unified exec processes may still be running in the background.」這句是寫給模型看的，不是寫給我的。</p>
+<p>當天晚上，Codex 負責執行指令的背景服務也重啟過一次。</p>
+<p>等待時間到了、我按了 Esc、背景服務重啟，rg 都沒有被停掉。它在背景繼續跑，一路讀進 Box 的資料夾。</p>
 <p>將近兩天，我是看到 Box 在同步才發現的。</p>
+<h3>Codex Desktop 上看不到它還在跑</h3>
+<p>我用過的 Claude Code、Kimi Code、pi、omp（原本叫 oh-my-pi），工作階段底下都會顯示還有工作在跑。Codex Desktop 沒有。</p>
+<p>Codex CLI 有 <code>/ps</code> 可以看背景終端機，<code>/stop</code> 可以停掉，但我用的是 Desktop。9 月初也有人在 GitHub 開了 issue，要 Codex Desktop 列出 AI 啟動的背景處理程序：<a href="https://github.com/openai/codex/issues/42244">openai/codex#42244</a>。</p>
+<p>中斷之後讓指令留在背景，是 Codex 刻意的設計。<a href="https://github.com/openai/codex/issues/42717">openai/codex#42717</a> 引用了原始碼裡的註解：處理程序存在工作階段層級，就是為了中斷那一輪時不要把它停掉。</p>
+<p>我的認知，這屬於設計失誤。</p>
 </div>
           <footer class="article-footer">
             <div class="article-share" id="share-links"></div>

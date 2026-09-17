@@ -10,7 +10,7 @@
       "url": "https://b-log.to/tech-analysis/rg-home-scan-box-drive-download/",
       "image": "https://b-log.to/content/img/2026/rg-home-scan-box-drive-download-cover.webp",
       "title": "一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac",
-      "content_text": "一行 rg 搜尋整個家目錄，等待逾時後沒被停掉，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事。",
+      "content_text": "一行 rg 搜尋整個家目錄，等待逾時、我按 Esc 中斷，它都沒停，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事；Codex Desktop 上也看不到 rg 還在跑。",
       "date_published": "2026-09-17T00:00:00.000Z",
       "date_modified": "2026-09-17T00:00:00.000Z",
       "tags": [
@@ -19,6 +19,7 @@
         "macOS",
         "File Provider",
         "Claude",
+        "Codex",
         "背景處理程序"
       ],
       "authors": [
