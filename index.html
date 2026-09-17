@@ -155,6 +155,7 @@
 
   <!-- 首頁 featured preload 會由生成腳本注入到這裡 -->
   <!-- HOME_FEATURED_PRELOAD_START -->
+  <link rel="preload" as="image" href="/content/img/2026/reseller-just-say-it-cover.webp" fetchpriority="high">
 <!-- HOME_FEATURED_PRELOAD_END -->
 
   <!-- 完整樣式表 -->
@@ -262,9 +263,10 @@
       </section>
 
       <!-- HOME_FEATURED_START -->
-      <section id="featured" class="hero-card hero-card--text-only" data-category-theme="business-insights" style="background-image: linear-gradient(135deg, #485bd9 0%, #556bff 50%, #6a86ff 100%);" data-featured-slug="reseller-just-say-it" data-featured-cover="">
+      <section id="featured" class="hero-card" data-category-theme="business-insights" data-featured-slug="reseller-just-say-it" data-featured-cover="/content/img/2026/reseller-just-say-it-cover.webp">
+        <div class="hero-card__media article-hero--image" id="hero-media" data-category-theme="business-insights"><img class="article-hero__image" src="/content/img/2026/reseller-just-say-it-cover.webp" alt="" aria-hidden="true" fetchpriority="high" decoding="sync"></div>
         <div class="hero-card__body">
-          <p class="hero-card__category" id="hero-category" style="border-color: rgba(85, 107, 255, 0.3); background: rgba(85, 107, 255, 0.1);">商業觀察</p>
+          <p class="hero-card__category" id="hero-category" style="color: #556bff; border-color: rgba(85, 107, 255, 0.3); background: rgba(85, 107, 255, 0.1);">商業觀察</p>
           <h2 class="hero-card__title">
             <a id="hero-link" href="/business-insights/reseller-just-say-it/">是店家也沒關係，直接說就好</a>
           </h2>
