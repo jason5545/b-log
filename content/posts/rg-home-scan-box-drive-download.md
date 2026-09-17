@@ -20,9 +20,21 @@ rg -l "<檔名>" /private/tmp ~
 
 ripgrep 要讀檔案內容才能搜尋。範圍是整個家目錄，Box 的資料夾也在裡面，所以它每讀一個檔案，Box 就得下載一個。
 
-對程式來說，還沒下載的檔案跟本機檔案看起來一模一樣，檔名、大小都在，只是內容不在本機。
+對程式來說，還沒下載的檔案跟本機檔案看起來一模一樣，檔名、大小都在，只是內容不在本機。一般的 `ls` 看不出差別，要用 `ls -lO` 才看得到，還沒下載的檔案會標著 `dataless`。
 
 Claude 把它砍掉，再重開 Box Drive，看了 30 秒，沒有新的下載請求。
+
+### 不是只有 rg 會這樣
+
+我請 Claude 查了別人有沒有遇過。
+
+AI agent goose 有個列目錄的 `tree` 工具，被標成唯讀，會自動核准。但它為了算行數，會去讀每個檔案。PR 裡量到，對 OneDrive 的資料夾呼叫一次，就有 2.06 GB 會被拉下來：[aaif-goose/goose#11947](https://github.com/aaif-goose/goose/pull/11947)。
+
+檔案搜尋工具 Cardinal 的內容搜尋也是，搜有同步的家目錄，會默默下載每個還在雲端的檔案：[cardisoft/cardinal#231](https://github.com/cardisoft/cardinal/issues/231)。
+
+Backblaze 的備份程式直接不備份 OneDrive、Dropbox、Box 這些資料夾了，更新說明寫的原因是效能問題、流量過大、非預期的上傳：[Robert Reese 的文章](https://rareese.com/posts/backblaze/)。
+
+要從系統這層擋，macOS 有 `setiopolicy_np` 可以關掉這個行為。關掉之後，讀還在雲端的檔案會直接失敗，不會下載。有人在 GitHub 提議這樣做：[bherila/restic-station#156](https://github.com/bherila/restic-station/issues/156)。
 
 ### Claude 說磁碟沒被塞爆，我回了一句 was 2.5tb
 
@@ -42,6 +54,8 @@ Claude 把它砍掉，再重開 Box Drive，看了 30 秒，沒有新的下載�
 
 跑了 7 分 21 秒，可用空間從 615 GB 變成 1,807 GB。
 
+也測了只看檔名會不會觸發下載。對整個 Box 資料夾跑 `du`、`find`，對清掉的資料夾跑只列檔名的 `rg --files`，下載請求都是 0。要讀內容才會下載。
+
 清完之後，Claude 算出來已用 2.0 TB，跟我說的 2.5 TB 對不上。這個差距後來沒有再查。
 
 ### 等待時間到了，我也按了 Esc，rg 都沒有結束
@@ -57,6 +71,8 @@ rg 被砍掉的時候已經跑了 1 天 18 小時，父處理程序是 PID 1。�
 腳本呼叫這行指令時，設定只等 10 秒。10.2 秒後拿到空的輸出，那次工作階段就當成找不到，繼續做下一步。
 
 但 rg 其實還沒跑完。指令沒跑完時，工具會回傳一個 `session_id`，之後可以拿它回去讀輸出。這次的腳本只印了輸出，沒有印 `session_id`。同一輪裡其他指令都有完成的紀錄，只有 rg 沒有。
+
+這個工作階段中途換過模型。rg 出事前不到一小時，我才叫接手的模型去查前一個模型為什麼卡住，查出來也是只印了輸出、丟掉 `session_id`。輪到它自己跑 rg，同樣的寫法又出現一次。
 
 rg 啟動後 1 分 55 秒，我按了 Esc，把那一輪中斷。
 
