@@ -206,6 +206,7 @@
 <pre><code class="language-bash">rg -l &quot;&lt;檔名&gt;&quot; /private/tmp ~
 </code></pre>
 <p>ripgrep 要讀檔案內容才能搜尋。範圍是整個家目錄，Box 的資料夾也在裡面，所以它每讀一個檔案，Box 就得下載一個。</p>
+<p>對程式來說，還沒下載的檔案跟本機檔案看起來一模一樣，檔名、大小都在，只是內容不在本機。</p>
 <p>Claude 把它砍掉，再重開 Box Drive，看了 30 秒，沒有新的下載請求。</p>
 <h3>Claude 說磁碟沒被塞爆，我回了一句 was 2.5tb</h3>
 <p>砍掉 rg 之後，Claude 去算下載量。它只看了最後 25 個小時左右的 log，這段就下載了約 964 GB。更早的 log 其實還在，它沒看到。</p>
