@@ -108,7 +108,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/rg-home-scan-box-drive-download-cover.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/rg-home-scan-box-drive-download-cover.webp" imagesrcset="/content/img/2026/rg-home-scan-box-drive-download-cover-480w.webp 480w, /content/img/2026/rg-home-scan-box-drive-download-cover-828w.webp 828w, /content/img/2026/rg-home-scan-box-drive-download-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac","description":"一行 rg 搜尋整個家目錄，等待逾時後沒被停掉，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-17T00:00:00Z","dateModified":"2026-09-17T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/rg-home-scan-box-drive-download/"},"url":"https://b-log.to/tech-analysis/rg-home-scan-box-drive-download/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/rg-home-scan-box-drive-download-cover.webp"],"keywords":"Box Drive, ripgrep, macOS, File Provider, Claude, 背景處理程序","articleSection":"技術分析"}</script>
@@ -188,7 +188,7 @@
     <main class="wrapper article-shell">
       <div class="article-layout">
         <article class="article">
-          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/rg-home-scan-box-drive-download-cover.webp" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/rg-home-scan-box-drive-download-cover.webp" srcset="/content/img/2026/rg-home-scan-box-drive-download-cover-480w.webp 480w, /content/img/2026/rg-home-scan-box-drive-download-cover-828w.webp 828w, /content/img/2026/rg-home-scan-box-drive-download-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
           <header class="article-header">
             <p id="post-category" class="article-category">技術分析</p>
             <h1 id="post-title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</h1>
