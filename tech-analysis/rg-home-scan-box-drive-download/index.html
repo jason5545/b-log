@@ -208,7 +208,7 @@
 <p>ripgrep 要讀檔案內容才能搜尋。範圍是整個家目錄，Box 的資料夾也在裡面，所以它每讀一個檔案，Box 就得下載一個。</p>
 <p>Claude 把它砍掉，再重開 Box Drive，看了 30 秒，沒有新的下載請求。</p>
 <h3>Claude 說磁碟沒被塞爆，我回了一句 was 2.5tb</h3>
-<p>砍掉 rg 之後，Claude 去算下載量。log 只留下最後 25 個小時左右，這段就下載了約 964 GB。更早的 log 已經輪替掉了。</p>
+<p>砍掉 rg 之後，Claude 去算下載量。它只看了最後 25 個小時左右的 log，這段就下載了約 964 GB。更早的 log 其實還在，它沒看到。</p>
 <p>接著它說，磁碟沒被塞爆，Box 會自己清掉舊的暫存，快取只有 19 GB，磁碟還剩 615 GB，不用手動清。</p>
 <p>我回它：「was 2.5tb」。</p>
 <p>它才說，19 GB 只是 Box 自己的快取資料夾。下載下來的檔案存在同步資料夾裡，它沒量那邊就下了結論。</p>
@@ -228,7 +228,7 @@
 <p>中斷當下，Codex 在紀錄裡留了一句：「Any running unified exec processes may still be running in the background.」這句是寫給模型看的，不是寫給我的。</p>
 <p>當天晚上，Codex 負責執行指令的背景服務也重啟過一次。</p>
 <p>等待時間到了、我按了 Esc、背景服務重啟，rg 都沒有被停掉。它在背景繼續跑，一路讀進 Box 的資料夾。</p>
-<p>將近兩天，我是看到 Box 在同步才發現的。</p>
+<p>將近兩天，我是先看到下載流量不對，再去看硬碟空間，才發現不太妙。</p>
 <h3>Codex Desktop 上看不到它還在跑</h3>
 <p>我用過的 Claude Code、Kimi Code、pi、omp（原本叫 oh-my-pi），工作階段底下都會顯示還有工作在跑。Codex Desktop 沒有。</p>
 <p>Codex CLI 有 <code>/ps</code> 可以看背景終端機，<code>/stop</code> 可以停掉，但我用的是 Desktop。9 月初也有人在 GitHub 開了 issue，要 Codex Desktop 列出 AI 啟動的背景處理程序：<a href="https://github.com/openai/codex/issues/42244">openai/codex#42244</a>。</p>
