@@ -229,6 +229,8 @@
 <p>當天晚上，Codex 負責執行指令的背景服務也重啟過一次。</p>
 <p>等待時間到了、我按了 Esc、背景服務重啟，rg 都沒有被停掉。它在背景繼續跑，一路讀進 Box 的資料夾。</p>
 <p>將近兩天，我是先看到下載流量不對，再去看硬碟空間，才發現不太妙。</p>
+<p>我白天用的網路環境有 bucket 限速：一開始給全速，持續跑一陣子，就會被壓在一個固定速度。那兩天白天，下載量大概每小時 60 到 70 GB，很平，我猜就是被壓在那個速度。</p>
+<p>家裡沒有這種機制。晚上回家，最快一小時差不多 100 GB，我完全沒感覺。</p>
 <h3>Codex Desktop 上看不到它還在跑</h3>
 <p>我用過的 Claude Code、Kimi Code、pi、omp（原本叫 oh-my-pi），工作階段底下都會顯示還有工作在跑。Codex Desktop 沒有。</p>
 <p>Codex CLI 有 <code>/ps</code> 可以看背景終端機，<code>/stop</code> 可以停掉，但我用的是 Desktop。9 月初也有人在 GitHub 開了 issue，要 Codex Desktop 列出 AI 啟動的背景處理程序：<a href="https://github.com/openai/codex/issues/42244">openai/codex#42244</a>。</p>
