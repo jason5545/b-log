@@ -42,18 +42,36 @@ Claude 把它砍掉，再重開 Box Drive，看了 30 秒，沒有新的下載�
 
 清完之後，Claude 算出來已用 2.0 TB，跟我說的 2.5 TB 對不上。這個差距後來沒有再查。
 
-### 等待時間到了，rg 沒有結束
+### 等待時間到了，我也按了 Esc，rg 都沒有結束
 
 rg 被砍掉的時候已經跑了 1 天 18 小時，父處理程序是 PID 1。原本叫它起來的那個處理程序，早就不在了。
 
 我問 Claude：「its scheduled or a single session」。
 
-不是排程。執行紀錄裡，這行指令只出現在兩天前的一次工作階段。
+不是排程。執行紀錄裡，這行指令只出現在兩天前的一次 Codex Desktop 工作階段。
 
 那次工作階段在找幾個檔案。它先在 `/private/tmp` 和另一個資料夾裡找，10 秒後把範圍擴大到整個家目錄。
 
 腳本呼叫這行指令時，設定只等 10 秒。10.2 秒後拿到空的輸出，那次工作階段就當成找不到，繼續做下一步。
 
-等待時間到了，rg 沒有被停掉。它在背景繼續跑，一路讀進 Box 的資料夾。
+但 rg 其實還沒跑完。指令沒跑完時，工具會回傳一個 `session_id`，之後可以拿它回去讀輸出。這次的腳本只印了輸出，沒有印 `session_id`。同一輪裡其他指令都有完成的紀錄，只有 rg 沒有。
+
+rg 啟動後 1 分 55 秒，我按了 Esc，把那一輪中斷。
+
+中斷當下，Codex 在紀錄裡留了一句：「Any running unified exec processes may still be running in the background.」這句是寫給模型看的，不是寫給我的。
+
+當天晚上，Codex 負責執行指令的背景服務也重啟過一次。
+
+等待時間到了、我按了 Esc、背景服務重啟，rg 都沒有被停掉。它在背景繼續跑，一路讀進 Box 的資料夾。
 
 將近兩天，我是看到 Box 在同步才發現的。
+
+### Codex Desktop 上看不到它還在跑
+
+我用過的 Claude Code、Kimi Code、pi、omp（原本叫 oh-my-pi），工作階段底下都會顯示還有工作在跑。Codex Desktop 沒有。
+
+Codex CLI 有 `/ps` 可以看背景終端機，`/stop` 可以停掉，但我用的是 Desktop。9 月初也有人在 GitHub 開了 issue，要 Codex Desktop 列出 AI 啟動的背景處理程序：[openai/codex#42244](https://github.com/openai/codex/issues/42244)。
+
+中斷之後讓指令留在背景，是 Codex 刻意的設計。[openai/codex#42717](https://github.com/openai/codex/issues/42717) 引用了原始碼裡的註解：處理程序存在工作階段層級，就是為了中斷那一輪時不要把它停掉。
+
+我的認知，這屬於設計失誤。
