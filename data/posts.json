@@ -1,5 +1,23 @@
 [
   {
+    "slug": "reseller-just-say-it",
+    "title": "是店家也沒關係，直接說就好",
+    "summary": "在臉書賣兩支全新 iPhone，買家都說是自用，往回翻才發現兩位好像認識。我本來對賣給店家有點感冒，現在覺得是店家也沒關係，直接說就好。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-09-17T00:00:00Z",
+    "tags": [
+      "二手交易",
+      "臉書",
+      "Marketplace",
+      "iPhone",
+      "收購商",
+      "自用",
+      "商業觀察"
+    ],
+    "readingTime": "2 min"
+  },
+  {
     "slug": "rg-home-scan-box-drive-download",
     "title": "一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac",
     "summary": "一行 rg 搜尋整個家目錄，等待逾時、我按 Esc 中斷，它都沒停，在背景跑了 42 小時。Box Drive 讀一個檔案就下載一個，1.2 TB 被拉到 Mac 上。Claude 一開始量錯位置，說磁碟沒事；Codex Desktop 上也看不到 rg 還在跑。",
