@@ -52,15 +52,17 @@ function findImages(dir, fileList = []) {
 async function convertToWebP(imagePath) {
   const parsedPath = path.parse(imagePath);
   const webpPath = path.join(parsedPath.dir, `${parsedPath.name}.webp`);
+  const isSvg = parsedPath.ext.toLowerCase() === '.svg';
+  const webpExists = fs.existsSync(webpPath);
 
-  // 如果 WebP 檔案已存在，跳過
-  if (fs.existsSync(webpPath)) {
+  // SVG 封面可能是用來替換既有封面，必須覆寫對應的 WebP
+  if (webpExists && !isSvg) {
     console.log(`⏭️  跳過（已存在）: ${path.relative(CONFIG.imgDir, webpPath)}`);
     return { skipped: true };
   }
 
   try {
-    const source = parsedPath.ext.toLowerCase() === '.svg'
+    const source = isSvg
       ? sharp(imagePath, { density: 300 }).resize({ width: 1600 })
       : sharp(imagePath);
     const info = await source
@@ -75,7 +77,7 @@ async function convertToWebP(imagePath) {
     const webpSize = info.size;
     const savings = ((1 - webpSize / originalSize) * 100).toFixed(1);
 
-    console.log(`✅ 已轉換: ${path.relative(CONFIG.imgDir, imagePath)}`);
+    console.log(`✅ ${webpExists ? '已覆寫' : '已轉換'}: ${path.relative(CONFIG.imgDir, imagePath)}`);
     console.log(`   → ${path.relative(CONFIG.imgDir, webpPath)}`);
     console.log(`   原始: ${(originalSize / 1024).toFixed(1)} KB → WebP: ${(webpSize / 1024).toFixed(1)} KB (減少 ${savings}%)`);
 
