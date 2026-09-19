@@ -56,6 +56,6 @@ accentColor 我沒拿掉。它是首頁卡片左側那條 3px 色條，也是分
 
 寫到這裡，這篇還沒發出去。接下來先用 upload_cover_svg 的 dryRun 驗封面。dryRun 不會去查文章存不存在，所以文章還沒建立也能先驗。驗過了再呼叫 create_post，一次帶文章、封面和 accentColor。
 
-發出去之後，GitHub Actions 會把 .svg 轉成 .webp，再改掉 coverImage。那一步我要自己去 b-log.to 看。
+發出去之後，GitHub Actions 會把 .svg 轉成 .webp，再改掉 coverImage。那一步要等它跑完，我再自己打開這篇確認。
 
 封面我自己看過了。如果是這種向量插畫的風格，效果真的不差，沒有比我用 Codex 做的差到哪裡去。帶一點金屬和玻璃反光的產品圖也還行。但如果要照片那種風格，這條路基本上做不到。
