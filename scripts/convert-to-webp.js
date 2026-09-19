@@ -2,7 +2,7 @@
  * 自動將 content/img/ 目錄下的圖片轉換為 WebP 格式
  *
  * 功能：
- * - 掃描所有 .jpg, .jpeg, .png 檔案
+ * - 掃描所有 .jpg, .jpeg, .png, .svg 檔案
  * - 檢查是否已有對應的 .webp 檔案
  * - 使用 sharp 進行高品質轉換
  * - 保留原始檔案（作為降級方案）
@@ -20,7 +20,7 @@ const CONFIG = {
   quality: 85,
   alphaQuality: 85,
   method: 6, // 0-6，數字越大壓縮越好但越慢
-  supportedFormats: ['.jpg', '.jpeg', '.png'],
+  supportedFormats: ['.jpg', '.jpeg', '.png', '.svg'],
 };
 
 /**
@@ -60,7 +60,10 @@ async function convertToWebP(imagePath) {
   }
 
   try {
-    const info = await sharp(imagePath)
+    const source = parsedPath.ext.toLowerCase() === '.svg'
+      ? sharp(imagePath, { density: 300 }).resize({ width: 1600 })
+      : sharp(imagePath);
+    const info = await source
       .webp({
         quality: CONFIG.quality,
         alphaQuality: CONFIG.alphaQuality,

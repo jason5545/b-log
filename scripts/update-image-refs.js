@@ -70,7 +70,7 @@ function updateMarkdownFile(filePath) {
     }
 
     // 直接替換副檔名為 .webp
-    const webpImagePath = imagePath.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+    const webpImagePath = imagePath.replace(/\.(jpg|jpeg|png|svg)$/i, '.webp');
     updated = true;
     convertedCount++;
     return `![${alt}](${webpImagePath})`;
@@ -113,7 +113,7 @@ function updateCoverImageRefs() {
       const webpPath = path.join(parsed.dir, `${parsed.name}.webp`);
 
       if (fs.existsSync(webpPath)) {
-        post.coverImage = post.coverImage.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+        post.coverImage = post.coverImage.replace(/\.(jpg|jpeg|png|svg)$/i, '.webp');
         console.log(`✅ posts.json: ${post.slug} coverImage → .webp`);
         postsChanged = true;
         updatedCount++;
@@ -142,7 +142,7 @@ function updateCoverImageRefs() {
       const webpPath = path.join(parsed.dir, `${parsed.name}.webp`);
 
       if (fs.existsSync(webpPath)) {
-        item.image = item.image.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+        item.image = item.image.replace(/\.(jpg|jpeg|png|svg)$/i, '.webp');
         console.log(`✅ feed.json: ${item.id} image → .webp`);
         feedChanged = true;
         updatedCount++;

@@ -9,6 +9,7 @@ on:
       - 'content/img/**/*.jpg'
       - 'content/img/**/*.jpeg'
       - 'content/img/**/*.png'
+      - 'content/img/**/*.svg'
 
   # 允許手動觸發
   workflow_dispatch:
@@ -53,7 +54,7 @@ jobs:
       - name: 刪除原始圖片
         run: |
           deleted=0
-          for ext in jpg jpeg png; do
+          for ext in jpg jpeg png svg; do
             for f in $(find content/img -name "*.${ext}" 2>/dev/null); do
               webp="${f%.*}.webp"
               if [ -f "$webp" ]; then
