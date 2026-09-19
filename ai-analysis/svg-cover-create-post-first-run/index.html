@@ -222,7 +222,7 @@
 <p>200 篇文章裡，有 119 篇沒有封面，靠 accentColor 的漸層撐畫面。前端的 fallback 留給它們。</p>
 <p>實作是 Codex 上的 Luna（gpt-5.6-luna xhigh）做的，一次就過。tsc 過了。負測試一個塞了 35 個 <code>&lt;text&gt;</code>，另外 <code>&lt;image&gt;</code>、<code>&lt;script&gt;</code>、1200×630 各一個。create_post 缺欄位的測試有三個。sharp 轉出來是 1600×900，然後部署。connector 的 commit 是 5fad0ba，b-log 的是 cc84d17。中間它抓到自己一個正規表示式的括號寫錯。</p>
 <p>這篇文章是用這條新流程發的第一篇。</p>
-<p>封面也是 Opus 5 在這個對話裡手寫的。這次我要它不用畫到上一張那麼細，控制在 15 KB 以內，讓整個流程快一點。畫出來是 9.3 KB、121 個元素：一支手機，螢幕上有一張向量圖正在被畫出來，旁邊一條路從手機接到伺服器，再接到部落格。深藍底，橘色是主角，這篇的 accentColor 也跟著用同一個橘色。</p>
+<p>封面也是 Opus 5 在這個對話裡手寫的，26.6 KB、348 個元素：一支手機，螢幕上的向量編輯器裡有一張圖正在被畫出來，旁邊一條路從手機接到伺服器，再接到部落格。深藍底，橘色是主角，這篇的 accentColor 也跟著用同一個橘色。</p>
 <p>實測在發文之前就卡了一下。我開這個對話的時候，connector 伺服器已經是新版。Claude 直接對伺服器打 tools/list，回來是 13 個工具。但對話裡載入的工具清單還是舊的 12 個，create_post 沒有 coverSvg，也找不到 upload_cover_svg。我把 connector 重新連線之後，同一個對話裡才看得到新工具。</p>
 <p>寫到這裡，這篇還沒發出去。接下來先用 upload_cover_svg 的 dryRun 驗封面。dryRun 不會去查文章存不存在，所以文章還沒建立也能先驗。驗過了再呼叫 create_post，一次帶文章、封面和 accentColor。</p>
 <p>發出去之後，GitHub Actions 會把 .svg 轉成 .webp，再改掉 coverImage。那一步我要自己去 b-log.to 看。</p>
