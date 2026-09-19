@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="2 月建 connector 時我沒讓它收 SVG，因為那時模型畫的 SVG 都很醜，這個判斷沒錯；該重測的時間點是 7 月底，我到今天才測。真正早該補的是 create_post 沒有封面欄位，這跟模型無關。這篇是新流程發的第一篇，封面是 Opus 5 手寫的 SVG。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/ai-analysis/svg-cover-create-post-first-run/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/ai-analysis/svg-cover-create-post-first-run/" id="og-url">
+  <meta property="og:title" content="讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了" id="og-title">
+  <meta property="og:description" content="2 月建 connector 時我沒讓它收 SVG，因為那時模型畫的 SVG 都很醜，這個判斷沒錯；該重測的時間點是 7 月底，我到今天才測。真正早該補的是 create_post 沒有封面欄位，這跟模型無關。這篇是新流程發的第一篇，封面是 Opus 5 手寫的 SVG。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/svg-cover-create-post-first-run-cover.svg" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-09-19T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-09-19T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="AI 分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="AI">
+  <meta property="article:tag" content="Claude">
+  <meta property="article:tag" content="Opus 5">
+  <meta property="article:tag" content="SVG">
+  <meta property="article:tag" content="MCP">
+  <meta property="article:tag" content="Codex">
+  <meta property="article:tag" content="部落格">
+  <meta property="article:tag" content="無障礙">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/ai-analysis/svg-cover-create-post-first-run/" id="twitter-url">
+  <meta property="twitter:title" content="讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了" id="twitter-title">
+  <meta property="twitter:description" content="2 月建 connector 時我沒讓它收 SVG，因為那時模型畫的 SVG 都很醜，這個判斷沒錯；該重測的時間點是 7 月底，我到今天才測。真正早該補的是 create_post 沒有封面欄位，這跟模型無關。這篇是新流程發的第一篇，封面是 Opus 5 手寫的 SVG。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/svg-cover-create-post-first-run-cover.svg" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="AI, Claude, Opus 5, SVG, MCP, Codex, 部落格, 無障礙" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/svg-cover-create-post-first-run-cover.svg" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了","description":"2 月建 connector 時我沒讓它收 SVG，因為那時模型畫的 SVG 都很醜，這個判斷沒錯；該重測的時間點是 7 月底，我到今天才測。真正早該補的是 create_post 沒有封面欄位，這跟模型無關。這篇是新流程發的第一篇，封面是 Opus 5 手寫的 SVG。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-19T00:00:00Z","dateModified":"2026-09-19T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/svg-cover-create-post-first-run/"},"url":"https://b-log.to/ai-analysis/svg-cover-create-post-first-run/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/svg-cover-create-post-first-run-cover.svg"],"keywords":"AI, Claude, Opus 5, SVG, MCP, Codex, 部落格, 無障礙","articleSection":"AI 分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/svg-cover-create-post-first-run-cover.svg" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Sep 19, 2026</span><span>4 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>AI</span><span>Claude</span><span>Opus 5</span><span>SVG</span><span>MCP</span><span>Codex</span><span>部落格</span><span>無障礙</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>今天我在 Claude.ai 網頁端測 Opus 5 手寫 SVG，題目用 9/17 那篇〈<a href="https://b-log.to/business-insights/reseller-just-say-it/">是店家也沒關係，直接說就好</a>〉。</p>
+<p>第一張花了 9 分鐘。檔案 24 KB，362 個元素。iPhone 三鏡頭的金屬環、玻璃反光、相機平台的階差都畫出來了，旁邊還有兩個買家頭像和一個聊天視窗。</p>
+<p>品質比我預期高。</p>
+<p>慢是因為輸出量大。SVG 要模型一個字一個字寫出來，24 KB 就是逐字寫完 24 KB。</p>
+<p>第二張我改成完全沒有字，尺寸 1600×900。這張快很多，手機、鏡頭、漸層、濾鏡的定義都沿用第一張，只重寫版面。我的封面本來就都是無字的。</p>
+<h2>2 月為什麼沒讓它收 SVG</h2>
+<p>這個 connector 是 2/25 建的，當時的事寫在〈<a href="https://b-log.to/tech-development/static-blog-mcp-connector/">幫靜態部落格接上 MCP，然後我可以躺在床上用手機發文了</a>〉。</p>
+<p>那時候我沒讓它收 SVG。原因很單純，那時候模型畫出來的 SVG 都很醜。</p>
+<p>今天我回頭查了官方公告。2/5 的 Opus 4.6 公告，完全沒提視覺輸出。7/24 的 Opus 5 公告，才第一次寫到「much stronger visual outputs」。</p>
+<p>所以 2 月不做，這個判斷沒錯。</p>
+<p>該重測的時間點是 7 月底，官方第一次把視覺輸出寫進公告的時候。我實際重測是今天，晚了大概兩個月。</p>
+<h2>早該補的是那個欄位</h2>
+<p>模型的部分，等是合理的。</p>
+<p>但 create_post 和 edit_post 從 2/25 開始就沒有 coverImage 欄位。只要我離開 Mac，就沒辦法幫文章設封面。</p>
+<p>這件事跟模型能力無關。這個欄位 2 月就能加。</p>
+<p>那為什麼不讓它收點陣圖，用 base64 塞進去？</p>
+<p>MCP 工具的參數也是模型逐字生成的。一張 70 KB 的 WebP 轉成 base64，大約九萬個字元，比畫一張圖還慢，中間錯一個字元整張就壞了。SVG 是文字，模型寫起來最自然。網頁端的 Opus 自己也給了一樣的結論。</p>
+<p>能接 MCP 的，只有 Claude 的網頁端和手機 App，其他家都不行。所以這條流程做完，我躺在床上用手機發文，也能附封面。</p>
+<h2>這篇就是第一次實測</h2>
+<p>新工具叫 upload_cover_svg，直接收 SVG 原始碼。create_post 和 publish_draft 改成 coverSvg 必填，之後的新文章一律要有封面。</p>
+<p>封面規則寫在工具裡：16:9，建議 viewBox 用 0 0 1600 900，完全不能有文字，不能用 <code>&lt;text&gt;</code>，也不能用 path 畫字。所有東西都要 inline，不能引用外部資源，300 KB 以內。</p>
+<p>accentColor 我沒拿掉。它是首頁卡片左側那條 3px 色條，也是分類標籤的顏色，我喜歡那個呈現。這次改成必填，顏色要配合文章主題。</p>
+<p>200 篇文章裡，有 119 篇沒有封面，靠 accentColor 的漸層撐畫面。前端的 fallback 留給它們。</p>
+<p>實作是 Codex 上的 Luna（gpt-5.6-luna xhigh）做的，一次就過。tsc 過了。負測試一個塞了 35 個 <code>&lt;text&gt;</code>，另外 <code>&lt;image&gt;</code>、<code>&lt;script&gt;</code>、1200×630 各一個。create_post 缺欄位的測試有三個。sharp 轉出來是 1600×900，然後部署。connector 的 commit 是 5fad0ba，b-log 的是 cc84d17。中間它抓到自己一個正規表示式的括號寫錯。</p>
+<p>這篇文章是用這條新流程發的第一篇。</p>
+<p>封面也是 Opus 5 在這個對話裡手寫的。這次我要它不用畫到上一張那麼細，控制在 15 KB 以內，讓整個流程快一點。畫出來是 9.3 KB、121 個元素：一支手機，螢幕上有一張向量圖正在被畫出來，旁邊一條路從手機接到伺服器，再接到部落格。深藍底，橘色是主角，這篇的 accentColor 也跟著用同一個橘色。</p>
+<p>實測在發文之前就卡了一下。我開這個對話的時候，connector 伺服器已經是新版。Claude 直接對伺服器打 tools/list，回來是 13 個工具。但對話裡載入的工具清單還是舊的 12 個，create_post 沒有 coverSvg，也找不到 upload_cover_svg。我把 connector 重新連線之後，同一個對話裡才看得到新工具。</p>
+<p>寫到這裡，這篇還沒發出去。接下來先用 upload_cover_svg 的 dryRun 驗封面。dryRun 不會去查文章存不存在，所以文章還沒建立也能先驗。驗過了再呼叫 create_post，一次帶文章、封面和 accentColor。</p>
+<p>發出去之後，GitHub Actions 會把 .svg 轉成 .webp，再改掉 coverImage。那一步我要自己去 b-log.to 看。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
