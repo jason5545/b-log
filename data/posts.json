@@ -1,14 +1,14 @@
 [
   {
     "slug": "first-hackathon-code-done-in-37-minutes",
-    "title": "第一次黑客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下",
-    "summary": "9/20 臺北 Claude Code Build Day，我人生第一場黑客松。題目是「我的輪椅進得去嗎」，程式碼 +37 分鐘就做完排練過，出事的全在 Enter 鍵和 Teams 分享那幾下。旁白是複製的聲音，我只按一次 START。結果是大會特別獎。",
+    "title": "第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下",
+    "summary": "9/20 臺北 Claude Code Build Day，我人生第一場駭客松。題目是「我的輪椅進得去嗎」，程式碼 +37 分鐘就做完排練過，出事的全在 Enter 鍵和 Teams 分享那幾下。旁白是複製的聲音，我只按一次 START。結果是大會特別獎。",
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2026-09-20T00:00:00Z",
     "tags": [
       "Build Day",
-      "黑客松",
+      "駭客松",
       "Claude Code",
       "輪椅",
       "電梯",

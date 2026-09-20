@@ -1,8 +1,8 @@
-# 第一次黑客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下
+# 第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下
 
 9/20 下午四點四十七分，我在會場樓下的大門口，先跟 Claude Code 對時。
 
-然後我請它照飛機的 cockpit checklist 那樣，它唸一項、我檢查一項，能自動查的它自己查完回報。它是我的副駕駛。這是我人生第一場黑客松，Claude Community Taiwan 辦的 Claude Code Build Day，Everyday 賽道，單人。
+然後我請它照飛機的 cockpit checklist 那樣，它唸一項、我檢查一項，能自動查的它自己查完回報。它是我的副駕駛。這是我人生第一場駭客松，Claude Community Taiwan 辦的 Claude Code Build Day，Everyday 賽道，單人。
 
 ## 題目是我自己的問題
 
