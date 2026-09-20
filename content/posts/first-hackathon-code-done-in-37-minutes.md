@@ -72,6 +72,14 @@ Repo 在 [github.com/jason5545/can-my-wheelchair-fit](https://github.com/jason55
 
 當天從頭到尾沒有對登記系統真查，也沒有輸入驗證碼。五個地址的原始回應都在 fixtures 裡，快取從那裡種出來。比賽當下資料庫不會動，真查沒有意義。live 路徑照寫、9/18 驗過，README 寫明。
 
+## 結果
+
+大會特別獎。
+
+評審是 Anthropic 的 Japan Developer Community Lead Junichiro Tsuji 和另一位評審。
+
+我想這就是 Anthropic 希望看到的。AI 可以改變一個人。可以改變一個社會。可以讓整個社會更進步。
+
 這篇文章是從記憶系統裡的十幾筆紀錄、prompt 檔案的 commit 訊息、產品 repo 的 log 和現場手冊拼回來的。當天我打的字都很短，一半是英文縮寫，寫進來的是事情本身。
 
 診所那台電梯還是 1030。我下次去，腳踏板還是要拆。
