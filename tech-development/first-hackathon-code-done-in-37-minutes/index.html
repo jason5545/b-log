@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第一次黑客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="9/20 台北 Claude Code Build Day，我人生第一場黑客松。題目是「我的輪椅進得去嗎」，程式碼 +37 分鐘就做完排練過，出事的全在 Enter 鍵和 Teams 分享那幾下。旁白是複製的聲音，我只按一次 START。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-development/first-hackathon-code-done-in-37-minutes/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-development/first-hackathon-code-done-in-37-minutes/" id="og-url">
+  <meta property="og:title" content="第一次黑客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下" id="og-title">
+  <meta property="og:description" content="9/20 台北 Claude Code Build Day，我人生第一場黑客松。題目是「我的輪椅進得去嗎」，程式碼 +37 分鐘就做完排練過，出事的全在 Enter 鍵和 Teams 分享那幾下。旁白是複製的聲音，我只按一次 START。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/first-hackathon-code-done-in-37-minutes-cover.svg" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-09-20T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-09-20T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術開發" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="Build Day">
+  <meta property="article:tag" content="黑客松">
+  <meta property="article:tag" content="Claude Code">
+  <meta property="article:tag" content="輪椅">
+  <meta property="article:tag" content="電梯">
+  <meta property="article:tag" content="無障礙">
+  <meta property="article:tag" content="Playwright">
+  <meta property="article:tag" content="voice clone">
+  <meta property="article:tag" content="Teams">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-development/first-hackathon-code-done-in-37-minutes/" id="twitter-url">
+  <meta property="twitter:title" content="第一次黑客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下" id="twitter-title">
+  <meta property="twitter:description" content="9/20 台北 Claude Code Build Day，我人生第一場黑客松。題目是「我的輪椅進得去嗎」，程式碼 +37 分鐘就做完排練過，出事的全在 Enter 鍵和 Teams 分享那幾下。旁白是複製的聲音，我只按一次 START。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/first-hackathon-code-done-in-37-minutes-cover.svg" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="Build Day, 黑客松, Claude Code, 輪椅, 電梯, 無障礙, Playwright, voice clone, Teams" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/first-hackathon-code-done-in-37-minutes-cover.svg" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"第一次黑客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下","description":"9/20 台北 Claude Code Build Day，我人生第一場黑客松。題目是「我的輪椅進得去嗎」，程式碼 +37 分鐘就做完排練過，出事的全在 Enter 鍵和 Teams 分享那幾下。旁白是複製的聲音，我只按一次 START。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-20T00:00:00Z","dateModified":"2026-09-20T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/first-hackathon-code-done-in-37-minutes/"},"url":"https://b-log.to/tech-development/first-hackathon-code-done-in-37-minutes/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/first-hackathon-code-done-in-37-minutes-cover.svg"],"keywords":"Build Day, 黑客松, Claude Code, 輪椅, 電梯, 無障礙, Playwright, voice clone, Teams","articleSection":"技術開發"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">第一次黑客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/first-hackathon-code-done-in-37-minutes-cover.svg" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">第一次黑客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Sep 20, 2026</span><span>5 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>Build Day</span><span>黑客松</span><span>Claude Code</span><span>輪椅</span><span>電梯</span><span>無障礙</span><span>Playwright</span><span>voice clone</span><span>Teams</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>9/20 下午四點四十七分，我在會場樓下的大門口，先跟 Claude Code 對時。</p>
+<p>然後我請它照飛機的 cockpit checklist 那樣，它唸一項、我檢查一項，能自動查的它自己查完回報。它是我的副駕駛。這是我人生第一場黑客松，Claude Community Taiwan 辦的 Claude Code Build Day，Everyday 賽道，單人。</p>
+<h2>題目是我自己的問題</h2>
+<p>「我的輪椅進得去嗎」。</p>
+<p>每一個新地方都說「我們有電梯」。我的問題從來不是有沒有電梯，是那台電梯的車廂放不放得下我的 Leon。</p>
+<p>台灣有一個全國昇降設備登記系統，每台電梯都有一串設備規格，例如 <code>P8 550-CO 90-14 S/B1-13</code>。P8 是載重等級，對上日本 JIS A 4301 的容量表，就能推出車廂大概是 1400 × 1030 毫米、門寬 800。Leon 的車長是 1060。</p>
+<p>1030 對 1060。差 30 毫米。</p>
+<p>這是我諮商診所那棟的電梯。每次去都要把腳踏板拆掉。工具算出來的答案，是我身體早就知道的事。差別是現在它旁邊有證據欄：門寬、車廂、設備編號、使用執照號碼。</p>
+<p>判定分五態：進得去且能迴轉、只能直進倒退、硬塞、進不去、沒有電梯。承德路二段 217 號是家人公司所在的大樓，七樓，P10 的車廂，判定是只能直進倒退。這跟我實際搭的經驗一樣。</p>
+<h2>賽前只准備 prompt，一行程式都不寫</h2>
+<p>主辦的規則寫得很清楚：可以事先準備 prompt，不接受帶半成品，各賽道第一名會查 repo。</p>
+<p>所以 9/15 決定題目之後，我做的是研究，不是實作。用瀏覽器側錄那個登記系統的請求順序，查出驗證碼只在一個端點檢查、換頁不用重打、詳情頁不帶 seq 會回一個全空的模板。9/18 用 curl 把整串流程跑通。9/18 和 9/20 早上把五個 demo 地址的原始 HTML 抓下來當保險，網站當天掛掉也能離線做。</p>
+<p>9/18 我問過 Claude Code 一個問題：當天它對自己的把握有多高？要不要把 prompt 改成給本機模型那種一步一步的寫法？我自己也覺得那樣有點太對它沒信心。它的答案是不要，理由是那種寫法拿掉判斷空間，而當天最需要判斷的時刻，正是網站行為跟側錄不一樣的時候。</p>
+<p>當天早上我再問一次：one-shot 的機率多高？它估五成。</p>
+<h2>開賽</h2>
+<p>17:43 開賽。Prompt 裡有一欄 KICKOFF TIME，貼上去之前我自己填。它感覺不到時間，只能靠 <code>date</code> 算，每次 commit 前印一次過了幾分鐘。</p>
+<p>第一個小坑是建公開 repo。這一步被 Claude Code 的自動模式擋下來，因為那是「建立公開介面」。它把指令印給我，我自己跑。</p>
+<p>+37 分鐘，三段 prompt 全部做完，含車廂俯視圖，第一次完整排練過。剩下五十分鐘。</p>
+<p>排練是一個 Playwright 腳本，照旁白的時間戳填地址、選輪椅、按查詢，最後印 TIMING OK 或不 OK。每個 commit 後都重跑一次，紅了就 checkout 回上一個綠的，不 debug。這條規則是當天早上才改的，原本 75 分鐘是停工線，改成 75 分鐘是第一次排練。</p>
+<p>之後加的東西：Karma 的產品照、空狀態的五態圖例、卡片頂端一句話結論、215 號到 217 號那條側向鏈的門牌示意圖、把輪椅從側視的兩個圓圈改成真的俯視。最後上台的是第 12 個 commit，tag 是 stage-build-8。十二次錄影排練全過。</p>
+<h2>為什麼台上不開口、不點</h2>
+<p>我的構音會隨場合的陌生程度下滑。這一場陌生程度是 100%。</p>
+<p>所以旁白全程用我自己聲音的 voice clone TTS，開頭第一句就講明這是複製的聲音，因為腦性麻痺讓我在台上講話和點擊都不可靠。連「Hi, I&#39;m Jason」和「Thank you」都不是我講的。</p>
+<p>點擊也不是我點的。台上由那個 Playwright 腳本操作 app，我只按一次 START。</p>
+<p>旁白當天改了兩次。第一次是結尾那句「with one finger and voice」，我發現當天全程都在打字，沒用語音，voice 兩個字要拿掉，只重生那一句。第二次是怕上台時間沒有彈性，把 69 秒縮到 59.4 秒，砍掉診所那段的最後一句和結尾兩句。句子重拼不重生，時間軸跟著平移。</p>
+<h2>出狀況的都在我要親手碰的地方</h2>
+<p>程式碼那邊沒有出過事。出事的是最後那幾下。</p>
+<p>19:11，控制頁開在瀏覽器裡，我按到 Enter，demo 提前跑掉一次。跑完之後視窗自己關了，半小時沒人發現。</p>
+<p>18:59，我問 Claude Code 能不能幫我操作 Teams 的分享，我怕在台上點錯。它試了 System Events，無障礙樹看得到「加入」那顆按鈕，下 click 指令回報成功，畫面完全沒反應。離 85 分鐘的停工線只剩 13 分鐘，放棄，分享那兩下我自己來。</p>
+<p>真的上台，Teams 的視窗選單列出三個「Google Chrome for Testing」，都沒有預覽縮圖。我選錯一次。第二次選到主視窗。</p>
+<p>19:58:30，按下 START。59 秒，一次過，TIMING OK，零錯誤。我們是第三組。</p>
+<p>賽後查出來，三個視窗是 Chromium 的 kiosk 模式在 macOS 會把分頁列和工具列各開成一個獨立視窗，Teams 逐個列出來。Enter 誤觸是控制頁只要有焦點就吃鍵盤。跑完關視窗是 driver 沒有 keep-open。當晚四項都修了：kiosk 改成 app 模式只剩一個視窗，START 要先勾 READY 而且只吃滑鼠點擊，跑完視窗留著，旗標不再被吃掉。</p>
+<p>沒縮圖的原因還沒查證。下次如果還是沒有，直接分享整個螢幕。</p>
+<h2>公平證據</h2>
+<p>Repo 在 <a href="https://github.com/jason5545/can-my-wheelchair-fit">github.com/jason5545/can-my-wheelchair-fit</a>。README 寫明哪些是賽前準備的：prompt、請求順序、規格字串格式、原始 HTML、尺寸表。每一行程式碼都在賽中寫的，commit log 是公開的，第一個 commit 17:44，最後一個 18:38。</p>
+<p>當天從頭到尾沒有對登記系統真查，也沒有輸入驗證碼。五個地址的原始回應都在 fixtures 裡，快取從那裡種出來。比賽當下資料庫不會動，真查沒有意義。live 路徑照寫、9/18 驗過，README 寫明。</p>
+<p>這篇文章是從記憶系統裡的十幾筆紀錄、prompt 檔案的 commit 訊息、產品 repo 的 log 和現場手冊拼回來的。當天我打的字都很短，一半是英文縮寫，寫進來的是事情本身。</p>
+<p>診所那台電梯還是 1030。我下次去，腳踏板還是要拆。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>

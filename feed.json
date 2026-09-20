@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "first-hackathon-code-done-in-37-minutes",
+      "url": "https://b-log.to/tech-development/first-hackathon-code-done-in-37-minutes/",
+      "title": "第一次黑客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下",
+      "content_text": "9/20 台北 Claude Code Build Day，我人生第一場黑客松。題目是「我的輪椅進得去嗎」，程式碼 +37 分鐘就做完排練過，出事的全在 Enter 鍵和 Teams 分享那幾下。旁白是複製的聲音，我只按一次 START。",
+      "date_published": "2026-09-20T00:00:00.000Z",
+      "date_modified": "2026-09-20T00:00:00.000Z",
+      "tags": [
+        "Build Day",
+        "黑客松",
+        "Claude Code",
+        "輪椅",
+        "電梯",
+        "無障礙",
+        "Playwright",
+        "voice clone",
+        "Teams"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/first-hackathon-code-done-in-37-minutes-cover.svg"
+    },
+    {
       "id": "svg-cover-create-post-first-run",
       "url": "https://b-log.to/ai-analysis/svg-cover-create-post-first-run/",
       "title": "讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了",
