@@ -2,7 +2,7 @@
   {
     "slug": "opus-5-spec-caught-by-deepseek-v4-1-flash",
     "title": "Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾",
-    "summary": "同一天兩個專案，Opus 5 寫的規格都被 DeepSeek V4.1 Flash 在開工前抓到矛盾，驗收條件是憑上一輪印象填的，沒對著資料重算。Flash 不是推理猜到，是把規則對資料全量跑過。這個洞有一半是我的：絕對條件是我的寫法，驗過才能發這一步之前沒人做。",
+    "summary": "同一天兩個專案，Opus 5 寫的規格都被 DeepSeek V4.1 Flash 在開工前抓到矛盾，驗收條件是憑上一輪印象填的，沒對著資料重算。Flash 不是推理猜到，是把規則對資料全量跑過。本來以為絕對條件是我的寫法，翻了對話才發現是 Opus 5 自己寫的。",
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2026-09-21T00:00:00Z",
