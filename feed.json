@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "opus-5-spec-caught-by-deepseek-v4-1-flash",
+      "url": "https://b-log.to/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/",
+      "title": "Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾",
+      "content_text": "同一天兩個專案，Opus 5 寫的規格都被 DeepSeek V4.1 Flash 在開工前抓到矛盾，驗收條件是憑上一輪印象填的，沒對著資料重算。Flash 不是推理猜到，是把規則對資料全量跑過。這個洞有一半是我的：絕對條件是我的寫法，驗過才能發這一步之前沒人做。",
+      "date_published": "2026-09-21T00:00:00.000Z",
+      "date_modified": "2026-09-21T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Opus 5",
+        "DeepSeek V4.1 Flash",
+        "規格",
+        "驗收條件",
+        "Terminal-Bench",
+        "DeepSWE"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp"
+    },
+    {
       "id": "windows-11-single-finger-scrolling-progress",
       "url": "https://b-log.to/tech-analysis/windows-11-single-finger-scrolling-progress/",
       "title": "Windows 11 終於把單指捲動放回觸控板設定，至少有進展了",

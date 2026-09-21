@@ -1,5 +1,25 @@
 [
   {
+    "slug": "opus-5-spec-caught-by-deepseek-v4-1-flash",
+    "title": "Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾",
+    "summary": "同一天兩個專案，Opus 5 寫的規格都被 DeepSeek V4.1 Flash 在開工前抓到矛盾，驗收條件是憑上一輪印象填的，沒對著資料重算。Flash 不是推理猜到，是把規則對資料全量跑過。這個洞有一半是我的：絕對條件是我的寫法，驗過才能發這一步之前沒人做。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-09-21T00:00:00Z",
+    "tags": [
+      "AI",
+      "Opus 5",
+      "DeepSeek V4.1 Flash",
+      "規格",
+      "驗收條件",
+      "Terminal-Bench",
+      "DeepSWE"
+    ],
+    "accentColor": "#e3a33a",
+    "coverImage": "/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "windows-11-single-finger-scrolling-progress",
     "title": "Windows 11 終於把單指捲動放回觸控板設定，至少有進展了",
     "summary": "微軟 9/10 把單指捲動放進 Windows 11 Release Preview，精確式觸控板可以選左側或右側，用一根手指垂直捲動。去年我抱怨它被拿掉，自己寫了工具。這版只做垂直，Neowin 實測常誤判成移動游標，這兩件事我在自己的工具裡處理過。至少有進展了。",
