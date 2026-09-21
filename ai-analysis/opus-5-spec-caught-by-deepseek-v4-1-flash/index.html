@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="同一天兩個專案，Opus 5 寫的規格都被 DeepSeek V4.1 Flash 在開工前抓到矛盾，驗收條件是憑上一輪印象填的，沒對著資料重算。Flash 不是推理猜到，是把規則對資料全量跑過。這個洞有一半是我的：絕對條件是我的寫法，驗過才能發這一步之前沒人做。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/" id="og-url">
+  <meta property="og:title" content="Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾" id="og-title">
+  <meta property="og:description" content="同一天兩個專案，Opus 5 寫的規格都被 DeepSeek V4.1 Flash 在開工前抓到矛盾，驗收條件是憑上一輪印象填的，沒對著資料重算。Flash 不是推理猜到，是把規則對資料全量跑過。這個洞有一半是我的：絕對條件是我的寫法，驗過才能發這一步之前沒人做。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-09-21T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-09-21T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="AI 分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="AI">
+  <meta property="article:tag" content="Opus 5">
+  <meta property="article:tag" content="DeepSeek V4.1 Flash">
+  <meta property="article:tag" content="規格">
+  <meta property="article:tag" content="驗收條件">
+  <meta property="article:tag" content="Terminal-Bench">
+  <meta property="article:tag" content="DeepSWE">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/" id="twitter-url">
+  <meta property="twitter:title" content="Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾" id="twitter-title">
+  <meta property="twitter:description" content="同一天兩個專案，Opus 5 寫的規格都被 DeepSeek V4.1 Flash 在開工前抓到矛盾，驗收條件是憑上一輪印象填的，沒對著資料重算。Flash 不是推理猜到，是把規則對資料全量跑過。這個洞有一半是我的：絕對條件是我的寫法，驗過才能發這一步之前沒人做。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="AI, Opus 5, DeepSeek V4.1 Flash, 規格, 驗收條件, Terminal-Bench, DeepSWE" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp" imagesrcset="/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-480w.webp 480w, /content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-828w.webp 828w, /content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾","description":"同一天兩個專案，Opus 5 寫的規格都被 DeepSeek V4.1 Flash 在開工前抓到矛盾，驗收條件是憑上一輪印象填的，沒對著資料重算。Flash 不是推理猜到，是把規則對資料全量跑過。這個洞有一半是我的：絕對條件是我的寫法，驗過才能發這一步之前沒人做。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-21T00:00:00Z","dateModified":"2026-09-21T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"},"url":"https://b-log.to/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp"],"keywords":"AI, Opus 5, DeepSeek V4.1 Flash, 規格, 驗收條件, Terminal-Bench, DeepSWE","articleSection":"AI 分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp" srcset="/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-480w.webp 480w, /content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-828w.webp 828w, /content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">AI 分析</p>
+            <h1 id="post-title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Sep 21, 2026</span><span>6 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>AI</span><span>Opus 5</span><span>DeepSeek V4.1 Flash</span><span>規格</span><span>驗收條件</span><span>Terminal-Bench</span><span>DeepSWE</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>這幾天在跑一個照片辨識 pipeline，流程是這樣：Opus 5 寫每一輪的規格和驗收條件，DeepSeek V4.1 Flash 走 opencode-go 路由負責實作，本機 VLM 讀圖。第五輪的規格丟過去，Flash 開工前先停下來問了一個問題。</p>
+<p>分類規則跟驗收條件互斥。</p>
+<p>規格寫的是「regex 命中而且對照表查得到 → 目標類別」，驗收條件又要求某一批的目標類別剛好是連號的 26 張。Flash 把規則對兩批既有的分類報告跑了一遍，逐張數，發現有 5 張 regex 命中但對照表查不到：一張是某個字讀錯、換掉就救得回來，一張讀出來的編號本來就不在對照表，另外三張直接組不出編號。嚴格照規格跑，這批剩 21 張，三條驗收條件一起 FAIL。</p>
+<p>它給了三種處理方式，標了一個推薦，然後等我決定。</p>
+<h2>另一個專案，同一組模型，同一天</h2>
+<p>人行道路徑的無障礙判定。一樣 Opus 5 寫規格，Flash 實作。這輪要求改三個地方，其中一條驗收條件寫的是：某條路線整條不准出現 LAST_RESORT。</p>
+<p>Flash 做完三個改動，回報：LAST_RESORT 佔 15.23%，cap 是 15%，那條路線的驗收也還是 FAIL。兩個問題它都往回查到三個改動以外的規則和資料。然後給了三個選項：照三個改動 commit 並回報缺口；加第 4 個改動（比對距離 6 m 改 12 m，它量過，掉到 11.7%，過 cap）再 commit；或者先不 commit，去查普查資料跟驗收條件到底誰錯。</p>
+<p>沒 commit 任何東西。</p>
+<p>普查資料裡那條路線本來就有三段真的窄，0.69 m、0.85 m 那種。「整條不准有 LAST_RESORT」在寫的時候沒對著普查資料重算過，跟「剛好 26 張」是同一種錯，條件是憑上一輪印象填的，不是跑出來的。</p>
+<p>兩個專案、兩種資料，同一個洞。</p>
+<h2>opus 5 caught by deepseek 4.1 flash?</h2>
+<p>第一個反應是這個。</p>
+<p>但仔細看，兩次都不是靠推理猜出來的。是把規則寫成程式、對資料全量跑、數出來跟驗收條件比，矛盾自己浮出來。這種東西在寫規格的時候幾乎看不見。26 這個數字是照上一輪 regex 命中數填的，規則文字後來又多加了一個查表條件，兩邊各自看都合理，要跑過資料才會撞在一起。</p>
+<p>寫規格的人是抽查，實作的人是全量枚舉。</p>
+<p>我比較在意的是它接下來做的事：兩次都是發現矛盾之後停下來問，沒有自己挑一個安靜做掉。第二次它已經量出 12 m 可以過 cap，還是沒 commit。很多模型在這種情況會直接選「放寬」，然後在回報裡輕描淡寫帶過，你要到驗收 FAIL 或 PASS 得很可疑才會回頭發現。</p>
+<h2>可是 Opus 5 不是比 4.1 Flash 強？兩邊都能跑檢查啊</h2>
+<p>對，而且寫規格的那個 session 確實有跑實測：量裁切框的座標、確認對照表的欄位、確認某個編號查不到。所以不是能不能跑，是有沒有想到要跑。</p>
+<p>它跑的都是自己覺得不確定的東西。座標、欄位。「剛好 26 張」跟「整條不准」它沒當成不確定，因為數字是上一輪回報來的、規則是上一輪驗過的，這輪只是加一個條件，看起來是收緊。沒重算的是：收緊之後還剩多少。</p>
+<p>更尷尬的是證據就在它自己手上。照片那個專案，第四輪的合成測試案例是它寫的，裡面明明白白有兩條：一個是「這種讀法組不出編號」，一個是「這個編號組得出來，但不在對照表」。就是那 5 張裡的兩張。寫測試案例的時候知道這兩張過不了查表，寫分類規則的時候又要求必須查得到，兩段隔了幾十行，沒接起來。</p>
+<p>兩段分開看都沒錯。能力高低不太影響這種事，因為根本沒有東西觸發它回頭重算。</p>
+<p>換成 Opus 5 去實作、Flash 寫規格，我猜多半還是實作方抓到。</p>
+<p>不過這個洞有一半是我的。</p>
+<p>兩邊的規格都照我的 house style 寫，驗收條件用「不准」「剛好」寫成絕對條件。這種寫法錯了一定現形，我不打算改。代價是每一條都得對著資料驗過才能發，而這一步之前沒人做。Opus 5 是在我的格式裡寫，它繼承的是我的習慣。</p>
+<h2>那分數呢</h2>
+<p>去查了 DeepSWE 跟 Terminal-Bench，數字對這件事蠻有解釋力。</p>
+<p>接近或反超的（都是廠商自報，harness 不一樣）：</p>
+<ul>
+<li>Terminal-Bench 2.1：Flash 90.6 對 Opus 5 89.1。Flash 用自家 harness 90.6，用 mini-SWE 90.3，用 Claude Code 88.0</li>
+<li>DeepSWE v1.1：Flash 74.2，Opus 5 各家寫法不一，有的寫 74.0，<a href="https://www.anthropic.com/news/claude-opus-5">Anthropic 自己公布的</a>是 68.8</li>
+<li>AutomationBench：Flash 54.8 對 Opus 5 50.3</li>
+</ul>
+<p>拉開差距的：</p>
+<ul>
+<li>Terminal-Bench 4.0（9 月初剛換的難版）：Opus 5 51.8、Fable 5.1 57.9（<a href="https://www.tbench.ai/leaderboard">官方榜</a>），Flash 31.2</li>
+<li>HLE：Opus 5 56.3 對 Flash 36.8</li>
+<li>NL2Repo：Opus 5 75.3 對 Flash 65.4</li>
+</ul>
+<p><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash">DeepSeek 自己的表</a>上，兩邊都有數字的 15 項 benchmark 裡，Flash 贏 5 項、平均贏 1.94 分；Opus 5 贏 10 項、平均贏 10.19 分。光是 harness 選擇就能讓 DeepSWE 擺盪好幾分，所以 TB 2.1 那種一兩分的差距基本上是雜訊。</p>
+<p>Flash 抓到矛盾的那種工作，照規格寫程式、跑資料、對驗收條件，就是 TB 2.1 和 DeepSWE 在量的東西，兩邊本來就接近飽和。Opus 5 真正拉開的是 TB 4.0、HLE 這種要自己撐長推理鏈的難題。寫規格時漏掉「加了條件後重算數量」，難度沒那麼高，就是沒觸發檢查。</p>
+<p>在「執行加驗證」這個工作型態上，兩者差距小到誰拿到資料誰就贏。</p>
+<h2>規格方做了什麼</h2>
+<p>Flash 找到矛盾，怎麼補是規格方設計的。</p>
+<p>人行道那條驗收，從「整條不准」改成把絕對條件綁回資料：LAST_RESORT 只准落在普查記錄的窄段、或它們所在的同一條邊上，落在別的地方才算失敗，而且每一段都要列出寬度、障礙物數量、速限、密度。</p>
+<p>比對距離放寬那條也不能只看比例降了。要 Flash 印出 6 m 跟 12 m 各自對到的邊數，還有多邊形道路名稱跟 OSM name 不一致的邊數。12 m 的不一致率比 6 m 高超過 2 個百分點，就停下來回報，不准 commit。</p>
+<p>所以這兩次是分工做完的：Flash 找矛盾，Opus 5 改驗收。這兩件事我目前沒看到單一模型自己做得好。</p>
+<h2>之後怎麼做</h2>
+<p>兩邊各加一條。</p>
+<p>寫規格那方：每個帶數字或絕對條件的驗收發出去之前，用現有的報告把新規則模擬一次重算。跑不到 10 秒。這兩次的矛盾在那一步就會現形，不用等 Flash 那邊來回一趟。</p>
+<p>實作那方的第 0 步：開工前先把這些驗收對現有的報告和資料跑一遍，有矛盾先回報，再寫程式。Flash 這兩次是自發做的，把它寫死成流程。</p>
+<p>Flash 留著當實作主力。原本我不打算讓它寫規格，有好幾個<a href="https://www.mindstudio.ai/blog/deepseek-v4-1-flash-benchmarks">實際上手的測試</a>說它在 benchmark 暗示應該輕鬆處理的任務上會卡住。</p>
+<p>但 Flash 寫規格會怎樣，我沒試。現在說「不讓它寫」，是憑第三方的實測報告加 benchmark 差距推的，跟我批評規格方「數字憑上一輪印象填」是同一種推法。</p>
+<p>下一輪讓它起草、Opus 5 審，看看。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
