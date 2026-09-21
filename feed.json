@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "windows-11-single-finger-scrolling-progress",
+      "url": "https://b-log.to/tech-analysis/windows-11-single-finger-scrolling-progress/",
+      "title": "Windows 11 終於把單指捲動放回觸控板設定，至少有進展了",
+      "content_text": "微軟 9/10 把單指捲動放進 Windows 11 Release Preview，精確式觸控板可以選左側或右側，用一根手指垂直捲動。去年我抱怨它被拿掉，自己寫了工具。這版只做垂直，Neowin 實測常誤判成移動游標，這兩件事我在自己的工具裡處理過。至少有進展了。",
+      "date_published": "2026-09-21T00:00:00.000Z",
+      "date_modified": "2026-09-21T00:00:00.000Z",
+      "tags": [
+        "Windows 11",
+        "觸控板",
+        "單指捲動",
+        "邊緣捲動",
+        "精確式觸控板",
+        "Microsoft",
+        "無障礙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/windows-11-single-finger-scrolling-progress-cover.webp"
+    },
+    {
       "id": "first-hackathon-code-done-in-37-minutes",
       "url": "https://b-log.to/tech-development/first-hackathon-code-done-in-37-minutes/",
       "title": "第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下",
