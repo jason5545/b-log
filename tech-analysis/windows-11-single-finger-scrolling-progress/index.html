@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windows 11 終於把單指捲動放回觸控板設定，至少有進展了 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="微軟 9/10 把單指捲動放進 Windows 11 Release Preview，精確式觸控板可以選左側或右側，用一根手指垂直捲動。去年我抱怨它被拿掉，自己寫了工具。這版只做垂直，Neowin 實測常誤判成移動游標，這兩件事我在自己的工具裡處理過。至少有進展了。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-analysis/windows-11-single-finger-scrolling-progress/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-analysis/windows-11-single-finger-scrolling-progress/" id="og-url">
+  <meta property="og:title" content="Windows 11 終於把單指捲動放回觸控板設定，至少有進展了" id="og-title">
+  <meta property="og:description" content="微軟 9/10 把單指捲動放進 Windows 11 Release Preview，精確式觸控板可以選左側或右側，用一根手指垂直捲動。去年我抱怨它被拿掉，自己寫了工具。這版只做垂直，Neowin 實測常誤判成移動游標，這兩件事我在自己的工具裡處理過。至少有進展了。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/windows-11-single-finger-scrolling-progress-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-09-21T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-09-21T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="Windows 11">
+  <meta property="article:tag" content="觸控板">
+  <meta property="article:tag" content="單指捲動">
+  <meta property="article:tag" content="邊緣捲動">
+  <meta property="article:tag" content="精確式觸控板">
+  <meta property="article:tag" content="Microsoft">
+  <meta property="article:tag" content="無障礙">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-analysis/windows-11-single-finger-scrolling-progress/" id="twitter-url">
+  <meta property="twitter:title" content="Windows 11 終於把單指捲動放回觸控板設定，至少有進展了" id="twitter-title">
+  <meta property="twitter:description" content="微軟 9/10 把單指捲動放進 Windows 11 Release Preview，精確式觸控板可以選左側或右側，用一根手指垂直捲動。去年我抱怨它被拿掉，自己寫了工具。這版只做垂直，Neowin 實測常誤判成移動游標，這兩件事我在自己的工具裡處理過。至少有進展了。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/windows-11-single-finger-scrolling-progress-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="Windows 11, 觸控板, 單指捲動, 邊緣捲動, 精確式觸控板, Microsoft, 無障礙" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/windows-11-single-finger-scrolling-progress-cover.webp" imagesrcset="/content/img/2026/windows-11-single-finger-scrolling-progress-cover-480w.webp 480w, /content/img/2026/windows-11-single-finger-scrolling-progress-cover-828w.webp 828w, /content/img/2026/windows-11-single-finger-scrolling-progress-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Windows 11 終於把單指捲動放回觸控板設定，至少有進展了","description":"微軟 9/10 把單指捲動放進 Windows 11 Release Preview，精確式觸控板可以選左側或右側，用一根手指垂直捲動。去年我抱怨它被拿掉，自己寫了工具。這版只做垂直，Neowin 實測常誤判成移動游標，這兩件事我在自己的工具裡處理過。至少有進展了。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-21T00:00:00Z","dateModified":"2026-09-21T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/windows-11-single-finger-scrolling-progress/"},"url":"https://b-log.to/tech-analysis/windows-11-single-finger-scrolling-progress/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/windows-11-single-finger-scrolling-progress-cover.webp"],"keywords":"Windows 11, 觸控板, 單指捲動, 邊緣捲動, 精確式觸控板, Microsoft, 無障礙","articleSection":"技術分析"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/windows-11-single-finger-scrolling-progress-cover.webp" srcset="/content/img/2026/windows-11-single-finger-scrolling-progress-cover-480w.webp 480w, /content/img/2026/windows-11-single-finger-scrolling-progress-cover-828w.webp 828w, /content/img/2026/windows-11-single-finger-scrolling-progress-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術分析</p>
+            <h1 id="post-title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Sep 21, 2026</span><span>3 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>Windows 11</span><span>觸控板</span><span>單指捲動</span><span>邊緣捲動</span><span>精確式觸控板</span><span>Microsoft</span><span>無障礙</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>微軟公告附的設定截圖裡，Drag two fingers to scroll 下面多了一列 Single-finger scrolling，右邊的下拉選單寫著 Right Side。</p>
+<p>選項有三個：Disabled、Left Side、Right Side。位置在「設定 → 藍牙與裝置 → 觸控板」，展開「捲動與縮放」就看得到。</p>
+<p>微軟的說明只有一句：手指從觸控板左側或右側開始滑，就能用一根手指垂直捲動。</p>
+<p>去年 11 月，我寫了〈<a href="https://b-log.to/business-insights/modernization-vs-accessibility/">當「現代化」成為無障礙的退步：精確式觸控板取消邊緣捲動功能</a>〉，抱怨精確式觸控板把邊緣捲動拿掉了。那篇問過一句：「留著一個 checkbox 很難嗎？」</p>
+<p>幾天後，我自己用 C# 寫了 <a href="https://b-log.to/tech-development/touchpad-advanced-tool/">Touchpad Advanced Tool</a>。今年 1 月換到 Mac，又寫了一個 <a href="https://b-log.to/tech-development/touchpal/">TrackPal</a>。</p>
+<p>微軟這邊，<a href="https://blogs.windows.com/windows-insider/2026/05/08/announcing-new-builds-for-8-may-2026/">5 月 8 日</a>先在 Experimental 通道的 Build 26300.8376 放進來，<a href="https://blogs.windows.com/windows-insider/2026/09/10/announcing-windows-11-release-preview-builds-26100-9539-26200-9539/">9 月 10 日</a>進到 Release Preview（24H2 是 26100.9539，25H2 是 26200.9539）。目前還是分批推送，升級到這個版本也不一定看得到。</p>
+<p>結果不是 checkbox，是下拉選單，還可以選左邊或右邊。</p>
+<h2>它放在哪裡</h2>
+<p>它就在「捲動與縮放」裡，跟雙指捲動、捲動速度排在同一區。微軟 5 月的公告把它和捲動速度、加速捲動寫在同一段觸控板更新，這段沒有用到「無障礙」這個詞。</p>
+<p>去年那篇我抱怨的是，無障礙部門在做得獎的新產品，觸控板這邊卻把基本功能拿掉，兩邊好像沒在溝通。這次加回來的，是觸控板設定本身。</p>
+<h2>我自己寫的時候卡過的兩件事</h2>
+<p>第一件是方向。</p>
+<p>微軟寫的是垂直捲動，只有左右兩側。水平捲動，公告沒有提。</p>
+<p>這跟我在 Mac 上反編譯 Scroll2 看到的一樣，邊緣只定義了 <code>leftEdge</code> 和 <code>rightEdge</code>。我自己的兩個工具都有做水平捲動：Windows 版可以把上緣或下緣設成水平捲動區，TrackPal 是手指放在底部邊緣左右滑。</p>
+<p>第二件是誤判。</p>
+<p><a href="https://www.neowin.net/reports/you-can-scroll-with-one-finger-in-windows-11-but-it-feels-awkward/">Neowin 的 Ivan Jenic 在 9/16 寫了實測</a>。他想捲動，常常變成只有游標在動。游標還可能跑出他要捲的那個視窗，他得把游標找回來、移回視窗上，再試一次。</p>
+<p>這個我很熟。寫 TrackPal 的時候我遇過同樣的狀況，想捲動，系統判定成移動游標，再試一次還是一樣。我後來加了意圖判斷和重試偵測：被拒絕之後一兩秒內在同一個邊緣再做類似的動作，系統就稍微放寬門檻。</p>
+<p>用兩根手指的人碰到誤判，換回雙指就好。只有一根手指的人沒得換，每重來一次，都要先把游標找回來，移回視窗上，再滑一次。</p>
+<h2>誰會用這個功能</h2>
+<p>Neowin 那篇最後說，大家用雙指捲動用了這麼多年，他不確定這個功能會有多少人用。</p>
+<p>這個判斷的前提是讀者有兩根手指可以用。需要單指捲動的人，沒有雙指的肌肉記憶要改。</p>
+<p>同一批更新還有 Automatic scrolling：捲動時手指碰到觸控板上緣或下緣，頁面會繼續捲，不用抬起手指重來。Neowin 說這個反而順。單指在邊緣滑，很快就會滑到底，這個設定剛好補在那裡。</p>
+<h2>還沒完整的地方</h2>
+<p>微軟 5 月的公告寫著，用 WinUI 3 做的介面要等 Windows App SDK 1.8 和 2.0 更新，才會完整支援這批新手勢。微軟自家新框架寫的 App，暫時不一定完整。</p>
+<p>去年我問的是一個 checkbox。今年 9 月，Release Preview 裡有了一個下拉選單，還在分批推。水平捲動和誤判，我是在自己的工具裡處理的，微軟這版還沒看到。</p>
+<p>至少有進展了。</p>
+<p>封面是微軟 <a href="https://blogs.windows.com/windows-insider/2026/05/08/announcing-new-builds-for-8-may-2026/">5 月 8 日公告</a>附的設定畫面。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
