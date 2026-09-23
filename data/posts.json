@@ -1,5 +1,25 @@
 [
   {
+    "slug": "opus-5-5-simplified-chinese-in-thinking-summary",
+    "title": "Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡",
+    "summary": "換到 Opus 5.5 不到一天，Claude Code 畫面中間冒出整句簡體。掃了對話紀錄，Opus 自己寫的回覆沒有漏，整句簡體都在 thinking 的摘要裡，而官方文件寫明摘要是另一個模型做的。hook 碰不到那一層。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-09-23T00:00:00Z",
+    "tags": [
+      "AI",
+      "Claude",
+      "Opus 5.5",
+      "Claude Code",
+      "thinking",
+      "正體中文",
+      "Fable 5.1"
+    ],
+    "accentColor": "#c2410c",
+    "coverImage": "/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover.webp",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "opus-5-spec-caught-by-deepseek-v4-1-flash",
     "title": "Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾",
     "summary": "同一天兩個專案，Opus 5 寫的規格都被 DeepSeek V4.1 Flash 在開工前抓到矛盾，驗收條件是憑上一輪印象填的，沒對著資料重算。Flash 不是推理猜到，是把規則對資料全量跑過。本來以為絕對條件是我的寫法，翻了對話才發現是 Opus 5 自己寫的。",
