@@ -270,8 +270,8 @@
           <h2 class="hero-card__title">
             <a id="hero-link" href="/tech-development/claude-desktop-open-session-without-start-session/">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</a>
           </h2>
-          <p class="hero-card__meta" id="hero-meta">By Jason Chien | Published Sep 24, 2026 | 4 min</p>
-          <p class="hero-card__summary" id="hero-summary">Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。改用 deep link 帶入資料夾，再從輔助使用介面按 Send。第一版對錯交替：畫面上資料夾是對的，session 卻開到暫存資料夾。app 的 log 顯示，失敗的兩次都在資料夾信任存好之前按下。</p>
+          <p class="hero-card__meta" id="hero-meta">By Jason Chien | Published Sep 24, 2026 | 5 min</p>
+          <p class="hero-card__summary" id="hero-summary">Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 app 的 log 才知道是按得太早。後來發現 spawn_task 的 chip 就能開，交接原文直接送到，deep link 只剩備援。</p>
           <div class="hero-card__actions">
             <a id="hero-read-more" class="button button--primary" href="/tech-development/claude-desktop-open-session-without-start-session/">Continue reading</a>
             <a id="hero-open-discussion" class="button button--ghost" href="/tech-development/claude-desktop-open-session-without-start-session/#comments">Discuss</a>
