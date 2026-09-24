@@ -10,7 +10,7 @@
       "url": "https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/",
       "image": "https://b-log.to/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp",
       "title": "沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方",
-      "content_text": "Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 app 的 log 才知道是按得太早。後來發現 spawn_task 的 chip 就能開，交接原文直接送到，deep link 只剩備援。",
+      "content_text": "Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 log 才知道是按得太早。後來發現同一個資料夾用 spawn_task 的 chip 就能開；換資料夾還是要靠 deep link。",
       "date_published": "2026-09-24T00:00:00.000Z",
       "date_modified": "2026-09-24T00:00:00.000Z",
       "tags": [

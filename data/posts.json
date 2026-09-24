@@ -2,7 +2,7 @@
   {
     "slug": "claude-desktop-open-session-without-start-session",
     "title": "沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方",
-    "summary": "Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 app 的 log 才知道是按得太早。後來發現 spawn_task 的 chip 就能開，交接原文直接送到，deep link 只剩備援。",
+    "summary": "Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 log 才知道是按得太早。後來發現同一個資料夾用 spawn_task 的 chip 就能開；換資料夾還是要靠 deep link。",
     "category": "技術開發",
     "author": "Jason Chien",
     "publishedAt": "2026-09-24T00:00:00Z",

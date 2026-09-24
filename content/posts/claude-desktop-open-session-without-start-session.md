@@ -79,7 +79,7 @@ Claude 去讀了桌面版的 `main.log`。
 
 到這裡，開實作端已經變成協調端跑一行指令。工具會把畫面上的權限模式和模型讀出來給協調端核對，我不用按任何東西。
 
-## 其實用不到 deep link
+## 其實 chip 就能開
 
 這篇發出去的時候，Facebook 的預覽抓取失敗。Claude 丟了一個 chip，讓我另開 session 去修。我按下去，看到那個 session 的上下文是乾淨的。
 
@@ -119,6 +119,12 @@ Claude 把那個測試 session 切成 Sonnet 5，再傳一句話過去，它回�
 
 另外，chip 開的 session 結束時會通知協調端。實際上這個結束指的是封存，不是做完一輪。實作端做完，還是要自己傳訊息回報。
 
-所以現在開實作端，是協調端丟一個 chip，再跑一行指令按下去。deep link 那套留著當備援。chip 看不到新 session 的權限模式，要確認權限模式的時候才用得到它。
+## 換資料夾還是要 deep link
+
+chip 只能開在協調端自己的 repo。Start locally 開在主資料夾，Start with worktree 也是從同一個 repo 開，沒有地方可以換資料夾。
+
+同一天稍晚就碰到了。b-log 這邊的協調端要把工作交給另一個 repo（cptwin）的實作端，chip 開不過去。改跑 deep link 那支 script，一次就開在 cptwin，模型和權限模式都跟協調端一樣。
+
+所以兩條都留著。同一個資料夾用 chip，換資料夾用 deep link。chip 也看不到新 session 的權限模式，要確認權限模式的時候，一樣走 deep link。
 
 旗標還是關的。
