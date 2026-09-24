@@ -155,7 +155,7 @@ async function scrapeUrl(postUrl, pageAccessToken) {
   if (!response.ok || payload.error) {
     const error = payload.error;
     const details = error
-      ? `${error.message || 'Unknown Facebook error'} (${error.type || 'unknown type'} ${error.code || 'unknown code'})`
+      ? `${error.message || 'Unknown Facebook error'} (${error.type || 'unknown type'} ${error.code || 'unknown code'}) ${JSON.stringify(error)}`
       : `HTTP ${response.status}`;
     throw new Error(`Facebook scrape failed for ${postUrl}: ${details}`);
   }
@@ -312,6 +312,7 @@ async function main() {
 
     try {
       await scrapeUrl(postUrl, pageAccessToken);
+      console.log(`  🔄 已要求 Facebook 重新抓取 ${post.slug}`);
     } catch (err) {
       console.log(`  ⚠️ 重新抓取 Open Graph 失敗，仍繼續發文 (${err.message})`);
     }
