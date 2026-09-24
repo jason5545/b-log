@@ -1,5 +1,26 @@
 [
   {
+    "slug": "claude-desktop-open-session-without-start-session",
+    "title": "沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方",
+    "summary": "Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。改用 deep link 帶入資料夾，再從輔助使用介面按 Send。第一版對錯交替：畫面上資料夾是對的，session 卻開到暫存資料夾。app 的 log 顯示，失敗的兩次都在資料夾信任存好之前按下。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-09-24T00:00:00Z",
+    "tags": [
+      "AI",
+      "Claude",
+      "Claude Code",
+      "Opus 5.5",
+      "自動化",
+      "無障礙",
+      "AX",
+      "deep link"
+    ],
+    "accentColor": "#0f766e",
+    "coverImage": "/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "opus-5-5-simplified-chinese-in-thinking-summary",
     "title": "Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡",
     "summary": "換到 Opus 5.5 不到一天，Claude Code 畫面中間冒出整句簡體。掃了對話紀錄，Opus 自己寫的回覆沒有漏，整句簡體都在 thinking 的摘要裡，而官方文件寫明摘要是另一個模型做的。hook 碰不到那一層。",
