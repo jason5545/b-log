@@ -6,7 +6,7 @@
   <title>沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方 - (b)-log</title>
 
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 app 的 log 才知道是按得太早。後來發現 spawn_task 的 chip 就能開，交接原文直接送到，deep link 只剩備援。">
+  <meta name="description" content="Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 log 才知道是按得太早。後來發現同一個資料夾用 spawn_task 的 chip 就能開；換資料夾還是要靠 deep link。">
   <meta name="author" content="Jason Chien">
   <link rel="canonical" href="https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/" id="canonical-url">
 
@@ -14,7 +14,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/" id="og-url">
   <meta property="og:title" content="沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方" id="og-title">
-  <meta property="og:description" content="Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 app 的 log 才知道是按得太早。後來發現 spawn_task 的 chip 就能開，交接原文直接送到，deep link 只剩備援。" id="og-description">
+  <meta property="og:description" content="Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 log 才知道是按得太早。後來發現同一個資料夾用 spawn_task 的 chip 就能開；換資料夾還是要靠 deep link。" id="og-description">
   <meta property="og:image" content="https://b-log.to/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -39,7 +39,7 @@
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/" id="twitter-url">
   <meta property="twitter:title" content="沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方" id="twitter-title">
-  <meta property="twitter:description" content="Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 app 的 log 才知道是按得太早。後來發現 spawn_task 的 chip 就能開，交接原文直接送到，deep link 只剩備援。" id="twitter-description">
+  <meta property="twitter:description" content="Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 log 才知道是按得太早。後來發現同一個資料夾用 spawn_task 的 chip 就能開；換資料夾還是要靠 deep link。" id="twitter-description">
   <meta property="twitter:image" content="https://b-log.to/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
 
@@ -113,7 +113,7 @@
   <link rel="preload" as="image" href="/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp" imagesrcset="/content/img/2026/claude-desktop-open-session-without-start-session-cover-480w.webp 480w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-828w.webp 828w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方","description":"Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 app 的 log 才知道是按得太早。後來發現 spawn_task 的 chip 就能開，交接原文直接送到，deep link 只剩備援。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-24T00:00:00Z","dateModified":"2026-09-24T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/"},"url":"https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp"],"keywords":"AI, Claude, Claude Code, Opus 5.5, 自動化, 無障礙, AX, deep link, spawn_task","articleSection":"技術開發"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方","description":"Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 log 才知道是按得太早。後來發現同一個資料夾用 spawn_task 的 chip 就能開；換資料夾還是要靠 deep link。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-24T00:00:00Z","dateModified":"2026-09-24T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/"},"url":"https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp"],"keywords":"AI, Claude, Claude Code, Opus 5.5, 自動化, 無障礙, AX, deep link, spawn_task","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
   <div class="orb orb-1"></div>
@@ -239,7 +239,7 @@
 <p>內容跟協調端自己跑的一樣，差別只在 <code>@</code>。<code>ls -la</code> 權限欄後面的 <code>@</code>，被它改成全形的 <code>＠</code>，而它標的是「原始輸出」。要精確比對，還是要自己重跑。</p>
 <p>開 session 的時候，主畫面會被切到新 session。打開協調端自己的連結就能切回來，這一步也放進工具裡。</p>
 <p>到這裡，開實作端已經變成協調端跑一行指令。工具會把畫面上的權限模式和模型讀出來給協調端核對，我不用按任何東西。</p>
-<h2>其實用不到 deep link</h2>
+<h2>其實 chip 就能開</h2>
 <p>這篇發出去的時候，Facebook 的預覽抓取失敗。Claude 丟了一個 chip，讓我另開 session 去修。我按下去，看到那個 session 的上下文是乾淨的。</p>
 <p>這個 chip 來自 Claude Code 的 <code>spawn_task</code>，用途是提議一件可以另外做的事。旗標關著的帳號拿到的正好是它，旗標開了反而沒有。</p>
 <p>skill 裡原本寫著「spawn_task 會開新的 worktree」，所以一開始就沒考慮它。其實那只是預設按鈕，旁邊的選單裡還有 Start locally，開在主資料夾。</p>
@@ -262,7 +262,10 @@
 <p>那時候我在看別的 session。chip 的啟動按鈕只在協調端自己的畫面上，我一切走，它就不在 AX tree 裡。Claude 唯一的辦法是把我的主畫面切回來，但我可能正在別的 session 打字，所以它停下來跟我說。</p>
 <p>我切回來之後重跑，這次整條跑完。</p>
 <p>另外，chip 開的 session 結束時會通知協調端。實際上這個結束指的是封存，不是做完一輪。實作端做完，還是要自己傳訊息回報。</p>
-<p>所以現在開實作端，是協調端丟一個 chip，再跑一行指令按下去。deep link 那套留著當備援。chip 看不到新 session 的權限模式，要確認權限模式的時候才用得到它。</p>
+<h2>換資料夾還是要 deep link</h2>
+<p>chip 只能開在協調端自己的 repo。Start locally 開在主資料夾，Start with worktree 也是從同一個 repo 開，沒有地方可以換資料夾。</p>
+<p>同一天稍晚就碰到了。b-log 這邊的協調端要把工作交給另一個 repo（cptwin）的實作端，chip 開不過去。改跑 deep link 那支 script，一次就開在 cptwin，模型和權限模式都跟協調端一樣。</p>
+<p>所以兩條都留著。同一個資料夾用 chip，換資料夾用 deep link。chip 也看不到新 session 的權限模式，要確認權限模式的時候，一樣走 deep link。</p>
 <p>旗標還是關的。</p>
 </div>
           <footer class="article-footer">
