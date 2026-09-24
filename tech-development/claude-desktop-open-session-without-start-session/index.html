@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。改用 deep link 帶入資料夾，再從輔助使用介面按 Send。第一版對錯交替：畫面上資料夾是對的，session 卻開到暫存資料夾。app 的 log 顯示，失敗的兩次都在資料夾信任存好之前按下。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/" id="og-url">
+  <meta property="og:title" content="沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方" id="og-title">
+  <meta property="og:description" content="Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。改用 deep link 帶入資料夾，再從輔助使用介面按 Send。第一版對錯交替：畫面上資料夾是對的，session 卻開到暫存資料夾。app 的 log 顯示，失敗的兩次都在資料夾信任存好之前按下。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="Jason Chien" id="og-author">
+  <meta property="article:published_time" content="2026-09-24T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-09-24T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術開發" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="AI">
+  <meta property="article:tag" content="Claude">
+  <meta property="article:tag" content="Claude Code">
+  <meta property="article:tag" content="Opus 5.5">
+  <meta property="article:tag" content="自動化">
+  <meta property="article:tag" content="無障礙">
+  <meta property="article:tag" content="AX">
+  <meta property="article:tag" content="deep link">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/" id="twitter-url">
+  <meta property="twitter:title" content="沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方" id="twitter-title">
+  <meta property="twitter:description" content="Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。改用 deep link 帶入資料夾，再從輔助使用介面按 Send。第一版對錯交替：畫面上資料夾是對的，session 卻開到暫存資料夾。app 的 log 顯示，失敗的兩次都在資料夾信任存好之前按下。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="AI, Claude, Claude Code, Opus 5.5, 自動化, 無障礙, AX, deep link" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#b45309">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- Bricolage Grotesque — heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    .article {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .article-header h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: -0.02em;
+    }
+    /* 防止 CLS - Article 頁面 */
+    .article-shell {
+      min-height: 600px;
+    }
+    .article-hero {
+      min-height: 260px;
+      aspect-ratio: 16 / 9;
+    }
+    .article-layout {
+      min-height: 500px;
+    }
+    .article-footer {
+      min-height: 400px;
+    }
+    /* 內容區域預留空間 */
+    #post-content:empty {
+      min-height: 400px;
+      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp" imagesrcset="/content/img/2026/claude-desktop-open-session-without-start-session-cover-480w.webp 480w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-828w.webp 828w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方","description":"Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。改用 deep link 帶入資料夾，再從輔助使用介面按 Send。第一版對錯交替：畫面上資料夾是對的，session 卻開到暫存資料夾。app 的 log 顯示，失敗的兩次都在資料夾信任存好之前按下。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-24T00:00:00Z","dateModified":"2026-09-24T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/"},"url":"https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp"],"keywords":"AI, Claude, Claude Code, Opus 5.5, 自動化, 無障礙, AX, deep link","articleSection":"技術開發"}</script>
+</head>
+<body class="post-page">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-chrome">
+    <header class="site-header">
+      <div class="wrapper">
+        <div class="site-header__top">
+          <div>
+            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></p>
+            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
+            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
+          </div>
+          <nav class="site-nav">
+            <a href="../../">Home</a>
+            <a href="../../about.html">About</a>
+            <a href="../../gadgets.html">Gadgets</a>
+            <a href="../../feed.json">Feed</a>
+            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
+
+            <!-- 搜尋按鈕與搜尋框 -->
+            <div class="search-toggle-container">
+              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
+                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+
+              <div class="search-box" hidden>
+                <div class="search-input-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="搜尋文章..."
+                    aria-label="搜尋文章"
+                    autocomplete="off"
+                  >
+                  <button
+                    type="button"
+                    id="search-clear"
+                    class="search-clear"
+                    aria-label="清除搜尋"
+                    hidden
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
+              <span class="theme-toggle__icon">
+                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
+                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
+                </svg>
+              </span>
+              <span class="theme-toggle__text">Auto</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrapper article-shell">
+      <div class="article-layout">
+        <article class="article">
+          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp" srcset="/content/img/2026/claude-desktop-open-session-without-start-session-cover-480w.webp 480w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-828w.webp 828w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
+          <header class="article-header">
+            <p id="post-category" class="article-category">技術開發</p>
+            <h1 id="post-title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</h1>
+            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Sep 24, 2026</span><span>4 min</span></div>
+          </header>
+          <div id="post-tags" class="article-tags"><span>AI</span><span>Claude</span><span>Claude Code</span><span>Opus 5.5</span><span>自動化</span><span>無障礙</span><span>AX</span><span>deep link</span></div>
+          <div id="post-content" class="article-body" data-prerendered="true"><p>今天早上要把工作交給另一個 Claude Code session，我又得自己開一個新的。開之前還先問了 Claude：要開在哪個 workspace？</p>
+<p>我最近的做法是一個 session 當協調端，另一個 session 動手。協調端已經很長，裝著計畫和審查要用的脈絡。實作的大量工具輸出放到另一邊，協調端只看 diff 和驗證輸出。</p>
+<p>Claude 桌面版其實有開 session 的工具，叫 <code>start_session</code>。但它受桌面版的功能旗標控制，我的帳號還沒推送到。</p>
+<p>所以每次都是我自己開。開的時候要講清楚四件事：資料夾、要不要 worktree、權限模式、模型。</p>
+<p>我主要靠右手食指操作電腦（<a href="https://b-log.to/tech-development/agentic-coding-mac-assistive-workflow/">前因在這篇</a>）。開新 session、找資料夾、切模式，每一下都是實際的操作量。</p>
+<p>今天我問 Claude：既然還沒有旗標，桌面版的輔助使用介面（AX tree）完不完整？有沒有 AppleScript？</p>
+<h2>查到的東西</h2>
+<p>AppleScript 沒有。Claude.app 沒有腳本字典，<code>sdef</code> 直接回錯誤。能做的只有透過 System Events 點選單，File → New Session。</p>
+<p>AX tree 是完整的。新 session 頁面上，資料夾、worktree 勾選框、權限模式、模型、effort、Send 按鈕，全都是有標籤的控制項。</p>
+<p>Claude 另外翻了 app 的程式碼，找到一個 deep link：</p>
+<pre><code>claude://code/new?folder=&lt;資料夾&gt;&amp;q=&lt;第一句話&gt;
+</code></pre>
+<p>桌面版自己選單裡的「在某個資料夾開新 session」，用的就是它。</p>
+<h2>第一個 Enter 是我按的</h2>
+<p>Claude 打開這個連結，畫面出現「You said: …」，它回報說連結會自動送出。</p>
+<p>其實是我按的 Enter。</p>
+<p>deep link 只會把資料夾和文字帶進輸入框，不會送出。session 要按下 Send 才會建立。</p>
+<p>少的就是這一下。Claude 寫了一個小工具，從 AX tree 找到帶著那段文字的輸入框，按下同一個輸入框裡的 Send。</p>
+<p>session 開出來了，但開在一個新的暫存資料夾，app 顯示「No folder」。</p>
+<p>它推測是按太快，資料夾還沒套上，改成等輸入框上的資料夾標籤出現、再等 1.5 秒才按。下一次成功了，我就叫它包進 skill。</p>
+<h2>只成功一次</h2>
+<p>我跟它說，這只成功一次，再測。</p>
+<p>它又送了兩次。git 的資料夾又開到 No folder，非 git 的那個開對了。</p>
+<p>算上前面幾次，真的送出的五次是：對、錯、對、錯、對。</p>
+<p>第二次失敗時，工具已經確認資料夾標籤是對的，worktree 勾選框也載入了。畫面上看不出差別。</p>
+<h2>app 自己的 log 寫著</h2>
+<p>Claude 去讀了桌面版的 <code>main.log</code>。</p>
+<p>打開 deep link 後幾秒內，log 會出現一行 <code>Saved workspace trust for &lt;資料夾&gt;</code>。只帶入、沒有按 Send 的那兩次測試，也有這一行。這是頁面自己在存資料夾信任，跟 Send 無關。</p>
+<p>照時間推算，失敗的兩次，Send 都是在這行出現之前按的。過了 10 秒，log 才出現 <code>createScratchWorkspace</code>，session 開在新的暫存資料夾。</p>
+<p>成功的幾次，大多是在這行之後按的。有一次疑似按早了也成功，所以這還只是最可能的原因，不是定論。</p>
+<p>工具改成兩件事：</p>
+<ul>
+<li>按 Send 之前，先等 log 出現這個資料夾的信任紀錄。</li>
+<li>按完之後，從 log 找新 session 的啟動紀錄 <code>Starting local session &lt;id&gt; in &lt;路徑&gt;</code>。路徑不對就報錯，把那個 session 的 id 一起交出來。</li>
+</ul>
+<p>改完連送三次，三次都開在指定的資料夾。</p>
+<h2>交接也跑一次</h2>
+<p>最後用 SendMessage 送一個唯讀的小任務給新開的 session：列出資料夾內容，做完回報。</p>
+<p>它跑了，也回報了。回報要等協調端那一輪結束才會送到。</p>
+<p>內容跟協調端自己跑的一樣，差別只在 <code>@</code>。<code>ls -la</code> 權限欄後面的 <code>@</code>，被它改成全形的 <code>＠</code>，而它標的是「原始輸出」。要精確比對，還是要自己重跑。</p>
+<p>開 session 的時候，主畫面會被切到新 session。打開協調端自己的連結就能切回來，這一步也放進工具裡。</p>
+<p>現在要開實作端，是協調端跑一行指令。工具會把畫面上的權限模式和模型讀出來給協調端核對，我不用按任何東西。</p>
+<p>旗標還是關的。</p>
+</div>
+          <footer class="article-footer">
+            <div class="article-share" id="share-links"></div>
+            <section class="comments-section" id="comments">
+              <h2>留言討論</h2>
+              <div id="giscus-container" class="giscus-container">
+                <div class="giscus-loading" id="giscus-loading">
+                  <p>載入留言系統中...</p>
+                </div>
+                <div class="giscus-fallback" id="giscus-fallback" hidden>
+                  <p>無法載入留言系統。您可以前往
+                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+                  </p>
+                </div>
+              </div>
+            </section>
+            <nav class="article-nav" aria-label="Post navigation">
+              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+            </nav>
+          </footer>
+        </article>
+
+        <aside class="article-sidebar">
+          <section class="widget">
+            <h3 class="widget__title">Related reading</h3>
+            <ul id="related-list" class="related-list"></ul>
+          </section>
+          <section class="widget">
+            <h3 class="widget__title">Latest posts</h3>
+            <ul id="latest-sidebar" class="related-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
