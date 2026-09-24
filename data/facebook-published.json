@@ -1436,6 +1436,13 @@
       "postUrl": "https://b-log.to/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/",
       "facebookPostId": "1026818047191304_122115085035290922",
       "publishedAt": "2026-09-23T07:22:47.263Z"
+    },
+    "claude-desktop-open-session-without-start-session": {
+      "status": "published",
+      "title": "沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方",
+      "postUrl": "https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/",
+      "facebookPostId": "1026818047191304_122115178539290922",
+      "publishedAt": "2026-09-24T02:51:41.736Z"
     }
   }
 }
