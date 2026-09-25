@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "cloud-agent-main-session-cap-90-usd-round",
+      "url": "https://b-log.to/ai-analysis/cloud-agent-main-session-cap-90-usd-round/",
+      "image": "https://b-log.to/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp",
+      "title": "我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元",
+      "content_text": "我只限制主 session 不要爆，雲端 agent 就把工作全派給子代理，一輪花掉 90 美元。改成一個 Sonnet 做到底只花 31，但做的量只有四分之一。",
+      "date_published": "2026-09-25T00:00:00.000Z",
+      "date_modified": "2026-09-25T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Claude",
+        "Claude Code",
+        "Opus 5.5",
+        "Sonnet 5",
+        "子代理",
+        "prompt cache",
+        "雲端",
+        "用量",
+        "式札"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "claude-desktop-open-session-without-start-session",
       "url": "https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/",
       "image": "https://b-log.to/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp",
