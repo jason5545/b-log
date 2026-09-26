@@ -74,8 +74,9 @@
        BRIEFING 橫跨第 1、2 列、LOG 橫跨第 2、3 列，第 1 列只由 LATEST 決定高度，
        兩欄各自往下接，不會被對面撐出空白。列距用 margin，第 2 列是空的時候才不會多一段 gap。 */
     @media (min-width: 961px) {
+      /* 側欄 1216px 以下維持 19rem，更寬時跟著變寬 */
       .home-grid {
-        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 24vw, 32rem);
         grid-template-rows: auto auto 1fr;
         gap: 0 3.5rem;
         padding-block: 2.25rem 4rem;
@@ -120,7 +121,7 @@
 
   <!-- 首頁 featured preload 會由生成腳本注入到這裡 -->
   <!-- HOME_FEATURED_PRELOAD_START -->
-  <link rel="preload" as="image" href="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" imagesrcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" imagesizes="(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, 400px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" imagesrcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" imagesizes="(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, (max-width: 1216px) 400px, 36vw" fetchpriority="high">
 <!-- HOME_FEATURED_PRELOAD_END -->
 
   <!-- 完整樣式表 -->
@@ -211,7 +212,7 @@
             <h3 class="lead__title" id="hero-title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</h3>
             <p class="lead__sum" id="hero-summary">Anthropic 送的 250 美元只能在雲端用，我拿來做一個完全放手的和風卡牌遊戲，順便學怎麼管雲端 agent 的用量。我只限制主 session 不要爆，它就把工作全派給子代理，一輪花掉 90 美元。改成一個 Sonnet 做到底只花 31，但做的量只有四分之一。</p>
           </div>
-          <div class="lead__media" id="hero-media"><img class="lead__img" src="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" srcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" sizes="(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, 400px" alt="" aria-hidden="true" fetchpriority="high" decoding="sync"></div>
+          <div class="lead__media" id="hero-media"><img class="lead__img" src="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" srcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" sizes="(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, (max-width: 1216px) 400px, 36vw" alt="" aria-hidden="true" fetchpriority="high" decoding="sync"></div>
         </a>
       </section>
 <!-- HOME_FEATURED_END -->
@@ -295,7 +296,7 @@
 
         <section class="behind" aria-labelledby="behind-label">
           <h2 class="label" id="behind-label">BEHIND THE SCENES</h2>
-          <p>Markdown + JSON + GitHub Pages. No build step, no plugins. Every article lives in git. Fork it, open a PR, or let your AI co-author propose edits through <code>agent.md</code>.</p>
+          <p>Markdown + JSON + GitHub Pages. No build step, no plugins. Every article lives in git. Fork it, open a PR, or let your AI co-author propose edits through <code>AGENTS.md</code>.</p>
         </section>
       </div>
     </div>

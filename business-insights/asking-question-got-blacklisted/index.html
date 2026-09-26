@@ -74,11 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
+       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -86,8 +87,11 @@
       .post,
       .article-foot {
         grid-column: 1;
+        max-width: none;
         margin-inline: 0;
       }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -96,8 +100,10 @@
         padding-top: 1rem;
       }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
-    @media (min-width: 1100px) and (min-height: 880px) {
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
+       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (min-height: 780px) {
       .article-aside {
         position: sticky;
         top: 0.5rem;
@@ -131,7 +137,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/blacklisted_inquiry.webp" imagesrcset="/content/img/2026/blacklisted_inquiry-480w.webp 480w" imagesizes="(max-width: 800px) calc(100vw - 32px), 736px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/blacklisted_inquiry.webp" imagesrcset="/content/img/2026/blacklisted_inquiry-480w.webp 480w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我只是想問個問題，卻被列入黑名單","description":"在 PayPal 點了「報告問題」想問為什麼扣到錯的卡，結果直接觸發爭議調查，被主機商列入黑名單。PayPal 的解決中心沒有「詢問」選項，只有「爭議」。後來遇到願意先問原因的 Josh，才知道這種紀錄會留存、主機商之間可以互查。沒有惡意，卻承擔所有後果。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-01-16T00:00:00Z","dateModified":"2026-01-16T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/business-insights/asking-question-got-blacklisted/"},"url":"https://b-log.to/business-insights/asking-question-got-blacklisted/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/blacklisted_inquiry.webp"],"keywords":"PayPal, 爭議機制, 黑名單, 主機商, 網路交易, 教訓","articleSection":"商業觀察"}</script>
@@ -192,7 +198,7 @@
       <p id="post-meta" class="meta">16JAN26 · 商業觀察 · 4 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">我只是想問個問題，卻被列入黑名單</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/blacklisted_inquiry.webp" srcset="/content/img/2026/blacklisted_inquiry-480w.webp 480w" sizes="(max-width: 800px) calc(100vw - 32px), 736px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/blacklisted_inquiry.webp" srcset="/content/img/2026/blacklisted_inquiry-480w.webp 480w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>幾年前，我租了一台虛擬主機，服務一直都很穩定，沒什麼問題。直到有一天，我發現扣款扣到了我家人的信用卡——那張卡是綁在我的 PayPal 帳戶裡的，但我沒預期會扣到那張。</p>
 <p>我打開 PayPal，找到那筆交易，點了「報告問題」。我的想法很單純：為什麼會扣到這張卡？我只是想問個問題，交易本身完全正常。</p>
 <p>沒想到，這個動作直接觸發了爭議調查程序。</p>

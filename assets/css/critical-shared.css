@@ -79,6 +79,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* 寬螢幕字級跟著放大：1280px 以下維持瀏覽器預設（手機、1024 不變），到 2560px 放大到 125% */
+  font-size: clamp(100%, calc(100% + (100vw - 1280px) * 0.003125), 125%);
 }
 
 body {
@@ -116,8 +118,8 @@ img {
   display: none !important;
 }
 
+/* 不設最大寬度：寬螢幕左右只留 padding（每邊最多 40px，小於 4vw） */
 .wrap {
-  max-width: 76rem;
   margin-inline: auto;
   padding-inline: clamp(16px, 4vw, 40px);
 }

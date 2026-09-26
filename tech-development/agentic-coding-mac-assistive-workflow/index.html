@@ -76,11 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
+       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -88,8 +89,11 @@
       .post,
       .article-foot {
         grid-column: 1;
+        max-width: none;
         margin-inline: 0;
       }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -98,8 +102,10 @@
         padding-top: 1rem;
       }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
-    @media (min-width: 1100px) and (min-height: 880px) {
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
+       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (min-height: 780px) {
       .article-aside {
         position: sticky;
         top: 0.5rem;
@@ -133,7 +139,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/agentic-coding-mac-assistive-workflow-cover.webp" imagesrcset="/content/img/2026/agentic-coding-mac-assistive-workflow-cover-480w.webp 480w, /content/img/2026/agentic-coding-mac-assistive-workflow-cover-828w.webp 828w, /content/img/2026/agentic-coding-mac-assistive-workflow-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), 736px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/agentic-coding-mac-assistive-workflow-cover.webp" imagesrcset="/content/img/2026/agentic-coding-mac-assistive-workflow-cover-480w.webp 480w, /content/img/2026/agentic-coding-mac-assistive-workflow-cover-828w.webp 828w, /content/img/2026/agentic-coding-mac-assistive-workflow-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"自從有了 Agentic Coding，我最好的輔助居然是一台 Mac","description":"我從 CP 的操作限制、一路試輔具，寫到現在靠 Qwen3-ASR、adapter 和 Computer Use，把語音輸入接成自己的電腦操作工作流。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-06-14T00:00:00Z","dateModified":"2026-06-14T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/agentic-coding-mac-assistive-workflow/"},"url":"https://b-log.to/tech-development/agentic-coding-mac-assistive-workflow/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/agentic-coding-mac-assistive-workflow-cover.webp"],"keywords":"Agentic Coding, Vibe Coding, Computer Use, Qwen3-ASR, ASR, 語音輸入, 輔具, macOS","articleSection":"技術開發"}</script>
@@ -194,7 +200,7 @@
       <p id="post-meta" class="meta">14JUN26 · 技術開發 · 4 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">自從有了 Agentic Coding，我最好的輔助居然是一台 Mac</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/agentic-coding-mac-assistive-workflow-cover.webp" srcset="/content/img/2026/agentic-coding-mac-assistive-workflow-cover-480w.webp 480w, /content/img/2026/agentic-coding-mac-assistive-workflow-cover-828w.webp 828w, /content/img/2026/agentic-coding-mac-assistive-workflow-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), 736px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/agentic-coding-mac-assistive-workflow-cover.webp" srcset="/content/img/2026/agentic-coding-mac-assistive-workflow-cover-480w.webp 480w, /content/img/2026/agentic-coding-mac-assistive-workflow-cover-828w.webp 828w, /content/img/2026/agentic-coding-mac-assistive-workflow-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>隨著 Vibe Coding，或者現在叫做 Agentic Coding 的興起，我想分享一下我的心路歷程。</p>
 <p>我從小就是 CP。</p>
 <p>比較像是說，整個身體只有右手的一根手指可以動。所以，平常我的操作範圍非常有限。</p>

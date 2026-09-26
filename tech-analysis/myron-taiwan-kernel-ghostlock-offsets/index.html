@@ -78,11 +78,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
+       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -90,8 +91,11 @@
       .post,
       .article-foot {
         grid-column: 1;
+        max-width: none;
         margin-inline: 0;
       }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -100,8 +104,10 @@
         padding-top: 1rem;
       }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
-    @media (min-width: 1100px) and (min-height: 880px) {
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
+       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (min-height: 780px) {
       .article-aside {
         position: sticky;
         top: 0.5rem;
@@ -135,7 +141,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2.webp" imagesrcset="/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-480w.webp 480w, /content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-828w.webp 828w, /content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), 736px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2.webp" imagesrcset="/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-480w.webp 480w, /content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-828w.webp 828w, /content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來","description":"同一支手機，陸版的 GhostLock payload 一堆人算好了，臺版永遠對不上。拆開三個 ROM 才看到：同代號不等於同核心，陸版走 Google 官方 GKI 分支、臺版是小米自己編的。卡我一個月、一支手機錢的問題，最後半小時解掉，因為答案一直躺在自己的 ROM 裡。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-04T00:00:00Z","dateModified":"2026-08-04T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/"},"url":"https://b-log.to/tech-analysis/myron-taiwan-kernel-ghostlock-offsets/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2.webp"],"keywords":"GhostLock, CVE-2026-43499, myron, POCO F8 Ultra, HyperOS, kernel, kallsyms, BTF, root, Android 16","articleSection":"技術分析"}</script>
@@ -196,7 +202,7 @@
       <p id="post-meta" class="meta">04AUG26 · 技術分析 · 10 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">同一支手機，兩顆核心：臺版的 GhostLock 偏移為什麼永遠算不出來</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2.webp" srcset="/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-480w.webp 480w, /content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-828w.webp 828w, /content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), 736px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2.webp" srcset="/content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-480w.webp 480w, /content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-828w.webp 828w, /content/img/2026/myron-taiwan-kernel-ghostlock-offsets-cover-v2-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>裝置是 myron，POCO F8 Ultra / Redmi K90 Pro Max，Snapdragon 8 Elite Gen 5。我手上有兩支。第一支是臺版，第二支也是臺版——會買第二支，就是因為第一支的 root 死活做不出來。</p>
 <p>2026 年 7 月 7 日，Nebula Security 公開了 GhostLock（CVE-2026-43499）：Linux 核心 futex PI requeue 路徑的 use-after-free，2011 年就存在，影響幾乎所有核心，公開 exploit 成功率 97%，還是 Google kernelCTF 強制公開的那種。大陸社群反應很快，幾天內各機型的偏移量就算好了，包成 payload 在酷安到處發。K90 Pro Max 的現成品一堆。</p>
 <p>我的臺版，全部不能用。</p>

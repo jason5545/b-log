@@ -73,11 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
+       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -85,8 +86,11 @@
       .post,
       .article-foot {
         grid-column: 1;
+        max-width: none;
         margin-inline: 0;
       }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -95,8 +99,10 @@
         padding-top: 1rem;
       }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
-    @media (min-width: 1100px) and (min-height: 880px) {
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
+       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (min-height: 780px) {
       .article-aside {
         position: sticky;
         top: 0.5rem;
@@ -245,7 +251,7 @@ https://example.com/ai-analysis/openai-vs-anthropic/
 <p><strong>分類對應表：</strong></p>
 <pre><code class="language-javascript">const categoryMapping = {
   &quot;AI 分析&quot;: &quot;ai-analysis&quot;,
-  &quot;技術開發&quot;: &quot;tech-development&quot;,
+  &quot;技術開發&quot;: &quot;tech-development&quot;, 
   &quot;技術分析&quot;: &quot;tech-analysis&quot;,
   &quot;開發哲學&quot;: &quot;dev-philosophy&quot;
 };
@@ -255,20 +261,20 @@ https://example.com/ai-analysis/openai-vs-anthropic/
 <pre><code class="language-javascript">// 解析當前 URL
 function parseCurrentPath() {
   const path = window.location.pathname;
-
+  
   // 移除開頭和結尾的斜線
   const cleanPath = path.replace(/^\/|\/$/g, &#39;&#39;);
-
+  
   // 分割路徑部分
   const parts = cleanPath.split(&#39;/&#39;);
-
+  
   if (parts.length === 2) {
     return {
       category: parts[0],
       slug: parts[1]
     };
   }
-
+  
   return null; // 不是永久連結格式
 }
 
@@ -278,12 +284,12 @@ function loadContent(category, slug) {
   const reverseCategoryMap = {
     &quot;ai-analysis&quot;: &quot;AI 分析&quot;,
     &quot;tech-development&quot;: &quot;技術開發&quot;,
-    &quot;tech-analysis&quot;: &quot;技術分析&quot;,
+    &quot;tech-analysis&quot;: &quot;技術分析&quot;, 
     &quot;dev-philosophy&quot;: &quot;開發哲學&quot;
   };
-
+  
   const chineseCategory = reverseCategoryMap[category];
-
+  
   // 載入對應文章
   loadPost(slug, chineseCategory);
 }
@@ -298,7 +304,7 @@ const path = require(&#39;path&#39;);
 const categoryMapping = {
   &quot;AI 分析&quot;: &quot;ai-analysis&quot;,
   &quot;技術開發&quot;: &quot;tech-development&quot;,
-  &quot;技術分析&quot;: &quot;tech-analysis&quot;,
+  &quot;技術分析&quot;: &quot;tech-analysis&quot;, 
   &quot;開發哲學&quot;: &quot;dev-philosophy&quot;
 };
 
@@ -310,13 +316,13 @@ postsData.forEach(post =&gt; {
   const categorySlug = categoryMapping[post.category];
   const redirectPath = `${categorySlug}/${post.slug}/`;
   const fullPath = path.join(__dirname, &#39;..&#39;, redirectPath, &#39;index.html&#39;);
-
+  
   // 確保目錄存在
   fs.mkdirSync(path.dirname(fullPath), { recursive: true });
-
+  
   // 生成重定向頁面內容
   const redirectContent = generateRedirectPage(post, redirectPath);
-
+  
   // 寫入檔案
   fs.writeFileSync(fullPath, redirectContent);
   console.log(`Generated: ${redirectPath}`);
@@ -352,18 +358,18 @@ on:
 jobs:
   generate-redirects:
     runs-on: ubuntu-latest
-
+    
     steps:
     - uses: actions/checkout@v2
-
+    
     - name: 設定 Node.js
       uses: actions/setup-node@v2
       with:
         node-version: &#39;16&#39;
-
+        
     - name: 生成重定向頁面
       run: node scripts/generate-redirects.js
-
+      
     - name: 提交變更
       run: |
         git config --local user.email &quot;action@github.com&quot;
@@ -404,7 +410,7 @@ function unslugifyCategory(slug) {
 function handleRouting() {
   const urlParams = new URLSearchParams(window.location.search);
   const slugFromQuery = urlParams.get(&#39;slug&#39;);
-
+  
   if (slugFromQuery) {
     // 舊格式：/post.html?slug=xxx
     loadPost(slugFromQuery);
@@ -463,7 +469,7 @@ self.addEventListener(&#39;fetch&#39;, event =&gt; {
 function loadPost(slug) {
   // 顯示載入指示器
   showLoadingIndicator();
-
+  
   // 懶加載文章內容
   fetch(`content/posts/${slug}.md`)
     .then(response =&gt; response.text())
@@ -523,10 +529,10 @@ const testCases = [
 
 testCases.forEach(test =&gt; {
   console.log(`測試: ${test.name}`);
-
+  
   // 模擬 URL 解析
   const result = parseUrl(test.url);
-
+  
   if (result.slug === test.expectedSlug) {
     console.log(&#39;✅ 通過&#39;);
   } else {

@@ -25,10 +25,10 @@ const HOME_FEATURED_END = '<!-- HOME_FEATURED_END -->';
 const ARTICLE_TAGS_START = '<!-- ARTICLE_TAGS_START -->';
 const ARTICLE_TAGS_END = '<!-- ARTICLE_TAGS_END -->';
 const HERO_IMAGE_WIDTHS = [480, 828, 1200];
-// 首頁 LATEST：760px 以下封面滿版，760–960px 約半欄，桌面固定約 400px
-const HOME_HERO_SIZES = '(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, 400px';
-// 文章頁封面：欄寬 46rem（736px），手機扣掉左右 16px
-const ARTICLE_HERO_SIZES = '(max-width: 800px) calc(100vw - 32px), 736px';
+// 首頁 LATEST：760px 以下封面滿版，760–960px 約半欄，1216px 以下約 400px，更寬時跟著左欄變寬（約 36vw）
+const HOME_HERO_SIZES = '(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, (max-width: 1216px) 400px, 36vw';
+// 文章頁封面：手機扣掉左右 16px；1216px 以下欄寬約 736px；更寬時文章欄最多 52.875rem（2560px 約 1060px）
+const ARTICLE_HERO_SIZES = '(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px';
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 // LiSA 的兩個分類：洋紅只給她，旁邊直接寫出這個分類是什麼
 const HER_CATEGORY_HINTS = {
@@ -95,10 +95,18 @@ function escapeJsonForScript(value) {
     .replace(/&/g, '\\u0026');
 }
 
+// 去掉每行行尾空白，但 <pre> 裡的行原樣保留（程式碼的行尾空白是內容的一部分）
 function stripTrailingWhitespace(html) {
+  let inPre = false;
   return html
     .split('\n')
-    .map((line) => line.trimEnd())
+    .map((line) => {
+      const startsInPre = inPre;
+      for (const match of line.matchAll(/<(\/?)pre\b/gi)) {
+        inPre = match[1] !== '/';
+      }
+      return startsInPre || inPre ? line : line.trimEnd();
+    })
     .join('\n');
 }
 

@@ -74,11 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
+       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -86,8 +87,11 @@
       .post,
       .article-foot {
         grid-column: 1;
+        max-width: none;
         margin-inline: 0;
       }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -96,8 +100,10 @@
         padding-top: 1rem;
       }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
-    @media (min-width: 1100px) and (min-height: 880px) {
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
+       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (min-height: 780px) {
       .article-aside {
         position: sticky;
         top: 0.5rem;
@@ -131,7 +137,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover.webp" imagesrcset="/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover-480w.webp 480w, /content/img/2026/asian-sex-diary-no-longer-johns-diary-cover-828w.webp 828w, /content/img/2026/asian-sex-diary-no-longer-johns-diary-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), 736px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover.webp" imagesrcset="/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover-480w.webp 480w, /content/img/2026/asian-sex-diary-no-longer-johns-diary-cover-828w.webp 828w, /content/img/2026/asian-sex-diary-no-longer-johns-diary-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Asian Sex Diary 已經不是 John 一個人的日記","description":"我從 Filipina Sex Diary 時期一路看到現在。John 不再出現，男主角開始輪替，畫面裡又出現熟悉的台灣演員。那幾句蹩腳的英文讓我看清楚：一個人的旅行日記，已經變成可以交給不同團隊繼續拍的格式。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-06T00:00:00Z","dateModified":"2026-08-06T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/cultural-insights/asian-sex-diary-no-longer-johns-diary/"},"url":"https://b-log.to/cultural-insights/asian-sex-diary-no-longer-johns-diary/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover.webp"],"keywords":"成人產業, Asian Sex Diary, Trike Patrol, 台灣成人產業, 東南亞, 內容平台","articleSection":"文化觀察"}</script>
@@ -192,7 +198,7 @@
       <p id="post-meta" class="meta">06AUG26 · 文化觀察 · 6 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">Asian Sex Diary 已經不是 John 一個人的日記</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover.webp" srcset="/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover-480w.webp 480w, /content/img/2026/asian-sex-diary-no-longer-johns-diary-cover-828w.webp 828w, /content/img/2026/asian-sex-diary-no-longer-johns-diary-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), 736px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover.webp" srcset="/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover-480w.webp 480w, /content/img/2026/asian-sex-diary-no-longer-johns-diary-cover-828w.webp 828w, /content/img/2026/asian-sex-diary-no-longer-johns-diary-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>最近我又打開 Asian Sex Diary，畫面裡出現的是我認得的台灣男優和女優。</p>
 <p>男優照著這個網站原本的形式，用蹩腳的英文跟女方說話。英文講得好不好不是重點。真正讓我停下來的是：這個我從 Filipina Sex Diary 時期一路看到現在的網站，居然繞了一大圈，最後接上了台灣成人產業。</p>
 <p>以前 Asian Sex Diary 幾乎就是 John。現在 John 不再出現，男主角一直換，連台灣演員都進來了。網站還叫 Diary，但它早就不是一個人的日記。</p>

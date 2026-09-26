@@ -75,11 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
+       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -87,8 +88,11 @@
       .post,
       .article-foot {
         grid-column: 1;
+        max-width: none;
         margin-inline: 0;
       }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -97,8 +101,10 @@
         padding-top: 1rem;
       }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
-    @media (min-width: 1100px) and (min-height: 880px) {
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
+       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (min-height: 780px) {
       .article-aside {
         position: sticky;
         top: 0.5rem;
@@ -132,7 +138,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/qwen-3-6-27b-diligence-compensates-cover.webp" imagesrcset="/content/img/2026/qwen-3-6-27b-diligence-compensates-cover-480w.webp 480w, /content/img/2026/qwen-3-6-27b-diligence-compensates-cover-828w.webp 828w, /content/img/2026/qwen-3-6-27b-diligence-compensates-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), 736px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/qwen-3-6-27b-diligence-compensates-cover.webp" imagesrcset="/content/img/2026/qwen-3-6-27b-diligence-compensates-cover-480w.webp 480w, /content/img/2026/qwen-3-6-27b-diligence-compensates-cover-828w.webp 828w, /content/img/2026/qwen-3-6-27b-diligence-compensates-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"勤能補拙：Qwen 3.6 27B 幫我修好了 TrackPal","description":"TrackPal 在 macOS 26 突然打不開了。ChatGPT 額度用完，改用 Qwen 3.6 27B 本地模型調查。一開始它用了舊 API 編譯不過，但接著開始寫 Swift 去測哪個 API 才是對的。不知道答案就寫程式去測，測出來了。這不叫聰明，這叫勤。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-02T00:00:00Z","dateModified":"2026-05-02T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/qwen-3-6-27b-diligence-compensates/"},"url":"https://b-log.to/ai-analysis/qwen-3-6-27b-diligence-compensates/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/qwen-3-6-27b-diligence-compensates-cover.webp"],"keywords":"Qwen, 本地模型, macOS 26, TrackPal, Swift, debug, 勤能補拙","articleSection":"AI 分析"}</script>
@@ -193,7 +199,7 @@
       <p id="post-meta" class="meta">02MAY26 · AI 分析 · 5 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">勤能補拙：Qwen 3.6 27B 幫我修好了 TrackPal</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/qwen-3-6-27b-diligence-compensates-cover.webp" srcset="/content/img/2026/qwen-3-6-27b-diligence-compensates-cover-480w.webp 480w, /content/img/2026/qwen-3-6-27b-diligence-compensates-cover-828w.webp 828w, /content/img/2026/qwen-3-6-27b-diligence-compensates-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), 736px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/qwen-3-6-27b-diligence-compensates-cover.webp" srcset="/content/img/2026/qwen-3-6-27b-diligence-compensates-cover-480w.webp 480w, /content/img/2026/qwen-3-6-27b-diligence-compensates-cover-828w.webp 828w, /content/img/2026/qwen-3-6-27b-diligence-compensates-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>TrackPal 突然打不開了。</p>
 <p>不是 crash、不是 bug，是完全打不開。macOS 26 之後的某個版本，AppKit 的行為變得非常奇怪——menu bar app 用 <code>MenuBarExtra</code> 的 <code>.window</code> 樣式時，popup 一關掉，整個 app 就被終止。</p>
 <p>平常我都是請 ChatGPT 來調查跟調整。但這時候剛好額度用完了。</p>

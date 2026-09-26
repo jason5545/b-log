@@ -75,11 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
+       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -87,8 +88,11 @@
       .post,
       .article-foot {
         grid-column: 1;
+        max-width: none;
         margin-inline: 0;
       }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -97,8 +101,10 @@
         padding-top: 1rem;
       }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
-    @media (min-width: 1100px) and (min-height: 880px) {
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
+       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (min-height: 780px) {
       .article-aside {
         position: sticky;
         top: 0.5rem;
@@ -132,7 +138,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp" imagesrcset="/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-480w.webp 480w, /content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-828w.webp 828w, /content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), 736px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp" imagesrcset="/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-480w.webp 480w, /content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-828w.webp 828w, /content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾","description":"同一天兩個專案，Opus 5 寫的規格都被 DeepSeek V4.1 Flash 在開工前抓到矛盾，驗收條件是憑上一輪印象填的，沒對著資料重算。Flash 不是推理猜到，是把規則對資料全量跑過。本來以為絕對條件是我的寫法，翻了對話才發現是 Opus 5 自己寫的。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-21T00:00:00Z","dateModified":"2026-09-21T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"},"url":"https://b-log.to/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp"],"keywords":"AI, Opus 5, DeepSeek V4.1 Flash, 規格, 驗收條件, Terminal-Bench, DeepSWE","articleSection":"AI 分析"}</script>
@@ -193,7 +199,7 @@
       <p id="post-meta" class="meta">21SEP26 · AI 分析 · 6 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp" srcset="/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-480w.webp 480w, /content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-828w.webp 828w, /content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), 736px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp" srcset="/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-480w.webp 480w, /content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-828w.webp 828w, /content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>這幾天在跑一個照片辨識 pipeline，流程是這樣：Opus 5 寫每一輪的規格和驗收條件，DeepSeek V4.1 Flash 走 opencode-go 路由負責實作，本機 VLM 讀圖。第五輪的規格丟過去，Flash 開工前先停下來問了一個問題。</p>
 <p>分類規則跟驗收條件互斥。</p>
 <p>規格寫的是「regex 命中而且對照表查得到 → 目標類別」，驗收條件又要求某一批的目標類別剛好是連號的 26 張。Flash 把規則對兩批既有的分類報告跑了一遍，逐張數，發現有 5 張 regex 命中但對照表查不到：一張是某個字讀錯、換掉就救得回來，一張讀出來的編號本來就不在對照表，另外三張直接組不出編號。嚴格照規格跑，這批剩 21 張，三條驗收條件一起 FAIL。</p>

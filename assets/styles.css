@@ -276,9 +276,9 @@
   padding: 0;
 }
 
-/* 載入前的佔位：一頁 LOG 的高度，避免版面跳動 */
+/* 載入前的佔位：一頁 LOG 的高度，避免版面跳動（用 rem，寬螢幕字級放大時一起變高） */
 .log .log__list:empty {
-  min-height: 980px;
+  min-height: 61.25rem;
   background: repeating-linear-gradient(
     to bottom,
     transparent 0,
@@ -400,7 +400,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  min-height: 396px;
+  min-height: 24.75rem;
 }
 
 .topics a {
@@ -684,6 +684,13 @@
 .post__body iframe,
 .post__body video {
   max-width: 100%;
+}
+
+/* 寬螢幕內文吃滿文章欄：橫式圖跟著變寬，直式截圖限制高度，不會一張比一個畫面還高 */
+@media (min-width: 1100px) {
+  .post__body img {
+    max-height: 85vh;
+  }
 }
 
 /* Inline code: ink on code-bg, never pink */
@@ -1095,6 +1102,8 @@
 .her-cat,
 .row--her .row__cat,
 .brief .cat.her-cat,
+.crumb a.her-cat,
+.crumb a.her-cat:hover,
 .topics a.her,
 .tag-cloud a.her {
   color: var(--magenta);

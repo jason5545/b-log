@@ -73,11 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
+       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -85,8 +86,11 @@
       .post,
       .article-foot {
         grid-column: 1;
+        max-width: none;
         margin-inline: 0;
       }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -95,8 +99,10 @@
         padding-top: 1rem;
       }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
-    @media (min-width: 1100px) and (min-height: 880px) {
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
+       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (min-height: 780px) {
       .article-aside {
         position: sticky;
         top: 0.5rem;
@@ -207,7 +213,7 @@
 function validateTime() {
   const now = new Date();
   const deadline = new Date(&#39;2025-01-01 10:00:00&#39;);
-
+  
   if (now &gt; deadline) {
     document.getElementById(&#39;submitBtn&#39;).disabled = true;
     alert(&#39;已超過訂餐時間&#39;);
@@ -279,17 +285,17 @@ fetch(&#39;/api/orders?start_date=2024-07-01&amp;end_date=2025-01-01&#39;)
 async function submitForm() {
   const formData = new FormData();
   formData.append(&#39;meal_id&#39;, selectedMeal);
-
+  
   const response = await fetch(&#39;/api/orders&#39;, {
     method: &#39;POST&#39;,
     body: formData
   });
-
+  
   const result = await response.json();
-
+  
   // 強制等待 120 秒
   await new Promise(resolve =&gt; setTimeout(resolve, 120000));
-
+  
   alert(&#39;訂單已完成&#39;);
   window.location.reload();
 }
@@ -307,7 +313,7 @@ async function submitForm() {
   const now = new Date();
   const deadline = new Date();
   deadline.setHours(10, 0, 0, 0);
-
+  
   if (now &gt; deadline) {
     document.getElementById(&#39;submitBtn&#39;).disabled = true;
     document.getElementById(&#39;errorMsg&#39;).textContent = &#39;已超過訂餐時間(10:00)&#39;;
@@ -330,14 +336,14 @@ submitButton.addEventListener(&#39;click&#39;, () =&gt; {
   const now = new Date();
   const deadline = new Date();
   deadline.setHours(10, 0, 0, 0);
-
+  
   if (now &gt; deadline) {
     return res.status(400).json({
       error: &#39;ORDER_TIME_EXPIRED&#39;,
       message: &#39;已超過訂餐時間(10:00)&#39;
     });
   }
-
+  
   // 2. 驗證其他必要欄位
   if (!req.body.meal_id || !req.body.quantity) {
     return res.status(400).json({
@@ -345,7 +351,7 @@ submitButton.addEventListener(&#39;click&#39;, () =&gt; {
       message: &#39;缺少必要欄位&#39;
     });
   }
-
+  
   // 3. 驗證權限
   if (!isAuthorized(req.user)) {
     return res.status(403).json({
@@ -353,7 +359,7 @@ submitButton.addEventListener(&#39;click&#39;, () =&gt; {
       message: &#39;無權限執行此操作&#39;
     });
   }
-
+  
   // 4. 通過所有驗證，處理請求
   const order = await db.orders.insert(req.body);
   res.json({ success: true, order });
@@ -370,15 +376,15 @@ res.json(allOrders);
   const page = parseInt(req.query.page) || 1;
   const limit = 50;
   const skip = (page - 1) * limit;
-
+  
   const orders = await db.orders
     .find({})
     .sort({ date: -1 })
     .skip(skip)
     .limit(limit);
-
+  
   const total = await db.orders.countDocuments({});
-
+  
   res.json({
     data: orders,
     pagination: {
@@ -393,13 +399,13 @@ res.json(allOrders);
 <p><strong>解決方案 2: 時間範圍過濾</strong></p>
 <pre><code class="language-javascript">app.get(&#39;/api/orders&#39;, async (req, res) =&gt; {
   // 預設只載入最近 7 天
-  const startDate = req.query.start_date ||
+  const startDate = req.query.start_date || 
     new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-
+  
   const orders = await db.orders.find({
     date: { $gte: startDate }
   });
-
+  
   res.json(orders);
 });
 </code></pre>
@@ -439,7 +445,7 @@ app.post(&#39;/api/orders&#39;, async (req, res) =&gt; {
     order_id: orderId,
     status: &#39;processing&#39;
   });
-
+  
   // 2. 背景處理
   jobQueue.add(&#39;process-order&#39;, {
     orderId,
@@ -457,7 +463,7 @@ app.get(&#39;/api/orders/:id/status&#39;, async (req, res) =&gt; {
 async function submitOrder() {
   const response = await fetch(&#39;/api/orders&#39;, {...});
   const { order_id } = await response.json();
-
+  
   // 可以關閉視窗，背景輪詢
   pollOrderStatus(order_id);
 }
@@ -476,13 +482,13 @@ function processOrder(data) {
   assert(data.meal_id, &#39;meal_id is required&#39;);
   assert(typeof data.meal_id === &#39;number&#39;, &#39;meal_id must be number&#39;);
   assert(data.quantity &gt; 0, &#39;quantity must be positive&#39;);
-
+  
   // 檢查權限
   assert(user.hasPermission(&#39;order&#39;), &#39;unauthorized&#39;);
-
+  
   // 檢查業務規則
   assert(isWithinOrderTime(), &#39;order time expired&#39;);
-
+  
   // 都通過才處理
   return createOrder(data);
 }
@@ -565,7 +571,7 @@ function getOrders(params) {
 <pre><code class="language-kotlin">// Android App 使用 OkHttp 直接呼叫 API
 class OrderRepository {
   private val client = OkHttpClient()
-
+  
   suspend fun submitOrder(mealId: Int): Result&lt;Order&gt; {
     val request = Request.Builder()
       .url(&quot;https://api.example.com/orders&quot;)
@@ -576,7 +582,7 @@ class OrderRepository {
         }
       &quot;&quot;&quot;.toRequestBody())
       .build()
-
+    
     return try {
       val response = client.newCall(request).execute()
       if (response.isSuccessful) {

@@ -75,11 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
+       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -87,8 +88,11 @@
       .post,
       .article-foot {
         grid-column: 1;
+        max-width: none;
         margin-inline: 0;
       }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -97,8 +101,10 @@
         padding-top: 1rem;
       }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
-    @media (min-width: 1100px) and (min-height: 880px) {
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
+       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (min-height: 780px) {
       .article-aside {
         position: sticky;
         top: 0.5rem;
@@ -132,7 +138,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover.webp" imagesrcset="/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-480w.webp 480w, /content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-828w.webp 828w, /content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), 736px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover.webp" imagesrcset="/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-480w.webp 480w, /content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-828w.webp 828w, /content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡","description":"換到 Opus 5.5 不到一天，Claude Code 畫面中間冒出整句簡體。掃了對話紀錄，Opus 自己寫的回覆沒有漏，整句簡體都在 thinking 的摘要裡，而官方文件寫明摘要是另一個模型做的。hook 碰不到那一層。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-23T00:00:00Z","dateModified":"2026-09-23T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"},"url":"https://b-log.to/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover.webp"],"keywords":"AI, Claude, Opus 5.5, Claude Code, thinking, 正體中文, Fable 5.1","articleSection":"AI 分析"}</script>
@@ -193,7 +199,7 @@
       <p id="post-meta" class="meta">23SEP26 · AI 分析 · 4 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover.webp" srcset="/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-480w.webp 480w, /content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-828w.webp 828w, /content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), 736px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover.webp" srcset="/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-480w.webp 480w, /content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-828w.webp 828w, /content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>今天把 Claude Code 換成 Opus 5.5，還不到一天，就在畫面中間看到整句簡體：</p>
 <blockquote>
 <p>明白了，P1~P5交给另一个session处理，本session负责交接和审查。</p>

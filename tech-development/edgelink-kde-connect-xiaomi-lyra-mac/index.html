@@ -77,11 +77,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
+       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -89,8 +90,11 @@
       .post,
       .article-foot {
         grid-column: 1;
+        max-width: none;
         margin-inline: 0;
       }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -99,8 +103,10 @@
         padding-top: 1rem;
       }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
-    @media (min-width: 1100px) and (min-height: 880px) {
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
+       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (min-height: 780px) {
       .article-aside {
         position: sticky;
         top: 0.5rem;
@@ -134,7 +140,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp" imagesrcset="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-480w.webp 480w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-828w.webp 828w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), 736px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp" imagesrcset="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-480w.webp 480w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-828w.webp 828w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect","description":"我花五週寫了 EdgeLink，讓 Mac 直接接手機來電、傳檔、鏡像操作，再用 Touch ID 遠端解鎖。從 Lyra 協議、端對端加密到 380 個 commit，現在這套已經是我的日常。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-08-15T00:00:00Z","dateModified":"2026-08-15T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/"},"url":"https://b-log.to/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp"],"keywords":"EdgeLink, KDE Connect, 小米, Lyra, macOS, Android, Touch ID, 協議逆向, 端對端加密","articleSection":"技術開發"}</script>
@@ -195,7 +201,7 @@
       <p id="post-meta" class="meta">15AUG26 · 技術開發 · 5 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp" srcset="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-480w.webp 480w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-828w.webp 828w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), 736px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover.webp" srcset="/content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-480w.webp 480w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-828w.webp 828w, /content/img/2026/edgelink-kde-connect-xiaomi-lyra-mac-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>手機丟在房間另一頭充電。電話響了，Mac 螢幕上跳出通話視窗，戴上耳機直接接，講完繼續打字。要傳檔案給手機，選單列點一下；要看手機畫面，鏡像開起來，畫面是活的，可以直接操作，鎖定了就按 Touch ID 遠端解鎖。Mac 上跳出的通知，手機那邊也有一份。剪貼簿兩邊是同一個。</p>
 <p>最麻煩的一條路是 Cloudflare relay。Mac 在 HiNet 底下，Cloudflare 從 2016 年起就把非 Enterprise 的 HiNet 流量導到海外低成本 PoP——當年美西，現在是新加坡。同一個 Mac ping workers.dev 要 67ms，ping <code>turn.cloudflare.com</code> 只要 6.6ms。同一個台灣、同樣的 ISP，路由政策不同就差十倍。</p>
 <p>手機走遠傳，落點正常在台北。Mac 繞新加坡，手機在台北，e2e 延遲 p50 約 200ms，p90 到 764ms，尾巴就是可見的卡頓。解法是最後改走 TURN anycast——路由不經 workers.dev 那套分流，HiNet 也落台北，6.6ms。</p>

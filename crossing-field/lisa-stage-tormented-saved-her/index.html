@@ -75,11 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
+       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -87,8 +88,11 @@
       .post,
       .article-foot {
         grid-column: 1;
+        max-width: none;
         margin-inline: 0;
       }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -97,8 +101,10 @@
         padding-top: 1rem;
       }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
-    @media (min-width: 1100px) and (min-height: 880px) {
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
+       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (min-height: 780px) {
       .article-aside {
         position: sticky;
         top: 0.5rem;
@@ -132,7 +138,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/lisa-stage-tormented-saved-her-cover.webp" imagesrcset="/content/img/2026/lisa-stage-tormented-saved-her-cover-480w.webp 480w, /content/img/2026/lisa-stage-tormented-saved-her-cover-828w.webp 828w, /content/img/2026/lisa-stage-tormented-saved-her-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), 736px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/lisa-stage-tormented-saved-her-cover.webp" imagesrcset="/content/img/2026/lisa-stage-tormented-saved-her-cover-480w.webp 480w, /content/img/2026/lisa-stage-tormented-saved-her-cover-828w.webp 828w, /content/img/2026/lisa-stage-tormented-saved-her-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"舞台折磨她，也拯救了她","description":"這篇整理《LiSA 15th Anniversary Book PRiSM》裡 2011 年到 2016 年的長訪談。從單飛出道前那種隨時可能消失的不安，到初次武道館的崩潰，再到重新站回武道館與橫濱競技場，LiSA 和舞台之間最殘酷也最真實的關係，都在這裡。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-04-28T00:00:00Z","dateModified":"2026-04-28T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/crossing-field/lisa-stage-tormented-saved-her/"},"url":"https://b-log.to/crossing-field/lisa-stage-tormented-saved-her/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/lisa-stage-tormented-saved-her-cover.webp"],"keywords":"LiSA, PRiSM, 專訪翻譯, 15週年, 武道館, 橫濱競技場, 演唱會","articleSection":"Crossing Field"}</script>
@@ -193,7 +199,7 @@
       <p id="post-meta" class="meta">28APR26 · Crossing Field · 12 MIN · JASON CHIEN 譯</p>
       <p id="post-catline" class="catline">CROSSING FIELD <span>她說的話</span></p>
       <h1 id="post-title" class="post__title">舞台折磨她，也拯救了她</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/lisa-stage-tormented-saved-her-cover.webp" srcset="/content/img/2026/lisa-stage-tormented-saved-her-cover-480w.webp 480w, /content/img/2026/lisa-stage-tormented-saved-her-cover-828w.webp 828w, /content/img/2026/lisa-stage-tormented-saved-her-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), 736px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/lisa-stage-tormented-saved-her-cover.webp" srcset="/content/img/2026/lisa-stage-tormented-saved-her-cover-480w.webp 480w, /content/img/2026/lisa-stage-tormented-saved-her-cover-828w.webp 828w, /content/img/2026/lisa-stage-tormented-saved-her-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><div class="crossing-field-intro">
   <p class="crossing-field-intro__eyebrow">Crossing Field / PRiSM Dispatch</p>
   <p class="crossing-field-intro__lead">2011 年，LiSA 雖然確定了單飛出道，卻說自己直到 CD 真正陳列在店頭的那一刻才相信這是真的。從「Girls Dead Monster」嶄露頭角、進而取得單飛出道機會的她，始終帶著「這一切隨時可能消失」的不安。這種恐懼在 2014 年的日本武道館公演中猛烈衝擊著她的精神。然而，在「デート（LiVE）」中獲得歌迷的歡呼聲支撐而重新振作，2015 年再度挑戰日本武道館、成功雪恥。2016 年也實現了橫濱競技場公演。在 LiSA 職涯的最初五年裡，折磨她的、拯救她的，一切都是演唱會。</p>
