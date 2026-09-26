@@ -38,6 +38,18 @@ Jason 2026/9/26 指定的硬規則。外觀改版方向是 Airbus ECAM 的色彩
 - 文章頁右欄的 CONTENTS（本文目錄）：Crossing Field 文章內文有 `crossing-field-toc` 的，右欄目錄照它的配色，編號洋紅、連結墨色；其他文章編號灰色、連結青色。
 - 封面 SVG 仍未掃。
 
+## 螢幕空間要吃滿
+
+Jason 從建站第一天就定的版面原則，2026/9/26 重申：「一個原則就是充分利用」。
+
+- 出處：2025/10/16 的 `aed2252a`「優化網站寬度設定，最大化利用螢幕空間」、`e9a76247`「進一步優化網站適應性，支援超寬螢幕」。
+- 內容區不設最大寬度。`.wrap`（[assets/css/critical-shared.css](assets/css/critical-shared.css)）只留左右 padding，每邊 `clamp(16px, 4vw, 40px)`。header、首頁、文章頁、about、gadgets 的左右緣一致。
+- 寬螢幕多出來的寬度，靠字級放大（html 從 1280px 的 100% 線性放大到 2560px 的 125%）和加寬欄位吃掉，不留兩側空白。
+- 文章頁 1100px 以上分兩欄：文章欄 `minmax(0, 1fr)`，右欄 `clamp(19rem, 100% - 56.375rem, 26rem)`，右欄只有一欄（RELATED、LATEST，下面接 CONTENTS）。右欄不能搶走文章的寬度：9/26 Jason 沒選右欄再分成兩、三欄的做法。首頁側欄是 `clamp(19rem, 24vw, 32rem)`。
+- 不要拿「每行 35～45 字」這類一般排版慣例把欄寬收窄、置中，或把側欄移到文末。9/26 Jason 接受寬螢幕每行超過 48 字（1920 寬約 57～69 字）。
+- 發生紀錄：2026/3/18 改成毛玻璃風格時，about、gadgets 被設了 `.content { max-width: 860px }`，當天移除。2026/9/26 ECAM 改版第一版（`d81239dc`）又把文章欄收成 736px 置中、側欄移到文末，後面三輪（`a6b32dac`、`d73369dc`、`428cab42`）才改回來。兩次都是動手前沒看這段歷史。
+- 動版面之前，先跑 `git log -- assets/styles.css assets/css/` 看過去的版面決定。
+
 ## 文章頁封面最高半個視窗
 
 Jason 2026/9/26 決定。文章頁頂部的封面（`#post-hero`）高度最多是視窗高的 50%，照原圖比例、不裁切，寬度跟著縮、靠文章欄左緣。首頁 LATEST、列表、og:image 不受影響。
