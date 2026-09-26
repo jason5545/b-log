@@ -20,7 +20,7 @@
 
 Jason 2026/9/26 指定的硬規則。外觀改版方向是 Airbus ECAM 的色彩語意（青色＝可以點、綠色＝已解決、琥珀＝要注意），d81239dc 已經上線；這條不管之後怎麼改都適用。
 
-- 洋紅只用在跟 LiSA 有關的東西：シルシ、Crossing Field 兩個分類的標籤與列表分類欄、TOPICS 裡這兩項、她的歌詞和訪談回答的出處與說話者標記、跟她有關的紀念區塊。
+- 洋紅只用在跟 LiSA 有關的東西：シルシ、Crossing Field 兩個分類的標籤與列表分類欄、TOPICS 裡這兩項、她的歌詞和訪談回答的出處與說話者標記、跟她有關的紀念區塊，以及下面「Crossing Field 專屬設計」列的線與編號。
 - 其他地方一律不用洋紅，也不用接近洋紅的粉紅、紫紅：連結、hover、按鈕、強調、行內程式碼、語法突顯、別人的說話者標記（Crossing Field 裡的「媽媽」用灰色）都不行。
 - 反過來，LiSA 相關的標記也只用洋紅，不借青色、綠色、琥珀。
 - 洋紅只有一組 token（mock 是深色 `#ee7ad0`、淺色 `#a3226f`，Jason 可能另外指定）。要換色就改 token，不開第二種粉紅。
@@ -35,7 +35,16 @@ Jason 2026/9/26 指定的硬規則。外觀改版方向是 Airbus ECAM 的色彩
 - 她的文章＝シルシ、Crossing Field 兩個分類，加上白名單兩篇：`songshan-airport-jpop-parallel-world`、`birthday-avatar-ai-barrier`（分類是文化觀察，Jason 9/26 確認算她的）。這些文章的 accentColor 在列表左緣色條與文章頁標題色條一律顯示 `var(--magenta)`，不用存的色碼。
 - 白名單在 `assets/main.js`、`scripts/generate-redirects.js`、`scripts/validate-content.js` 三處的 `HER_POST_SLUGS`，validate 會比對三處是否一致；要加減文章，三處一起改。
 - 她的文章在文章頁麵包屑的分類（シルシ、Crossing Field）顯示洋紅，靜態頁與 CSR 一致。
-- 文章頁右欄的 CONTENTS（本文目錄）：Crossing Field 文章內文有 `crossing-field-toc` 的，右欄目錄照它的配色，編號洋紅、連結墨色；其他文章編號灰色、連結青色。
+- 文章頁右欄的 CONTENTS（本文目錄）：Crossing Field 文章內文有 `crossing-field-toc` 的，右欄目錄照它的配色，編號洋紅、連結墨色、目前章節的左緣洋紅；其他文章編號灰色、連結青色、目前章節左緣青色。
+- LATEST 的 meta 行與 LOG 標題的篩選名稱，她的分類名稱是洋紅（兩個分類都算），main.js 與 generate-redirects.js 輸出同一種 `<span class="her-cat">`。
+
+Crossing Field 專屬設計（2026/9/26，只套 Crossing Field，不套シルシ；取代改版前的整頁粉紫漸層）：
+
+- 依據是 Airbus PFD 的配色：飛行員在 FCU 選的目標是青色，交給 FMGC 管理的目標是洋紅。這個站照同一套，讀者點的東西是青色，她說的話是洋紅。洋紅只畫在線與字上，不鋪底色、不做漸層。
+- 整頁：頁首下緣換成 2px 洋紅（文章頁與 `?category=Crossing Field` 分類頁）。判斷方式是頁面裡有 `data-category-theme="crossing-field"`，分類頁由 main.js 設在 `.home-grid`。
+- 分類頁：LATEST、LOG 兩個標題的底線洋紅。
+- 文章頁：最外層 h2 用明體，上方加洋紅兩位數章節編號，跟內文目錄與右欄目錄的編號一致（9/26 核對 7 篇，h2 與目錄都一對一、同順序；新文章沒有目錄或 h2 不在目錄裡時，編號會對不上）。
+- 她的回答左邊一條 2px 洋紅線，同一人連續的段落接成一條，換人（`cf-answer--speaker-start`）就斷開；別人（媽媽）是 `--rule` 灰線。
 - 封面 SVG 仍未掃。
 
 ## 螢幕空間要吃滿

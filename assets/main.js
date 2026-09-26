@@ -1184,6 +1184,12 @@ async function renderHomepage() {
   const startHereEl = document.querySelector('.start-here');
   if (startHereEl) startHereEl.hidden = hasActiveHomeFilter();
 
+  // 篩選分類時，首頁兩欄帶上跟文章頁一樣的 data-category-theme（Crossing Field 分類頁的樣式靠它）
+  const categoryName = filterCategory
+    ? allPosts.find((post) => post.category && post.category.toLowerCase() === filterCategory.toLowerCase())?.category || filterCategory
+    : '';
+  applyCategoryTheme(document.querySelector('.home-grid'), { category: categoryName });
+
   // TOPICS 一律列出全部分類，目前篩選的分類標記 aria-current
   populateCategoryList(allPosts, filterCategory);
   populateTagCloud(allPosts, filterTag);
@@ -1216,7 +1222,7 @@ async function renderHomepage() {
 
   // 更新搜尋結果計數與 LOG 標題
   updateSearchResultsCount(posts.length, searchQuery);
-  updateLogSummary(posts.length, { filterTag, filterCategory, searchQuery });
+  updateLogSummary(posts.length, { filterTag, filterCategory: categoryName, searchQuery });
 
   // 如果篩選後沒有文章，顯示提示
   if (!posts.length) {
@@ -1260,9 +1266,16 @@ function updateLogSummary(count, { filterTag, filterCategory, searchQuery } = {}
     ? `#${filterTag}`
     : filterCategory || '';
 
-  summaryEl.textContent = filterLabel
-    ? `${filterLabel}：${count} 篇，新到舊`
-    : `${count} 篇，新到舊`;
+  const countText = filterLabel ? `：${count} 篇，新到舊` : `${count} 篇，新到舊`;
+  // 她的分類名稱用洋紅，跟列表分類欄一樣
+  if (filterLabel && filterLabel === filterCategory && isHerCategory(filterCategory)) {
+    const category = document.createElement('span');
+    category.className = 'her-cat';
+    category.textContent = filterCategory;
+    summaryEl.replaceChildren(category, countText);
+  } else {
+    summaryEl.textContent = `${filterLabel}${countText}`;
+  }
 
   if (filterLabel && labelEl && !clearEl) {
     clearEl = document.createElement('a');
@@ -1659,7 +1672,20 @@ function renderFeaturedPost(post) {
   }
 
   if (heroMeta) {
-    heroMeta.textContent = formatMetaParts(post, { includeAuthor: false }).join(' · ');
+    // 她的分類名稱用洋紅（generate-redirects.js 的靜態 LATEST 輸出同一種結構）
+    const parts = formatMetaParts(post, { includeAuthor: false });
+    heroMeta.replaceChildren();
+    parts.forEach((part, index) => {
+      if (index) heroMeta.append(' · ');
+      if (part === post.category && isHerCategory(post.category)) {
+        const category = document.createElement('span');
+        category.className = 'her-cat';
+        category.textContent = part;
+        heroMeta.append(category);
+      } else {
+        heroMeta.append(part);
+      }
+    });
   }
 
   if (heroSummary) {

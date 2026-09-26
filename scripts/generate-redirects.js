@@ -764,7 +764,12 @@ function buildHomepageFeaturedSection(post) {
   const safeCoverImage = escapeHtml(post.coverImage || '');
   const safeTitle = escapeHtml(post.title || post.slug || 'Untitled');
   const safeSummary = escapeHtml(post.summary || '');
-  const safeMeta = escapeHtml(formatStaticMetaParts(post, { includeAuthor: false }).join(' · '));
+  // 她的分類名稱用洋紅（main.js 的 renderFeaturedPost 輸出同一種結構）
+  const safeMeta = formatStaticMetaParts(post, { includeAuthor: false })
+    .map((part) => (part === post.category && isHerCategory(post.category)
+      ? `<span class="her-cat">${escapeHtml(part)}</span>`
+      : escapeHtml(part)))
+    .join(' · ');
   const safePath = escapeHtml(slugToPath(post.slug, post.category));
   const audioIndicator = post.hasAudio ? buildAudioIndicatorMarkup(true) : '';
   const sectionClass = post.coverImage ? 'lead' : 'lead lead--text-only';

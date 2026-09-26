@@ -1162,9 +1162,13 @@
   color: var(--magenta);
 }
 
-/* Crossing Field 的右欄目錄跟內文目錄同色：編號洋紅、連結 ink、hover 青色 */
+/* Crossing Field 的右欄目錄跟內文目錄同色：編號洋紅、連結 ink、hover 青色、目前章節洋紅 */
 .aside-toc--cf .toc-list li::before {
   color: var(--magenta);
+}
+
+.aside-toc--cf .toc-list li:has(> a.is-current) {
+  box-shadow: inset 3px 0 0 var(--magenta);
 }
 
 .aside-toc--cf .toc-list a {
@@ -1222,11 +1226,45 @@
   color: var(--magenta);
 }
 
-/* Crossing Field: her words */
+/* Crossing Field: her words
+   Airbus 的 PFD 上，飛行員自己選的目標是青色，交給 FMGC 管理的目標是洋紅。
+   這個站照同一套：讀者點的東西是青色，她說的話是洋紅。 */
+
+/* 整頁：頁首下緣換成洋紅（文章頁、分類頁）。用 box-shadow 加粗，不動版面高度 */
+body:has([data-category-theme="crossing-field"]) .site {
+  border-bottom-color: var(--magenta);
+  box-shadow: 0 1px 0 var(--magenta);
+}
+
+/* 分類頁（首頁 ?category=Crossing Field）：LATEST、LOG 標題線洋紅 */
+.home-grid[data-category-theme="crossing-field"] #lead-label,
+.home-grid[data-category-theme="crossing-field"] #log-label {
+  border-bottom-color: var(--magenta);
+}
+
 [data-category-theme="crossing-field"] .post__title {
   font-family: var(--font-serif);
   font-weight: 700;
   line-height: 1.4;
+}
+
+/* 章節：編號跟目錄一樣是洋紅兩位數，標題用明體（7 篇的最外層 h2 都跟目錄一對一、同順序） */
+[data-category-theme="crossing-field"] .post__body {
+  counter-reset: cf-chapter;
+}
+
+[data-category-theme="crossing-field"] .post__body > h2 {
+  counter-increment: cf-chapter;
+  font-family: var(--font-serif);
+}
+
+[data-category-theme="crossing-field"] .post__body > h2::before {
+  content: counter(cf-chapter, decimal-leading-zero);
+  display: block;
+  margin-bottom: 0.45rem;
+  font: 700 0.74rem/1.2 var(--font-mono);
+  letter-spacing: 0.16em;
+  color: var(--magenta);
 }
 
 .post__body .crossing-field-intro,
@@ -1378,11 +1416,23 @@
   display: none;
 }
 
+/* 回答左邊一條線：她是洋紅，別人（媽媽）是灰色。同一個人連續的段落接成一條，換人就斷開 */
 .post__body .cf-answer {
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--magenta);
   font-family: var(--font-serif);
   font-size: 1.16rem;
   line-height: 1.95;
   color: var(--ink);
+}
+
+.post__body .cf-answer[data-speaker]:not([data-speaker="LiSA"]) {
+  border-left-color: var(--rule);
+}
+
+.post__body .cf-answer + .cf-answer:not(.cf-answer--speaker-start) {
+  margin-top: -1.15em;
+  padding-top: 1.15em;
 }
 
 .post__body .cf-answer strong {
