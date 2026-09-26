@@ -34,7 +34,20 @@ const HERO_IMAGE_WIDTHS = [480, 828, 1200];
 // 首頁 LATEST：760px 以下封面滿版，760–960px 約半欄，1216px 以下約 400px，更寬時跟著左欄變寬（約 36vw）
 const HOME_HERO_SIZES = '(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, (max-width: 1216px) 400px, 36vw';
 // 文章頁封面：手機扣掉左右 16px；1216px 以下欄寬約 736px；更寬時文章欄最多 52.875rem（2560px 約 1060px）
-const ARTICLE_HERO_SIZES = '(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px';
+// 文章頁封面高度最多視窗一半、照原圖比例（post.html 關鍵 CSS），顯示寬度＝min(文章欄寬, 50vh × 寬高比)。
+// 文章欄寬：400px 以下 100vw − 32px、800px 以下 92vw、1099px 以下 736px（單欄 46rem）、
+// 1100–1439px 約 100vw − 440px（最多 873px）、1440px 以上約 90.78vw − 434px（右欄 26rem＋欄距，rem 隨寬度放大）
+function buildArticleHeroSizes(size) {
+  const ratio = size ? Math.round((size.width / size.height) * 10000) / 10000 : 16 / 9;
+  const cap = `50vh * ${Number(ratio.toFixed(4))}`;
+  return [
+    `(max-width: 400px) min(calc(100vw - 32px), ${cap})`,
+    `(max-width: 800px) min(92vw, ${cap})`,
+    `(max-width: 1099px) min(736px, ${cap})`,
+    `(max-width: 1439px) min(calc(100vw - 440px), 873px, ${cap})`,
+    `min(calc(90.78vw - 434px), ${cap})`
+  ].join(', ');
+}
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 // LiSA 的兩個分類：洋紅只給她，旁邊直接寫出這個分類是什麼
 const HER_CATEGORY_HINTS = {
@@ -141,14 +154,38 @@ function buildResponsiveImageSrcset(imageUrl) {
     .join(', ');
 }
 
-function buildHeroImageAttributes(coverImage, sizes, decoding = 'async') {
+// 封面原圖尺寸：直接讀檔頭（webp、png），不靠 sharp，內容管線不用裝相依套件
+function readImageSize(imageUrl) {
+  const imagePath = imageUrlToPath(imageUrl);
+  if (!imagePath || !fs.existsSync(imagePath)) return null;
+
+  const buffer = fs.readFileSync(imagePath);
+  let size = null;
+  if (buffer.toString('ascii', 0, 4) === 'RIFF' && buffer.toString('ascii', 8, 12) === 'WEBP') {
+    const chunk = buffer.toString('ascii', 12, 16);
+    if (chunk === 'VP8X') {
+      size = { width: 1 + buffer.readUIntLE(24, 3), height: 1 + buffer.readUIntLE(27, 3) };
+    } else if (chunk === 'VP8 ') {
+      size = { width: buffer.readUInt16LE(26) & 0x3fff, height: buffer.readUInt16LE(28) & 0x3fff };
+    } else if (chunk === 'VP8L') {
+      const bits = buffer.readUInt32LE(21);
+      size = { width: 1 + (bits & 0x3fff), height: 1 + ((bits >> 14) & 0x3fff) };
+    }
+  } else if (buffer.toString('ascii', 1, 4) === 'PNG') {
+    size = { width: buffer.readUInt32BE(16), height: buffer.readUInt32BE(20) };
+  }
+  return size && size.width > 0 && size.height > 0 ? size : null;
+}
+
+function buildHeroImageAttributes(coverImage, sizes, decoding = 'async', size = null) {
   const safeCoverImage = escapeHtml(coverImage);
   const srcset = buildResponsiveImageSrcset(coverImage);
   const srcsetAttr = srcset ? ` srcset="${escapeHtml(srcset)}" sizes="${escapeHtml(sizes)}"` : '';
-  return `src="${safeCoverImage}"${srcsetAttr} alt="" aria-hidden="true" fetchpriority="high" decoding="${decoding}"`;
+  const sizeAttr = size ? ` width="${size.width}" height="${size.height}"` : '';
+  return `src="${safeCoverImage}"${srcsetAttr}${sizeAttr} alt="" aria-hidden="true" fetchpriority="high" decoding="${decoding}"`;
 }
 
-function buildHeroPreload(coverImage, sizes = ARTICLE_HERO_SIZES) {
+function buildHeroPreload(coverImage, sizes = buildArticleHeroSizes(readImageSize(coverImage))) {
   if (!coverImage) return '';
 
   const safeCoverImage = escapeHtml(coverImage);
@@ -165,7 +202,10 @@ function buildHeroMarkup(post, hideCover = false) {
     return '<figure id="post-hero" class="post__cover" hidden></figure>';
   }
 
-  return `<figure id="post-hero" class="post__cover"><img class="post__cover-img" ${buildHeroImageAttributes(post.coverImage, ARTICLE_HERO_SIZES)}></figure>`;
+  // 保留框的比例寫在 style，第一次繪製就是原圖比例（CSS 沒拿到時預設 16:9）
+  const size = readImageSize(post.coverImage);
+  const ratioStyle = size ? ` style="--cover-w: ${size.width}; --cover-h: ${size.height}"` : '';
+  return `<figure id="post-hero" class="post__cover"${ratioStyle}><img class="post__cover-img" ${buildHeroImageAttributes(post.coverImage, buildArticleHeroSizes(size), 'async', size)}></figure>`;
 }
 
 // 範本裡的 placeholder 一定要存在，找不到就直接失敗，避免產出半套頁面

@@ -135,10 +135,18 @@
       font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
       color: var(--ink);
     }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
     .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
       margin: 0 0 2.5rem;
-      aspect-ratio: 16 / 9;
       background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
     }
     .post__body {
       max-width: 35em;
@@ -153,7 +161,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2025/claude-gpl-paradox-cover.webp" imagesrcset="/content/img/2025/claude-gpl-paradox-cover-480w.webp 480w, /content/img/2025/claude-gpl-paradox-cover-828w.webp 828w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2025/claude-gpl-paradox-cover.webp" imagesrcset="/content/img/2025/claude-gpl-paradox-cover-480w.webp 480w, /content/img/2025/claude-gpl-paradox-cover-828w.webp 828w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1), (max-width: 800px) min(92vw, 50vh * 1), (max-width: 1099px) min(736px, 50vh * 1), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1), min(calc(90.78vw - 434px), 50vh * 1)" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我用 Claude 做了一個實驗：請它生成 GPL 授權，結果被自己的過濾機制擋下來了","description":"請 Claude 生成 GPL v3 授權條款被阻擋，卻允許協助反編譯。透過實驗和 Agent 辯論，分析內容過濾機制的邏輯矛盾：它最佳化了錯誤的指標，成功阻止「看起來像複製」的行為，卻沒阻止「實際有害」的行為。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-02T12:00:00Z","dateModified":"2025-12-02T12:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/claude-content-filter-paradox/"},"url":"https://b-log.to/ai-analysis/claude-content-filter-paradox/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2025/claude-gpl-paradox-cover.webp"],"keywords":"Claude, AI, 內容過濾, GPL, 開放原始碼授權, Goodhart's Law","articleSection":"AI 分析"}</script>
@@ -214,7 +222,7 @@
       <p id="post-meta" class="meta">02DEC25 · AI 分析 · 10 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">我用 Claude 做了一個實驗：請它生成 GPL 授權，結果被自己的過濾機制擋下來了</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2025/claude-gpl-paradox-cover.webp" srcset="/content/img/2025/claude-gpl-paradox-cover-480w.webp 480w, /content/img/2025/claude-gpl-paradox-cover-828w.webp 828w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1024; --cover-h: 1024"><img class="post__cover-img" src="/content/img/2025/claude-gpl-paradox-cover.webp" srcset="/content/img/2025/claude-gpl-paradox-cover-480w.webp 480w, /content/img/2025/claude-gpl-paradox-cover-828w.webp 828w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1), (max-width: 800px) min(92vw, 50vh * 1), (max-width: 1099px) min(736px, 50vh * 1), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1), min(calc(90.78vw - 434px), 50vh * 1)" width="1024" height="1024" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>今天我做了一個小實驗，想測試 Claude Code 的內容過濾機制。結果發現了一個有趣的矛盾：它會阻擋我生成 GPL 授權條款，卻允許我做反編譯。</p>
 <h2 id="section-1">實驗經過</h2>
 <p>我只是單純地請 Claude 幫我生成一個 GPL v3 授權檔案，結果收到了這個錯誤：</p>

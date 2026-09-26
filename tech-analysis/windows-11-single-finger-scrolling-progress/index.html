@@ -136,10 +136,18 @@
       font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
       color: var(--ink);
     }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
     .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
       margin: 0 0 2.5rem;
-      aspect-ratio: 16 / 9;
       background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
     }
     .post__body {
       max-width: 35em;
@@ -154,7 +162,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/windows-11-single-finger-scrolling-progress-cover.webp" imagesrcset="/content/img/2026/windows-11-single-finger-scrolling-progress-cover-480w.webp 480w, /content/img/2026/windows-11-single-finger-scrolling-progress-cover-828w.webp 828w, /content/img/2026/windows-11-single-finger-scrolling-progress-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/windows-11-single-finger-scrolling-progress-cover.webp" imagesrcset="/content/img/2026/windows-11-single-finger-scrolling-progress-cover-480w.webp 480w, /content/img/2026/windows-11-single-finger-scrolling-progress-cover-828w.webp 828w, /content/img/2026/windows-11-single-finger-scrolling-progress-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7779), (max-width: 800px) min(92vw, 50vh * 1.7779), (max-width: 1099px) min(736px, 50vh * 1.7779), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7779), min(calc(90.78vw - 434px), 50vh * 1.7779)" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Windows 11 終於把單指捲動放回觸控板設定，至少有進展了","description":"微軟 9/10 把單指捲動放進 Windows 11 Release Preview，精確式觸控板可以選左側或右側，用一根手指垂直捲動。去年我抱怨它被拿掉，自己寫了工具。這版只做垂直，Neowin 實測常誤判成移動游標，這兩件事我在自己的工具裡處理過。至少有進展了。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-21T00:00:00Z","dateModified":"2026-09-21T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/windows-11-single-finger-scrolling-progress/"},"url":"https://b-log.to/tech-analysis/windows-11-single-finger-scrolling-progress/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/windows-11-single-finger-scrolling-progress-cover.webp"],"keywords":"Windows 11, 觸控板, 單指捲動, 邊緣捲動, 精確式觸控板, Microsoft, 無障礙","articleSection":"技術分析"}</script>
@@ -215,7 +223,7 @@
       <p id="post-meta" class="meta">21SEP26 · 技術分析 · 3 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/windows-11-single-finger-scrolling-progress-cover.webp" srcset="/content/img/2026/windows-11-single-finger-scrolling-progress-cover-480w.webp 480w, /content/img/2026/windows-11-single-finger-scrolling-progress-cover-828w.webp 828w, /content/img/2026/windows-11-single-finger-scrolling-progress-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1513; --cover-h: 851"><img class="post__cover-img" src="/content/img/2026/windows-11-single-finger-scrolling-progress-cover.webp" srcset="/content/img/2026/windows-11-single-finger-scrolling-progress-cover-480w.webp 480w, /content/img/2026/windows-11-single-finger-scrolling-progress-cover-828w.webp 828w, /content/img/2026/windows-11-single-finger-scrolling-progress-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7779), (max-width: 800px) min(92vw, 50vh * 1.7779), (max-width: 1099px) min(736px, 50vh * 1.7779), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7779), min(calc(90.78vw - 434px), 50vh * 1.7779)" width="1513" height="851" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>微軟公告附的設定截圖裡，Drag two fingers to scroll 下面多了一列 Single-finger scrolling，右邊的下拉選單寫著 Right Side。</p>
 <p>選項有三個：Disabled、Left Side、Right Side。位置在「設定 → 藍牙與裝置 → 觸控板」，展開「捲動與縮放」就看得到。</p>
 <p>微軟的說明只有一句：手指從觸控板左側或右側開始滑，就能用一根手指垂直捲動。</p>

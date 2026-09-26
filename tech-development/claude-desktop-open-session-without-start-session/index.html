@@ -138,10 +138,18 @@
       font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
       color: var(--ink);
     }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
     .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
       margin: 0 0 2.5rem;
-      aspect-ratio: 16 / 9;
       background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
     }
     .post__body {
       max-width: 35em;
@@ -156,7 +164,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp" imagesrcset="/content/img/2026/claude-desktop-open-session-without-start-session-cover-480w.webp 480w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-828w.webp 828w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp" imagesrcset="/content/img/2026/claude-desktop-open-session-without-start-session-cover-480w.webp 480w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-828w.webp 828w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.75), (max-width: 800px) min(92vw, 50vh * 1.75), (max-width: 1099px) min(736px, 50vh * 1.75), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.75), min(calc(90.78vw - 434px), 50vh * 1.75)" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方","description":"Claude 桌面版開新 session 的 start_session 受旗標控制，我的帳號還沒有。先用 deep link 加輔助使用介面按 Send，第一版對錯交替，查 log 才知道是按得太早。後來發現同一個資料夾用 spawn_task 的 chip 就能開；換資料夾還是要靠 deep link。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-24T00:00:00Z","dateModified":"2026-09-24T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/"},"url":"https://b-log.to/tech-development/claude-desktop-open-session-without-start-session/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp"],"keywords":"AI, Claude, Claude Code, Opus 5.5, 自動化, 無障礙, AX, deep link, spawn_task","articleSection":"技術開發"}</script>
@@ -217,7 +225,7 @@
       <p id="post-meta" class="meta">24SEP26 · 技術開發 · 5 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp" srcset="/content/img/2026/claude-desktop-open-session-without-start-session-cover-480w.webp 480w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-828w.webp 828w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1344; --cover-h: 768"><img class="post__cover-img" src="/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp" srcset="/content/img/2026/claude-desktop-open-session-without-start-session-cover-480w.webp 480w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-828w.webp 828w, /content/img/2026/claude-desktop-open-session-without-start-session-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.75), (max-width: 800px) min(92vw, 50vh * 1.75), (max-width: 1099px) min(736px, 50vh * 1.75), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.75), min(calc(90.78vw - 434px), 50vh * 1.75)" width="1344" height="768" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>今天早上要把工作交給另一個 Claude Code session，我又得自己開一個新的。開之前還先問了 Claude：要開在哪個 workspace？</p>
 <p>我最近的做法是一個 session 當協調端，另一個 session 動手。協調端已經很長，裝著計畫和審查要用的脈絡。實作的大量工具輸出放到另一邊，協調端只看 diff 和驗證輸出。</p>
 <p>Claude 桌面版其實有開 session 的工具，叫 <code>start_session</code>。但它受桌面版的功能旗標控制，我的帳號還沒推送到。</p>

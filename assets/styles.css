@@ -558,9 +558,9 @@
   overflow-wrap: break-word;
 }
 
+/* 寬度與比例（高度最多視窗一半、照原圖比例）在 post.html 的關鍵 CSS，這裡不要再寫 aspect-ratio 蓋掉 */
 .post__cover {
   margin: 0 0 2.5rem;
-  aspect-ratio: 16 / 9;
   border-radius: 2px;
   overflow: hidden;
   background: var(--surface);
@@ -570,7 +570,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /* Body typography */

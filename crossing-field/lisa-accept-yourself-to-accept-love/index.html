@@ -138,10 +138,18 @@
       font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
       color: var(--ink);
     }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
     .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
       margin: 0 0 2.5rem;
-      aspect-ratio: 16 / 9;
       background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
     }
     .post__body {
       max-width: 35em;
@@ -156,7 +164,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/lisa-accept-yourself-to-accept-love-cover.webp" imagesrcset="/content/img/2026/lisa-accept-yourself-to-accept-love-cover-480w.webp 480w, /content/img/2026/lisa-accept-yourself-to-accept-love-cover-828w.webp 828w, /content/img/2026/lisa-accept-yourself-to-accept-love-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/lisa-accept-yourself-to-accept-love-cover.webp" imagesrcset="/content/img/2026/lisa-accept-yourself-to-accept-love-cover-480w.webp 480w, /content/img/2026/lisa-accept-yourself-to-accept-love-cover-828w.webp 828w, /content/img/2026/lisa-accept-yourself-to-accept-love-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7778), (max-width: 800px) min(92vw, 50vh * 1.7778), (max-width: 1099px) min(736px, 50vh * 1.7778), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7778), min(calc(90.78vw - 434px), 50vh * 1.7778)" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"學會接受自己，才能接受愛","description":"這篇整理《LiSA 15th Anniversary Book PRiSM》裡 2022 年到 2026 年的長訪談。從 10 週年後暫停演唱會、重新規劃未來，到 PATCH WALK、PRiSM 展與學會接受自己的過程，LiSA 終於比較能接受那些一直都在的愛。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-04-29T00:00:00Z","dateModified":"2026-04-29T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/crossing-field/lisa-accept-yourself-to-accept-love/"},"url":"https://b-log.to/crossing-field/lisa-accept-yourself-to-accept-love/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/lisa-accept-yourself-to-accept-love-cover.webp"],"keywords":"LiSA, PRiSM, 專訪翻譯, 15週年, Eve\u0026Birth, LANDER, PATCH WALK, LiSAっ子, PRiSM展","articleSection":"Crossing Field"}</script>
@@ -217,7 +225,7 @@
       <p id="post-meta" class="meta">29APR26 · Crossing Field · 10 MIN · JASON CHIEN 譯</p>
       <p id="post-catline" class="catline">CROSSING FIELD <span>她說的話</span></p>
       <h1 id="post-title" class="post__title">學會接受自己，才能接受愛</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/lisa-accept-yourself-to-accept-love-cover.webp" srcset="/content/img/2026/lisa-accept-yourself-to-accept-love-cover-480w.webp 480w, /content/img/2026/lisa-accept-yourself-to-accept-love-cover-828w.webp 828w, /content/img/2026/lisa-accept-yourself-to-accept-love-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1600; --cover-h: 900"><img class="post__cover-img" src="/content/img/2026/lisa-accept-yourself-to-accept-love-cover.webp" srcset="/content/img/2026/lisa-accept-yourself-to-accept-love-cover-480w.webp 480w, /content/img/2026/lisa-accept-yourself-to-accept-love-cover-828w.webp 828w, /content/img/2026/lisa-accept-yourself-to-accept-love-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7778), (max-width: 800px) min(92vw, 50vh * 1.7778), (max-width: 1099px) min(736px, 50vh * 1.7778), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7778), min(calc(90.78vw - 434px), 50vh * 1.7778)" width="1600" height="900" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><div class="crossing-field-intro">
   <p class="crossing-field-intro__eyebrow">Crossing Field / PRiSM Dispatch</p>
   <p class="crossing-field-intro__lead">新冠疫情讓全世界陷入混亂。「紅蓮華」和「炎」的大熱餘溫猶存，LiSA 卻在 2022 年春天過後，給自己的現場演出安排了一段空白期。在那段期間，她開始累積全新的人生體驗。而與歌迷長達 15 年的深厚羈絆，也讓她成為一個能夠坦然接受愛意的 LiSA。如今，慶祝 15 週年的大型展覽「LiSA PRiSM 〜LiFE is Soulful Artworks〜」即將登場，她說，她對那些被稱為「LiSAっ子」的歌迷們，有一個願望。</p>

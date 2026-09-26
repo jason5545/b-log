@@ -135,10 +135,18 @@
       font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
       color: var(--ink);
     }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
     .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
       margin: 0 0 2.5rem;
-      aspect-ratio: 16 / 9;
       background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
     }
     .post__body {
       max-width: 35em;
@@ -153,7 +161,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover.webp" imagesrcset="/content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover-480w.webp 480w, /content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover-828w.webp 828w, /content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover.webp" imagesrcset="/content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover-480w.webp 480w, /content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover-828w.webp 828w, /content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我等了兩年多才輪到的那個服務，八月停了","description":"我等了兩年多，才在手天使官網那五十次服務裡留下其中一次。剩下兩次我一直讓著沒申請，六年後它停止受理；那條路關了，其他的路本來就沒開過。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-03T00:00:00Z","dateModified":"2026-09-03T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"},"url":"https://b-log.to/cultural-insights/hand-angel-service-stopped-after-two-year-wait/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover.webp"],"keywords":"手天使, 身障者性權, 性義工, 重度身障, 長期照顧, 性自主","articleSection":"文化觀察"}</script>
@@ -214,7 +222,7 @@
       <p id="post-meta" class="meta">03SEP26 · 文化觀察 · 12 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">我等了兩年多才輪到的那個服務，八月停了</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover.webp" srcset="/content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover-480w.webp 480w, /content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover-828w.webp 828w, /content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1672; --cover-h: 941"><img class="post__cover-img" src="/content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover.webp" srcset="/content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover-480w.webp 480w, /content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover-828w.webp 828w, /content/img/2026/hand-angel-service-stopped-after-two-year-wait-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" width="1672" height="941" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>8 月 16 日，<a href="https://www.handangel.org/?p=9050">手天使公告</a>：無償協助重度肢障、視障者自慰的服務，即日起不再接受申請。</p>
 <p>理由寫得很客氣。人力、財力，但不只是人力財力，還有組織運作和義工培力。沒有恢復的時程。就算恢復，條件也可能改。永遠不收費。樂見別人用「手天使」這個名字去做同樣的事。</p>
 <p>我讀完的第一個反應不是可惜。</p>

@@ -136,10 +136,18 @@
       font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
       color: var(--ink);
     }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
     .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
       margin: 0 0 2.5rem;
-      aspect-ratio: 16 / 9;
       background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
     }
     .post__body {
       max-width: 35em;
@@ -154,7 +162,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp" imagesrcset="/content/img/2026/one-blank-icon-two-ai-problem-frames-cover-480w.webp 480w, /content/img/2026/one-blank-icon-two-ai-problem-frames-cover-828w.webp 828w, /content/img/2026/one-blank-icon-two-ai-problem-frames-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp" imagesrcset="/content/img/2026/one-blank-icon-two-ai-problem-frames-cover-480w.webp 480w, /content/img/2026/one-blank-icon-two-ai-problem-frames-cover-828w.webp 828w, /content/img/2026/one-blank-icon-two-ai-problem-frames-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"同一個白色方塊，兩個 AI 看見的是不同問題","description":"我看著一個 AI 在通知 API 裡越挖越深，換 Claude 看同一批證據後，卻從 LaunchServices 和 Communication Notification 找到出口。多一個 AI 的價值不是多一票。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-07-10T00:00:00Z","dateModified":"2026-07-10T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/one-blank-icon-two-ai-problem-frames/"},"url":"https://b-log.to/ai-analysis/one-blank-icon-two-ai-problem-frames/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp"],"keywords":"AI, Codex, Claude, LaunchServices, macOS, Communication Notification, 多模型協作","articleSection":"AI 分析"}</script>
@@ -215,7 +223,7 @@
       <p id="post-meta" class="meta">10JUL26 · AI 分析 · 7 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">同一個白色方塊，兩個 AI 看見的是不同問題</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp" srcset="/content/img/2026/one-blank-icon-two-ai-problem-frames-cover-480w.webp 480w, /content/img/2026/one-blank-icon-two-ai-problem-frames-cover-828w.webp 828w, /content/img/2026/one-blank-icon-two-ai-problem-frames-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1672; --cover-h: 941"><img class="post__cover-img" src="/content/img/2026/one-blank-icon-two-ai-problem-frames-cover.webp" srcset="/content/img/2026/one-blank-icon-two-ai-problem-frames-cover-480w.webp 480w, /content/img/2026/one-blank-icon-two-ai-problem-frames-cover-828w.webp 828w, /content/img/2026/one-blank-icon-two-ai-problem-frames-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" width="1672" height="941" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>EdgeLink 最近在做 Android 通知轉送。</p>
 <p>我想要的效果很單純：LINE、Facebook 的通知第一次在 Mac 右上角跳出來時，要保留 Android 原本的圖示；進到 macOS 通知中心之後，左邊則顯示 EdgeLink 自己的 logo。</p>
 <p>結果第一次跳出的圖示修好了，通知中心裡卻一直是一個白色方塊。</p>

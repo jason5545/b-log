@@ -37,3 +37,11 @@ Jason 2026/9/26 指定的硬規則。外觀改版方向是 Airbus ECAM 的色彩
 - 她的文章在文章頁麵包屑的分類（シルシ、Crossing Field）顯示洋紅，靜態頁與 CSR 一致。
 - 文章頁右欄的 CONTENTS（本文目錄）：Crossing Field 文章內文有 `crossing-field-toc` 的，右欄目錄照它的配色，編號洋紅、連結墨色；其他文章編號灰色、連結青色。
 - 封面 SVG 仍未掃。
+
+## 文章頁封面最高半個視窗
+
+Jason 2026/9/26 決定。文章頁頂部的封面（`#post-hero`）高度最多是視窗高的 50%，照原圖比例、不裁切，寬度跟著縮、靠文章欄左緣。首頁 LATEST、列表、og:image 不受影響。
+
+- 原圖寬高由 `scripts/generate-redirects.js` 直接讀 webp／png 檔頭，寫進 figure 的 `style="--cover-w: …; --cover-h: …"`，img 也帶 `width`／`height`；`sizes` 依比例逐篇產生。
+- 版面規則在 `post.html` 的關鍵 CSS（`min(100%, 50svh × 寬高比)` 加 `aspect-ratio`）。`assets/styles.css` 的 `.post__cover` 不要再寫 `aspect-ratio`，會蓋掉逐篇比例。
+- 用 svh 不用 vh：手機網址列伸縮時 svh 不變，而且是網址列展開時的可見高度。

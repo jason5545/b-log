@@ -136,10 +136,18 @@
       font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
       color: var(--ink);
     }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
     .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
       margin: 0 0 2.5rem;
-      aspect-ratio: 16 / 9;
       background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
     }
     .post__body {
       max-width: 35em;
@@ -154,7 +162,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2025/supercomputer-prophecy-cover.webp" imagesrcset="/content/img/2025/supercomputer-prophecy-cover-480w.webp 480w, /content/img/2025/supercomputer-prophecy-cover-828w.webp 828w, /content/img/2025/supercomputer-prophecy-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2025/supercomputer-prophecy-cover.webp" imagesrcset="/content/img/2025/supercomputer-prophecy-cover-480w.webp 480w, /content/img/2025/supercomputer-prophecy-cover-828w.webp 828w, /content/img/2025/supercomputer-prophecy-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.8333), (max-width: 800px) min(92vw, 50vh * 1.8333), (max-width: 1099px) min(736px, 50vh * 1.8333), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.8333), min(calc(90.78vw - 434px), 50vh * 1.8333)" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"十八年前的預言：當《超級電腦》的科幻變成我的現實","description":"2007年我13歲時讀到的《超級電腦》小說，預言了AI助理、神經網絡翻譯、AI對齊問題、腦機介面等技術。18年後的2025年，這些預言一一應驗。從Claude協助我開發、到AI的道德限制、再到清醒夢研究，這本網文竟然精準預測了AI時代。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-10-29T00:00:00Z","dateModified":"2025-10-29T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/super-computer-prophecy-18-years/"},"url":"https://b-log.to/ai-analysis/super-computer-prophecy-18-years/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2025/supercomputer-prophecy-cover.webp"],"keywords":"AI, 科幻, 預言, 神經網絡, AI對齊, 腦機介面, 清醒夢","articleSection":"AI 分析"}</script>
@@ -215,7 +223,7 @@
       <p id="post-meta" class="meta">29OCT25 · AI 分析 · 12 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">十八年前的預言：當《超級電腦》的科幻變成我的現實</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2025/supercomputer-prophecy-cover.webp" srcset="/content/img/2025/supercomputer-prophecy-cover-480w.webp 480w, /content/img/2025/supercomputer-prophecy-cover-828w.webp 828w, /content/img/2025/supercomputer-prophecy-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 2816; --cover-h: 1536"><img class="post__cover-img" src="/content/img/2025/supercomputer-prophecy-cover.webp" srcset="/content/img/2025/supercomputer-prophecy-cover-480w.webp 480w, /content/img/2025/supercomputer-prophecy-cover-828w.webp 828w, /content/img/2025/supercomputer-prophecy-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.8333), (max-width: 800px) min(92vw, 50vh * 1.8333), (max-width: 1099px) min(736px, 50vh * 1.8333), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.8333), min(calc(90.78vw - 434px), 50vh * 1.8333)" width="2816" height="1536" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">一本國一時的小說，在我31歲時一一應驗</h2>
 <p>2007年，我13歲，國一。那時候我在網上看到一本剛開始連載的小說——《超級電腦》，作者是瘋狂冰咆哮。</p>
 <p>故事很簡單：主角陳旭大學開學第一天，筆電被偷了。他靈機一動，寫了封信給「未來的子孫」，請他們用時光機寄一台筆電回來。一分鐘後，一台來自2086年的超級電腦從天而降。</p>

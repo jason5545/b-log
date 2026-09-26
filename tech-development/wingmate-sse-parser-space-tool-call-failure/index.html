@@ -137,10 +137,18 @@
       font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
       color: var(--ink);
     }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
     .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
       margin: 0 0 2.5rem;
-      aspect-ratio: 16 / 9;
       background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
     }
     .post__body {
       max-width: 35em;
@@ -155,7 +163,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover.webp" imagesrcset="/content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover-480w.webp 480w, /content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover-828w.webp 828w, /content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover.webp" imagesrcset="/content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover-480w.webp 480w, /content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover-828w.webp 828w, /content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"一個空格讓 tool call 全部失效：Wingmate 的 SSE parser 事故","description":"我 6 月 29 日晚上推完 Wingmate Android build，agent 還能思考、能 stream，tool call 卻全部發不出去。最後查到不是 executor 壞掉，而是 SSE parser 只認 data: 後面有空白，漏掉合法 chunk。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-06-30T00:00:00Z","dateModified":"2026-06-30T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/wingmate-sse-parser-space-tool-call-failure/"},"url":"https://b-log.to/tech-development/wingmate-sse-parser-space-tool-call-failure/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover.webp"],"keywords":"Wingmate, Android, SSE, OpenAI-compatible, tool call, LLM, debug, Gradle","articleSection":"技術開發"}</script>
@@ -216,7 +224,7 @@
       <p id="post-meta" class="meta">30JUN26 · 技術開發 · 8 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">一個空格讓 tool call 全部失效：Wingmate 的 SSE parser 事故</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover.webp" srcset="/content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover-480w.webp 480w, /content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover-828w.webp 828w, /content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1672; --cover-h: 941"><img class="post__cover-img" src="/content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover.webp" srcset="/content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover-480w.webp 480w, /content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover-828w.webp 828w, /content/img/2026/wingmate-sse-parser-space-tool-call-failure-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" width="1672" height="941" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>Wingmate 是我在做的 Android app。另一邊我還有個 CopilotChat，是 Apple 平台的原生 LLM chat client，SwiftUI 寫的。它的起點其實是 GitHub Copilot——當初我離開 claude.ai，走 Copilot 當中間層繼續用 Claude，然後發現 GitHub 沒有像樣的 iOS client，就自己做了一個。CopilotChat 從 Copilot device-flow OAuth 起家，再往外接 120 多家 provider，定位是 chat + coding mode 的桌面/手持 client：agent 能讀寫 workspace 檔案、跑 MCP tool、在 macOS 上跑 bash，但 build 這件事還是交給宿主機的 Android Studio / Xcode。</p>
 <p>但這條路走下來，我對 Copilot 這個 provider 的信任是遞減的。同一個 Claude Opus，Anthropic 官方 API 給 1M context window，GitHub 砍到 192K，第三方 client 再砍到 144K。我想查原因，用 VS Code 的 client ID 做 OAuth 測試，GitHub 直接 403，錯誤訊息只丟一個 TOS 首頁叫我自己去翻。然後 4 月 20 號，GitHub 把 Opus 從 Pro 完全移除，Pro+ 只留 Opus 4.7，同時暫停三個方案的新使用者註冊。洩漏的內部文件寫得很直白：有些使用者單一請求的成本已經超過他們整個月的訂閱費，長期要轉向按 token 計費。</p>
 <p>這不是 GitHub 特別惡意，是訂閱制的內建邏輯——你租的不是模型能力，是「今天這個版本的存取權」，條款隨時能改。我之前寫過一篇〈雲端 AI 的承諾有保存期限〉，結論是：出口只有降低對任何單一雲端服務的依賴深度。</p>

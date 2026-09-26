@@ -2504,8 +2504,16 @@ function renderArticleCover(element, post, contentEl) {
     return;
   }
 
+  // 靜態頁的原圖比例寫在 figure 的 style；這裡是沒預先渲染的情況，圖載入後才知道比例，先照 16:9 保留
+  element.style.removeProperty('--cover-w');
+  element.style.removeProperty('--cover-h');
   const coverImage = document.createElement('img');
   coverImage.className = 'post__cover-img';
+  coverImage.addEventListener('load', () => {
+    if (!coverImage.naturalWidth || !coverImage.naturalHeight) return;
+    element.style.setProperty('--cover-w', coverImage.naturalWidth);
+    element.style.setProperty('--cover-h', coverImage.naturalHeight);
+  }, { once: true });
   coverImage.src = post.coverImage;
   coverImage.alt = '';
   coverImage.decoding = 'async';

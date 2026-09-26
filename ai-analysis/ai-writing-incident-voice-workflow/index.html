@@ -137,10 +137,18 @@
       font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
       color: var(--ink);
     }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
     .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
       margin: 0 0 2.5rem;
-      aspect-ratio: 16 / 9;
       background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
     }
     .post__body {
       max-width: 35em;
@@ -155,7 +163,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/ai-writing-incident-voice-workflow-cover.webp" imagesrcset="/content/img/2026/ai-writing-incident-voice-workflow-cover-480w.webp 480w, /content/img/2026/ai-writing-incident-voice-workflow-cover-828w.webp 828w, /content/img/2026/ai-writing-incident-voice-workflow-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/ai-writing-incident-voice-workflow-cover.webp" imagesrcset="/content/img/2026/ai-writing-incident-voice-workflow-cover-480w.webp 480w, /content/img/2026/ai-writing-incident-voice-workflow-cover-828w.webp 828w, /content/img/2026/ai-writing-incident-voice-workflow-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"那篇被說 AI 味很重的文章，後來讓我修了整條工作流","description":"一篇 Facebook 文章被說 AI 味太重後，我回頭檢查自己的寫作 skill、hook、Voco 語音辨識和發布責任。這次事故讓我重新調整 AI 在工作流裡的位置。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-06-05T00:00:00Z","dateModified":"2026-06-05T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/ai-writing-incident-voice-workflow/"},"url":"https://b-log.to/ai-analysis/ai-writing-incident-voice-workflow/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/ai-writing-incident-voice-workflow-cover.webp"],"keywords":"AI, ChatGPT, 語音輸入, Voco, ASR, 寫作工作流, Facebook, hook","articleSection":"AI 分析"}</script>
@@ -216,7 +224,7 @@
       <p id="post-meta" class="meta">05JUN26 · AI 分析 · 6 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">那篇被說 AI 味很重的文章，後來讓我修了整條工作流</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/ai-writing-incident-voice-workflow-cover.webp" srcset="/content/img/2026/ai-writing-incident-voice-workflow-cover-480w.webp 480w, /content/img/2026/ai-writing-incident-voice-workflow-cover-828w.webp 828w, /content/img/2026/ai-writing-incident-voice-workflow-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1672; --cover-h: 941"><img class="post__cover-img" src="/content/img/2026/ai-writing-incident-voice-workflow-cover.webp" srcset="/content/img/2026/ai-writing-incident-voice-workflow-cover-480w.webp 480w, /content/img/2026/ai-writing-incident-voice-workflow-cover-828w.webp 828w, /content/img/2026/ai-writing-incident-voice-workflow-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" width="1672" height="941" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>今天我在 Facebook 社團發了一篇文章，講我對 AI 慣用字被原封不動貼出去的不舒服。</p>
 <p>那個出發點到現在我還是認同。很多 AI 生成的文字會有一些固定用字，太工整、太像在替句子貼標籤，也太容易把人的語氣磨成某種看起來正確的樣子。我一直很在意這個問題，甚至在意到有點過度。</p>
 <p>結果五分鐘後，有人留言說那篇文章 AI 味也很重，一直在用對比、對比句。</p>

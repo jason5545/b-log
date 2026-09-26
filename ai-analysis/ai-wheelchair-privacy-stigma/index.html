@@ -136,10 +136,18 @@
       font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
       color: var(--ink);
     }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
     .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
       margin: 0 0 2.5rem;
-      aspect-ratio: 16 / 9;
       background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
     }
     .post__body {
       max-width: 35em;
@@ -154,7 +162,7 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2025/ai-wheelchair-privacy-cover.webp" imagesrcset="/content/img/2025/ai-wheelchair-privacy-cover-480w.webp 480w, /content/img/2025/ai-wheelchair-privacy-cover-828w.webp 828w" imagesizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2025/ai-wheelchair-privacy-cover.webp" imagesrcset="/content/img/2025/ai-wheelchair-privacy-cover-480w.webp 480w, /content/img/2025/ai-wheelchair-privacy-cover-828w.webp 828w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1), (max-width: 800px) min(92vw, 50vh * 1), (max-width: 1099px) min(736px, 50vh * 1), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1), min(calc(90.78vw - 434px), 50vh * 1)" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"當 AI 把我的輪椅當成需要隱藏的秘密","description":"Gemini 把「使用輪椅」標記為敏感資訊並自動刪除，說是保護隱私。但輪椅不是診斷，不是病歷——它只是一張有輪子的椅子。當系統把身心障礙和 HIV 檢測放在同一分類處理，傳達的訊息是：這是需要被隱藏的事。這不是保護，是包裝成政策的污名化。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2025-12-06T00:00:00Z","dateModified":"2025-12-06T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/ai-wheelchair-privacy-stigma/"},"url":"https://b-log.to/ai-analysis/ai-wheelchair-privacy-stigma/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2025/ai-wheelchair-privacy-cover.webp"],"keywords":"Gemini, AI, 隱私, 身心障礙, 輪椅, GDPR, Reddit","articleSection":"AI 分析"}</script>
@@ -215,7 +223,7 @@
       <p id="post-meta" class="meta">06DEC25 · AI 分析 · 12 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">當 AI 把我的輪椅當成需要隱藏的秘密</h1>
-      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2025/ai-wheelchair-privacy-cover.webp" srcset="/content/img/2025/ai-wheelchair-privacy-cover-480w.webp 480w, /content/img/2025/ai-wheelchair-privacy-cover-828w.webp 828w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1024; --cover-h: 1024"><img class="post__cover-img" src="/content/img/2025/ai-wheelchair-privacy-cover.webp" srcset="/content/img/2025/ai-wheelchair-privacy-cover-480w.webp 480w, /content/img/2025/ai-wheelchair-privacy-cover-828w.webp 828w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1), (max-width: 800px) min(92vw, 50vh * 1), (max-width: 1099px) min(736px, 50vh * 1), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1), min(calc(90.78vw - 434px), 50vh * 1)" width="1024" height="1024" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>我是輪椅使用者。這不是什麼隱私，就像有人戴眼鏡、有人騎腳踏車一樣，只是我移動的方式。</p>
 <p>最近我在用 Gemini 討論演唱會的進場動線規劃。中途我注意到它的內部思維鏈寫著：</p>
 <blockquote>
