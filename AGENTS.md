@@ -50,6 +50,16 @@ Jason 從建站第一天就定的版面原則，2026/9/26 重申：「一個原�
 - 發生紀錄：2026/3/18 改成毛玻璃風格時，about、gadgets 被設了 `.content { max-width: 860px }`，當天移除。2026/9/26 ECAM 改版第一版（`d81239dc`）又把文章欄收成 736px 置中、側欄移到文末，後面三輪（`a6b32dac`、`d73369dc`、`428cab42`）才改回來。兩次都是動手前沒看這段歷史。
 - 動版面之前，先跑 `git log -- assets/styles.css assets/css/` 看過去的版面決定。
 
+為什麼不照多數網站限寬（Jason 9/26 的判斷，研究出處附在後面）：
+
+- 限寬的慣例有三個來源：中等行長的閱讀研究；固定寬度的版面比較好控制，框架也直接寫成預設（例如 Tailwind Typography 的 `prose` 是 `max-width: 65ch`）；窄欄內容少也不會顯得空。只有第一個跟讀者有關，而且研究結論沒有一面倒。
+- 螢幕上要捲動時，長行不一定比較慢。Dyson & Kipping 1998：每行 100 字元比 25 字元讀得快，一部分原因是捲動時間少。Bernard et al. 2002：受試者認為最長的行捲動量最合適。代價是理解：Dyson & Haselgrove 2001 裡，每行 55 字元的理解分數比 100 字元好。
+- 這個站的主要讀者是 Jason 自己。他用一根手指操作，每捲一次都是實體成本，一屏放得下多少內容是成本問題，不只是美感。
+- 吃滿時，想要窄行的讀者可以自己把視窗拉窄；限寬之後，讀者沒辦法把它拉寬。WCAG 1.4.8（AAA 級：每行不超過 80 字元，CJK 不超過 40）只要求「有辦法」達到，視窗縮窄就算，網站不用自己限寬，也不用另做切換鈕。
+- 代價的處理：字級隨寬度放大，行長增加得慢（9/24 那篇在 1440 寬一行 47 字、1920 寬 57 字）。段落長的 Crossing Field 訪談翻譯在 2560 寬一行約 92 字，讀起來真的跟不上時，只針對這類文章處理，不回頭把全站收窄。
+
+出處：[WCAG 2.2 Understanding 1.4.8](https://www.w3.org/WAI/WCAG22/Understanding/visual-presentation.html)；Dyson, M. C. (2004), *How physical text layout affects reading from screen*, Behaviour & Information Technology 23(6), 377–393（Dyson & Kipping 1998、Bernard et al. 2002 的結果引自這篇回顧）；[Dyson & Haselgrove (2001)](https://www.sciencedirect.com/science/article/abs/pii/S1071581901904586)；[tailwindcss-typography `styles.js`](https://github.com/tailwindlabs/tailwindcss-typography/blob/main/src/styles.js)。
+
 ## 文章頁封面最高半個視窗
 
 Jason 2026/9/26 決定。文章頁頂部的封面（`#post-hero`）高度最多是視窗高的 50%，照原圖比例、不裁切，寬度跟著縮、靠文章欄左緣。首頁 LATEST、列表、og:image 不受影響。
