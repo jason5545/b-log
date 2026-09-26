@@ -22,8 +22,22 @@ const HOME_FEATURED_END = '<!-- HOME_FEATURED_END -->';
 const ARTICLE_TAGS_START = '<!-- ARTICLE_TAGS_START -->';
 const ARTICLE_TAGS_END = '<!-- ARTICLE_TAGS_END -->';
 const HERO_IMAGE_WIDTHS = [480, 828, 1200];
-const HOME_HERO_SIZES = '(min-width: 1600px) 50vw, (min-width: 1200px) 50vw, 98vw';
-const ARTICLE_HERO_SIZES = '(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw';
+// 首頁 LATEST：760px 以下封面滿版，760–960px 約半欄，桌面固定約 400px
+const HOME_HERO_SIZES = '(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, 400px';
+// 文章頁封面：欄寬 46rem（736px），手機扣掉左右 16px
+const ARTICLE_HERO_SIZES = '(max-width: 800px) calc(100vw - 32px), 736px';
+const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+// LiSA 的兩個分類：洋紅只給她，旁邊直接寫出這個分類是什麼
+const HER_CATEGORY_HINTS = {
+  'シルシ': '我和她的事',
+  'Crossing Field': '她說的話',
+};
+const STATUS_SECTIONS = {
+  resolved: { key: '已修', className: 'ok' },
+  procedures: { key: '程序', className: 'proc' },
+  inop: { title: 'INOP SYS' },
+  open: { title: '未定' },
+};
 
 // 從集中式設定檔載入分類映射
 const categoriesConfigPath = path.join(ROOT_DIR, 'config/categories.json');
@@ -102,10 +116,18 @@ function buildHeroPreload(coverImage, sizes = ARTICLE_HERO_SIZES) {
 
 function buildHeroMarkup(post) {
   if (!post.coverImage) {
-    return '<div id="post-hero" class="article-hero"></div>';
+    return '<figure id="post-hero" class="post__cover" hidden></figure>';
   }
 
-  return `<div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" ${buildHeroImageAttributes(post.coverImage, ARTICLE_HERO_SIZES)}></div>`;
+  return `<figure id="post-hero" class="post__cover"><img class="post__cover-img" ${buildHeroImageAttributes(post.coverImage, ARTICLE_HERO_SIZES)}></figure>`;
+}
+
+// 範本裡的 placeholder 一定要存在，找不到就直接失敗，避免產出半套頁面
+function replaceRequired(html, placeholder, replacement) {
+  if (!html.includes(placeholder)) {
+    throw new Error(`post.html 找不到 placeholder：${placeholder}`);
+  }
+  return html.replace(placeholder, () => replacement);
 }
 
 function escapeRegExp(value = '') {
@@ -147,77 +169,58 @@ function parseDate(value) {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-function formatStaticDate(value) {
+// ECAM 日期格式：24SEP26（台北時間）
+function formatEcamDate(value) {
   const date = parseDate(value);
   if (!date) return '';
-  return new Intl.DateTimeFormat(META_DATE_LOCALE, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
+  const parts = new Intl.DateTimeFormat(META_DATE_LOCALE, {
+    year: '2-digit',
+    month: 'numeric',
+    day: '2-digit',
     timeZone: META_DATE_TIME_ZONE,
-  }).format(date);
+  }).formatToParts(date);
+  const get = (type) => parts.find((part) => part.type === type)?.value || '';
+  const month = MONTHS[Number.parseInt(get('month'), 10) - 1] || '';
+  return `${get('day')}${month}${get('year')}`;
 }
 
-function formatStaticMetaParts(post) {
+function formatReadingTime(post) {
+  const value = String(post.readingTime || '').trim();
+  return value ? value.toUpperCase() : '';
+}
+
+function isHerCategory(category) {
+  return Object.prototype.hasOwnProperty.call(HER_CATEGORY_HINTS, category);
+}
+
+// 文章 meta 行：24SEP26 · 技術開發 · 5 MIN · JASON CHIEN
+function formatStaticMetaParts(post, { includeAuthor = true } = {}) {
   const parts = [];
-  if (post.author) {
-    parts.push(`By ${post.author}`);
-  }
-
-  const publishedDate = formatStaticDate(post.publishedAt);
+  const publishedDate = formatEcamDate(post.publishedAt);
   if (publishedDate) {
-    parts.push(`Published ${publishedDate}`);
+    parts.push(publishedDate);
   }
 
-  const updatedDate = formatStaticDate(post.updatedAt || post.publishedAt);
+  if (post.category) {
+    parts.push(post.category);
+  }
+
+  const readingTime = formatReadingTime(post);
+  if (readingTime) {
+    parts.push(readingTime);
+  }
+
+  if (includeAuthor && post.author) {
+    const author = post.author.toUpperCase();
+    parts.push(post.category === 'Crossing Field' ? `${author} 譯` : author);
+  }
+
+  const updatedDate = formatEcamDate(post.updatedAt || post.publishedAt);
   if (updatedDate && updatedDate !== publishedDate) {
-    parts.push(`Updated ${updatedDate}`);
-  }
-
-  if (post.readingTime) {
-    parts.push(post.readingTime);
+    parts.push(`UPDATED ${updatedDate}`);
   }
 
   return parts;
-}
-
-function hexToRgb(hex) {
-  if (typeof hex !== 'string') return null;
-  let normalized = hex.trim().replace('#', '');
-  if (![3, 6].includes(normalized.length)) return null;
-  if (normalized.length === 3) {
-    normalized = normalized.split('').map((char) => char + char).join('');
-  }
-
-  const value = Number.parseInt(normalized, 16);
-  if (Number.isNaN(value)) return null;
-
-  return {
-    r: (value >> 16) & 255,
-    g: (value >> 8) & 255,
-    b: value & 255,
-  };
-}
-
-function rgbToHex({ r, g, b }) {
-  const toHex = (value) => value.toString(16).padStart(2, '0');
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-}
-
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
-
-function shadeColor(hex, percent) {
-  const rgb = hexToRgb(hex);
-  if (!rgb) return hex;
-
-  const factor = (100 + percent) / 100;
-  return rgbToHex({
-    r: clamp(Math.round(rgb.r * factor), 0, 255),
-    g: clamp(Math.round(rgb.g * factor), 0, 255),
-    b: clamp(Math.round(rgb.b * factor), 0, 255),
-  });
 }
 
 function slugToPath(slug, category) {
@@ -252,7 +255,7 @@ function buildAudioPlayerHTML(audioFile) {
         <span class="current-time">0:00</span>
         <span class="duration">0:00</span>
       </div>
-      <div class="playlist-info" style="display:none; font-size:0.75rem; color:var(--text-secondary, #666); margin-top:0.25rem;">
+      <div class="playlist-info" style="display:none">
         片段 <span class="current-part">1</span> / <span class="total-parts">1</span>
       </div>
     </div>
@@ -301,28 +304,141 @@ function renderMarkdownForStaticPage(post) {
   let markdown = stripMarkdownTitle(fs.readFileSync(markdownPath, 'utf8'));
   markdown = markdown.replace(/<!--\s*audio:\s*(.+?)\s*-->/g, (_, audioFile) => buildAudioPlayerHTML(audioFile.trim()));
 
-  return marked
+  let html = marked
     .parse(markdown)
     .replace(/\b(src|srcset)="content\//g, '$1="/content/');
+
+  if (post.category === 'Crossing Field') {
+    html = buildCrossingFieldSource(html);
+  }
+  if (post.category === 'シルシ') {
+    html = markLisaQuoteCitations(html);
+  }
+
+  return html;
 }
 
 function buildArticleMetaMarkup(post) {
-  return formatStaticMetaParts(post)
-    .map((part) => `<span>${escapeHtml(part)}</span>`)
-    .join('');
+  return escapeHtml(formatStaticMetaParts(post).join(' · '));
 }
 
 function buildArticleTagsMarkup(tags = []) {
   if (!Array.isArray(tags) || !tags.length) {
-    return '<div id="post-tags" class="article-tags" hidden></div>';
+    return '<div id="post-tags" class="tags" hidden></div>';
   }
 
   const tagMarkup = tags
     .filter(Boolean)
-    .map((tag) => `<span>${escapeHtml(tag)}</span>`)
+    .map((tag) => `<a href="/?tag=${encodeURIComponent(tag)}">${escapeHtml(tag)}</a>`)
     .join('');
 
-  return `<div id="post-tags" class="article-tags">${tagMarkup}</div>`;
+  return `<div id="post-tags" class="tags"><span class="meta">TAGS</span>${tagMarkup}</div>`;
+}
+
+function buildBreadcrumbMarkup(post) {
+  if (!post.category) {
+    return '<span id="breadcrumb-current"></span>';
+  }
+
+  const herClass = isHerCategory(post.category) ? ' class="her-cat"' : '';
+  return `<span id="breadcrumb-current"><a href="/?category=${encodeURIComponent(post.category)}"${herClass}>${escapeHtml(post.category)}</a></span>`;
+}
+
+function buildCatlineMarkup(post) {
+  if (!isHerCategory(post.category)) {
+    return '<p id="post-catline" class="catline" hidden></p>';
+  }
+
+  return `<p id="post-catline" class="catline">${escapeHtml(post.category.toUpperCase())} <span>${escapeHtml(HER_CATEGORY_HINTS[post.category])}</span></p>`;
+}
+
+// STATUS 面板：posts.json 的選填欄位 status
+function buildStatusInnerMarkup(status) {
+  if (!isPlainObject(status)) return '';
+
+  const listItems = (key) => (Array.isArray(status[key]) ? status[key].filter((item) => typeof item === 'string' && item.trim()) : []);
+  const leftItems = ['resolved', 'procedures']
+    .flatMap((key) => listItems(key).map((item) => {
+      const { key: label, className } = STATUS_SECTIONS[key];
+      return `<li class="${className}"><span class="k">${label}</span>${escapeHtml(item)}</li>`;
+    }));
+  const rightGroups = ['inop', 'open']
+    .map((key) => {
+      const items = listItems(key);
+      if (!items.length) return '';
+      const listMarkup = items.map((item) => `<li class="caut">${escapeHtml(item)}</li>`).join('');
+      return `<h3 class="status__sub">${STATUS_SECTIONS[key].title}</h3><ul>${listMarkup}</ul>`;
+    })
+    .filter(Boolean);
+
+  if (!leftItems.length && !rightGroups.length) return '';
+
+  const columns = [];
+  if (leftItems.length) columns.push(`<ul>${leftItems.join('')}</ul>`);
+  if (rightGroups.length) columns.push(`<div>${rightGroups.join('')}</div>`);
+  const gridClass = columns.length === 1 ? 'status__grid status__grid--single' : 'status__grid';
+
+  return `<h2 class="status__title" id="status-title">STATUS</h2><div class="${gridClass}">${columns.join('')}</div>`;
+}
+
+function isPlainObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function buildStatusMarkup(post) {
+  const inner = buildStatusInnerMarkup(post.status);
+  if (!inner) {
+    return '<section id="post-status" class="status" aria-labelledby="status-title" hidden></section>';
+  }
+
+  return `<section id="post-status" class="status" aria-labelledby="status-title">${inner}</section>`;
+}
+
+// Crossing Field：開頭的「翻譯報導／翻譯整理」引用改成原文出處資料表
+function splitSourceRow(paragraphHtml) {
+  const leadText = paragraphHtml.split('<')[0];
+  let separatorIndex = leadText.indexOf('：');
+  if (separatorIndex === -1) separatorIndex = leadText.indexOf('／');
+  if (separatorIndex <= 0 || separatorIndex > 12) return null;
+
+  const key = leadText.slice(0, separatorIndex).trim();
+  const value = paragraphHtml.slice(separatorIndex + 1).trim().replace(/<\/?code>/g, '');
+  if (!key || !value) return null;
+  return { key, value };
+}
+
+function buildCrossingFieldSource(html) {
+  return html.replace(/<blockquote>\s*<p>(翻譯報導|翻譯整理)<\/p>([\s\S]*?)<\/blockquote>/, (match, kind, rest) => {
+    if (rest.replace(/<p>[\s\S]*?<\/p>/g, '').trim()) return match;
+
+    const rows = [];
+    for (const paragraph of rest.matchAll(/<p>([\s\S]*?)<\/p>/g)) {
+      const row = splitSourceRow(paragraph[1].trim());
+      if (!row) return match;
+      rows.push(row);
+    }
+    if (!rows.length) return match;
+
+    const rowMarkup = rows.map(({ key, value }) => `<dt>${key}</dt><dd>${value}</dd>`).join('');
+    return `<div class="cf-source" role="group" aria-label="${kind}"><p class="cf-source__kind">${kind}</p><dl>${rowMarkup}</dl></div>`;
+  });
+}
+
+// シルシ：引用的最後一行以「——」開頭時，是她的歌詞出處
+function markLisaQuoteCitations(html) {
+  return html.replace(/<blockquote>([\s\S]*?)<\/blockquote>/g, (match, inner) => {
+    const lastParagraph = inner.match(/^([\s\S]*)<p>([\s\S]*?)<\/p>(\s*)$/);
+    if (!lastParagraph) return match;
+
+    const [, before, paragraph, trailing] = lastParagraph;
+    const lines = paragraph.split('\n');
+    const lastLine = lines[lines.length - 1].trim();
+    if (!lastLine.startsWith('——')) return match;
+
+    const remaining = lines.slice(0, -1).join('\n').trim();
+    const paragraphMarkup = remaining ? `<p>${remaining}</p>\n` : '';
+    return `<blockquote>${before}${paragraphMarkup}<cite class="her-cite">${lastLine}</cite>${trailing}</blockquote>`;
+  });
 }
 
 function buildStructuredData(post, fullUrl, imageUrl) {
@@ -364,17 +480,6 @@ function buildStructuredData(post, fullUrl, imageUrl) {
   return `  <script type="application/ld+json">${escapeJsonForScript(schema)}</script>\n`;
 }
 
-function buildHeroCategoryStyle(post, includeColor = true) {
-  const accent = post.accentColor || '#556bff';
-  const rgb = hexToRgb(accent);
-  if (!rgb) {
-    return '';
-  }
-
-  const colorDecl = includeColor ? `color: ${accent}; ` : '';
-  return ` style="${colorDecl}border-color: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3); background: rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1);"`;
-}
-
 function buildCloudinaryOgImage(title) {
   const encodedTitle = encodeURIComponent(title || 'Untitled');
   return (
@@ -398,68 +503,47 @@ function buildArticleTagMetaBlock(tags = []) {
     .join('\n');
 }
 
-function buildHomepageHeroMedia(post, categoryThemeAttr) {
+function buildHomepageHeroMedia(post) {
   if (post.coverImage) {
-    return `        <div class="hero-card__media article-hero--image" id="hero-media"${categoryThemeAttr}><img class="article-hero__image" ${buildHeroImageAttributes(post.coverImage, HOME_HERO_SIZES, 'sync')}></div>`;
+    return `          <div class="lead__media" id="hero-media"><img class="lead__img" ${buildHeroImageAttributes(post.coverImage, HOME_HERO_SIZES, 'sync')}></div>`;
   }
-  // 無封面：不輸出 media 區塊，首頁主打改用文字為主版型
+  // 無封面：不輸出 media 區塊，LATEST 改用純文字版型
   return '';
 }
 
 function buildHomepageFeaturedSection(post) {
   if (!post) {
-    return `      <section id="featured" class="hero-card" hidden data-featured-slug="" data-featured-cover="">
-        <div class="hero-card__media" id="hero-media"></div>
-        <div class="hero-card__body">
-          <p class="hero-card__category" id="hero-category"></p>
-          <h2 class="hero-card__title">
-            <a id="hero-link" href="#"></a>
-          </h2>
-          <p class="hero-card__meta" id="hero-meta"></p>
-          <p class="hero-card__summary" id="hero-summary"></p>
-          <div class="hero-card__actions">
-            <a id="hero-read-more" class="button button--primary" href="#">Continue reading</a>
-            <a id="hero-open-discussion" class="button button--ghost" href="#comments">Discuss</a>
+    return `      <section id="featured" class="lead lead--text-only" aria-labelledby="lead-label" hidden data-featured-slug="" data-featured-cover="">
+        <h2 class="label" id="lead-label">LATEST <span>最新一篇</span></h2>
+        <a class="lead__link" id="hero-link" href="#">
+          <div class="lead__text">
+            <p class="meta" id="hero-meta"></p>
+            <h3 class="lead__title" id="hero-title"></h3>
+            <p class="lead__sum" id="hero-summary"></p>
           </div>
-        </div>
+        </a>
       </section>`;
   }
 
-  const categoryTheme = categoryMapping[post.category] || '';
-  const categoryThemeAttr = categoryTheme ? ` data-category-theme="${escapeHtml(categoryTheme)}"` : '';
   const safeSlug = escapeHtml(post.slug || '');
   const safeCoverImage = escapeHtml(post.coverImage || '');
-  const safeCategory = escapeHtml(post.category || 'Dispatch');
   const safeTitle = escapeHtml(post.title || post.slug || 'Untitled');
   const safeSummary = escapeHtml(post.summary || '');
-  const safeMeta = escapeHtml(formatStaticMetaParts(post).join(' | '));
+  const safeMeta = escapeHtml(formatStaticMetaParts(post, { includeAuthor: false }).join(' · '));
   const safePath = escapeHtml(slugToPath(post.slug, post.category));
-  const safeDiscussPath = escapeHtml(`${slugToPath(post.slug, post.category)}#comments`);
-  // 文字版型時 badge 前景交給主題 CSS（var(--text)）保對比，底色與框線保留 accent
-  const categoryStyle = buildHeroCategoryStyle(post, !!post.coverImage);
   const audioIndicator = post.hasAudio ? buildAudioIndicatorMarkup(true) : '';
+  const sectionClass = post.coverImage ? 'lead' : 'lead lead--text-only';
+  const mediaBlock = post.coverImage ? `\n${buildHomepageHeroMedia(post)}` : '';
 
-  const heroCardClass = post.coverImage ? 'hero-card' : 'hero-card hero-card--text-only';
-  const mediaBlock = post.coverImage ? `\n${buildHomepageHeroMedia(post, categoryThemeAttr)}` : '';
-  // 無封面：accent 漸層當整個 hero 背景（文字區由主題遮罩保對比）
-  const heroAccent = post.accentColor || '#556bff';
-  const heroGradientStyle = post.coverImage
-    ? ''
-    : ` style="background-image: linear-gradient(135deg, ${shadeColor(heroAccent, -15)} 0%, ${heroAccent} 50%, ${shadeColor(heroAccent, 25)} 100%);"`;
-
-  return `      <section id="featured" class="${heroCardClass}"${categoryThemeAttr}${heroGradientStyle} data-featured-slug="${safeSlug}" data-featured-cover="${safeCoverImage}">${mediaBlock}
-        <div class="hero-card__body">
-          <p class="hero-card__category" id="hero-category"${categoryStyle}>${safeCategory}</p>
-          <h2 class="hero-card__title">
-            <a id="hero-link" href="${safePath}">${safeTitle}</a>${audioIndicator}
-          </h2>
-          <p class="hero-card__meta" id="hero-meta">${safeMeta}</p>
-          <p class="hero-card__summary" id="hero-summary">${safeSummary}</p>
-          <div class="hero-card__actions">
-            <a id="hero-read-more" class="button button--primary" href="${safePath}">Continue reading</a>
-            <a id="hero-open-discussion" class="button button--ghost" href="${safeDiscussPath}">Discuss</a>
-          </div>
-        </div>
+  return `      <section id="featured" class="${sectionClass}" aria-labelledby="lead-label" data-featured-slug="${safeSlug}" data-featured-cover="${safeCoverImage}">
+        <h2 class="label" id="lead-label">LATEST <span>最新一篇</span></h2>
+        <a class="lead__link" id="hero-link" href="${safePath}">
+          <div class="lead__text">
+            <p class="meta" id="hero-meta">${safeMeta}</p>
+            <h3 class="lead__title" id="hero-title">${safeTitle}${audioIndicator}</h3>
+            <p class="lead__sum" id="hero-summary">${safeSummary}</p>
+          </div>${mediaBlock}
+        </a>
       </section>`;
 }
 
@@ -563,6 +647,7 @@ function generatePostHTML(post) {
   const safeTitle = escapeHtml(title || slug || 'Untitled');
   const safeSummary = escapeHtml(summary || '');
   const safeCategory = escapeHtml(category || '');
+  const categoryThemeAttr = categorySlug ? ` data-category-theme="${escapeHtml(categorySlug)}"` : '';
 
   // 調整相對路徑，因為文章頁面在 /category/slug/ 目錄下
   // 需要往上兩層才能到根目錄
@@ -601,13 +686,15 @@ function generatePostHTML(post) {
   html = html.replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="index, follow">');
   html = html.replace(/  <!-- 首圖 preload 會由生成腳本注入到這裡 -->\s*/,
     `  <!-- 首圖 preload 會由生成腳本注入到這裡 -->\n${heroPreload}`);
-  html = html.replace(/<div id="post-hero" class="article-hero"><\/div>/, heroMarkup);
-  html = html.replace(/<span id="breadcrumb-current"><\/span>/, `<span id="breadcrumb-current">${safeTitle}</span>`);
-  html = html.replace(/<p id="post-category" class="article-category"><\/p>/, `<p id="post-category" class="article-category">${safeCategory}</p>`);
-  html = html.replace(/<h1 id="post-title">Loading<\/h1>/, `<h1 id="post-title">${safeTitle}</h1>`);
-  html = html.replace(/<div id="post-meta" class="article-meta"><\/div>/, `<div id="post-meta" class="article-meta">${staticMetaMarkup}</div>`);
-  html = html.replace(/<div id="post-tags" class="article-tags"><\/div>/, staticTagsMarkup);
-  html = html.replace(/<div id="post-content" class="article-body"><\/div>/, `<div id="post-content" class="article-body" data-prerendered="true">${staticPostContent}</div>`);
+  html = replaceRequired(html, '<article class="post" id="post-article">', `<article class="post" id="post-article"${categoryThemeAttr}>`);
+  html = replaceRequired(html, '<figure id="post-hero" class="post__cover" hidden></figure>', heroMarkup);
+  html = replaceRequired(html, '<span id="breadcrumb-current"></span>', buildBreadcrumbMarkup(post));
+  html = replaceRequired(html, '<p id="post-meta" class="meta"></p>', `<p id="post-meta" class="meta">${staticMetaMarkup}</p>`);
+  html = replaceRequired(html, '<p id="post-catline" class="catline" hidden></p>', buildCatlineMarkup(post));
+  html = replaceRequired(html, '<h1 id="post-title" class="post__title">Loading</h1>', `<h1 id="post-title" class="post__title">${safeTitle}</h1>`);
+  html = replaceRequired(html, '<div id="post-content" class="post__body article-body"></div>', `<div id="post-content" class="post__body article-body" data-prerendered="true">${staticPostContent}</div>`);
+  html = replaceRequired(html, '<section id="post-status" class="status" aria-labelledby="status-title" hidden></section>', buildStatusMarkup(post));
+  html = replaceRequired(html, '<div id="post-tags" class="tags" hidden></div>', staticTagsMarkup);
   html = replaceMarkedBlock(
     html,
     ARTICLE_TAGS_START,

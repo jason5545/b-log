@@ -45,7 +45,8 @@
   <!-- 額外的 metadata -->
   <meta name="keywords" content="IK512, 5G, Proxmox, Homelab, Networking, Failover, Watchdog, ModemManager" id="meta-keywords">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#b45309">
+  <meta name="theme-color" content="#f4efe7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1114" media="(prefers-color-scheme: dark)">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -57,54 +58,39 @@
   <!-- 啟用 View Transition API（跨文件過渡） -->
   <meta name="view-transition" content="same-origin">
 
-  <!-- Bricolage Grotesque — heading font -->
+  <!-- B612 / B612 Mono — heading and UI font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/critical-shared.css">
 
   <!-- 文章頁專屬關鍵 CSS -->
   <style>
-    .article {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft);
-      overflow: hidden;
+    .post {
+      max-width: 46rem;
+      margin-inline: auto;
+      padding-block: 1rem 4rem;
     }
-    .article-header h1 {
-      margin: 0 0 1rem;
-      font-size: clamp(2.2rem, 5vw, 3.2rem);
-      letter-spacing: -0.02em;
+    .post__title {
+      margin: 0.8rem 0 1.75rem;
+      font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
+      color: var(--ink);
     }
-    /* 防止 CLS - Article 頁面 */
-    .article-shell {
-      min-height: 600px;
-    }
-    .article-hero {
-      min-height: 260px;
+    .post__cover {
+      margin: 0 0 2.5rem;
       aspect-ratio: 16 / 9;
+      background: var(--surface);
     }
-    .article-layout {
-      min-height: 500px;
+    .post__body {
+      max-width: 35em;
+      font-size: 1.125rem;
+      line-height: 1.9;
     }
-    .article-footer {
-      min-height: 400px;
-    }
-    /* 內容區域預留空間 */
+    /* 內容區域預留空間（未預先渲染時） */
     #post-content:empty {
       min-height: 400px;
-      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
-      background-size: 200% 100%;
-      animation: skeleton-loading 1.5s infinite;
-      border-radius: var(--radius-md);
-    }
-    @keyframes skeleton-loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 33px, var(--rule) 33px, var(--rule) 34px);
     }
   </style>
 
@@ -114,88 +100,62 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"IK512 到底壞了沒？一次從表象到根因的系統診斷","description":"IK512 從 USB 斷線、zombie bearer 到每次換 IP，問題一個接一個。追完之後才發現硬體從頭到尾沒壞過，三個問題來自三個完全不同的層次。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-03-01T00:00:00Z","dateModified":"2026-03-01T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/ik512-firmware-diagnosis/"},"url":"https://b-log.to/tech-analysis/ik512-firmware-diagnosis/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:IK512%20%E5%88%B0%E5%BA%95%E5%A3%9E%E4%BA%86%E6%B2%92%EF%BC%9F%E4%B8%80%E6%AC%A1%E5%BE%9E%E8%A1%A8%E8%B1%A1%E5%88%B0%E6%A0%B9%E5%9B%A0%E7%9A%84%E7%B3%BB%E7%B5%B1%E8%A8%BA%E6%96%B7,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"IK512, 5G, Proxmox, Homelab, Networking, Failover, Watchdog, ModemManager","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="page-chrome">
-    <header class="site-header">
-      <div class="wrapper">
-        <div class="site-header__top">
-          <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">IK512 到底壞了沒？一次從表象到根因的系統診斷</span></p>
-            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
-            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
-          </div>
-          <nav class="site-nav">
-            <a href="../../">Home</a>
-            <a href="../../about.html">About</a>
-            <a href="../../gadgets.html">Gadgets</a>
-            <a href="../../feed.json">Feed</a>
-            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
-
-            <!-- 搜尋按鈕與搜尋框 -->
-            <div class="search-toggle-container">
-              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
-                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="m21 21-4.35-4.35"></path>
+  <a class="skip" href="#content">跳到內容</a>
+  <header class="site site-header">
+    <div class="wrap">
+      <div class="site__id">
+        <p class="site__title"><a class="wordmark" href="../../" aria-label="(b)-log 首頁"><span class="br" aria-hidden="true">(</span>b<span class="br" aria-hidden="true">)</span>-log</a></p>
+        <p class="tagline">世界的預設值不包含我，所以我自己定義</p>
+      </div>
+      <nav class="site__nav" aria-label="主選單">
+        <ul>
+          <li><a href="../../">HOME</a></li>
+          <li><a href="../../about.html">ABOUT</a></li>
+          <li><a href="../../gadgets.html">GADGETS</a></li>
+          <li><a href="../../feed.json">FEED</a></li>
+          <li><a href="#" id="random-post-link" onclick="goToRandomPost(event)">RANDOM</a></li>
+        </ul>
+      </nav>
+      <div class="site__tools">
+        <div class="search-toggle-container">
+          <button class="iconbtn search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" aria-controls="site-search" type="button">
+            <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </button>
+          <div class="search-box" id="site-search" hidden>
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5"></path>
+              </svg>
+              <input type="search" id="search-input" class="search-input" placeholder="搜尋文章" aria-label="搜尋文章" autocomplete="off">
+              <button type="button" id="search-clear" class="search-clear" aria-label="清除搜尋" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
               </button>
-
-              <div class="search-box" hidden>
-                <div class="search-input-wrapper">
-                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.35-4.35"></path>
-                  </svg>
-                  <input
-                    type="search"
-                    id="search-input"
-                    class="search-input"
-                    placeholder="搜尋文章..."
-                    aria-label="搜尋文章"
-                    autocomplete="off"
-                  >
-                  <button
-                    type="button"
-                    id="search-clear"
-                    class="search-clear"
-                    aria-label="清除搜尋"
-                    hidden
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-              </div>
             </div>
-
-            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
-              <span class="theme-toggle__icon">
-                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
-                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
-                </svg>
-              </span>
-              <span class="theme-toggle__text">Auto</span>
-            </button>
-          </nav>
+          </div>
         </div>
+        <button class="themebtn theme-toggle" type="button" onclick="ThemeManager.toggle()" aria-label="切換深淺色">
+          <span class="theme-toggle__icon"><i class="theme-dot" aria-hidden="true"></i></span>
+          <span class="theme-toggle__text">AUTO</span>
+        </button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <main class="wrapper article-shell">
-      <div class="article-layout">
-        <article class="article">
-          <div id="post-hero" class="article-hero"></div>
-          <header class="article-header">
-            <p id="post-category" class="article-category">技術分析</p>
-            <h1 id="post-title">IK512 到底壞了沒？一次從表象到根因的系統診斷</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Mar 1, 2026</span><span>5 min</span></div>
-          </header>
-          <div id="post-tags" class="article-tags"><span>IK512</span><span>5G</span><span>Proxmox</span><span>Homelab</span><span>Networking</span><span>Failover</span><span>Watchdog</span><span>ModemManager</span></div>
-          <div id="post-content" class="article-body" data-prerendered="true"><p>IK512 從上線到現在，我們碰到的麻煩不少：USB 間歇斷線、bearer 假死、每次 reconnect 都換 IP。每次出問題，第一反應都是「這東西是不是壞了」。把所有問題拉出來一起看，結論反而讓人意外：硬體從頭到尾沒壞過。</p>
+  <main id="content" class="wrap article-shell">
+    <article class="post" id="post-article" data-category-theme="tech-analysis">
+      <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=%E6%8A%80%E8%A1%93%E5%88%86%E6%9E%90">技術分析</a></span></nav>
+      <p id="post-meta" class="meta">01MAR26 · 技術分析 · 5 MIN · JASON CHIEN</p>
+      <p id="post-catline" class="catline" hidden></p>
+      <h1 id="post-title" class="post__title">IK512 到底壞了沒？一次從表象到根因的系統診斷</h1>
+      <figure id="post-hero" class="post__cover" hidden></figure>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><p>IK512 從上線到現在，我們碰到的麻煩不少：USB 間歇斷線、bearer 假死、每次 reconnect 都換 IP。每次出問題，第一反應都是「這東西是不是壞了」。把所有問題拉出來一起看，結論反而讓人意外：硬體從頭到尾沒壞過。</p>
 <h2>三個問題，三個層次</h2>
 <p>先把事件整理出來。</p>
 <p><strong>USB 間歇斷線</strong>：IK512 每隔幾小時出現 MBIM <code>NotOpened</code>，bearer 斷掉，需要手動 USB rebind 才能恢復。最初懷疑是 modem 不穩定，追下去才發現是 Linux 核心的 USB hub autosuspend——USB Root Hub 閒置後進入休眠，把整個 hub 連同下掛的 IK512 一起掛起來。解法是 GRUB 加上 <code>usbcore.autosuspend=-1</code>，全域關掉 USB 省電。這不是硬體問題，也不是 IK512 特有的問題，任何 USB 網卡在同樣設定下都會中招。</p>
@@ -232,48 +192,48 @@
 <hr>
 <p>相關文章：<a href="/blog/proxmox-failover-watchdog-v2">一條壞掉的路由，讓我重寫了整個 Failover Watchdog</a>　<a href="/blog/tcl-ik512-gps-false-advertising">TCL LINKKEY IK512 的 GPS 不實廣告：從技術驗證到代理商回應</a></p>
 </div>
-          <footer class="article-footer">
-            <div class="article-share" id="share-links"></div>
-            <section class="comments-section" id="comments">
-              <h2>留言討論</h2>
-              <div id="giscus-container" class="giscus-container">
-                <div class="giscus-loading" id="giscus-loading">
-                  <p>載入留言系統中...</p>
-                </div>
-                <div class="giscus-fallback" id="giscus-fallback" hidden>
-                  <p>無法載入留言系統。您可以前往
-                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
-                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
-                  </p>
-                </div>
-              </div>
-            </section>
-            <nav class="article-nav" aria-label="Post navigation">
-              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
-              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
-            </nav>
-          </footer>
-        </article>
 
-        <aside class="article-sidebar">
-          <section class="widget">
-            <h3 class="widget__title">Related reading</h3>
-            <ul id="related-list" class="related-list"></ul>
-          </section>
-          <section class="widget">
-            <h3 class="widget__title">Latest posts</h3>
-            <ul id="latest-sidebar" class="related-list"></ul>
-          </section>
-        </aside>
-      </div>
-    </main>
+      <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
+      <div id="post-tags" class="tags"><span class="meta">TAGS</span><a href="/?tag=IK512">IK512</a><a href="/?tag=5G">5G</a><a href="/?tag=Proxmox">Proxmox</a><a href="/?tag=Homelab">Homelab</a><a href="/?tag=Networking">Networking</a><a href="/?tag=Failover">Failover</a><a href="/?tag=Watchdog">Watchdog</a><a href="/?tag=ModemManager">ModemManager</a></div>
+      <div id="share-links" class="share"></div>
 
-    <footer class="site-footer">
-      <div class="wrapper">
-        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
-      </div>
-    </footer>
-  </div>
+      <section class="related" aria-labelledby="related-label">
+        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+        <ol id="related-list" class="log__list"></ol>
+      </section>
+      <section class="related" aria-labelledby="latest-label">
+        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+        <ol id="latest-sidebar" class="log__list"></ol>
+      </section>
+
+      <nav class="article-nav" aria-label="上一篇與下一篇">
+        <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+        <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+      </nav>
+
+      <section class="comments-section" id="comments" aria-labelledby="comments-label">
+        <h2 class="label" id="comments-label">COMMENTS <span>留言討論</span></h2>
+        <div id="giscus-container" class="giscus-container">
+          <div class="giscus-loading" id="giscus-loading">
+            <p>載入留言系統中...</p>
+          </div>
+          <div class="giscus-fallback" id="giscus-fallback" hidden>
+            <p>無法載入留言系統。您可以前往
+              <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                 target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+            </p>
+          </div>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="foot site-footer">
+    <div class="wrap">
+      <p>© 2026 JASON CHIEN</p>
+      <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
+    </div>
+  </footer>
 
   <!-- JavaScript - CSR 核心，延遲載入 -->
   <script src="../../assets/marked.min.js" defer></script>

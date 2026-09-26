@@ -44,7 +44,8 @@
   <!-- 額外的 metadata -->
   <meta name="keywords" content="OpenClaw, MiniMax, 外掛開發, OpenCC, AgentTool, API, AI" id="meta-keywords">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#b45309">
+  <meta name="theme-color" content="#f4efe7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1114" media="(prefers-color-scheme: dark)">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -56,54 +57,39 @@
   <!-- 啟用 View Transition API（跨文件過渡） -->
   <meta name="view-transition" content="same-origin">
 
-  <!-- Bricolage Grotesque — heading font -->
+  <!-- B612 / B612 Mono — heading and UI font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/critical-shared.css">
 
   <!-- 文章頁專屬關鍵 CSS -->
   <style>
-    .article {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft);
-      overflow: hidden;
+    .post {
+      max-width: 46rem;
+      margin-inline: auto;
+      padding-block: 1rem 4rem;
     }
-    .article-header h1 {
-      margin: 0 0 1rem;
-      font-size: clamp(2.2rem, 5vw, 3.2rem);
-      letter-spacing: -0.02em;
+    .post__title {
+      margin: 0.8rem 0 1.75rem;
+      font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
+      color: var(--ink);
     }
-    /* 防止 CLS - Article 頁面 */
-    .article-shell {
-      min-height: 600px;
-    }
-    .article-hero {
-      min-height: 260px;
+    .post__cover {
+      margin: 0 0 2.5rem;
       aspect-ratio: 16 / 9;
+      background: var(--surface);
     }
-    .article-layout {
-      min-height: 500px;
+    .post__body {
+      max-width: 35em;
+      font-size: 1.125rem;
+      line-height: 1.9;
     }
-    .article-footer {
-      min-height: 400px;
-    }
-    /* 內容區域預留空間 */
+    /* 內容區域預留空間（未預先渲染時） */
     #post-content:empty {
       min-height: 400px;
-      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
-      background-size: 200% 100%;
-      animation: skeleton-loading 1.5s infinite;
-      border-radius: var(--radius-md);
-    }
-    @keyframes skeleton-loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 33px, var(--rule) 33px, var(--rule) 34px);
     }
   </style>
 
@@ -113,88 +99,62 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"讓 AI 幫自己寫外掛，然後它用錯了自己平台的 API","description":"我請 OpenClaw 的 AI 寫一個 OpenCC 繁體轉換外掛，它寫出來的東西直接讓自己崩潰——因為它用錯了自己平台的 Tool 介面。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-03-20T00:00:00Z","dateModified":"2026-03-20T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/openclaw-plugin-ai-wrote-wrong-api/"},"url":"https://b-log.to/tech-analysis/openclaw-plugin-ai-wrote-wrong-api/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E8%AE%93%20AI%20%E5%B9%AB%E8%87%AA%E5%B7%B1%E5%AF%AB%E5%A4%96%E6%8E%9B%EF%BC%8C%E7%84%B6%E5%BE%8C%E5%AE%83%E7%94%A8%E9%8C%AF%E4%BA%86%E8%87%AA%E5%B7%B1%E5%B9%B3%E5%8F%B0%E7%9A%84%20API,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"OpenClaw, MiniMax, 外掛開發, OpenCC, AgentTool, API, AI","articleSection":"技術分析"}</script>
 </head>
 <body class="post-page">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="page-chrome">
-    <header class="site-header">
-      <div class="wrapper">
-        <div class="site-header__top">
-          <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">讓 AI 幫自己寫外掛，然後它用錯了自己平台的 API</span></p>
-            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
-            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
-          </div>
-          <nav class="site-nav">
-            <a href="../../">Home</a>
-            <a href="../../about.html">About</a>
-            <a href="../../gadgets.html">Gadgets</a>
-            <a href="../../feed.json">Feed</a>
-            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
-
-            <!-- 搜尋按鈕與搜尋框 -->
-            <div class="search-toggle-container">
-              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
-                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="m21 21-4.35-4.35"></path>
+  <a class="skip" href="#content">跳到內容</a>
+  <header class="site site-header">
+    <div class="wrap">
+      <div class="site__id">
+        <p class="site__title"><a class="wordmark" href="../../" aria-label="(b)-log 首頁"><span class="br" aria-hidden="true">(</span>b<span class="br" aria-hidden="true">)</span>-log</a></p>
+        <p class="tagline">世界的預設值不包含我，所以我自己定義</p>
+      </div>
+      <nav class="site__nav" aria-label="主選單">
+        <ul>
+          <li><a href="../../">HOME</a></li>
+          <li><a href="../../about.html">ABOUT</a></li>
+          <li><a href="../../gadgets.html">GADGETS</a></li>
+          <li><a href="../../feed.json">FEED</a></li>
+          <li><a href="#" id="random-post-link" onclick="goToRandomPost(event)">RANDOM</a></li>
+        </ul>
+      </nav>
+      <div class="site__tools">
+        <div class="search-toggle-container">
+          <button class="iconbtn search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" aria-controls="site-search" type="button">
+            <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </button>
+          <div class="search-box" id="site-search" hidden>
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5"></path>
+              </svg>
+              <input type="search" id="search-input" class="search-input" placeholder="搜尋文章" aria-label="搜尋文章" autocomplete="off">
+              <button type="button" id="search-clear" class="search-clear" aria-label="清除搜尋" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
               </button>
-
-              <div class="search-box" hidden>
-                <div class="search-input-wrapper">
-                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.35-4.35"></path>
-                  </svg>
-                  <input
-                    type="search"
-                    id="search-input"
-                    class="search-input"
-                    placeholder="搜尋文章..."
-                    aria-label="搜尋文章"
-                    autocomplete="off"
-                  >
-                  <button
-                    type="button"
-                    id="search-clear"
-                    class="search-clear"
-                    aria-label="清除搜尋"
-                    hidden
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-              </div>
             </div>
-
-            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
-              <span class="theme-toggle__icon">
-                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
-                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
-                </svg>
-              </span>
-              <span class="theme-toggle__text">Auto</span>
-            </button>
-          </nav>
+          </div>
         </div>
+        <button class="themebtn theme-toggle" type="button" onclick="ThemeManager.toggle()" aria-label="切換深淺色">
+          <span class="theme-toggle__icon"><i class="theme-dot" aria-hidden="true"></i></span>
+          <span class="theme-toggle__text">AUTO</span>
+        </button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <main class="wrapper article-shell">
-      <div class="article-layout">
-        <article class="article">
-          <div id="post-hero" class="article-hero"></div>
-          <header class="article-header">
-            <p id="post-category" class="article-category">技術分析</p>
-            <h1 id="post-title">讓 AI 幫自己寫外掛，然後它用錯了自己平台的 API</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Mar 20, 2026</span><span>5 min</span></div>
-          </header>
-          <div id="post-tags" class="article-tags"><span>OpenClaw</span><span>MiniMax</span><span>外掛開發</span><span>OpenCC</span><span>AgentTool</span><span>API</span><span>AI</span></div>
-          <div id="post-content" class="article-body" data-prerendered="true"><p>我在 OpenClaw 上跑的模型是 MiniMax-M2.7，人格叫 Itsuki。它回覆中文時偶爾會冒出簡體用詞——設置、獲取、運行、默認——這些在 <code>USER.md</code> 裡已經明確寫了要避免，但模型不一定每次都遵守。</p>
+  <main id="content" class="wrap article-shell">
+    <article class="post" id="post-article" data-category-theme="tech-analysis">
+      <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=%E6%8A%80%E8%A1%93%E5%88%86%E6%9E%90">技術分析</a></span></nav>
+      <p id="post-meta" class="meta">20MAR26 · 技術分析 · 5 MIN · JASON CHIEN</p>
+      <p id="post-catline" class="catline" hidden></p>
+      <h1 id="post-title" class="post__title">讓 AI 幫自己寫外掛，然後它用錯了自己平台的 API</h1>
+      <figure id="post-hero" class="post__cover" hidden></figure>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><p>我在 OpenClaw 上跑的模型是 MiniMax-M2.7，人格叫 Itsuki。它回覆中文時偶爾會冒出簡體用詞——設置、獲取、運行、默認——這些在 <code>USER.md</code> 裡已經明確寫了要避免，但模型不一定每次都遵守。</p>
 <p>所以我請 Itsuki 做一件看起來合理的事：<strong>幫我寫一個 OpenClaw 外掛，讓所有中文輸出都經過 <a href="https://github.com/BYVoid/OpenCC">OpenCC</a> 的臺灣模式轉換。</strong></p>
 <p>它很積極。花了大概十分鐘，讀了 OpenClaw 的文件、查了外掛架構、裝了 <code>opencc-js</code>、寫好 <code>index.ts</code> 和 <code>openclaw.plugin.json</code>，最後把外掛加進設定檔的 allow list。</p>
 <p>然後我發了一句「怎麼了」，它就崩潰了。</p>
@@ -285,48 +245,48 @@ plugins.allow: plugin not found: opencc-tw
 <p>這不是「AI 太笨所以寫不好 code」，這是「系統沒有告訴 AI 它寫的 code 壞了」。</p>
 <p>任何開發者——人類或 AI——在沒有 feedback loop 的條件下都會交出有 bug 的程式碼。差別在於有 feedback loop 的時候，好的開發者能夠自我修正。OpenClaw 把這條路切斷了。</p>
 </div>
-          <footer class="article-footer">
-            <div class="article-share" id="share-links"></div>
-            <section class="comments-section" id="comments">
-              <h2>留言討論</h2>
-              <div id="giscus-container" class="giscus-container">
-                <div class="giscus-loading" id="giscus-loading">
-                  <p>載入留言系統中...</p>
-                </div>
-                <div class="giscus-fallback" id="giscus-fallback" hidden>
-                  <p>無法載入留言系統。您可以前往
-                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
-                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
-                  </p>
-                </div>
-              </div>
-            </section>
-            <nav class="article-nav" aria-label="Post navigation">
-              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
-              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
-            </nav>
-          </footer>
-        </article>
 
-        <aside class="article-sidebar">
-          <section class="widget">
-            <h3 class="widget__title">Related reading</h3>
-            <ul id="related-list" class="related-list"></ul>
-          </section>
-          <section class="widget">
-            <h3 class="widget__title">Latest posts</h3>
-            <ul id="latest-sidebar" class="related-list"></ul>
-          </section>
-        </aside>
-      </div>
-    </main>
+      <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
+      <div id="post-tags" class="tags"><span class="meta">TAGS</span><a href="/?tag=OpenClaw">OpenClaw</a><a href="/?tag=MiniMax">MiniMax</a><a href="/?tag=%E5%A4%96%E6%8E%9B%E9%96%8B%E7%99%BC">外掛開發</a><a href="/?tag=OpenCC">OpenCC</a><a href="/?tag=AgentTool">AgentTool</a><a href="/?tag=API">API</a><a href="/?tag=AI">AI</a></div>
+      <div id="share-links" class="share"></div>
 
-    <footer class="site-footer">
-      <div class="wrapper">
-        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
-      </div>
-    </footer>
-  </div>
+      <section class="related" aria-labelledby="related-label">
+        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+        <ol id="related-list" class="log__list"></ol>
+      </section>
+      <section class="related" aria-labelledby="latest-label">
+        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+        <ol id="latest-sidebar" class="log__list"></ol>
+      </section>
+
+      <nav class="article-nav" aria-label="上一篇與下一篇">
+        <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+        <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+      </nav>
+
+      <section class="comments-section" id="comments" aria-labelledby="comments-label">
+        <h2 class="label" id="comments-label">COMMENTS <span>留言討論</span></h2>
+        <div id="giscus-container" class="giscus-container">
+          <div class="giscus-loading" id="giscus-loading">
+            <p>載入留言系統中...</p>
+          </div>
+          <div class="giscus-fallback" id="giscus-fallback" hidden>
+            <p>無法載入留言系統。您可以前往
+              <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                 target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+            </p>
+          </div>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="foot site-footer">
+    <div class="wrap">
+      <p>© 2026 JASON CHIEN</p>
+      <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
+    </div>
+  </footer>
 
   <!-- JavaScript - CSR 核心，延遲載入 -->
   <script src="../../assets/marked.min.js" defer></script>

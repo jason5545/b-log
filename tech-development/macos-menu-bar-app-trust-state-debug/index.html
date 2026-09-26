@@ -45,7 +45,8 @@
   <!-- 額外的 metadata -->
   <meta name="keywords" content="macOS, Swift, BLE, EmulStick, TCC, Accessibility, Input Monitoring, menu bar app" id="meta-keywords">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#b45309">
+  <meta name="theme-color" content="#f4efe7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1114" media="(prefers-color-scheme: dark)">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -57,146 +58,105 @@
   <!-- 啟用 View Transition API（跨文件過渡） -->
   <meta name="view-transition" content="same-origin">
 
-  <!-- Bricolage Grotesque — heading font -->
+  <!-- B612 / B612 Mono — heading and UI font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/critical-shared.css">
 
   <!-- 文章頁專屬關鍵 CSS -->
   <style>
-    .article {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft);
-      overflow: hidden;
+    .post {
+      max-width: 46rem;
+      margin-inline: auto;
+      padding-block: 1rem 4rem;
     }
-    .article-header h1 {
-      margin: 0 0 1rem;
-      font-size: clamp(2.2rem, 5vw, 3.2rem);
-      letter-spacing: -0.02em;
+    .post__title {
+      margin: 0.8rem 0 1.75rem;
+      font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
+      color: var(--ink);
     }
-    /* 防止 CLS - Article 頁面 */
-    .article-shell {
-      min-height: 600px;
-    }
-    .article-hero {
-      min-height: 260px;
+    .post__cover {
+      margin: 0 0 2.5rem;
       aspect-ratio: 16 / 9;
+      background: var(--surface);
     }
-    .article-layout {
-      min-height: 500px;
+    .post__body {
+      max-width: 35em;
+      font-size: 1.125rem;
+      line-height: 1.9;
     }
-    .article-footer {
-      min-height: 400px;
-    }
-    /* 內容區域預留空間 */
+    /* 內容區域預留空間（未預先渲染時） */
     #post-content:empty {
       min-height: 400px;
-      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
-      background-size: 200% 100%;
-      animation: skeleton-loading 1.5s infinite;
-      border-radius: var(--radius-md);
-    }
-    @keyframes skeleton-loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 33px, var(--rule) 33px, var(--rule) 34px);
     }
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/macos-menu-bar-app-trust-state-debug-cover.webp" imagesrcset="/content/img/2026/macos-menu-bar-app-trust-state-debug-cover-480w.webp 480w, /content/img/2026/macos-menu-bar-app-trust-state-debug-cover-828w.webp 828w, /content/img/2026/macos-menu-bar-app-trust-state-debug-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/macos-menu-bar-app-trust-state-debug-cover.webp" imagesrcset="/content/img/2026/macos-menu-bar-app-trust-state-debug-cover-480w.webp 480w, /content/img/2026/macos-menu-bar-app-trust-state-debug-cover-828w.webp 828w, /content/img/2026/macos-menu-bar-app-trust-state-debug-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), 736px" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app","description":"我以為 Unified Remote Evo Mac 卡在 BLE forwarding，最後真正確認的是 macOS 權限、bundle identity、menu bar UI 和裝置 mode 到底有沒有同步。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-05-21T00:00:00Z","dateModified":"2026-05-21T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-development/macos-menu-bar-app-trust-state-debug/"},"url":"https://b-log.to/tech-development/macos-menu-bar-app-trust-state-debug/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/macos-menu-bar-app-trust-state-debug-cover.webp"],"keywords":"macOS, Swift, BLE, EmulStick, TCC, Accessibility, Input Monitoring, menu bar app","articleSection":"技術開發"}</script>
 </head>
 <body class="post-page">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="page-chrome">
-    <header class="site-header">
-      <div class="wrapper">
-        <div class="site-header__top">
-          <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app</span></p>
-            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
-            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
-          </div>
-          <nav class="site-nav">
-            <a href="../../">Home</a>
-            <a href="../../about.html">About</a>
-            <a href="../../gadgets.html">Gadgets</a>
-            <a href="../../feed.json">Feed</a>
-            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
-
-            <!-- 搜尋按鈕與搜尋框 -->
-            <div class="search-toggle-container">
-              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
-                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="m21 21-4.35-4.35"></path>
+  <a class="skip" href="#content">跳到內容</a>
+  <header class="site site-header">
+    <div class="wrap">
+      <div class="site__id">
+        <p class="site__title"><a class="wordmark" href="../../" aria-label="(b)-log 首頁"><span class="br" aria-hidden="true">(</span>b<span class="br" aria-hidden="true">)</span>-log</a></p>
+        <p class="tagline">世界的預設值不包含我，所以我自己定義</p>
+      </div>
+      <nav class="site__nav" aria-label="主選單">
+        <ul>
+          <li><a href="../../">HOME</a></li>
+          <li><a href="../../about.html">ABOUT</a></li>
+          <li><a href="../../gadgets.html">GADGETS</a></li>
+          <li><a href="../../feed.json">FEED</a></li>
+          <li><a href="#" id="random-post-link" onclick="goToRandomPost(event)">RANDOM</a></li>
+        </ul>
+      </nav>
+      <div class="site__tools">
+        <div class="search-toggle-container">
+          <button class="iconbtn search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" aria-controls="site-search" type="button">
+            <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </button>
+          <div class="search-box" id="site-search" hidden>
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5"></path>
+              </svg>
+              <input type="search" id="search-input" class="search-input" placeholder="搜尋文章" aria-label="搜尋文章" autocomplete="off">
+              <button type="button" id="search-clear" class="search-clear" aria-label="清除搜尋" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
               </button>
-
-              <div class="search-box" hidden>
-                <div class="search-input-wrapper">
-                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.35-4.35"></path>
-                  </svg>
-                  <input
-                    type="search"
-                    id="search-input"
-                    class="search-input"
-                    placeholder="搜尋文章..."
-                    aria-label="搜尋文章"
-                    autocomplete="off"
-                  >
-                  <button
-                    type="button"
-                    id="search-clear"
-                    class="search-clear"
-                    aria-label="清除搜尋"
-                    hidden
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-              </div>
             </div>
-
-            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
-              <span class="theme-toggle__icon">
-                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
-                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
-                </svg>
-              </span>
-              <span class="theme-toggle__text">Auto</span>
-            </button>
-          </nav>
+          </div>
         </div>
+        <button class="themebtn theme-toggle" type="button" onclick="ThemeManager.toggle()" aria-label="切換深淺色">
+          <span class="theme-toggle__icon"><i class="theme-dot" aria-hidden="true"></i></span>
+          <span class="theme-toggle__text">AUTO</span>
+        </button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <main class="wrapper article-shell">
-      <div class="article-layout">
-        <article class="article">
-          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/macos-menu-bar-app-trust-state-debug-cover.webp" srcset="/content/img/2026/macos-menu-bar-app-trust-state-debug-cover-480w.webp 480w, /content/img/2026/macos-menu-bar-app-trust-state-debug-cover-828w.webp 828w, /content/img/2026/macos-menu-bar-app-trust-state-debug-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
-          <header class="article-header">
-            <p id="post-category" class="article-category">技術開發</p>
-            <h1 id="post-title">我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published May 21, 2026</span><span>8 min</span></div>
-          </header>
-          <div id="post-tags" class="article-tags"><span>macOS</span><span>Swift</span><span>BLE</span><span>EmulStick</span><span>TCC</span><span>Accessibility</span><span>Input Monitoring</span><span>menu bar app</span></div>
-          <div id="post-content" class="article-body" data-prerendered="true"><p>我一開始以為這只是把 EmulStick 的 BLE forwarding 接到 macOS。</p>
+  <main id="content" class="wrap article-shell">
+    <article class="post" id="post-article" data-category-theme="tech-development">
+      <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=%E6%8A%80%E8%A1%93%E9%96%8B%E7%99%BC">技術開發</a></span></nav>
+      <p id="post-meta" class="meta">21MAY26 · 技術開發 · 8 MIN · JASON CHIEN</p>
+      <p id="post-catline" class="catline" hidden></p>
+      <h1 id="post-title" class="post__title">我以為在修 BLE，最後是在確認 macOS 到底信不信這個 app</h1>
+      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/macos-menu-bar-app-trust-state-debug-cover.webp" srcset="/content/img/2026/macos-menu-bar-app-trust-state-debug-cover-480w.webp 480w, /content/img/2026/macos-menu-bar-app-trust-state-debug-cover-828w.webp 828w, /content/img/2026/macos-menu-bar-app-trust-state-debug-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), 736px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><p>我一開始以為這只是把 EmulStick 的 BLE forwarding 接到 macOS。</p>
 <p>掃描、連線、AES 驗證、寫 HID report。Android 版已經有一條路，macOS 版照著協定補起來，應該就能跑。</p>
 <p>後來時間主要耗在 macOS。</p>
 <p>BLE 很誠實。能寫就是能寫，不能寫就回錯。真正麻煩的是 macOS：System Settings 顯示已經授權，程式卻還是拿不到權限；menu bar 顯示 grabbed，event tap 卻說 released；裝置看起來連上了，但 mode 還停在上一個狀態。</p>
@@ -378,48 +338,48 @@ AppModel 確認 UI 和 event tap 用同一個狀態。</p>
 <p>我不是不能接受它壞掉。</p>
 <p>寫這種東西本來就會壞。真正不能接受的是，它壞掉的時候看起來像已經好了。</p>
 </div>
-          <footer class="article-footer">
-            <div class="article-share" id="share-links"></div>
-            <section class="comments-section" id="comments">
-              <h2>留言討論</h2>
-              <div id="giscus-container" class="giscus-container">
-                <div class="giscus-loading" id="giscus-loading">
-                  <p>載入留言系統中...</p>
-                </div>
-                <div class="giscus-fallback" id="giscus-fallback" hidden>
-                  <p>無法載入留言系統。您可以前往
-                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
-                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
-                  </p>
-                </div>
-              </div>
-            </section>
-            <nav class="article-nav" aria-label="Post navigation">
-              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
-              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
-            </nav>
-          </footer>
-        </article>
 
-        <aside class="article-sidebar">
-          <section class="widget">
-            <h3 class="widget__title">Related reading</h3>
-            <ul id="related-list" class="related-list"></ul>
-          </section>
-          <section class="widget">
-            <h3 class="widget__title">Latest posts</h3>
-            <ul id="latest-sidebar" class="related-list"></ul>
-          </section>
-        </aside>
-      </div>
-    </main>
+      <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
+      <div id="post-tags" class="tags"><span class="meta">TAGS</span><a href="/?tag=macOS">macOS</a><a href="/?tag=Swift">Swift</a><a href="/?tag=BLE">BLE</a><a href="/?tag=EmulStick">EmulStick</a><a href="/?tag=TCC">TCC</a><a href="/?tag=Accessibility">Accessibility</a><a href="/?tag=Input%20Monitoring">Input Monitoring</a><a href="/?tag=menu%20bar%20app">menu bar app</a></div>
+      <div id="share-links" class="share"></div>
 
-    <footer class="site-footer">
-      <div class="wrapper">
-        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
-      </div>
-    </footer>
-  </div>
+      <section class="related" aria-labelledby="related-label">
+        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+        <ol id="related-list" class="log__list"></ol>
+      </section>
+      <section class="related" aria-labelledby="latest-label">
+        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+        <ol id="latest-sidebar" class="log__list"></ol>
+      </section>
+
+      <nav class="article-nav" aria-label="上一篇與下一篇">
+        <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+        <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+      </nav>
+
+      <section class="comments-section" id="comments" aria-labelledby="comments-label">
+        <h2 class="label" id="comments-label">COMMENTS <span>留言討論</span></h2>
+        <div id="giscus-container" class="giscus-container">
+          <div class="giscus-loading" id="giscus-loading">
+            <p>載入留言系統中...</p>
+          </div>
+          <div class="giscus-fallback" id="giscus-fallback" hidden>
+            <p>無法載入留言系統。您可以前往
+              <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                 target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+            </p>
+          </div>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="foot site-footer">
+    <div class="wrap">
+      <p>© 2026 JASON CHIEN</p>
+      <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
+    </div>
+  </footer>
 
   <!-- JavaScript - CSR 核心，延遲載入 -->
   <script src="../../assets/marked.min.js" defer></script>

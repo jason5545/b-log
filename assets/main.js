@@ -18,7 +18,16 @@ const CLOUDINARY_OG_IMAGE_CONFIG = {
   fontId: 'notosanstc-bold.ttf'
 };
 const POSTS_CACHE_TTL_MS = 5 * 60 * 1000;
-const POSTS_PER_PAGE = 10;
+const POSTS_PER_PAGE = 20;
+const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+// LiSA 的兩個分類：洋紅只給她，旁邊直接寫出這個分類是什麼
+const HER_CATEGORY_HINTS = {
+  'シルシ': '我和她的事',
+  'Crossing Field': '她說的話',
+};
+const AUDIO_ICON_SVG = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
+</svg>`;
 let visibleCount = 0;
 let allFilteredPosts = [];
 
@@ -529,7 +538,7 @@ function generateAudioPlayerHTML(audioFile) {
         <span class="current-time">0:00</span>
         <span class="duration">0:00</span>
       </div>
-      <div class="playlist-info" style="display:none; font-size:0.75rem; color:var(--text-secondary, #666); margin-top:0.25rem;">
+      <div class="playlist-info" style="display:none">
         片段 <span class="current-part">1</span> / <span class="total-parts">1</span>
       </div>
     </div>
@@ -931,10 +940,10 @@ const AudioPlayerManager = {
     const clampedPercent = Math.max(0, Math.min(100, percent));
     progressBar.style.background = `linear-gradient(
       to right,
-      var(--accent-color, #556bff) 0%,
-      var(--accent-color, #556bff) ${clampedPercent}%,
-      var(--border-color, #e0e0e0) ${clampedPercent}%,
-      var(--border-color, #e0e0e0) 100%
+      var(--cyan) 0%,
+      var(--cyan) ${clampedPercent}%,
+      var(--rule) ${clampedPercent}%,
+      var(--rule) 100%
     )`;
   },
 
@@ -1152,7 +1161,8 @@ async function renderHomepage() {
   if (postsEmptyEl) postsEmptyEl.hidden = true;
   if (postsErrorEl) postsErrorEl.hidden = true;
 
-  let posts = await loadNormalizedPosts();
+  const allPosts = await loadNormalizedPosts();
+  let posts = allPosts;
 
   // 讀取 URL 參數以支援篩選功能
   const params = new URLSearchParams(window.location.search);
@@ -1160,9 +1170,12 @@ async function renderHomepage() {
   const filterCategory = params.get('category');
   const searchQuery = params.get('search');
 
-  // Start here 僅在未篩選首頁顯示：進入分類、標籤、搜尋時隱藏，清除篩選或返回時恢復
+  // BRIEFING 僅在未篩選首頁顯示：進入分類、標籤、搜尋時隱藏，清除篩選或返回時恢復
   const startHereEl = document.querySelector('.start-here');
   if (startHereEl) startHereEl.hidden = hasActiveHomeFilter();
+
+  // TOPICS 一律列出全部分類，目前篩選的分類標記 aria-current
+  populateCategoryList(allPosts, filterCategory);
 
   if (!posts.length) {
     if (postsEmptyEl) postsEmptyEl.hidden = false;
@@ -1189,8 +1202,9 @@ async function renderHomepage() {
     posts = filterPostsBySearch(posts, searchQuery);
   }
 
-  // 更新搜尋結果計數
+  // 更新搜尋結果計數與 LOG 標題
   updateSearchResultsCount(posts.length, searchQuery);
+  updateLogSummary(posts.length, { filterTag, filterCategory, searchQuery });
 
   // 如果篩選後沒有文章，顯示提示
   if (!posts.length) {
@@ -1204,118 +1218,133 @@ async function renderHomepage() {
         : 'No posts yet. Add your first note in content/posts.';
       postsEmptyEl.hidden = false;
     }
+    allFilteredPosts = [];
+    visibleCount = 0;
+    updateLoadMoreButton();
     return;
   }
 
-  const [featured, ...rest] = posts;
-  renderFeaturedPost(featured);
+  renderFeaturedPost(posts[0]);
 
-  allFilteredPosts = rest;
+  // LOG 從最新一篇開始列，跟 LATEST 重複一列是刻意的：LOG 是完整的時間序
+  allFilteredPosts = posts;
   visibleCount = 0;
   postsListEl.innerHTML = '';
 
   appendNextPage();
+}
 
-  populateCategoryList(posts);
-  populateTagCloud(posts);
+function updateLogSummary(count, { filterTag, filterCategory, searchQuery } = {}) {
+  const summaryEl = document.querySelector('#log-summary');
+  if (!summaryEl) return;
+
+  const labelEl = summaryEl.parentElement;
+  let clearEl = labelEl ? labelEl.querySelector('.label__clear') : null;
+  const filterLabel = searchQuery
+    ? `「${searchQuery}」`
+    : filterTag
+    ? `#${filterTag}`
+    : filterCategory || '';
+
+  summaryEl.textContent = filterLabel
+    ? `${filterLabel}：${count} 篇，新到舊`
+    : `${count} 篇，新到舊`;
+
+  if (filterLabel && labelEl && !clearEl) {
+    clearEl = document.createElement('a');
+    clearEl.className = 'label__clear';
+    clearEl.href = './';
+    clearEl.textContent = 'ALL ›';
+    labelEl.appendChild(clearEl);
+  } else if (!filterLabel && clearEl) {
+    clearEl.remove();
+  }
 }
 
 function appendNextPage() {
   const postsListEl = document.querySelector('#posts-list');
   if (!postsListEl) return;
 
-  const template = document.querySelector('#post-item-template');
-  if (!template) return;
-
   const end = Math.min(visibleCount + POSTS_PER_PAGE, allFilteredPosts.length);
   const batch = allFilteredPosts.slice(visibleCount, end);
+  const fragment = document.createDocumentFragment();
 
   batch.forEach((post) => {
-    const clone = template.content.cloneNode(true);
-    const cardEl = clone.querySelector('.post-card');
-    const linkEl = clone.querySelector('.post-link');
-    const metaEl = clone.querySelector('.post-meta');
-    const summaryEl = clone.querySelector('.post-summary');
-    const categoryEl = clone.querySelector('.post-card__category');
-    const tagsEl = clone.querySelector('.post-tags');
-
-    if (cardEl) {
-      const accent = post.accentColor || '#556bff';
-      cardEl.style.borderLeft = `3px solid ${accent}`;
-      applyCategoryTheme(cardEl, post);
-    }
-
-    if (linkEl) {
-      linkEl.href = slugToPath(post.slug, post.category);
-      linkEl.textContent = post.title || post.slug;
-
-      const existingAudioIcon = linkEl.parentElement.querySelector('.audio-indicator');
-      if (existingAudioIcon) {
-        existingAudioIcon.remove();
-      }
-
-      if (post.hasAudio) {
-        const audioIcon = document.createElement('span');
-        audioIcon.className = 'audio-indicator';
-        audioIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
-        </svg>`;
-        audioIcon.setAttribute('aria-label', '有語音版');
-        audioIcon.setAttribute('title', '此文章有語音版');
-        linkEl.parentElement.insertBefore(audioIcon, linkEl.nextSibling);
-      }
-    }
-
-    if (categoryEl) {
-      categoryEl.textContent = post.category || 'Dispatch';
-      const accent = post.accentColor || '#556bff';
-      categoryEl.style.color = accent;
-      const rgb = hexToRgb(accent);
-      if (rgb) {
-        categoryEl.style.borderColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`;
-        categoryEl.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`;
-      }
-    }
-
-    if (metaEl) {
-      metaEl.textContent = formatMetaParts(post).join(' | ');
-    }
-
-    if (summaryEl) {
-      summaryEl.textContent = post.summary || '';
-    }
-
-    populateTagBadges(tagsEl, post.tags);
-    postsListEl.appendChild(clone);
+    fragment.appendChild(buildLogRow(post));
   });
 
+  postsListEl.appendChild(fragment);
   visibleCount = end;
   updateLoadMoreButton();
 }
 
 function updateLoadMoreButton() {
-  let wrapper = document.querySelector('.load-more-btn-wrapper');
+  let button = document.querySelector('#load-more-btn');
   if (visibleCount >= allFilteredPosts.length) {
-    if (wrapper) wrapper.hidden = true;
+    if (button) button.hidden = true;
     return;
   }
-  if (!wrapper) {
-    wrapper = document.createElement('div');
-    wrapper.className = 'load-more-btn-wrapper';
-    const btn = document.createElement('button');
-    btn.id = 'load-more-btn';
-    btn.className = 'button button--ghost load-more-btn';
-    btn.textContent = 'Load More';
-    btn.addEventListener('click', appendNextPage);
-    wrapper.appendChild(btn);
+  if (!button) {
+    button = document.createElement('button');
+    button.type = 'button';
+    button.id = 'load-more-btn';
+    button.className = 'log__more load-more-btn';
+    button.addEventListener('click', () => {
+      const firstNewIndex = visibleCount;
+      appendNextPage();
+      // 焦點移到新載入的第一列，鍵盤使用者不用從頭 Tab
+      const rows = document.querySelectorAll('#posts-list .row a');
+      if (rows[firstNewIndex]) rows[firstNewIndex].focus();
+    });
     const postsListEl = document.querySelector('#posts-list');
-    if (postsListEl && postsListEl.parentElement) {
-      postsListEl.parentElement.appendChild(wrapper);
+    if (postsListEl) {
+      postsListEl.insertAdjacentElement('afterend', button);
     }
   }
   const remaining = allFilteredPosts.length - visibleCount;
-  wrapper.querySelector('#load-more-btn').textContent = `Load More (${remaining} left)`;
-  wrapper.hidden = false;
+  button.textContent = `更早的 ${remaining} 篇 ›`;
+  button.hidden = false;
+}
+
+// LOG 列：日期、分類、標題、閱讀時間
+function buildLogRow(post) {
+  const li = document.createElement('li');
+  li.className = isHerCategory(post.category) ? 'row row--her' : 'row';
+
+  const link = document.createElement('a');
+  link.href = slugToPath(post.slug, post.category);
+
+  const date = document.createElement('span');
+  date.className = 'row__date';
+  date.textContent = formatEcamDate(post.publishedDate);
+
+  const category = document.createElement('span');
+  category.className = 'row__cat';
+  category.textContent = post.category || '';
+
+  const title = document.createElement('span');
+  title.className = 'row__title';
+  title.textContent = post.title || post.slug;
+  if (post.hasAudio) {
+    title.appendChild(buildAudioIndicator('audio-indicator'));
+  }
+
+  const time = document.createElement('span');
+  time.className = 'row__time';
+  time.textContent = formatReadingTime(post);
+
+  link.append(date, category, title, time);
+  li.appendChild(link);
+  return li;
+}
+
+function buildAudioIndicator(className) {
+  const audioIcon = document.createElement('span');
+  audioIcon.className = className;
+  audioIcon.innerHTML = AUDIO_ICON_SVG;
+  audioIcon.setAttribute('aria-label', '有語音版');
+  audioIcon.setAttribute('title', '此文章有語音版');
+  return audioIcon;
 }
 
 async function renderArticle() {
@@ -1348,39 +1377,36 @@ async function renderArticle() {
   const post = posts[index];
   const breadcrumbCurrent = document.querySelector('#breadcrumb-current');
   const heroEl = document.querySelector('#post-hero');
-  const categoryEl = document.querySelector('#post-category');
+  const catlineEl = document.querySelector('#post-catline');
   const titleEl = document.querySelector('#post-title');
   const metaEl = document.querySelector('#post-meta');
   const tagsEl = document.querySelector('#post-tags');
-  const articleEl = document.querySelector('.article');
-  const articleShellEl = document.querySelector('.article-shell');
+  const statusEl = document.querySelector('#post-status');
+  const articleEl = document.querySelector('#post-article');
 
   if (breadcrumbCurrent) {
-    const parent = breadcrumbCurrent.parentElement;
-
-    // 創建箭頭分隔符（如果不存在）
-    let separator = parent.querySelector('.breadcrumb-separator');
-    if (!separator) {
-      separator = document.createElement('span');
-      separator.className = 'breadcrumb-separator';
-      separator.textContent = '›';
-      parent.insertBefore(separator, breadcrumbCurrent);
+    breadcrumbCurrent.replaceChildren();
+    if (post.category) {
+      const categoryLink = document.createElement('a');
+      categoryLink.href = `/?category=${encodeURIComponent(post.category)}`;
+      categoryLink.textContent = post.category;
+      if (isHerCategory(post.category)) categoryLink.className = 'her-cat';
+      breadcrumbCurrent.appendChild(categoryLink);
     }
-
-    breadcrumbCurrent.textContent = post.title || slug;
   }
 
-  applyAccentBackground(heroEl, post);
+  renderArticleCover(heroEl, post);
   applyCategoryTheme(articleEl, post);
-  applyCategoryTheme(heroEl, post);
-  applyCategoryTheme(articleShellEl, post);
 
-  if (categoryEl) {
-    if (post.category) {
-      categoryEl.textContent = post.category;
-      categoryEl.hidden = false;
+  if (catlineEl) {
+    if (isHerCategory(post.category)) {
+      const hint = document.createElement('span');
+      hint.textContent = HER_CATEGORY_HINTS[post.category];
+      catlineEl.replaceChildren(`${post.category.toUpperCase()} `, hint);
+      catlineEl.hidden = false;
     } else {
-      categoryEl.hidden = true;
+      catlineEl.replaceChildren();
+      catlineEl.hidden = true;
     }
   }
 
@@ -1389,14 +1415,8 @@ async function renderArticle() {
 
     // 如果文章有語音版，添加語音圖示（加到標題內部）
     if (post.hasAudio) {
-      const audioIcon = document.createElement('span');
-      audioIcon.className = 'audio-indicator audio-indicator--article';
-      audioIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
-      </svg>`;
-      audioIcon.setAttribute('aria-label', '有語音版');
-      audioIcon.setAttribute('title', '此文章有語音版');
-      titleEl.appendChild(audioIcon);  // 改為加到 h1 內部
+      const audioIcon = buildAudioIndicator('audio-indicator audio-indicator--article');
+      titleEl.appendChild(audioIcon);
 
       // 偵測標題是否因為音訊圖示而換行，如果換行則自動縮小圖示
       setTimeout(() => {
@@ -1416,16 +1436,13 @@ async function renderArticle() {
   document.title = post.title ? `${post.title} - b-log` : 'Reading - b-log';
 
   if (metaEl) {
-    metaEl.innerHTML = '';
-    const parts = formatMetaParts(post);
-    parts.forEach((part) => {
-      // 確保只添加非空的 meta 部分
-      if (part && part.trim()) {
-        const span = document.createElement('span');
-        span.textContent = part;
-        metaEl.appendChild(span);
-      }
-    });
+    metaEl.textContent = formatMetaParts(post).join(' · ');
+  }
+
+  if (statusEl && !statusEl.innerHTML.trim()) {
+    const statusMarkup = buildStatusInnerHTML(post.status);
+    statusEl.innerHTML = statusMarkup;
+    statusEl.hidden = !statusMarkup;
   }
 
   populateTagBadges(tagsEl, post.tags);
@@ -1508,98 +1525,59 @@ function parseDate(value) {
 
 function renderFeaturedPost(post) {
   const heroSection = document.querySelector('#featured');
-  let heroMedia = document.querySelector('#hero-media');
-  const heroCategory = document.querySelector('#hero-category');
   const heroLink = document.querySelector('#hero-link');
+  const heroTitle = document.querySelector('#hero-title');
   const heroMeta = document.querySelector('#hero-meta');
   const heroSummary = document.querySelector('#hero-summary');
-  const heroReadMore = document.querySelector('#hero-read-more');
-  const heroDiscuss = document.querySelector('#hero-open-discussion');
+  let heroMedia = document.querySelector('#hero-media');
 
-  if (!heroSection) return;
+  if (!heroSection || !heroLink) return;
 
-  // media 元素與文章封面狀態保持一致：無封面用文字版型，有封面才渲染圖片區
-  if (post.coverImage && !heroMedia) {
-    heroMedia = document.createElement('div');
-    heroMedia.className = 'hero-card__media';
-    heroMedia.id = 'hero-media';
-    heroSection.prepend(heroMedia);
-  } else if (!post.coverImage && heroMedia) {
-    heroMedia.remove();
-    heroMedia = null;
-  }
-  heroSection.classList.toggle('hero-card--text-only', !post.coverImage);
-  // 無封面時 accent 漸層直接當 hero 背景；有封面時清除，避免殘留前一篇顏色
-  if (!post.coverImage) {
-    const heroAccent = post.accentColor || '#556bff';
-    heroSection.style.backgroundImage = `linear-gradient(135deg, ${shadeColor(heroAccent, -15)} 0%, ${heroAccent} 50%, ${shadeColor(heroAccent, 25)} 100%)`;
-  } else {
-    heroSection.style.backgroundImage = '';
-  }
+  heroSection.hidden = false;
+  heroSection.classList.toggle('lead--text-only', !post.coverImage);
 
+  // 靜態產生的 LATEST 已經是這一篇時，不動封面，保留 LCP 的 preload 與 srcset
   const isCurrentStaticFeatured =
-    !hasActiveHomeFilter() &&
     heroSection.dataset.featuredSlug === post.slug &&
-    heroMedia?.querySelector('.article-hero__image');
+    heroMedia?.querySelector('.lead__img');
 
   if (!isCurrentStaticFeatured) {
-    applyAccentBackground(heroMedia, post);
-    applyCategoryTheme(heroSection, post);
-    applyCategoryTheme(heroMedia, post);
-    heroSection.hidden = false;
+    if (post.coverImage) {
+      if (!heroMedia) {
+        heroMedia = document.createElement('div');
+        heroMedia.className = 'lead__media';
+        heroMedia.id = 'hero-media';
+        heroLink.appendChild(heroMedia);
+      }
+      const image = document.createElement('img');
+      image.className = 'lead__img';
+      image.src = post.coverImage;
+      image.alt = '';
+      image.decoding = 'async';
+      image.setAttribute('aria-hidden', 'true');
+      heroMedia.replaceChildren(image);
+    } else if (heroMedia) {
+      heroMedia.remove();
+    }
+    heroSection.dataset.featuredSlug = post.slug;
+    heroSection.dataset.featuredCover = post.coverImage || '';
   }
 
-  if (heroCategory) {
-    heroCategory.textContent = post.category || 'Dispatch';
-    heroCategory.hidden = !post.category;
-    // Accent-colored badge
-    const accent = post.accentColor || '#556bff';
-    // 文字版型時 badge 前景交給主題 CSS（var(--text)）保對比
-    heroCategory.style.color = post.coverImage ? accent : '';
-    const rgb = hexToRgb(accent);
-    if (rgb) {
-      heroCategory.style.borderColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`;
-      heroCategory.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`;
-    }
-  }
+  heroLink.href = slugToPath(post.slug, post.category);
 
-  if (heroLink) {
-    heroLink.href = slugToPath(post.slug, post.category);
-    heroLink.textContent = post.title || post.slug;
-
-    // 先清除已存在的音訊圖示（避免重複渲染時累積）
-    const existingAudioIcon = heroLink.parentElement.querySelector('.audio-indicator');
-    if (existingAudioIcon) {
-      existingAudioIcon.remove();
-    }
-
-    // 如果文章有語音版，添加語音圖示
+  if (heroTitle) {
+    heroTitle.textContent = post.title || post.slug;
     if (post.hasAudio) {
-      const audioIcon = document.createElement('span');
-      audioIcon.className = 'audio-indicator audio-indicator--hero';
-      audioIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
-      </svg>`;
-      audioIcon.setAttribute('aria-label', '有語音版');
-      audioIcon.setAttribute('title', '此文章有語音版');
-      heroLink.parentElement.insertBefore(audioIcon, heroLink.nextSibling);
+      heroTitle.appendChild(buildAudioIndicator('audio-indicator audio-indicator--hero'));
     }
   }
 
   if (heroMeta) {
-    heroMeta.textContent = formatMetaParts(post).join(' | ');
+    heroMeta.textContent = formatMetaParts(post, { includeAuthor: false }).join(' · ');
   }
 
   if (heroSummary) {
     heroSummary.textContent = post.summary || '';
-  }
-
-  if (heroReadMore) {
-    heroReadMore.href = slugToPath(post.slug, post.category);
-  }
-
-  if (heroDiscuss) {
-    heroDiscuss.href = `${slugToPath(post.slug, post.category)}#comments`;
   }
 }
 
@@ -1612,25 +1590,32 @@ function populateTagBadges(container, tags) {
   if (!container) return;
   container.innerHTML = '';
 
-  if (!Array.isArray(tags) || !tags.length) {
+  const values = Array.isArray(tags)
+    ? tags.map((tag) => String(tag || '').trim()).filter(Boolean)
+    : [];
+
+  if (!values.length) {
     container.hidden = true;
     return;
   }
 
   container.hidden = false;
-  tags.forEach((tag) => {
-    const value = String(tag || '').trim();
-    if (!value) return;
-    const chip = document.createElement('span');
-    chip.textContent = value;
-    container.appendChild(chip);
+  const label = document.createElement('span');
+  label.className = 'meta';
+  label.textContent = 'TAGS';
+  container.appendChild(label);
+
+  values.forEach((value) => {
+    const link = document.createElement('a');
+    link.href = `/?tag=${encodeURIComponent(value)}`;
+    link.textContent = value;
+    container.appendChild(link);
   });
 }
 
-function populateCategoryList(posts) {
+function populateCategoryList(posts, activeCategory = '') {
   const listEl = document.querySelector('#category-list');
-  const template = document.querySelector('#category-item-template');
-  if (!listEl || !template) return;
+  if (!listEl) return;
 
   listEl.innerHTML = '';
   const counts = new Map();
@@ -1648,86 +1633,39 @@ function populateCategoryList(posts) {
     return;
   }
 
-  const categoryHints = {
-    'シルシ': '我和她的事',
-    'Crossing Field': '她說的話',
-  };
+  const active = String(activeCategory || '').toLowerCase();
 
   Array.from(counts.entries())
     .sort((a, b) => b[1] - a[1])
     .forEach(([category, count]) => {
-      const clone = template.content.cloneNode(true);
-      const link = clone.querySelector('.taxonomy-link');
-      if (link) {
-        link.textContent = `${category} (${count})`;
-        link.href = `index.html?category=${encodeURIComponent(category)}`;
-        if (categoryHints[category]) link.title = categoryHints[category];
-      }
-      listEl.appendChild(clone);
-    });
-}
-
-function populateTagCloud(posts) {
-  const cloudEl = document.querySelector('#tag-cloud');
-  if (!cloudEl) return;
-
-  cloudEl.innerHTML = '';
-  const tagMap = new Map();
-
-  posts.forEach((post) => {
-    if (!Array.isArray(post.tags)) return;
-    post.tags.forEach((tag) => {
-      const value = String(tag || '').trim();
-      if (!value) return;
-      const key = value.toLowerCase();
-      const entry = tagMap.get(key) || { label: value, count: 0 };
-      entry.count += 1;
-      entry.label = value;
-      tagMap.set(key, entry);
-    });
-  });
-
-  if (!tagMap.size) {
-    const span = document.createElement('span');
-    span.textContent = 'No tags yet.';
-    cloudEl.appendChild(span);
-    return;
-  }
-
-  const entries = Array.from(tagMap.values()).sort((a, b) => b.count - a.count);
-  const counts = entries.map((entry) => entry.count);
-  const min = Math.min(...counts);
-  const max = Math.max(...counts);
-
-  // 首頁預設只顯示常用標籤，其餘收進 Show all，篩選功能不受影響
-  const visibleLimit = 14;
-  const renderTags = (list) => {
-    list.forEach((entry) => {
+      const li = document.createElement('li');
       const link = document.createElement('a');
-      link.textContent = `#${entry.label}`;
-      link.href = `index.html?tag=${encodeURIComponent(entry.label)}`;
+      link.href = `/?category=${encodeURIComponent(category)}`;
+      if (isHerCategory(category)) link.className = 'her';
+      if (active && category.toLowerCase() === active) {
+        link.setAttribute('aria-current', 'page');
+      }
 
-      const size = max === min ? 0.95 : 0.85 + ((entry.count - min) / (max - min)) * 0.5;
-      link.style.fontSize = `${size.toFixed(2)}rem`;
-      cloudEl.appendChild(link);
+      link.append(category);
+      if (isHerCategory(category)) {
+        const hint = document.createElement('span');
+        hint.className = 'hint';
+        hint.textContent = HER_CATEGORY_HINTS[category];
+        link.append(' ', hint);
+      }
+
+      const dots = document.createElement('span');
+      dots.className = 'dots';
+      dots.setAttribute('aria-hidden', 'true');
+
+      const number = document.createElement('span');
+      number.className = 'n';
+      number.textContent = String(count);
+
+      link.append(dots, number);
+      li.appendChild(link);
+      listEl.appendChild(li);
     });
-  };
-
-  renderTags(entries.slice(0, visibleLimit));
-
-  const remainingTags = entries.slice(visibleLimit);
-  if (remainingTags.length > 0) {
-    const moreBtn = document.createElement('button');
-    moreBtn.type = 'button';
-    moreBtn.className = 'tag-cloud__more';
-    moreBtn.textContent = `Show all (${entries.length})`;
-    moreBtn.setAttribute('aria-expanded', 'false');
-    moreBtn.addEventListener('click', () => {
-      renderTags(remainingTags);
-      moreBtn.remove();
-    });
-    cloudEl.appendChild(moreBtn);
-  }
 }
 
 async function renderMarkdownContent(slug, contentEl) {
@@ -2142,19 +2080,24 @@ function renderShareLinks(post) {
   const postTitle = post.title || 'New post on b-log';
   const urlString = pageUrl.toString();
 
+  const shareLabel = document.createElement('span');
+  shareLabel.className = 'meta';
+  shareLabel.textContent = 'SHARE';
+  shareEl.appendChild(shareLabel);
+
   const shareItems = [
     {
-      label: 'Share on X',
+      label: 'X',
       href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(postTitle)}&url=${encodeURIComponent(urlString)}`,
       external: true,
     },
     {
-      label: 'Share on Facebook',
+      label: 'FACEBOOK',
       href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(urlString)}`,
       external: true,
     },
     {
-      label: 'Copy link',
+      label: 'COPY LINK',
       href: '#',
       action: 'copy-link',
     },
@@ -2190,26 +2133,35 @@ function renderNavigation(posts, index) {
   const newer = index > 0 ? posts[index - 1] : null;
   const older = index < posts.length - 1 ? posts[index + 1] : null;
 
-  configureNavLink(prevEl, newer, 'Newer post');
-  configureNavLink(nextEl, older, 'Older post');
+  configureNavLink(prevEl, newer, '‹ NEWER');
+  configureNavLink(nextEl, older, 'OLDER ›');
 }
 
-function configureNavLink(element, post, labelPrefix) {
+function configureNavLink(element, post, labelText) {
   if (!element) return;
 
+  const label = document.createElement('span');
+  label.className = 'article-nav__label';
+  label.textContent = labelText;
+
+  const title = document.createElement('span');
+  title.className = 'article-nav__title';
+
   if (post) {
-    element.textContent = `${labelPrefix}: ${post.title || post.slug}`;
+    title.textContent = post.title || post.slug;
     element.href = slugToPath(post.slug, post.category);
     element.classList.remove('is-disabled');
     element.removeAttribute('aria-disabled');
     element.tabIndex = 0;
   } else {
-    element.textContent = `No ${labelPrefix.toLowerCase()} yet`;
+    title.textContent = labelText.includes('NEWER') ? '已經是最新一篇' : '已經是最早一篇';
     element.classList.add('is-disabled');
     element.setAttribute('aria-disabled', 'true');
     element.removeAttribute('href');
     element.tabIndex = -1;
   }
+
+  element.replaceChildren(label, title);
 }
 
 function renderRelatedPosts(posts, currentPost) {
@@ -2231,11 +2183,12 @@ function renderRelatedPosts(posts, currentPost) {
 
     if (!related.length) {
       const li = document.createElement('li');
+      li.className = 'row--empty';
       li.textContent = 'More posts arriving soon.';
       relatedList.appendChild(li);
     } else {
       related.forEach((post) => {
-        relatedList.appendChild(buildRelatedItem(post));
+        relatedList.appendChild(buildLogRow(post));
       });
     }
   }
@@ -2244,7 +2197,7 @@ function renderRelatedPosts(posts, currentPost) {
     latestList.innerHTML = '';
     const latest = posts.filter((post) => post.slug !== currentPost.slug).slice(0, 3);
     latest.forEach((post) => {
-      latestList.appendChild(buildRelatedItem(post));
+      latestList.appendChild(buildLogRow(post));
     });
   }
 
@@ -2254,135 +2207,117 @@ function renderRelatedPosts(posts, currentPost) {
   }
 }
 
-function buildRelatedItem(post) {
-  const li = document.createElement('li');
-  const link = document.createElement('a');
-  link.href = slugToPath(post.slug, post.category);
-  link.textContent = post.title || post.slug;
-  li.appendChild(link);
-
-  if (post.publishedDate) {
-    const meta = document.createElement('small');
-    meta.textContent = ` - ${formatDate(post.publishedDate)}`;
-    li.appendChild(meta);
-  }
-
-  return li;
-}
-
-function formatMetaParts(post) {
+// ECAM meta 行：24SEP26 · 技術開發 · 5 MIN · JASON CHIEN
+function formatMetaParts(post, { includeAuthor = true } = {}) {
   const parts = [];
-  if (post.author) {
-    parts.push(`By ${post.author}`);
+  const publishedDate = formatEcamDate(post.publishedDate);
+  if (publishedDate) {
+    parts.push(publishedDate);
   }
-  if (post.publishedDate) {
-    parts.push(`Published ${formatDate(post.publishedDate)}`);
+  if (post.category) {
+    parts.push(post.category);
   }
-  if (post.updatedDate && post.publishedDate && post.updatedDate.getTime() !== post.publishedDate.getTime()) {
-    parts.push(`Updated ${formatDate(post.updatedDate)}`);
+  const readingTime = formatReadingTime(post);
+  if (readingTime) {
+    parts.push(readingTime);
   }
-  if (post.readingTime) {
-    parts.push(post.readingTime);
+  if (includeAuthor && post.author) {
+    const author = post.author.toUpperCase();
+    parts.push(post.category === 'Crossing Field' ? `${author} 譯` : author);
+  }
+  const updatedDate = formatEcamDate(post.updatedDate);
+  if (updatedDate && updatedDate !== publishedDate) {
+    parts.push(`UPDATED ${updatedDate}`);
   }
   return parts;
 }
 
-function formatDate(date) {
+// 24SEP26（台北時間）
+function formatEcamDate(date) {
   if (!date) return '';
-  return new Intl.DateTimeFormat(META_DATE_LOCALE, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
+  const parts = new Intl.DateTimeFormat(META_DATE_LOCALE, {
+    year: '2-digit',
+    month: 'numeric',
+    day: '2-digit',
     timeZone: META_DATE_TIME_ZONE,
-  }).format(date);
+  }).formatToParts(date);
+  const get = (type) => parts.find((part) => part.type === type)?.value || '';
+  const month = MONTHS[Number.parseInt(get('month'), 10) - 1] || '';
+  return `${get('day')}${month}${get('year')}`;
 }
 
-function applyAccentBackground(element, post) {
+function formatReadingTime(post) {
+  const value = String(post.readingTime || '').trim();
+  return value ? value.toUpperCase() : '';
+}
+
+function isHerCategory(category) {
+  return Object.prototype.hasOwnProperty.call(HER_CATEGORY_HINTS, category);
+}
+
+// STATUS 面板（靜態頁已由 generate-redirects.js 產生，這裡只補未預先渲染的情況）
+function buildStatusInnerHTML(status) {
+  if (!status || typeof status !== 'object' || Array.isArray(status)) return '';
+
+  const listItems = (key) => (Array.isArray(status[key])
+    ? status[key].filter((item) => typeof item === 'string' && item.trim())
+    : []);
+  const leftItems = [
+    ...listItems('resolved').map((item) => `<li class="ok"><span class="k">已修</span>${escapeHtml(item)}</li>`),
+    ...listItems('procedures').map((item) => `<li class="proc"><span class="k">程序</span>${escapeHtml(item)}</li>`),
+  ];
+  const rightGroups = [
+    ['inop', 'INOP SYS'],
+    ['open', '未定'],
+  ]
+    .map(([key, title]) => {
+      const items = listItems(key);
+      if (!items.length) return '';
+      return `<h3 class="status__sub">${title}</h3><ul>${items.map((item) => `<li class="caut">${escapeHtml(item)}</li>`).join('')}</ul>`;
+    })
+    .filter(Boolean);
+
+  if (!leftItems.length && !rightGroups.length) return '';
+
+  const columns = [];
+  if (leftItems.length) columns.push(`<ul>${leftItems.join('')}</ul>`);
+  if (rightGroups.length) columns.push(`<div>${rightGroups.join('')}</div>`);
+  const gridClass = columns.length === 1 ? 'status__grid status__grid--single' : 'status__grid';
+
+  return `<h2 class="status__title" id="status-title">STATUS</h2><div class="${gridClass}">${columns.join('')}</div>`;
+}
+
+// 文章封面：有封面才顯示，沒有封面就整塊隱藏（不再用 accentColor 漸層）
+function renderArticleCover(element, post) {
   if (!element) return;
 
-  if (post.coverImage) {
-    const existingImage = element.querySelector('.article-hero__image');
-    const resolvedCoverImage = new URL(post.coverImage, window.location.origin).href;
-    if (
-      existingImage &&
-      (
-        existingImage.getAttribute('src') === post.coverImage ||
-        existingImage.currentSrc === resolvedCoverImage
-      )
-    ) {
-      element.classList.add('article-hero--image');
-      element.style.backgroundImage = '';
-      element.style.backgroundSize = '';
-      element.style.backgroundPosition = '';
-      return;
-    }
-  }
-
-  element.replaceChildren();
-  element.classList.remove('article-hero--image');
-  element.style.backgroundSize = '';
-  element.style.backgroundPosition = '';
-
-  if (post.coverImage) {
-    const heroImage = document.createElement('img');
-    heroImage.className = 'article-hero__image';
-    heroImage.src = post.coverImage;
-    heroImage.alt = '';
-    heroImage.decoding = 'async';
-    heroImage.fetchPriority = 'high';
-    heroImage.setAttribute('aria-hidden', 'true');
-    element.classList.add('article-hero--image');
-    element.appendChild(heroImage);
-    element.style.backgroundImage = '';
+  if (!post.coverImage) {
+    element.replaceChildren();
+    element.hidden = true;
     return;
   }
 
-  const accent = post.accentColor || '#556bff';
-  const gradient = `linear-gradient(135deg, ${shadeColor(accent, -15)} 0%, ${accent} 50%, ${shadeColor(accent, 25)} 100%)`;
-  element.style.backgroundImage = gradient;
-}
-
-function shadeColor(hex, percent) {
-  const rgb = hexToRgb(hex);
-  if (!rgb) return hex;
-
-  const factor = (100 + percent) / 100;
-  const r = clamp(Math.round(rgb.r * factor), 0, 255);
-  const g = clamp(Math.round(rgb.g * factor), 0, 255);
-  const b = clamp(Math.round(rgb.b * factor), 0, 255);
-
-  return rgbToHex({ r, g, b });
-}
-
-function hexToRgb(hex) {
-  if (typeof hex !== 'string') return null;
-  let value = hex.trim().replace('#', '');
-
-  if (![3, 6].includes(value.length)) return null;
-  if (value.length === 3) {
-    value = value
-      .split('')
-      .map((char) => char + char)
-      .join('');
+  element.hidden = false;
+  const existingImage = element.querySelector('.post__cover-img');
+  const resolvedCoverImage = new URL(post.coverImage, window.location.origin).href;
+  if (
+    existingImage &&
+    (
+      existingImage.getAttribute('src') === post.coverImage ||
+      existingImage.currentSrc === resolvedCoverImage
+    )
+  ) {
+    return;
   }
 
-  const num = Number.parseInt(value, 16);
-  if (Number.isNaN(num)) return null;
-
-  return {
-    r: (num >> 16) & 255,
-    g: (num >> 8) & 255,
-    b: num & 255,
-  };
-}
-
-function rgbToHex({ r, g, b }) {
-  const toHex = (component) => component.toString(16).padStart(2, '0');
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-}
-
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
+  const coverImage = document.createElement('img');
+  coverImage.className = 'post__cover-img';
+  coverImage.src = post.coverImage;
+  coverImage.alt = '';
+  coverImage.decoding = 'async';
+  coverImage.fetchPriority = 'high';
+  coverImage.setAttribute('aria-hidden', 'true');
+  element.replaceChildren(coverImage);
 }
 
 function getCategoryTheme(post) {
@@ -2425,10 +2360,10 @@ function setupCopyLink(container, url) {
       } else {
         throw new Error('Clipboard API unavailable');
       }
-      trigger.textContent = 'Link copied';
+      trigger.textContent = 'COPIED';
     } catch (error) {
       window.prompt('Copy this URL', url);
-      trigger.textContent = 'Link copied';
+      trigger.textContent = 'COPIED';
     }
 
     setTimeout(() => {
@@ -2540,44 +2475,22 @@ function getPostImage(post, baseUrl) {
  * 這樣在導航時可以有流暢的過渡效果
  */
 function setupViewTransitionNames() {
-  // 為首頁的精選文章添加固定的 transition name
-  const featuredTitle = document.querySelector('#hero-link');
-  if (featuredTitle) {
-    featuredTitle.style.viewTransitionName = 'featured-title';
+  // 首頁 LATEST 的標題與文章頁標題用同一個名字，換頁時接起來
+  const featuredSection = document.querySelector('#featured');
+  const featuredTitle = document.querySelector('#hero-title');
+  if (featuredSection && featuredTitle && featuredSection.dataset.featuredSlug) {
+    featuredTitle.style.viewTransitionName = `post-title-${featuredSection.dataset.featuredSlug}`;
   }
 
-  // 為首頁的文章卡片添加唯一的 transition name（基於 slug）
-  document.querySelectorAll('.post-card').forEach((card, index) => {
-    const link = card.querySelector('.post-link');
-    if (link) {
-      const url = new URL(link.href, window.location.origin);
-      const slug = extractSlugFromUrl(url);
-      if (slug) {
-        card.style.viewTransitionName = `post-card-${slug}`;
-      } else {
-        card.style.viewTransitionName = `post-card-${index}`;
-      }
-    }
-  });
-
-  // 為文章頁面的標題添加 transition name
+  // 文章頁的標題與封面
   const postTitle = document.querySelector('#post-title');
-  if (postTitle) {
-    const urlObj = new URL(window.location.href);
-    const slug = extractSlugFromUrl(urlObj);
-    if (slug) {
-      postTitle.style.viewTransitionName = `post-title-${slug}`;
-    }
-  }
-
-  // 為文章頁面的 hero 區域添加 transition name
   const postHero = document.querySelector('#post-hero');
-  if (postHero) {
-    const urlObj = new URL(window.location.href);
-    const slug = extractSlugFromUrl(urlObj);
-    if (slug) {
-      postHero.style.viewTransitionName = `post-hero-${slug}`;
-    }
+  const slug = extractSlugFromUrl(new URL(window.location.href));
+  if (slug && postTitle) {
+    postTitle.style.viewTransitionName = `post-title-${slug}`;
+  }
+  if (slug && postHero && !postHero.hidden) {
+    postHero.style.viewTransitionName = `post-hero-${slug}`;
   }
 }
 

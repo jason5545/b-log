@@ -44,7 +44,8 @@
   <!-- 額外的 metadata -->
   <meta name="keywords" content="LiSA, PRiSM, 專訪翻譯, 15週年, 武道館, 橫濱競技場, 演唱會" id="meta-keywords">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#b45309">
+  <meta name="theme-color" content="#f4efe7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1114" media="(prefers-color-scheme: dark)">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -56,157 +57,111 @@
   <!-- 啟用 View Transition API（跨文件過渡） -->
   <meta name="view-transition" content="same-origin">
 
-  <!-- Bricolage Grotesque — heading font -->
+  <!-- B612 / B612 Mono — heading and UI font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/critical-shared.css">
 
   <!-- 文章頁專屬關鍵 CSS -->
   <style>
-    .article {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft);
-      overflow: hidden;
+    .post {
+      max-width: 46rem;
+      margin-inline: auto;
+      padding-block: 1rem 4rem;
     }
-    .article-header h1 {
-      margin: 0 0 1rem;
-      font-size: clamp(2.2rem, 5vw, 3.2rem);
-      letter-spacing: -0.02em;
+    .post__title {
+      margin: 0.8rem 0 1.75rem;
+      font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
+      color: var(--ink);
     }
-    /* 防止 CLS - Article 頁面 */
-    .article-shell {
-      min-height: 600px;
-    }
-    .article-hero {
-      min-height: 260px;
+    .post__cover {
+      margin: 0 0 2.5rem;
       aspect-ratio: 16 / 9;
+      background: var(--surface);
     }
-    .article-layout {
-      min-height: 500px;
+    .post__body {
+      max-width: 35em;
+      font-size: 1.125rem;
+      line-height: 1.9;
     }
-    .article-footer {
-      min-height: 400px;
-    }
-    /* 內容區域預留空間 */
+    /* 內容區域預留空間（未預先渲染時） */
     #post-content:empty {
       min-height: 400px;
-      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
-      background-size: 200% 100%;
-      animation: skeleton-loading 1.5s infinite;
-      border-radius: var(--radius-md);
-    }
-    @keyframes skeleton-loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 33px, var(--rule) 33px, var(--rule) 34px);
     }
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/lisa-stage-tormented-saved-her-cover.webp" imagesrcset="/content/img/2026/lisa-stage-tormented-saved-her-cover-480w.webp 480w, /content/img/2026/lisa-stage-tormented-saved-her-cover-828w.webp 828w, /content/img/2026/lisa-stage-tormented-saved-her-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/lisa-stage-tormented-saved-her-cover.webp" imagesrcset="/content/img/2026/lisa-stage-tormented-saved-her-cover-480w.webp 480w, /content/img/2026/lisa-stage-tormented-saved-her-cover-828w.webp 828w, /content/img/2026/lisa-stage-tormented-saved-her-cover-1200w.webp 1200w" imagesizes="(max-width: 800px) calc(100vw - 32px), 736px" fetchpriority="high">
 <!-- 完整樣式表 -->
   <link rel="stylesheet" href="../../assets/styles.min.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"舞台折磨她，也拯救了她","description":"這篇整理《LiSA 15th Anniversary Book PRiSM》裡 2011 年到 2016 年的長訪談。從單飛出道前那種隨時可能消失的不安，到初次武道館的崩潰，再到重新站回武道館與橫濱競技場，LiSA 和舞台之間最殘酷也最真實的關係，都在這裡。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-04-28T00:00:00Z","dateModified":"2026-04-28T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/crossing-field/lisa-stage-tormented-saved-her/"},"url":"https://b-log.to/crossing-field/lisa-stage-tormented-saved-her/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/lisa-stage-tormented-saved-her-cover.webp"],"keywords":"LiSA, PRiSM, 專訪翻譯, 15週年, 武道館, 橫濱競技場, 演唱會","articleSection":"Crossing Field"}</script>
 </head>
 <body class="post-page">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="page-chrome">
-    <header class="site-header">
-      <div class="wrapper">
-        <div class="site-header__top">
-          <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">舞台折磨她，也拯救了她</span></p>
-            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
-            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
-          </div>
-          <nav class="site-nav">
-            <a href="../../">Home</a>
-            <a href="../../about.html">About</a>
-            <a href="../../gadgets.html">Gadgets</a>
-            <a href="../../feed.json">Feed</a>
-            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
-
-            <!-- 搜尋按鈕與搜尋框 -->
-            <div class="search-toggle-container">
-              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
-                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="m21 21-4.35-4.35"></path>
+  <a class="skip" href="#content">跳到內容</a>
+  <header class="site site-header">
+    <div class="wrap">
+      <div class="site__id">
+        <p class="site__title"><a class="wordmark" href="../../" aria-label="(b)-log 首頁"><span class="br" aria-hidden="true">(</span>b<span class="br" aria-hidden="true">)</span>-log</a></p>
+        <p class="tagline">世界的預設值不包含我，所以我自己定義</p>
+      </div>
+      <nav class="site__nav" aria-label="主選單">
+        <ul>
+          <li><a href="../../">HOME</a></li>
+          <li><a href="../../about.html">ABOUT</a></li>
+          <li><a href="../../gadgets.html">GADGETS</a></li>
+          <li><a href="../../feed.json">FEED</a></li>
+          <li><a href="#" id="random-post-link" onclick="goToRandomPost(event)">RANDOM</a></li>
+        </ul>
+      </nav>
+      <div class="site__tools">
+        <div class="search-toggle-container">
+          <button class="iconbtn search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" aria-controls="site-search" type="button">
+            <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </button>
+          <div class="search-box" id="site-search" hidden>
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5"></path>
+              </svg>
+              <input type="search" id="search-input" class="search-input" placeholder="搜尋文章" aria-label="搜尋文章" autocomplete="off">
+              <button type="button" id="search-clear" class="search-clear" aria-label="清除搜尋" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
               </button>
-
-              <div class="search-box" hidden>
-                <div class="search-input-wrapper">
-                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.35-4.35"></path>
-                  </svg>
-                  <input
-                    type="search"
-                    id="search-input"
-                    class="search-input"
-                    placeholder="搜尋文章..."
-                    aria-label="搜尋文章"
-                    autocomplete="off"
-                  >
-                  <button
-                    type="button"
-                    id="search-clear"
-                    class="search-clear"
-                    aria-label="清除搜尋"
-                    hidden
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-              </div>
             </div>
-
-            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
-              <span class="theme-toggle__icon">
-                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
-                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
-                </svg>
-              </span>
-              <span class="theme-toggle__text">Auto</span>
-            </button>
-          </nav>
+          </div>
         </div>
+        <button class="themebtn theme-toggle" type="button" onclick="ThemeManager.toggle()" aria-label="切換深淺色">
+          <span class="theme-toggle__icon"><i class="theme-dot" aria-hidden="true"></i></span>
+          <span class="theme-toggle__text">AUTO</span>
+        </button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <main class="wrapper article-shell">
-      <div class="article-layout">
-        <article class="article">
-          <div id="post-hero" class="article-hero article-hero--image"><img class="article-hero__image" src="/content/img/2026/lisa-stage-tormented-saved-her-cover.webp" srcset="/content/img/2026/lisa-stage-tormented-saved-her-cover-480w.webp 480w, /content/img/2026/lisa-stage-tormented-saved-her-cover-828w.webp 828w, /content/img/2026/lisa-stage-tormented-saved-her-cover-1200w.webp 1200w" sizes="(min-width: 1600px) calc(96vw - 428px), (min-width: 1200px) calc(98vw - 364px), 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></div>
-          <header class="article-header">
-            <p id="post-category" class="article-category">Crossing Field</p>
-            <h1 id="post-title">舞台折磨她，也拯救了她</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Apr 28, 2026</span><span>12 min</span></div>
-          </header>
-          <div id="post-tags" class="article-tags"><span>LiSA</span><span>PRiSM</span><span>專訪翻譯</span><span>15週年</span><span>武道館</span><span>橫濱競技場</span><span>演唱會</span></div>
-          <div id="post-content" class="article-body" data-prerendered="true"><div class="crossing-field-intro">
+  <main id="content" class="wrap article-shell">
+    <article class="post" id="post-article" data-category-theme="crossing-field">
+      <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=Crossing%20Field" class="her-cat">Crossing Field</a></span></nav>
+      <p id="post-meta" class="meta">28APR26 · Crossing Field · 12 MIN · JASON CHIEN 譯</p>
+      <p id="post-catline" class="catline">CROSSING FIELD <span>她說的話</span></p>
+      <h1 id="post-title" class="post__title">舞台折磨她，也拯救了她</h1>
+      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/lisa-stage-tormented-saved-her-cover.webp" srcset="/content/img/2026/lisa-stage-tormented-saved-her-cover-480w.webp 480w, /content/img/2026/lisa-stage-tormented-saved-her-cover-828w.webp 828w, /content/img/2026/lisa-stage-tormented-saved-her-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), 736px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><div class="crossing-field-intro">
   <p class="crossing-field-intro__eyebrow">Crossing Field / PRiSM Dispatch</p>
   <p class="crossing-field-intro__lead">2011 年，LiSA 雖然確定了單飛出道，卻說自己直到 CD 真正陳列在店頭的那一刻才相信這是真的。從「Girls Dead Monster」嶄露頭角、進而取得單飛出道機會的她，始終帶著「這一切隨時可能消失」的不安。這種恐懼在 2014 年的日本武道館公演中猛烈衝擊著她的精神。然而，在「デート（LiVE）」中獲得歌迷的歡呼聲支撐而重新振作，2015 年再度挑戰日本武道館、成功雪恥。2016 年也實現了橫濱競技場公演。在 LiSA 職涯的最初五年裡，折磨她的、拯救她的，一切都是演唱會。</p>
   <p class="crossing-field-intro__meta">關鍵詞：LiSA、PRiSM、15週年、武道館、橫濱競技場、專訪翻譯</p>
 </div>
 
-<blockquote>
-<p>翻譯整理</p>
-<p>收錄書籍：<code>LiSA 15th Anniversary Book PRiSM</code></p>
-<p>出版：<code>KADOKAWA</code></p>
-<p>範圍：<code>2011年-2016年</code></p>
-</blockquote>
+<div class="cf-source" role="group" aria-label="翻譯整理"><p class="cf-source__kind">翻譯整理</p><dl><dt>收錄書籍</dt><dd>LiSA 15th Anniversary Book PRiSM</dd><dt>出版</dt><dd>KADOKAWA</dd><dt>範圍</dt><dd>2011年-2016年</dd></dl></div>
 <div class="crossing-field-serial">
   <p class="crossing-field-serial__eyebrow">PRiSM Dispatch / 完整系列</p>
   <p class="crossing-field-serial__lead">這三篇是一組，從 2011 年一路整理到 2026 年。想照時間順序讀，可以從單飛出道那篇開始。</p>
@@ -294,48 +249,48 @@
 <p><strong>——2016 年 11 月 26 日、27 日舉辦的「LiVE is Smile Always〜NEVER ENDiNG GLORY〜」，兩天合計於橫濱競技場動員了約兩萬五千人。與以往相比，場地規模截然不同，這個舞台對 LiSA 來說是什麼樣的風景？</strong></p>
 <p>我自己在做的事大概沒有變，感覺是以前的做法，以及懷著「希望大家開心」的心情去做的一切，得到了「表現優秀！」的印章。「昨天之前做的一切，確確實實連到了這裡，表現優秀。把大家都逗得很開心嘛」，就像被蓋上了一個很大的印章。那讓我得以肯定迄今為止的自己，也成了自信。在橫濱競技場這樣大規模的場地，迄今所做的一切得到了妥善的評價，那個經歷，在精神上也有很大的安定作用。</p>
 </div>
-          <footer class="article-footer">
-            <div class="article-share" id="share-links"></div>
-            <section class="comments-section" id="comments">
-              <h2>留言討論</h2>
-              <div id="giscus-container" class="giscus-container">
-                <div class="giscus-loading" id="giscus-loading">
-                  <p>載入留言系統中...</p>
-                </div>
-                <div class="giscus-fallback" id="giscus-fallback" hidden>
-                  <p>無法載入留言系統。您可以前往
-                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
-                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
-                  </p>
-                </div>
-              </div>
-            </section>
-            <nav class="article-nav" aria-label="Post navigation">
-              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
-              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
-            </nav>
-          </footer>
-        </article>
 
-        <aside class="article-sidebar">
-          <section class="widget">
-            <h3 class="widget__title">Related reading</h3>
-            <ul id="related-list" class="related-list"></ul>
-          </section>
-          <section class="widget">
-            <h3 class="widget__title">Latest posts</h3>
-            <ul id="latest-sidebar" class="related-list"></ul>
-          </section>
-        </aside>
-      </div>
-    </main>
+      <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
+      <div id="post-tags" class="tags"><span class="meta">TAGS</span><a href="/?tag=LiSA">LiSA</a><a href="/?tag=PRiSM">PRiSM</a><a href="/?tag=%E5%B0%88%E8%A8%AA%E7%BF%BB%E8%AD%AF">專訪翻譯</a><a href="/?tag=15%E9%80%B1%E5%B9%B4">15週年</a><a href="/?tag=%E6%AD%A6%E9%81%93%E9%A4%A8">武道館</a><a href="/?tag=%E6%A9%AB%E6%BF%B1%E7%AB%B6%E6%8A%80%E5%A0%B4">橫濱競技場</a><a href="/?tag=%E6%BC%94%E5%94%B1%E6%9C%83">演唱會</a></div>
+      <div id="share-links" class="share"></div>
 
-    <footer class="site-footer">
-      <div class="wrapper">
-        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
-      </div>
-    </footer>
-  </div>
+      <section class="related" aria-labelledby="related-label">
+        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+        <ol id="related-list" class="log__list"></ol>
+      </section>
+      <section class="related" aria-labelledby="latest-label">
+        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+        <ol id="latest-sidebar" class="log__list"></ol>
+      </section>
+
+      <nav class="article-nav" aria-label="上一篇與下一篇">
+        <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+        <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+      </nav>
+
+      <section class="comments-section" id="comments" aria-labelledby="comments-label">
+        <h2 class="label" id="comments-label">COMMENTS <span>留言討論</span></h2>
+        <div id="giscus-container" class="giscus-container">
+          <div class="giscus-loading" id="giscus-loading">
+            <p>載入留言系統中...</p>
+          </div>
+          <div class="giscus-fallback" id="giscus-fallback" hidden>
+            <p>無法載入留言系統。您可以前往
+              <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                 target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+            </p>
+          </div>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="foot site-footer">
+    <div class="wrap">
+      <p>© 2026 JASON CHIEN</p>
+      <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
+    </div>
+  </footer>
 
   <!-- JavaScript - CSR 核心，延遲載入 -->
   <script src="../../assets/marked.min.js" defer></script>

@@ -49,7 +49,8 @@
   <!-- 額外的 metadata -->
   <meta name="keywords" content="J-POP, LiSA, 動畫, 商業合作, 音樂評論, 產業觀察, YOASOBI, King Gnu, K-POP, アニソン, fripSide, Aimer" id="meta-keywords">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#b45309">
+  <meta name="theme-color" content="#f4efe7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1114" media="(prefers-color-scheme: dark)">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -61,54 +62,39 @@
   <!-- 啟用 View Transition API（跨文件過渡） -->
   <meta name="view-transition" content="same-origin">
 
-  <!-- Bricolage Grotesque — heading font -->
+  <!-- B612 / B612 Mono — heading and UI font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/critical-shared.css">
 
   <!-- 文章頁專屬關鍵 CSS -->
   <style>
-    .article {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft);
-      overflow: hidden;
+    .post {
+      max-width: 46rem;
+      margin-inline: auto;
+      padding-block: 1rem 4rem;
     }
-    .article-header h1 {
-      margin: 0 0 1rem;
-      font-size: clamp(2.2rem, 5vw, 3.2rem);
-      letter-spacing: -0.02em;
+    .post__title {
+      margin: 0.8rem 0 1.75rem;
+      font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
+      color: var(--ink);
     }
-    /* 防止 CLS - Article 頁面 */
-    .article-shell {
-      min-height: 600px;
-    }
-    .article-hero {
-      min-height: 260px;
+    .post__cover {
+      margin: 0 0 2.5rem;
       aspect-ratio: 16 / 9;
+      background: var(--surface);
     }
-    .article-layout {
-      min-height: 500px;
+    .post__body {
+      max-width: 35em;
+      font-size: 1.125rem;
+      line-height: 1.9;
     }
-    .article-footer {
-      min-height: 400px;
-    }
-    /* 內容區域預留空間 */
+    /* 內容區域預留空間（未預先渲染時） */
     #post-content:empty {
       min-height: 400px;
-      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
-      background-size: 200% 100%;
-      animation: skeleton-loading 1.5s infinite;
-      border-radius: var(--radius-md);
-    }
-    @keyframes skeleton-loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 33px, var(--rule) 33px, var(--rule) 34px);
     }
   </style>
 
@@ -118,88 +104,62 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"當音樂不再是音樂——一個十年粉絲看 J-POP 的「從屬化」","description":"一位日本音樂評論人的長文在日本引起熱議：J-POP 正在被動畫綁架。他的數據沒有錯，但他站在路人的視角寫了一篇路人看不到的文章。身為追了 LiSA 超過十年的人，我想從牆的另一邊說幾句。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-03-13T00:00:00Z","dateModified":"2026-03-13T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/cultural-insights/jpop-subordination-fan-perspective/"},"url":"https://b-log.to/cultural-insights/jpop-subordination-fan-perspective/","inLanguage":"zh-Hant-TW","image":["https://res.cloudinary.com/dynj7181i/image/upload/c_fill,w_1200,h_630/co_rgb:ffffff,l_text:notosanstc-bold.ttf_60_center:%E7%95%B6%E9%9F%B3%E6%A8%82%E4%B8%8D%E5%86%8D%E6%98%AF%E9%9F%B3%E6%A8%82%E2%80%94%E2%80%94%E4%B8%80%E5%80%8B%E5%8D%81%E5%B9%B4%E7%B2%89%E7%B5%B2%E7%9C%8B%20J-POP%20%E7%9A%84%E3%80%8C%E5%BE%9E%E5%B1%AC%E5%8C%96%E3%80%8D,w_1000,c_fit/fl_layer_apply,g_center/og-background_cbst7j.png"],"keywords":"J-POP, LiSA, 動畫, 商業合作, 音樂評論, 產業觀察, YOASOBI, King Gnu, K-POP, アニソン, fripSide, Aimer","articleSection":"文化觀察"}</script>
 </head>
 <body class="post-page">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="page-chrome">
-    <header class="site-header">
-      <div class="wrapper">
-        <div class="site-header__top">
-          <div>
-            <p class="breadcrumb"><a href="../../">Home</a><span id="breadcrumb-current">當音樂不再是音樂——一個十年粉絲看 J-POP 的「從屬化」</span></p>
-            <h1 class="site-title"><a href="../../">(b)-log</a></h1>
-            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
-          </div>
-          <nav class="site-nav">
-            <a href="../../">Home</a>
-            <a href="../../about.html">About</a>
-            <a href="../../gadgets.html">Gadgets</a>
-            <a href="../../feed.json">Feed</a>
-            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
-
-            <!-- 搜尋按鈕與搜尋框 -->
-            <div class="search-toggle-container">
-              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
-                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="m21 21-4.35-4.35"></path>
+  <a class="skip" href="#content">跳到內容</a>
+  <header class="site site-header">
+    <div class="wrap">
+      <div class="site__id">
+        <p class="site__title"><a class="wordmark" href="../../" aria-label="(b)-log 首頁"><span class="br" aria-hidden="true">(</span>b<span class="br" aria-hidden="true">)</span>-log</a></p>
+        <p class="tagline">世界的預設值不包含我，所以我自己定義</p>
+      </div>
+      <nav class="site__nav" aria-label="主選單">
+        <ul>
+          <li><a href="../../">HOME</a></li>
+          <li><a href="../../about.html">ABOUT</a></li>
+          <li><a href="../../gadgets.html">GADGETS</a></li>
+          <li><a href="../../feed.json">FEED</a></li>
+          <li><a href="#" id="random-post-link" onclick="goToRandomPost(event)">RANDOM</a></li>
+        </ul>
+      </nav>
+      <div class="site__tools">
+        <div class="search-toggle-container">
+          <button class="iconbtn search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" aria-controls="site-search" type="button">
+            <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </button>
+          <div class="search-box" id="site-search" hidden>
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5"></path>
+              </svg>
+              <input type="search" id="search-input" class="search-input" placeholder="搜尋文章" aria-label="搜尋文章" autocomplete="off">
+              <button type="button" id="search-clear" class="search-clear" aria-label="清除搜尋" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
               </button>
-
-              <div class="search-box" hidden>
-                <div class="search-input-wrapper">
-                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.35-4.35"></path>
-                  </svg>
-                  <input
-                    type="search"
-                    id="search-input"
-                    class="search-input"
-                    placeholder="搜尋文章..."
-                    aria-label="搜尋文章"
-                    autocomplete="off"
-                  >
-                  <button
-                    type="button"
-                    id="search-clear"
-                    class="search-clear"
-                    aria-label="清除搜尋"
-                    hidden
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-              </div>
             </div>
-
-            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
-              <span class="theme-toggle__icon">
-                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
-                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
-                </svg>
-              </span>
-              <span class="theme-toggle__text">Auto</span>
-            </button>
-          </nav>
+          </div>
         </div>
+        <button class="themebtn theme-toggle" type="button" onclick="ThemeManager.toggle()" aria-label="切換深淺色">
+          <span class="theme-toggle__icon"><i class="theme-dot" aria-hidden="true"></i></span>
+          <span class="theme-toggle__text">AUTO</span>
+        </button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <main class="wrapper article-shell">
-      <div class="article-layout">
-        <article class="article">
-          <div id="post-hero" class="article-hero"></div>
-          <header class="article-header">
-            <p id="post-category" class="article-category">文化觀察</p>
-            <h1 id="post-title">當音樂不再是音樂——一個十年粉絲看 J-POP 的「從屬化」</h1>
-            <div id="post-meta" class="article-meta"><span>By Jason Chien</span><span>Published Mar 13, 2026</span><span>11 min</span></div>
-          </header>
-          <div id="post-tags" class="article-tags"><span>J-POP</span><span>LiSA</span><span>動畫</span><span>商業合作</span><span>音樂評論</span><span>產業觀察</span><span>YOASOBI</span><span>King Gnu</span><span>K-POP</span><span>アニソン</span><span>fripSide</span><span>Aimer</span></div>
-          <div id="post-content" class="article-body" data-prerendered="true"><p>最近一位日本音樂評論人發了一篇長文，從 Billboard JAPAN 2025 年榜的數據出發，剖析 J-POP 如何被動畫原作「綁架」。文章寫得很紮實，數據也到位——前十名裡只有兩首沒有商業合作，King Gnu 的專輯實際 14 首歌裡 13 首是 tie-in，佔比 93%。他的結論是：J-POP 正從「與影像並行」走向「從屬於影像」，音樂不再是獨立的表現形式，而成了故事的附屬品。</p>
+  <main id="content" class="wrap article-shell">
+    <article class="post" id="post-article" data-category-theme="cultural-insights">
+      <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=%E6%96%87%E5%8C%96%E8%A7%80%E5%AF%9F">文化觀察</a></span></nav>
+      <p id="post-meta" class="meta">13MAR26 · 文化觀察 · 11 MIN · JASON CHIEN</p>
+      <p id="post-catline" class="catline" hidden></p>
+      <h1 id="post-title" class="post__title">當音樂不再是音樂——一個十年粉絲看 J-POP 的「從屬化」</h1>
+      <figure id="post-hero" class="post__cover" hidden></figure>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><p>最近一位日本音樂評論人發了一篇長文，從 Billboard JAPAN 2025 年榜的數據出發，剖析 J-POP 如何被動畫原作「綁架」。文章寫得很紮實，數據也到位——前十名裡只有兩首沒有商業合作，King Gnu 的專輯實際 14 首歌裡 13 首是 tie-in，佔比 93%。他的結論是：J-POP 正從「與影像並行」走向「從屬於影像」，音樂不再是獨立的表現形式，而成了故事的附屬品。</p>
 <p>他說得對嗎？數據上是對的。但他的文章有一個根本的盲點：他站在路人的視角，寫了一篇路人看不到的文章。</p>
 <h2>路人看到的，跟粉絲看到的，是完全不同的東西</h2>
 <p>這件事必須分成兩層來談。</p>
@@ -261,48 +221,48 @@
 <hr>
 <p><em>今日もいい日だ。</em></p>
 </div>
-          <footer class="article-footer">
-            <div class="article-share" id="share-links"></div>
-            <section class="comments-section" id="comments">
-              <h2>留言討論</h2>
-              <div id="giscus-container" class="giscus-container">
-                <div class="giscus-loading" id="giscus-loading">
-                  <p>載入留言系統中...</p>
-                </div>
-                <div class="giscus-fallback" id="giscus-fallback" hidden>
-                  <p>無法載入留言系統。您可以前往
-                    <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
-                       target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
-                  </p>
-                </div>
-              </div>
-            </section>
-            <nav class="article-nav" aria-label="Post navigation">
-              <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
-              <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
-            </nav>
-          </footer>
-        </article>
 
-        <aside class="article-sidebar">
-          <section class="widget">
-            <h3 class="widget__title">Related reading</h3>
-            <ul id="related-list" class="related-list"></ul>
-          </section>
-          <section class="widget">
-            <h3 class="widget__title">Latest posts</h3>
-            <ul id="latest-sidebar" class="related-list"></ul>
-          </section>
-        </aside>
-      </div>
-    </main>
+      <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
+      <div id="post-tags" class="tags"><span class="meta">TAGS</span><a href="/?tag=J-POP">J-POP</a><a href="/?tag=LiSA">LiSA</a><a href="/?tag=%E5%8B%95%E7%95%AB">動畫</a><a href="/?tag=%E5%95%86%E6%A5%AD%E5%90%88%E4%BD%9C">商業合作</a><a href="/?tag=%E9%9F%B3%E6%A8%82%E8%A9%95%E8%AB%96">音樂評論</a><a href="/?tag=%E7%94%A2%E6%A5%AD%E8%A7%80%E5%AF%9F">產業觀察</a><a href="/?tag=YOASOBI">YOASOBI</a><a href="/?tag=King%20Gnu">King Gnu</a><a href="/?tag=K-POP">K-POP</a><a href="/?tag=%E3%82%A2%E3%83%8B%E3%82%BD%E3%83%B3">アニソン</a><a href="/?tag=fripSide">fripSide</a><a href="/?tag=Aimer">Aimer</a></div>
+      <div id="share-links" class="share"></div>
 
-    <footer class="site-footer">
-      <div class="wrapper">
-        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
-      </div>
-    </footer>
-  </div>
+      <section class="related" aria-labelledby="related-label">
+        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+        <ol id="related-list" class="log__list"></ol>
+      </section>
+      <section class="related" aria-labelledby="latest-label">
+        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+        <ol id="latest-sidebar" class="log__list"></ol>
+      </section>
+
+      <nav class="article-nav" aria-label="上一篇與下一篇">
+        <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+        <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+      </nav>
+
+      <section class="comments-section" id="comments" aria-labelledby="comments-label">
+        <h2 class="label" id="comments-label">COMMENTS <span>留言討論</span></h2>
+        <div id="giscus-container" class="giscus-container">
+          <div class="giscus-loading" id="giscus-loading">
+            <p>載入留言系統中...</p>
+          </div>
+          <div class="giscus-fallback" id="giscus-fallback" hidden>
+            <p>無法載入留言系統。您可以前往
+              <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                 target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+            </p>
+          </div>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="foot site-footer">
+    <div class="wrap">
+      <p>© 2026 JASON CHIEN</p>
+      <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
+    </div>
+  </footer>
 
   <!-- JavaScript - CSR 核心，延遲載入 -->
   <script src="../../assets/marked.min.js" defer></script>

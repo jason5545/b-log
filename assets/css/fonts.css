@@ -1,26 +1,22 @@
 /* ====================================================================
-   Fonts — Bricolage Grotesque for headings, system stack for body/CJK
+   Fonts — B612 for English headings, B612 Mono for metadata and UI,
+   system stack for body and CJK. No CJK web fonts are loaded.
    ==================================================================== */
 
-/* Chinese-optimised system stack */
 :root {
-  --sans-tc: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-             "PingFang TC", "Microsoft JhengHei", "Noto Sans TC",
-             "Heiti TC", "Helvetica Neue", Arial, Helvetica, sans-serif;
-  --font-heading: "Bricolage Grotesque", var(--sans-tc);
-  --font-body: var(--sans-tc);
+  --font-body: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC",
+               "Microsoft JhengHei", "Heiti TC", system-ui, sans-serif;
+  --font-head: "B612", -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC",
+               "Microsoft JhengHei", system-ui, sans-serif;
+  --font-mono: "B612 Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-serif: "Songti TC", "Noto Serif TC", "Noto Serif CJK TC", "Source Han Serif TC",
+                "PMingLiU", "MingLiU", serif;
 }
 
 html[lang="zh-Hant-TW"] body {
   font-family: var(--font-body);
 }
 
-/* Apply heading font to all headings and key UI elements */
-h1, h2, h3, h4, h5, h6,
-.site-title,
-.hero-card__title,
-.stream-title,
-.widget__title,
-.article-header h1 {
-  font-family: var(--font-heading);
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-head);
 }

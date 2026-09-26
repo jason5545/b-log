@@ -18,10 +18,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
 
-  <!-- Bricolage Grotesque — heading font -->
+  <!-- B612 / B612 Mono — heading and UI font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/critical-shared.css">
 
@@ -34,7 +34,7 @@
 
     /* 裝置清單：PVE 樹狀導航 + 單一互動式終端機 */
     main {
-      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --mono: var(--font-mono);
     }
 
     /* 版面骨架：讓終端機精確撐到頁尾，內容多時再自然長高 */
@@ -47,12 +47,15 @@
       flex: 1 0 auto;
       display: flex;
       flex-direction: column;
+      width: 100%;
     }
 
     main > .content {
       flex: 1 0 auto;
       display: flex;
       flex-direction: column;
+      width: 100%;
+      max-width: none;
     }
 
     .gadgets-layout {
@@ -70,9 +73,9 @@
       align-self: start;
       font-family: var(--mono);
       font-size: 0.8rem;
-      background: var(--glass-tint);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
+      background: transparent;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
       padding: 0.85rem 0.65rem 1rem;
       max-height: calc(100vh - 110px);
       overflow: auto;
@@ -81,7 +84,7 @@
     .pve-tree__head {
       font-weight: 700;
       letter-spacing: 0.06em;
-      color: var(--accent);
+      color: var(--ink);
       padding: 0 0.45rem;
     }
 
@@ -97,7 +100,7 @@
       font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--text-muted);
+      color: var(--muted);
       padding-left: 0.45rem;
       cursor: pointer;
       user-select: none;
@@ -107,7 +110,7 @@
     .pve-tree li.grp::before {
       content: "▾";
       margin-right: 0.3rem;
-      color: var(--accent);
+      color: var(--cyan);
     }
 
     .pve-tree li.grp.collapsed::before {
@@ -123,9 +126,9 @@
       display: flex;
       align-items: center;
       gap: 0.45rem;
-      margin-top: 0.15rem;
+      min-height: 44px;
       padding: 0.24rem 0.45rem;
-      border-radius: 8px;
+      border-radius: 2px;
       color: var(--text);
       text-decoration: none;
       line-height: 1.45;
@@ -133,8 +136,8 @@
     }
 
     .pve-tree a:hover {
-      background: var(--accent-soft);
-      color: var(--accent-strong);
+      background: var(--row-hover);
+      color: var(--cyan);
     }
 
     .dot {
@@ -145,13 +148,12 @@
     }
 
     .dot--run {
-      background: #22c55e;
-      box-shadow: 0 0 6px rgba(34, 197, 94, 0.55);
+      background: var(--green);
     }
 
     .dot--stop {
       background: transparent;
-      border: 1.5px solid var(--text-muted);
+      border: 1.5px solid var(--muted);
     }
 
     /* 主終端機 */
@@ -160,23 +162,17 @@
       min-width: 0;
     }
 
+    /* 終端機跟 STATUS 一樣，深淺模式都是深色顯示器 */
     .term {
-      --term-bg: #16181d;
+      --term-bg: #0b0f12;
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       background: var(--term-bg);
       color: #d6dae2;
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      border-radius: var(--radius-sm);
-      box-shadow: var(--shadow-soft);
+      border: 1px solid #262e35;
+      border-radius: 2px;
       overflow: hidden;
-      transition: box-shadow 0.3s ease, border-color 0.3s ease;
-    }
-
-    .term:hover {
-      box-shadow: var(--shadow-strong);
-      border-color: rgba(255, 255, 255, 0.16);
     }
 
     .term__bar {
@@ -184,8 +180,8 @@
       align-items: center;
       gap: 0.6rem;
       padding: 0.48rem 0.8rem;
-      background: linear-gradient(180deg, #23262e, #1b1e25);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      background: #11161a;
+      border-bottom: 1px solid #262e35;
     }
 
     .term__lights {
@@ -270,11 +266,10 @@
 
     .ls-name { color: #566070; }
 
-    /* 方向鍵導航時的焦點樣式 */
+    /* 方向鍵導航時的焦點樣式：沿用全站 3px cyan 焦點框 */
     .pve-tree a:focus-visible {
-      background: var(--accent-soft);
-      color: var(--accent-strong);
-      outline: none;
+      background: var(--row-hover);
+      color: var(--cyan);
     }
 
     .term__cmd {
@@ -359,7 +354,7 @@
       font-weight: 600;
       letter-spacing: 0.05em;
       padding: 0.08em 0.5em;
-      border-radius: 10px;
+      border-radius: 2px;
       vertical-align: 0.18em;
     }
 
@@ -517,8 +512,8 @@
 
       .pve-tree a {
         white-space: nowrap;
-        border: 1px solid var(--border);
-        border-radius: 999px;
+        border: 1px solid var(--rule);
+        border-radius: 2px;
         padding: 0.28rem 0.7rem;
       }
     }
@@ -528,76 +523,54 @@
   <link rel="stylesheet" href="assets/styles.min.css">
 </head>
 <body>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <header class="site-header">
-    <div class="wrapper">
-      <div class="site-header__top">
-        <div>
-          <p class="breadcrumb"><a href="./">&lt; Back home</a></p>
-          <h1 class="site-title"><a href="./">(b)-log</a></h1>
-          <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
-        </div>
-        <nav class="site-nav">
-          <a href="./">Home</a>
-          <a href="about.html">About</a>
-          <a href="gadgets.html" aria-current="page">Gadgets</a>
-          <a href="feed.json">Feed</a>
-          <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
-
-          <!-- 搜尋按鈕與搜尋框 -->
-          <div class="search-toggle-container">
-            <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
-              <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.35-4.35"></path>
+  <a class="skip" href="#content">跳到內容</a>
+  <header class="site site-header">
+    <div class="wrap">
+      <div class="site__id">
+        <p class="site__title"><a class="wordmark" href="./" aria-label="(b)-log 首頁"><span class="br" aria-hidden="true">(</span>b<span class="br" aria-hidden="true">)</span>-log</a></p>
+        <p class="tagline">世界的預設值不包含我，所以我自己定義</p>
+      </div>
+      <nav class="site__nav" aria-label="主選單">
+        <ul>
+          <li><a href="./">HOME</a></li>
+          <li><a href="about.html">ABOUT</a></li>
+          <li><a href="gadgets.html" aria-current="page">GADGETS</a></li>
+          <li><a href="feed.json">FEED</a></li>
+          <li><a href="#" id="random-post-link" onclick="goToRandomPost(event)">RANDOM</a></li>
+        </ul>
+      </nav>
+      <div class="site__tools">
+        <div class="search-toggle-container">
+          <button class="iconbtn search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" aria-controls="site-search" type="button">
+            <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </button>
+          <div class="search-box" id="site-search" hidden>
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5"></path>
               </svg>
-            </button>
-
-            <div class="search-box" hidden>
-              <div class="search-input-wrapper">
-                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="m21 21-4.35-4.35"></path>
+              <input type="search" id="search-input" class="search-input" placeholder="搜尋文章" aria-label="搜尋文章" autocomplete="off">
+              <button type="button" id="search-clear" class="search-clear" aria-label="清除搜尋" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
-                <input
-                  type="search"
-                  id="search-input"
-                  class="search-input"
-                  placeholder="搜尋文章..."
-                  aria-label="搜尋文章"
-                  autocomplete="off"
-                >
-                <button
-                  type="button"
-                  id="search-clear"
-                  class="search-clear"
-                  aria-label="清除搜尋"
-                  hidden
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                </button>
-              </div>
+              </button>
             </div>
           </div>
-
-          <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
-            <span class="theme-toggle__icon">
-              <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
-                <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
-              </svg>
-            </span>
-            <span class="theme-toggle__text">Auto</span>
-          </button>
-        </nav>
+        </div>
+        <button class="themebtn theme-toggle" type="button" onclick="ThemeManager.toggle()" aria-label="切換深淺色">
+          <span class="theme-toggle__icon"><i class="theme-dot" aria-hidden="true"></i></span>
+          <span class="theme-toggle__text">AUTO</span>
+        </button>
       </div>
     </div>
   </header>
-  <main class="wrapper">
+  <main id="content" class="wrap">
     <section class="content">
       <h1>我的裝置</h1>
       <p>這裡記錄我目前使用的各種裝置。點左側任一台，終端機就會連線進去——綠點是 running，空心點是 stopped。懶得點的話，底下的 prompt 可以直接打指令：<code>ls</code>、<code>ssh &lt;主機名&gt;</code>，Tab 補全、↑↓ 翻歷史；左邊清單也支援方向鍵移動、Enter 連線。沒有 JavaScript 時，所有輸出會像 scrollback 一樣全部列出。</p>
@@ -898,9 +871,10 @@
 
     </section>
   </main>
-  <footer class="site-footer">
-    <div class="wrapper">
-      <p>Built on GitHub Pages with a sprinkle of JavaScript.</p>
+  <footer class="foot site-footer">
+    <div class="wrap">
+      <p>© 2026 JASON CHIEN</p>
+      <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
     </div>
   </footer>
 

@@ -36,7 +36,8 @@
   <!-- 額外的 metadata -->
   <meta name="keywords" content="逆向工程, AI 分析, 身心障礙, 無障礙, LiSA, 技術分析">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#b45309">
+  <meta name="theme-color" content="#f4efe7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1114" media="(prefers-color-scheme: dark)">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -48,343 +49,242 @@
   <!-- 啟用 View Transition API（跨文件過渡） -->
   <meta name="view-transition" content="same-origin">
 
-  <!-- Bricolage Grotesque — heading font -->
+  <!-- B612 / B612 Mono — heading and UI font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/critical-shared.css">
 
   <!-- 首頁專屬關鍵 CSS -->
   <style>
-    .site-header::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      border-bottom: 1px solid var(--border);
-    }
-    .layout-grid {
+    .home-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 19rem;
+      grid-template-areas: "lead brief" "log side";
+      gap: 3rem 3.5rem;
+      padding-block: 2.25rem 4rem;
       min-height: 600px;
     }
-    /* 骨架屏樣式 - 載入時的佔位符 */
-    .post-list:empty::before {
-      content: '';
-      display: block;
-      height: 400px;
-      background: linear-gradient(90deg, var(--surface-muted) 25%, rgba(255,255,255,0.3) 50%, var(--surface-muted) 75%);
-      background-size: 200% 100%;
-      animation: skeleton-loading 1.5s infinite;
-      border-radius: var(--radius-md);
-    }
-    @keyframes skeleton-loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-    /* Hero card 預留空間 */
-    .hero-card {
+    .lead { grid-area: lead; min-width: 0; }
+    .lead__link {
       display: grid;
-      grid-template-columns: 1fr;
-      min-height: 400px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-strong);
-      overflow: hidden;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      gap: 1.75rem;
+      align-items: start;
+      color: inherit;
+      text-decoration: none;
     }
-    /* Keep hero card in the layout even when hidden to avoid large CLS */
-    .hero-card[hidden] {
-      display: block;
-      opacity: 0;
-      pointer-events: none;
+    .lead--text-only .lead__link { grid-template-columns: minmax(0, 1fr); }
+    .lead__title {
+      margin: 0;
+      font: 700 clamp(1.55rem, 2.7vw, 2.15rem)/1.32 var(--font-head);
+      color: var(--ink);
     }
-    /* 防止動態內容造成佈局移動 */
-    .content-grid {
-      min-height: 500px;
-    }
-    .hero-card__media {
-      min-height: 220px;
-      min-width: 0;
+    /* 主打封面預留空間，避免 CLS */
+    .lead__media {
       aspect-ratio: 16 / 9;
-      background: var(--surface-muted);
+      background: var(--surface);
     }
-    .article-hero__image {
+    .lead__img {
       display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-    @media (min-width: 1200px) {
-      .hero-card {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      }
-      .hero-card .hero-card__media {
-        min-height: 320px;
-        aspect-ratio: auto;
-        position: relative;
-      }
-      .hero-card__media .article-hero__image {
-        position: absolute;
-        inset: 0;
+    @media (max-width: 960px) {
+      .home-grid {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "lead" "brief" "log" "side";
+        gap: 2.5rem;
+        padding-block: 1.5rem 3rem;
       }
     }
-    @media (min-width: 1600px) {
-      .hero-card {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      }
-      .hero-card .hero-card__media {
-        min-height: 380px;
-      }
-    }
-    /* 無封面：單欄文字為主版型，覆蓋桌面雙欄，不留巨大占位區 */
-    .hero-card--text-only {
-      grid-template-columns: minmax(0, 1fr);
-      min-height: 0;
-    }
-    /* 無封面：accent 漸層當背景，文字下方主題遮罩保對比 */
-    .hero-card--text-only .hero-card__body {
-      position: relative;
-      z-index: 1;
-      background: linear-gradient(90deg, var(--hero-scrim) 0%, var(--hero-scrim) 45%, var(--hero-scrim-soft) 100%);
-    }
-    .hero-card--text-only .hero-card__category {
-      color: var(--text);
+    @media (max-width: 760px) {
+      .lead__link { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+      .lead__media { order: -1; }
     }
   </style>
 
   <!-- 首頁 featured preload 會由生成腳本注入到這裡 -->
   <!-- HOME_FEATURED_PRELOAD_START -->
-  <link rel="preload" as="image" href="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" imagesrcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" imagesizes="(min-width: 1600px) 50vw, (min-width: 1200px) 50vw, 98vw" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" imagesrcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" imagesizes="(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, 400px" fetchpriority="high">
 <!-- HOME_FEATURED_PRELOAD_END -->
 
   <!-- 完整樣式表 -->
   <link rel="stylesheet" href="assets/styles.min.css">
 </head>
 <body class="home">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="page-chrome">
-    <header class="site-header">
-      <div class="wrapper">
-        <div class="site-header__top">
-          <div>
-            <h1 class="site-title"><a href="./">(b)-log</a></h1>
-            <p class="site-tagline">世界的預設值不包含我，所以我自己定義</p>
-          </div>
-          <nav class="site-nav">
-            <a href="./" aria-current="page">Home</a>
-            <a href="about.html">About</a>
-            <a href="gadgets.html">Gadgets</a>
-            <a href="feed.json">Feed</a>
-            <a href="#" id="random-post-link" onclick="goToRandomPost(event)">Random</a>
-
-            <!-- 搜尋按鈕與搜尋框 -->
-            <div class="search-toggle-container">
-              <button class="search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" type="button">
-                <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="m21 21-4.35-4.35"></path>
+  <a class="skip" href="#content">跳到內容</a>
+  <header class="site site-header">
+    <div class="wrap">
+      <div class="site__id">
+        <h1 class="site__title"><a class="wordmark" href="./" aria-label="(b)-log 首頁"><span class="br" aria-hidden="true">(</span>b<span class="br" aria-hidden="true">)</span>-log</a></h1>
+        <p class="tagline">世界的預設值不包含我，所以我自己定義</p>
+      </div>
+      <nav class="site__nav" aria-label="主選單">
+        <ul>
+          <li><a href="./" aria-current="page">HOME</a></li>
+          <li><a href="about.html">ABOUT</a></li>
+          <li><a href="gadgets.html">GADGETS</a></li>
+          <li><a href="feed.json">FEED</a></li>
+          <li><a href="#" id="random-post-link" onclick="goToRandomPost(event)">RANDOM</a></li>
+        </ul>
+      </nav>
+      <div class="site__tools">
+        <div class="search-toggle-container">
+          <button class="iconbtn search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" aria-controls="site-search" type="button">
+            <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </button>
+          <div class="search-box" id="site-search" hidden>
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5"></path>
+              </svg>
+              <input type="search" id="search-input" class="search-input" placeholder="搜尋文章" aria-label="搜尋文章" autocomplete="off">
+              <button type="button" id="search-clear" class="search-clear" aria-label="清除搜尋" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
               </button>
-
-              <div class="search-box" hidden>
-                <div class="search-input-wrapper">
-                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.35-4.35"></path>
-                  </svg>
-                  <input
-                    type="search"
-                    id="search-input"
-                    class="search-input"
-                    placeholder="搜尋文章..."
-                    aria-label="搜尋文章"
-                    autocomplete="off"
-                  >
-                  <button
-                    type="button"
-                    id="search-clear"
-                    class="search-clear"
-                    aria-label="清除搜尋"
-                    hidden
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-              </div>
             </div>
-
-            <button class="theme-toggle" onclick="ThemeManager.toggle()" aria-label="Toggle theme">
-              <span class="theme-toggle__icon">
-                <!-- SVG icons will be dynamically updated by JavaScript -->
-                <svg class="theme-icon theme-icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21.5 12c0 5.25-4.25 9.5-9.5 9.5S2.5 17.25 2.5 12 6.75 2.5 12 2.5s9.5 4.25 9.5 9.5z"/>
-                  <path d="M12 2.5v19M21.5 12h-19M18.36 5.64l-12.72 12.72M18.36 18.36L5.64 5.64"/>
-                </svg>
-              </span>
-              <span class="theme-toggle__text">Auto</span>
-            </button>
-          </nav>
-        </div>
-        <div class="site-cta">
-          <p>Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
-        </div>
-      </div>
-    </header>
-
-    <!-- 12 月生日特輯橫幅 -->
-    <div id="birthday-banner" class="birthday-theme birthday-banner" hidden>
-      <span class="birthday-banner__text">
-        🎊 12 月是我的生日月！感謝一路以來的陪伴 🎊
-      </span>
-      <button class="birthday-banner__close" aria-label="關閉橫幅" onclick="BirthdayTheme.closeBanner()">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
-
-    <main class="wrapper layout-grid">
-      <!-- 十週年紀念區塊（2015-2025）-->
-      <section id="anniversary-section" class="birthday-theme anniversary-section" hidden>
-        <span class="anniversary-section__badge">✨ 十週年紀念</span>
-        <h2 class="anniversary-section__title">Believe in myself</h2>
-        <p class="anniversary-section__subtitle">
-          2015 年 7 月，一個輪椅上的少年第一次踏入演唱會現場。十年後的今天，這個故事依然在繼續。
-        </p>
-        <a id="anniversary-link" class="anniversary-section__link" href="/life-stories/lisa-concert-believe-in-myself/">
-          閱讀這篇生命故事 →
-        </a>
-      </section>
-
-      <!-- HOME_FEATURED_START -->
-      <section id="featured" class="hero-card" data-category-theme="ai-analysis" data-featured-slug="cloud-agent-main-session-cap-90-usd-round" data-featured-cover="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp">
-        <div class="hero-card__media article-hero--image" id="hero-media" data-category-theme="ai-analysis"><img class="article-hero__image" src="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" srcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" sizes="(min-width: 1600px) 50vw, (min-width: 1200px) 50vw, 98vw" alt="" aria-hidden="true" fetchpriority="high" decoding="sync"></div>
-        <div class="hero-card__body">
-          <p class="hero-card__category" id="hero-category" style="color: #2f6b5b; border-color: rgba(47, 107, 91, 0.3); background: rgba(47, 107, 91, 0.1);">AI 分析</p>
-          <h2 class="hero-card__title">
-            <a id="hero-link" href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</a>
-          </h2>
-          <p class="hero-card__meta" id="hero-meta">By Jason Chien | Published Sep 25, 2026 | 6 min</p>
-          <p class="hero-card__summary" id="hero-summary">Anthropic 送的 250 美元只能在雲端用，我拿來做一個完全放手的和風卡牌遊戲，順便學怎麼管雲端 agent 的用量。我只限制主 session 不要爆，它就把工作全派給子代理，一輪花掉 90 美元。改成一個 Sonnet 做到底只花 31，但做的量只有四分之一。</p>
-          <div class="hero-card__actions">
-            <a id="hero-read-more" class="button button--primary" href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/">Continue reading</a>
-            <a id="hero-open-discussion" class="button button--ghost" href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/#comments">Discuss</a>
           </div>
         </div>
+        <button class="themebtn theme-toggle" type="button" onclick="ThemeManager.toggle()" aria-label="切換深淺色">
+          <span class="theme-toggle__icon"><i class="theme-dot" aria-hidden="true"></i></span>
+          <span class="theme-toggle__text">AUTO</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 12 月生日特輯橫幅 -->
+  <div id="birthday-banner" class="birthday-theme birthday-banner" hidden>
+    <span class="birthday-banner__text">
+      🎊 12 月是我的生日月！感謝一路以來的陪伴 🎊
+    </span>
+    <button class="birthday-banner__close" type="button" aria-label="關閉橫幅" onclick="BirthdayTheme.closeBanner()">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <main id="content" class="wrap layout-grid">
+    <!-- 十週年紀念區塊（2015-2025）-->
+    <section id="anniversary-section" class="birthday-theme anniversary-section" hidden>
+      <span class="anniversary-section__badge">✨ 十週年紀念</span>
+      <h2 class="anniversary-section__title">Believe in myself</h2>
+      <p class="anniversary-section__subtitle">
+        2015 年 7 月，一個輪椅上的少年第一次踏入演唱會現場。十年後的今天，這個故事依然在繼續。
+      </p>
+      <a id="anniversary-link" class="anniversary-section__link" href="/life-stories/lisa-concert-believe-in-myself/">
+        閱讀這篇生命故事 →
+      </a>
+    </section>
+
+    <div class="home-grid">
+      <!-- HOME_FEATURED_START -->
+      <section id="featured" class="lead" aria-labelledby="lead-label" data-featured-slug="cloud-agent-main-session-cap-90-usd-round" data-featured-cover="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp">
+        <h2 class="label" id="lead-label">LATEST <span>最新一篇</span></h2>
+        <a class="lead__link" id="hero-link" href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/">
+          <div class="lead__text">
+            <p class="meta" id="hero-meta">25SEP26 · AI 分析 · 6 MIN</p>
+            <h3 class="lead__title" id="hero-title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</h3>
+            <p class="lead__sum" id="hero-summary">Anthropic 送的 250 美元只能在雲端用，我拿來做一個完全放手的和風卡牌遊戲，順便學怎麼管雲端 agent 的用量。我只限制主 session 不要爆，它就把工作全派給子代理，一輪花掉 90 美元。改成一個 Sonnet 做到底只花 31，但做的量只有四分之一。</p>
+          </div>
+          <div class="lead__media" id="hero-media"><img class="lead__img" src="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" srcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" sizes="(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, 400px" alt="" aria-hidden="true" fetchpriority="high" decoding="sync"></div>
+        </a>
       </section>
 <!-- HOME_FEATURED_END -->
 
-      <div class="content-grid">
-        <section id="posts" class="post-stream" aria-live="polite">
-          <section class="start-here" aria-labelledby="start-here-title">
-            <h2 class="start-here__title" id="start-here-title">Start here</h2>
-            <p class="start-here__subtitle">第一次來，先讀這幾篇。</p>
-            <ol class="start-here__list">
-              <li>
-                <a href="/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/">來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect</a>
-                <p class="start-here__reason">五週從協議層寫出會說小米 Lyra 的 KDE Connect：來電在 Mac 接、鏡像用 Touch ID 解鎖，工具自己長出來的旗艦作。</p>
-              </li>
-              <li>
-                <a href="/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/">我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截</a>
-                <p class="start-here__reason">為了關掉一個干擾我的手勢去問 AI，被攔截。這篇是這個站最常回到的主題：身障者的技術需求，怎麼在分類器眼裡變成嫌疑。</p>
-              </li>
-              <li>
-                <a href="/shirushi/lisa-concert-believe-in-myself/">Believe in myself - 獻給在某時某刻聽到這首歌的某個人</a>
-                <p class="start-here__reason">2015 年第一次進 LiSA 演唱會現場的完整故事，站上十週年紀念區塊連結的就是這一篇。</p>
-              </li>
-            </ol>
-          </section>
-          <div class="stream-header">
-            <h2 class="stream-title">Latest Dispatches</h2>
-            <p class="stream-subtitle">技術拆解、被擋下來的 prompt、制度的縫，還有她。</p>
-            <p id="search-results-count" class="search-results-count" hidden></p>
-          </div>
+      <section class="brief start-here" aria-labelledby="brief-label">
+        <h2 class="label" id="brief-label">BRIEFING <span>第一次來，先讀這三篇</span></h2>
+        <ol>
+          <li>
+            <span class="cat">技術開發</span>
+            <a href="/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/">來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect</a>
+            <p>五週從協議層寫出會說小米 Lyra 的 KDE Connect：來電在 Mac 接、鏡像用 Touch ID 解鎖，工具自己長出來的旗艦作。</p>
+          </li>
+          <li>
+            <span class="cat">文化觀察</span>
+            <a href="/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/">我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截</a>
+            <p>為了關掉一個干擾我的手勢去問 AI，被攔截。這篇是這個站最常回到的主題：身障者的技術需求，怎麼在分類器眼裡變成嫌疑。</p>
+          </li>
+          <li>
+            <span class="cat her-cat">シルシ　我和她的事</span>
+            <a href="/shirushi/lisa-concert-believe-in-myself/">Believe in myself - 獻給在某時某刻聽到這首歌的某個人</a>
+            <p>2015 年第一次進 LiSA 演唱會現場的完整故事，站上十週年紀念區塊連結的就是這一篇。</p>
+          </li>
+        </ol>
+      </section>
 
-          <ul id="posts-list" class="post-list"></ul>
-          <template id="post-item-template">
-            <li class="post-card">
-              <article>
-                <header class="post-card__header">
-                  <p class="post-card__category"></p>
-                  <h3><a class="post-link" href="#"></a></h3>
-                  <p class="post-meta"></p>
-                </header>
-                <p class="post-summary"></p>
-                <footer class="post-tags"></footer>
-              </article>
-            </li>
-          </template>
-          <p id="posts-empty" class="notice" hidden>No posts yet. Add your first note in <code>content/posts</code>.</p>
-          <p id="posts-error" class="error" hidden>Could not load posts. Check <code>data/posts.json</code>.</p>
+      <section id="posts" class="log post-stream" aria-labelledby="log-label">
+        <h2 class="label" id="log-label">LOG <span id="log-summary">新到舊</span></h2>
+        <p id="search-results-count" class="search-results-count" role="status" hidden></p>
+        <div class="log__head" aria-hidden="true"><span>DATE</span><span>CAT</span><span>TITLE</span><span>TIME</span></div>
+        <ol id="posts-list" class="log__list post-list"></ol>
+        <p id="posts-empty" class="notice" hidden>No posts yet. Add your first note in <code>content/posts</code>.</p>
+        <p id="posts-error" class="error" hidden>Could not load posts. Check <code>data/posts.json</code>.</p>
+      </section>
+
+      <div class="side sidebar">
+        <!-- 年度回顧統計區塊 -->
+        <section id="yearly-stats" class="birthday-theme widget yearly-stats" hidden>
+          <div class="yearly-stats__header">
+            <div class="yearly-stats__icon" aria-hidden="true">📊</div>
+            <h3 class="yearly-stats__title"><span class="yearly-stats__year">2025</span> 年度回顧</h3>
+          </div>
+          <div class="yearly-stats__grid">
+            <div class="yearly-stats__item">
+              <span id="stats-total-posts" class="yearly-stats__number">0</span>
+              <span class="yearly-stats__label">篇文章</span>
+            </div>
+            <div class="yearly-stats__item">
+              <span id="stats-total-words" class="yearly-stats__number">0</span>
+              <span class="yearly-stats__label">預估字數</span>
+            </div>
+            <div class="yearly-stats__item">
+              <span id="stats-audio-posts" class="yearly-stats__number">0</span>
+              <span class="yearly-stats__label">語音版</span>
+            </div>
+            <div class="yearly-stats__item">
+              <span id="stats-categories" class="yearly-stats__number">0</span>
+              <span class="yearly-stats__label">個分類</span>
+            </div>
+          </div>
+          <div class="yearly-stats__categories">
+            <p class="yearly-stats__categories-title">分類分佈</p>
+            <div id="stats-category-list" class="yearly-stats__category-list"></div>
+          </div>
         </section>
 
-        <aside class="sidebar">
-          <!-- 年度回顧統計區塊 -->
-          <section id="yearly-stats" class="birthday-theme widget yearly-stats" hidden>
-            <div class="yearly-stats__header">
-              <div class="yearly-stats__icon">📊</div>
-              <h3 class="yearly-stats__title"><span class="yearly-stats__year">2025</span> 年度回顧</h3>
-            </div>
-            <div class="yearly-stats__grid">
-              <div class="yearly-stats__item">
-                <span id="stats-total-posts" class="yearly-stats__number">0</span>
-                <span class="yearly-stats__label">篇文章</span>
-              </div>
-              <div class="yearly-stats__item">
-                <span id="stats-total-words" class="yearly-stats__number">0</span>
-                <span class="yearly-stats__label">預估字數</span>
-              </div>
-              <div class="yearly-stats__item">
-                <span id="stats-audio-posts" class="yearly-stats__number">0</span>
-                <span class="yearly-stats__label">語音版</span>
-              </div>
-              <div class="yearly-stats__item">
-                <span id="stats-categories" class="yearly-stats__number">0</span>
-                <span class="yearly-stats__label">個分類</span>
-              </div>
-            </div>
-            <div class="yearly-stats__categories">
-              <p class="yearly-stats__categories-title">分類分佈</p>
-              <div id="stats-category-list" class="yearly-stats__category-list"></div>
-            </div>
-          </section>
+        <section aria-labelledby="topics-label">
+          <h2 class="label" id="topics-label">TOPICS</h2>
+          <ul id="category-list" class="topics taxonomy-list"></ul>
+        </section>
 
-          <section class="widget widget--profile">
-            <h3 class="widget__title">One finger, full stack</h3>
-            <p>Hi, I'm Jason. 一根手指打字，坐輪椅，用 AI 當義肢寫程式。這裡放我拆開的東西、被擋下來的事，還有追了十一年的 LiSA。</p>
-            <p class="widget__cta"><a href="feed.json">Subscribe via JSON Feed -></a></p>
-          </section>
-          <section class="widget">
-            <h3 class="widget__title">Topics</h3>
-            <ul id="category-list" class="taxonomy-list"></ul>
-            <template id="category-item-template">
-              <li><a href="#" class="taxonomy-link"></a></li>
-            </template>
-          </section>
-          <section class="widget">
-            <h3 class="widget__title">Tag cloud</h3>
-            <div id="tag-cloud" class="tag-cloud"></div>
-          </section>
-          <section class="widget widget--note">
-            <h3 class="widget__title">Behind the scenes</h3>
-            <p>Markdown + JSON + GitHub Pages. No build step, no plugins. Every article lives in git. Fork it, open a PR, or let your AI co-author propose edits through <code>agent.md</code>.</p>
-          </section>
-        </aside>
+        <section class="about widget--profile" aria-labelledby="about-label">
+          <h2 class="label" id="about-label">ONE FINGER, FULL STACK</h2>
+          <p>Hi, I'm Jason. 一根手指打字，坐輪椅，用 AI 當義肢寫程式。這裡放我拆開的東西、被擋下來的事，還有追了十一年的 LiSA。</p>
+          <a href="feed.json">JSON FEED ›</a>
+        </section>
       </div>
-    </main>
+    </div>
+  </main>
 
-    <footer class="site-footer">
-      <div class="wrapper">
-        <p>Hand-built like classic WordPress themes, delivered as static HTML.</p>
-      </div>
-    </footer>
-  </div>
+  <footer class="foot site-footer">
+    <div class="wrap">
+      <p>© 2026 JASON CHIEN</p>
+      <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
+    </div>
+  </footer>
 
   <!-- JavaScript - CSR 核心，延遲載入 -->
   <script src="assets/main.min.js" type="module" defer></script>

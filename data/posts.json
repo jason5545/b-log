@@ -42,7 +42,23 @@
     ],
     "accentColor": "#0f766e",
     "coverImage": "/content/img/2026/claude-desktop-open-session-without-start-session-cover.webp",
-    "readingTime": "5 min"
+    "readingTime": "5 min",
+    "status": {
+      "resolved": [
+        "同一個資料夾開 session：chip 按 Start locally，1 秒開好",
+        "換資料夾開 session：deep link，等 log 出現資料夾信任紀錄再按 Send，連送三次都對"
+      ],
+      "procedures": [
+        "Fable 指揮時，chip 只放「待命」，切成 Opus 之後再傳交接"
+      ],
+      "inop": [
+        "start_session（功能旗標未開）"
+      ],
+      "open": [
+        "Send 按太早是最可能的原因，還不是定論",
+        "Fable 開的 chip，第一輪用哪個模型"
+      ]
+    }
   },
   {
     "slug": "opus-5-5-simplified-chinese-in-thinking-summary",
@@ -422,7 +438,7 @@
       "東南亞",
       "內容平台"
     ],
-    "accentColor": "#9f3f60",
+    "accentColor": "#2e6b75",
     "coverImage": "/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover.webp",
     "readingTime": "6 min"
   },
@@ -2421,7 +2437,7 @@
       "職業歧視",
       "雙重標準"
     ],
-    "accentColor": "#8b2252"
+    "accentColor": "#5b6770"
   },
   {
     "slug": "seven-ai-one-article",

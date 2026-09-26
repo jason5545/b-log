@@ -175,6 +175,38 @@ function validateAudioFile(audioFile, context) {
   }
 }
 
+// posts.json 的選填欄位 status：{ resolved, procedures, inop, open }，都是選填的字串陣列
+const STATUS_KEYS = ['resolved', 'procedures', 'inop', 'open'];
+
+function validateStatus(status, context) {
+  if (!isPlainObject(status)) {
+    addError(`${context} 的 status 必須是物件`);
+    return;
+  }
+
+  for (const key of Object.keys(status)) {
+    if (!STATUS_KEYS.includes(key)) {
+      addError(`${context} 的 status 有未知欄位：${key}（只接受 ${STATUS_KEYS.join('、')}）`);
+    }
+  }
+
+  for (const key of STATUS_KEYS) {
+    if (status[key] === undefined) continue;
+    if (!Array.isArray(status[key])) {
+      addError(`${context} 的 status.${key} 必須是字串陣列`);
+      continue;
+    }
+    if (status[key].some((item) => typeof item !== 'string' || !item.trim())) {
+      addError(`${context} 的 status.${key} 含有空值或非字串`);
+    }
+  }
+
+  const hasItems = STATUS_KEYS.some((key) => Array.isArray(status[key]) && status[key].length > 0);
+  if (!hasItems) {
+    addWarning(`${context} 的 status 沒有任何項目，不會顯示 STATUS 面板`);
+  }
+}
+
 function validateCategories(categoriesConfig) {
   if (!isPlainObject(categoriesConfig) || !isPlainObject(categoriesConfig.categoryMapping)) {
     addError('config/categories.json 缺少 categoryMapping 物件');
@@ -257,6 +289,10 @@ function validatePosts(posts, categoryMapping) {
       addError(`${context} 的 tags 必須是陣列`);
     } else if (post.tags.some((tag) => typeof tag !== 'string' || !tag.trim())) {
       addError(`${context} 的 tags 含有空值或非字串`);
+    }
+
+    if (post.status !== undefined) {
+      validateStatus(post.status, context);
     }
 
     if (post.coverImage && !localSitePathExists(post.coverImage)) {

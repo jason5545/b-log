@@ -1,5 +1,5 @@
 // Simple service worker for extended font caching
-const CACHE_NAME = 'b-log-fonts-v1';
+const CACHE_NAME = 'b-log-fonts-v2';
 const FONT_CACHE_DAYS = 365;
 
 const FONT_URLS = [
