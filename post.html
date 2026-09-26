@@ -60,10 +60,48 @@
 
   <!-- 文章頁專屬關鍵 CSS -->
   <style>
-    .post {
+    /* 單欄：文章、RELATED／LATEST、上下篇與留言依序往下 */
+    .post,
+    .article-aside,
+    .article-foot {
       max-width: 46rem;
       margin-inline: auto;
-      padding-block: 1rem 4rem;
+    }
+    .post { padding-top: 1rem; }
+    .article-foot { padding-bottom: 4rem; }
+    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    @media (min-width: 1100px) {
+      .article-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-rows: auto 1fr;
+        column-gap: 3.5rem;
+        align-items: start;
+      }
+      .post,
+      .article-foot {
+        grid-column: 1;
+        margin-inline: 0;
+      }
+      .article-aside {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        max-width: none;
+        margin-inline: 0;
+        padding-top: 1rem;
+      }
+    }
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
+    @media (min-width: 1100px) and (min-height: 880px) {
+      .article-aside {
+        position: sticky;
+        top: 0.5rem;
+      }
+    }
+    .post__accent {
+      height: 4px;
+      margin: 0 0 1rem;
+      background: var(--post-accent, transparent);
     }
     .post__title {
       margin: 0.8rem 0 1.75rem;
@@ -144,6 +182,7 @@
   <main id="content" class="wrap article-shell">
     <article class="post" id="post-article">
       <nav class="crumb" aria-label="麵包屑"><a href="./">HOME</a> › <span id="breadcrumb-current"></span></nav>
+      <div id="post-accent" class="post__accent" aria-hidden="true"></div>
       <p id="post-meta" class="meta"></p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">Loading</h1>
@@ -153,16 +192,20 @@
       <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
       <div id="post-tags" class="tags" hidden></div>
       <div id="share-links" class="share"></div>
+    </article>
 
+    <aside class="article-aside" aria-label="相關文章與最新文章">
       <section class="related" aria-labelledby="related-label">
         <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="log__list"></ol>
+        <ol id="related-list" class="side-list"></ol>
       </section>
       <section class="related" aria-labelledby="latest-label">
         <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="log__list"></ol>
+        <ol id="latest-sidebar" class="side-list"></ol>
       </section>
+    </aside>
 
+    <div class="article-foot">
       <nav class="article-nav" aria-label="上一篇與下一篇">
         <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
         <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
@@ -182,12 +225,12 @@
           </div>
         </div>
       </section>
-    </article>
+    </div>
   </main>
 
   <footer class="foot site-footer">
     <div class="wrap">
-      <p>© 2026 JASON CHIEN</p>
+      <p>© <span class="foot__year" data-footer-year>2026</span> JASON CHIEN</p>
       <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
     </div>
   </footer>

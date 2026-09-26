@@ -4,6 +4,7 @@ import {
   createThemeManager,
   initSearchUI,
   initWebMcpTools,
+  syncFooterYear,
 } from './shared-ui.js';
 
 const categoryMappingStore = createCategoryMappingStore();
@@ -26,6 +27,7 @@ window.goToRandomPost = goToRandomPost;
 
 document.addEventListener('DOMContentLoaded', () => {
   ThemeManager.init();
+  syncFooterYear();
   initSearchUI({ onSearch: redirectToHomeWithSearch });
   initWebMcpTools({ loadCategoryMapping });
   loadCategoryMapping().catch((error) => {

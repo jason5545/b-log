@@ -58,15 +58,35 @@
 
   <!-- 首頁專屬關鍵 CSS -->
   <style>
+    /* 手機：DOM 順序就是閱讀順序，LATEST、BRIEFING、LOG、側欄 */
     .home-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 19rem;
-      grid-template-areas: "lead brief" "log side";
-      gap: 3rem 3.5rem;
-      padding-block: 2.25rem 4rem;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2.5rem;
+      padding-block: 1.5rem 3rem;
       min-height: 600px;
     }
-    .lead { grid-area: lead; min-width: 0; }
+    .lead,
+    .brief,
+    .log,
+    .side { min-width: 0; }
+    /* 寬螢幕：左欄 LATEST 接 LOG，右欄 BRIEFING 接側欄。
+       BRIEFING 橫跨第 1、2 列、LOG 橫跨第 2、3 列，第 1 列只由 LATEST 決定高度，
+       兩欄各自往下接，不會被對面撐出空白。列距用 margin，第 2 列是空的時候才不會多一段 gap。 */
+    @media (min-width: 961px) {
+      .home-grid {
+        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-rows: auto auto 1fr;
+        gap: 0 3.5rem;
+        padding-block: 2.25rem 4rem;
+      }
+      .lead { grid-area: 1 / 1 / 2 / 2; }
+      .brief { grid-area: 1 / 2 / 3 / 3; }
+      .log { grid-area: 2 / 1 / 4 / 2; margin-top: 3rem; }
+      .side { grid-area: 3 / 2 / 4 / 3; margin-top: 2.5rem; }
+      /* 有篩選時 BRIEFING 隱藏，側欄直接頂上來 */
+      .home-grid:has(> .brief[hidden]) .side { grid-area: 1 / 2 / 4 / 3; margin-top: 0; }
+    }
     .lead__link {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
@@ -91,14 +111,6 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-    }
-    @media (max-width: 960px) {
-      .home-grid {
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-areas: "lead" "brief" "log" "side";
-        gap: 2.5rem;
-        padding-block: 1.5rem 3rem;
-      }
     }
     @media (max-width: 760px) {
       .lead__link { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
@@ -270,10 +282,20 @@
           <ul id="category-list" class="topics taxonomy-list"></ul>
         </section>
 
+        <section aria-labelledby="tags-label">
+          <h2 class="label" id="tags-label">TAGS</h2>
+          <div id="tag-cloud" class="tag-cloud"></div>
+        </section>
+
         <section class="about widget--profile" aria-labelledby="about-label">
           <h2 class="label" id="about-label">ONE FINGER, FULL STACK</h2>
           <p>Hi, I'm Jason. 一根手指打字，坐輪椅，用 AI 當義肢寫程式。這裡放我拆開的東西、被擋下來的事，還有追了十一年的 LiSA。</p>
           <a href="feed.json">JSON FEED ›</a>
+        </section>
+
+        <section class="behind" aria-labelledby="behind-label">
+          <h2 class="label" id="behind-label">BEHIND THE SCENES</h2>
+          <p>Markdown + JSON + GitHub Pages. No build step, no plugins. Every article lives in git. Fork it, open a PR, or let your AI co-author propose edits through <code>agent.md</code>.</p>
         </section>
       </div>
     </div>
@@ -281,7 +303,7 @@
 
   <footer class="foot site-footer">
     <div class="wrap">
-      <p>© 2026 JASON CHIEN</p>
+      <p>© <span class="foot__year" data-footer-year>2026</span> JASON CHIEN</p>
       <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
     </div>
   </footer>

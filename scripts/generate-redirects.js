@@ -6,6 +6,9 @@ const ROOT_DIR = path.join(__dirname, '..');
 const POSTS_PATH = path.join(ROOT_DIR, 'data/posts.json');
 const TEMPLATE_PATH = path.join(ROOT_DIR, 'post.html');
 const HOMEPAGE_PATH = path.join(ROOT_DIR, 'index.html');
+// 頁尾年份要跟著產生時間走的根目錄頁面（文章靜態頁另外在產生時替換）
+const FOOTER_YEAR_PAGES = ['index.html', 'post.html', 'about.html', 'gadgets.html'];
+const FOOTER_YEAR_PATTERN = /(<span class="foot__year" data-footer-year>)\d{4}(<\/span>)/g;
 const POSTS_DIR = path.join(ROOT_DIR, 'content/posts');
 const SITE_BASE_URL = 'https://b-log.to';
 const META_DATE_LOCALE = 'en-US';
@@ -32,6 +35,9 @@ const HER_CATEGORY_HINTS = {
   'シルシ': '我和她的事',
   'Crossing Field': '她說的話',
 };
+// 分類不是她的、但 Jason 9/26 確認算她的文章。accentColor 一律顯示洋紅。
+// 這份白名單在 main.js、generate-redirects.js、validate-content.js 三處要一致（validate 會比對）
+const HER_POST_SLUGS = ['songshan-airport-jpop-parallel-world', 'birthday-avatar-ai-barrier'];
 const STATUS_SECTIONS = {
   resolved: { key: '已修', className: 'ok' },
   procedures: { key: '程序', className: 'proc' },
@@ -45,7 +51,33 @@ const categoriesConfig = JSON.parse(fs.readFileSync(categoriesConfigPath, 'utf8'
 const categoryMapping = categoriesConfig.categoryMapping;
 const knownCategorySlugs = new Set(Object.values(categoryMapping));
 
-const postTemplate = fs.readFileSync(TEMPLATE_PATH, 'utf8');
+// 產生時的年份（台北時間），前端再用當下年份覆寫
+const FOOTER_YEAR = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  timeZone: META_DATE_TIME_ZONE,
+}).format(new Date());
+
+function applyFooterYear(html) {
+  return html.replace(FOOTER_YEAR_PATTERN, (_, open, close) => `${open}${FOOTER_YEAR}${close}`);
+}
+
+function syncFooterYearPages() {
+  for (const page of FOOTER_YEAR_PAGES) {
+    const filePath = path.join(ROOT_DIR, page);
+    const html = fs.readFileSync(filePath, 'utf8');
+    if (html.search(FOOTER_YEAR_PATTERN) === -1) {
+      throw new Error(`${page} 找不到頁尾年份 data-footer-year`);
+    }
+    const updated = applyFooterYear(html);
+    if (updated !== html) {
+      fs.writeFileSync(filePath, updated, 'utf8');
+      console.log(`📅 已更新 ${page} 頁尾年份：${FOOTER_YEAR}`);
+    }
+  }
+}
+
+// post.html 範本在 syncGeneratedContent() 裡先同步年份再讀
+let postTemplate = '';
 
 function escapeHtml(value = '') {
   return String(value)
@@ -114,8 +146,8 @@ function buildHeroPreload(coverImage, sizes = ARTICLE_HERO_SIZES) {
   return `  <link rel="preload" as="image" href="${safeCoverImage}"${responsiveAttrs} fetchpriority="high">\n`;
 }
 
-function buildHeroMarkup(post) {
-  if (!post.coverImage) {
+function buildHeroMarkup(post, hideCover = false) {
+  if (!post.coverImage || hideCover) {
     return '<figure id="post-hero" class="post__cover" hidden></figure>';
   }
 
@@ -191,6 +223,79 @@ function formatReadingTime(post) {
 
 function isHerCategory(category) {
   return Object.prototype.hasOwnProperty.call(HER_CATEGORY_HINTS, category);
+}
+
+function isHerPost(post) {
+  return isHerCategory(post.category) || HER_POST_SLUGS.includes(post.slug);
+}
+
+// accentColor：她的文章一律洋紅 token，其他用存的色碼，沒有就不畫
+function resolveAccent(post) {
+  if (isHerPost(post)) return 'var(--magenta)';
+  const color = String(post.accentColor || '').trim();
+  return /^#[0-9a-f]{3,8}$/i.test(color) ? color : '';
+}
+
+// RELATED／LATEST 側欄列（跟 main.js 的 buildSideRow 同一個結構）。
+// 靜態輸出，側欄在第一屏時不會因為 JS 補內容而把 LATEST 往下推
+function buildSideRowMarkup(post) {
+  const accent = resolveAccent(post);
+  const styleAttr = accent ? ` style="--row-accent:${escapeHtml(accent)}"` : '';
+  const categoryMarkup = post.category
+    ? ` · <span${isHerCategory(post.category) ? ' class="her-cat"' : ''}>${escapeHtml(post.category)}</span>`
+    : '';
+  const audioIndicator = post.hasAudio ? buildAudioIndicatorMarkup() : '';
+  return `<li${styleAttr}><a href="${escapeHtml(slugToPath(post.slug, post.category))}"><span class="side-row__meta">${escapeHtml(formatEcamDate(post.publishedAt))}${categoryMarkup}</span><span class="side-row__title">${escapeHtml(post.title || post.slug)}${audioIndicator}</span></a></li>`;
+}
+
+// 選文規則跟 main.js 的 renderRelatedPosts 一樣：同分類或有共同標籤，新到舊取 3 篇
+function buildRelatedListMarkup(sortedPosts, currentPost) {
+  const related = sortedPosts
+    .filter((post) => post.slug !== currentPost.slug)
+    .filter((post) => {
+      if (currentPost.category && post.category && post.category === currentPost.category) return true;
+      if (!Array.isArray(currentPost.tags) || !Array.isArray(post.tags)) return false;
+      return currentPost.tags.some((tag) => post.tags.includes(tag));
+    })
+    .slice(0, 3);
+
+  const items = related.length
+    ? related.map(buildSideRowMarkup).join('')
+    : '<li class="row--empty">More posts arriving soon.</li>';
+  return `<ol id="related-list" class="side-list" data-prerendered="true">${items}</ol>`;
+}
+
+function buildLatestListMarkup(sortedPosts, currentPost) {
+  const latest = sortedPosts.filter((post) => post.slug !== currentPost.slug).slice(0, 3);
+  return `<ol id="latest-sidebar" class="side-list" data-prerendered="true">${latest.map(buildSideRowMarkup).join('')}</ol>`;
+}
+
+function buildAccentMarkup(post) {
+  const accent = resolveAccent(post);
+  if (!accent) {
+    return '<div id="post-accent" class="post__accent" aria-hidden="true"></div>';
+  }
+  return `<div id="post-accent" class="post__accent" aria-hidden="true" style="--post-accent:${escapeHtml(accent)}"></div>`;
+}
+
+// 去掉 https://b-log.to 與 -480w／-828w／-1200w 後綴，再補上開頭的 /
+function normalizeImagePath(value) {
+  return String(value || '')
+    .trim()
+    .replace(/^https?:\/\/b-log\.to/i, '')
+    .replace(/^(?!\/)/, '/')
+    .replace(/-(?:480|828|1200)w(\.[a-z0-9]+)$/i, '$1');
+}
+
+// 封面跟內文任一張圖是同一張時，文章頁頂部不放封面，只留內文那張（main.js 同一條規則）
+function coverAppearsInBody(coverImage, bodyHtml) {
+  if (!coverImage) return false;
+  const cover = normalizeImagePath(coverImage);
+  for (const match of bodyHtml.matchAll(/<img\b[^>]*?\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)) {
+    const src = (match[1] ?? match[2] ?? '').replace(/&amp;/g, '&');
+    if (normalizeImagePath(src) === cover) return true;
+  }
+  return false;
 }
 
 // 文章 meta 行：24SEP26 · 技術開發 · 5 MIN · JASON CHIEN
@@ -548,11 +653,7 @@ function buildHomepageFeaturedSection(post) {
 }
 
 function syncHomepage(posts) {
-  const sortedPosts = [...posts].sort((a, b) => {
-    const timeA = parseDate(a.publishedAt)?.getTime() || 0;
-    const timeB = parseDate(b.publishedAt)?.getTime() || 0;
-    return timeB - timeA;
-  });
+  const sortedPosts = sortPostsByPublishedAt(posts);
   const featuredPost = sortedPosts[0] || null;
   const homepageTemplate = fs.readFileSync(HOMEPAGE_PATH, 'utf8');
   const homepageOgTitle = extractMetaPropertyContent(homepageTemplate, 'og:title');
@@ -631,7 +732,7 @@ function listGeneratedIndexFiles() {
 }
 
 // 生成完整的文章頁面 HTML（複製 post.html 結構）
-function generatePostHTML(post) {
+function generatePostHTML(post, sortedPosts) {
   const {
     slug,
     title,
@@ -661,9 +762,10 @@ function generatePostHTML(post) {
 
   // 生成完整的 URL
   const fullUrl = `${SITE_BASE_URL}/${categorySlug}/${slug}/`;
-  const heroPreload = buildHeroPreload(coverImage);
-  const heroMarkup = buildHeroMarkup(post);
   const staticPostContent = renderMarkdownForStaticPage(post);
+  const hideCover = coverAppearsInBody(coverImage, staticPostContent);
+  const heroPreload = hideCover ? '' : buildHeroPreload(coverImage);
+  const heroMarkup = buildHeroMarkup(post, hideCover);
   const staticMetaMarkup = buildArticleMetaMarkup(post);
   const staticTagsMarkup = buildArticleTagsMarkup(tags);
 
@@ -689,6 +791,9 @@ function generatePostHTML(post) {
   html = replaceRequired(html, '<article class="post" id="post-article">', `<article class="post" id="post-article"${categoryThemeAttr}>`);
   html = replaceRequired(html, '<figure id="post-hero" class="post__cover" hidden></figure>', heroMarkup);
   html = replaceRequired(html, '<span id="breadcrumb-current"></span>', buildBreadcrumbMarkup(post));
+  html = replaceRequired(html, '<div id="post-accent" class="post__accent" aria-hidden="true"></div>', buildAccentMarkup(post));
+  html = replaceRequired(html, '<ol id="related-list" class="side-list"></ol>', buildRelatedListMarkup(sortedPosts, post));
+  html = replaceRequired(html, '<ol id="latest-sidebar" class="side-list"></ol>', buildLatestListMarkup(sortedPosts, post));
   html = replaceRequired(html, '<p id="post-meta" class="meta"></p>', `<p id="post-meta" class="meta">${staticMetaMarkup}</p>`);
   html = replaceRequired(html, '<p id="post-catline" class="catline" hidden></p>', buildCatlineMarkup(post));
   html = replaceRequired(html, '<h1 id="post-title" class="post__title">Loading</h1>', `<h1 id="post-title" class="post__title">${safeTitle}</h1>`);
@@ -717,6 +822,7 @@ function generatePostHTML(post) {
   html = html.replace(/<meta property="twitter:description" content="" id="twitter-description">/, `<meta property="twitter:description" content="${safeSummary}" id="twitter-description">`);
   html = html.replace(/<meta property="twitter:image" content="" id="twitter-image">/, `<meta property="twitter:image" content="${ogImageUrl}" id="twitter-image">`);
   html = html.replace('</head>', `${buildStructuredData(post, fullUrl, ogImageUrl)}</head>`);
+  html = applyFooterYear(html);
 
   return stripTrailingWhitespace(html);
 }
@@ -768,9 +874,18 @@ function buildCurrentRouteMap(posts) {
   };
 }
 
+function sortPostsByPublishedAt(posts) {
+  return [...posts].sort((a, b) => {
+    const timeA = parseDate(a.publishedAt)?.getTime() || 0;
+    const timeB = parseDate(b.publishedAt)?.getTime() || 0;
+    return timeB - timeA;
+  });
+}
+
 function writeCurrentPostPages(posts) {
   let createdCount = 0;
   let redirectCount = 0;
+  const sortedPosts = sortPostsByPublishedAt(posts);
 
   for (const post of posts) {
     const { slug, title, category } = post;
@@ -785,7 +900,7 @@ function writeCurrentPostPages(posts) {
     ensureDir(postDir);
 
     const indexPath = path.join(postDir, 'index.html');
-    const html = generatePostHTML(post);
+    const html = generatePostHTML(post, sortedPosts);
     fs.writeFileSync(indexPath, html, 'utf8');
 
     console.log(`✅ 已建立：${categorySlug}/${slug}/index.html`);
@@ -878,6 +993,8 @@ function syncGeneratedContent() {
   console.log('開始同步內容產物與 WordPress 風格文章頁面...\n');
 
   const posts = JSON.parse(fs.readFileSync(POSTS_PATH, 'utf8'));
+  syncFooterYearPages();
+  postTemplate = fs.readFileSync(TEMPLATE_PATH, 'utf8');
   syncHomepage(posts);
 
   const routeState = buildCurrentRouteMap(posts);

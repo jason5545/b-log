@@ -170,6 +170,20 @@ export function createRandomPostHandler({
   };
 }
 
+// 頁尾年份：靜態 HTML 放產生時的年份，這裡換成台北時間的今年
+export function syncFooterYear() {
+  const year = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    timeZone: 'Asia/Taipei'
+  }).format(new Date());
+
+  document.querySelectorAll('[data-footer-year]').forEach((element) => {
+    if (element.textContent !== year) {
+      element.textContent = year;
+    }
+  });
+}
+
 function clampToolLimit(value, fallback = 10, max = 20) {
   const parsed = Number.parseInt(value, 10);
   if (!Number.isFinite(parsed) || parsed <= 0) return fallback;

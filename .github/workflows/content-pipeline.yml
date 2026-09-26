@@ -149,7 +149,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add index.html data/posts.json feed.json sitemap.xml assets/main.min.js assets/main-static.min.js assets/styles.min.css content/img/ */*/index.html
+          git add index.html post.html about.html gadgets.html data/posts.json feed.json sitemap.xml assets/main.min.js assets/main-static.min.js assets/styles.min.css content/img/ */*/index.html
           git commit -m "chore: sync content artifacts
 
           - regenerate static article routes

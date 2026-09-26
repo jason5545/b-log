@@ -17,6 +17,40 @@ const paths = {
 const issues = {
   errors: [],
   warnings: [],
+  notes: [],
+};
+
+// 洋紅只給 LiSA（AGENTS.md）：她的兩個分類，加上分類不是她的、但 Jason 9/26 確認算她的文章。
+// HER_POST_SLUGS 在 main.js、generate-redirects.js、validate-content.js 三處要一致，下面會比對
+const HER_CATEGORIES = ['シルシ', 'Crossing Field'];
+const HER_POST_SLUGS = ['songshan-airport-jpop-parallel-world', 'birthday-avatar-ai-barrier'];
+const HER_POST_SLUG_SOURCES = ['assets/main.js', 'scripts/generate-redirects.js'];
+// 洋紅範圍：色相 285–350°、HSL 飽和度 > 35%
+const MAGENTA_HUE_MIN = 285;
+const MAGENTA_HUE_MAX = 350;
+const MAGENTA_SATURATION_MIN = 35;
+// 要掃的樣式：外部 CSS 與四個根目錄 HTML 的 inline style
+const STYLE_SCAN_CSS_DIRS = ['assets/css'];
+const STYLE_SCAN_CSS_FILES = ['assets/styles.css'];
+const STYLE_SCAN_HTML_FILES = ['index.html', 'post.html', 'about.html', 'gadgets.html'];
+// 可能落在洋紅範圍的 CSS 具名色（實際是否算洋紅仍用色相與飽和度判斷）
+const NAMED_COLORS = {
+  magenta: '#ff00ff',
+  fuchsia: '#ff00ff',
+  hotpink: '#ff69b4',
+  deeppink: '#ff1493',
+  mediumvioletred: '#c71585',
+  palevioletred: '#db7093',
+  orchid: '#da70d6',
+  mediumorchid: '#ba55d3',
+  darkorchid: '#9932cc',
+  violet: '#ee82ee',
+  plum: '#dda0dd',
+  darkmagenta: '#8b008b',
+  purple: '#800080',
+  pink: '#ffc0cb',
+  lightpink: '#ffb6c1',
+  crimson: '#dc143c',
 };
 
 function addError(message) {
@@ -25,6 +59,10 @@ function addError(message) {
 
 function addWarning(message) {
   issues.warnings.push(message);
+}
+
+function addNote(message) {
+  issues.notes.push(message);
 }
 
 function readJson(filePath, label) {
@@ -109,6 +147,183 @@ function localSitePathExists(resourcePath) {
   const localPath = getLocalPathFromSitePath(resourcePath);
   if (!localPath) return true;
   return fs.existsSync(localPath);
+}
+
+function isHerPost(post) {
+  return HER_CATEGORIES.includes(post.category) || HER_POST_SLUGS.includes(post.slug);
+}
+
+// 把 #rgb、#rrggbb、rgb()、hsl() 轉成 HSL（色相 0–360、飽和度與亮度 0–100）
+function rgbToHsl(r, g, b) {
+  const rn = r / 255;
+  const gn = g / 255;
+  const bn = b / 255;
+  const max = Math.max(rn, gn, bn);
+  const min = Math.min(rn, gn, bn);
+  const lightness = (max + min) / 2;
+  const delta = max - min;
+  if (!delta) return { h: 0, s: 0, l: lightness * 100 };
+
+  const saturation = delta / (1 - Math.abs(2 * lightness - 1));
+  let hue;
+  if (max === rn) hue = 60 * (((gn - bn) / delta) % 6);
+  else if (max === gn) hue = 60 * ((bn - rn) / delta + 2);
+  else hue = 60 * ((rn - gn) / delta + 4);
+  if (hue < 0) hue += 360;
+  return { h: hue, s: saturation * 100, l: lightness * 100 };
+}
+
+function hexToHsl(hex) {
+  let value = hex.replace('#', '');
+  if (value.length === 3 || value.length === 4) {
+    value = value.slice(0, 3).split('').map((char) => char + char).join('');
+  }
+  value = value.slice(0, 6);
+  return rgbToHsl(
+    Number.parseInt(value.slice(0, 2), 16),
+    Number.parseInt(value.slice(2, 4), 16),
+    Number.parseInt(value.slice(4, 6), 16)
+  );
+}
+
+function isMagentaRange({ h, s }) {
+  return h >= MAGENTA_HUE_MIN && h <= MAGENTA_HUE_MAX && s > MAGENTA_SATURATION_MIN;
+}
+
+function formatHsl({ h, s }) {
+  return `色相 ${h.toFixed(1)}°、飽和度 ${s.toFixed(1)}%`;
+}
+
+// 找出一段 CSS 值裡的所有顏色
+function extractColors(value) {
+  const colors = [];
+  for (const match of value.matchAll(/#([0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})\b/gi)) {
+    colors.push({ text: match[0], hsl: hexToHsl(match[0]) });
+  }
+  for (const match of value.matchAll(/rgba?\(\s*(\d+(?:\.\d+)?)[\s,]+(\d+(?:\.\d+)?)[\s,]+(\d+(?:\.\d+)?)/gi)) {
+    colors.push({ text: match[0], hsl: rgbToHsl(Number(match[1]), Number(match[2]), Number(match[3])) });
+  }
+  for (const match of value.matchAll(/hsla?\(\s*(-?\d+(?:\.\d+)?)(?:deg)?[\s,]+(\d+(?:\.\d+)?)%[\s,]+(\d+(?:\.\d+)?)%/gi)) {
+    const hue = ((Number(match[1]) % 360) + 360) % 360;
+    colors.push({ text: match[0], hsl: { h: hue, s: Number(match[2]), l: Number(match[3]) } });
+  }
+  // 具名色要是獨立的字，var(--magenta) 裡的 magenta 是 token 名稱，不算
+  for (const match of value.matchAll(/(?<![\w-])([a-z]+)(?![\w-])/gi)) {
+    const named = NAMED_COLORS[match[1].toLowerCase()];
+    if (named) colors.push({ text: match[0], hsl: hexToHsl(named) });
+  }
+  return colors;
+}
+
+// 掃一段 CSS 的每一條宣告，回傳洋紅範圍的顏色。
+// 樣式表只看最內層 {} 裡的宣告，選擇器裡的 #id 不會被當成色碼；style 屬性整段都是宣告
+function findMagentaDeclarations(cssText, { isDeclarationList = false } = {}) {
+  const results = [];
+  const withoutComments = cssText.replace(/\/\*[\s\S]*?\*\//g, (comment) => comment.replace(/[^\n]/g, ' '));
+  const blocks = isDeclarationList
+    ? [{ text: withoutComments, offset: 0 }]
+    : [...withoutComments.matchAll(/\{([^{}]*)\}/g)].map((match) => ({ text: match[1], offset: match.index + 1 }));
+
+  for (const block of blocks) {
+    for (const match of block.text.matchAll(/(--[\w-]+|[a-z-]+)\s*:\s*([^;]+)/gi)) {
+      const [, property, value] = match;
+      for (const color of extractColors(value)) {
+        if (!isMagentaRange(color.hsl)) continue;
+        const line = withoutComments.slice(0, block.offset + match.index).split('\n').length;
+        results.push({ property: property.toLowerCase(), color, line });
+      }
+    }
+  }
+  return results;
+}
+
+// (a) accentColor 在洋紅範圍的，只准出現在她的文章
+function validateAccentColors(posts) {
+  let withAccent = 0;
+  const magentaAccents = [];
+
+  for (const post of posts) {
+    if (post.accentColor === undefined) continue;
+    const context = post.slug || '(沒有 slug)';
+    if (typeof post.accentColor !== 'string' || !/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(post.accentColor)) {
+      addError(`${context} 的 accentColor 必須是 #rgb 或 #rrggbb：${post.accentColor}`);
+      continue;
+    }
+
+    withAccent += 1;
+    const hsl = hexToHsl(post.accentColor);
+    if (!isMagentaRange(hsl)) continue;
+
+    magentaAccents.push(post.slug);
+    if (!isHerPost(post)) {
+      addError(`${context} 的 accentColor ${post.accentColor} 在洋紅範圍（${formatHsl(hsl)}），洋紅只給 LiSA 的文章`);
+    }
+  }
+
+  const violations = magentaAccents.filter((slug) => !isHerPost(posts.find((post) => post.slug === slug)));
+  addNote(`洋紅檢查 (a) accentColor：${withAccent} 篇有 accentColor，洋紅範圍 ${magentaAccents.length} 篇，違規 ${violations.length} 篇${magentaAccents.length ? `（${magentaAccents.join('、')}）` : ''}`);
+}
+
+// (b) 樣式表與根目錄 HTML 的 inline style，洋紅範圍的色碼只准出現在 --magenta 宣告
+function validateMagentaInStyles() {
+  const sources = [];
+
+  for (const file of STYLE_SCAN_CSS_FILES) {
+    sources.push({ label: file, css: readText(path.join(ROOT_DIR, file), file) });
+  }
+  for (const dir of STYLE_SCAN_CSS_DIRS) {
+    const dirPath = path.join(ROOT_DIR, dir);
+    if (!fs.existsSync(dirPath)) continue;
+    for (const file of fs.readdirSync(dirPath).filter((name) => name.endsWith('.css')).sort()) {
+      const relativePath = `${dir}/${file}`;
+      sources.push({ label: relativePath, css: readText(path.join(dirPath, file), relativePath) });
+    }
+  }
+  for (const file of STYLE_SCAN_HTML_FILES) {
+    const html = readText(path.join(ROOT_DIR, file), file);
+    for (const match of html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)) {
+      const startLine = html.slice(0, match.index).split('\n').length - 1;
+      sources.push({ label: `${file} <style>`, css: match[1], lineOffset: startLine });
+    }
+    for (const match of html.matchAll(/\sstyle\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)) {
+      const line = html.slice(0, match.index).split('\n').length;
+      sources.push({ label: `${file} style=""`, css: match[1] ?? match[2] ?? '', fixedLine: line, isDeclarationList: true });
+    }
+  }
+
+  let allowed = 0;
+  let violations = 0;
+  for (const source of sources) {
+    for (const { property, color, line } of findMagentaDeclarations(source.css, source)) {
+      const location = source.fixedLine ?? (line + (source.lineOffset || 0));
+      if (property === '--magenta') {
+        allowed += 1;
+        continue;
+      }
+      violations += 1;
+      addError(`${source.label}:${location} 的 ${property} 用了洋紅範圍的 ${color.text}（${formatHsl(color.hsl)}），洋紅只能經由 --magenta token`);
+    }
+  }
+
+  const fileCount = new Set(sources.map((source) => source.label.split(' ')[0])).size;
+  addNote(`洋紅檢查 (b) 樣式：掃 ${fileCount} 個檔案（${sources.length} 段樣式），洋紅範圍色碼 ${allowed + violations} 處，${allowed} 處是 --magenta 宣告，違規 ${violations} 處`);
+}
+
+// 白名單三處一致：main.js 與 generate-redirects.js 的 HER_POST_SLUGS 要跟這裡一樣
+function validateHerPostSlugSources() {
+  const expected = JSON.stringify([...HER_POST_SLUGS].sort());
+  for (const file of HER_POST_SLUG_SOURCES) {
+    const source = readText(path.join(ROOT_DIR, file), file);
+    const match = source.match(/const HER_POST_SLUGS = \[([^\]]*)\]/);
+    if (!match) {
+      addError(`${file} 找不到 HER_POST_SLUGS 白名單`);
+      continue;
+    }
+    const slugs = [...match[1].matchAll(/'([^']+)'|"([^"]+)"/g)].map((item) => item[1] ?? item[2]).sort();
+    if (JSON.stringify(slugs) !== expected) {
+      addError(`${file} 的 HER_POST_SLUGS 跟 validate-content.js 不一致：${slugs.join('、')}`);
+    }
+  }
 }
 
 function extractAudioMarkers(markdown) {
@@ -521,6 +736,16 @@ function main() {
   }
 
   validateGeneratedRoutes(posts, categoryMapping);
+
+  if (Array.isArray(posts)) {
+    validateAccentColors(posts);
+  }
+  validateMagentaInStyles();
+  validateHerPostSlugSources();
+
+  for (const note of issues.notes) {
+    console.log(`ℹ️  ${note}`);
+  }
 
   for (const warning of issues.warnings) {
     console.warn(`⚠️  ${warning}`);

@@ -18,7 +18,7 @@
 
 ## 洋紅只給 LiSA
 
-Jason 2026/9/26 指定的硬規則。外觀改版方向是 Airbus ECAM 的色彩語意（青色＝可以點、綠色＝已解決、琥珀＝要注意），當天只定了概念，還沒實作；這條不管改版做到哪裡都適用。
+Jason 2026/9/26 指定的硬規則。外觀改版方向是 Airbus ECAM 的色彩語意（青色＝可以點、綠色＝已解決、琥珀＝要注意），d81239dc 已經上線；這條不管之後怎麼改都適用。
 
 - 洋紅只用在跟 LiSA 有關的東西：シルシ、Crossing Field 兩個分類的標籤與列表分類欄、TOPICS 裡這兩項、她的歌詞和訪談回答的出處與說話者標記、跟她有關的紀念區塊。
 - 其他地方一律不用洋紅，也不用接近洋紅的粉紅、紫紅：連結、hover、按鈕、強調、行內程式碼、語法突顯、別人的說話者標記（Crossing Field 裡的「媽媽」用灰色）都不行。
@@ -26,8 +26,12 @@ Jason 2026/9/26 指定的硬規則。外觀改版方向是 Airbus ECAM 的色彩
 - 洋紅只有一組 token（mock 是深色 `#ee7ad0`、淺色 `#a3226f`，Jason 可能另外指定）。要換色就改 token，不開第二種粉紅。
 - 為什麼：ECAM 的洋紅保留給特定狀況的訊息，這個站把它保留給她。
 
-目前違規（2026/9/26 掃 `assets/styles.css` 與 `data/posts.json`，判準是色相 285–350°、飽和度 > 35%；封面 SVG 未掃）：
+目前狀態（2026/9/26 第二輪修正後）：
 
-- `.article-body code` 與 `.article-body .token.tag` 用 `#f38ba8`，所有技術文章的行內程式碼都是粉紅。
-- 2 篇 `accentColor` 是粉紅系、內文沒提到 LiSA，要換色：`asian-sex-diary-no-longer-johns-diary`（`#9f3f60`）、`japan-av-industry-hypocrisy`（`#8b2252`）。
-- 算她的、不算違規：Crossing Field 主題、十週年紀念區塊、12 月生日橫幅，以及分類不是 LiSA 但 Jason 9/26 確認算她的 `songshan-airport-jpop-parallel-world`（`#e85d75`）、`birthday-avatar-ai-barrier`（`#e91e8c`）。改版時這些色碼一併換成洋紅 token。
+- d81239dc 之後違規已清零：行內程式碼與語法突顯不再是粉紅；`asian-sex-diary-no-longer-johns-diary`、`japan-av-industry-hypocrisy` 的 `accentColor` 已換成 `#2e6b75`、`#5b6770`。
+- `npm run validate`（[scripts/validate-content.js](scripts/validate-content.js)）會擋兩件事，判準都是色相 285–350°、HSL 飽和度 > 35%：
+  - (a) `data/posts.json` 的 `accentColor` 落在這個範圍的，只准出現在她的文章。
+  - (b) `assets/styles.css`、`assets/css/*.css`，以及 `index.html`、`post.html`、`about.html`、`gadgets.html` 的 inline style（`<style>` 與 `style=""`），這個範圍的色碼只准出現在 `--magenta:` 宣告。
+- 她的文章＝シルシ、Crossing Field 兩個分類，加上白名單兩篇：`songshan-airport-jpop-parallel-world`、`birthday-avatar-ai-barrier`（分類是文化觀察，Jason 9/26 確認算她的）。這些文章的 accentColor 在列表左緣色條與文章頁標題色條一律顯示 `var(--magenta)`，不用存的色碼。
+- 白名單在 `assets/main.js`、`scripts/generate-redirects.js`、`scripts/validate-content.js` 三處的 `HER_POST_SLUGS`，validate 會比對三處是否一致；要加減文章，三處一起改。
+- 封面 SVG 仍未掃。

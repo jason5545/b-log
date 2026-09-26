@@ -64,10 +64,48 @@
 
   <!-- 文章頁專屬關鍵 CSS -->
   <style>
-    .post {
+    /* 單欄：文章、RELATED／LATEST、上下篇與留言依序往下 */
+    .post,
+    .article-aside,
+    .article-foot {
       max-width: 46rem;
       margin-inline: auto;
-      padding-block: 1rem 4rem;
+    }
+    .post { padding-top: 1rem; }
+    .article-foot { padding-bottom: 4rem; }
+    /* 寬螢幕：欄寬跟首頁 .home-grid 一樣，右欄放 RELATED／LATEST */
+    @media (min-width: 1100px) {
+      .article-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-rows: auto 1fr;
+        column-gap: 3.5rem;
+        align-items: start;
+      }
+      .post,
+      .article-foot {
+        grid-column: 1;
+        margin-inline: 0;
+      }
+      .article-aside {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        max-width: none;
+        margin-inline: 0;
+        padding-top: 1rem;
+      }
+    }
+    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉 */
+    @media (min-width: 1100px) and (min-height: 880px) {
+      .article-aside {
+        position: sticky;
+        top: 0.5rem;
+      }
+    }
+    .post__accent {
+      height: 4px;
+      margin: 0 0 1rem;
+      background: var(--post-accent, transparent);
     }
     .post__title {
       margin: 0.8rem 0 1.75rem;
@@ -149,6 +187,7 @@
   <main id="content" class="wrap article-shell">
     <article class="post" id="post-article" data-category-theme="cultural-insights">
       <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=%E6%96%87%E5%8C%96%E8%A7%80%E5%AF%9F">文化觀察</a></span></nav>
+      <div id="post-accent" class="post__accent" aria-hidden="true" style="--post-accent:#e74c3c"></div>
       <p id="post-meta" class="meta">11JAN26 · 文化觀察 · 4 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">身障票不是你的入場券生意</h1>
@@ -172,16 +211,20 @@
       <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
       <div id="post-tags" class="tags"><span class="meta">TAGS</span><a href="/?tag=%E8%BA%AB%E5%BF%83%E9%9A%9C%E7%A4%99">身心障礙</a><a href="/?tag=%E6%BC%94%E5%94%B1%E6%9C%83">演唱會</a><a href="/?tag=%E8%B3%BC%E7%A5%A8%E7%B3%BB%E7%B5%B1">購票系統</a><a href="/?tag=%E9%BB%83%E7%89%9B">黃牛</a><a href="/?tag=%E7%A4%BE%E6%9C%83%E8%A7%80%E5%AF%9F">社會觀察</a></div>
       <div id="share-links" class="share"></div>
+    </article>
 
+    <aside class="article-aside" aria-label="相關文章與最新文章">
       <section class="related" aria-labelledby="related-label">
         <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="log__list"></ol>
+        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
       </section>
       <section class="related" aria-labelledby="latest-label">
         <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="log__list"></ol>
+        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
       </section>
+    </aside>
 
+    <div class="article-foot">
       <nav class="article-nav" aria-label="上一篇與下一篇">
         <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
         <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
@@ -201,12 +244,12 @@
           </div>
         </div>
       </section>
-    </article>
+    </div>
   </main>
 
   <footer class="foot site-footer">
     <div class="wrap">
-      <p>© 2026 JASON CHIEN</p>
+      <p>© <span class="foot__year" data-footer-year>2026</span> JASON CHIEN</p>
       <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
     </div>
   </footer>

@@ -5,6 +5,7 @@ import {
   createThemeManager,
   initSearchUI,
   initWebMcpTools,
+  syncFooterYear,
 } from './shared-ui.js';
 
 const POSTS_ROOT = '/content/posts/';
@@ -25,6 +26,11 @@ const HER_CATEGORY_HINTS = {
   'シルシ': '我和她的事',
   'Crossing Field': '她說的話',
 };
+// 分類不是她的、但 Jason 9/26 確認算她的文章。accentColor 一律顯示洋紅。
+// 這份白名單在 main.js、generate-redirects.js、validate-content.js 三處要一致（validate 會比對）
+const HER_POST_SLUGS = ['songshan-airport-jpop-parallel-world', 'birthday-avatar-ai-barrier'];
+const HER_TAG_PATTERN = /lisa|シルシ/i;
+const TAG_CLOUD_VISIBLE_LIMIT = 14;
 const AUDIO_ICON_SVG = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
   <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
 </svg>`;
@@ -1103,6 +1109,7 @@ const AudioPlayerManager = {
 document.addEventListener('DOMContentLoaded', async () => {
   // 初始化深色模式
   ThemeManager.init();
+  syncFooterYear();
   // 初始化語音播放器
   AudioPlayerManager.init();
   // 初始化搜尋功能（所有頁面）
@@ -1176,6 +1183,8 @@ async function renderHomepage() {
 
   // TOPICS 一律列出全部分類，目前篩選的分類標記 aria-current
   populateCategoryList(allPosts, filterCategory);
+  populateTagCloud(allPosts, filterTag);
+  applyBriefingAccents(allPosts);
 
   if (!posts.length) {
     if (postsEmptyEl) postsEmptyEl.hidden = false;
@@ -1226,8 +1235,10 @@ async function renderHomepage() {
 
   renderFeaturedPost(posts[0]);
 
-  // LOG 從最新一篇開始列，跟 LATEST 重複一列是刻意的：LOG 是完整的時間序
-  allFilteredPosts = posts;
+  // 沒有篩選時 LATEST 已經是最新一篇，LOG 從第二篇開始，載入更多也不會再出現；
+  // 有篩選時列出全部符合的，包含 LATEST 那篇
+  const isFiltered = Boolean(filterTag || filterCategory || searchQuery);
+  allFilteredPosts = isFiltered ? posts : posts.slice(1);
   visibleCount = 0;
   postsListEl.innerHTML = '';
 
@@ -1310,6 +1321,7 @@ function updateLoadMoreButton() {
 function buildLogRow(post) {
   const li = document.createElement('li');
   li.className = isHerCategory(post.category) ? 'row row--her' : 'row';
+  applyRowAccent(li, post);
 
   const link = document.createElement('a');
   link.href = slugToPath(post.slug, post.category);
@@ -1336,6 +1348,64 @@ function buildLogRow(post) {
   link.append(date, category, title, time);
   li.appendChild(link);
   return li;
+}
+
+// RELATED／LATEST 側欄列：第一行「日期 · 分類」，第二行標題
+function buildSideRow(post) {
+  const li = document.createElement('li');
+  applyRowAccent(li, post);
+
+  const link = document.createElement('a');
+  link.href = slugToPath(post.slug, post.category);
+
+  const meta = document.createElement('span');
+  meta.className = 'side-row__meta';
+  meta.textContent = formatEcamDate(post.publishedDate);
+  if (post.category) {
+    const category = document.createElement('span');
+    category.textContent = post.category;
+    if (isHerCategory(post.category)) category.className = 'her-cat';
+    meta.append(' · ', category);
+  }
+
+  const title = document.createElement('span');
+  title.className = 'side-row__title';
+  title.textContent = post.title || post.slug;
+  if (post.hasAudio) {
+    title.appendChild(buildAudioIndicator('audio-indicator'));
+  }
+
+  link.append(meta, title);
+  li.appendChild(link);
+  return li;
+}
+
+// 列左緣的 accentColor 色條：她的文章一律洋紅，其他用存的色碼，沒有就不畫
+function applyRowAccent(element, post) {
+  const accent = resolveAccent(post);
+  if (accent) element.style.setProperty('--row-accent', accent);
+}
+
+function resolveAccent(post) {
+  if (isHerPost(post)) return 'var(--magenta)';
+  const color = String(post?.accentColor || '').trim();
+  return /^#[0-9a-f]{3,8}$/i.test(color) ? color : '';
+}
+
+function isHerPost(post) {
+  return isHerCategory(post?.category) || HER_POST_SLUGS.includes(post?.slug);
+}
+
+// BRIEFING 是寫死在 index.html 的三篇，依連結找回文章補上色條
+function applyBriefingAccents(posts) {
+  const bySlug = new Map(posts.map((post) => [post.slug, post]));
+  document.querySelectorAll('.brief li').forEach((item) => {
+    const link = item.querySelector('a[href]');
+    if (!link) return;
+    const slug = link.getAttribute('href').split('/').filter(Boolean).pop();
+    const post = bySlug.get(slug);
+    if (post) applyRowAccent(item, post);
+  });
 }
 
 function buildAudioIndicator(className) {
@@ -1383,6 +1453,7 @@ async function renderArticle() {
   const tagsEl = document.querySelector('#post-tags');
   const statusEl = document.querySelector('#post-status');
   const articleEl = document.querySelector('#post-article');
+  const accentEl = document.querySelector('#post-accent');
 
   if (breadcrumbCurrent) {
     breadcrumbCurrent.replaceChildren();
@@ -1395,8 +1466,17 @@ async function renderArticle() {
     }
   }
 
-  renderArticleCover(heroEl, post);
   applyCategoryTheme(articleEl, post);
+
+  // 標題區上方的 accentColor 色條（靜態頁已經直接輸出，這裡只補未預先渲染的情況）
+  if (accentEl) {
+    const accent = resolveAccent(post);
+    if (accent) {
+      accentEl.style.setProperty('--post-accent', accent);
+    } else {
+      accentEl.style.removeProperty('--post-accent');
+    }
+  }
 
   if (catlineEl) {
     if (isHerCategory(post.category)) {
@@ -1447,6 +1527,8 @@ async function renderArticle() {
 
   populateTagBadges(tagsEl, post.tags);
   await renderMarkdownContent(slug, contentEl);
+  // 封面要等內文到位才知道內文有沒有同一張圖
+  renderArticleCover(heroEl, post, contentEl);
 
   // 重新初始化語音播放器（因為播放器 HTML 是動態生成的）
   AudioPlayerManager.init();
@@ -1666,6 +1748,101 @@ function populateCategoryList(posts, activeCategory = '') {
       li.appendChild(link);
       listEl.appendChild(li);
     });
+}
+
+// TAGS：所有標籤不分大小寫合併、依次數排序，預設顯示前 14 個，其餘收進 Show all
+function populateTagCloud(posts, activeTag = '') {
+  const cloudEl = document.querySelector('#tag-cloud');
+  if (!cloudEl || cloudEl.dataset.rendered === 'true') {
+    markActiveTag(cloudEl, activeTag);
+    return;
+  }
+
+  cloudEl.innerHTML = '';
+  const tagMap = new Map();
+
+  posts.forEach((post) => {
+    if (!Array.isArray(post.tags)) return;
+    post.tags.forEach((tag) => {
+      const value = String(tag || '').trim();
+      if (!value) return;
+      const key = value.toLowerCase();
+      const entry = tagMap.get(key) || { label: value, count: 0 };
+      entry.count += 1;
+      entry.label = value;
+      tagMap.set(key, entry);
+    });
+  });
+
+  if (!tagMap.size) {
+    const empty = document.createElement('span');
+    empty.className = 'meta';
+    empty.textContent = 'No tags yet.';
+    cloudEl.appendChild(empty);
+    return;
+  }
+
+  const entries = Array.from(tagMap.values()).sort((a, b) => b.count - a.count);
+  const counts = entries.map((entry) => entry.count);
+  const min = Math.min(...counts);
+  const max = Math.max(...counts);
+
+  const renderTags = (list, before = null) => {
+    const fragment = document.createDocumentFragment();
+    list.forEach((entry) => {
+      const link = document.createElement('a');
+      link.href = `/?tag=${encodeURIComponent(entry.label)}`;
+      link.dataset.tag = entry.label.toLowerCase();
+      if (HER_TAG_PATTERN.test(entry.label)) link.className = 'her';
+
+      const size = max === min ? 0.95 : 0.85 + ((entry.count - min) / (max - min)) * 0.5;
+      link.style.fontSize = `${size.toFixed(2)}rem`;
+
+      const count = document.createElement('span');
+      count.className = 'n';
+      count.textContent = String(entry.count);
+
+      link.append(entry.label, count);
+      fragment.appendChild(link);
+    });
+    cloudEl.insertBefore(fragment, before);
+  };
+
+  renderTags(entries.slice(0, TAG_CLOUD_VISIBLE_LIMIT));
+
+  const remainingTags = entries.slice(TAG_CLOUD_VISIBLE_LIMIT);
+  if (remainingTags.length > 0) {
+    const moreBtn = document.createElement('button');
+    moreBtn.type = 'button';
+    moreBtn.className = 'tag-cloud__more';
+    moreBtn.textContent = `Show all (${entries.length})`;
+    moreBtn.setAttribute('aria-expanded', 'false');
+    moreBtn.addEventListener('click', () => {
+      const firstNewIndex = TAG_CLOUD_VISIBLE_LIMIT;
+      renderTags(remainingTags, moreBtn);
+      moreBtn.remove();
+      markActiveTag(cloudEl, new URLSearchParams(window.location.search).get('tag'));
+      // 焦點移到展開的第一個標籤，鍵盤使用者不用從頭 Tab
+      const links = cloudEl.querySelectorAll('a');
+      if (links[firstNewIndex]) links[firstNewIndex].focus();
+    });
+    cloudEl.appendChild(moreBtn);
+  }
+
+  cloudEl.dataset.rendered = 'true';
+  markActiveTag(cloudEl, activeTag);
+}
+
+function markActiveTag(cloudEl, activeTag) {
+  if (!cloudEl) return;
+  const active = String(activeTag || '').toLowerCase();
+  cloudEl.querySelectorAll('a[data-tag]').forEach((link) => {
+    if (active && link.dataset.tag === active) {
+      link.setAttribute('aria-current', 'page');
+    } else {
+      link.removeAttribute('aria-current');
+    }
+  });
 }
 
 async function renderMarkdownContent(slug, contentEl) {
@@ -2018,53 +2195,61 @@ function applyBasicSyntaxHighlighting(codeBlock, language) {
 }
 
 function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
+// 佔位符只用私用區字元：沒有任何 token 規則會比對到它，escapeHtml 也不會動到它
+const TOKEN_PLACEHOLDER_OPEN = '';
+const TOKEN_PLACEHOLDER_CLOSE = '';
+const TOKEN_DIGIT_BASE = 0xE100;
+const TOKEN_PLACEHOLDER_PATTERN = /([-]+)/g;
+const PRIVATE_USE_PATTERN = /[-]/;
+
 function highlightLine(line) {
-  if (!line.trim()) return escapeHtml(line);
+  if (!line.trim() || PRIVATE_USE_PATTERN.test(line)) return escapeHtml(line);
 
   const tokens = [];
 
-  // 使用字母前綴避免數字正則匹配到佔位符
+  // 比對到的片段先換成佔位符，最後才整行跳脫一次再換回來，
+  // 原始碼裡的 &、<、> 只會被跳脫一次（以前先跳脫再比對運算子，& 會變成 &amp;）
   function protect(match, tokenClass) {
-    const id = `T${tokens.length}X`;
-    tokens.push(`<span class="token ${tokenClass}">${match}</span>`);
-    return `___${id}___`;
+    const id = String(tokens.length)
+      .split('')
+      .map((digit) => String.fromCharCode(TOKEN_DIGIT_BASE + Number(digit)))
+      .join('');
+    tokens.push(`<span class="token ${tokenClass}">${escapeHtml(match)}</span>`);
+    return `${TOKEN_PLACEHOLDER_OPEN}${id}${TOKEN_PLACEHOLDER_CLOSE}`;
   }
 
-  // 1. 先保護 < 和 > 符號（在 escapeHtml 之前）
   let result = line;
-  result = result.replace(/</g, (match) => protect('&lt;', 'punctuation'));
-  result = result.replace(/>/g, (match) => protect('&gt;', 'punctuation'));
 
-  // 2. 轉譯其他 HTML 字符
-  result = escapeHtml(result);
-
-  // 3. 保護字符串
+  // 1. 字串
   result = result.replace(/(["'`])(?:(?=(\\?))\2.)*?\1/g, (match) => protect(match, 'string'));
 
-  // 4. 保護並標記關鍵字
+  // 2. 關鍵字
   result = result.replace(/\b(function|const|let|var|if|else|for|while|return|class|extends|import|export|from|default|async|await|try|catch|finally|throw|new|this|super)\b/g, (match) => protect(match, 'keyword'));
 
-  // 5. 保護並標記數字
+  // 3. 數字
   result = result.replace(/\b(\d+)\b/g, (match) => protect(match, 'number'));
 
-  // 6. 保護並標記內建對象
+  // 4. 內建物件
   result = result.replace(/\b(document|window|console|Array|Object|String|Number|Boolean|Date|RegExp|Math|JSON)\b/g, (match) => protect(match, 'variable'));
 
-  // 7. 處理運算符和標點
-  result = result.replace(/([+\-*/%=!&|]{1,3}|[;:,(){}[\]])/g, '<span class="token punctuation">$1</span>');
+  // 5. 運算子與標點（含 < 和 >）
+  result = result.replace(/[+\-*/%=!&|<>]{1,3}|[;:,(){}[\]]/g, (match) => protect(match, 'punctuation'));
 
-  // 8. 還原所有被保護的 token
-  tokens.forEach((token, idx) => {
-    const id = `T${idx}X`;
-    result = result.split(`___${id}___`).join(token);
+  // 6. 剩下的文字跳脫一次，再把佔位符換回 token
+  return escapeHtml(result).replace(TOKEN_PLACEHOLDER_PATTERN, (_, id) => {
+    const index = Number(
+      id.split('').map((char) => char.charCodeAt(0) - TOKEN_DIGIT_BASE).join('')
+    );
+    return tokens[index];
   });
-
-  return result;
 }
 
 function renderShareLinks(post) {
@@ -2168,7 +2353,8 @@ function renderRelatedPosts(posts, currentPost) {
   const relatedList = document.querySelector('#related-list');
   const latestList = document.querySelector('#latest-sidebar');
 
-  if (relatedList) {
+  // 靜態頁已經由 generate-redirects.js 輸出這兩個清單，只補未預先渲染的情況
+  if (relatedList && relatedList.dataset.prerendered !== 'true') {
     relatedList.innerHTML = '';
     const related = posts
       .filter((post) => post.slug !== currentPost.slug)
@@ -2188,16 +2374,16 @@ function renderRelatedPosts(posts, currentPost) {
       relatedList.appendChild(li);
     } else {
       related.forEach((post) => {
-        relatedList.appendChild(buildLogRow(post));
+        relatedList.appendChild(buildSideRow(post));
       });
     }
   }
 
-  if (latestList) {
+  if (latestList && latestList.dataset.prerendered !== 'true') {
     latestList.innerHTML = '';
     const latest = posts.filter((post) => post.slug !== currentPost.slug).slice(0, 3);
     latest.forEach((post) => {
-      latestList.appendChild(buildLogRow(post));
+      latestList.appendChild(buildSideRow(post));
     });
   }
 
@@ -2287,11 +2473,12 @@ function buildStatusInnerHTML(status) {
   return `<h2 class="status__title" id="status-title">STATUS</h2><div class="${gridClass}">${columns.join('')}</div>`;
 }
 
-// 文章封面：有封面才顯示，沒有封面就整塊隱藏（不再用 accentColor 漸層）
-function renderArticleCover(element, post) {
+// 文章封面：有封面才顯示，沒有封面就整塊隱藏（不再用 accentColor 漸層）。
+// 封面跟內文某張圖是同一張時也隱藏，只留內文那張（規則跟 generate-redirects.js 一樣）
+function renderArticleCover(element, post, contentEl) {
   if (!element) return;
 
-  if (!post.coverImage) {
+  if (!post.coverImage || coverAppearsInBody(post.coverImage, contentEl)) {
     element.replaceChildren();
     element.hidden = true;
     return;
@@ -2318,6 +2505,23 @@ function renderArticleCover(element, post) {
   coverImage.fetchPriority = 'high';
   coverImage.setAttribute('aria-hidden', 'true');
   element.replaceChildren(coverImage);
+}
+
+// 去掉 https://b-log.to 與 -480w／-828w／-1200w 後綴，再補上開頭的 /
+function normalizeImagePath(value) {
+  return String(value || '')
+    .trim()
+    .replace(/^https?:\/\/b-log\.to/i, '')
+    .replace(/^(?!\/)/, '/')
+    .replace(/-(?:480|828|1200)w(\.[a-z0-9]+)$/i, '$1');
+}
+
+function coverAppearsInBody(coverImage, contentEl) {
+  if (!coverImage || !contentEl) return false;
+  const cover = normalizeImagePath(coverImage);
+  return Array.from(contentEl.querySelectorAll('img[src]')).some(
+    (image) => normalizeImagePath(image.getAttribute('src')) === cover
+  );
 }
 
 function getCategoryTheme(post) {
