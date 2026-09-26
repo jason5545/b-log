@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -202,19 +218,19 @@
 <p>沒有什麼特別的計畫，只是想用 AI 繪圖工具做一張新的大頭貼。想法很簡單：動漫風格、坐在電動輪椅上、操作我的 ThinkPad P15 Gen 2 筆電、穿著粉紅黑配色的衣服（LiSA 的代表色），背景帶點音符和程式碼的元素。</p>
 <p>這些都是我的日常，我的真實樣貌。應該不難吧？</p>
 <p><img src="/content/img/2025/birthday-avatar-cover.webp" alt="Birthday Avatar"></p>
-<h2>第一道牆：「Ghibli」</h2>
+<h2 id="section-1">第一道牆：「Ghibli」</h2>
 <p>我想要那種溫暖、手繪感、有點懷舊的日式動畫風格。最直覺的描述就是「吉卜力風格」——柔和的水彩質感、細膩的光影、寧靜而療癒的氛圍。</p>
 <p>然後 prompt 被拒絕了。</p>
 <p>原因是「Studio Ghibli」可能涉及版權問題。</p>
 <p>我不是要複製《乘著風》的畫面，我不是要生成宮崎駿的角色，我甚至不是要把這張圖拿去賣。我只是想在自己的生日，用自己喜歡的風格，做一張自己的圖。</p>
 <p>但平台不管這些。它看到「Ghibli」就擋，不問意圖、不問用途、不問規模。</p>
-<h2>繞路的技術</h2>
+<h2 id="section-2">繞路的技術</h2>
 <p>好吧，那就繞。</p>
 <p>把「Studio Ghibli style」換成「soft hand-painted Japanese animation aesthetic with warm watercolor tones」。把「Ghibli aesthetic」換成「1980s-1990s Japanese animated film look」。</p>
 <p>想要更接近那個風格？用「Kazuo Oga inspired backgrounds」——這是吉卜力的背景美術師，名字夠冷門，通常不會被過濾，但 AI 有機會認得。</p>
 <p>本質上就是在玩文字遊戲：說一樣的事情，用不一樣的詞。懂得繞的人照樣達成目的，不懂的人被擋在門外。</p>
 <p>最後成功了。</p>
-<h2>這合理嗎？</h2>
+<h2 id="section-3">這合理嗎？</h2>
 <p>平台的邏輯我理解：一刀切最省成本。不用判斷每個請求的意圖，不用區分商業用途和個人創作，不用承擔法務風險。出事有交代，沒事少麻煩。</p>
 <p>版權方的擔憂我也理解：確實有人大量生成「吉卜力風」的圖去牟利，品牌稀釋是真的。</p>
 <p>但從我的角度：</p>
@@ -227,13 +243,13 @@
 <p>這在傳統著作權法下叫「合理使用」。但 AI 平台沒有能力（也沒有意願）做這種細緻的判斷，所以全部擋掉。</p>
 <p>這是風控成本外部化：平台不想花錢做審查，使用者自己想辦法繞。繞不過的人放棄，平台沒有損失。</p>
 <p>跟我之前寫過的「數位落差」是同一個結構——有能力的人找到出路，沒能力的人被系統排除，然後系統宣稱自己很公平。</p>
-<h2>Constitutional AI 的另一種可能</h2>
+<h2 id="section-4">Constitutional AI 的另一種可能</h2>
 <p>這讓我想到 Anthropic 的 Constitutional AI 方法。</p>
 <p>傳統的內容過濾是「黑名單」邏輯：看到特定關鍵詞就擋，不管上下文。而 Constitutional AI 是用原則來引導行為——理解你為什麼說這個詞，而不是單純禁止你說這個詞。</p>
 <p>一個是「禁止說 Ghibli」，一個是「理解你想用 Ghibli 做什麼」。</p>
 <p>差別在於：有沒有把使用者當成有判斷力的人看待。</p>
 <p>當然，這種方法成本更高，需要模型真的「理解」而不只是「比對」。大部分繪圖工具選擇便宜的路，使用者就得自己繞路。</p>
-<h2>生日的小結</h2>
+<h2 id="section-5">生日的小結</h2>
 <p>圖最後做出來了。</p>
 <p>不是因為系統合理，是因為我知道怎麼繞。這本身就是一種技術，一種在限制中尋找出路的能力。</p>
 <p>但我還是覺得哪裡不對。</p>
@@ -248,15 +264,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">第一道牆：「Ghibli」</a></li><li><a href="#section-2">繞路的技術</a></li><li><a href="#section-3">這合理嗎？</a></li><li><a href="#section-4">Constitutional AI 的另一種可能</a></li><li><a href="#section-5">生日的小結</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

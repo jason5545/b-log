@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -202,7 +218,7 @@
 <p>於是我對著資料夾按右鍵。</p>
 <p>沒有。</p>
 <p>「加入側邊欄」這個選項，不在右鍵選單裡。</p>
-<h2>你在開玩笑吧？</h2>
+<h2 id="section-1">你在開玩笑吧？</h2>
 <p>我以為是我漏看了，把選單從頭到尾掃了一遍。沒有。Google 之後才知道，Apple 很早以前就把這個功能從右鍵選單移除了。現在只剩三種方式：</p>
 <ul>
 <li>鍵盤快捷鍵 Cmd+Ctrl+T</li>
@@ -210,7 +226,7 @@
 <li><strong>拖曳資料夾到側邊欄</strong></li>
 </ul>
 <p>我用 macOS 才三週多，之前一直是 Linux 和 Windows 的使用者。在 Windows 上，右鍵就有「釘選到快速存取」，不需要知道任何隱藏選項。所以我根本不知道選單列裡還藏了一個「加入側邊欄」，直覺就是試拖曳。</p>
-<h2>冷汗直流</h2>
+<h2 id="section-2">冷汗直流</h2>
 <p>我的身體狀況讓拖曳這個動作變得非常高風險。精細的滑鼠控制對我來說不是理所當然的事，手一滑，資料夾就會掉到別的位置。</p>
 <p>而我拖的是什麼？公司在 Box 雲端上的正式專案資料夾。</p>
 <p>然後資料夾就被移走了。</p>
@@ -218,12 +234,12 @@
 <p>最後還是得回到 Finder，用拖曳把它拖回正確的位置——對，就是用同一個害我出事的操作來收拾殘局。</p>
 <p>macOS 又沒有「剪下」檔案的概念，不能像 Windows 一樣 Ctrl+X 剪下、Ctrl+V 貼上。Finder 的「移動」只能靠拖曳，或是 Cmd+C 複製之後用 Cmd+Option+V「移動到此」——但這招要先導覽到目標資料夾，路徑那麼深，光是找到正確位置就夠麻煩了。</p>
 <p>總之最後是移回去了。但在雲端同步的環境下，那幾分鐘真的很漫長。</p>
-<h2>這是誰的設計決策？</h2>
+<h2 id="section-3">這是誰的設計決策？</h2>
 <p>Apple 把「加入側邊欄」從右鍵選單移除的理由，大概是覺得選單太長需要「精簡」。但這個決定等於是逼使用者去拖曳——一個對很多人來說有風險的操作。</p>
 <p>不是每個人都能精準地把資料夾拖到側邊欄上正確的位置。手部動作受限的人、年長的使用者、甚至只是手邊放著咖啡不方便的人，都可能在拖曳過程中出錯。</p>
 <p>而出錯的代價可以很大。移動一個雲端同步的資料夾，影響的可能是整個團隊。</p>
 <p>前面提過，Windows 右鍵就有「釘選到快速存取」，一個點擊搞定。Apple 號稱比 Windows 更注重使用者體驗，結果連 Windows 都做到的基本功能，macOS 要使用者自己寫 AppleScript 來補。</p>
-<h2>自己動手解決</h2>
+<h2 id="section-4">自己動手解決</h2>
 <p>既然 Apple 不給，我就自己做。最後的方案是用 macOS 內建的「捷徑」App 做了一個快速動作：</p>
 <ol>
 <li>在捷徑 App 建立一個新捷徑，命名為「加入側邊欄」</li>
@@ -241,7 +257,7 @@ end tell
 <li>到系統設定 → 隱私權與安全性 → 輔助使用，允許「Finder」控制電腦</li>
 </ol>
 <p>完成之後，右鍵資料夾 → 快速動作 → 「加入側邊欄」，搞定。不用拖曳，不用記快捷鍵，不用翻選單列。</p>
-<h2>不該由使用者來補這個洞</h2>
+<h2 id="section-5">不該由使用者來補這個洞</h2>
 <p>這整件事花了我不少時間，中間還繞了一圈先嘗試 Automator 的 workflow（結果在新版 macOS 上只會出現在「服務」子選單而不是「快速動作」裡）。</p>
 <p>一個本來就該在右鍵選單裡的功能，使用者不應該需要寫 AppleScript、設定權限、搞清楚 Automator 跟捷徑的差別，才能安全地使用它。</p>
 <p>Apple 談無障礙設計談得很多，但像這種細節上的倒退，才是真正影響日常使用的地方。</p>
@@ -252,15 +268,20 @@ end tell
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">你在開玩笑吧？</a></li><li><a href="#section-2">冷汗直流</a></li><li><a href="#section-3">這是誰的設計決策？</a></li><li><a href="#section-4">自己動手解決</a></li><li><a href="#section-5">不該由使用者來補這個洞</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

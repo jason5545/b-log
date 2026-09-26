@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -197,9 +213,9 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">語法突顯系統的深度偵錯之旅：四個連鎖問題的修復實錄</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>前言</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">前言</h2>
 <p>在開發部落格的過程中，程式碼區塊的語法突顯功能是提升閱讀體驗的關鍵。然而，當我實作自訂的語法突顯系統時，卻遇到了一連串看似簡單、實則環環相扣的問題。這篇文章將詳細記錄我如何逐步診斷並修復四個連鎖問題，以及背後的技術原理。</p>
-<h2>問題全景</h2>
+<h2 id="section-2">問題全景</h2>
 <p>在修復過程中，我遇到了四個主要問題：</p>
 <ol>
 <li><strong>URL 被誤判為註解</strong>：<code>https://example.com</code> 中的 <code>//</code> 被當作註解處理</li>
@@ -208,7 +224,7 @@
 <li><strong>HTML 實體符號顯示錯誤</strong>：<code>&lt;</code> 和 <code>&gt;</code> 顯示為文字 <code>&amp;lt;</code> <code>&amp;gt;</code></li>
 </ol>
 <p>這些問題並非獨立存在，而是相互關聯，需要系統性的思考和逐步修復。</p>
-<h2>系統架構概覽</h2>
+<h2 id="section-3">系統架構概覽</h2>
 <p>在深入問題之前，先了解整個語法突顯系統的架構：</p>
 <pre><code class="language-javascript">function applyBasicSyntaxHighlighting(codeBlock, language) {
   const code = codeBlock.textContent;
@@ -240,7 +256,7 @@
 <li><strong>優先處理註解</strong>：確保註解內容不被進一步處理</li>
 <li><strong>分階段標記</strong>：依序處理字串、關鍵字、數字、標點</li>
 </ol>
-<h2>問題一：URL 被誤判為註解</h2>
+<h2 id="section-4">問題一：URL 被誤判為註解</h2>
 <h3>問題現象</h3>
 <p>當程式碼中包含 URL 時：</p>
 <pre><code>https://example.com/post.php?id=123
@@ -267,7 +283,7 @@
 <li>✅ <code>const x = 1; // comment</code> - 被識別為註解</li>
 <li>✅ <code>https://example.com</code> - 不被識別為註解</li>
 </ul>
-<h2>問題二：巢狀標籤導致關鍵字異常</h2>
+<h2 id="section-5">問題二：巢狀標籤導致關鍵字異常</h2>
 <h3>問題現象</h3>
 <p>關鍵字顯示異常：</p>
 <ul>
@@ -347,7 +363,7 @@
 <li><code>___T0X___</code>、<code>___T1X___</code> 格式</li>
 <li>使用字母包裹數字（<code>T</code> 和 <code>X</code>），避免被數字正則匹配</li>
 </ul>
-<h2>問題三：數字殘留問題</h2>
+<h2 id="section-6">問題三：數字殘留問題</h2>
 <h3>問題現象</h3>
 <p>程式碼區塊前面有時會出現意外的數字 <code>0</code>、<code>1</code> 等。</p>
 <h3>第一次嘗試：<code>___TOKEN_0___</code></h3>
@@ -381,7 +397,7 @@ return `___${id}___`;
 <li>不會有轉譯問題</li>
 <li>效能更好</li>
 </ul>
-<h2>問題四：HTML 實體符號顯示錯誤</h2>
+<h2 id="section-7">問題四：HTML 實體符號顯示錯誤</h2>
 <h3>問題現象</h3>
 <p>程式碼中的 <code>&lt;</code> 和 <code>&gt;</code> 顯示為文字 <code>&amp;lt;</code> <code>&amp;gt;</code>，而不是符號本身。</p>
 <h3>根本原因</h3>
@@ -440,7 +456,7 @@ result = result.replace(/&amp;gt;/g, &#39;&lt;span class=&quot;token punctuation
 <li>這樣既完成了 HTML 轉譯，又套用了樣式</li>
 <li>避免了二次處理的複雜性</li>
 </ol>
-<h2>完整的處理流程</h2>
+<h2 id="section-8">完整的處理流程</h2>
 <p>最終的處理流程如下：</p>
 <pre><code class="language-javascript">function highlightLine(line) {
   if (!line.trim()) return escapeHtml(line);
@@ -491,7 +507,7 @@ result = result.replace(/&amp;gt;/g, &#39;&lt;span class=&quot;token punctuation
   return result;
 }
 </code></pre>
-<h2>技術要點總結</h2>
+<h2 id="section-9">技術要點總結</h2>
 <h3>1. 正則表達式的精確性</h3>
 <p><strong>負向後顧斷言</strong>是關鍵：</p>
 <pre><code class="language-javascript">// ❌ 不精確
@@ -526,7 +542,7 @@ result = result.replace(new RegExp(placeholder, &#39;g&#39;), token);
 // ✅ 使用 split/join 更安全
 result = result.split(placeholder).join(token);
 </code></pre>
-<h2>效能考量</h2>
+<h2 id="section-10">效能考量</h2>
 <p>雖然使用了多階段處理和佔位符機制，但效能影響可以接受：</p>
 <ol>
 <li><strong>逐行處理</strong>：每行程式碼通常不長，處理速度快</li>
@@ -538,7 +554,7 @@ result = result.split(placeholder).join(token);
 <li>處理 100 行程式碼：&lt; 10ms</li>
 <li>處理 1000 行程式碼：&lt; 50ms</li>
 </ul>
-<h2>偵錯經驗分享</h2>
+<h2 id="section-11">偵錯經驗分享</h2>
 <h3>1. 分階段驗證</h3>
 <p>每修復一個問題，都要測試：</p>
 <ul>
@@ -570,7 +586,7 @@ const&lt;span class=&quot;token punctuation&quot;&gt;s&lt;/span&gt;
 <li>修復數字殘留 → 測試 → 提交</li>
 <li>修復 HTML 實體 → 測試 → 提交</li>
 </ol>
-<h2>後續改進方向</h2>
+<h2 id="section-12">後續改進方向</h2>
 <h3>1. 支援更多語言</h3>
 <p>目前只支援 JavaScript 基本語法，可以擴展：</p>
 <ul>
@@ -603,7 +619,7 @@ const&lt;span class=&quot;token punctuation&quot;&gt;s&lt;/span&gt;
   });
 });
 </code></pre>
-<h2>結語</h2>
+<h2 id="section-13">結語</h2>
 <p>這次偵錯之旅讓我深刻體會到：</p>
 <ol>
 <li><strong>細節決定成敗</strong>：一個小小的正則表達式，可能引發連鎖問題</li>
@@ -620,15 +636,20 @@ const&lt;span class=&quot;token punctuation&quot;&gt;s&lt;/span&gt;
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">前言</a></li><li><a href="#section-2">問題全景</a></li><li><a href="#section-3">系統架構概覽</a></li><li><a href="#section-4">問題一：URL 被誤判為註解</a></li><li><a href="#section-5">問題二：巢狀標籤導致關鍵字異常</a></li><li><a href="#section-6">問題三：數字殘留問題</a></li><li><a href="#section-7">問題四：HTML 實體符號顯示錯誤</a></li><li><a href="#section-8">完整的處理流程</a></li><li><a href="#section-9">技術要點總結</a></li><li><a href="#section-10">效能考量</a></li><li><a href="#section-11">偵錯經驗分享</a></li><li><a href="#section-12">後續改進方向</a></li><li><a href="#section-13">結語</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

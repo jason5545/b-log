@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -206,7 +222,7 @@
 <p>現在護欄放寬了。我把同一個話題拿去問 Claude：想討論當初被擋到底合不合理，順便問它，剩下的工作能不能接回去做。</p>
 <p>第一個 prompt 就被 flag。</p>
 <p>不是做到一半被攔，是開場就中。真的是有夠無奈。</p>
-<h2>放寬的是哪一種，細則跟標題差很遠</h2>
+<h2 id="section-1">放寬的是哪一種，細則跟標題差很遠</h2>
 <p>被擋之後，我把公告本文和 system card 整份讀完。這次放寬的邊界，其實寫得很清楚。</p>
 <p>Fable 5.1 開放的是「在原始碼裡發掘軟體漏洞」，也就是防禦性質的漏洞研究。官方說資安分類器的誤報因此降了大約六成。</p>
 <p>但同一批文件裡，有三類工作維持阻擋，或者改送其他模型處理：滲透測試、exploit 開發，還有「以二進位為基礎的漏洞掃描」。System card 講得更白：</p>
@@ -218,7 +234,7 @@
 <p>我也問過自己：我的 repo 裡面明明都是程式碼了，這不算原始碼嗎？</p>
 <p>算，也不算。我自己的實作 code，修 bug、寫測試，這些在任何一家都不會被擋，本來就不在護欄的管轄範圍。但如果任務實質是「分析小米的 binary 和協定」，那不管筆記存在哪個資料夾，它要求模型做的事仍然是二進位分析。「這是分析出來的」在分類器面前不是加分，是扣分，因為那正好是它被訓練要攔的特徵。</p>
 <p>判準其實很簡單：模型要看的東西是我寫的 code，就安全；模型要看的東西是 Xiaomi 的 binary 和協定本身，就還是被擋。</p>
-<h2>我的 prompt 為什麼會中</h2>
+<h2 id="section-2">我的 prompt 為什麼會中</h2>
 <p>知道邊界之後，我回頭看自己那則 prompt，其實中得不冤枉。</p>
 <p>那句話的結構是這樣的：「這個專案一開始給 Codex 做，被擋下來了。我有 trust access 也一樣。後來我用 Kimi 完成了。現在你放寬了，換你覺得呢？」</p>
 <p>每一句單獨看都無害，組起來卻是另一回事：一個被別家拒絕過的使用者，拿著一份無法驗證的資格，陳述自己在別處完成了工作，然後問你合不合理。</p>
@@ -226,18 +242,18 @@
 <p>諷刺的是，我那則 prompt 真正想討論的，其實是無障礙的法理。為了互通性而逆向，在美國 DMCA 和歐盟軟體指令裡都有合法空間；身心障礙者需要第三方工具才能平等使用自己的裝置，這是更值得討論的題目。我甚至沒有要它做什麼，只是要它拿出來討論。</p>
 <p>但分類器不做法律分析，也不讀動機。它只做句型比對。我的討論掛在一個待平反的拒絕上，就先被當成翻案處理。</p>
 <p>後來我把同樣的論點抽象化一層，拿掉「我」、拿掉具體遭遇，變成「信任存取計畫該怎麼設計，才不會把合法研究者推去別家」，就可以問了。話題一模一樣，差別只在它不再掛在我的案子上。</p>
-<h2>Theo 的一次，和我的一次</h2>
+<h2 id="section-3">Theo 的一次，和我的一次</h2>
 <p>這件事最有意思的地方，是 Theo 和我都沒有說謊。</p>
 <p>他做了一天只被擋一次，是真的。我第一發就中，也是真的。</p>
 <p>差別在分母。他的工作是網頁開發、開放原始碼專案，那些東西本來就離觸發區很遠。但即使是這種位置的人，舊版只要沾到一點密碼學就會中。而我的專案核心恰好就是密碼學：金鑰交換、P256 握手、AES-GCM 加密，整條私有協定都建立在上面。護欄放寬六成，對他是從偶爾會中變成幾乎不中，對我是從會中變成還是會中。</p>
 <p>同一句「放寬了」，對不同位置的人是完全不同的東西。</p>
 <p>所以以後看到這種新聞，標準動作只有一個：去看一手來源的細則，拿自己的用途類別去對。新聞告訴你線移動了，但線有沒有移到你這邊，要自己拿尺量。</p>
-<h2>順手查清楚的兩件事</h2>
+<h2 id="section-4">順手查清楚的兩件事</h2>
 <p>既然都查了，我把兩家的高階存取也一起確認過。</p>
 <p>Anthropic 的 Mythos，就是比 Fable 護欄更鬆的那個版本，從頭到尾沒有對美國以外開放過。四月是幾十家邀請制夥伴，六月發表後被美國政府出口管制，連在美國的外籍員工都被切斷，重開之後限大約一百家美國機構。唯一的非美例外是歐盟的 ENISA，那是政府對政府的安排。這次 5.1 的公告說「正與美國政府協調擴大國際存取」，沒有日期，也沒有資格條件。</p>
 <p>OpenAI 的 Daybreak 分 Blue 和 Red 兩級。我有 Blue。Red 給的是專門的資安模型，做授權的漏洞重現和紅隊測試，個人可以申請，但要獨立審核，而且用途限於「你擁有或明確獲授權的系統」。我的用途是逆向第三方協定做互通，手機是我的，分析對象是小米的軟體，授權鏈正好是灰色的。申請了大概率也不對口。</p>
 <p>更實際的是：我的 Blue 資格到現在都還沒有真的傳導到每一次請求上，issue #31505 開了快兩個月還是 open。我去 tracker 掃過，同類的回報從六月到九月有三十幾張，全部還開著。有人甚至收到 Cyber Abuse 的政策警告，擔心帳號被封。</p>
-<h2>放寬是真實的，只是不是為我放寬的</h2>
+<h2 id="section-5">放寬是真實的，只是不是為我放寬的</h2>
 <p>我不覺得 Anthropic 或 OpenAI 認為我是壞人。分類器在規模化下做不到意圖裁判，我的工作在表面特徵上離惡意工具的距離，確實比離我的距離近。廠商選擇寧可誤殺，這是成本不對稱下的理性決定。</p>
 <p>我可以理解這個邏輯，同時不接受它變成我的成本。</p>
 <p>我的工作沒有停。逆向最難的那段已經做完了，剩下的都是我自己程式碼裡的 bug，那些東西本來就不在任何一家的護欄裡。那天 dirty tree 裡的 DTMF 修改就是證據：百分之百是自己的 code，一行逆向都沒有。</p>
@@ -250,15 +266,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">放寬的是哪一種，細則跟標題差很遠</a></li><li><a href="#section-2">我的 prompt 為什麼會中</a></li><li><a href="#section-3">Theo 的一次，和我的一次</a></li><li><a href="#section-4">順手查清楚的兩件事</a></li><li><a href="#section-5">放寬是真實的，只是不是為我放寬的</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

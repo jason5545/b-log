@@ -78,12 +78,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -96,19 +96,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -206,7 +222,7 @@
 <p>我離開了 claude.ai，走 GitHub Copilot 的路線繼續用 Claude。路是通了，但有一個問題：GitHub 沒有一個像樣的 iOS Copilot Chat 客戶端。</p>
 <p>官方的 Copilot for Xcode 是 macOS 限定，而且是 IDE 擴展，不是獨立的聊天 app。VS Code 裡的 Copilot Chat 更不用說——那是桌面的東西。我在手機上想跟 Claude 說句話，沒有辦法。</p>
 <p>所以我自己做了一個。用 Claude Code 做的。</p>
-<h2>CopilotChat</h2>
+<h2 id="section-1">CopilotChat</h2>
 <p><a href="https://github.com/jason5545/CopilotChat">CopilotChat</a> 是一個 iOS 原生 app，純 SwiftUI，不依賴任何第三方框架。你用 GitHub 帳號登入（Device Flow OAuth），就能直接跟 Copilot API 裡的所有模型聊天——Claude Opus 4.6、GPT-4o、Gemini，什麼都有。</p>
 <p>但這些只是基本款。我真正想做的是把手機變成一個完整的 AI 終端，不只是聊天框。不只是 GitHub Copilot——而是任何 LLM provider。</p>
 <h3>MCP 自動執行</h3>
@@ -224,7 +240,7 @@
 <p>做完功能之後，我做了一次完整的安全性審計。結果修了兩個 HIGH level 的問題：MCP server 的自訂 headers（可能包含 Bearer token）原本跟 server config 一起存在 UserDefaults 的明文 plist 裡，現在改存 Keychain；Gemini API key 原本放在 URL query parameter 裡（會洩漏到 URL cache 和 proxy log），現在改用 <code>x-goog-api-key</code> HTTP header。整個 app 零第三方依賴，沒有供應鏈風險。</p>
 <h3>其他</h3>
 <p>對話歷史用 JSON 檔案持久化、context window 圓形指示器、MCP 權限控制（三層模型：tool &gt; server &gt; session）、對話自動命名、編輯訊息和重新生成、Carbon 設計系統（深炭黑 + 琥珀色，三重字型）。這些都是參考 claude.ai 和 OpenCode 的設計做出來的。</p>
-<h2>然後我去查了一下</h2>
+<h2 id="section-2">然後我去查了一下</h2>
 <p>文章寫到這裡，我想確認一件事：我是不是重複造輪子了？網路上是不是已經有人做過一樣的東西？</p>
 <p>我搜了好幾輪，把所有能想到的關鍵字組合都打了一遍：「GitHub Copilot iOS client MCP」「iOS app Copilot chat unofficial」「SwiftUI MCP client open source」。結果是：</p>
 <ul>
@@ -234,7 +250,7 @@
 <li><strong>OpenCode</strong>：終端機工具（Go），完全不同平台</li>
 </ul>
 <p>沒有人做過「iOS 原生 app + GitHub Copilot API 認證 + MCP 自動執行」這個組合。</p>
-<h2>等等，Chatbox 呢？</h2>
+<h2 id="section-3">等等，Chatbox 呢？</h2>
 <p>有人可能會說：Chatbox 不就是嗎？</p>
 <p>對，Chatbox 確實是最接近的。跨平台（Windows/Mac/Linux/iOS/Android/Web）、開放原始碼、支援多 provider、有 MCP。概念上幾乎一樣——都是「通用 LLM chat client + MCP + 多 provider」。</p>
 <p>但 Chatbox 的 MCP 是<strong>桌面限定</strong>。我直接翻了它的原始碼，在 <code>feature-flags.ts</code> 裡寫得清清楚楚：</p>
@@ -252,11 +268,11 @@
 <p>沒有 license，header 不帶認證，Chatbox 的 MCP server 不會讓你連。</p>
 <p>所以如果你在 Mac 上開 Chatbox，免費版看到的 MCP 設定頁可能是空的或是被藏起來的。有人還因為同名爭議被從 iOS App Store 下架過。</p>
 <p>Chatbox 是一個很好的產品，我不否認。但在 iOS 上，它是一個不帶 MCP 的聊天客戶端。而 CopilotChat 在手機上就能跑完整的 MCP tool call loop。</p>
-<h2>所以這個東西特別在哪？</h2>
+<h2 id="section-4">所以這個東西特別在哪？</h2>
 <p>不是單一功能。是整合。</p>
 <p>CopilotChat 把 GitHub Copilot、多 provider、MCP 自動工具執行，和 iPhone 上的本機 workspace coding mode 放進了同一個原生 app。這些東西拆開來看，都不是新發明。但把整套 workflow 串起來，就是另一回事。</p>
 <p>我想做的也不是一個只能聊天的 mobile client，不是一個只能填 API key 的通用殼，也不是一個只能在桌面跑 agent mode 的 IDE 配件。我想做的是：在手機上就能進入工具調度、檔案編輯、provider 切換、MCP 呼叫完整循環的 LLM 終端。</p>
-<h2>我用 Claude 做了一個離開 Claude 的工具</h2>
+<h2 id="section-5">我用 Claude 做了一個離開 Claude 的工具</h2>
 <p>上次那篇文章的結尾，我寫了這句話。現在它有了下半句：然後用這個工具，發現了一個沒有人填過的洞。</p>
 <p>CopilotChat 已經是我跟 Claude 對話的主力介面了。從 4 月 8 號開始，我在手機上開 CopilotChat 跟 Claude 聊天的時間，可能比在電腦上還多。context window 192K、34 個 MCP tool schemas、記憶系統——全部在 iPhone 上跑。</p>
 <p>如果你有 GitHub Copilot 訂閱，clone 下來、Xcode 打開、裝到手機上，用 GitHub 帳號登入就能用，不用帶 API key。如果你用其他 provider——OpenRouter、Anthropic、Augment Code——填個 API key 或 session JSON 就能切換。整個 app 零第三方依賴，MIT 授權。</p>
@@ -268,15 +284,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#f07c2a"><a href="/ai-analysis/svg-cover-create-post-first-run/"><span class="side-row__meta">19SEP26 · <span>AI 分析</span></span><span class="side-row__title">讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#f07c2a"><a href="/ai-analysis/svg-cover-create-post-first-run/"><span class="side-row__meta">19SEP26 · <span>AI 分析</span></span><span class="side-row__title">讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">CopilotChat</a></li><li><a href="#section-2">然後我去查了一下</a></li><li><a href="#section-3">等等，Chatbox 呢？</a></li><li><a href="#section-4">所以這個東西特別在哪？</a></li><li><a href="#section-5">我用 Claude 做了一個離開 Claude 的工具</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

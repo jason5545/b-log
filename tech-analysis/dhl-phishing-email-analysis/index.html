@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -197,9 +213,9 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">拆解一封冒用 DHL 的釣魚信：從寄件者到發信平台</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>事件起因</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">事件起因</h2>
 <p>收到一封看起來來自 <code>noreply@dhl.com</code> 的 DHL 包裹通知信。寄件者地址完全正確，不是那種一眼就能識破的 <code>dhl.xyz</code> 或 <code>dh1.com</code>。公司的 ShareTech 郵件閘道把它判定為垃圾信攔截了下來，但我想搞清楚它到底是怎麼做到冒用正版網域的。</p>
-<h2>第一個破綻：連結指向俄羅斯伺服器</h2>
+<h2 id="section-2">第一個破綻：連結指向俄羅斯伺服器</h2>
 <p>翻開信件原始碼，所有連結都指向同一個地址：</p>
 <pre><code>http://srv222256.hoster-test.ru/we/login.htm#sarah@sarahselections.com
 </code></pre>
@@ -210,7 +226,7 @@
 <li><strong>FAQ 和 Help Centre 按鈕指向同一個網址</strong>：正常網站不會這樣設計</li>
 <li><strong>網址尾端附帶 email 地址</strong>：<code>#sarah@sarahselections.com</code> 是用來追蹤哪個受害者點了連結</li>
 </ul>
-<h2>核心問題：為什麼能冒用 dhl.com？</h2>
+<h2 id="section-3">核心問題：為什麼能冒用 dhl.com？</h2>
 <p>電子郵件協定 SMTP 設計於 1980 年代，天生不驗證寄件者身份。就像寄實體信時，你可以在信封上寫任何人的回郵地址一樣。</p>
 <p>SMTP 有兩層寄件者：</p>
 <ul>
@@ -243,7 +259,7 @@
 <td>很多伺服器選擇隔離而非直接丟棄</td>
 </tr>
 </tbody></table>
-<h2>發信管道：SendGrid</h2>
+<h2 id="section-4">發信管道：SendGrid</h2>
 <p>查看郵件標頭，發現信件實際上是透過 <code>cdn.mc-auto.sendgrid.net</code> 發出的。</p>
 <p>SendGrid 是 Twilio 旗下的正規大量郵件發送平台，很多企業拿來發行銷信和通知信。攻擊者利用它的原因很明確：</p>
 <ul>
@@ -251,13 +267,13 @@
 <li>很多郵件伺服器信任 SendGrid 的 IP 信譽，不容易被擋</li>
 </ul>
 <p>這讓整封信在技術驗證上更難被攔截。</p>
-<h2>ShareTech 攔截後的黑名單問題</h2>
+<h2 id="section-5">ShareTech 攔截後的黑名單問題</h2>
 <p>ShareTech 郵件閘道成功把這封信攔到隔離區，系統提供了「加入黑名單」的選項。但我選擇不加，原因是：</p>
 <p><strong>黑名單是基於寄件者地址比對的。</strong> 封鎖 <code>noreply@dhl.com</code> 意味著以後真正的 DHL 通知也會被擋。而攻擊者下次只要換成 <code>shipping@dhl.com</code> 就能繞過黑名單。</p>
 <p>這不是 ShareTech 的設計缺陷，而是黑名單機制本來就不適合對付寄件者偽造。真正該處理偽造的是伺服器層級的 SPF/DKIM/DMARC 驗證，不是使用者端的黑名單。</p>
-<h2>我做了什麼</h2>
+<h2 id="section-6">我做了什麼</h2>
 <p>把原始郵件（含完整標頭）轉寄到 <code>abuse@sendgrid.com</code> 進行檢舉。SendGrid 會調查並停用該帳號。雖然攻擊者可以重新註冊，但至少增加了他們的成本，而且 SendGrid 對重複違規者的驗證會越來越嚴格。</p>
-<h2>判斷釣魚信的檢查清單</h2>
+<h2 id="section-7">判斷釣魚信的檢查清單</h2>
 <table>
 <thead>
 <tr>
@@ -294,15 +310,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">事件起因</a></li><li><a href="#section-2">第一個破綻：連結指向俄羅斯伺服器</a></li><li><a href="#section-3">核心問題：為什麼能冒用 dhl.com？</a></li><li><a href="#section-4">發信管道：SendGrid</a></li><li><a href="#section-5">ShareTech 攔截後的黑名單問題</a></li><li><a href="#section-6">我做了什麼</a></li><li><a href="#section-7">判斷釣魚信的檢查清單</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

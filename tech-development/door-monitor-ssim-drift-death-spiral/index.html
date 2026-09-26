@@ -78,12 +78,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -96,19 +96,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -205,24 +221,24 @@
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>我在家門口裝了一台 Tapo C200，用 RTSP 串流接進 Proxmox LXC 裡跑的 Python 服務，偵測門是否開著超過五秒，是的話就發 Telegram 警告。偵測邏輯是 YOLOv8 nano 做物件偵測，加上 SSIM 比對一張「門關著」的參考影像——SSIM 低於 0.65 就判定門開。</p>
 <p>這套東西跑了一陣子都沒問題，直到今天凌晨。</p>
 <hr>
-<h2>285 次警告，門沒開過</h2>
+<h2 id="section-1">285 次警告，門沒開過</h2>
 <p>早上起來看手機，Telegram 炸了。從半夜 00:11 開始，每 60 秒一則「門未關警告」，一路報到我手動停掉服務為止。總共 285 則。</p>
 <p>拍了一張即時截圖，門關得好好的。</p>
 <p>用 LXC 上的環境跑了一次 SSIM 比對：夜間參考影像 vs 當前畫面，<strong>SSIM 0.42</strong>。門檻是 0.65，難怪系統覺得門開了。</p>
 <p>但兩張圖肉眼看幾乎一模一樣。</p>
 <hr>
-<h2>IR 夜視的光線漂移</h2>
+<h2 id="section-2">IR 夜視的光線漂移</h2>
 <p>Tapo C200 晚上會切到 IR 紅外線夜視模式，畫面變成黑白的。我的夜間參考影像是前一天傍晚 17:50 拍的——剛切進 IR 模式的時候。</p>
 <p>問題是，IR LED 的反射亮度會隨時間漂移。傍晚的 IR 畫面跟凌晨三點的 IR 畫面，肉眼看差不多，但像素層面的亮度分佈已經不同了。SSIM 對這種全域亮度偏移很敏感，0.9+ 可以一路掉到 0.42。</p>
 <p>門沒動過，但在演算法眼裡，整個畫面都變了。</p>
 <hr>
-<h2>自適應更新的死鎖</h2>
+<h2 id="section-3">自適應更新的死鎖</h2>
 <p>系統其實有自適應參考影像更新的機制：門穩定關閉 120 秒、SSIM ≥ 0.80，就自動用當前畫面更新參考影像，應對光線漸變。</p>
 <p>聽起來應該能處理這個問題，但它有一個前提：<strong>門必須被判定為關閉</strong>。</p>
 <p>SSIM 掉到 0.42 → 系統判定門開 → <code>door_closed_since</code> 被重置為 <code>None</code> → 自適應更新永遠不會觸發 → SSIM 繼續低 → 繼續判定門開。</p>
 <p>死亡螺旋。一旦進去就回不來。</p>
 <hr>
-<h2>修復：多參考 + 漂移恢復</h2>
+<h2 id="section-4">修復：多參考 + 漂移恢復</h2>
 <h3>多參考影像</h3>
 <p>單張參考影像太脆弱了。夜間不同時段的 IR 亮度不同，一張搞不定。</p>
 <p>改成自動載入所有 <code>reference_closed_night*.jpg</code>，SSIM 比對時跟每張參考都算一次，取最高分。只要跟其中一張夠像，就判定門關。上限 5 張，超過時淘汰最舊的（但保留第一張校準影像）。</p>
@@ -230,7 +246,7 @@
 <p>打破死鎖的關鍵。當 SSIM 持續低於門檻，但 YOLO 在門口附近沒有偵測到任何異常（沒有人、沒有物件），持續 300 秒後，系統認定這是光線漂移，自動把當前畫面加入參考影像。</p>
 <p>加了一道安全門：SSIM 低於 0.35 時不允許漂移恢復。光線漂移是漸進的，SSIM 不會掉太低；真的門開了是結構性變化，SSIM 會更低。0.35 是區分這兩者的門檻。</p>
 <hr>
-<h2>花屏：另一個驚喜</h2>
+<h2 id="section-5">花屏：另一個驚喜</h2>
 <p>修完部署上去之後，系統跑得很穩。但過了一會兒又收到一則警告。</p>
 <p>看了截圖——畫面是花的。大片垂直色塊條紋，典型的 h264 解碼錯誤。RTSP 串流偶爾會出這種問題，畫面壞掉的時候 SSIM 當然也會暴跌。</p>
 <p>加了兩層防護：</p>
@@ -239,13 +255,13 @@
 <li><strong>連續 3 幀確認</strong>：SSIM 需要連續 3 幀都判定門開才真正觸發警告。偶爾一幀花屏不會造成誤報，而且只多 1.5 秒延遲（偵測間隔 0.5 秒 × 3），原本的 5 秒門檻之上幾乎感覺不到</li>
 </ol>
 <hr>
-<h2>清晨的日夜切換</h2>
+<h2 id="section-6">清晨的日夜切換</h2>
 <p>以為搞定了，早上八點又來。</p>
 <p>這次不是夜間的問題。攝影機在清晨從 IR 切回彩色模式，系統跟著切到日間模式去比對日間參考影像——但日間參考是之前大白天拍的，清晨的光線完全不同，SSIM 只有 0.48。</p>
 <p>根本原因一樣：單張參考影像，沒有漂移恢復。只是這次發生在日間。</p>
 <p>把多參考和漂移恢復統一套用到日間模式，問題解決。</p>
 <hr>
-<h2>回頭看</h2>
+<h2 id="section-7">回頭看</h2>
 <p>整件事的核心問題不是演算法錯了——SSIM 比對、YOLOv8 偵測，這些邏輯都是對的。問題在於系統設計沒有考慮到「參考影像會過期」這個現實。</p>
 <p>一台 24 小時運作的攝影機，光線每分每秒都在變。IR 切換、日出日落、室內燈開關——任何一個都足以讓固定的參考影像失效。</p>
 <p>自適應更新的出發點是對的，但它把「門必須是關的」作為更新前提，等於假設了「系統判斷正確」才能自我修正——可一旦判斷錯了，就永遠修正不了。</p>
@@ -258,15 +274,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">285 次警告，門沒開過</a></li><li><a href="#section-2">IR 夜視的光線漂移</a></li><li><a href="#section-3">自適應更新的死鎖</a></li><li><a href="#section-4">修復：多參考 + 漂移恢復</a></li><li><a href="#section-5">花屏：另一個驚喜</a></li><li><a href="#section-6">清晨的日夜切換</a></li><li><a href="#section-7">回頭看</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

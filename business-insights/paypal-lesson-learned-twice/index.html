@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -202,26 +218,26 @@
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>我玩模擬飛行二十年了。PMDG 是圈內做波音機型最有名的開發商，但說來慚愧，在 MSFS 這一代我一直都在白嫖。上一次買他們的正版飛機，還是 P3D 的年代。</p>
 <p>直到最近，PMDG 終於對 777F 推了一個重大補丁——整個系統層面的重新架構，消除了長期存在的嚴重 WASM 錯誤。我覺得是時候了，$54.99 美金，買。</p>
 <p>結果第一次正版回歸，就出事了。</p>
-<h2>系統錯誤，但錢已經扣了</h2>
+<h2 id="section-1">系統錯誤，但錢已經扣了</h2>
 <p>第一次刷卡，PMDG 的結帳頁面跳出「系統錯誤，請稍後再試」。但幾乎同一時間，我的國泰世華銀行 App 已經彈出扣款通知。</p>
 <p>我想了一下，又刷了第二次。這次成功了，收到 PayPal 的確認郵件，Transaction ID 就一筆。</p>
 <p>但銀行 App 裡，兩筆扣款都在。</p>
-<h2>銀行的反應讓我嚇了一跳</h2>
+<h2 id="section-2">銀行的反應讓我嚇了一跳</h2>
 <p>我打給國泰世華客服確認狀況。客服查了之後說，的確有兩筆交易紀錄。然後他立刻提議：「那我幫你啟動爭款調查。」</p>
 <p>我當下馬上阻止了他。</p>
 <p>因為<a href="https://b-log.to/posts/asking-question-got-blacklisted">幾年前我就踩過一次一模一樣的坑</a>。那次我只是在 PayPal 上想問為什麼扣到錯的卡，結果系統直接觸發爭議調查，主機商 BuyVM 把我列入黑名單。爭議紀錄會留存，主機商之間可以互查。我沒有任何惡意，卻承擔了所有後果。</p>
 <p>那次的學費，我不打算再繳第二次。</p>
-<h2>先搞清楚狀況再說</h2>
+<h2 id="section-3">先搞清楚狀況再說</h2>
 <p>我先發了 email 給 PMDG 知會這個情況。他們的後台也只有一筆交易紀錄——和 PayPal 一致。PMDG 那邊始終沒回信，但這不重要，因為問題不在他們。</p>
 <p>隔天我打了電話給 PayPal 客服。對方查了之後直接承認，是他們系統的問題導致重複扣款。他們給了我一組授權碼，讓我拿去跟國泰世華申請退款。打給銀行，報了授權碼，退款完成。</p>
 <p>整件事就這樣結了。</p>
-<h2>銀行客服不該讓客戶自己踩煞車</h2>
+<h2 id="section-4">銀行客服不該讓客戶自己踩煞車</h2>
 <p>事後回想，國泰世華客服的反應讓我有點不舒服。</p>
 <p>我打電話過去的時候，情況是：有兩筆扣款紀錄，但我還沒確認那筆到底是什麼性質、PayPal 那邊的狀態也不清楚。正常來說，客服應該先幫我釐清交易狀態——是預授權還是已清算、商家端有沒有完成結算——然後再建議對應的處理方式。</p>
 <p>但他跳過了這些步驟，第一反應就是啟動爭款調查。</p>
 <p>爭款調查不是沒有代價的。上次的經驗告訴我，這個動作一旦啟動，你可能會被商家列入黑名單，而且你事前根本不會被告知這個風險。銀行不應該預設客戶了解這些後果，更不應該讓客戶自己來踩煞車。</p>
 <p>我能擋下來，是因為我有過慘痛的經驗。換一個沒經歷過的人，大概就直接同意了。</p>
-<h2>教訓</h2>
+<h2 id="section-5">教訓</h2>
 <p>上次那篇文章寫的教訓依然適用：有問題先聯繫商家和支付平台，搞清楚狀況，不要讓任何一方替你啟動「調查」或「爭議」流程。</p>
 <p>這次多學到一件事：銀行客服的積極，不一定對你有利。他們的 SOP 可能是「客戶反映多扣款→啟動爭款調查」，但這個 SOP 少了一個關鍵步驟：先確認事實。</p>
 <p>學費繳過一次就夠了。第二次，你得自己擋住。</p>
@@ -232,15 +248,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li><li style="--row-accent:#4f6f68"><a href="/business-insights/counseling-clinic-legal-runway/"><span class="side-row__meta">08JUN26 · <span>商業觀察</span></span><span class="side-row__title">我以為心理諮商所是一座基地，後來發現它更像一條合法跑道</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li><li style="--row-accent:#4f6f68"><a href="/business-insights/counseling-clinic-legal-runway/"><span class="side-row__meta">08JUN26 · <span>商業觀察</span></span><span class="side-row__title">我以為心理諮商所是一座基地，後來發現它更像一條合法跑道</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">系統錯誤，但錢已經扣了</a></li><li><a href="#section-2">銀行的反應讓我嚇了一跳</a></li><li><a href="#section-3">先搞清楚狀況再說</a></li><li><a href="#section-4">銀行客服不該讓客戶自己踩煞車</a></li><li><a href="#section-5">教訓</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

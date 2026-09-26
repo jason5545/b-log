@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -207,7 +223,7 @@
 <p>這種問題最容易讓人往程式碼裡查。</p>
 <p>我一開始也會想，是不是 <code>MenuBarExtra</code> 的 <code>.window</code> 又在 macOS 26 被改了？是不是 <code>NSStatusItem</code> 的 visibility 被 app 自己寫壞？是不是之前修 sudden termination 的地方又有副作用？</p>
 <p>後來發現，卡住的是 macOS 自己記住了一份舊的 menu bar allow-list，而且那份記憶比 app 目前的狀態還有力。</p>
-<h2>公開 API 只講到這裡</h2>
+<h2 id="section-1">公開 API 只講到這裡</h2>
 <p>如果只看 Apple 的公開文件，這件事應該很單純。</p>
 <p><a href="https://developer.apple.com/documentation/swiftui/menubarextra"><code>MenuBarExtra</code></a> 是 SwiftUI 裡放在系統 menu bar 的 scene。你可以做一個只有 menu bar item 的 utility app，也可以用 <code>.menuBarExtraStyle(.window)</code> 做比較複雜的面板。</p>
 <p>AppKit 那邊，<a href="https://developer.apple.com/documentation/appkit/nsstatusitem"><code>NSStatusItem</code></a> 就是一個顯示在系統 menu bar 的項目；<a href="https://developer.apple.com/documentation/appkit/nsstatusbar"><code>NSStatusBar</code></a> 管理這些 status items。Apple 文件也很早就提醒過，menu bar 空間有限，status item 不保證永遠可用。</p>
@@ -216,7 +232,7 @@
 <p>不是只有你的 app。</p>
 <p>也不是只有 <code>defaults read com.your.bundle.id</code>。</p>
 <p>還有 Control Center。</p>
-<h2>舊 app 不會真的離開</h2>
+<h2 id="section-2">舊 app 不會真的離開</h2>
 <p>我後來查到不少人遇到比較表層的版本：app 刪掉了，但 System Settings &gt; Menu Bar &gt; Allow in the Menu Bar 裡還留著它。</p>
 <p><a href="https://apple.stackexchange.com/questions/470374/remove-uninstalled-apps-from-macos-system-settings-menu-bar-allow-in-the-menu">Ask Different 上有一題</a>在問這個問題，答案提到的路徑是這個：</p>
 <pre><code class="language-text">~/Library/GroupContainersAlias/group.com.apple.controlcenter/Library/Preferences/group.com.apple.controlcenter.plist
@@ -233,7 +249,7 @@
 <p>麻煩的是，我找不到一個明確的 per-app reset。</p>
 <p>我想要的其實很小：對單一 bundle id 說，「把這個 app 在 Allow in the Menu Bar 裡的歷史狀態清掉，重新認一次。」</p>
 <p>macOS 沒給我這個按鈕。</p>
-<h2>TrackPal 這次被舊狀態覆蓋</h2>
+<h2 id="section-3">TrackPal 這次被舊狀態覆蓋</h2>
 <p>如果只是刪掉的 app 留在設定裡，那還算煩，但不致命。</p>
 <p>TrackPal 這次更麻煩。</p>
 <p>它不是「舊 app 留在清單裡」。它是目前這個 app 的 menu bar item 會被舊狀態影響。</p>
@@ -251,7 +267,7 @@
 <p><a href="https://github.com/p0deje/Maccy/issues/1029">Maccy 也有人</a>在 macOS 26.0.1 遇到 menu bar icon missing，issue 裡可以看到 <code>NSStatusItem VisibleCC Item-0</code>、<code>Item-1</code> 這種紀錄。</p>
 <p>那不一定跟 TrackPal 是同一個根因。</p>
 <p>但至少可以先把一件事釘住：macOS 26 的 menu bar visibility 不是只有 app 端一個開關。</p>
-<h2>最後重設的是 allow-list</h2>
+<h2 id="section-4">最後重設的是 allow-list</h2>
 <p>這裡最容易做錯的是只刪 app 自己的 defaults。</p>
 <p>例如：</p>
 <pre><code class="language-bash">defaults delete com.jasonchien.TrackPal &quot;NSStatusItem VisibleCC Item-0&quot;
@@ -274,7 +290,7 @@
 <p>這裡讓我改了判斷。</p>
 <p>TrackPal 原本有建立 menu bar item。</p>
 <p>只是 Control Center 用舊狀態把它按掉。</p>
-<h2>不要把這件事當一般偏好設定</h2>
+<h2 id="section-5">不要把這件事當一般偏好設定</h2>
 <p>我不太喜歡 macOS 26 這裡的設計。</p>
 <p>我不是反對它有狀態。</p>
 <p>menu bar 一定要有狀態。</p>
@@ -287,7 +303,7 @@
 <p>但真正錯的可能是系統把另一個 app 的舊禁止狀態套到你身上。</p>
 <p>這種 bug 最浪費時間。</p>
 <p>因為它會讓你一直在自己的程式碼裡找一個不存在的錯。</p>
-<h2>我會怎麼查下一次</h2>
+<h2 id="section-6">我會怎麼查下一次</h2>
 <p>下次遇到 macOS 26 menu bar app 不顯示，我不會先改 UI。</p>
 <p>我會先確認幾件事：</p>
 <pre><code class="language-bash">defaults read com.your.bundle.id | rg &#39;NSStatusItem|VisibleCC&#39;
@@ -305,7 +321,7 @@
 <p>app 自己的 <code>VisibleCC</code> 有沒有被寫成 0。</p>
 <p>Control Center 的 <code>trackedApplications</code> 有沒有把舊狀態套回來。</p>
 <p>這三個混在一起查，會很痛苦。</p>
-<h2>這次修掉的是 macOS 的舊答案</h2>
+<h2 id="section-7">這次修掉的是 macOS 的舊答案</h2>
 <p>我之前寫過 TrackPal 在 macOS 26 會因為 <code>MenuBarExtra</code> <code>.window</code> 觸發 sudden termination。那次是程式碼真的需要補：<code>setActivationPolicy(.accessory)</code>，再用 <code>applicationShouldTerminate</code> 回 <code>.terminateCancel</code>。</p>
 <p>那是 app 的問題。</p>
 <p>這次不是。</p>
@@ -326,15 +342,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">公開 API 只講到這裡</a></li><li><a href="#section-2">舊 app 不會真的離開</a></li><li><a href="#section-3">TrackPal 這次被舊狀態覆蓋</a></li><li><a href="#section-4">最後重設的是 allow-list</a></li><li><a href="#section-5">不要把這件事當一般偏好設定</a></li><li><a href="#section-6">我會怎麼查下一次</a></li><li><a href="#section-7">這次修掉的是 macOS 的舊答案</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

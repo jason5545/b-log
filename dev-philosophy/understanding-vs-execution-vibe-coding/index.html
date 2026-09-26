@@ -72,12 +72,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -90,19 +90,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -245,7 +261,7 @@
   </div>
 </div>
 
-<h2>什麼是 Vibe Coding?</h2>
+<h2 id="section-1">什麼是 Vibe Coding?</h2>
 <p>「Vibe Coding」指的是<strong>依靠直覺、感覺和 AI 輔助工具進行程式設計的開發風格</strong>，強調快速實現功能，而非嚴謹的規劃和架構設計。</p>
 <h3>主要特徵</h3>
 <p><strong>開發方式:</strong></p>
@@ -261,7 +277,7 @@
 <li>遇到問題直接問 AI 或搜尋，而非深入理解原理</li>
 <li>跳過傳統的設計階段，直接進入實作</li>
 </ul>
-<h2>Theo 的框架:Type A vs Type B</h2>
+<h2 id="section-2">Theo 的框架:Type A vs Type B</h2>
 <p>知名 tech YouTuber Theo (t3dotgg) 對 vibe coding 提出了一個重要的區分:</p>
 <h3>Type A - 有基礎的直覺開發</h3>
 <ul>
@@ -284,7 +300,7 @@
 <li><strong>出問題時你得能救自己</strong>:完全依賴 AI 的人遇到 bug 就卡死</li>
 </ul>
 <p>這個框架的關鍵區分點是:<strong>你是否理解自己在做什麼</strong>。</p>
-<h2>一個被忽略的 Edge Case</h2>
+<h2 id="section-3">一個被忽略的 Edge Case</h2>
 <p>然而，這個二分法忽略了一個有趣的邊界情況:</p>
 <p><strong>如果一個開發者:</strong></p>
 <ul>
@@ -307,7 +323,7 @@
 <li>但幾乎每一行程式碼都需要 AI 協助</li>
 </ul>
 <p>不是因為不會，是因為<strong>打字成本太高</strong>。</p>
-<h2>框架的第三軸:為什麼使用 AI?</h2>
+<h2 id="section-4">框架的第三軸:為什麼使用 AI?</h2>
 <p>Theo 的框架假設「理解」和「執行獨立性」總是綁在一起的:</p>
 <ul>
 <li>理解 → 能獨立執行</li>
@@ -336,7 +352,7 @@
 </ul>
 </li>
 </ol>
-<h2>創作歸屬的哲學問題</h2>
+<h2 id="section-5">創作歸屬的哲學問題</h2>
 <p>這個討論引發了一個更深層的問題:<strong>當 AI 協助你表達想法時，這個作品是誰的?</strong></p>
 <h3>類比思考</h3>
 <p>考慮以下情況:</p>
@@ -359,7 +375,7 @@
 <li><strong>策展能力</strong>:從 AI 產出中選擇和調整</li>
 </ul>
 <p>這是從「生產」轉向「策展與意圖管理」的典範轉移。</p>
-<h2>AI 作為認知與溝通的義肢</h2>
+<h2 id="section-6">AI 作為認知與溝通的義肢</h2>
 <p>霍金使用語音合成器說話，沒有人會說「那是電腦在說話」。</p>
 <p>同樣，當物理限制使得某些能力無法自然執行時，工具的使用不應該被視為「作弊」或「能力不足」，而是<strong>合理的輔助</strong>。</p>
 <h3>強制解耦的啟示</h3>
@@ -370,7 +386,7 @@
 <li>是「能親手寫出程式碼」?</li>
 <li>還是「理解系統、做出決策、解決問題」?</li>
 </ul>
-<h2>務實的結論</h2>
+<h2 id="section-7">務實的結論</h2>
 <p>在這個討論中，真正重要的是:</p>
 <ul>
 <li>論點有沒有盲點?</li>
@@ -380,7 +396,7 @@
 <p>至於這個思考是<strong>如何被表達出來的</strong>，其實是次要的。</p>
 <p>就像做技術決策時，重要的是<strong>這個決策對不對</strong>，不是<strong>你是怎麼得出這個決策的</strong>。</p>
 <hr>
-<h2>後記</h2>
+<h2 id="section-8">後記</h2>
 <p>這篇文章本身就是這個討論的實踐案例:</p>
 <ul>
 <li>觀點、分析、架構 → 我的</li>
@@ -396,15 +412,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">什麼是 Vibe Coding?</a></li><li><a href="#section-2">Theo 的框架:Type A vs Type B</a></li><li><a href="#section-3">一個被忽略的 Edge Case</a></li><li><a href="#section-4">框架的第三軸:為什麼使用 AI?</a></li><li><a href="#section-5">創作歸屬的哲學問題</a></li><li><a href="#section-6">AI 作為認知與溝通的義肢</a></li><li><a href="#section-7">務實的結論</a></li><li><a href="#section-8">後記</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

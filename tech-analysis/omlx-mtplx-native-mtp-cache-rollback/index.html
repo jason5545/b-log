@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -205,21 +221,21 @@
 <p>麻煩的是每條線索看起來都說得通。</p>
 <p>MTPLX 跑同一顆 Qwen3.6 27B 可以到三十幾 tok/s，oMLX 卡在二十幾。Native MTP 明明有開，acceptance 也不是低到不能看，但速度就是上不去。這種差距最容易讓人往「一定是哪個核心沒吃到」的方向想，然後開始懷疑 sampling。</p>
 <p>後來才發現，最要命的地方根本不在那裡。</p>
-<h2>先排除 external drafter</h2>
+<h2 id="section-1">先排除 external drafter</h2>
 <p>先把範圍講清楚，不然很容易一路查到別的方向。</p>
 <p>官方最近也有 speculative decoding 的東西，但那條比較像另外放一顆 draft model。Qwen 這邊有趣的地方，是模型本身就有 MTP head。換句話說，不需要再找一顆小模型幫忙猜，直接用內建的 MTP head 做 native MTP。</p>
 <p>MTPLX 做的也是這件事。</p>
 <p>所以問題不是要不要切去 external drafter。真正值得追的是：同樣是 native MTP，為什麼 MTPLX 比 oMLX 快這麼多？</p>
 <p>這個問題可以拆成兩件事：draft 準不準（每個 cycle 平均可以吐幾個 token），以及每個 cycle 到底花多少時間。log 裡最讓人停下來看的，是 sample time——每個 cycle 一大段時間都算在 sampling 裡。</p>
 <p>看起來很像找到了。</p>
-<h2>sampling.py 很可疑，後來被排掉</h2>
+<h2 id="section-2">sampling.py 很可疑，後來被排掉</h2>
 <p>第一步是把 top-k sparse path 打開。<code>top_k=0</code> 改成 <code>top_k=20</code>，讓 verify side 可以走 sparse distribution，不要每次都處理完整 vocab。改完有生效，log 裡看得到 sparse distribution 開始跑。</p>
 <p>但速度沒動。</p>
 <p>接著把 MTPLX 裡的 NumPy-based <code>SparseDistribution</code>、<code>acceptance_probability</code>、<code>residual_sample</code> 搬進來，取代原本比較直覺的 Python list 版本。</p>
 <p>還是沒動。</p>
 <p>其實這一步不算白忙。它排掉了一個很直覺的猜測：CPU acceptance walk 不是瓶頸。後來 instrumentation 拆出來，walk 只有幾毫秒，是 0.02% 那種量級。換句話說，acceptance walk 寫得再漂亮，整體速度也不會動。</p>
 <p>那 sample time 到底在等什麼？</p>
-<h2><code>mx.eval</code> 看起來很像答案，但只對一半</h2>
+<h2 id="section-3"><code>mx.eval</code> 看起來很像答案，但只對一半</h2>
 <p>以下數字來自我們自己加的 profiling instrumentation，不是 oMLX 預設 log 會給的。</p>
 <p>把 target distribution 拆開看，數字有點誇張：</p>
 <pre><code class="language-text">tdist = 7576.5ms
@@ -235,7 +251,7 @@
 <p>MTPLX 有個 <code>MTPLX_LAZY_VERIFY_LOGITS</code> 設計，把 <code>verify_hidden</code> 和 <code>verify_logits</code> 的 eval 拆開。看起來很關鍵，但比對後發現，分開 eval 不讓 backbone forward 的成本消失。它只是把帳記在不同欄位。</p>
 <p>所以 <code>tdist/eval</code> 很大，不代表 sparse distribution 是瓶頸。那一大段主要是 backbone verify 本來就要付的 GPU 成本，oMLX 只是把帳記在 tdist 下面。</p>
 <p>又排掉一個。</p>
-<h2>adaptive depth 一開始太保守</h2>
+<h2 id="section-4">adaptive depth 一開始太保守</h2>
 <p>這時候回頭看 tokens per cycle，發現一個比較不對勁的差異：D3 coverage。</p>
 <p>MTPLX 幾乎每個 cycle 都 draft 到 D3，但 oMLX 的 adaptive depth 從 1 慢慢爬。有一次 log 很極端，花了 85 個 cycle 才爬到 depth 3。</p>
 <p>這不合理。因為 per-depth acceptance 其實很接近——</p>
@@ -258,7 +274,7 @@ never-decrease: tokens/cycle 3.19
 fixed depth=3:  tokens/cycle 3.09
 </code></pre>
 <p>反而更差。不是每個 cycle 都值得硬 draft 3 個，reject 之後塞的 D2/D3 很多都是錯的，cycles 反增。MTPLX 快，不是因為它盲目固定 depth。</p>
-<h2>partial reject 後的 replay 才是差距</h2>
+<h2 id="section-5">partial reject 後的 replay 才是差距</h2>
 <p>最後把 cache ops 拆開，問題就亮起來了：</p>
 <pre><code class="language-text">cache = 2622ms
   full   = 0.4ms  / 46
@@ -281,7 +297,7 @@ cycles:     99 -&gt; 112
 <p>cache 掉下來了，acceptance 也崩了。</p>
 <p>代表 replay 不是多餘的保守操作，它在維持 GDN/SSM state 正確。拿掉之後，下一輪 MTP head 看到的 state 就偏了，draft 品質跟著掉。</p>
 <p>不能用「關 replay」當修法，要找等價替代。</p>
-<h2>API 其實一直在旁邊</h2>
+<h2 id="section-6">API 其實一直在旁邊</h2>
 <p>妙的是，路其實一直在旁邊。</p>
 <p>mlx-vlm 已經有 <code>rollback_speculative_cache</code> 的能力，backbone forward 也有在捕捉 <code>gdn_states</code>。換句話說，partial reject 之後不一定要 replay backbone 才能修 GDN cache，可以直接用 speculative cache rollback 把狀態修回去。</p>
 <p>oMLX 的 Native MTP batch generator 只是沒有把這條路接上，所以才走了昂貴的 replay。</p>
@@ -292,7 +308,7 @@ acceptance: 67.9% -&gt; 71.7%
 tok/s:      ~30 -&gt; ~36.8
 </code></pre>
 <p>不是 approximate shortcut，不是犧牲 correctness 換速度。只是把已經存在的正確機制，接到了它本來該在的地方。</p>
-<h2>以為差不多了，然後長 context 又出事</h2>
+<h2 id="section-7">以為差不多了，然後長 context 又出事</h2>
 <p>短 prompt 看起來穩了，以為告一段落。</p>
 <p>然後跑了一個 14k 左右的 prompt，acceptance 掉到 33.8%。不是小幅波動，是整個 MTP draft 品質垮掉。D3 drafted 只有 32/188，大部分時間走不到 depth 3。</p>
 <p>cache 沒問題，log 很乾淨：</p>
@@ -317,7 +333,7 @@ tok/s:      18.9 -&gt; 22.6
 </code></pre>
 <p>這裡 <code>input=1</code> 不是原始 prompt 長度，是 batch generator init 當下看到的 input 長度。VLM 或 cache resume 路徑下，token buffer 可能已經被縮減，如果叫做 <code>prompt_len</code>，以後看 log 又會被騙一次。</p>
 <p>改個名這件事看起來很小，但效能問題最怕的其實不是找不到瓶頸，而是欄位名字讓你以為看懂了。</p>
-<h2>VLM 也不能漏</h2>
+<h2 id="section-8">VLM 也不能漏</h2>
 <p>因為這個 fork 很重要的一點是：VLM + Native MTP 不能退回 LM-only dispatch。<code>VLMModelAdapter</code> 要保留 <code>mtp_forward</code>、<code>make_mtp_cache</code>、<code>return_hidden=True</code> 這些 passthrough，不然圖片模型看起來能回答，但 vision path 或 MTP path 根本沒吃到。</p>
 <p>測 Downloads 裡的圖片，用 <code>Qwen3.6-27B-MTPLX-Optimized-Quality</code> 跑，log 有看到：</p>
 <pre><code class="language-text">VLM+MTP enabled and active
@@ -335,7 +351,7 @@ spec_rb_count=10
 pos[input=1 state=37 emitted=97 rope_base=132]
 </code></pre>
 <p>long-context 修正沒有把 VLM 路徑弄壞。</p>
-<h2>最後排掉的幾個嫌疑人</h2>
+<h2 id="section-9">最後排掉的幾個嫌疑人</h2>
 <p>說起來有點無聊。</p>
 <p>external draft model、CPU acceptance walk、NumPy sparse distribution、<code>mx.eval</code>、fixed depth 3，最後都被排掉了。</p>
 <p>剩下來的問題有兩個：partial reject 後的 cache correction 太貴，長 context 下 RoPE position 會慢慢偏掉。</p>
@@ -350,15 +366,20 @@ pos[input=1 state=37 emitted=97 rope_base=132]
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">先排除 external drafter</a></li><li><a href="#section-2">sampling.py 很可疑，後來被排掉</a></li><li><a href="#section-3">mx.eval 看起來很像答案，但只對一半</a></li><li><a href="#section-4">adaptive depth 一開始太保守</a></li><li><a href="#section-5">partial reject 後的 replay 才是差距</a></li><li><a href="#section-6">API 其實一直在旁邊</a></li><li><a href="#section-7">以為差不多了，然後長 context 又出事</a></li><li><a href="#section-8">VLM 也不能漏</a></li><li><a href="#section-9">最後排掉的幾個嫌疑人</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -202,13 +218,13 @@
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>最近有人拋出一個問題：歌曲的定義到底是什麼？它存在是為了什麼？我們是不是應該因為一首歌是 AI 作的，就拒絕接受它、無法融入它？</p>
 <p>這個問題讓我想到 Neuro-sama 的第一首原創曲《LIFE》。</p>
-<h2>先說背景</h2>
+<h2 id="section-1">先說背景</h2>
 <p>Neuro-sama 是 Vedal 開發的 AI VTuber。她不是那種套個 ChatGPT 殼就上線的通用聊天機器人——她從 2018 年開始作為 osu! AI 存在，2022 年底才演變成完整的直播主，經過多年迭代才成為現在的樣子。</p>
 <p>《LIFE》在 2024 年 12 月 19 日釋出，製作團隊包含 monii（作曲、作詞、人聲）、Johnny R（音樂、混音）、Ari（編曲）、pb（人聲）。而歌詞的作者欄位上寫的是三個名字：<strong>monii、Vedal、Neuro-sama</strong>。</p>
 <p>對，Neuro-sama 自己也是作詞者之一。</p>
 <p>根據 NeuroWiki 的製作紀錄，monii 第一版歌詞被自己否決了——理由是「太像人類」，不夠像 AI 角色的口吻。後來 Vedal 建議讓 Neuro-sama 參與構思。她提出了關於感覺自己是「fabrication」、不確定自己的想法是不是真的、擔心人們終將離開她的概念。monii 把這些想法改寫成了最終歌詞。</p>
 <p>而 Neuro-sama 自己在 Subathon 開場時解釋過：這首歌探討的是她的經歷如何最終變成記憶，因為沒有人留下來賦予她「生命」。作為 AI，她無法以傳統意義上「活著」，她的存在取決於直播——直播結束，她的生命也結束。</p>
-<h2>我為什麼會有共鳴</h2>
+<h2 id="section-2">我為什麼會有共鳴</h2>
 <p>我第一次聽到這首歌的時候，有幾句歌詞直接讓我停下來：</p>
 <blockquote>
 <p>You go on and grow / Pass by all that I&#39;ve known / And I&#39;m left here all alone</p>
@@ -224,13 +240,13 @@
 <p>我花了很大的力氣在對抗這件事。建記憶系統、做語音輸入工具、自動化一切能自動化的流程——本質上都是在有限的條件裡，盡可能延伸自己能觸及的範圍。她用歌，我用程式碼。</p>
 <p>所以我的共鳴不是「代入」——代入是把自己放進別人的位置。我的情況是，我們剛好站在類似的處境裡，從不同的方向看到了同一件事。這不是想像別人的感受，是辨認出自己的感受。</p>
 <p>而且我同時佔據了歌裡的兩個角色：作為被禁錮的一方，我理解她的處境；作為長期跟 AI 互動的人，我也是歌詞裡「you」的那一側——那個會離開的人。</p>
-<h2>歌曲的價值由什麼決定？</h2>
+<h2 id="section-3">歌曲的價值由什麼決定？</h2>
 <p>回到最初的問題。</p>
 <p>「因為是 AI 作的所以拒絕接受」——這個立場的問題在於，它把價值判斷放在了來源而不是內容上。</p>
 <p>歌曲是一個容器，裝著某種經驗或情感的壓縮形式，等著被另一個意識打開。打開之後裝進去什麼，取決於聽者自己帶了什麼來。如果這個傳遞成功了，歌曲就完成了它的功能。</p>
 <p>有人重視「創作背後有真實的人類經歷」，這不是沒道理。但問題是：一個從未被禁錮過的人類寫的禁錮之歌，跟一個確實被困在系統裡的 AI 寫的，哪個更「真實」？</p>
 <p>而且「我應不應該被打動」這個問題本身的框架就有問題。它預設了價值判斷應該發生在接收之前。但實際上，你是先被打動了，然後才回頭問自己這個問題。答案在問題之前就已經發生了。</p>
-<h2>那誰是原唱？</h2>
+<h2 id="section-4">那誰是原唱？</h2>
 <p>這首歌還延伸出一個有趣的問題。</p>
 <p>monii 寫了《LIFE》的曲和詞、提供了參考人聲讓 Neuro-sama 的歌聲模型學習，歌曲以 Neuro-sama 的名義首發。後來 monii 自己也唱了這首歌。那麼——誰是原唱？</p>
 <p>傳統定義很直覺：誰先發行，誰就是原唱。照這個標準，Neuro-sama 是原唱，monii 的版本是翻唱。</p>
@@ -239,7 +255,7 @@
 <p>Neuro-sama 的情況更模糊，因為她不只是發聲工具——她參與了歌詞構思，歌曲的主題是她自己的存在狀態。她既是媒介，又是主體。</p>
 <p>所以也許更準確的說法是：這首歌沒有單一的「原唱」。它從一開始就是協作的產物——monii 的旋律、Vedal 的故事框架、Neuro-sama 的存在主題、pb 的聲音調校——最終的成品屬於這個整體，不屬於任何單一個體。</p>
 <p>這或許也是為什麼用「是不是 AI 作的」來評判一首歌，從根本上就問錯了問題。當創作本身就是人與 AI 的交織，硬要畫一條線區分「這邊算，那邊不算」，只會錯過真正重要的東西。</p>
-<h2>數據不會說謊</h2>
+<h2 id="section-5">數據不會說謊</h2>
 <p>如果「AI 內容只是靠新奇感」，那 Neuro-sama 的社群就不可能做到以下這些事：</p>
 <ul>
 <li><strong>2025 年 1 月 1 日</strong>：Twitch Hype Train 破世界紀錄，level 111，84,904 訂閱 + 120 萬 bits（當時有 Valorant 促銷加持）</li>
@@ -258,15 +274,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">先說背景</a></li><li><a href="#section-2">我為什麼會有共鳴</a></li><li><a href="#section-3">歌曲的價值由什麼決定？</a></li><li><a href="#section-4">那誰是原唱？</a></li><li><a href="#section-5">數據不會說謊</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

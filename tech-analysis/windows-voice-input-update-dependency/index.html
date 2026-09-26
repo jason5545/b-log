@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -199,17 +215,17 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">語音辨識進步了，但 Windows 還是那個 Windows</h1>
       <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2025/windows-voice-cover.webp" srcset="/content/img/2025/windows-voice-cover-480w.webp 480w, /content/img/2025/windows-voice-cover-828w.webp 828w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>前言</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">前言</h2>
 <p>作為一個只能用單指打字的開發者，任何能減少鍵盤操作的工具對我來說都是剛需。Windows 11 的語音輸入（Win+H）本來用得好好的，結果某天突然就壞了。</p>
 <p>更詭異的是：語音輸入面板能正常叫出來，但麥克風按鈕完全按不下去。就像一個裝飾品一樣擺在那邊。</p>
-<h2>問題症狀</h2>
+<h2 id="section-2">問題症狀</h2>
 <ul>
 <li>按 <code>Win + H</code> 可以叫出語音輸入面板 ✅</li>
 <li>面板正常顯示，沒有錯誤訊息 ✅</li>
 <li>但麥克風按鈕完全沒反應 ❌</li>
 <li>點擊後沒有任何回饋，不會變色、不會啟動 ❌</li>
 </ul>
-<h2>排查過程</h2>
+<h2 id="section-3">排查過程</h2>
 <h3>第一步：檢查服務狀態</h3>
 <p>我先確認相關服務是否正常運作：</p>
 <pre><code class="language-powershell">Get-Service TabletInputService, Audiosrv, AudioEndpointBuilder | Format-Table Name, Status, StartType
@@ -239,7 +255,7 @@ foreach ($s in $settings) {
 <h3>第四步：檢查麥克風硬體</h3>
 <p>測試其他使用麥克風的應用程式（Discord、錄音機等）：<strong>完全正常</strong>。</p>
 <p>確定不是硬體問題。</p>
-<h2>真正的原因</h2>
+<h2 id="section-4">真正的原因</h2>
 <p>在快要放棄的時候，我突然想到一件事：</p>
 <p><strong>我之前用 WinUtil (Chris Titus Tech) 優化工具，把 Windows Update 服務完全停用了。</strong></p>
 <p>抱著試試看的心態，我把 Windows Update 改回自動啟動：</p>
@@ -247,7 +263,7 @@ foreach ($s in $settings) {
 Start-Service -Name wuauserv
 </code></pre>
 <p>重開機後... <strong>語音輸入復活了！</strong> 🎉</p>
-<h2>為什麼語音輸入會依賴 Windows Update？</h2>
+<h2 id="section-5">為什麼語音輸入會依賴 Windows Update？</h2>
 <p>這個問題我到現在還是百思不得其解。</p>
 <p>根據推測，可能的原因：</p>
 <ol>
@@ -272,7 +288,7 @@ Start-Service -Name wuauserv
 <p>無論如何，這種隱藏的依賴關係真的很反直覺。</p>
 <p>語音輸入跟 Windows Update 八竿子打不著關係，結果卻是這樣設計的。</p>
 <p><strong>Desktop Linux of the year.</strong> 🙃</p>
-<h2>最終解決方案</h2>
+<h2 id="section-6">最終解決方案</h2>
 <p>但我還是不想讓 Windows Update 亂跑，所以採用了折衷方案：</p>
 <h3>延遲更新到 2042 年 + WinUtil</h3>
 <p>透過群組原則編輯器或登錄檔，把更新延遲到遙遠的未來：</p>
@@ -292,7 +308,7 @@ New-ItemProperty -Path &quot;HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUp
 <li>✅ 系統不會被自動更新騷擾</li>
 </ul>
 <p>再搭配 WinUtil 關閉其他不需要的功能，完美。</p>
-<h2>意外的驚喜：辨識率大幅進步</h2>
+<h2 id="section-7">意外的驚喜：辨識率大幅進步</h2>
 <p>修好語音輸入後，實際使用了一陣子，發現一件很驚喜的事：</p>
 <p><strong>Windows 語音輸入的繁體中文辨識率已經不輸 Gboard 了。</strong></p>
 <p>我記得幾年前試用時，Windows 的中文辨識還很糟糕，常常辨識錯誤或是完全聽不懂。但現在：</p>
@@ -339,7 +355,7 @@ New-ItemProperty -Path &quot;HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUp
 </tbody></table>
 <p>對我這種單指打字的使用者來說，這是個重大進步。</p>
 <p>以前可能會想「反正辨識率不好，還是自己慢慢打」，但現在真的可以當成主要輸入方式了。</p>
-<h2>結論</h2>
+<h2 id="section-8">結論</h2>
 <p>這次經驗讓我學到：</p>
 <ol>
 <li><strong>Windows 的服務依賴關係很複雜</strong>，有時候完全不合邏輯</li>
@@ -364,15 +380,20 @@ New-ItemProperty -Path &quot;HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUp
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">前言</a></li><li><a href="#section-2">問題症狀</a></li><li><a href="#section-3">排查過程</a></li><li><a href="#section-4">真正的原因</a></li><li><a href="#section-5">為什麼語音輸入會依賴 Windows Update？</a></li><li><a href="#section-6">最終解決方案</a></li><li><a href="#section-7">意外的驚喜：辨識率大幅進步</a></li><li><a href="#section-8">結論</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

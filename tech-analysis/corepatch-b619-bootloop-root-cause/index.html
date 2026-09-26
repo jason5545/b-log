@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -203,7 +219,7 @@
       <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp" srcset="/content/img/2026/corepatch-b619-bootloop-root-cause-cover-480w.webp 480w, /content/img/2026/corepatch-b619-bootloop-root-cause-cover-828w.webp 828w, /content/img/2026/corepatch-b619-bootloop-root-cause-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>我在同一支手機上被這條鏈炸了兩次：OTA 之後開機循環，format data 暫時恢復，下一次又來。第二次我才把 <code>packages.xml</code>、APK 簽章和 CorePatch 的 hook 放在一起比對。</p>
 <p>你如果沒在跑 Xiaomi.eu ROM、沒裝 CorePatch，這篇仍然值得看。它記錄的是一個 fail-open 設計，怎麼在特定條件下把暫時的驗證失敗寫成下一次冷開機的致命狀態。</p>
-<h2>TL; DR</h2>
+<h2 id="section-1">TL; DR</h2>
 <p>CorePatch 的 <code>ApkSignatureVerifierHook</code> 有一段 fail-open 邏輯：當 APK 簽章驗證失敗、又拿不到「已安裝簽章」或「略過摘要驗證」救援時，它會<strong>硬塞一顆 Google 平台 release key 當占位符</strong>（SHA-256 開頭是 <code>b6198a8d…</code>，我通稱它 B619）。</p>
 <p>平常這沒事，因為 CorePatch 主要在 <code>/data/app</code> 處理異簽章 APK，下次開機 LSPosed 已接管，bypass 繼續放行。</p>
 <p>但 Xiaomi.eu 的打包流程會把 <code>ContactsProvider</code> 處理成「v1 檔案在、v2/v3 被 strip、<code>.SF</code> 又殘留 <code>X-Android-APK-Signed: 2,3</code> 宣告」的自相矛盾狀態。這顆 APK 又剛好屬於 <code>android.uid.shared</code> 這個 shared UID 群組。</p>
@@ -216,19 +232,19 @@
 <li>開機循環</li>
 </ol>
 <p><strong>根因一行話</strong>：CorePatch 用「真實有效的 Google platform 憑證」當 fail-open 占位符，而你的 EU ROM 恰好有一個 v1/v2/v3 自相矛盾的 ContactsProvider，兩者相遇就把它寫進 <code>packages.xml</code>。</p>
-<h2>我為什麼在意這條鏈</h2>
+<h2 id="section-2">我為什麼在意這條鏈</h2>
 <p>第一次 format data 完，我以為是 ROM 鍋，把備份還回去就算了。第二次還發，我才願意打開 logcat 一行一行看。一個在 Android 平台廣泛被信任的公開憑證，被某個 hook 模組當成 fallback 塞進去，而且塞完之後的下游沒有一道門會問「這顆 APK 本來就是用 AOSP key 簽的嗎」。這是 hook 階段把錯誤結果寫成後續流程會相信的狀態，重刷只會暫時蓋掉它。十二小時的工，不能只換來一句「小心 OTA」。</p>
-<h2>事件還原</h2>
+<h2 id="section-3">事件還原</h2>
 <p>第二次 OTA 升級（EU → EU，版本號 B309）之後，開機卡在 logo。<code>fastboot</code> 進 recovery，logcat 沒看到任何有意義的 error，只有一行 <code>PackageManager: Reconcile failed</code>，然後就重開。</p>
 <p>退路跟第一次一樣：format <code>/data</code>、重刷、慢慢把備份還回來。十二小時的工。</p>
 <p>第一次的時候我以為是「這版 ROM 比較不穩」。第二次還發，我就知道這不是偶發，是某個流程被穩定觸發的。</p>
 <p>要追，就得先知道「第二次跟第一次的共同條件」是什麼。剩下的就是 noise。</p>
-<h2>注入點：全 repo 只有一處</h2>
+<h2 id="section-4">注入點：全 repo 只有一處</h2>
 <p><code>app/src/main/java/org/lsposed/corepatch/hook/ApkSignatureVerifierHook.kt:186</code></p>
 <pre><code class="language-kotlin">signaturesBefore ?: arrayOf(Signature(Constant.SIGNATURE)),
 </code></pre>
 <p>這個 <code>?:</code> 的右邊是 fallback，意思是「如果 <code>signaturesBefore</code> 為 null，就塞這個」。一行就夠了，問題就在這一行。</p>
-<h2>B619 是哪一顆憑證</h2>
+<h2 id="section-5">B619 是哪一顆憑證</h2>
 <p><code>Constant.SIGNATURE</code> 不是隨機假資料，是 AOSP/Google 公開的「Android」platform release key。完整 metadata：</p>
 <ul>
 <li>Subject = Issuer：<code>C=US, ST=California, L=Mountain View, O=Google Inc., OU=Android, CN=Android</code></li>
@@ -240,7 +256,7 @@
 <p>它是一顆在 Android 生態裡被廣泛使用的公開 platform 憑證，不是測試用的隨機 key。放進 fallback 之後，後面的 reconcile 會把它當成一個看似合理、其實不屬於這顆 APK 的簽章。</p>
 <p>比對來源：我用 <code>apksigner</code> 把 APK 拆出來，計算內嵌憑證的 SHA-256，跟 <code>packages.xml</code> 寫進去的 hex 完全一致。同時也從 Android Open Source Project 的 platform keystore clone 出原始 DER，跑 SHA-256，三邊對得起來。</p>
 <p>這一步閉合了「B619 就是 CorePatch 寫進去的」這條鏈。如果對不起來，可能是 LSPosed fork 或別的東西在搞事，要繼續往下追。對得起來，就可以鎖定是 CorePatch。</p>
-<h2>觸發條件鏈</h2>
+<h2 id="section-6">觸發條件鏈</h2>
 <p><code>ApkSignatureVerifierHook.kt:88-226</code> 這段要跑完整條鏈才會掉進 fallback。少一層就跑到別條路徑。</p>
 <table>
 <thead>
@@ -271,7 +287,7 @@
 </tr>
 </tbody></table>
 <p>我的設定一直是「bypass 開、另外兩項關」。對一般用途剛好足夠，沒預料到會走到 fallback。</p>
-<h2>為什麼偏偏是 ContactsProvider</h2>
+<h2 id="section-7">為什麼偏偏是 ContactsProvider</h2>
 <p>我本來以為 EU 整批系統 APK 都被 strip 成 v1 only，所以每顆 shared UID 成員都該中招。實測五個 <code>android.uid.shared</code> 成員才發現不是：</p>
 <table>
 <thead>
@@ -311,7 +327,7 @@
 <p>任何一次驗證路徑變化（OTA、parser 差異、時序、bypass 模組版本差異）都會讓它獨家掉進 fallback → B619 → 跟其他成員的 E443 混簽章 → 冷開機 fatal。</p>
 <p>我看到這行實測結果的時候才想清楚一件事：CorePatch 選 <code>Constant.SIGNATURE</code> 當 fallback，判斷成本幾乎是零。寫下 <code>signaturesBefore ?: arrayOf(Signature(Constant.SIGNATURE))</code> 的人，不需要先理解 shared UID、<code>system_server</code> reconcile，或 EU ROM 的 strip 順序；只要讓這次驗證繼續就好。</p>
 <p>但下游要付的成本是 12 小時的工、一次「重刷就沒事」的誤判，還有一個連 logcat 都不會直接說出原因的 bootloop。找到 fallback 的成本很低；確認它和五顆 APK 的簽章狀態交集在哪裡，才是昂貴的部分。我寫下這段，是提醒自己下一次選 fallback 之前，要先算清楚成本最後落在誰身上。</p>
-<h2>上游現況：這條鏈沒有修復路徑</h2>
+<h2 id="section-8">上游現況：這條鏈沒有修復路徑</h2>
 <p>我去翻了 fork 點之前的所有 commit：</p>
 <ul>
 <li><code>4500fa2</code>（2024-03-11 Initial commit）就有這顆 fallback</li>
@@ -327,7 +343,7 @@
 <li><strong>就算查到，也很可能先停在個人 fork。</strong> 我自己的 patch 推在 fork <code>6e9afdb</code>，目前不打算發 PR。這條鏈需要特定 ROM、特定 APK 狀態和可比對的 <code>packages.xml</code>；沒有可重現證據，上游很難判斷要改哪一層。#132 那張 open issue 就是這個結構的樣板：有現象、無證據、上游無從修起。</li>
 </ol>
 <p>我在這裡寫的，是為了下一個會走完整條鏈的人。<strong>需要「root + ABX 解析 + 反編譯模組 + 對 SHA-256」四件事都做的人本來就少</strong>。寫下來，至少把搜尋路徑留好。</p>
-<h2>我開的 fork 跟 patch</h2>
+<h2 id="section-9">我開的 fork 跟 patch</h2>
 <p>我在 fork 上 <code>6e9afdb</code> 推了一個兩層修法：</p>
 <pre><code class="language-kotlin">// A. fail-closed：拿不到真實憑證就讓原錯誤傳播，不再偽造
 if (signaturesBefore == null) {
@@ -344,7 +360,7 @@ if (apkPath.startsWith(&quot;/data/app/&quot;) &amp;&amp; bypassVerification) {
 <p>加上把 <code>Constant.SIGNATURE</code> 從 repo 裡刪掉，編譯期就拿不到這顆 key。</p>
 <p>重開機實證：裝新版 fork 之後再觸發相同條件（模擬 v1-only + 矛盾 <code>.SF</code>），<code>packages.xml</code> 不再被污染，開機正常。</p>
 <p>這個 patch 目前不會進 upstream，原因如上節：一般場景用不到，真的會炸的人又很難把證據帶回來。對在 EU ROM 上跑 CorePatch 的人，至少要先停用 bypass，直到換掉這個 fallback。</p>
-<h2>怎麼自己驗證你有沒有中</h2>
+<h2 id="section-10">怎麼自己驗證你有沒有中</h2>
 <p>如果你也遇到 OTA 後 bootloop、format data 復活、第二次再發：</p>
 <ol>
 <li><strong>開機進 recovery 或 TWRP</strong>，掛載 <code>/data</code>（唯讀就夠）</li>
@@ -355,7 +371,7 @@ if (apkPath.startsWith(&quot;/data/app/&quot;) &amp;&amp; bypassVerification) {
 </ol>
 <p>對得起來，就先別 format data：關掉 CorePatch 的 bypass，換上 patch，再重新觸發相同條件確認。</p>
 <p>對不起來，就不能把這次 bootloop 歸到這條鏈，得繼續查。</p>
-<h2>我學到的事</h2>
+<h2 id="section-11">我學到的事</h2>
 <h3>1. 失敗開放設計是雙面刃</h3>
 <p>CorePatch 的 fail-open 哲學在「使用者裝了一個來路不明的 APK 結果因為簽章不過被擋下來」這個場景是對的：寧可放行也不要擋住。但當下游消費端（PackageManager）的容錯假設是「簽章會一致」時，這個放行就會在 shared UID 群組上放大成 fatal。</p>
 <p>設計 fail-open 時要問的不是「失敗時怎麼繼續」，是「下游有誰假設我不會失敗」。</p>
@@ -387,15 +403,20 @@ if (apkPath.startsWith(&quot;/data/app/&quot;) &amp;&amp; bypassVerification) {
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#0e7490"><a href="/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/"><span class="side-row__meta">15AUG26 · <span>技術開發</span></span><span class="side-row__title">來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#0e7490"><a href="/tech-development/edgelink-kde-connect-xiaomi-lyra-mac/"><span class="side-row__meta">15AUG26 · <span>技術開發</span></span><span class="side-row__title">來電在 Mac 接、鏡像用 Touch ID 解鎖：我花了五週寫一個會說小米 Lyra 的 KDE Connect</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">TL; DR</a></li><li><a href="#section-2">我為什麼在意這條鏈</a></li><li><a href="#section-3">事件還原</a></li><li><a href="#section-4">注入點：全 repo 只有一處</a></li><li><a href="#section-5">B619 是哪一顆憑證</a></li><li><a href="#section-6">觸發條件鏈</a></li><li><a href="#section-7">為什麼偏偏是 ContactsProvider</a></li><li><a href="#section-8">上游現況：這條鏈沒有修復路徑</a></li><li><a href="#section-9">我開的 fork 跟 patch</a></li><li><a href="#section-10">怎麼自己驗證你有沒有中</a></li><li><a href="#section-11">我學到的事</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

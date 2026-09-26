@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -201,7 +217,7 @@
       <h1 id="post-title" class="post__title">IK512 到底壞了沒？一次從表象到根因的系統診斷</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>IK512 從上線到現在，我們碰到的麻煩不少：USB 間歇斷線、bearer 假死、每次 reconnect 都換 IP。每次出問題，第一反應都是「這東西是不是壞了」。把所有問題拉出來一起看，結論反而讓人意外：硬體從頭到尾沒壞過。</p>
-<h2>三個問題，三個層次</h2>
+<h2 id="section-1">三個問題，三個層次</h2>
 <p>先把事件整理出來。</p>
 <p><strong>USB 間歇斷線</strong>：IK512 每隔幾小時出現 MBIM <code>NotOpened</code>，bearer 斷掉，需要手動 USB rebind 才能恢復。最初懷疑是 modem 不穩定，追下去才發現是 Linux 核心的 USB hub autosuspend——USB Root Hub 閒置後進入休眠，把整個 hub 連同下掛的 IK512 一起掛起來。解法是 GRUB 加上 <code>usbcore.autosuspend=-1</code>，全域關掉 USB 省電。這不是硬體問題，也不是 IK512 特有的問題，任何 USB 網卡在同樣設定下都會中招。</p>
 <p><strong>Zombie bearer</strong>：bearer 狀態顯示 <code>connected: yes</code>、訊號品質正常、IP 也有分配，但 ping 8.8.8.8 100% loss，tx/rx 近乎為零。資料通道死了，但 firmware 對 ModemManager 保持沉默。從 2/28 晚上 20:55 reconnect 後進入殭屍狀態，到 3/1 早上 08:26 才手動發現，持續超過 11 小時，watchdog v2 完全沒有感知到。</p>
@@ -212,23 +228,23 @@
 <li>Zombie bearer → <strong>firmware 缺陷</strong>，bearer 死亡時應該上報卻沒有</li>
 <li>每次換 IP → <strong>電信商 CGNAT 行為</strong>，session 到期就中斷重建，正常設計</li>
 </ul>
-<h2>Zombie Bearer 的本質</h2>
+<h2 id="section-2">Zombie Bearer 的本質</h2>
 <p>Zombie bearer 是這三個裡面最核心的問題，因為它無法從 host 端根本解決。</p>
 <p>MBIM 協定對 bearer 的設計期望是：當資料通道斷開時，modem firmware 應該更新 bearer state，讓 ModemManager 能感知並觸發重連。IK512 沒有實作這一塊——bearer 死了，firmware 維持 <code>connected: yes</code>，host 端完全不知道發生了什麼事。</p>
 <p>這不是 IK512 特有的問題，而是 consumer-grade USB dongle 的通病。廠商的開發資源有限，firmware 對 host 的 event notification 實作往往不完整，因為一般消費者感知不到這個層次的差異。工業級模組（如 Quectel RM520N-GL）才會嚴格實作 bearer failure notification，因為工業應用不能靠人眼監控。</p>
 <p>Watchdog v2.5 的補救方式是主動驗證：不相信 bearer status 的回報，每次都自己去 ping 確認資料通道真的通。這是從 host 端繞過 firmware 的缺口，有效，但本質上是在替 firmware 做它原本應該做的事。</p>
-<h2>這個裝置本來就不是設計來這樣用的</h2>
+<h2 id="section-3">這個裝置本來就不是設計來這樣用的</h2>
 <p>IK512 的設計使用情境是：插上 Windows 電腦，裝驅動程式，打開瀏覽器，上網。使用者不需要知道 bearer 是什麼，不需要知道 MBIM，不需要知道 session 斷了再連。那個層次的問題，Windows 驅動程式和電信商 app 都幫你處理掉了，使用者也不在乎 IP 有沒有換。</p>
 <p>我拿它來做的事情完全不同：裸接 Linux、ModemManager 直接管、當 Proxmox 的 failover 備援、要求 bearer failure 要能被偵測到、要求路由要能自動切換。這些需求在它的設計目標裡根本不存在。</p>
 <p>所以才需要用 watchdog 去補——本質上是在用一個消費級工具做工業級的工作，缺的部分只能自己加。這也解釋了為什麼工業模組貴那麼多：那些需求它原本就設計進去了，firmware 完整實作是預設，不是選配。</p>
-<h2>為什麼手機熱點不會有這個問題</h2>
+<h2 id="section-4">為什麼手機熱點不會有這個問題</h2>
 <p>很多人用手機熱點，從來不會碰到這種 zombie 狀態，但裝了 USB dongle 的 Linux 卻要自己想辦法。差別在架構。</p>
 <p>手機的基頻晶片和 Android/iOS 的電話堆疊（RIL，Radio Interface Layer）是緊密整合的。Bearer 一斷，電話堆疊馬上感知，自動重撥，整個恢復過程在手機內部完成。對外呈現的 WiFi hotspot 從來沒有真的斷掉，連接的設備感知不到任何異常。</p>
 <p>IK512 是裸 modem 透過 MBIM 暴露給 Linux，modem 和 ModemManager 之間的整合完整性完全取決於 firmware 實作。firmware 沒做的部分，就必須由 host 端自己補。</p>
-<h2>類比：HiNet PPPoE 的強制斷線</h2>
+<h2 id="section-5">類比：HiNet PPPoE 的強制斷線</h2>
 <p>電信商 CGNAT session 週期性中斷、重建、換 IP，這件事本身和台灣的 HiNet PPPoE 三天強制斷線換 IP 是同一個概念——都是電信商在 session 層面主動管理連線生命週期，host 端只能被動應對。</p>
 <p>差別在於感知難度不同。PPPoE 斷線時 interface 狀態是真的掉的，OS 能感知到，重撥機制也跑得起來。IK512 的 CGNAT session 斷掉時，bearer 死了但 interface 仍然活著，感知難度高得多，才需要用 ping 主動探測。</p>
-<h2>那到底要不要換？</h2>
+<h2 id="section-6">那到底要不要換？</h2>
 <p>把問題追清楚之後，退貨的動機反而弱了。</p>
 <p>台灣市場買得到的消費級 5G USB dongle，firmware 品質普遍在同一個等級，換同類型的產品不會解決 zombie bearer 問題，只是換一個一樣的坑。降到 4G 也一樣——zombie bearer 是 consumer-grade firmware 通病，跟 4G/5G 無關。</p>
 <p>要根本解決，需要的是工業級模組，代表的是三四倍的成本加上自組 USB adapter board 的麻煩，對一個 homelab 備援線路而言不划算。</p>
@@ -243,15 +259,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">三個問題，三個層次</a></li><li><a href="#section-2">Zombie Bearer 的本質</a></li><li><a href="#section-3">這個裝置本來就不是設計來這樣用的</a></li><li><a href="#section-4">為什麼手機熱點不會有這個問題</a></li><li><a href="#section-5">類比：HiNet PPPoE 的強制斷線</a></li><li><a href="#section-6">那到底要不要換？</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

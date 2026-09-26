@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -220,7 +236,7 @@
 
 <hr>
 <p><a id="chapter-1"></a></p>
-<h2>回到岐阜老家了</h2>
+<h2 id="section-1">回到岐阜老家了</h2>
 <p>LiSA 出身岐阜縣，她深愛故鄉、深愛家人，這是眾所周知的事。每次巡演，中部地區的場次從不缺席；每逢重要演唱會，觀眾席上總能看到母親的身影。她在岐阜這片土地上，從幼年到青春期究竟度過了怎樣的歲月？就讓我們從岐阜・織部家的母女對談開始，踏上一段追尋 LiSA 記憶的旅程。</p>
 <p><img src="/content/img/2026/lisa-gifu-memory-mother.webp" alt="LiSA 與母親的合照"></p>
 <hr>
@@ -294,7 +310,7 @@
 對，小時候，是啊。</p>
 <hr>
 <p><a id="chapter-2"></a></p>
-<h2>環境驟變帶來的孤獨，以及與音樂的相遇</h2>
+<h2 id="section-2">環境驟變帶來的孤獨，以及與音樂的相遇</h2>
 <p>LiSA
 上了小學，環境大幅改變。媽媽工作變忙了，不在家、學校參觀日也來不了……便當也沒辦法幫我做，就是那種感覺。</p>
 <p>媽媽
@@ -374,7 +390,7 @@
 我喜歡的是走到那裡為止的那段努力。希望能成為 LiSA 人生的自信。有一件兩件「那時候拼過了」、「跨越過了」的挑戰經歷，感覺就是不一樣。讓孩子受了委屈，對此我很抱歉，但我心裡始終有一個念頭：「父母會先走」、「不要覺得父母永遠都在」。因為終有一天要一個人活下去，所以希望她能堅強。這就是我的根本，我唯一的準則。當初那樣支持她，也是希望她能過得快樂、又能堅強。僅此而已。</p>
 <hr>
 <p><a id="chapter-3"></a></p>
-<h2>首次離家與艱辛，母女之間的羈絆</h2>
+<h2 id="section-3">首次離家與艱辛，母女之間的羈絆</h2>
 <p>——認真投入歌唱與舞蹈學校的小學高年級時期。此後 LiSA 又是如何成長的呢？</p>
 <p>LiSA
 甄選通過之後，每個月老師會來名古屋幾次讓我上課，但從家裡通過去很辛苦，而且「這樣的進度根本進步不了！」，所以決定搬家，搬到那個學校總部所在的地方。我一個人去。</p>
@@ -449,7 +465,7 @@
 ……………。</p>
 <hr>
 <p><a id="chapter-4"></a></p>
-<h2>沉浸樂團的高中生活與前往東京</h2>
+<h2 id="section-4">沉浸樂團的高中生活與前往東京</h2>
 <p>——然後升上國三，接著進入高中，這個時期妳組了樂團。</p>
 <p>LiSA
 國三的時候被學長問「要不要玩樂團？」，我輕鬆地說「好啊」，這就是開始。所以第一場演出也不是在 Live House，而是在類似公民會館的地方辦的活動。國二的時候真的太閒了，只是到處晃，但升上三年級開始玩樂團後，就一直去朋友家做音樂、在隔音室錄音、翻唱喜歡的樂團，玩得很開心。</p>
@@ -528,7 +544,7 @@
 別讓我哭嘛～。（站起身）紙巾，紙巾～。</p>
 <hr>
 <p><a id="chapter-5"></a></p>
-<h2>以「今天也是好日子！」相連，母女也是對手的關係</h2>
+<h2 id="section-5">以「今天也是好日子！」相連，母女也是對手的關係</h2>
 <p>——那麼 LiSA 正好離席了（笑），讓我請教最後一個問題。身為母親，您現在怎麼看 LiSA 這個人？</p>
 <p>媽媽
 我……養育完兩個孩子之後，真心感謝說「啊，讓我上了一堂親職的課」。能感受到現在在這裡的自己，全都是託孩子的福。最近女兒常常對我說「報恩」或「孝順」這樣的話，但孩子依賴父母是理所當然的。就跟我自己多年來也這樣依賴著媽媽一樣，我活著的期間，依賴我才是反過來對父母的孝順，我這樣對她說。只有一件事，這大概是遺傳了我的地方（苦笑），她有那種逞強、過度努力的地方，我希望她不要搞錯那份努力的方向，變成對周圍要求過多，或是責怪某人。希望她透過工作，過著豐富的生活。現在真的有很多地方讓我向她學習，看著她追逐夢想、做著現在這份工作的樣子，我也受到「我也要加油」的激勵。現在與其說我在支持她，更像是對手。</p>
@@ -575,15 +591,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc aside-toc--cf" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">回到岐阜老家了</a></li><li><a href="#section-2">環境驟變帶來的孤獨，以及與音樂的相遇</a></li><li><a href="#section-3">首次離家與艱辛，母女之間的羈絆</a></li><li><a href="#section-4">沉浸樂團的高中生活與前往東京</a></li><li><a href="#section-5">以「今天也是好日子！」相連，母女也是對手的關係</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

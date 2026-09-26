@@ -78,12 +78,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -96,19 +96,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -202,12 +218,12 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">把 Telegram Bot 丟上 Fly.io：七個坑和一次 52 分鐘的強制等待</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>背景</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">背景</h2>
 <p>我有一個 Telegram Bot Controller——一個 master bot 加上一個 MTProto userbot，用來統一控制多個子 bot（OpenClaw 的 Izukibot、ClaudeBot 等）。使用者只跟 master bot 對話，userbot 當中間人轉發訊息和代理 inline button。</p>
 <p>技術棧是 PyroTGFork（Pyrogram 的活躍 fork，原版已停止維護），同時跑 Bot API client 和 MTProto User API client，用 <code>compose()</code> 同時啟動。</p>
 <p>本來在本機跑，但 bot 這種東西需要 24/7 運行。看了一圈 serverless 選項，Fly.io 免費方案（shared-cpu-1x / 256MB）剛好夠用，東京節點離台灣最近，延遲也可以接受。</p>
 <p>以下是部署過程中踩的每一個坑。</p>
-<h2>第一坑：tgcrypto 需要 gcc</h2>
+<h2 id="section-2">第一坑：tgcrypto 需要 gcc</h2>
 <p>Dockerfile 用了 <code>python:3.13-slim</code> 作為 base image——slim 嘛，輕量。<code>pip install</code> 一跑，tgcrypto 直接報錯：找不到 <code>gcc</code>。</p>
 <p>tgcrypto 是 C extension，需要編譯。slim image 裡沒有編譯器。</p>
 <p>解法是用多階段建置：builder stage 裝 gcc，編譯完再 copy 到乾淨的 slim image。這樣最終 image 不會帶著 200MB 的 gcc：</p>
@@ -220,11 +236,11 @@ FROM python:3.13-slim
 COPY --from=builder /install /usr/local
 </code></pre>
 <p>但第一次我只加了 <code>gcc</code>，沒加 <code>libc6-dev</code>。</p>
-<h2>第二坑：gcc 有了但 stdint.h 沒有</h2>
+<h2 id="section-3">第二坑：gcc 有了但 stdint.h 沒有</h2>
 <p>tgcrypto 的 C code 裡 <code>#include &lt;stdint.h&gt;</code>，這個頭檔在 <code>libc6-dev</code> 裡。光裝 gcc 不夠，還需要 C standard library 的 header files。</p>
 <p>錯誤訊息倒是很直接：<code>fatal error: stdint.h: No such file or directory</code>。加上 <code>libc6-dev</code> 就解了。</p>
 <p>這兩個坑加在一起其實是一個概念：<strong>slim image 是真的 slim，連最基本的 C 開發工具鏈都沒有。</strong> 如果你的依賴裡有任何 C extension（tgcrypto、uvloop、numpy、cryptography...），都需要在 builder stage 裝 gcc + libc6-dev。</p>
-<h2>第三坑：fly.toml 的 [processes] 會覆蓋 Dockerfile CMD</h2>
+<h2 id="section-4">第三坑：fly.toml 的 [processes] 會覆蓋 Dockerfile CMD</h2>
 <p>我的 Dockerfile 最後一行是：</p>
 <pre><code class="language-dockerfile">CMD [&quot;/app/entrypoint.sh&quot;]
 </code></pre>
@@ -239,13 +255,13 @@ COPY --from=builder /install /usr/local
 <pre><code class="language-toml">[processes]
   app = &quot;/app/entrypoint.sh&quot;
 </code></pre>
-<h2>第四坑：Docker 快取不知道你改了 .dockerignore</h2>
+<h2 id="section-5">第四坑：Docker 快取不知道你改了 .dockerignore</h2>
 <p>改完 <code>[processes]</code> 之後重新部署，session 檔還是沒被打包進 image。</p>
 <p>因為之前的 <code>.dockerignore</code> 裡包含了 <code>*.session</code>（當時還沒打算把 session 打包進 image）。後來決定要打包，把 <code>.dockerignore</code> 裡的 <code>*.session</code> 刪了。</p>
 <p>但 Docker build cache 不在乎你改了 <code>.dockerignore</code>。<code>COPY *.session sessions/</code> 這一層已經被 cache 了，cache 裡的版本是空的 sessions 目錄。</p>
 <p>解法：<code>fly deploy --no-cache</code>。</p>
 <p><strong>任何時候你改了 <code>.dockerignore</code> 的排除規則，都必須清快取重建。</strong> Docker 的 cache invalidation 是基於 <code>COPY</code> 的來源檔案內容，不包括 <code>.dockerignore</code> 的變更。</p>
-<h2>第五坑：Crash-Restart 循環觸發 Telegram FloodWait</h2>
+<h2 id="section-6">第五坑：Crash-Restart 循環觸發 Telegram FloodWait</h2>
 <p>session 檔終於打包進去了，entrypoint 也跑了，但 bot 啟動後立刻 crash——因為 session 檔是空的（第四坑的殘留）。Fly.io 的 machine 會自動重啟 crash 的 process。</p>
 <p>每次重啟，Pyrogram 都會嘗試用 session 檔裡的 auth key 連線 Telegram。session 是空的，所以每次都走 <code>auth.ImportBotAuthorization</code>——相當於重新登入。</p>
 <p>Telegram 看到同一個帳號在幾秒內重複登入十幾次，直接觸發 <strong>FloodWait</strong>：</p>
@@ -255,7 +271,7 @@ Must wait 3133 seconds (52 minutes)
 <p>三千一百三十三秒。將近一個小時。</p>
 <p>你什麼都不能做，只能等。而且<strong>必須先停掉 machine</strong>，否則 Fly.io 會繼續自動重啟，每次重啟都重新觸發 FloodWait，計時器重來。</p>
 <p>教訓很清楚：<strong>在部署 Telegram bot 之前，先確認 session 檔是正確的。</strong> 如果 bot 會 crash，先手動停掉 machine 而不是讓它自動重啟。Telegram 的限速是根據嘗試次數累加的，越多次等越久。</p>
-<h2>第六坑：entrypoint 的 &quot;不覆蓋&quot; 邏輯</h2>
+<h2 id="section-7">第六坑：entrypoint 的 &quot;不覆蓋&quot; 邏輯</h2>
 <p>等了 52 分鐘，FloodWait 過了。用 <code>--no-cache</code> 重建了 image，確認 session 檔正確打包。重新部署。</p>
 <p>bot 又 crash 了。一樣的 <code>&quot;Enter phone number or bot token&quot;</code>。</p>
 <p>SSH 進去看 <code>/data/</code>（volume 掛載點），session 檔存在、大小 40960 bytes。再看 <code>/app/sessions/</code>（image 裡打包的），也是 40960 bytes。</p>
@@ -275,7 +291,7 @@ fi
 done
 </code></pre>
 <p>這個設計取捨很明確：<strong>session 檔的 source of truth 永遠是 image 裡打包的那份。</strong> Volume 只是讓 Pyrogram 有地方寫 runtime 資料，但每次啟動都從 image 同步，確保不會因為 crash 產生的垃圾檔案而卡死。</p>
-<h2>第七坑：fly ssh console 裡的 glob 展開</h2>
+<h2 id="section-8">第七坑：fly ssh console 裡的 glob 展開</h2>
 <p>發現第六坑之後，第一反應是 SSH 進去手動清理：</p>
 <pre><code class="language-bash">fly ssh console -C &quot;rm -f /data/*.session /data/*.session-shm&quot;
 </code></pre>
@@ -285,7 +301,7 @@ done
 <pre><code class="language-bash">fly ssh console -C &quot;sh -c &#39;rm -f /data/*.session /data/*.session-shm&#39;&quot;
 </code></pre>
 <p>小坑，但在你焦頭爛額地想修一個已經 crash 了 20 次的 bot 時，多一個 parse error 真的很火。</p>
-<h2>教訓</h2>
+<h2 id="section-9">教訓</h2>
 <ol>
 <li><p><strong>多階段建置不是可選的。</strong> 有 C extension 就得用。<code>gcc</code> + <code>libc6-dev</code> 是最低要求。</p>
 </li>
@@ -300,7 +316,7 @@ done
 <li><p><strong>Session 檔 = 帳號憑證。</strong> Pyrogram 的 <code>.session</code> 檔是 SQLite 資料庫，裡面存著 Telegram auth key。它壞了就等於沒有登入憑證，Pyrogram 會要求重新輸入手機號碼——在 Docker container 裡，這意味著 EOFError crash。</p>
 </li>
 </ol>
-<h2>目前狀態</h2>
+<h2 id="section-10">目前狀態</h2>
 <p>Bot 跑在 Fly.io 東京節點（nrt），shared-cpu-1x / 256MB，用 persistent volume 存 session 檔但每次啟動都從 image 同步。Master bot 和 MTProto userbot 雙 client 正常運行，指令選單同步、訊息轉發、inline button 代理都正常。</p>
 <p>從開始部署到真正穩定運行，中間有大約兩個小時在等 FloodWait 和 debug session 檔問題。如果你看了這篇文章，應該可以在十五分鐘內部署完。</p>
 </div>
@@ -310,15 +326,20 @@ done
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">背景</a></li><li><a href="#section-2">第一坑：tgcrypto 需要 gcc</a></li><li><a href="#section-3">第二坑：gcc 有了但 stdint.h 沒有</a></li><li><a href="#section-4">第三坑：fly.toml 的 [processes] 會覆蓋 Dockerfile CMD</a></li><li><a href="#section-5">第四坑：Docker 快取不知道你改了 .dockerignore</a></li><li><a href="#section-6">第五坑：Crash-Restart 循環觸發 Telegram FloodWait</a></li><li><a href="#section-7">第六坑：entrypoint 的 &quot;不覆蓋&quot; 邏輯</a></li><li><a href="#section-8">第七坑：fly ssh console 裡的 glob 展開</a></li><li><a href="#section-9">教訓</a></li><li><a href="#section-10">目前狀態</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

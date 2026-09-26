@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -207,20 +223,20 @@
 <p>我生活圈裡只有一個人在用 FaceTime，我也只跟她用。</p>
 <p>我們當然也有 LINE。但我從頭到尾都沒喜歡過 LINE，覺得它就是個大雜燴，功能不好用，安卓版的 App 又爛，只是人在台灣不得不用。所以我跟她聯絡，百分之九十九都是 FaceTime。</p>
 <p>iPhone 我也已經賣掉，換回安卓了。原因不只一個，其中之一是 iOS 不給 JIT，我連在上面跑個模擬器都很困難，這件事我在〈<a href="https://b-log.to/tech-analysis/apple-love-hate-single-finger-user/">我對 Apple 的愛恨交織：一個單指使用者的無奈</a>〉寫過。所以 Mac 這條線一斷，我沒有另一支 iPhone 可以接手。</p>
-<h2>把電話掛掉的，是一個我根本沒打開的 App</h2>
+<h2 id="section-1">把電話掛掉的，是一個我根本沒打開的 App</h2>
 <p>9 月 16 日，我讓 Kimi 去翻這台 Mac 的系統日誌和通話紀錄。</p>
 <p>先排除掉的東西：Tailscale 的 exit node 全程是關的；網路在兩個地點都試過，視訊都通；她那邊的 iPhone 是哪個 iOS 版本也不重要，因為整個故障都發生在我這台 Mac 上。</p>
 <p>在 macOS 27 上，FaceTime 的視訊還是 FaceTime 自己處理，語音卻是交給 Mac 上的「電話」App。</p>
 <p>語音通話一開始，系統就在背景把「電話」App 叫起來，視窗從頭到尾沒有出現。大約四秒後，它自己正常結束，沒有當掉，也沒有被強制關閉。問題是它在負責通話的系統服務 callservicesd 那邊登記過：自己消失的話，就把通話掛掉。它一結束，callservicesd 就照做，掛斷原因代碼 41。</p>
 <p>通話紀錄也對得起來。這兩天每一通語音都是 41，視訊都正常結束。</p>
 <p>目前的解法是：打 FaceTime 語音之前，先把 Mac 上的「電話」App 打開，視窗留著。9 月 16 日晚上 8:07:18 是最後一通失敗，0 秒就斷。8:07:45 我開著「電話」App 再打一次，撐了 27.5 秒，她那邊有響。</p>
-<h2>回報交給 AI，只有描述那段比較快</h2>
+<h2 id="section-2">回報交給 AI，只有描述那段比較快</h2>
 <p>回報 Apple 這一步，我也交給 AI。</p>
 <p>上一篇寫〈<a href="https://b-log.to/ai-analysis/theo-voice-computer-use-everyday-limits/">Theo 開始把電腦操作交給 AI，我已經這樣很久了</a>〉時，我說 CLI 的工作大多交給 AI，網站操作能交到哪裡，還得一個網站、一個網站試。這次換成一個 App。</p>
 <p>Feedback Assistant 沒有 AppleScript 可以直接控制，Claude 改用輔助使用介面去點選單、填欄位。一開始 App 還沒登入，我得自己登。標題貼上去沒有進到欄位，它改成直接寫入欄位值，每一格再截圖確認。最後一次失敗的時間，是 Kimi 從通話紀錄撈出來補上的。送出也是我自己按。</p>
 <p>結果除了填那段很長的英文描述比較快，其實也沒有比較快。</p>
 <p>回報編號是 FB24802682。</p>
-<h2>我問 Claude：這算不算你的失誤</h2>
+<h2 id="section-3">我問 Claude：這算不算你的失誤</h2>
 <p>我印象中，Apple 這次 27 版跟 Claude 合作修了很多 bug。結果偏偏就是這一版，出現這個鬼東西。所以我直接問 Claude，這算不算是它的失誤。</p>
 <p>它先去讀 Apple 自己的安全性公告，把我的前提修正了一次。</p>
 <p><a href="https://support.apple.com/en-us/149035">macOS 27 的安全性公告</a>列了兩百多個漏洞，發現者欄位寫著「Calif.io in collaboration with Claude and Anthropic Research」的有 8 個：SMB 網路分享 3 個、WebDAV 3 個、Foundation 1 個、影片編碼器 1 個。<a href="https://support.apple.com/en-us/149034">iOS 27</a> 只有 2 個。這是一家資安公司用 Claude 找到漏洞，回報給 Apple，修補是 Apple 自己出的。公告裡 FaceTime 那一欄感謝的是另一位研究員，「電話」App 和 callservicesd 都沒有 Claude 的名字。</p>
@@ -241,15 +257,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">把電話掛掉的，是一個我根本沒打開的 App</a></li><li><a href="#section-2">回報交給 AI，只有描述那段比較快</a></li><li><a href="#section-3">我問 Claude：這算不算你的失誤</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

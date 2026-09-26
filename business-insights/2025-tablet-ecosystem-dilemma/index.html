@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -247,12 +263,12 @@
   </div>
 </div>
 
-<h2>前言</h2>
+<h2 id="section-1">前言</h2>
 <p>2025 年 10 月，蘋果發布了搭載 M5 晶片的 iPad Pro。硬體規格再次突破天際：12GB RAM 起跳、支援 Wi-Fi 7、GPU 效能提升 35%。同一時期，三星透過 One UI 8 全球鎖死 bootloader，小米將解鎖限制從 3 台/年降到 1 台/年，連曾經的「極客之選」OnePlus 也開始要求申請審核。</p>
 <p>當我們深入探討這些變化時，會發現一個殘酷的現實：<strong>不只是單一廠商，整個平板與手機生態都在經歷一場「自由度大倒退」。</strong></p>
 <p>本文將從技術角度剖析三大平台（iPadOS、Android、Windows）如何在 2025 年持續收緊對使用者裝置的控制權。</p>
 <hr>
-<h2>第一重困境：iPad Pro 的硬體過剩與軟體功能限制</h2>
+<h2 id="section-2">第一重困境：iPad Pro 的硬體過剩與軟體功能限制</h2>
 <h3>M5 晶片：強大到令人尷尬</h3>
 <p>iPad Pro M5 的硬體規格：</p>
 <ul>
@@ -324,7 +340,7 @@
 <h4>iWork：功能從未完整恢復</h4>
 <p>2012 年 Apple 為支援 iCloud 重寫 iWork，移除大量功能。雖然這些年慢慢補回來，但至今仍未恢復 iWork &#39;09 的完整功能。Web 版功能更陽春。</p>
 <hr>
-<h2>第二重困境：Android 的自由度大倒退</h2>
+<h2 id="section-3">第二重困境：Android 的自由度大倒退</h2>
 <h3>Android 廠商的集體倒退</h3>
 <h4>三星 One UI 8：Bootloader 鎖死全球</h4>
 <p><strong>改變內容：</strong>
@@ -472,7 +488,7 @@ Google 推出免費開發者帳號，但：</p>
 <li><strong>Google 控制和限制未驗證開發者的 app 可安裝到多少裝置</strong></li>
 </ul>
 <hr>
-<h2>第三重困境：Windows 的雙重失敗</h2>
+<h2 id="section-4">第三重困境：Windows 的雙重失敗</h2>
 <h3>強制雲端帳戶：繞過方法持續被封鎖</h3>
 <p><strong>最新動態（2025 年 10 月）：</strong>
 Microsoft 在 Windows 11 預覽版 26220.6772 中封鎖了 <code>start ms-cxh:localonly</code> 指令，這是繼 2025 年 3 月封鎖 <code>oobe\bypassnro</code> 之後的又一次打擊。</p>
@@ -519,7 +535,7 @@ Windows 11 的平板體驗就像「有人改了螢幕 DPI」，而不是真正�
 </li>
 </ol>
 <hr>
-<h2>四大平台對比：沒有贏家</h2>
+<h2 id="section-5">四大平台對比：沒有贏家</h2>
 <table>
 <thead>
 <tr>
@@ -588,7 +604,7 @@ Windows 11 的平板體驗就像「有人改了螢幕 DPI」，而不是真正�
 <li>❌ 硬體支援有限</li>
 </ul>
 <hr>
-<h2>技術分析：為什麼會這樣？</h2>
+<h2 id="section-6">技術分析：為什麼會這樣？</h2>
 <h3>1. 商業模式的轉變</h3>
 <p><strong>從「賣產品」到「賣服務」：</strong></p>
 <ul>
@@ -639,7 +655,7 @@ Windows 11 的平板體驗就像「有人改了螢幕 DPI」，而不是真正�
 <li>開放原始碼社群受到嚴重打擊</li>
 </ul>
 <hr>
-<h2>結論：封閉花園的時代</h2>
+<h2 id="section-7">結論：封閉花園的時代</h2>
 <h3>殘酷的現實</h3>
 <p><strong>2025 年，所有主流平板/手機平台都在收緊控制：</strong></p>
 <ol>
@@ -691,7 +707,7 @@ Windows 11 的平板體驗就像「有人改了螢幕 DPI」，而不是真正�
 <li>在社群中發聲，讓廠商知道使用者在乎自主權</li>
 </ul>
 <hr>
-<h2>後記</h2>
+<h2 id="section-8">後記</h2>
 <p>本文撰寫於 2025 年 10 月，基於當時的公開資訊和技術文件。技術領域變化快速，建議讀者持續關注：</p>
 <ul>
 <li>XDA Developers（Android 客製化社群）</li>
@@ -709,15 +725,20 @@ Windows 11 的平板體驗就像「有人改了螢幕 DPI」，而不是真正�
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">前言</a></li><li><a href="#section-2">第一重困境：iPad Pro 的硬體過剩與軟體功能限制</a></li><li><a href="#section-3">第二重困境：Android 的自由度大倒退</a></li><li><a href="#section-4">第三重困境：Windows 的雙重失敗</a></li><li><a href="#section-5">四大平台對比：沒有贏家</a></li><li><a href="#section-6">技術分析：為什麼會這樣？</a></li><li><a href="#section-7">結論：封閉花園的時代</a></li><li><a href="#section-8">後記</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

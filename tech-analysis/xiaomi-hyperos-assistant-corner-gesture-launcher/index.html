@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -206,7 +222,7 @@
 <p>我以為關掉很簡單。</p>
 <p>畢竟 AOSP 本來就有 <code>assistant_touch_gesture_enabled</code> 這個 secure setting，寫個 <code>0</code> 就該沒事了。</p>
 <p>結果不是。</p>
-<h2>第一個坑：key 名字寫錯了</h2>
+<h2 id="section-1">第一個坑：key 名字寫錯了</h2>
 <p>網路上流傳的解法大多長這樣：</p>
 <pre><code class="language-bash">settings put --user 0 secure assistant_touch_gesture_enabled 0
 </code></pre>
@@ -244,7 +260,7 @@
 <p>SystemUI 這邊確實關掉了。</p>
 <p>然後我從左下角上滑一次。</p>
 <p>Google Assistant 還是開了。</p>
-<h2>第二個坑：SystemUI 關了也沒用</h2>
+<h2 id="section-2">第二個坑：SystemUI 關了也沒用</h2>
 <p>這時候我開始覺得不對勁。</p>
 <p>SystemUI 已經回 <code>mAssistantAvailable=false</code>，為什麼手勢還會觸發？</p>
 <p><code>dumpsys activity activities</code> 看了一下，左下角上滑後前台是：</p>
@@ -258,7 +274,7 @@ com.google.android.apps.search.assistant.surfaces.voice.robin.ui.floaty.activity
 <p>是 Launcher。</p>
 <p>HyperOS 的 Launcher 叫 <code>MiLauncherGlobal</code>，路徑在 <code>/product/priv-app/MiLauncherGlobal/</code>，版本 <code>RELEASE-6.01.03.1943-01051706</code>。</p>
 <p>所以這台機器上，左下角上滑這個手勢根本不是 SystemUI 在處理的，是 Launcher 自己有一套。</p>
-<h2>拆 MiLauncherGlobal</h2>
+<h2 id="section-3">拆 MiLauncherGlobal</h2>
 <p>關鍵類別集中在這幾個：</p>
 <pre><code class="language-text">com.miui.home.recents.FsGestureAssistHelper
 com.miui.home.recents.FsGestureAssistEnableHelper
@@ -316,7 +332,7 @@ if (DeviceConfigs.IS_KDDI_BUILD) {
 <p>左下角上滑還是會開。</p>
 <p>沒用。</p>
 <p>測完還原成 <code>null</code>。</p>
-<h2>SystemUI 傳來的 availability，Launcher 直接忽略</h2>
+<h2 id="section-4">SystemUI 傳來的 availability，Launcher 直接忽略</h2>
 <p>這段我覺得是最扯的。</p>
 <p>MiLauncherGlobal 的 <code>TouchInteractionService</code> 有收到 SystemUI 的 overview proxy callback：</p>
 <pre><code class="language-java">// TouchInteractionService.java:170
@@ -333,7 +349,7 @@ public void onAssistantAvailable(boolean z) {
 <p>SystemUI 那邊已經把 <code>mAssistantAvailable</code> 設成 <code>false</code> 了，結果 Launcher 收到之後什麼都沒做。</p>
 <p>它照自己的 <code>FsGestureAssistEnableHelper</code> 判斷要不要觸發，完全不理 SystemUI 講什麼。</p>
 <p>所以你以為你關掉了，其實只關了一半。另一半在 Launcher 手裡，而 Launcher 根本沒在聽。</p>
-<h2>最後有效的組合</h2>
+<h2 id="section-5">最後有效的組合</h2>
 <p>試到最後，真正能擋住的是：</p>
 <pre><code class="language-bash">settings put --user 0 secure assist_touch_gesture_enabled 0
 settings delete --user 0 secure assistant
@@ -366,13 +382,13 @@ adb shell dumpsys activity activities | rg -i &quot;topResumedActivity|FloatyAct
 <p>locked bootloader、沒 root 的前提下，這台機器的乾淨切分點有限。</p>
 <p>比較乾淨但需要更高權限的替代方案是 hook：用 LSPosed 把 <code>FsGestureAssistHelper.canTriggerAssistantAction()</code> 永遠回 <code>false</code>，或只對 corner gesture 把 <code>FsGestureAssistEnableHelper.supportAssistantGesture()</code> 回 <code>false</code>。</p>
 <p>至於直接改 MiLauncherGlobal 或 SystemUI 的 overlay，locked bootloader 下就別想了。</p>
-<h2>被排除的路</h2>
+<h2 id="section-6">被排除的路</h2>
 <p>記一下，避免下次又繞進去。</p>
 <p><code>assistant_touch_gesture_enabled</code>：key 名字錯了，SystemUI 讀的是 <code>assist_touch_gesture_enabled</code>，少一個 <code>ant</code>。</p>
 <p><code>google_assist_enable</code>：這台不是 KDDI build，程式碼裡那個 gate 只在 <code>IS_KDDI_BUILD</code> 時生效。</p>
 <p><code>entity_config_key_voice_assistant</code>：這條是導航列長按 / 雙擊 shortcut，<code>onLongPress()</code> -&gt; <code>doAction(2)</code>、<code>onDoubleTap()</code> -&gt; <code>doAction(4)</code>，跟左下角上滑無關。</p>
 <p>重啟 SystemUI：不用，<code>assist_touch_gesture_enabled</code> 有 <code>ContentObserver</code>，live 生效。</p>
-<h2>學到的事</h2>
+<h2 id="section-7">學到的事</h2>
 <p>這次真正的坑不是「找不到 key」。</p>
 <p>第一個找到的 SystemUI key 其實是對的，寫進去也確實生效了。</p>
 <p>問題是那個 key 不是最後那個 gate。</p>
@@ -395,15 +411,20 @@ FsGesture*
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">第一個坑：key 名字寫錯了</a></li><li><a href="#section-2">第二個坑：SystemUI 關了也沒用</a></li><li><a href="#section-3">拆 MiLauncherGlobal</a></li><li><a href="#section-4">SystemUI 傳來的 availability，Launcher 直接忽略</a></li><li><a href="#section-5">最後有效的組合</a></li><li><a href="#section-6">被排除的路</a></li><li><a href="#section-7">學到的事</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

@@ -77,12 +77,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -95,19 +95,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -201,15 +217,15 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">當 AI 不再幫你腦補：從一篇 LiSA 翻譯看模型退化的真實影響</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>前言</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">前言</h2>
 <p>最近我在部落格發了一篇文章——把一篇 12 年前消失的 LiSA 母女對談翻譯補回來。那是 LiSA 寫真書裡的母女對談，後來有粉絲翻譯成英文發在網路上，但那篇英文翻譯後來消失了。我覺得可惜，就用 AI 從日文原文重新翻成中文，一篇一篇連載出來（<a href="https://b-log.to/crossing-field/lisa-gifu-memory-journey-mother-interview/">完整文章在這裡</a>）。</p>
 <p>做這件事的過程裡，我累積了不少跟 AI 協作翻譯的經驗。但就在文章發布沒多久，Claude Opus 4.7 推出了。社群的反應很激烈——有人說它「嚴重回退」，有人說「從跟一個有思想的同事對話，變成收到一份備忘錄」。</p>
 <p>我聽到這些反應的時候，心裡的第一個念頭不是「我又要換模型了」。而是：<strong>這條路我走過。</strong></p>
-<h2>我走過的路：從 GPT-5 的「制式化」到跳船</h2>
+<h2 id="section-2">我走過的路：從 GPT-5 的「制式化」到跳船</h2>
 <p>2026 年 2 月，我經過多個 AI 的對比測試後，決定完全放棄 ChatGPT。原因很單純：<strong>GPT-5 系列在人性化回應方面遠遜於 Claude</strong>。它太制式化了，像在跟一個客服機器人講話，不是在跟一個能理解你語境的助手協作。</p>
 <p>我沒有猶豫太久。那個時候 Claude 的語感還很好，所以我就跳了。</p>
 <p>但現在，Opus 4.7 也開始走同一條路。</p>
-<h2>Opus 4.7 變了什麼</h2>
+<h2 id="section-3">Opus 4.7 變了什麼</h2>
 <p>先說清楚：Opus 4.7 不是「變笨了」。它在基準測試上的表現比 4.6 更好，agentic 能力更強。但它的行為模式變了：</p>
 <ul>
 <li><strong>Temperature 被移除了。</strong> 你無法再用參數控制輸出的隨機性和創意程度，只能用 prompt 描述你想要的風格。</li>
@@ -267,7 +283,7 @@
 <p><strong>Jan Leike 是戰略層。</strong> 他的領域是 superalignment——「未來的超級智能怎麼跟人類對齊」。這是研究層面的、理論性的、長期的。他影響的是 Anthropic 的<strong>安全文化和研究方向</strong>，但不直接碰「模型今天輸出的語氣是什麼」。</p>
 <p><strong>Andrea Vallone 是戰術層。</strong> 她的專長是 model behavior policy 和 rule-based rewards——直接決定「模型面對使用者的時候怎麼說話」。語氣、風格、邊界、什麼該說什麼不該說。這是<strong>產品層面的、可落地的、短期見效的</strong>。</p>
 <p>簡單說：<strong>Jan Leike 打底，Andrea Vallone 執行。</strong> 戰略改變需要時間才看得到，戰術改變三個月就反映在產品上。這就是為什麼 Opus 4.7 之前你感覺不明顯，Andrea Vallone 一到，變化就來了。</p>
-<h2>這跟我的翻譯有什麼關係</h2>
+<h2 id="section-4">這跟我的翻譯有什麼關係</h2>
 <p>關係很大。</p>
 <p>我的翻譯工作流是這樣的：</p>
 <ol>
@@ -278,7 +294,7 @@
 </ol>
 <p>這套流程的核心假設是：<strong>AI 給出的初稿有一個可用的語感基線，我再去微調。</strong></p>
 <p>但如果模型變成像 Opus 4.7 那樣——初稿就是一份翻譯機器人等級的東西，那我的工作就從「校準」變成「實質重寫」。工作量直接翻倍。</p>
-<h2>我在 GPT 時代就踩過的坑</h2>
+<h2 id="section-5">我在 GPT 時代就踩過的坑</h2>
 <p>其實類似的問題，我早在 2025 年就遇到了。</p>
 <p>那時候我在測試怎麼讓 GPT 的輸出更有溫度、更像人。我試了兩種方法：</p>
 <ul>
@@ -287,7 +303,7 @@
 </ul>
 <p>這個經驗後來變成了我的預設策略：<strong>不要告訴模型「你不要怎樣」，而是告訴它「你是誰」。</strong></p>
 <p>但 Opus 4.7 的變化讓這件事變得更難了。因為連「你是誰」這種角色框架，在模型不再願意模擬感受的時候，效果也會打折。你可以告訴它「你是一個懂 LiSA 的資深翻譯者」，但如果模型的底層已經被訓練成「不要模擬情感、只要精確表達」，那你的角色框架就是在跟模型的訓練目標對抗。</p>
-<h2>本地模型呢？</h2>
+<h2 id="section-6">本地模型呢？</h2>
 <p>你可能會問：既然雲端模型越來越不聽話，那本地模型呢？我自己也有一套本地 LLM 的架構——vMLX + JANG 格式的 Gemma 4，跑在自己的機器上。</p>
 <p>客觀來說：</p>
 <ul>
@@ -320,12 +336,12 @@
 </tr>
 </tbody></table>
 <p>雲端模型是「食材好但你不准調味」，本地模型是「讓你自由發揮但食材等級不同」。</p>
-<h2>所以，結論是什麼</h2>
+<h2 id="section-7">所以，結論是什麼</h2>
 <p>我不覺得這是一個「硬著跟模型對抗」的局面。也不是「把希望寄託在本地模型」的問題。</p>
 <p>我的結論是：<strong>翻譯品質的核心從來不是 AI 的自然語感，是人類的判斷力。</strong></p>
 <p>模型退化只會讓我在工作流裡的角色從「校準者」變成「實質主譯者」。AI 從「幫我翻得差不多我再改」退化成「幫我查字典、給我一個粗糙的框架，剩下的我來」。這不是世界末日，只是效率的變化。</p>
 <p>而且反過來想——這恰恰證明了 steering 能力的價值。當 AI 越來越不可靠的時候，<strong>你怎麼引導它、怎麼把你的情感和 context 灌進去、怎麼在最後一哩把溫度拉回來</strong>——這些技能只會越來越重要。</p>
-<h2>給同樣在做 AI 翻譯的人</h2>
+<h2 id="section-8">給同樣在做 AI 翻譯的人</h2>
 <p>如果你也在用 AI 做翻譯，不管你是翻日文、英文、還是任何語言，我的建議是：</p>
 <ol>
 <li><strong>不要依賴模型的自然語感。</strong> 那東西隨時可能被拿走，就像 temperature 一樣。背後驅動它的是整個產業的人才流動和價值觀選擇，不是你控得住的。</li>
@@ -344,15 +360,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">前言</a></li><li><a href="#section-2">我走過的路：從 GPT-5 的「制式化」到跳船</a></li><li><a href="#section-3">Opus 4.7 變了什麼</a></li><li><a href="#section-4">這跟我的翻譯有什麼關係</a></li><li><a href="#section-5">我在 GPT 時代就踩過的坑</a></li><li><a href="#section-6">本地模型呢？</a></li><li><a href="#section-7">所以，結論是什麼</a></li><li><a href="#section-8">給同樣在做 AI 翻譯的人</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

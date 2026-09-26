@@ -72,12 +72,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -90,19 +90,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -198,20 +214,20 @@
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>我是台北市復康巴士的使用者，持悠遊聯名卡搭車。所謂的悠遊聯名卡自動加值，就是當卡片餘額不足時，驗票機會自動從綁定的信用卡扣款加值，不需要另外跑超商或捷運站。這個功能我用了好幾年，從來沒出過問題。</p>
 <p>直到 2026 年 3 月 24 日。</p>
-<h2>突然就不能用了</h2>
+<h2 id="section-1">突然就不能用了</h2>
 <p>那天刷卡上車，機器顯示「交易不合法」。我以為是偶發錯誤，結果接下來每一趟都一樣。自動加值功能完全失效。</p>
-<h2>業者說：從來就沒有</h2>
+<h2 id="section-2">業者說：從來就沒有</h2>
 <p>我先打給復康巴士的調度中心反映，得到的回覆是：「復康巴士從來都不支援自動加值。」</p>
 <p>我再聯絡營運單位元三，得到一模一樣的答案：「從未有此功能，建議你問悠遊卡公司。」</p>
 <p>這跟我過去幾年的使用經驗完全矛盾。</p>
-<h2>悠遊卡公司怎麼說</h2>
+<h2 id="section-3">悠遊卡公司怎麼說</h2>
 <p>我向悠遊卡公司提出申訴。客服調出了我的交易記錄，確認之前確實有在復康巴士上成功自動加值的紀錄，並備註在案件中。</p>
 <p>幾個工作天後，悠遊卡公司正式回覆：</p>
 <blockquote>
 <p>此為車機設備有異常導致，建議您可向業者（復康巴士）進行反應。</p>
 </blockquote>
 <p>白紙黑字：<strong>問題出在車機設備，不是系統不支援。</strong></p>
-<h2>三方記錄全部指向同一件事</h2>
+<h2 id="section-4">三方記錄全部指向同一件事</h2>
 <p>這件事最諷刺的地方在於，所有紀錄都寫得很清楚：</p>
 <ul>
 <li><strong>悠遊卡公司系統</strong>裡的加值記錄，商戶名稱是「元三復康」</li>
@@ -220,14 +236,14 @@
 </ul>
 <p>悠遊卡公司系統、發卡銀行、現場人員，三個完全獨立的來源，全部指向同一個結論：元三的設備一直在執行自動加值交易。</p>
 <p>然後元三的辦公室跟我說「從來就沒有」。</p>
-<h2>「從未支援」到底是什麼意思</h2>
+<h2 id="section-5">「從未支援」到底是什麼意思</h2>
 <p>我的理解是這樣的：自動加值可能不是元三主動申請開通的功能，而是連線式驗票機本身就具備的能力。所以在元三的認知裡，這不算他們的「服務項目」。</p>
 <p>但這不是重點。重點是設備登記在你名下、交易商戶寫的是你的公司名字、錢是透過你的終端從乘客的信用卡裡扣的——你不能在功能壞掉之後說「這跟我無關」。</p>
 <p>更何況，你自己的司機都在說有。</p>
-<h2>對行動不便者意味著什麼</h2>
+<h2 id="section-6">對行動不便者意味著什麼</h2>
 <p>現在我每一趟搭復康巴士之前，都必須先繞去超商買東西、刻意讓消費金額超過悠遊卡餘額來觸發自動加值，這樣上車才刷得過。</p>
 <p>對一般人來說，多跑一趟超商不算什麼。但復康巴士的使用者就是行動不便的人。每一趟「多跑一趟」都是真實的負擔。這個 workaround 本身就說明了問題的嚴重性。</p>
-<h2>後續</h2>
+<h2 id="section-7">後續</h2>
 <p>悠遊卡公司已經告訴我問題在車機設備，要找業者處理。業者拒絕。所以我透過台北市 1999 陳情系統正式提出陳情，目前等待處理中。</p>
 <p>復康巴士是台北市政府委託營運的公共服務，不是元三的私人生意。設備壞了就修，這不是什麼過分的要求。</p>
 <hr>
@@ -239,15 +255,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">突然就不能用了</a></li><li><a href="#section-2">業者說：從來就沒有</a></li><li><a href="#section-3">悠遊卡公司怎麼說</a></li><li><a href="#section-4">三方記錄全部指向同一件事</a></li><li><a href="#section-5">「從未支援」到底是什麼意思</a></li><li><a href="#section-6">對行動不便者意味著什麼</a></li><li><a href="#section-7">後續</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

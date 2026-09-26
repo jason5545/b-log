@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -199,18 +215,18 @@
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>最近因為在臉書上看到綾野真白的台灣公演一直賣不完，我才開始認真去了解這位歌手。身邊的朋友雖然也注意到了售票狀況，但大家的反應都很正面，覺得她是個好女孩，值得被支持。這讓我更好奇——一個能讓人這樣說的歌手，為什麼票會賣不完？</p>
 <p>研究了一輪之後，發現她的故事比我想像中複雜得多，也讓我對「紅與不紅之間」這件事有了一些新的想法。</p>
-<h2>起點其實不差</h2>
+<h2 id="section-1">起點其實不差</h2>
 <p>綾野真白 2014 年出道，第一首單曲就拿到了《Fate/stay night [Unlimited Blade Works]》的 OP。光看這個起跑點，在動漫歌手裡算是頂級的敲門磚了。同期的動漫歌手們，很多人花了好幾年才搭到一部有知名度的作品，她出道就有。</p>
 <p>但問題也從這裡開始。同一部作品的 ED 是 Aimer 唱的，而那首 ED 的存在感在觀眾心中遠遠超過了 OP。Fate UBW 這張手牌，在還沒打出去之前就被削掉了一半。</p>
-<h2>後續作品沒有接住</h2>
+<h2 id="section-2">後續作品沒有接住</h2>
 <p>出道之後，她陸續為《驅魔少年 HALLOW》《Re:CREATORS》《皇帝聖印戰記》《龍族拚圖》等作品唱過主題曲。坦白說，這些作品對我來說都比較陌生——而我算是長年關注動漫音樂的人了。</p>
 <p>這就是問題所在。這些作品不是爛作，但沒有一部成為現象級的存在。對比其他動漫歌手，LiSA 有鬼滅之刃、SAO、Fate/Zero，每一部都是隨便抓一個路人都聽過的名字。やなぎなぎ有 supercell 時期的《化物語》、《あの花》、《俺妹》。藍井艾露有 SAO 的 IGNITE。每個人都有至少一個能讓陌生人「啊，我知道」的錨點。</p>
 <p>綾野真白呢？只有一個 Fate UBW，而且那個錨點的光芒還是被 Aimer 分走的。</p>
-<h2>聽了她最知名的那首歌</h2>
+<h2 id="section-3">聽了她最知名的那首歌</h2>
 <p>寫這篇之前，我特地去聽了 ideal white。製作不差、唱功也有，但聽完之後我很難哼出副歌的旋律。不是不好聽，是沒有一個瞬間讓我「被停住」。</p>
 <p>我想到自己當年聽到某些歌的經驗，那種前奏一下去就知道「就是這首」的感覺。ideal white 沒有給我這樣的衝擊。它是一首合格的動畫 OP，但不是一首會讓人記住的歌。</p>
 <p>而且她的聲音風格偏力量型，跟藍井艾露的定位很接近。但藍井艾露的沙啞高音辨識度極高，在同類型的歌手裡已經先佔好了位置。那綾野真白要站在哪裡？這個問題她出道十年好像一直沒有找到答案。</p>
-<h2>休止與復出</h2>
+<h2 id="section-4">休止與復出</h2>
 <p>2021 年，她離開了所屬的 SACRA MUSIC（Sony 旗下）和事務所 CREATIVE OFFICE CUE，同時宣布活動休止。這意味著她不是被解約，而是自己選擇離開。</p>
 <p>2024 年 1 月，她宣布復出。但這時候的她已經是完全獨立的身份——沒有廠牌資源、沒有事務所幫忙接案。新歌透過 BOOTH 販售、封面自己畫、FC 自己經營。</p>
 <p>復出後的場地規模說明了一切：</p>
@@ -223,7 +239,7 @@
 <p>在日本本土，她的動員力大概就在 200-300 人。不夠一場撐滿，所以幾乎每次都拆成午場跟晚場兩場來辦。</p>
 <p>不過她復出後做了一個值得注意的嘗試。2024 年 12 月，她發行了一張動漫歌翻唱專輯《SONGS OF ANIMATION》，收錄了九首經典動漫歌的翻唱，包括 Angel Beats! 的 Crow Song、Fate/Zero 的 MEMORIA、Guilty Crown 的 The Everlasting Guilty Crown、薔薇少女的聖少女領域等。2025 年 5 月的青山 RizM 那場，整場就是以這張專輯為主題。</p>
 <p>這個策略很聰明。她自己的原創曲在市場上缺乏辨識度，但翻唱經典動漫歌至少能讓不認識她的聽眾有共鳴。尤其是海外場，觀眾對她本人的作品可能完全陌生，翻唱就成了最實際的橋樑。</p>
-<h2>翻唱與原創之間</h2>
+<h2 id="section-5">翻唱與原創之間</h2>
 <p>出於好奇，我去聽了這張翻唱專輯。感想是——她唱得不錯。真的不錯。尤其是 MEMORIA，聲音質感跟藍井艾露很接近，力度跟詮釋都到位。</p>
 <p>但這恰恰就是問題所在。</p>
 <p>聽翻唱的時候，因為有原版當參照，我能明確感受到她的實力。但聽她自己的 ideal white 時，我什麼感覺都沒有——不是不好，是沒有記憶點。翻唱讓我聽出她「唱得不錯」，原創卻讓我聽完就忘。</p>
@@ -231,7 +247,7 @@
 <p>而且說到底，就算翻唱唱得再好，還是原唱最好。聽她的 MEMORIA 會讓我想起藍井艾露，然後下一個動作是回去聽藍井艾露。翻唱能做到的最好結果，就是讓人想起原唱——但那等於是把聽眾送走。</p>
 <p>那她乾脆走全翻唱路線呢？也不行。全翻唱在動漫音樂圈有個名字——歌い手（utaite），YouTube 跟 NicoNico 上無數人在做這件事，而且大多免費。她如果全翻唱，等於從「賣不動的原創歌手」變成「要收錢的翻唱歌手」，生態位更擠、天花板更低。更何況翻唱的頂尖還有花たん那個等級在上面，綾野真白的翻唱實力到得了「不錯」，但到不了「讓人覺得比原版還好」。</p>
 <p>往原創走，作品沒有記憶點。往翻唱走，實力過得去但不是頂尖。兩條路都不是死路，但兩條路都到不了讓人非聽不可的位置。</p>
-<h2>台灣的狀況</h2>
+<h2 id="section-6">台灣的狀況</h2>
 <p>她這次的台灣場是「綾野真白 2nd LIVE in TAIWAN」，2/28 在角落文創。FunOne Tickets 售票頁面上，午場跟晚場都還有票——距離演出只剩不到兩週。</p>
 <p>有趣的是，主辦的宣傳文案裡用了「影片動漫女伶」這個稱號。我看了好幾遍，還是搞不懂「影片」是指什麼。正常來說就是「動漫歌手」，這個大家都聽得懂。「女伶」本來是戲曲演員的意思，套在一個唱歌的人身上也很奇怪。三個詞拆開來每個都對不上她實際在做的事，拼在一起更是語意不通。</p>
 <p>另外文案還花了不少篇幅講她 4 歲學鋼琴、改編童謠的故事。這種素材會出現在宣傳裡，通常是因為沒有更有力的賣點可以寫。如果作品夠強，直接列作品名就夠了，不需要去翻童年往事。</p>
@@ -243,12 +259,12 @@
 <p>更讓我卻步的是售票平台本身。FunOne Tickets 的身心障礙票購買流程，居然還需要上傳手冊照片。主流的售票平台像 KKTIX 或 tixcraft，早就跟政府資料庫串接了，輸入身分證字號幾秒鐘就能驗證。但在這裡，我需要翻手冊、拍照、上傳檔案，對我來說每一步都是額外的操作負擔，更別說把個人證件照片交給一個不熟悉的小平台，隱私上也讓人不太放心。</p>
 <p>我本來是帶著善意想去支持的。但從票價到平台到驗證流程，每一步都在把人推開。</p>
 <p>這是她第二次被邀來台灣辦單獨公演了。2019 年第一次在同一個場地，票也沒賣完。七年後同樣的場地、同樣的規模，結果一樣。主辦願意給兩次機會，這份誠意值得肯定。但以目前的售票狀況來看，下一次的邀請恐怕需要更多的理由來支撐。</p>
-<h2>不是失敗，是「差一點」</h2>
+<h2 id="section-7">不是失敗，是「差一點」</h2>
 <p>寫到這裡，我不想把綾野真白的故事定調為「失敗」。因為她確實有一群真心喜歡她的粉絲，而且她自己也很清楚現在的定位。復出之後的每一個選擇都很清醒：不硬撐大場地、不假裝自己還是大廠藝人、在能力範圍內把事情做好。</p>
 <p>她的粉絲也是。會自發跑去別的歌手群組幫忙宣傳，這份心意是真的。</p>
 <p>但感性歸感性，市場的現實是殘酷的。沒有廠牌就拿不到動畫 tie-up，拿不到 tie-up 就沒有曝光，沒有曝光就沒有新粉絲——這是一個封閉的迴圈，而獨立之後幾乎無解。現有的核心粉絲只會隨時間慢慢流失，不會有新血補充。</p>
 <p>我想她大概會以獨立音樂人的姿態繼續唱下去。在日本 250-500 人的場地裡，跟那些從出道就支持她的人一起。不會消失，但也不會再變大。未來能不能再見到她來台灣，可能要看這次的結果了。</p>
-<h2>讓我感觸最深的一件事</h2>
+<h2 id="section-8">讓我感觸最深的一件事</h2>
 <p>研究完綾野真白之後，我回頭想了一下自己這些年追隨 LiSA 的經驗。</p>
 <p>我之所以成為 LiSA 的粉絲，是因為 2015 年在 YouTube 上偶然點到了一個 2012 年日比谷野外音樂堂的鋼琴版演出。那個影片把我停住了，從此再也沒有離開過。</p>
 <p>但那是一個多麼偶然的事。如果那天我沒有點到那個影片，現在的我可能完全不一樣。</p>
@@ -265,15 +281,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">起點其實不差</a></li><li><a href="#section-2">後續作品沒有接住</a></li><li><a href="#section-3">聽了她最知名的那首歌</a></li><li><a href="#section-4">休止與復出</a></li><li><a href="#section-5">翻唱與原創之間</a></li><li><a href="#section-6">台灣的狀況</a></li><li><a href="#section-7">不是失敗，是「差一點」</a></li><li><a href="#section-8">讓我感觸最深的一件事</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

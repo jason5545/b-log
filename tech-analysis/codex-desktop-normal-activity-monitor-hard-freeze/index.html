@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -209,7 +225,7 @@
 <p>最怪的是，事件發生前 Activity Monitor 看起來正常。</p>
 <p>macOS 應該會有個資源耗盡的提示窗吧？但是現在的情況是完全沒有，是直接卡死。沒有記憶體壓力衝紅，沒有哪個 process 明顯吃完整台機器，也沒有 macOS 常見的「系統已耗盡應用程式記憶體」提示。什麼都沒有，就直接死掉。</p>
 <p>有的人會問我那你怎麼不換更頂的？反正要換更頂的也沒有東西可以換了。</p>
-<h2>我們先查了所有看起來比較合理的東西</h2>
+<h2 id="section-1">我們先查了所有看起來比較合理的東西</h2>
 <p>一開始我也沒有直接把問題算在 Codex Desktop 身上。</p>
 <p>Moonlight 斷線，看起來像網路。於是我們重啟 Wi-Fi、升級路由器韌體、查轉發、查 Tailscale、查 Windows VM，也查過影像串流那條資料路徑有沒有問題。</p>
 <p>這些方向都不是亂猜。之前 Moonlight 的本地 IP 黑畫面，最後真的查到 Windows VM 的 VirtIO／NIC offload 路徑。網路、VM、UDP 串流，本來就可能讓遠端桌面看起來像整台機器掛掉。</p>
@@ -218,21 +234,21 @@
 <p>而且只要關掉 Codex Desktop，其他東西就恢復正常。</p>
 <p>這個對照開始讓前面那些網路檢查變得很尷尬。我們繞了那麼大一圈，結果最後真正會改變結果的動作，是不要開官方 App。</p>
 <p>我只是覺得有夠無奈。之前為了這個重啟 Wi-Fi、升級路由器韌體，查系統參數，查 Windows VM 有沒有問題，查轉發有沒有問題。繞了那麼多圈，原來問題是在你這邊。</p>
-<h2>T3 Code 跑得穩，問題就留在官方 Desktop 這一層</h2>
+<h2 id="section-2">T3 Code 跑得穩，問題就留在官方 Desktop 這一層</h2>
 <p>我後來先改用 T3 Code。</p>
 <p>你只是一個 app server 的 UI 而已吧？這很奇怪。T3 Code 也不是把 Codex 整個換掉。它仍然透過 <code>codex app-server</code> 工作，只是沒有走官方 Desktop 的同一套介面、renderer 與 Computer Use helper 路徑。</p>
 <p>用了一陣子之後，問題沒有再出現。</p>
 <p>這不能告訴我官方 App 裡到底是哪一段有問題，但範圍已經小很多了。Codex 後端照樣在跑，Mac 卻沒有再卡死。</p>
 <p>Mac 沒換，工作內容也沒換，<code>app-server</code> 還是照常在跑。換掉官方 Desktop shell 之後就穩定了。接下來要查的，自然是官方 App 額外帶進來的 renderer、長 thread 狀態、Computer Use helper，還有它們怎麼跟 macOS 的圖形與輸入系統互動。</p>
 <p>我原本只是想找一個暫時能用的替代 UI，結果它變成最有價值的 A/B test。</p>
-<h2>Activity Monitor 為什麼會看起來正常</h2>
+<h2 id="section-3">Activity Monitor 為什麼會看起來正常</h2>
 <p>我現在比較確定的，是這次不像一般的「資源總量用完」。</p>
 <p>如果只是記憶體不夠，我預期在 128GB 被吃完以前，Activity Monitor 會先看到記憶體壓力、swap 或單一 process 的明顯變化，macOS 也通常會跳出資源耗盡提示。這次什麼都沒有。</p>
 <p>但鎖死 renderer、WindowServer、輸入事件或某個系統服務，不一定需要把所有 CPU 和記憶體吃滿。</p>
 <p>一條 event loop 忙等、一段高頻 IPC、一個 process 不斷留下 helper、或圖形與輸入路徑互相等住，都可能讓「使用者能不能操作」先壞掉。Activity Monitor 顯示的是取樣到的 CPU、記憶體與 process 狀態，它不會直接告訴你滑鼠事件是不是還能走到桌面，也不會替你證明 WindowServer 與 HID 路徑沒有卡住。</p>
 <p>所以「Activity Monitor 正常」和「整台機器不能操作」並不矛盾。</p>
 <p>它只證明這不像單純的記憶體耗盡。</p>
-<h2>後來又多了一個線索：heartbeat 一直叫醒同一條長 thread</h2>
+<h2 id="section-4">後來又多了一個線索：heartbeat 一直叫醒同一條長 thread</h2>
 <p>原本我們把 10 小時以上的 CPU 與 lag 全部算在 Codex Desktop 身上。</p>
 <p>後來整理 CWP09 的監控流程時，才發現還有一個很可能的放大器。</p>
 <p>那個監控原本是一個 heartbeat automation。它每小時叫醒同一條 Codex thread，檢查 Box 裡有沒有新的檔案。這個動作持續了好幾天。</p>
@@ -248,19 +264,19 @@
 </ul>
 <p>這三個 issue 沒有證明我的 hard freeze 就是同一個 bug，但它們把 10 小時後越來越慢的那一段解釋得很合理。</p>
 <p>至少可以確認，其他人也在官方 App 裡遇到長時間執行、長 thread 與 renderer 空轉。我的 heartbeat 又每小時把同一條超長 thread 叫醒一次，剛好一直把它往那個方向推。</p>
-<h2>採樣後，比 Activity Monitor 多看到幾件事</h2>
+<h2 id="section-5">採樣後，比 Activity Monitor 多看到幾件事</h2>
 <p>我們做了一個一次性採樣器，不常駐，也不再用 Codex automation 監控 Codex 自己。</p>
 <p>在這次調查還活躍時，process list 裡有 7 個 app-server、6 組 <code>SkyComputerUseClient</code> 與 <code>node_repl</code> helper。還有一個 <code>turn-ended</code> process 已經活了超過 41 小時。</p>
 <p>兩次取樣之間，renderer 合計 CPU 從 4.6% 跳到 24.6%；主 app-server 約 17% 到 18%。同一分鐘內，websocket response trace 寫入約 2.3MB 到 2.9MB。</p>
 <p>這些數字沒有大到讓 128GB Mac 必然當機。</p>
 <p>這些數字至少讓我看到：畫面上沒有工作，Desktop 裡面還是有東西持續累積。Activity Monitor 如果只看總 CPU，很容易把 7 個 app-server、6 組 helper、renderer 波動與大量 trace 當成「還好」。</p>
 <p>我現在在意的是它們到底會活多久、會不會越留越多。下一次 Computer Use 或長 thread wake-up 進來時，renderer、helper 與 macOS 輸入路徑會不會又一起卡住，這才是要繼續抓的地方。</p>
-<h2>現在把兩個問題分開看</h2>
+<h2 id="section-6">現在把兩個問題分開看</h2>
 <p>我目前不會把所有現象硬塞進同一個答案。</p>
 <p>10 小時後越來越 lag，比較像 Desktop 的長 session 問題，被每小時 heartbeat 與超長 thread 放大。</p>
 <p>整台 Mac 的滑鼠、鍵盤、Caps Lock、Moonlight 同時失效，嚴重程度更高。這一段比較接近 Computer Use、WindowServer、HID 或圖形路徑。移除 heartbeat 也許會降低發生機率，但還不能說 hard freeze 已經找到原因。</p>
 <p>兩件事也可能接在一起：長 thread 與 helper 先累積，下一次 Computer Use 或圖形事件才把整台機器推到不能操作。現在沒有足夠證據把這條因果寫死，所以我會分成兩條繼續看。</p>
-<h2>我把 heartbeat 從 Codex thread 裡拿掉了</h2>
+<h2 id="section-7">我把 heartbeat 從 Codex thread 裡拿掉了</h2>
 <p>新的監控不再叫醒任何 Codex thread。</p>
 <p>現在是 launchd 每小時啟動一次 Python：掃一次 Box，寫一份很小的 JSON 與文字狀態，然後退出。它不做 employer sync、不產生 package、不刪檔、不 git push，也不在記憶體裡留到下一個小時。</p>
 <p>舊的長 thread 已經封存。</p>
@@ -268,7 +284,7 @@
 <p>接下來看兩條線就夠了。</p>
 <p>先看那條 143MB thread 不再被喚醒之後，renderer、app-server、log growth 和十小時後的 lag 有沒有穩住。這一段改善，heartbeat 的放大效果就很明顯。</p>
 <p>另一條是完全不碰那條 thread，Computer Use helper 還會不會繼續累積，甚至再次造成整機輸入失效。這個現象如果還在，問題就仍然留在官方 Desktop 的 helper 與 macOS 整合路徑。</p>
-<h2>硬體到頂，也清不掉沒結束的 process</h2>
+<h2 id="section-8">硬體到頂，也清不掉沒結束的 process</h2>
 <p>買 M5 Max 的時候，我本來就預期這類工作不該再因為硬體不夠而卡住。</p>
 <p>現在看來，我一開始把方向想錯了。之前用基本版 M5，我還能說 loading 對基本版來說太重了所以才卡。但 M5 Max 也發生第二次，這已經不是 loading 太重而已。</p>
 <p>硬體可以讓同樣的錯誤晚一點出現，但它不會替長 thread 設上限，不會清掉 41 小時前該結束的 process，也不會讓一個每小時醒來的 automation 突然知道自己應該是無狀態的。</p>
@@ -284,15 +300,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#61758b"><a href="/ai-analysis/theo-voice-computer-use-everyday-limits/"><span class="side-row__meta">16SEP26 · <span>AI 分析</span></span><span class="side-row__title">Theo 開始把電腦操作交給 AI，我已經這樣很久了</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#61758b"><a href="/ai-analysis/theo-voice-computer-use-everyday-limits/"><span class="side-row__meta">16SEP26 · <span>AI 分析</span></span><span class="side-row__title">Theo 開始把電腦操作交給 AI，我已經這樣很久了</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">我們先查了所有看起來比較合理的東西</a></li><li><a href="#section-2">T3 Code 跑得穩，問題就留在官方 Desktop 這一層</a></li><li><a href="#section-3">Activity Monitor 為什麼會看起來正常</a></li><li><a href="#section-4">後來又多了一個線索：heartbeat 一直叫醒同一條長 thread</a></li><li><a href="#section-5">採樣後，比 Activity Monitor 多看到幾件事</a></li><li><a href="#section-6">現在把兩個問題分開看</a></li><li><a href="#section-7">我把 heartbeat 從 Codex thread 裡拿掉了</a></li><li><a href="#section-8">硬體到頂，也清不掉沒結束的 process</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

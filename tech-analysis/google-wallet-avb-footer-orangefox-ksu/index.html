@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -211,7 +227,7 @@
 <li>各種 root 偵測軟體：全 clean</li>
 </ul>
 <p>如果某一關不過，我還知道要去哪裡修。每關都過、只有錢包不過，這才是最煩的。</p>
-<h2>錢包根本不看 Play Integrity</h2>
+<h2 id="section-1">錢包根本不看 Play Integrity</h2>
 <p>先把錢包和 Play services 從手機拉出來拆。</p>
 <p>Wallet APK（<code>com.google.android.apps.walletnfcrel</code>）裡面跟 attestation 有關的東西其實很少，只有 <code>GetLastAttestationResultRequest</code> / <code>GetLastAttestationResultResponse</code> 這種 IPC stub。它只是跟 GMS 要結果，自己不做偵測。</p>
 <p>真正的偵測在 GMS（<code>com.google.android.gms</code> 26.26.34）的 tapandpay 模組。加卡的流程是：</p>
@@ -224,14 +240,14 @@
 </ol>
 <p>關鍵在第二步。這條路跟 Play Integrity API 是完全獨立的兩條線。Play 商店那個「裝置認證通過」走的是 Play Integrity；錢包加卡走的是 DroidGuard 的支付級 attestation。兩邊的 verdict 互不參考。</p>
 <p>所以「Play Integrity 都 STRONG 了為什麼錢包還說我 root」這個問題，本身就是問錯的。錢包從來沒看過那個 STRONG。</p>
-<h2>排除法：不是快取、不是帳號、不是 ROM</h2>
+<h2 id="section-2">排除法：不是快取、不是帳號、不是 ROM</h2>
 <p>接下來是一連串排除。</p>
 <p><strong>不是快取。</strong> 把 GMS 的 <code>last_attestation_result</code> 刪掉、force-stop GMS，它重啟後自動重跑一次 attestation，幾秒鐘內 server 又回 fail，新的失敗結果馬上寫回快取。完全可重現。</p>
 <p><strong>不是帳號。</strong> 306 的時候我也遇過一次類似的狀況，那時候換個 Google 帳號就好了。這次換了沒用。</p>
 <p><strong>不是 ROM。</strong> 手邊剛好有 306 和 308 的 ROM，把兩邊的 super 解開、各 partition 的 build.prop 抽出來對。結果兩版結構完全一樣：system 都是 missi 通用映像、vendor 都是 mivendor、build id 都是 <code>BQ2A.250705.001-BP2A.250605.031.A3</code> 這種兩個平台版本串在一起的寫法，build.host 都是 xiaomi.eu。只有版本號不同。306 能過的結構，308 沒有道理不能過。</p>
 <p>到這裡，裝置端「看起來」能查的都乾淨。當時下的結論是：server 端風控，可能是這台裝置被標記了，只能等。</p>
 <p>這個結論是錯的。</p>
-<h2>修好之後，才有資格找根本原因</h2>
+<h2 id="section-3">修好之後，才有資格找根本原因</h2>
 <p>後來我自己想到一件事：KSU 當初不是用官方 APK patch 的，是刷機的時候順手用 OrangeFox Recovery 內建的 KernelSU Next 選項裝的。</p>
 <p>而且官方管理器 APK 裝完之後，其實警告過「這個 IMG 有問題」。我當時只按了「重新修補」，修補完介面一切正常，就沒再管。</p>
 <p>這次從 ROM 裡提取原版 init_boot，用官方 APK 重新 patch，再刷一次。</p>
@@ -257,13 +273,13 @@ magiskboot repack failed
 <p>官方 KernelSU-Next 走的是另一條路。它的 boot_patch 用的是 <code>android_bootimg</code> 這個 Rust crate，parser 會讀出 avb_info，patcher 在重打包時會把 vbmeta 和 footer 寫回去，順便更新裡面的 size 欄位（patcher.rs 312-339）。</p>
 <p>這也解釋了為什麼官方 APK 的「重新修補」救不了。官方的修補是「parse 當前的 image → 換 ramdisk → repack」。footer 已經被 magiskboot 丟掉了，parse 的時候就沒有這個東西，repack 當然也不會憑空長回來。介面顯示正常，是因為 ramdisk 裡的 init 和 kernelsu.ko 換成官方的了；但 image 尾部的結構缺損，修補不會碰。</p>
 <p>只有從原版 image 重新 patch，footer 才會被完整保留下來。</p>
-<h2>為什麼能開機、為什麼全綠</h2>
+<h2 id="section-4">為什麼能開機、為什麼全綠</h2>
 <p>這裡是整件事最陰險的地方。</p>
 <p>footer 被丟掉的 init_boot，照理說 locked bootloader 應該拒絕開機。但我這台的回鎖方式不會強制驗證 init_boot 那條鏈，所以照開。</p>
 <p>Play Integrity 也照過，因為它檢查的是 vbmeta 層的簽章和 locked 狀態，那層是好的。</p>
 <p>於是形成一個很詭異的狀態：bootloader 說 green、Play Integrity 說 STRONG、手機正常開機正常使用，但 init_boot 的 chained 結構其實是缺的。Google 的支付級 attestation 看的就是這種東西。</p>
 <p>能開機，不代表結構完整。每一盞綠燈，只證明它負責檢查的那一層沒問題。</p>
-<h2>為什麼 AI 查了那麼久，沒想到這一邊</h2>
+<h2 id="section-5">為什麼 AI 查了那麼久，沒想到這一邊</h2>
 <p>最後這段值得記。</p>
 <p>這次排查大半是我跟 AI 一起做的。它拆 APK 很快、實驗設計也合理，但結論卡在「server 端風控」。事後我問它為什麼沒想到 boot image 這邊，它的回答整理起來是四個失誤：</p>
 <p>一是過早接受「server 是黑箱」。追到 DroidGuard 就認定本地無從驗證，停止挖裝置端的證據。但 server 判的是本地送出去的東西，它沒有去檢查送出去的東西本身。</p>
@@ -280,15 +296,20 @@ magiskboot repack failed
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">錢包根本不看 Play Integrity</a></li><li><a href="#section-2">排除法：不是快取、不是帳號、不是 ROM</a></li><li><a href="#section-3">修好之後，才有資格找根本原因</a></li><li><a href="#section-4">為什麼能開機、為什麼全綠</a></li><li><a href="#section-5">為什麼 AI 查了那麼久，沒想到這一邊</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

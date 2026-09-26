@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -205,7 +221,7 @@
 <p>乍看之下相當完整：有現象、有數據、有引用、有工具。我當時的第一反應也是展開貼文，準備找 GitHub repo 看看有沒有什麼值得參考的地方。</p>
 <p>結果留言區一片批評聲。</p>
 <hr>
-<h2>觀察是真的，解釋是 AI 填充的</h2>
+<h2 id="section-1">觀察是真的，解釋是 AI 填充的</h2>
 <p>仔細讀完之後，問題變得很清楚。</p>
 <p>作者的<strong>親身觀察</strong>沒有錯。孤兒處理程序確實存在，Gradle daemon 確實很吃記憶體，Flutter 的 shell wrapper 信號傳遞問題也是真實的技術細節。這些不是捏造的。</p>
 <p>但他的<strong>技術解釋</strong>有幾個明顯裂縫：</p>
@@ -215,7 +231,7 @@
 <p>這個落差，就是留言區在嘲諷「你是要重構 OS 嗎」的原因。</p>
 <p>文章的結構完整、語氣篤定、引用詳盡，但核心邏輯有個裂縫——而這種「表面嚴謹、核心有洞」的文章，正是 AI 輔助寫作最容易產生的類型。</p>
 <hr>
-<h2>閉環裡的正向回饋</h2>
+<h2 id="section-2">閉環裡的正向回饋</h2>
 <p>後來作者在留言裡承認，他只是個 vibecoder。</p>
 <p>這個詞說明了一切。</p>
 <p>他大概是這樣做的：用 Claude Code 觀察現象、用 AI 補充背景知識和 root cause 分析、讓 AI 寫工具、再讓 AI 整理成一篇完整的技術文章。全程在 AI 的閉環裡完成，每一步都是正向回饋——「分析得很好」、腳本跑起來了、記憶體真的降了——沒有任何環節被外部視角質疑過。</p>
@@ -223,7 +239,7 @@
 <p>所以他出來發文的時候，心理狀態大概是：「我做了一個紮實的分析，留言應該會說好厲害、這個工具真有用。」</p>
 <p>結果留言區是第一個真正的外部視角，而且一次來了很多個。</p>
 <hr>
-<h2>跨模型驗證才是真正的第二意見</h2>
+<h2 id="section-3">跨模型驗證才是真正的第二意見</h2>
 <p>我自己處理比較複雜的技術問題時，當 Claude 在某個問題上進入 loop，我會把問題帶去 ChatGPT 問第二意見。</p>
 <p>有趣的是，每次這樣做，ChatGPT 都會建議由它擔任主力、Claude 負責審核就好。我反過來問 Claude 呢？它也有類似傾向。</p>
 <p>這不是 AI 在「搶業務」，而是每個模型都傾向認為自己的推理框架比較可靠，所以自然建議自己主導。問題是這個建議本身就是帶偏見的——沒有任何一個模型有辦法客觀評估自己跟另一個模型的差距。</p>
@@ -232,7 +248,7 @@
 <p>沒有。子 Agent 跟主 Agent 是同一個模型，訓練權重完全一樣，盲點高度重疊。更糟的是，子 Agent 的上下文通常從主 Agent 傳遞過來，等於一開始就接收了帶有框架偏見的資訊。子 Agent 適合做任務分工，不適合做觀點驗證。</p>
 <p>真正有效的第二意見，來自不同的先驗假設和訓練偏向，也就是不同的模型。</p>
 <hr>
-<h2>我自己的做法</h2>
+<h2 id="section-4">我自己的做法</h2>
 <p>我在 AI 協作上有一個自己的原則：<strong>文章只寫我親身走過的事情</strong>。</p>
 <p>不是走完 A 步驟就出來說 A，而是走完 A、B、C、D，包括走錯路、回頭、找到真正原因，最後才讓 AI 幫我把這個過程整理成文章。那些「走錯路」的細節，是我帶進去的，不是 AI 捏造的。</p>
 <p>那個 vibecoder 和我的差別不是「有沒有依賴 AI」，而是他在閉環裡做完一件事，沒有任何信號告訴他「該去問第二個人了」。孤兒處理程序清掉了、記憶體降了，看起來一切完美，他就出來發文了。</p>
@@ -242,7 +258,7 @@
 <p>技術文章最難的部分從來不是寫作，而是知道自己什麼時候真的懂了、什麼時候只是 AI 幫你填了一個聽起來合理的解釋。</p>
 <p>閉環裡不會有人告訴你這兩件事的差別。</p>
 <hr>
-<h2>補充：Apple 的「選擇性強制」問題</h2>
+<h2 id="section-5">補充：Apple 的「選擇性強制」問題</h2>
 <p>回到那個 <code>kqueue</code> + <code>EVFILT_PROC</code> 的問題——為什麼 Apple 有工具，但開發者不用，而 Apple 也不強制？</p>
 <p>這其實反映了 Apple 平台一個更深層的設計哲學：<strong>它的強制力是選擇性的，而且選擇的標準是使用者看不看得到。</strong></p>
 <p>看得到的地方——UI 風格、音訊行為、通知樣式——全部強制，給你一整套，不能拆。我自己在開發語音工具時就踩過這個坑：想用 Apple 的 Voice Processing API 取得降噪功能，結果發現 audio ducking（壓低背景音量）是綁在一起的，沒辦法單獨關掉，只好 revert 回去自己用 RNNoise 實作降噪。Apple 認為這個組合對「通話情境」是正確答案，所以整包給你，不提供拆件選項。</p>
@@ -260,15 +276,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">觀察是真的，解釋是 AI 填充的</a></li><li><a href="#section-2">閉環裡的正向回饋</a></li><li><a href="#section-3">跨模型驗證才是真正的第二意見</a></li><li><a href="#section-4">我自己的做法</a></li><li><a href="#section-5">補充：Apple 的「選擇性強制」問題</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

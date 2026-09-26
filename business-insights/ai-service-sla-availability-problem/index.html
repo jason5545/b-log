@@ -78,12 +78,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -96,19 +96,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -204,25 +220,25 @@
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>今天 Claude 又出事了。Opus 4.6 和 Sonnet 4.6 從早上開始出現 elevated error rates，同一天 Anthropic 宣布要在尖峰時段加速消耗使用者的 session limit。整個三月，這已經不是第一次，也不會是最後一次。</p>
 <p>這讓我想到一個在 hosting 圈很基本、但在 AI 服務幾乎不存在的東西：<strong>SLA</strong>。</p>
-<h2>先說可用性，其他先不提</h2>
+<h2 id="section-1">先說可用性，其他先不提</h2>
 <p>有人會把 SLA 討論帶到品質穩定性、latency、模型版本一致性這些方向。這些都重要，但前提是服務要能用。一個時常掛掉、時常限速的服務，談其他都是空的。</p>
 <p>今天要討論的只有一件事：<strong>AI 服務到底應不應該對可用性做出承諾？</strong></p>
 <p>我認為應該。但現實是，無論是 Anthropic、OpenAI，還是 xAI，目前都沒有針對一般付費使用者做這件事。最接近的實作方案，反而是 OpenRouter 那種聚合層的架構。</p>
-<h2>OpenRouter 為什麼能接近 SLA</h2>
+<h2 id="section-2">OpenRouter 為什麼能接近 SLA</h2>
 <p>OpenRouter 不是靠自己的基礎設施撐起可用性，而是透過路由——同一個模型，當 Anthropic 自己的端點掛掉，它可以切去 Google Vertex AI 上的 Claude，或是 AWS Bedrock 上的 Claude。模型行為一致，只是換了一條路。</p>
 <p>這個區別很關鍵：不是切換到「另一家的 AI」，而是切換<strong>同一個模型的不同基礎設施提供商</strong>。對使用者來說，效果是一樣的；對服務可用性來說，這才是真正能承諾 SLA 的架構。</p>
 <p>YouTuber Theo 很久以前就因為這個原因，選擇不再直接跟 Anthropic 買 API，而是走 Vertex。不是不信任 Claude 這個模型，是不信任 Anthropic 自己的基礎設施。這個判斷在三月份得到了非常充分的驗證。</p>
-<h2>分開好，還是合併好</h2>
+<h2 id="section-3">分開好，還是合併好</h2>
 <p>這其實是個值得認真討論的問題。Anthropic 身兼「最好的模型研究公司」和「直接服務使用者的平台」兩個角色，這兩件事的能力要求完全不同。</p>
 <p>跑一個全球高可用的基礎設施，是 Google 和 AWS 花了幾十年、幾千億美金建出來的東西。Anthropic 的核心能力是模型研究和 AI 安全，讓他們去和雲端巨頭競爭基礎設施可靠性，本來就不公平，也不合理。</p>
 <p>從純粹的商業邏輯來看，把模型和基礎設施分開其實對 Anthropic 更健康：不用分心解決 DevOps 層的問題、雲端夥伴幫你觸及更多企業客戶、可以把資源集中在讓模型更好。護城河在模型能力，不在機房管理。</p>
 <p>反對意見是商業面的損失——流量走 Vertex 和 Bedrock，Google 和 AWS 要抽成，Anthropic 的直接收入會被稀釋。這確實是真實的代價。但我覺得這個代價換到的東西更值錢：開發者真的願意把它放進生產環境。</p>
-<h2>訂閱補貼正在走向終點</h2>
+<h2 id="section-4">訂閱補貼正在走向終點</h2>
 <p>Theo 還說過一句話：這種訂閱補貼方式不是長久之計。</p>
 <p>$200 的 Max 方案，換算下來大概只有 $4,000 的推理額度。這個差距是 Anthropic 在用虧損換使用者黏著度。模型越強、使用者越重度使用，成本缺口就越大。</p>
 <p>這個月的幾件事，放在一起看就是同一個故事的不同章節：GitHub Copilot 在 3/12 砍掉了學生方案裡的 Claude Opus 和 Sonnet 手動選擇權（原因是「要讓 Copilot 對全球學生保持免費可及」）；Anthropic 今天開始在尖峰時段加速消耗 session limit。方向一致：縮減補貼，把重度使用者往 API 推，或往更高費率的方案推。</p>
 <p>補貼空間正在被一點一點收回。</p>
-<h2>最後</h2>
+<h2 id="section-5">最後</h2>
 <p>我認為 AI 服務的 SLA，答案不會從 Anthropic 或 OpenAI 自己身上長出來。他們沒有動機設計一個「掛了就切走」的機制，因為那意味著幫競爭對手導流。</p>
 <p>真正能承諾 SLA 的，只有站在所有提供商之上的那一層。OpenRouter 目前沒有正式的 SLA 文件，但它的架構是對的。這個位置現在是空著的——等著被人認真填進去。</p>
 <p>而對開發者來說，結論很簡單：如果你在乎可用性，不要把生產環境直接壓在任何一家 AI 公司的原生 API 上。這不是對 Claude 沒信心，這是對基礎設施現實有認識。</p>
@@ -233,15 +249,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">先說可用性，其他先不提</a></li><li><a href="#section-2">OpenRouter 為什麼能接近 SLA</a></li><li><a href="#section-3">分開好，還是合併好</a></li><li><a href="#section-4">訂閱補貼正在走向終點</a></li><li><a href="#section-5">最後</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

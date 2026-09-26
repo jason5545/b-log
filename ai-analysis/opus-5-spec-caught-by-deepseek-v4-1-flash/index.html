@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -204,18 +220,18 @@
 <p>分類規則跟驗收條件互斥。</p>
 <p>規格寫的是「regex 命中而且對照表查得到 → 目標類別」，驗收條件又要求某一批的目標類別剛好是連號的 26 張。Flash 把規則對兩批既有的分類報告跑了一遍，逐張數，發現有 5 張 regex 命中但對照表查不到：一張是某個字讀錯、換掉就救得回來，一張讀出來的編號本來就不在對照表，另外三張直接組不出編號。嚴格照規格跑，這批剩 21 張，三條驗收條件一起 FAIL。</p>
 <p>它給了三種處理方式，標了一個推薦，然後等我決定。</p>
-<h2>另一個專案，同一組模型，同一天</h2>
+<h2 id="section-1">另一個專案，同一組模型，同一天</h2>
 <p>人行道路徑的無障礙判定。一樣 Opus 5 寫規格，Flash 實作。這輪要求改三個地方，其中一條驗收條件寫的是：某條路線整條不准出現 LAST_RESORT。</p>
 <p>Flash 做完三個改動，回報：LAST_RESORT 佔 15.23%，cap 是 15%，那條路線的驗收也還是 FAIL。兩個問題它都往回查到三個改動以外的規則和資料。然後給了三個選項：照三個改動 commit 並回報缺口；加第 4 個改動（比對距離 6 m 改 12 m，它量過，掉到 11.7%，過 cap）再 commit；或者先不 commit，去查普查資料跟驗收條件到底誰錯。</p>
 <p>沒 commit 任何東西。</p>
 <p>普查資料裡那條路線本來就有三段真的窄，0.69 m、0.85 m 那種。「整條不准有 LAST_RESORT」在寫的時候沒對著普查資料重算過，跟「剛好 26 張」是同一種錯，條件是憑上一輪印象填的，不是跑出來的。</p>
 <p>兩個專案、兩種資料，同一個洞。</p>
-<h2>opus 5 caught by deepseek 4.1 flash?</h2>
+<h2 id="section-2">opus 5 caught by deepseek 4.1 flash?</h2>
 <p>第一個反應是這個。</p>
 <p>但仔細看，兩次都不是靠推理猜出來的。是把規則寫成程式、對資料全量跑、數出來跟驗收條件比，矛盾自己浮出來。這種東西在寫規格的時候幾乎看不見。26 這個數字是照上一輪 regex 命中數填的，規則文字後來又多加了一個查表條件，兩邊各自看都合理，要跑過資料才會撞在一起。</p>
 <p>寫規格的人是抽查，實作的人是全量枚舉。</p>
 <p>我比較在意的是它接下來做的事：兩次都是發現矛盾之後停下來問，沒有自己挑一個安靜做掉。第二次它已經量出 12 m 可以過 cap，還是沒 commit。很多模型在這種情況會直接選「放寬」，然後在回報裡輕描淡寫帶過，你要到驗收 FAIL 或 PASS 得很可疑才會回頭發現。</p>
-<h2>可是 Opus 5 不是比 4.1 Flash 強？兩邊都能跑檢查啊</h2>
+<h2 id="section-3">可是 Opus 5 不是比 4.1 Flash 強？兩邊都能跑檢查啊</h2>
 <p>對，而且寫規格的那個 session 確實有跑實測：量裁切框的座標、確認對照表的欄位、確認某個編號查不到。所以不是能不能跑，是有沒有想到要跑。</p>
 <p>它跑的都是自己覺得不確定的東西。座標、欄位。「剛好 26 張」跟「整條不准」它沒當成不確定，因為數字是上一輪回報來的、規則是上一輪驗過的，這輪只是加一個條件，看起來是收緊。沒重算的是：收緊之後還剩多少。</p>
 <p>更尷尬的是證據就在它自己手上。照片那個專案，第四輪的合成測試案例是它寫的，裡面明明白白有兩條：一個是「這種讀法組不出編號」，一個是「這個編號組得出來，但不在對照表」。就是那 5 張裡的兩張。寫測試案例的時候知道這兩張過不了查表，寫分類規則的時候又要求必須查得到，兩段隔了幾十行，沒接起來。</p>
@@ -224,7 +240,7 @@
 <p>本來我以為這個洞有一半是我的，絕對條件是我的寫法。</p>
 <p>回去翻了兩串對話，不是。「剛好 26 張」跟「整條路線不能有任何 LAST_RESORT」都是 Opus 5 自己寫的。人行道那條，我給它的只有一句現場觀察：以明德國小為分界，往振興方向 OK，往捷運站會越來越不 OK。它先提議「明德路上不能出現 LAST_RESORT」，寫進 prompt 時又擴大成整條路線。15% 的上限，它自己也註明是估的，沒有實測。</p>
 <p>我的部分在 AGENTS.md：派 DeepSeek 的前提是驗收要機器判得出來，prompt 要釘死。這會把規格往硬數字推，但數字要不要對著資料重算，裡面沒寫。</p>
-<h2>那分數呢</h2>
+<h2 id="section-4">那分數呢</h2>
 <p>去查了 DeepSWE 跟 Terminal-Bench，數字對這件事蠻有解釋力。</p>
 <p>接近或反超的（都是廠商自報，harness 不一樣）：</p>
 <ul>
@@ -241,12 +257,12 @@
 <p><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash">DeepSeek 自己的表</a>上，兩邊都有數字的 15 項 benchmark 裡，Flash 贏 5 項、平均贏 1.94 分；Opus 5 贏 10 項、平均贏 10.19 分。光是 harness 選擇就能讓 DeepSWE 擺盪好幾分，所以 TB 2.1 那種一兩分的差距基本上是雜訊。</p>
 <p>Flash 抓到矛盾的那種工作，照規格寫程式、跑資料、對驗收條件，就是 TB 2.1 和 DeepSWE 在量的東西，兩邊本來就接近飽和。Opus 5 真正拉開的是 TB 4.0、HLE 這種要自己撐長推理鏈的難題。寫規格時漏掉「加了條件後重算數量」，難度沒那麼高，就是沒觸發檢查。</p>
 <p>在「執行加驗證」這個工作型態上，兩者差距小到誰拿到資料誰就贏。</p>
-<h2>規格方做了什麼</h2>
+<h2 id="section-5">規格方做了什麼</h2>
 <p>Flash 找到矛盾，怎麼補是規格方設計的。</p>
 <p>人行道那條驗收，從「整條不准」改成把絕對條件綁回資料：LAST_RESORT 只准落在普查記錄的窄段、或它們所在的同一條邊上，落在別的地方才算失敗，而且每一段都要列出寬度、障礙物數量、速限、密度。</p>
 <p>比對距離放寬那條也不能只看比例降了。要 Flash 印出 6 m 跟 12 m 各自對到的邊數，還有多邊形道路名稱跟 OSM name 不一致的邊數。12 m 的不一致率比 6 m 高超過 2 個百分點，就停下來回報，不准 commit。這個 2 個百分點，Opus 5 也註明是抓的安全邊界，沒有實測。</p>
 <p>所以這兩次是分工做完的：Flash 找矛盾，Opus 5 改驗收。這兩件事我目前沒看到單一模型自己做得好。</p>
-<h2>之後怎麼做</h2>
+<h2 id="section-6">之後怎麼做</h2>
 <p>兩邊各加一條。</p>
 <p>寫規格那方：每個帶數字或絕對條件的驗收發出去之前，用現有的報告把新規則模擬一次重算。跑不到 10 秒。這兩次的矛盾在那一步就會現形，不用等 Flash 那邊來回一趟。</p>
 <p>實作那方的第 0 步：開工前先把這些驗收對現有的報告和資料跑一遍，有矛盾先回報，再寫程式。Flash 這兩次是自發做的，把它寫死成流程。</p>
@@ -260,15 +276,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#f07c2a"><a href="/ai-analysis/svg-cover-create-post-first-run/"><span class="side-row__meta">19SEP26 · <span>AI 分析</span></span><span class="side-row__title">讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">另一個專案，同一組模型，同一天</a></li><li><a href="#section-2">opus 5 caught by deepseek 4.1 flash?</a></li><li><a href="#section-3">可是 Opus 5 不是比 4.1 Flash 強？兩邊都能跑檢查啊</a></li><li><a href="#section-4">那分數呢</a></li><li><a href="#section-5">規格方做了什麼</a></li><li><a href="#section-6">之後怎麼做</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

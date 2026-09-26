@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -205,40 +221,40 @@
 <p>最近看了 Theo 的影片，他花了一小時五分鐘抱怨 Apple 的軟體問題。我看完之後的心情很複雜，不是因為他說的我不認同，是因為他說的我全部都親身經歷過。</p>
 <p>作為他的長期觀眾，我已經很習慣他講個 10 到 30 分鐘了。看到時間軸顯示一個多小時，我還揉了一下眼睛確認沒看錯。一個以精簡著稱的人，對同一個主題講了三倍的時間，而且沒有廢話——這件事本身就已經說明了問題的規模：Apple 給了他足夠多的素材，讓他根本剪不短。</p>
 <p>這次我也改變了平常的觀看方式。平常我都從頭聽到尾，這次採取了邊讀字稿、邊同時聆聽的策略——某種程度上，這支影片的長度本身就逼出了新的消費方式。</p>
-<h2>iCloud：我以為是同步，結果是刪除</h2>
+<h2 id="section-1">iCloud：我以為是同步，結果是刪除</h2>
 <p>Theo 提到 Vision Pro 開機後要等 1 到 3 小時才能同步完照片 manifest，不是下載照片本身，只是同步「哪些照片存在」的清單。我的狀況更嚴重。</p>
 <p>前幾天，我放在 iCloud Drive 的 2000 多張焊接報告照片在 Finder 裡消失了。Finder 顯示空白，但用終端機還看得到。後來才查清楚：檔案帶有 quarantine 屬性，上傳時部分失敗，iCloud 的自我修復機制誤判，然後開始反向同步——也就是把本機檔案一直刪掉。</p>
 <p>這是工作用的資料，不是個人照片。</p>
 <p>然後是 Gmail 同步。我第一次在 Mail app 設定 Gmail 帳號，同步花了整整三天三夜才完成。三天。</p>
-<h2>語音輸入：Apple 做不好，我自己做</h2>
+<h2 id="section-2">語音輸入：Apple 做不好，我自己做</h2>
 <p>我因為身體狀況只能單指打字，語音輸入對我來說不是方便的功能，是日常必需品。</p>
 <p>Apple 的原生語音輸入我從來沒有認真依賴過，因為它根本不可靠。autocorrect 更嚴重——手動改掉的字，它還是會改回去，iOS 26 之後更頻繁。</p>
 <p>我後來用 Typeless，效果好很多。但 Typeless 發生了隱私爭議，我改用開放原始碼的 VoiceInk，最後乾脆自己整合開發出 Voco。一個需要語音輸入的使用者，為了繞開 Apple 原生工具之爛，走到自己寫軟體這一步。</p>
 <p>Theo 說第三方新創的文字 UX 比 Apple 好一個數量級。我同意，我親身驗證了。</p>
-<h2>AirDrop：酷品牌包裝的一串問題</h2>
+<h2 id="section-3">AirDrop：酷品牌包裝的一串問題</h2>
 <p>這句話是 Theo 說的，我直接拿來用，因為我沒辦法描述得更準確。</p>
 <p>我不需要傳 500GB 的 ProRes 檔案，光是日常小檔案，AirDrop 失敗的頻率就已經讓我放棄。找不到裝置（「Searching for device…」一直轉）、傳到一半斷線，這些我都碰過。</p>
 <p>更諷刺的是，2025 年 11 月 Google 在沒有 Apple 配合的情況下，自己逆向工程實作了 AirDrop 相容性，讓 Android 的 Quick Share 可以直接跟 iPhone、iPad 和 MacBook 傳檔案。2026 年更確認要擴展到更多 Android 裝置。一個第三方把 Apple 自己的協定打通了，而 Apple 原廠的 AirDrop 在我手上還是常常失敗。</p>
-<h2>USB 3 在 2026 年還是 Pro 專屬</h2>
+<h2 id="section-4">USB 3 在 2026 年還是 Pro 專屬</h2>
 <p>iPhone 17 Pro Max 才有 USB 3 速度。非 Pro 的 iPhone，插 USB-C 還是 USB 2。</p>
 <p>USB-C 是通用標準，不是 Apple 發明的，但 Apple 把傳輸速度當賣點來賣。2026 年了，插一條線不知道自己是快是慢，這種事只有 Apple 做得出來。</p>
-<h2>Spotlight 爛了，但我也沒辦法用 Raycast</h2>
+<h2 id="section-5">Spotlight 爛了，但我也沒辦法用 Raycast</h2>
 <p>Spotlight 的索引問題我也有碰到，結果很奇怪，不是單純的慢，是不穩定。</p>
 <p>Theo 說他放棄 Spotlight 改用 Raycast。我不行，因為我常用 iPhone 鏡像功能，Raycast 跟它不相容，用起來很不方便。結果就是只能繼續忍著爛掉的 Spotlight。</p>
-<h2>Safari 和鑰匙圈，我也都沒在用</h2>
+<h2 id="section-6">Safari 和鑰匙圈，我也都沒在用</h2>
 <p>這點我跟 Theo 一樣。我不用 Safari，瀏覽器用別的。原生鑰匙圈也不用，密碼管理交給其他工具。</p>
 <p>Apple 的原生軟體，我能替換的都替換了。</p>
-<h2>配件生態也是困住你的一部分</h2>
+<h2 id="section-7">配件生態也是困住你的一部分</h2>
 <p>還有一個角度很少人提：配件。iPhone 和 MacBook 的保護殼、周邊配件選擇多到誇張，各種材質、品牌、價位任你挑。換到 Android 或其他 Windows 筆電，同款型號能找到的配件可能就那幾個，有時候連合身的保護殼都不一定有。</p>
 <p>這也是離開 Apple 的隱性成本——不只是軟體和硬體，連整個周邊生態都圍著 Apple 轉，一旦離開，這些全部消失。</p>
-<h2>如果有後起之秀做得一樣好</h2>
+<h2 id="section-8">如果有後起之秀做得一樣好</h2>
 <p>我相信一件事：如果今天有任何競爭者做出跟 Apple 硬體一樣好的產品，沒有人會想留在 Apple。留下來的人不是因為愛，是因為目前沒有夠好的替代品。這才是 Apple 真正的護城河——不是品牌忠誠度，是競爭者還不夠強。</p>
 <p>這才是判斷果粉最直接的標準：一個真正的果粉，Safari、iCloud 鑰匙圈、Apple Mail、Spotlight 全部用原廠的，而且覺得很好用。我呢？硬體幾乎買齊了——iPhone、MacBook、AirTag 四個——但軟體能換就換，換不掉的就想辦法繞開。花了果粉的錢，卻在逃離果粉的生活方式。</p>
-<h2>macOS 獨有的工具，Linux 根本沒份</h2>
+<h2 id="section-9">macOS 獨有的工具，Linux 根本沒份</h2>
 <p>這不只是「Apple 的東西爛」那麼簡單。有些好東西就是只在 macOS 上有。</p>
 <p>我最近在用 cmux，一個 Ghostty 的 fork，macOS 專屬的終端機 app。這種工具在 Linux 上根本沒有對應的東西。不是 Linux 版本比較差，是完全沒有。</p>
 <p>所以我被留在 Apple 生態裡，不只是因為硬體，也因為這些只在 macOS 上存在的工具。這讓「逃跑」這件事更難。</p>
-<h2>那為什麼還在用？</h2>
+<h2 id="section-10">那為什麼還在用？</h2>
 <p>硬體目前沒有替代品。要電池、要螢幕、要效能三個同時成立，只有 Apple Silicon。Android 的影片品質差距還在，Linux 的 HDMI HDR 問題沒有解決。</p>
 <p>我想開發 iOS App，就必須用 Mac，這不是喜好，是現實。</p>
 <p>我之前寫過一篇文章，說我和 Apple 的關係是「不是愛，不是恨，是你不給我選擇的無奈」。Theo 的結論也是一樣：他被困在 Apple 生態裡，不是因為他想，是因為目前沒有夠好的替代品。</p>
@@ -253,15 +269,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#a66b48"><a href="/ai-analysis/macos-27-facetime-audio-claude-fault/"><span class="side-row__meta">16SEP26 · <span>AI 分析</span></span><span class="side-row__title">三版 macOS 第一次連 FaceTime 語音都壞了，我問 Claude 這算不算它的錯</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#a66b48"><a href="/ai-analysis/macos-27-facetime-audio-claude-fault/"><span class="side-row__meta">16SEP26 · <span>AI 分析</span></span><span class="side-row__title">三版 macOS 第一次連 FaceTime 語音都壞了，我問 Claude 這算不算它的錯</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">iCloud：我以為是同步，結果是刪除</a></li><li><a href="#section-2">語音輸入：Apple 做不好，我自己做</a></li><li><a href="#section-3">AirDrop：酷品牌包裝的一串問題</a></li><li><a href="#section-4">USB 3 在 2026 年還是 Pro 專屬</a></li><li><a href="#section-5">Spotlight 爛了，但我也沒辦法用 Raycast</a></li><li><a href="#section-6">Safari 和鑰匙圈，我也都沒在用</a></li><li><a href="#section-7">配件生態也是困住你的一部分</a></li><li><a href="#section-8">如果有後起之秀做得一樣好</a></li><li><a href="#section-9">macOS 獨有的工具，Linux 根本沒份</a></li><li><a href="#section-10">那為什麼還在用？</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

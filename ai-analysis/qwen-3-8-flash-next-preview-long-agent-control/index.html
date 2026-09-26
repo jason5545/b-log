@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -208,7 +224,7 @@
 <p>更麻煩的是，它把三個 package 寫進註解，真正會生效的 package 行反而沒加。HTML 裡還開始出現 <code>只выводит</code>、<code>已用過년에는</code>、<code>台سل圈</code> 這種跨語言碎片。</p>
 <p>我最後把它停掉了。</p>
 <p>這個畫面讓我回頭問了一個問題：Qwen3.8-Flash-Next 名字裡的 Next，到底代表什麼？</p>
-<h2>我一開始懷疑是 4-bit 和去對齊</h2>
+<h2 id="section-1">我一開始懷疑是 4-bit 和去對齊</h2>
 <p>我跑的是 OrcaRouter 的去對齊 4-bit 版本。Medium 幾乎都正常，xhigh 卻比較容易出現 token salad、重複，或一路想下去不肯交答案。</p>
 <p>第一個直覺很自然：是不是去對齊把權重弄傷了？或者 4-bit 精度太低，短任務撐得住，長推理才開始累積誤差？</p>
 <p>這個說法聽起來合理。我甚至已經在評估 6-bit。它大概要吃掉 101GB 記憶體，128GB 的 Mac 勉強塞得下。</p>
@@ -219,7 +235,7 @@
 <p>我也測過 MTP 開關。結果一樣。64K needle 可以精確取回，RoPE 也不像主因。</p>
 <p>到這裡，去對齊已經不是必要條件。OrcaRouter 那個 4-bit 版本，也不能再單獨解釋為什麼 Jundot 仍然會把完整 32K 用完。</p>
 <p>真正留下來的現象比較單純：這顆模型碰到「發現矛盾就回頭核對，而且不要停」的 prompt，會一直找到下一件可以算的事。xhigh 給它多少長度，它就用多少。</p>
-<h2>亂碼和不肯停，其實是兩件事</h2>
+<h2 id="section-2">亂碼和不肯停，其實是兩件事</h2>
 <p>這一輪最容易誤判的地方，是我把所有異常都叫成「跑飛」。</p>
 <p>有些確實是 backend bug。oMLX 前幾天才修掉一個 <a href="https://github.com/jundot/omlx/pull/3232">PLE rollback 問題</a>：Lightning MTP 猜錯 token、主模型拒絕之後，GDN 和 QSA 有退回正確位置，PLE 的 n-gram history 與 short-convolution state 卻還留在被拒絕的 token 上。後面的生成當然會歪。</p>
 <p>這種問題可以修。RMSNorm 權重格式讀錯、tool parser 卡在 token 0、streaming 解碼拆壞字元，也都屬於推理管線的責任。</p>
@@ -229,7 +245,7 @@
 <p>Pi 那輪又讓我看到另一層。公開討論裡已經有人遇到幾乎相同的狀況：同一顆 Flash-Next 直接用 llama.cpp CLI 時正常，接到 Pi／pi-web 之後卻開始錯讀檔名，混入隨機語言和符號。他也用了官方建議的 <code>top_k=20</code>，換過權重與 backend，問題仍然存在。<a href="https://www.reddit.com/r/LocalLLM/comments/1w1vb8v/qwen_38_flash_next_with_pi_receives_and_produces/">那篇回報</a></p>
 <p>這表示 agent harness 也有責任。Pi 把 system prompt、tool schema、AGENTS.md、歷史輸出和工具結果一路留在 context 裡。我的 WebUI session 在 100K 之後開始出現語言污染，到 159K 才被我中止。</p>
 <p>262K context 代表它放得下，不代表它到了 159K 還能好好管理一個專案。</p>
-<h2>官方從來沒有把它說成 Qwen4</h2>
+<h2 id="section-3">官方從來沒有把它說成 Qwen4</h2>
 <p>Qwen 對這顆模型的定位其實寫得很直接。</p>
 <p>它是官方正式公開的 checkpoint，不是來路不明的測試檔。但官方稱它為「experimental preview of the architecture that will underpin Qwen4」，也就是 Qwen4 底層架構的實驗性預覽。<a href="https://github.com/QwenLM/Qwen3.8-Flash-Next">官方說明</a></p>
 <p>這個差別很重要。</p>
@@ -238,7 +254,7 @@
 <p>官方提早放出它，本來就是要讓社群在 Qwen4 正式登場前先檢查這套架構，推理框架也有時間準備。Qwen 自己在模型卡裡寫到，可以調高 <code>presence_penalty</code> 降低 endless repetition，但代價可能是語言混雜和輕微能力下降。<a href="https://huggingface.co/Qwen/Qwen3.8-Flash-Next#best-practices">官方 Best Practices</a></p>
 <p>所以 Next 不是比較新的宣傳字樣。</p>
 <p>它是在說：下一代的架構已經先拿出來了，正式世代還在後面。</p>
-<h2>我現在怎麼用它</h2>
+<h2 id="section-4">我現在怎麼用它</h2>
 <p>6-bit 不需要再下載了。從 BF16 自己重做 oQ4，也不會教會模型什麼時候該收手。</p>
 <p>我會繼續用它，但工作方式要改。</p>
 <p>Medium 負責真正的改檔、測試、build 和部署。xhigh 留給範圍明確、context 乾淨，而且真的需要長推理的問題。任務中間改過幾次方向，我會直接開新 session，不讓它背著前面八萬個 token 的錯誤假設繼續工作。</p>
@@ -246,7 +262,7 @@
 <p>但我不再期待一次 backend 更新，就讓 xhigh 自然知道什麼時候該停。</p>
 <p>那天它卡住的 <code>build.sh</code> 只有 173 行。它不是看不懂，也不是少一個 API。它缺的是在證據已經足夠時做決定，然後把工作交出來。</p>
 <p>這大概就是它現在叫 Next，而不是 Qwen4 的原因。</p>
-<h2>後記：範圍定死之後，它會自己停</h2>
+<h2 id="section-5">後記：範圍定死之後，它會自己停</h2>
 <p>這篇寫完之後，我用同一顆模型（Jundot oQ 混合精度版）做了五輪對照實驗，對手是 GLM-5.3 Flash。題目從六個檔案的 TypeScript 改到 Kotlin 佇列服務，每輪有隱藏測試。全部用 low 跑。</p>
 <p>結果跟上面那個三十八分鐘的 session 完全不像。五輪都是自己做完、跑完驗收、commit、停下，最長十五分鐘。四輪產出跟參考解逐 byte 相同。有一輪我什麼位置都不給，只給三個 bug 的症狀和驗收條件，它三個根因都找對，設計題也自己拍板，二十一條隱藏測試全過，跟 GLM 一樣。</p>
 <p>差別只有三件事。第一，範圍在開場就定死，不是做到一半才收斂。第二，每個任務開新 session，context 從來沒超過一份 prompt 加一個小專案。第三，prompt 裡有驗收清單：跑哪幾條指令、輸出應該長什麼樣。那份清單就是「證據已經足夠」的定義。</p>
@@ -261,15 +277,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">我一開始懷疑是 4-bit 和去對齊</a></li><li><a href="#section-2">亂碼和不肯停，其實是兩件事</a></li><li><a href="#section-3">官方從來沒有把它說成 Qwen4</a></li><li><a href="#section-4">我現在怎麼用它</a></li><li><a href="#section-5">後記：範圍定死之後，它會自己停</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

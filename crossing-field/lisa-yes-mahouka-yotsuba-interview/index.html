@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -225,7 +241,7 @@
 
 <hr>
 <p><a id="chapter-1"></a></p>
-<h2>超越「Rising Hope」。從達也的歌，轉向深雪的歌</h2>
+<h2 id="section-1">超越「Rising Hope」。從達也的歌，轉向深雪的歌</h2>
 <p><strong>——從「Rising Hope」、「Shouted Serenade」以來，LiSA 一直用激烈的方式為《魔法科》的片頭增色，請先談談這次接到邀約時的直覺感受。</strong></p>
 <p><strong>LiSA</strong>　老實說，我覺得「Shouted Serenade」已經把能說的都說完了，心想「我大概沒有什麼能再為《魔法科》寫的東西了吧」（笑）。</p>
 <p><strong>——畢竟「Shouted Serenade」作為「Rising Hope」跨越十年的回應曲，確實很完美。</strong></p>
@@ -236,7 +252,7 @@
 <em>(C)2024 佐島 勤/KADOKAWA/魔法科高中四葉繼承篇製作委員會</em></p>
 <hr>
 <p><a id="chapter-2"></a></p>
-<h2>作詞是「120% 深雪」。與當年壓抑情感的自己產生共鳴</h2>
+<h2 id="section-2">作詞是「120% 深雪」。與當年壓抑情感的自己產生共鳴</h2>
 <p><strong>——這次作詞由 LiSA 獨自完成。「一直愛下去並不是罪吧」等歌詞，充分濃縮了深雪的內心世界。</strong></p>
 <p><strong>LiSA</strong>　謝謝。這首歌不摻雜任何達也的成分，完完全全是深雪情感的歌，所以我才能夠放手去寫。</p>
 <p><strong>——對於深雪的情感，你將自己的心情同步到什麼程度來編織歌詞呢？</strong></p>
@@ -249,7 +265,7 @@
 <em>(C)2024 佐島 勤/KADOKAWA/魔法科高中四葉繼承篇製作委員會</em></p>
 <hr>
 <p><a id="chapter-3"></a></p>
-<h2>如果是以前的自己，一定唱不出來。在副歌「收住」的全新演唱表現</h2>
+<h2 id="section-3">如果是以前的自己，一定唱不出來。在副歌「收住」的全新演唱表現</h2>
 <p><strong>——編曲方面，是高木一成作曲、江口亮編曲的搖滾抒情曲。從 A、B 段的靜謐到副歌一口氣展開的結構，LiSA 招牌的爆發力不用說，細膩的表現力也相當出色，令我很感動。</strong></p>
 <p><strong>LiSA</strong>　很高興你這麼說。就我個人而言，這種直球式的抒情歌是最難的。一個人默默把情感壓抑在心裡的 A 段、B 段那種低溫感，以及在掙扎中傾吐想放聲吶喊的副歌能量，這兩者之間的切換幅度要比平時更大，真的非常困難。如果是以前的自己，大概一定唱不出來吧。</p>
 <p><strong>——整段錄音過程中，有沒有特別印象深刻的段落？</strong></p>
@@ -258,7 +274,7 @@
 <em>(C)2024 佐島 勤/KADOKAWA/魔法科高中四葉繼承篇製作委員會</em></p>
 <hr>
 <p><a id="chapter-4"></a></p>
-<h2>灌注於「YES」之中的愛之肯定</h2>
+<h2 id="section-4">灌注於「YES」之中的愛之肯定</h2>
 <p><img src="/content/img/2026/lisa-yes-mahouka-yotsuba-interview/17380364.webp" alt="LiSA">
 <em>攝影＝茉那實</em></p>
 <p><strong>——曲名「YES」非常明快，可以談談這短短一個詞背後所寄託的意義嗎？</strong></p>
@@ -271,7 +287,7 @@
 <em>(C)2024 佐島 勤/KADOKAWA/魔法科高中四葉繼承篇製作委員會</em></p>
 <hr>
 <p><a id="chapter-5"></a></p>
-<h2>學會控制情感的大人。個人出道 15 週年的現在位置</h2>
+<h2 id="section-5">學會控制情感的大人。個人出道 15 週年的現在位置</h2>
 <p><strong>——今年是個人出道 15 週年，跟剛出道的時候相比，有覺得自己「變成熟了」的地方嗎？</strong></p>
 <p><strong>LiSA</strong>　有啊。看黑髮時期的照片，都覺得「還是個少女呢」（笑）。不過我覺得最成熟的地方，是自己能夠好好地控制情感了。像是「現在最好不要把情緒表現出來」或反過來「這個舞台就全部解放吧」，多少能懂得看場合了（笑）。</p>
 <p><strong>——說到這個，剛出道時我去採訪你的時候，你常常哭呢。</strong></p>
@@ -293,15 +309,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc aside-toc--cf" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">超越「Rising Hope」。從達也的歌，轉向深雪的歌</a></li><li><a href="#section-2">作詞是「120% 深雪」。與當年壓抑情感的自己產生共鳴</a></li><li><a href="#section-3">如果是以前的自己，一定唱不出來。在副歌「收住」的全新演唱表現</a></li><li><a href="#section-4">灌注於「YES」之中的愛之肯定</a></li><li><a href="#section-5">學會控制情感的大人。個人出道 15 週年的現在位置</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

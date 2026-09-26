@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -198,7 +214,7 @@
       <h1 id="post-title" class="post__title">KDE Plasma 6 面板自動隱藏失效的解決方法</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>開始用 KDE Neon 之後遇到一個很煩的問題：底部面板的自動隱藏功能用一段時間就會失效，面板卡在那邊不會縮回去，每次都得手動重啟 plasmashell 才能恢復。一天下來重啟了五次。</p>
-<h2>問題現象</h2>
+<h2 id="section-1">問題現象</h2>
 <ul>
 <li>面板設定為「自動隱藏」模式</li>
 <li>剛開機時運作正常</li>
@@ -206,7 +222,7 @@
 <li>滑鼠移開面板區域也沒用，它就是賴在那裡不走</li>
 <li>重啟 <code>plasmashell</code> 後暫時恢復，但過一陣子又會發生</li>
 </ul>
-<h2>真正的兇手：LINE</h2>
+<h2 id="section-2">真正的兇手：LINE</h2>
 <p>後來發現，真正導致面板卡住的兇手是透過 Wine 執行的 LINE。每次 LINE 有新訊息通知，面板就會跳出來，然後就不會自動隱藏了。</p>
 <p><strong>快速解法</strong>：把 LINE 視窗重新最小化一次，面板就會恢復正常。</p>
 <h3>永久解法：KWin 腳本 + 規則</h3>
@@ -262,7 +278,7 @@ qdbus6 org.kde.KWin /KWin reconfigure
 <li><strong>焦點竊取防護</strong>：強制 → 極端</li>
 </ul>
 <p>這樣 LINE 就不會再搶焦點導致面板卡住了。</p>
-<h2>查 log</h2>
+<h2 id="section-3">查 log</h2>
 <pre><code class="language-bash">journalctl --user -u plasma-plasmashell.service -b
 journalctl -b | grep -i plasmashell
 </code></pre>
@@ -272,7 +288,7 @@ plasmashell: BatteryItem: Binding loop detected for property &quot;width&quot;
 </code></pre>
 <p>看起來通知和電池小工具有點問題，但應該不是主因。</p>
 <p>Google 了一下，原來這是個老問題——<a href="https://bugs.kde.org/show_bug.cgi?id=330356">Bug 330356</a> 從 2013 年就有人在抱怨，到現在還是陰魂不散。</p>
-<h2>解決方法</h2>
+<h2 id="section-4">解決方法</h2>
 <p>翻了一下 bug report 的討論串，大家都說兇手是任務管理器的「當視窗需要注意時取消隱藏」選項。關掉它就好了。</p>
 <h3>方法一：透過 GUI 設定</h3>
 <ol>
@@ -289,7 +305,7 @@ plasmashell: BatteryItem: Binding loop detected for property &quot;width&quot;
 <p>然後重啟 plasmashell：</p>
 <pre><code class="language-bash">kquitapp6 plasmashell &amp;&amp; plasmashell &amp;
 </code></pre>
-<h2>還是不行的話</h2>
+<h2 id="section-5">還是不行的話</h2>
 <p>如果上面的方法沒用，可以再試試：</p>
 <ol>
 <li><strong>檢查通知</strong>——關閉所有懸停的通知視窗</li>
@@ -306,15 +322,20 @@ plasmashell: BatteryItem: Binding loop detected for property &quot;width&quot;
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">問題現象</a></li><li><a href="#section-2">真正的兇手：LINE</a></li><li><a href="#section-3">查 log</a></li><li><a href="#section-4">解決方法</a></li><li><a href="#section-5">還是不行的話</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

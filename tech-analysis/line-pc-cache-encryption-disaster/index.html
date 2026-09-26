@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -201,19 +217,19 @@
       <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2025/line-encryption-cover.webp" srcset="/content/img/2025/line-encryption-cover-480w.webp 480w, /content/img/2025/line-encryption-cover-828w.webp 828w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>這不是教學文，這是一篇針對 LINE 軟體架構的檄文。</p>
 <hr>
-<h2>起因：一場原本很單純的備份</h2>
+<h2 id="section-1">起因：一場原本很單純的備份</h2>
 <p>目標很簡單：我要備份某個工作群組裡的 3000 多張照片。</p>
 <p>這些是重要的工作資產。</p>
 <p>但 LINE 電腦版把圖片鎖死在 <code>%AppData%\Local\LINE\Cache</code> 裡，變成一堆打不開的 <code>.eimg</code> 垃圾。</p>
 <p>正常的軟體會給你「匯出」按鈕。</p>
 <p>LINE 給你的是 AES 加密，和一堆只有他們工程師才看得懂的私有格式。</p>
-<h2>為什麼要在本機加密？</h2>
+<h2 id="section-2">為什麼要在本機加密？</h2>
 <p>這是我最不爽的一點。</p>
 <p>檔案都在我硬碟了，為什麼還要加密？</p>
 <p>只有一個原因：築牆 (Walled Garden)。</p>
 <p>他們不希望你輕易把資料搬走。這不是為了資安，這是為了綁架使用者。</p>
 <p>一旦你依賴它傳輸工作檔案，你就被鎖死在這個生態系裡。</p>
-<h2>過程：從暴力破解到看見真相</h2>
+<h2 id="section-3">過程：從暴力破解到看見真相</h2>
 <p>我不信邪。</p>
 <p>既然螢幕上能顯示，記憶體裡就一定有鑰匙。</p>
 <p>我對 LINE 進行了 Memdump（記憶體轉儲），寫了 Python 腳本去暴力枚舉。</p>
@@ -222,7 +238,7 @@
 <p><strong>抓到 Key 了</strong>：電腦跑了一小時，我真的挖出了那把 32 bytes 的 AES Key。</p>
 <p>然後呢？</p>
 <p>我解開了檔案的頭（JPEG Header <code>FF D8</code> 出現了），但後面全是亂碼。</p>
-<h2>絕望的「瑞士起司」加密法</h2>
+<h2 id="section-4">絕望的「瑞士起司」加密法</h2>
 <p>深入分析 Hex 後，我氣笑了。</p>
 <p>這根本不是標準的 AES 加密。</p>
 <p>有些檔案解不開，但我在檔案中間發現了「裸奔」的明文 JPEG。</p>
@@ -234,7 +250,7 @@
 </ul>
 <p>這叫安全嗎？這叫髒 (Dirty)。</p>
 <p>這就像買了個保險箱，結果側面被人拿電鑽開了好幾個洞，只為了方便看裡面有沒有東西。</p>
-<h2>結論：最噁心的不是爛，是貪</h2>
+<h2 id="section-5">結論：最噁心的不是爛，是貪</h2>
 <p>這次逆向工程讓我看清了 LINE 的本質。</p>
 <p>我不反對加密，我反對的是「無法匯出」。</p>
 <p>我不反對收費，我反對的是「製造問題再賣解決方案」。</p>
@@ -251,7 +267,7 @@
 <p>IV Reuse、部分加密、奇怪的 Container 格式。</p>
 <p>還有那個死不出 Linux 版的傲慢。</p>
 <p>這是一個縫合怪，完全無視電腦使用者的檔案管理需求。</p>
-<h2>Action Items</h2>
+<h2 id="section-6">Action Items</h2>
 <p>我不打算再花時間去猜它的加密模式了，ROI 太低。</p>
 <p>我已經備份了所有原始的 <code>.eimg</code> 檔案。</p>
 <p>它們現在躺在我的冷儲存硬碟裡，等待哪天有更閒的高手發布解密工具，或是等待哪天我心血來潮再去逆向它的 Assembly。</p>
@@ -266,15 +282,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">起因：一場原本很單純的備份</a></li><li><a href="#section-2">為什麼要在本機加密？</a></li><li><a href="#section-3">過程：從暴力破解到看見真相</a></li><li><a href="#section-4">絕望的「瑞士起司」加密法</a></li><li><a href="#section-5">結論：最噁心的不是爛，是貪</a></li><li><a href="#section-6">Action Items</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

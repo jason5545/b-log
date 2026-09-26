@@ -77,12 +77,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -95,19 +95,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -231,14 +247,14 @@
 
 <hr>
 <p><a id="chapter-1"></a></p>
-<h2>在疫情中迎來 10 週年，真的很不甘心</h2>
+<h2 id="section-1">在疫情中迎來 10 週年，真的很不甘心</h2>
 <p>——2022 年 4 月 12 日至 28 日，以「LiVE is Smile Always〜Eve&amp;Birth〜」全 4 場作為 10 週年的收尾，其中 4 月 19 日、20 日更有日本武道館的「the Birth」公演。迎來個人出道 10 週年時，您心裡抱著什麼樣的心情？</p>
 <p>老實說，在疫情當中迎來 10 週年，真的讓我很不甘心。如果是在正常情況下迎接 10 週年，也許有些夢想可以實現，也許能看見不同的風景，但我們沒辦法和大家一起盡情大聲慶祝，這讓我覺得非常遺憾。</p>
 <p>不過，在種種限制之下，還是能和歌迷們一起完成包含武道館在內的公演，這讓我感到很慶幸。武道館對我而言，是我最初的夢想之地，是我最早立下的目標。能以那裡作為主場回到那裡，並在那裡迎來 10 週年的句點，是讓我非常驕傲的事。</p>
 <p>「LiVE is Smile Always〜Eve&amp;Birth〜」的時候也有禁止出聲的限制，10 週年真的是帶著疫情的尾巴過去的。在某種意義上，我感覺自己一直在被考驗。因為得不到大家聲音的支持，練習成果、在電視上磨練出來的「讓人好好聽進去」的唱功，以及在現場爆發的那種感覺，全都交織在一起——10 週年的演唱會就是那樣一場演出。</p>
 <hr>
 <p><a id="chapter-2"></a></p>
-<h2>必須重新規劃未來</h2>
+<h2 id="section-2">必須重新規劃未來</h2>
 <p>——「LiVE is Smile Always〜Eve&amp;Birth〜」之後，LiSA 您並沒有公布任何演出計畫。</p>
 <p>從那之後，我打算暫時休息一下，不辦演唱會了。所以，當我站在武道館的「LiVE is Smile Always〜Eve&amp;Birth〜」舞台上時，只有我自己知道——接下來一段時間我不會再辦演唱會了，但歌迷們當然不知道這件事。那是一場我無法許下「下次見」的承諾的演唱會，我在心裡獨自感受著 10 年的節點，就這樣站上了那個舞台。</p>
 <p>——是什麼契機讓您決定暫時休息呢？</p>
@@ -249,7 +265,7 @@
 <p>所以，我一直在躁動。如果能辦演唱會，我現在就想辦；也很想撤回「休息」這個決定。但從作業面來說，演出場地必須提前一年預約才能確保，如果我一年前說「明年不辦演唱會」，就真的訂不到了。所以，我接受了自己的決定，讓它好好延續下去。這和「不說謊」的信念有點像——我強迫自己以自己的決定為基礎，讓那段時間成為真正接軌下一步的休息，在自己心中，某種意義上是強制執行的。我製造了一個把自己關起來的狀態。這樣一來，才真的讓自己休息下來了。</p>
 <hr>
 <p><a id="chapter-3"></a></p>
-<h2>就這樣下去，只會走下坡</h2>
+<h2 id="section-3">就這樣下去，只會走下坡</h2>
 <p>——把這樣的決定強迫施加在自己身上，過去應該從來沒有過吧。</p>
 <p>我一直覺得，不經歷痛苦，有很多東西是生不出來的，所以我不討厭讓自己受傷。雖然不做爭議搜尋，但對於從外部飛來的批評，我還是能主動去看的。不親身感受那種受傷的心情，歌詞和情感就生不出來；我也想讓自己確實體驗那些感受，想安心地確認「啊，我在這種地方也會流血」。</p>
 <p>當然，真的感覺到自己快到極限的時候，也會難受到不行。但是，只是一直跑的話，連受傷的餘裕都沒有。電影《Drive My Car》裡有一句台詞：「本該好好受傷的」，那句話深深刺進了我心裡。因為太忙，有很多次明明受傷了卻無法承認，就這樣過來了。一直在跑的話，眼前還有下一份工作，根本沒辦法一一沮喪下去。但確實需要有時間正視受傷的自己，那段時間會成為養分，孕育出好歌、好文字——我有過這樣的經歷，所以我覺得自己定期需要那樣的時間。</p>
@@ -265,7 +281,7 @@
 <p>所以感覺就像是，從一片乾涸枯竭的沙漠裡，又陸陸續續長出了新芽。</p>
 <hr>
 <p><a id="chapter-4"></a></p>
-<h2>從零開始重新打造的樂趣</h2>
+<h2 id="section-4">從零開始重新打造的樂趣</h2>
 <p>——2023 年 9 月 30 日至 12 月 17 日舉辦的「LiVE is Smile Always〜LANDER〜」共 19 場，是睽違約 4 年的全國巡迴廳演。限制解除、可以出聲應援了，應該是一個感覺回到疫情前的巡演吧，喜悅一定也很大？</p>
 <p>減肥之後，吃飯會更好吃，不是嗎？（笑）自己限制了自己的演出，如今解放了，同時也開放出聲。那份喜悅，和疫情前可以出聲的「LiVE is Smile Always〜紅蓮華〜」（2019 年 7 月 3 日至 10 月 15 日）的回憶又不一樣，是在這個全新世界中誕生的喜悅。因為是和大家一起熬過那段艱難的時期、同甘共苦之後，才能在新炊的米飯前，所有人一起說「好好吃」的那種喜悅。</p>
 <p>因為演出有一段空白，必須重新健身、重新把身體打造起來。雖然有些不安，但改造肌肉的使用方式，把那化為自己的經歷，帶著健美選手般的心情（笑），再次從頭打造自己的身體來唱歌，那份樂趣是真實存在的。那種技術層面的樂趣也非常大。</p>
@@ -277,7 +293,7 @@
 <p>雖然很憑感覺，但也有「這樣的 LiSA 我不想要」（笑）。不是失敗還是成功的問題，而是不誠實面對的那個我，就不是 LiSA 了。這 15 年我也有所改變，與其說是我選擇了改變，不如說是不改變就無法繼續，這算是我的藉口吧（笑）。而且，「紅蓮華」之後發生了一些事，讓我感覺到過去的一切都得到了肯定，既然如此，我更想努力成為一個讓重要的人們能長久享受的 LiSA。</p>
 <hr>
 <p><a id="chapter-5"></a></p>
-<h2>想表達自己的美學，也想讓大家更享受</h2>
+<h2 id="section-5">想表達自己的美學，也想讓大家更享受</h2>
 <p>——今天您穿著 LiSA 於 2020 年創立的服裝品牌「ROY reflect overjoy」的衣服。</p>
 <p>世界上有很多好看的衣服，但就是沒有「啊，我想穿的就是這個」的那件，所以只好自己做（笑）。不是別人已經有的東西，而是「不，這裡再這樣一點就好了」那種、自己最想要的東西，做出來的就是 ROY。那樣的東西被別人覺得需要，讓我很開心，所以才會繼續用 ROY 做下去，大概是這樣的感覺。</p>
 <p>另外，我大概天生就是愛管閒事的人。「這個我覺得超適合你！」之類的（笑）。食物也是，「來岐阜一定要吃水果大福！」「蛤？你不喜歡大福？先吃一個看看！」之類的（笑）。可能就是強迫推銷的癖好太重，但就是希望大家更好、更開心，所以才忍不住插嘴。</p>
@@ -285,7 +301,7 @@
 <p>一開始，我拍照是為了寫自己的部落格，為了不忘記自己感受到的東西，把那些瞬間切割下來。音樂之外，能用非音樂的方式表達自己說不出口的東西的，就是攝影。如果要我清楚說明自己的攝影技術和美學，我說不出來。但是，用文字、語言、音樂以外的方式，表達自己的美學，那份樂趣是真實的。</p>
 <hr>
 <p><a id="chapter-6"></a></p>
-<h2>15 年，在與人的往來中被治癒</h2>
+<h2 id="section-6">15 年，在與人的往來中被治癒</h2>
 <p>——2025 年 9 月 27 日至 2026 年 1 月 2 日，「LiVE is Smile Always〜PATCH WALK〜」共 18 場公演結束。即將迎來 15 週年，在最新的巡演中，您感受到的「演唱會」對您而言是什麼？</p>
 <p>和喜歡的人聊喜歡的事情的時候，是最開心的。對音樂有著強烈執著的夥伴們聚在舞台上，從外面看可能根本看不出一格的差距，也覺得無所謂（笑）。但對我們來說，那一格超級重要，和旁邊的人之間的距離感很重要，在廳場辦這件事也很重要。</p>
 <p>有能夠一起追求自己所愛的夥伴，場地規模又是廳場，所以聚集來的都是最精華的 LiSAっ子，大家會享受歌曲順序的趣味性、其中的故事，諸如此類的細節。感覺就像是在那個空間裡，一起在談論這些東西。那是一場縫合著這一切、不斷前進的演唱會，所以能更隨心所欲，更有趣、更開心。</p>
@@ -306,7 +322,7 @@
 <p>是慢慢地。還是很膽小吧。就算對方一直張開雙臂說「我愛你」，我還是會想「嗯，你真的愛嗎？說不定明天就不見了？」「咦，下個月就不在了吧？」就這樣戰戰兢兢地慢慢靠近，我想是這樣的。</p>
 <hr>
 <p><a id="chapter-7"></a></p>
-<h2>希望 LiSAっ子 到 70 歲也能大聲吶喊</h2>
+<h2 id="section-7">希望 LiSAっ子 到 70 歲也能大聲吶喊</h2>
 <p>——2026 年，首次大型展覽會「LiSA PRiSM 〜LiFE is Soulful Artworks〜」即將登場。歷代服裝也會展出，規模龐大，對於這次展覽的舉辦，您有什麼感受？</p>
 <p>老實說，我非常驚訝。這次展覽的工作人員一直以來都很喜歡我，把他們的心意託付在一封信裡。我做的一切是面向眼前的人，但那不是與任何人一對一的接觸，而是面向被稱為 LiSAっ子 的大家。有人看到了這一切，那些人說「很棒！」，聚集在一起，說「想和我們一起慶祝 15 週年」，又再一次讓我有一種被蓋上「15 週年，做得好」那枚印章的感覺。</p>
 <p>而且，大家真的很用心地打造這次展覽，給了我很多點子，還讓我有了全新的邂逅，我自己也非常期待。感覺是共同打造 LiSA 的夥伴又增加了，展覽的大家，也加入了這個由我傾注血肉、餵養出來的 LiSA 之中，一起慶祝 15 週年。那是因為我堅持下來了，因為我決定「不說謊、誠實地做 LiSA」，才讓他們找到了我，是這樣的緣分。所以，那也是讓我被蓋上「做得好」印章的感覺。</p>
@@ -322,15 +338,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc aside-toc--cf" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">在疫情中迎來 10 週年，真的很不甘心</a></li><li><a href="#section-2">必須重新規劃未來</a></li><li><a href="#section-3">就這樣下去，只會走下坡</a></li><li><a href="#section-4">從零開始重新打造的樂趣</a></li><li><a href="#section-5">想表達自己的美學，也想讓大家更享受</a></li><li><a href="#section-6">15 年，在與人的往來中被治癒</a></li><li><a href="#section-7">希望 LiSAっ子 到 70 歲也能大聲吶喊</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

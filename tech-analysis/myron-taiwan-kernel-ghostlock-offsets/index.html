@@ -78,12 +78,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -96,19 +96,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -207,7 +223,7 @@
 <p>2026 年 7 月 7 日，Nebula Security 公開了 GhostLock（CVE-2026-43499）：Linux 核心 futex PI requeue 路徑的 use-after-free，2011 年就存在，影響幾乎所有核心，公開 exploit 成功率 97%，還是 Google kernelCTF 強制公開的那種。大陸社群反應很快，幾天內各機型的偏移量就算好了，包成 payload 在酷安到處發。K90 Pro Max 的現成品一堆。</p>
 <p>我的臺版，全部不能用。</p>
 <p>十幾天的嘗試、AI 陪跑三天三夜，都算不出來。最後我放棄，買了第二支手機走另一條路。直到這個月回頭拆開三個 ROM，才看到答案：同一支手機、同一個 codename，臺版和陸版的核心根本不是同一顆 binary。而那些 payload 寫死的，恰恰是跟著 binary 走的東西。</p>
-<h2>三個 ROM，三顆核心</h2>
+<h2 id="section-1">三個 ROM，三顆核心</h2>
 <p>手上的 ROM：臺版 3.0.1.0（出廠版本）、臺版 3.0.6.0、xiaomi.eu 306 和 308（陸版底）。把 boot.img 解開，先看核心版本字串：</p>
 <table>
 <thead>
@@ -270,30 +286,30 @@
 </tr>
 </tbody></table>
 <p>注意 <code>selinux_state</code> 那行：差距是 0x120c8，不是跟別人一樣的 0x10000。這代表不是整體平移，是符號配置真的被洗亂了。而且連臺版自己 3.0.1 升 3.0.6，<code>rt_mutex</code> 那幾個漏洞相關函數的位置都已經換過。config 也有差：陸版多開了七個 <code>XIAOMI_*</code> 選項。</p>
-<h2>為什麼偏移量不能共用</h2>
+<h2 id="section-2">為什麼偏移量不能共用</h2>
 <p>GhostLock 是 data-only exploit。它要的不是 shellcode，是「這一次編譯出來的 init_cred 在哪個位址」。十幾個位址，寫死在 payload 裡。</p>
 <p>我用核心內嵌的 BTF 把三版的 struct 布局整個解析出來：<code>task_struct</code> 都是 5184 bytes，<code>cred</code> 都在 0x900，<code>pi_blocked_on</code> 都在 0xA18，一個 byte 都沒差。也就是說，觸發邏輯通用、結構欄位通用，唯一不通用的就是那張位址表。</p>
 <p>但 exploit 沒有那張表就是打空氣。打錯位址，最好的情況是沒反應，常見的情況是 kernel panic 直接重開機。</p>
 <p>所以結論很硬：所有為陸版 ogki 核心算的 payload，在臺版核心上永遠是錯的。不是小米故意擋，是兩條發版線本來就各編各的——陸版追官方 GKI 分支求快，國際版有自己的 patch queue 和認證凍結點，加上全部用 <code>+pgo +bolt +lto</code> 編譯，PGO/BOLT 會依 profiling 重排函數位置，任何一點程式碼差異都會把符號表整個洗亂。會被這件事打到的人，在小米的使用者統計裡小到不存在，所以永遠不會有人有動機對齊。</p>
-<h2>我付過的三種成本</h2>
+<h2 id="section-3">我付過的三種成本</h2>
 <p>回頭看，當時擺在面前的是三條路：</p>
 <p><strong>蹲官方解鎖名額。</strong> 小米國際版每天零點放名額，限量，跟你競爭的是一堆腳本。今晚蹲不到，明天再蹲。成本是健康，無上限，而且付了不保證有。我的身體狀況熬夜不了，這條路對我來說等於不存在。</p>
 <p><strong>算臺版偏移。</strong> 成本是時間。十幾天沒結果，AI 陪跑三天三夜也沒出來。當時等於無解。</p>
 <p><strong>買第二支。</strong> 成本是錢，一次性，確定性交付。兩支加起來四萬六，後來第一支便宜賣給家人，回收一萬五，淨成本三萬一。</p>
 <p>順帶一提過程裡的另一個變數：美國的模型看到 kernel exploit 就拒絕幫忙，不管你的理由是「自己的手機、要做無障礙工具、漏洞已公開」。最後是 DeepSeek 陪我耗那三天三夜。願意和能夠，是兩個獨立的軸。</p>
 <p>事後檢討這個決策：用當時掌握的資訊，買手機是對的——三個選項裡唯一成本可預測的。但誠實說，這筆錢有一部分是知識溢價。解法當時就存在，只是我和陪我的 AI 都不知道那條路。</p>
-<h2>三天三夜和半小時的差別，不是算力，是路線</h2>
+<h2 id="section-4">三天三夜和半小時的差別，不是算力，是路線</h2>
 <p>當年卡死的原因是：想在沒有 root 的手機上，從執行期 leak 出符號位址。那是難路，要靠側信道、要靠運氣。</p>
 <p>這次走的路是靜態的：ROM 本來就躺在我自己的 Downloads 裡。boot.img 解開，完整 kallsyms 就在裡面，12.5 萬個符號全部直接可讀。不需要 root、不需要 leak、不需要運氣。</p>
 <p>而且靜態路線還有一個意料之外的好處：乾淨。我第二支手機後來刷了第三方核心、套了 KSU，從實機 dump 出來的 kallsyms 已經是被改過的。ROM 裡的 boot.img 才是沒被汙染的 ground truth。</p>
 <p>只抽符號還不夠，還要證明抽出來的是對的。交叉驗證的做法是：用抽出來的位址，回讀 binary 裡對應位置的內容——<code>init_task</code> 的 comm 欄位讀出來要是「swapper」、<code>init_cred</code> 的 usage 要是個小整數、<code>init_uts_ns</code> 的 release 欄位要逐字元等於這顆核心的 uname 字串。三個獨立來源（kallsyms 提取、BTF 欄位、原始 binary）互相對得上，臺版和陸版各自驗證都通過。到這裡，不需要實機就能信任這份偏移。</p>
 <p>後面的組裝就很順：以 ghostlock-oneplus 為底加一個臺版 target，它內建的 struct 偏移跟我從 BTF 算的逐欄吻合；反組譯確認 pselect 的棧配置，跟已驗證可行的 Xiaomi 17 完全相同；NDK 一次編過，零警告。</p>
 <p>從動手到編出 binary，半小時。</p>
-<h2>放出來，以及放出來的方式</h2>
+<h2 id="section-5">放出來，以及放出來的方式</h2>
 <p>東西在 <a href="https://github.com/jason5545/ghostlock-myron-tw">github.com/jason5545/ghostlock-myron-tw</a>：臺版偏移表、分析、編好的 binary，還有把我這次整套流程工具化的三支腳本——抽偏移、驗 struct、驗棧配置，都內建「驗證不過就不准用」的檢查。</p>
 <p>刻意沒放的東西：小米的專有韌體、別人的 EFI 工具、FRP 相關的步驟。原因是看過前車之鑑：之前有一套同類的一鍵解鎖工具，作者的封存公告寫得很直白——極大比例的使用者拿它只是為了跑遊戲外掛，還有人拿去收錢代刷、自己不懂原理把客戶手機刷成磚，最後一個學生開發者被白嫖到心累收攤。一鍵包養出那種生態，所以我發的是教科書，不是槍。會自己編譯的人，就是這些東西該到的人手上；「要自己編」這道門檻，恰好就是過濾器。</p>
 <p>還有一個已知限制：這份偏移只覆蓋 WPMTWXM。MIXM、EUXM 這些其他區域版本，核心可能又不同。但方法是可以帶走的，工具都公開了，任何冷門區域版本的持有者都能自己產生他那份表。</p>
-<h2>卡我最久的，不是技術難度</h2>
+<h2 id="section-6">卡我最久的，不是技術難度</h2>
 <p>第一支手機現在在家人手上，我故意讓它停在 3.0.6.0 沒更新。這次編出來的東西，就是要拿去救它的。</p>
 <p>回頭看整件事，最貴的從來不是漏洞本身。是「會算偏移的人都在陸版」這個結構：漏洞在臺版核心裡躺著，會躺到 OTA 修補把它關掉為止，期間不會有人碰它，因為沒有人有動機為小眾區域版本算那張表。如果不是這次自己拆，臺版大概永遠不會有人解。</p>
 <p>知識不對稱的價格，是一支手機。現在臺版的表算出來了、工具也公開了，這個結構裡至少少一個要付這筆錢的人。</p>
@@ -304,15 +320,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">三個 ROM，三顆核心</a></li><li><a href="#section-2">為什麼偏移量不能共用</a></li><li><a href="#section-3">我付過的三種成本</a></li><li><a href="#section-4">三天三夜和半小時的差別，不是算力，是路線</a></li><li><a href="#section-5">放出來，以及放出來的方式</a></li><li><a href="#section-6">卡我最久的，不是技術難度</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

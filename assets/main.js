@@ -4,6 +4,7 @@ import {
   createRandomPostHandler,
   createThemeManager,
   initSearchUI,
+  initTocHighlight,
   initWebMcpTools,
   syncFooterYear,
 } from './shared-ui.js';
@@ -31,6 +32,8 @@ const HER_CATEGORY_HINTS = {
 const HER_POST_SLUGS = ['songshan-airport-jpop-parallel-world', 'birthday-avatar-ai-barrier'];
 const HER_TAG_PATTERN = /lisa|シルシ/i;
 const TAG_CLOUD_VISIBLE_LIMIT = 14;
+// CONTENTS 目錄：內文最外層至少 2 個 h2 才顯示（跟 generate-redirects.js 同一條）
+const TOC_MIN_HEADINGS = 2;
 const AUDIO_ICON_SVG = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
   <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
 </svg>`;
@@ -1529,6 +1532,7 @@ async function renderArticle() {
   await renderMarkdownContent(slug, contentEl);
   // 封面要等內文到位才知道內文有沒有同一張圖
   renderArticleCover(heroEl, post, contentEl);
+  renderArticleToc(contentEl);
 
   // 重新初始化語音播放器（因為播放器 HTML 是動態生成的）
   AudioPlayerManager.init();
@@ -2353,19 +2357,20 @@ function renderRelatedPosts(posts, currentPost) {
   const relatedList = document.querySelector('#related-list');
   const latestList = document.querySelector('#latest-sidebar');
 
+  const related = posts
+    .filter((post) => post.slug !== currentPost.slug)
+    .filter((post) => {
+      if (currentPost.category && post.category && post.category === currentPost.category) {
+        return true;
+      }
+      if (!Array.isArray(currentPost.tags) || !Array.isArray(post.tags)) return false;
+      return currentPost.tags.some((tag) => post.tags.includes(tag));
+    })
+    .slice(0, 3);
+
   // 靜態頁已經由 generate-redirects.js 輸出這兩個清單，只補未預先渲染的情況
   if (relatedList && relatedList.dataset.prerendered !== 'true') {
     relatedList.innerHTML = '';
-    const related = posts
-      .filter((post) => post.slug !== currentPost.slug)
-      .filter((post) => {
-        if (currentPost.category && post.category && post.category === currentPost.category) {
-          return true;
-        }
-        if (!Array.isArray(currentPost.tags) || !Array.isArray(post.tags)) return false;
-        return currentPost.tags.some((tag) => post.tags.includes(tag));
-      })
-      .slice(0, 3);
 
     if (!related.length) {
       const li = document.createElement('li');
@@ -2381,7 +2386,9 @@ function renderRelatedPosts(posts, currentPost) {
 
   if (latestList && latestList.dataset.prerendered !== 'true') {
     latestList.innerHTML = '';
-    const latest = posts.filter((post) => post.slug !== currentPost.slug).slice(0, 3);
+    // LATEST 排除目前這篇和已經列在 RELATED 的文章
+    const excluded = new Set([currentPost.slug, ...related.map((post) => post.slug)]);
+    const latest = posts.filter((post) => !excluded.has(post.slug)).slice(0, 3);
     latest.forEach((post) => {
       latestList.appendChild(buildSideRow(post));
     });
@@ -2505,6 +2512,67 @@ function renderArticleCover(element, post, contentEl) {
   coverImage.fetchPriority = 'high';
   coverImage.setAttribute('aria-hidden', 'true');
   element.replaceChildren(coverImage);
+}
+
+// CONTENTS：最外層 h2 補 id、產生目錄（靜態頁已由 generate-redirects.js 輸出，只補未預先渲染的情況）
+function renderArticleToc(contentEl) {
+  const tocEl = document.querySelector('#post-toc');
+  if (!contentEl || !tocEl) return;
+
+  if (tocEl.dataset.prerendered !== 'true') {
+    const headings = ensureHeadingIds(contentEl);
+    const items = headings
+      .map((heading) => ({ id: heading.id, text: heading.textContent.trim() }))
+      .filter((item) => item.text);
+
+    if (items.length >= TOC_MIN_HEADINGS) {
+      tocEl.className = contentEl.querySelector('.crossing-field-toc') ? 'aside-toc aside-toc--cf' : 'aside-toc';
+      const label = document.createElement('h2');
+      label.className = 'label';
+      label.id = 'toc-label';
+      const hint = document.createElement('span');
+      hint.textContent = '本文目錄';
+      label.append('CONTENTS ', hint);
+
+      const list = document.createElement('ol');
+      list.className = 'toc-list';
+      items.forEach(({ id, text }) => {
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = `#${id}`;
+        link.textContent = text;
+        li.appendChild(link);
+        list.appendChild(li);
+      });
+
+      tocEl.replaceChildren(label, list);
+      tocEl.hidden = false;
+    } else {
+      tocEl.replaceChildren();
+      tocEl.hidden = true;
+    }
+  }
+
+  initTocHighlight(tocEl.hidden ? null : tocEl);
+}
+
+// 最外層 h2 缺 id 的補上 section-N（N 是第幾個 h2），已有的 id 不動、撞名加後綴
+function ensureHeadingIds(contentEl) {
+  const usedIds = new Set(Array.from(document.querySelectorAll('[id]'), (element) => element.id));
+  const headings = Array.from(contentEl.children).filter((element) => element.tagName === 'H2');
+  headings.forEach((heading, index) => {
+    if (heading.id) return;
+    const candidate = `section-${index + 1}`;
+    let id = candidate;
+    let suffix = 2;
+    while (usedIds.has(id)) {
+      id = `${candidate}-${suffix}`;
+      suffix += 1;
+    }
+    usedIds.add(id);
+    heading.id = id;
+  });
+  return headings;
 }
 
 // 去掉 https://b-log.to 與 -480w／-828w／-1200w 後綴，再補上開頭的 /

@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -198,14 +214,14 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">當「現代化」成為無障礙的退步：精確式觸控板取消邊緣捲動功能</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>發現問題</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">發現問題</h2>
 <p>最近拿到一台高階的 ThinkPad 二手工作站，開機後第一次使用觸控板時發現一件有趣的事：現在的觸控板預設你會用多點觸控。</p>
 <p>對多數人來說這很正常，雙指捲動、三指切換視窗，這些都是現代觸控板的標準操作。但對我這種只能用單指操作的使用者來說，這就產生了一個實際問題：我要怎麼捲動頁面？</p>
-<h2>消失的邊緣捲動</h2>
+<h2 id="section-2">消失的邊緣捲動</h2>
 <p>以前的解決方案很簡單：邊緣捲動。單指在觸控板右側邊緣上下滑動，就能捲動頁面。這個功能在 Synaptics 觸控板驅動裡存在了十幾年，是單指使用者的標準解決方案。</p>
 <p>但當我打開設定想啟用這個功能時，發現它消失了。</p>
 <p>不是藏在某個深層選單裡，而是徹底從 Windows 的精確式觸控板（Precision Touchpad）設定中移除了。</p>
-<h2>Microsoft 的邏輯</h2>
+<h2 id="section-3">Microsoft 的邏輯</h2>
 <p>為什麼會拿掉這個功能？從技術和產品策略來看：</p>
 <h3>多點手勢成為主流</h3>
 <p>Microsoft 認為雙指捲動更直觀、更自然，而且跨裝置一致：手機用雙指縮放，平板用雙指捲動，筆電也該如此。精確式觸控板標準就是圍繞多點手勢設計的。</p>
@@ -213,13 +229,13 @@
 <p>太多設定選項會讓使用者困惑，追求「開箱即用」「零學習成本」。在這種設計哲學下，邊緣捲動被視為「過時的操作方式」，不符合現代化體驗。</p>
 <h3>統一體驗</h3>
 <p>跨裝置一致性優先於個人需求。所有人都該用同樣的方式操作，不符合「現代化」形象的功能就淘汰。</p>
-<h2>產業的跟進</h2>
+<h2 id="section-4">產業的跟進</h2>
 <p><strong>Synaptics 的轉變：</strong>
 以前的觸控板霸主，有自己完整的驅動和功能生態。Windows 推精確式觸控板標準後，逐漸放棄自家驅動特色，新機型改用 Windows 原生驅動，邊緣捲動就這樣消失了。</p>
 <p><strong>Elan 的策略：</strong>
 本來就是後起之秀，主打「便宜、夠用、符合標準」，一開始就完全跟著 Microsoft 的精確式觸控板規格走，從來沒提供過邊緣捲動。</p>
 <p>產業邏輯很簡單：Microsoft 推標準 → OEM 廠商要求簡化驅動維護 → Synaptics 被迫跟進 → 邊緣捲動從「標配」變成「過時功能」。</p>
-<h2>技術上有多難？</h2>
+<h2 id="section-5">技術上有多難？</h2>
 <p>最諷刺的是，留著這個功能技術上完全不難：</p>
 <pre><code>1. 偵測游標/觸控座標
 2. 判斷是否在邊緣區域
@@ -227,12 +243,12 @@
 </code></pre>
 <p>程式碼邏輯超簡單，維護成本幾乎為零，不會影響其他功能。</p>
 <p>一個 checkbox 和幾行程式碼就能解決，卻因為「不符合設計理念」被拿掉。這不是技術問題，是產品決策問題。</p>
-<h2>大廠的設計傲慢</h2>
+<h2 id="section-6">大廠的設計傲慢</h2>
 <p>這種決策反映了一個更深層的問題：<strong>用「大多數人的便利性」取代「少數人的必要功能」</strong>。</p>
 <p>對多數人來說，精確式觸控板是進步；對特定使用者來說，是退步。</p>
 <p>Microsoft 的潛台詞是：「我們知道什麼對你最好。」你的需求被當成「過時的使用習慣」，而不是「合理的無障礙需求」。</p>
 <p>ThinkPad 以前主打「專業使用者」「可客製化」，現在也跟著大眾化了。高階工作站反而失去了基本的專業功能。</p>
-<h2>組織的諷刺</h2>
+<h2 id="section-7">組織的諷刺</h2>
 <p>更諷刺的是，Microsoft 其實有一個專門的無障礙部門，而且相當活躍：</p>
 <ul>
 <li>Xbox Adaptive Controller（適應性手把）獲獎無數</li>
@@ -252,7 +268,7 @@
 <li><strong>審查機制缺陷</strong>：砍功能不需要經過無障礙審查，只有新功能才需要</li>
 </ol>
 <p>這就是大公司的組織問題：一邊喊著「科技應該為所有人服務」，一邊在產品決策上忽略實際使用者需求。無障礙成為行銷亮點，而不是設計原則。</p>
-<h2>AI 時代的解決方案</h2>
+<h2 id="section-8">AI 時代的解決方案</h2>
 <p>有趣的是，AI 的普及讓這類問題有了新的解法。</p>
 <p>我聽過一個案例：有個電腦店老闆的客戶買了 MSI 筆電，但因為只能單指操作，連右鍵都按不到。MSI 的觸控板沒有 ThinkPad 的 TrackPoint 和實體三鍵，單指使用者完全無解。老闆就用 Claude 寫了一個小程式，讓客戶可以在觸控板劃定區域當作右鍵點擊。</p>
 <p>技術邏輯跟邊緣捲動幾乎一樣：劃定區域 → 攔截輸入 → 轉換行為。</p>
@@ -264,7 +280,7 @@
 <li><p><strong>小規模的靈活性</strong>：Microsoft 不會為少數人的需求開發功能，但實際使用者和小店老闆更貼近真實情境，知道客戶真正要什麼。</p>
 </li>
 </ol>
-<h2>我的解決方案</h2>
+<h2 id="section-9">我的解決方案</h2>
 <p>既然大廠不給，那就自己做。</p>
 <p>我準備用 C# 寫一個小工具：</p>
 <ul>
@@ -275,7 +291,7 @@
 </ul>
 <p>技術上會用到 Raw Input API 或 Precision Touchpad API 取得觸控板原始數據，再用低階滑鼠鉤子攔截和轉換事件。</p>
 <p>某種程度上，這是在用 AI 填補大廠忽略的無障礙缺口。</p>
-<h2>結語</h2>
+<h2 id="section-10">結語</h2>
 <p>這件事讓我想到：當科技產品在「現代化」「簡化」「標準化」的名義下演進時，常常會犧牲掉某些人的基本需求。</p>
 <p>不是每個人都能做多點手勢。生理限制、使用習慣、裝置限制，這些在產品經理的 OKR 裡可能只是「邊緣案例」，但對當事人來說是實實在在的障礙。</p>
 <p>留著一個 checkbox 很難嗎？不難。但在「統一體驗」的大旗下，這種彈性被視為累贅。</p>
@@ -287,15 +303,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">發現問題</a></li><li><a href="#section-2">消失的邊緣捲動</a></li><li><a href="#section-3">Microsoft 的邏輯</a></li><li><a href="#section-4">產業的跟進</a></li><li><a href="#section-5">技術上有多難？</a></li><li><a href="#section-6">大廠的設計傲慢</a></li><li><a href="#section-7">組織的諷刺</a></li><li><a href="#section-8">AI 時代的解決方案</a></li><li><a href="#section-9">我的解決方案</a></li><li><a href="#section-10">結語</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -205,7 +221,7 @@ LiSA《天黑黑》</p>
 </blockquote>
 <p>自從 5/22 簽名會過後，就公布了 LiSA 9/24 會來臺北國際會議中心開唱的消息。將近三個月的等待，說長也不長，說短也不短。隨著日期逼近，心中也越來越期待，會帶給大家又一次的感動。</p>
 <p><img src="/content/img/2016/lisa-2016-0522-animate-illustration.webp" alt="5/22 安利美特簽名會，跟 LiSA 合照的插畫版"></p>
-<h2>等待</h2>
+<h2 id="section-1">等待</h2>
 <p>終於等到 LiSA 來臺灣那天，我前一晚根本無法入睡，於是隔天一早七點多便早早起床打開 FB，看著大家不斷更新接機的詳細計劃。即使自己沒辦法接機，也已經止不住心中的興奮之情，就這樣過了一個十分亢奮的上午。</p>
 <p>到了演唱會當天，我早早的 11:00 便從家裡出發，在捷運上也是聽著 LiSA 的歌，精神上已經完全沉浸在演唱會的狀態當中。</p>
 <p><img src="/content/img/2016/lisa-2016-ticc-03.webp" alt="TICC 今日活動看板：大會堂 19:30 到 22:30，LiSA 2016 台北演唱會"></p>
@@ -221,12 +237,12 @@ LiSA《天黑黑》</p>
 <p><img src="/content/img/2016/lisa-2016-ticc-09.webp" alt="LiSA 台灣後援會送的花籃"></p>
 <p><img src="/content/img/2016/lisa-2016-ticc-10.webp" alt="後援會花籃卡片：御祝 台湾公演 LiVE is Smile Always ～Hi! FiVE～ Taipei 2016"></p>
 <p><img src="/content/img/2016/lisa-2016-ticc-08.webp" alt="周洺甫與千田愛紗送的花籃"></p>
-<h2>進場前的擔心</h2>
+<h2 id="section-2">進場前的擔心</h2>
 <p>終於等到進場的時刻。其實在這天到來之前，我心裡很擔心，因為我從小就有個毛病：腦部發育不太完全，所以只要週遭的聲音太大，或突然來個沒預期的音效之類的，我的身體就會反射的往前跳。年初去看 Kalafina 的時候，兩個半小時的場就跳了一個半小時，搞得工作人員一直盯著我看。</p>
 <p>但是這次 LiSA 的演唱會，出乎我意料的居然一次也沒發生，頂多因為身體跟著節奏擺動得太厲害，high 過頭而已。</p>
 <p>果然 LiSA 是本命。</p>
 <p>（2026 年補：這件事十年後我才想清楚為什麼，寫在<a href="https://b-log.to/shirushi/lisa-sounds-i-do-not-brace/">〈跟她有關的聲音，我不防備〉</a>。）</p>
-<h2>開口跪</h2>
+<h2 id="section-3">開口跪</h2>
 <p><img src="/content/img/2016/lisa-2016-ticc-11.webp" alt="開演前的舞台，藍光打在 Hi! FiVE 的幕布上"></p>
 <p>其實這次演唱會我淚崩了好幾次。從 believe in myself 一開口的那瞬間，我就知道「開口跪」這句網路用語形容得極其貼切。如果今天不是我坐著輪椅，恐怕我會真的跪著聽吧。</p>
 <p>完全止不住我內心的澎湃。LiSA 透過她充滿魔力的聲音，把歌詞一字一句唱進我心裡。沒錯，就是這首歌教我學會了要相信自己，把握住每一個屬於自己的機會，無論遇到什麼困難也不要放棄。我的眼淚就情不自禁的流了下來。</p>
@@ -234,7 +250,7 @@ LiSA《天黑黑》</p>
 <p>天黑黑後的印記，我更是完全沒法控制，眼淚一直不停的流。想到我認識 LiSA 之後，第一次參加演唱會、第一次沒法參加見面會的遺憾、第一次近距離看到她、甚至第一次合照，都在我心裡留下了不可抹滅的印記。然而這個舉動讓我旁邊的大媽一直盯著我看，她大概心想「這個人瘋了」。</p>
 <p><img src="/content/img/2016/lisa-2016-0522-animate-with-lisa.webp" alt="5/22 安利美特台北總店簽名會，跟 LiSA 的合照"></p>
 <p>還好中間有不少 high 歌，又讓我跟著 high 了起來。沒辦法跟著打 call，就只好跟著擺動四肢、擺動身體。印象最深刻的是 Psychedelic Drive 的扇子舞，時而魅惑、時而俏皮，簡直不能再讚了。很喜歡！</p>
-<h2>安可</h2>
+<h2 id="section-4">安可</h2>
 <p>然後到了安可環節，大家用一片片的珍珠板排出 TW 愛心 LiSA 的字樣，真的超壯觀也超感動。可惜消息走漏了點風聲，效果稍微打了點折扣，不過還是超厲害的！</p>
 <p>接著到了手紙的時候，又想到從一開始到現在的轉變，都是因為 LiSA 才造就了現在的我。真的有滿滿的話想對她說。</p>
 <p>「僅存於此的歌便足矣，感受這道光芒，即使無法觸及更無法看清，卻始終在自己左右。」</p>
@@ -242,7 +258,7 @@ LiSA《天黑黑》</p>
 <p>結尾曲 best day, best way 是全場大合唱。LiSA 走下台跟全場擊掌，只見工作人員一陣手忙腳亂，紛紛「護駕」，深怕 LiSA 出什麼意外。不過 LiSA 真的很照顧後排的觀眾，連後排都擊掌到了。然而到了我這邊的時候，LiSA 大概知道沒辦法跟我擊掌，所以就朝我這邊指了一下！</p>
 <p>說真的，雖然只是一個小小的動作，但給我的感覺就像是要上了天一樣開心。</p>
 <p>說實話，還好 LiSA 的慢歌並不算多，要不然我大概會整場都在哭。</p>
-<h2>LiSA ッ子</h2>
+<h2 id="section-5">LiSA ッ子</h2>
 <p><img src="/content/img/2016/lisa-2016-ticc-01.webp" alt="隔天 9/25 Sony Store 一日店長活動結束後的大合照"></p>
 <p>結束以後跟來自中國的 LiSA ッ子合了一張照。說真的，如果是以前的我，絕對想不到能接觸到那麼多志同道合的一群人。然而入坑之後，我真的認識了很多來自不同國家的 LiSA ッ子，大家都為了一個相同的目標去支持著 LiSA，甚至不遠千里買機票飛來參與 LiSA 的演唱會。能夠認識一群那麼有愛的 LiSA ッ子，真的是太好了！</p>
 <p>公主殿下，謝謝你。謝謝你給了我「LiSA」這個歸處，歸心之處。只要你的音樂之路還在持續，那我追尋的腳步就不打算停歇。不管你想要走出怎樣的未來，都讓我在一旁，一起見證吧。</p>
@@ -256,15 +272,20 @@ LiSA《天黑黑》</p>
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">等待</a></li><li><a href="#section-2">進場前的擔心</a></li><li><a href="#section-3">開口跪</a></li><li><a href="#section-4">安可</a></li><li><a href="#section-5">LiSA ッ子</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

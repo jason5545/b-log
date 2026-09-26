@@ -26,7 +26,7 @@ Jason 2026/9/26 指定的硬規則。外觀改版方向是 Airbus ECAM 的色彩
 - 洋紅只有一組 token（mock 是深色 `#ee7ad0`、淺色 `#a3226f`，Jason 可能另外指定）。要換色就改 token，不開第二種粉紅。
 - 為什麼：ECAM 的洋紅保留給特定狀況的訊息，這個站把它保留給她。
 
-目前狀態（2026/9/26 第二輪修正後）：
+目前狀態（2026/9/26 第三輪修正後）：
 
 - d81239dc 之後違規已清零：行內程式碼與語法突顯不再是粉紅；`asian-sex-diary-no-longer-johns-diary`、`japan-av-industry-hypocrisy` 的 `accentColor` 已換成 `#2e6b75`、`#5b6770`。
 - `npm run validate`（[scripts/validate-content.js](scripts/validate-content.js)）會擋兩件事，判準都是色相 285–350°、HSL 飽和度 > 35%：
@@ -34,4 +34,6 @@ Jason 2026/9/26 指定的硬規則。外觀改版方向是 Airbus ECAM 的色彩
   - (b) `assets/styles.css`、`assets/css/*.css`，以及 `index.html`、`post.html`、`about.html`、`gadgets.html` 的 inline style（`<style>` 與 `style=""`），這個範圍的色碼只准出現在 `--magenta:` 宣告。
 - 她的文章＝シルシ、Crossing Field 兩個分類，加上白名單兩篇：`songshan-airport-jpop-parallel-world`、`birthday-avatar-ai-barrier`（分類是文化觀察，Jason 9/26 確認算她的）。這些文章的 accentColor 在列表左緣色條與文章頁標題色條一律顯示 `var(--magenta)`，不用存的色碼。
 - 白名單在 `assets/main.js`、`scripts/generate-redirects.js`、`scripts/validate-content.js` 三處的 `HER_POST_SLUGS`，validate 會比對三處是否一致；要加減文章，三處一起改。
+- 她的文章在文章頁麵包屑的分類（シルシ、Crossing Field）顯示洋紅，靜態頁與 CSR 一致。
+- 文章頁右欄的 CONTENTS（本文目錄）：Crossing Field 文章內文有 `crossing-field-toc` 的，右欄目錄照它的配色，編號洋紅、連結墨色；其他文章編號灰色、連結青色。
 - 封面 SVG 仍未掃。

@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -198,31 +214,31 @@
       <h1 id="post-title" class="post__title">你的文章沒有靈魂，不是 AI 的錯</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>最近看到有人在懷念七年前寫文章的風氣，說還沒有 AI 的時候，寫出來的東西都比較有重量。這個觀察有一部分是真的，但也混了不少懷舊濾鏡。</p>
-<h2>以前的文章真的比較好嗎？</h2>
+<h2 id="section-1">以前的文章真的比較好嗎？</h2>
 <p>寫作成本下降確實改變了生態。以前要寫一篇文章，你得自己查資料、組織邏輯、反覆修改，這個過程本身就是篩選機制——沒有足夠動機或想法的人根本不會動筆。成品裡帶著作者消化過的痕跡，讀者感受得到的那個「重量」，其實就是思考密度。</p>
 <p>但七年前爛文章一樣多，只是沒人記得了。倖存者偏差讓人覺得「以前都比較好」，實際上是爛的已經沉下去了。當時也有自己的「低成本量產」問題——內容農場、SEO 灌水文、抄來抄去的懶人包，空洞程度不輸現在的 AI 生成內容。</p>
 <p>真正改變的是量。現在產出垃圾的成本趨近於零，所以垃圾量爆炸了。有重量的東西可能沒有變少，但被淹沒的程度變得嚴重。</p>
-<h2>問題在人，不在 AI</h2>
+<h2 id="section-2">問題在人，不在 AI</h2>
 <p>如果你叫 AI 幫你寫一篇演唱會心得，結果它寫出「去演唱會最重要的第一件事就是人要到場」——這是你的問題，不是 AI 的問題。你給了一個空洞的指令，它就回你一篇正確但沒有靈魂的東西。</p>
 <p>反過來說，如果你真的有東西想講，知道自己想表達什麼感受、什麼細節是重要的，只是需要 AI 幫忙組織語言或潤稿，產出的東西一樣有重量，因為核心觀點和經驗是你的。</p>
 <p>真正的分界線不是「有沒有用 AI」，而是「你本來就有話要說，還是只是想要一篇文章存在」。</p>
-<h2>VideoGamer：當垃圾生產被系統化</h2>
+<h2 id="section-3">VideoGamer：當垃圾生產被系統化</h2>
 <p>最近有一個案例把這件事推到了極端——歐洲老牌遊戲媒體 VideoGamer，擁有超過 20 年歷史，被一家馬耳他的賭博 SEO 公司 Clickout Media 收購後，資深編輯全部離職或被開除，網站直接轉型成 AI 內容工廠。</p>
 <p>他們不只是用 AI 寫文章。他們用 ChatGPT 生成假的編輯大頭照，建立假的社群媒體帳號，製造出一整批不存在的「記者」。其中一個叫 Brian Merrygold 的假編輯，個人簡介上寫的專長是「iGaming 和運動博彩分析」，結果跑去寫了一篇《惡靈古堡：安魂曲》的評測，給了 9/10。</p>
 <p>這篇評測有多廢？它把遊戲形容成「用電鋸轟鳴、血漿四濺的方式證明我們為什麼喜歡被嚇」。聽起來很像一回事，但你把這句話套到任何一款有血腥元素的恐怖遊戲上都完全通順。整篇充滿華麗的修辭堆疊，卻沒有任何具體的遊玩細節——因為根本沒有人玩過這款遊戲。</p>
 <p>更荒謬的是，這篇評測是在解禁時間發出的，當時根本沒有其他內容可以抄，所以 AI 只能把發售前的公開資訊拼湊在一起，連預購獎勵都寫進去了。而那張假大頭照的檔名直接就是 <code>ChatGPT-Image-Oct-20-2025-11_57_34-AM-300x300.png</code>，連改檔名都懶。</p>
 <p>對比 PC Gamer 真人寫的評測，人家會講「10 小時內每一分鐘都感覺有必要，沒有多餘的跑腿任務」——這是真的坐下來玩完才會有的觀察。AI 的版本只能寫出「這個類別的通用描述」，永遠寫不出「這款遊戲的獨特體驗」。</p>
 <p>辨識 AI 廢話有一個很簡單的測試：<strong>把主詞換掉，如果換到同類型的另一個作品上還是完全說得通，那它大概就是廢話。</strong></p>
-<h2>最諷刺的地方</h2>
+<h2 id="section-4">最諷刺的地方</h2>
 <p>VideoGamer 的新東家花了時間建假帳號、做假大頭照、寫假個人簡介、經營假社群——這些「包裝」的工夫其實不少。但真正決定品質的那一步，也就是好好引導 AI 產出有具體觀點的東西，他們反而完全沒做。</p>
 <p>他們把力氣花在欺騙的基礎建設上，而不是內容本身。結果省掉了唯一能讓這件事不被抓的步驟。</p>
 <p>這帶出一個更根本的問題：當你自己發出去的東西連自己都不會看，這個網站還有存在的必要嗎？</p>
 <p>Google 後來把 VideoGamer 從搜尋索引中完全移除。但某種程度上，這個網站在精神上早就死了，Google 只是補了死亡證明。創辦人 Tom Orry 2004 年在布萊頓大學宿舍創立這個網站的時候，它是有靈魂的，因為背後有一個真的在玩遊戲、真的有話想說的人。現在背後只剩一家想要流量變現的賭博公司。</p>
-<h2>搜尋引擎正在被污染</h2>
+<h2 id="section-5">搜尋引擎正在被污染</h2>
 <p>這個問題不只是 VideoGamer 一家。AI 可以用幾乎零成本大量產出「看起來像高品質」的內容，搜尋引擎排名的基本假設——「人寫的內容大致反映真實價值」——正在被打破。</p>
 <p>你搜一個技術問題，前幾頁可能都是 AI 改寫的文章，表面上結構完整，但沒有人真的驗證過裡面的步驟能不能用。更糟的是，這些 AI 產出的內容進入網路後，未來的 AI 又拿它們當訓練資料，品質就一路往下掉。</p>
 <p>所以現在已經可以觀察到一個趨勢：真正要找有用資訊的人開始繞過搜尋引擎了，直接去 Reddit、去特定社群、去 GitHub issues，或者問 AI 但自己驗證。搜尋引擎作為「知識入口」的角色正在被侵蝕，而推手諷刺地正是 AI 自己產出的內容。</p>
-<h2>工具從來不決定內容的重量</h2>
+<h2 id="section-6">工具從來不決定內容的重量</h2>
 <p>回到最開始的話題。AI 降低了寫作門檻，這是事實。但門檻降低不代表品質必然下降——它只是讓更多沒有東西要說的人也能輕易產出文字了。</p>
 <p>能花時間理解 AI 的特性，把它融入自己的思考流程的人，目前比例不多。多數人就是叫 AI 產一篇文章，什麼都不看就發出去。但這也不是什麼新現象，每個工具普及後都是這樣：Excel 出來的時候大部分人也只會 SUM，智慧型手機普及後多數人也只是滑社群。</p>
 <p>對於真正有觀點要表達的人來說，AI 反而是優勢。當多數人都在產出均質化的 AI 味內容，你只要有自己的東西在裡面，辨識度反而比以前更高。</p>
@@ -234,15 +250,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">以前的文章真的比較好嗎？</a></li><li><a href="#section-2">問題在人，不在 AI</a></li><li><a href="#section-3">VideoGamer：當垃圾生產被系統化</a></li><li><a href="#section-4">最諷刺的地方</a></li><li><a href="#section-5">搜尋引擎正在被污染</a></li><li><a href="#section-6">工具從來不決定內容的重量</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

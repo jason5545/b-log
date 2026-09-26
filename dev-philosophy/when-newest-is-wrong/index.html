@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -198,12 +214,12 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">當「取最新」是對的，但結果是錯的</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>事情經過</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">事情經過</h2>
 <p>我寫了一支自動化程式，用來處理工程專案的文件組裝。其中一個功能是從來源資料夾搜尋材質證明 PDF，按照批號配對後放進對應的檔案包裡。</p>
 <p>同一個批號可能存在多個版本的材證檔案，所以我設計了一個規則：<strong>從檔名中的日期判斷版本，取最新的那個。</strong></p>
 <p>這個邏輯在正常情況下完全沒問題——新版本取代舊版本，天經地義。程式跑了好幾個月，處理過上百個檔案包，從來沒出事。</p>
 <p>直到今天，業主打電話來問：「你們放的材證等級不對。」</p>
-<h2>發生了什麼</h2>
+<h2 id="section-2">發生了什麼</h2>
 <p>某個批號同時存在兩份材證：</p>
 <ul>
 <li>一份是正確的檢驗證書（第三方認證），檔名日期較早</li>
@@ -211,18 +227,18 @@
 </ul>
 <p>那份錯的檔案，是檔案管理人員歸檔時放進 archive 資料夾的。問題是，我的程式用 Python 的 <code>os.walk</code> 遞迴搜尋整個來源目錄——包括 archive。</p>
 <p>程式忠實地執行了「取最新」的規則，選了日期較新但內容錯誤的那份。然後這個錯誤被複製到了三個不同的儲存位置，影響了七十幾個 PDF。</p>
-<h2>邏輯有錯嗎？</h2>
+<h2 id="section-3">邏輯有錯嗎？</h2>
 <p>客觀來說，沒有。</p>
 <p>「同一份文件有多個版本，取最新的」是檔案管理的基本共識。版本控制系統、檔案同步工具、備份軟體，全都是這個邏輯。在正常的資料流中，新版本就是應該取代舊版本。</p>
 <p>問題出在<strong>搜尋範圍</strong>，不是<strong>選擇邏輯</strong>。</p>
 <p>archive 資料夾的語意是「不再使用」，但程式不知道這個語意。對 <code>os.walk</code> 來說，00 跟其他資料夾沒有任何區別——它就是一個子目錄，裡面有 PDF，符合條件就抓。</p>
-<h2>修法</h2>
+<h2 id="section-4">修法</h2>
 <p>兩行：</p>
 <pre><code class="language-python">for root, dirs, files in os.walk(source_folder):
     dirs[:] = [d for d in dirs if d not in (&#39;00&#39;, &#39;archive&#39;)]
 </code></pre>
 <p>讓 <code>os.walk</code> 不再走進 archive 資料夾。邏輯本身不用改，只是補上搜尋範圍的語意邊界。</p>
-<h2>反思</h2>
+<h2 id="section-5">反思</h2>
 <p>這件事讓我想到一個更普遍的問題：<strong>當你的自動化邏輯建立在一個合理的假設上，而這個假設被資料端的意外打破時，錯的是誰？</strong></p>
 <p>答案是：沒有人「錯」。</p>
 <ul>
@@ -242,15 +258,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#2d6a8f"><a href="/cultural-insights/please-use-the-phone/"><span class="side-row__meta">06MAR26 · <span>文化觀察</span></span><span class="side-row__title">當系統告訴我：請用電話</span></a></li><li style="--row-accent:#018089"><a href="/tech-analysis/rehabilitation-bus-login-reverse-engineering/"><span class="side-row__meta">06MAR26 · <span>技術分析</span></span><span class="side-row__title">一張 Logo 圖片擋了所有人兩年：逆向台北市復康巴士登入機制</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#2d6a8f"><a href="/cultural-insights/please-use-the-phone/"><span class="side-row__meta">06MAR26 · <span>文化觀察</span></span><span class="side-row__title">當系統告訴我：請用電話</span></a></li><li style="--row-accent:#018089"><a href="/tech-analysis/rehabilitation-bus-login-reverse-engineering/"><span class="side-row__meta">06MAR26 · <span>技術分析</span></span><span class="side-row__title">一張 Logo 圖片擋了所有人兩年：逆向台北市復康巴士登入機制</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">事情經過</a></li><li><a href="#section-2">發生了什麼</a></li><li><a href="#section-3">邏輯有錯嗎？</a></li><li><a href="#section-4">修法</a></li><li><a href="#section-5">反思</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

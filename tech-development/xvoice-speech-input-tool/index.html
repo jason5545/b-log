@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -198,13 +214,13 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">從 ViaVoice 到 xvoice：一個非標準發音者的語音辨識之路</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>那個年代，是技術欠我的</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">那個年代，是技術欠我的</h2>
 <p>90 年代末到 2000 年代初，語音辨識軟體開始進入消費市場。IBM ViaVoice、Dragon NaturallySpeaking 是當時的代表。我還記得那個「Speaker Adaptation」的過程——打開軟體，然後被要求朗讀一篇又一篇的制式文章，持續一個小時甚至更久，只為了讓系統「學會」我的聲音。</p>
 <p>對一般人來說，這可能只是枯燥。對我來說，這是折磨。</p>
 <p>我天生肌肉張力的問題，發音跟「標準」有落差。那些制式文章要求的是標準發音，而我念出來的，系統學到的就是錯的。惡性循環。念得越多，錯得越離譜。</p>
 <p>那時候我以為是自己的問題很嚴重。</p>
 <p>現在回頭看，不是的。是那個年代的技術根本不是為我們設計的。</p>
-<h2>舊系統為什麼注定失敗</h2>
+<h2 id="section-2">舊系統為什麼注定失敗</h2>
 <p>ViaVoice 用的是 HMM（Hidden Markov Model）聲學模型，搭配 trigram 語言模型。這種架構有幾個致命限制：</p>
 <ul>
 <li><strong>幾乎從零學習</strong>：沒有預訓練，每個使用者都要從頭訓練</li>
@@ -214,7 +230,7 @@
 <p>這套邏輯的前提是「使用者會配合機器」。我不符合這個前提，所以我被系統判定為「有問題」。</p>
 <p>2003 年，IBM 把 ViaVoice 桌面版授權給 ScanSoft（後來的 Nuance），自己只留嵌入式版本。2021 年，Microsoft 以 197 億美元收購 Nuance。這條技術線繞了一大圈，最後被併入巨頭，然後基本上被放棄了。</p>
 <p>諷刺的是，現在 Windows 11 內建的語音辨識其實還不錯，我用起來大概有 70% 的準確率。但 70% 不夠。每 10 個字錯 3 個，修正成本太高。</p>
-<h2>現代系統好在哪裡，又差在哪裡</h2>
+<h2 id="section-3">現代系統好在哪裡，又差在哪裡</h2>
 <p>Whisper 這類基於 Transformer 的模型，跟舊時代完全不同：</p>
 <ul>
 <li>預訓練資料是數十萬小時的多語者語音</li>
@@ -226,7 +242,7 @@
 <p>**幻覺（Hallucination）**是最大的痛點。Whisper 遇到不確定的音訊片段時，不會留白，而是傾向生成「流暢但錯誤」的文字。我看過它輸出「字幕組提供」「感謝收看」這種完全不存在的內容——因為它的訓練資料包含大量 YouTube 字幕，這些 pattern 出現頻率很高，所以它「覺得」這樣輸出是安全的。</p>
 <p>對模型來說，loss 低、機率高，是「安全」的。對我來說，這是災難。</p>
 <p>我在 ChatGPT 網頁介面上也用過 Whisper，幻覺一樣嚴重。這代表不是我的實作有問題，是模型本身的特性。OpenAI 沒有修，可能也不會修——訓練資料污染太深，他們的重心也已經轉向 GPT 系列。</p>
-<h2>xvoice：讓機器配合我</h2>
+<h2 id="section-4">xvoice：讓機器配合我</h2>
 <p>既然上游不會修，我自己來。</p>
 <p>我開發了 xvoice，一個跨平台的語音輸入系統。架構很簡單：</p>
 <pre><code>Silero VAD（語音活動偵測）
@@ -241,7 +257,7 @@ OpenCC（簡繁轉換）
 <p>Whisper 對我的發音會有固定的錯誤 pattern——「我常講 A，它常聽成 B」。LLM 校正層的工作就是學會這些 pattern，然後補回來。</p>
 <p>我還寫了幻覺過濾程式，專門攔截那些「字幕組提供」之類的輸出。</p>
 <p>現在這個系統已經是我日常使用的工具。我打這篇文章的時候，也是用它。一開電腦就開啟，每一句話都是在幫它累積訓練資料。</p>
-<h2>發現：整段話一起講，效果更好</h2>
+<h2 id="section-5">發現：整段話一起講，效果更好</h2>
 <p>有一個有趣的發現：我原本習慣一句一句講，後來試著整段話一起講，辨識效果反而更好。</p>
 <p>原因是兩層都受益於更長的上下文：</p>
 <ul>
@@ -250,7 +266,7 @@ OpenCC（簡繁轉換）
 </ul>
 <p>一句一句講是 hard mode，每句都是孤立的，模型只能瞎猜。</p>
 <p>這改變了我的使用習慣——不用一口氣講五分鐘，但至少一個完整的意思講完再送出。</p>
-<h2>關於構音障礙的分級</h2>
+<h2 id="section-6">關於構音障礙的分級</h2>
 <p>在研究這個領域的過程中，我查了一些醫學文獻。構音障礙（dysarthria）在臨床上通常分成五級：</p>
 <table>
 <thead>
@@ -291,7 +307,7 @@ OpenCC（簡繁轉換）
 <p>很直接，但也是事實。</p>
 <p>這讓我意識到 xvoice 的極限。我的系統依賴一個前提：ASR 輸出的錯誤是「有規律可循」的。如果 ASR 準確率掉到 30% 以下，錯誤開始變得隨機、無規律，LLM 拿到的輸入接近亂碼，就沒有足夠的「骨架」可以修正了。</p>
 <p>xvoice 的天花板大概在 moderate。再往下的群體，需要的是完全不同的技術路線——可能是專屬聲學模型，或者非語音輸入（眼控、腦機介面等）。</p>
-<h2>目標：讓更多人不用受這種苦</h2>
+<h2 id="section-7">目標：讓更多人不用受這種苦</h2>
 <p>我的目標是有一天達到 100% 的辨識準確率。</p>
 <p>這聽起來很狂妄，但我覺得是可行的。現在每一句話都在累積資料，每一次錯誤都是 correction pair。等資料量夠了，可以整理成 few-shot example，強化校正層的 prompt，甚至做更進一步的微調。</p>
 <p>xvoice 目前還是私人專案，放在 GitHub 上但還沒公開。等核心穩定、自己用得順了再開放原始碼，比丟出半成品讓人踩雷好。</p>
@@ -304,15 +320,20 @@ OpenCC（簡繁轉換）
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">那個年代，是技術欠我的</a></li><li><a href="#section-2">舊系統為什麼注定失敗</a></li><li><a href="#section-3">現代系統好在哪裡，又差在哪裡</a></li><li><a href="#section-4">xvoice：讓機器配合我</a></li><li><a href="#section-5">發現：整段話一起講，效果更好</a></li><li><a href="#section-6">關於構音障礙的分級</a></li><li><a href="#section-7">目標：讓更多人不用受這種苦</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -222,7 +238,7 @@
 <p>這個價差我後來想了很久。手天使一開始是男同志成立的，男義工多是歷史因素。但反過來看，一個重障直男要等十倍的時間，才能有人用正常的方式碰他的身體。市場沒有這種服務，國家沒有這種服務，唯一有的那個組織，排隊要三年。</p>
 <p>第一年我還記得「啊，一年了」。第二年之後我對時間就沒概念了。順其自然。</p>
 <p>順其自然的意思是，你已經不敢真的期待。</p>
-<h2>誰在面談誰</h2>
+<h2 id="section-1">誰在面談誰</h2>
 <p>2020 年 1 月初，Vincent 把我的案子派給嘉梁。</p>
 <p>嘉梁是腦麻。我也是腦麻。Vincent 的想法大概是腦麻的比較能跟腦麻的溝通。</p>
 <p>嘉梁自己的文章寫得很誠實：他第一個感覺是心虛。他上一個申請者，花了很多時間確認對方理解規則，最後對方堅決取消。他問自己，LK 遇到我這樣的面談義工，會不會是一種不幸？</p>
@@ -253,7 +269,7 @@
 <p>五分鐘。</p>
 <p>射了。真的射，射得遠，量多。我來不及跟她說。她說：這才算你人生第一次射精。</p>
 <p>我在心得裡把她的名字寫成「小陶子」。她的署名是「小桃子」。寫錯了六年，這次查資料才發現。</p>
-<h2>那圈白白的東西</h2>
+<h2 id="section-2">那圈白白的東西</h2>
 <p>射完之後她說，有一句話想跟你說，希望你不要往心裡去。</p>
 <p>她發現我龜頭上有一圈白白的、像垢的東西。</p>
 <p>我聽完反而鬆了一口氣。</p>
@@ -274,7 +290,7 @@
 <p>Vincent 寫，一個小小動作背後的痛苦，是性事自主的你所無法體會的。</p>
 <p>我補一句。不是「家人看到會生氣」這麼簡單。是這個東西放在房間裡，就需要有人幫我拿出來、幫我用、幫我洗、幫我收回去。每一個步驟都是別人。飛機杯對一般人是隱私，對我是一個需要好幾個人配合的公開流程。</p>
 <p>所以不是不敢。是它根本無法變成我的。</p>
-<h2>「幫他打一次手槍又如何」</h2>
+<h2 id="section-3">「幫他打一次手槍又如何」</h2>
 <p>小桃子的心得結尾有一段，我讀了很多遍。</p>
 <p>她說服務完很惆悵。她最近都在工作賺錢，休假也在接案，把所有精力投注在工作，太用力對待自己，也沒同理心對待別人。然後她想：我覺得幫他打一次手槍，那又如何呢？LK 還是蠻不需要直接處理「現實層面」的議題，例如賺錢、存錢。</p>
 <p>這段有一半對，一半沒有。</p>
@@ -289,7 +305,7 @@
 <p>結果是左側乳房侵襲性乳管癌，0.7 公分，非常早期。十天切完。</p>
 <p>所以 2020 年五篇文裡那個「厭惡我陰莖的外傭」，跟 2026 年我硬把她推上攝影車的那個人，是同一個人。</p>
 <p>我沒有要把這段關係講成和解。她還是那樣洗，我還是那樣痛。只是十五年下來，該吵的吵過了，該做的也做了。人跟人綁在一起十五年就是這樣，不是愛不是恨，是日子。</p>
-<h2>然後它關了</h2>
+<h2 id="section-4">然後它關了</h2>
 <p>回到 8 月 16 日。</p>
 <p>我現在讀那五篇文，看到的不只是我那天的事。我看到的是，一次任務要動用多少人。</p>
 <p>面談義工先在網路上跟我聊，再約實體面談，再做服務前訪談。行政義工至少兩位，一個處理防疫和消毒，一個訪問性義工的前後心情。還有一個個人助理搬我上床、調燈光、脫衣服。性義工九十分鐘。任務前有資深義工阿南訪談小桃子，任務後再訪一次。然後小桃子花至少一個禮拜寫心得，因為「怎麼寫都寫不出當天現場的細小細微感受」。</p>
@@ -326,15 +342,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li><li style="--row-accent:#c0392b"><a href="/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/"><span class="side-row__meta">01JUL26 · <span>文化觀察</span></span><span class="side-row__title">我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li><li style="--row-accent:#c0392b"><a href="/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/"><span class="side-row__meta">01JUL26 · <span>文化觀察</span></span><span class="side-row__title">我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">誰在面談誰</a></li><li><a href="#section-2">那圈白白的東西</a></li><li><a href="#section-3">「幫他打一次手槍又如何」</a></li><li><a href="#section-4">然後它關了</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

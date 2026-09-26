@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -203,7 +219,7 @@
 <p>我只是叫 Codex 開一個網頁。照理說，這不應該是一件需要寫文章的事。瀏覽器在那裡，Chrome extension 也在那裡，native host 也連著，下一步看起來就是開 tab、goto URL、確認頁面載入。</p>
 <p>後來才發現，卡住的地方不是「怎麼開網頁」。</p>
 <p>是 Codex 這次到底透過哪一條被信任的路在控制瀏覽器。</p>
-<h2>這次碰到的是真實使用者瀏覽器</h2>
+<h2 id="section-1">這次碰到的是真實使用者瀏覽器</h2>
 <p>如果只是測本機頁面，Codex 有 in-app browser。那條路很乾淨，localhost、file URL、截圖、點選、驗證畫面，都可以放在一個相對隔離的環境裡做。</p>
 <p>但有些任務不能用那條路。</p>
 <p>使用者已經登入的網站、既有 Chrome 分頁、profile 裡的 extension、cookies、遠端服務的 session，這些東西不在 in-app browser 裡。要碰到它們，就得走使用者真正的 Chromium 瀏覽器，也就是 Chrome 或 Helium 這類環境。</p>
@@ -216,7 +232,7 @@
 </code></pre>
 <p>每一層都要對。</p>
 <p>模型會不會寫 JavaScript 反而不是重點。重點是那段 JavaScript 有沒有拿到真正被允許的 browser bridge。</p>
-<h2>第一個線索：runtime 不信任快取路徑</h2>
+<h2 id="section-2">第一個線索：runtime 不信任快取路徑</h2>
 <p>原本直覺會走 Chrome plugin 裡快取的 client：</p>
 <pre><code class="language-text">~/.codex/plugins/cache/openai-bundled/chrome/.../scripts/browser-client.mjs
 </code></pre>
@@ -235,7 +251,7 @@ privileged native pipe bridge is not available
 </code></pre>
 <p>同樣都是 <code>browser-client.mjs</code>，但 runtime 在意的是它從哪裡來。</p>
 <p>這很像 macOS 的權限問題。你以為你在跑同一個 app，但系統看的是 bundle identity、簽章、路徑、權限授權的那條鏈。檔案內容看起來一樣，不代表系統願意把同樣的能力交給它。</p>
-<h2>不能為了能動就繞過去</h2>
+<h2 id="section-3">不能為了能動就繞過去</h2>
 <p>這種時候最危險的修法，是開始想辦法自己打 native host、自己走 socket、自己繞過官方 runtime。</p>
 <p>我不是不能接受 debug 時做低階檢查。raw socket ping 有時候可以幫你確認 bridge 到底活不活著。</p>
 <p>但拿它當正式控制路徑，我不太接受。</p>
@@ -243,7 +259,7 @@ privileged native pipe bridge is not available
 <p>真正該修的是信任路徑，不是把信任邊界拆掉。</p>
 <p>所以 <code>chrome-trusted</code> 這個 skill 的存在其實很窄：它不是重做 Chrome automation，也不是另外發明瀏覽器控制協議。它只是要求 Codex 走 bundled marketplace 那份 trusted <code>browser-client.mjs</code>，然後仍然使用官方 browser API。</p>
 <p>這個邊界留住，事情才不會變成「能動就好」。</p>
-<h2>健康檢查比開頁成功更重要</h2>
+<h2 id="section-4">健康檢查比開頁成功更重要</h2>
 <p>bootstrap 之後，第一件事不是急著開網頁。</p>
 <p>我會先做一個很小的健康檢查：</p>
 <pre><code class="language-js">const tabs = await browser.user.openTabs();
@@ -259,7 +275,7 @@ nodeRepl.write(JSON.stringify({ ok: true, tabCount: tabs.length }, null, 2));
 </code></pre>
 <p>這跟我這次遇到的點幾乎是同一條線。它不是「網站開不起來」，也不是「Chrome 沒開」。Chrome 在，plugin 也裝過，甚至 diagnostic script 還另外卡在 Windows 路徑權限問題。真正卡住的是 Codex 拿不到那條 privileged browser bridge。</p>
 <p>這個 issue 讓整件事更清楚：重裝 plugin 不一定會修好信任路徑。你可以把使用者可見的東西全部重來一次，但如果 runtime 仍然不信任現在 import 的 <code>browser-client.mjs</code>，那條 bridge 還是不會交出去。</p>
-<h2>第二個線索：tab 其實是 wrapper</h2>
+<h2 id="section-5">第二個線索：tab 其實是 wrapper</h2>
 <p>trusted path 通了之後，開新分頁其實很順：</p>
 <pre><code class="language-js">globalThis.tab = await browser.tabs.new();
 await tab.goto(&quot;https://example.com&quot;);
@@ -286,7 +302,7 @@ const pageInfo = await tab.playwright.evaluate(() =&gt; ({
 <p>這個工具沒有把 Playwright 原封不動丟給你。它包了一層，因為它同時要處理使用者分頁、extension backend、能力清單、clipboard、content export、CUA 操作。你如果把它當成標準 Playwright page，就會在一個看起來很熟的地方摔倒。</p>
 <p>我不討厭這層 wrapper。它有存在理由。</p>
 <p>但 skill 裡必須把這個邊界寫清楚。不然下一個 agent 看到 <code>tab.goto()</code> 可以用，就會自然假設 <code>tab.evaluate()</code> 也可以用。這就是小坑變成重複成本的方式。</p>
-<h2>第三個線索：finalize 會收掉控制權</h2>
+<h2 id="section-6">第三個線索：finalize 會收掉控制權</h2>
 <p>Chrome browser tool 最後還有一個動作：</p>
 <pre><code class="language-js">await browser.tabs.finalize({ keep: [{ tab, status: &quot;deliverable&quot; }] });
 </code></pre>
@@ -296,7 +312,7 @@ const pageInfo = await tab.playwright.evaluate(() =&gt; ({
 <p>你會看到「分頁明明還在，為什麼操作說 Tab not found？」然後又開始懷疑 extension 或網站。其實只是你已經把那個 session 收掉了。</p>
 <p>所以比較穩的工作流是：互動、檢查、截圖或讀 DOM，都在 finalize 前做完。真的需要後續接手，就重新從 <code>browser.user.openTabs()</code> 拿目前的分頁物件，再 claim。</p>
 <p>分頁可見，不等於控制權還在。</p>
-<h2>Helium 也讓事情更容易被誤會</h2>
+<h2 id="section-7">Helium 也讓事情更容易被誤會</h2>
 <p>這次還有一層背景：Helium 是 Chromium-based，Codex Chrome Extension 可以在裡面工作，但 backend 可能仍然回報自己叫 Chrome。</p>
 <p>這不代表使用者一定在用 Google Chrome。</p>
 <p>如果你用名稱去判斷環境，很容易走錯診斷方向。真正該看的不是它叫什麼，而是 extension instance 有沒有連上、trusted client 有沒有拿到 bridge、openTabs 能不能列出目前分頁。</p>
@@ -305,7 +321,7 @@ const pageInfo = await tab.playwright.evaluate(() =&gt; ({
 </code></pre>
 <p>但那只是診斷，不是正常控制路徑。</p>
 <p>正常控制路徑還是 trusted <code>browser-client.mjs</code>。</p>
-<h2>後來我把它寫進 skill</h2>
+<h2 id="section-8">後來我把它寫進 skill</h2>
 <p>我以前對這種 skill 的看法比較簡單：它就是把一段可重複操作記下來。</p>
 <p>這次比較明顯的是，skill 更像是把「不要再走錯路」記下來。</p>
 <p><code>chrome-trusted</code> 不需要寫成一本文件。它只需要把幾個會害人重踩的點釘住。</p>
@@ -318,7 +334,7 @@ const pageInfo = await tab.playwright.evaluate(() =&gt; ({
 <p>但它們很適合變成 skill，因為模型每次重來都會自然掉進同一個洞。不是因為模型笨，而是因為它看到的 API 形狀太像另一個熟悉的東西。<code>tab.goto()</code> 可以用，於是它以為 <code>tab.evaluate()</code> 也可以用。快取資料夾裡有 <code>browser-client.mjs</code>，於是它以為那就是該 import 的檔案。</p>
 <p>這些錯誤很合理。</p>
 <p>合理到你不把它寫下來，它下次一定還會發生。</p>
-<h2>這次留下來的判斷</h2>
+<h2 id="section-9">這次留下來的判斷</h2>
 <p>表面上，這只是一次開網頁。</p>
 <p>但我後來在意的不是那個頁面有沒有打開，而是 Codex 在打開它的時候，知不知道自己站在哪一條被允許的路上。</p>
 <p>AI coding agent 的信任問題，不只在模型會不會亂寫 code。</p>
@@ -336,15 +352,20 @@ const pageInfo = await tab.playwright.evaluate(() =&gt; ({
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#f07c2a"><a href="/ai-analysis/svg-cover-create-post-first-run/"><span class="side-row__meta">19SEP26 · <span>AI 分析</span></span><span class="side-row__title">讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#f07c2a"><a href="/ai-analysis/svg-cover-create-post-first-run/"><span class="side-row__meta">19SEP26 · <span>AI 分析</span></span><span class="side-row__title">讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">這次碰到的是真實使用者瀏覽器</a></li><li><a href="#section-2">第一個線索：runtime 不信任快取路徑</a></li><li><a href="#section-3">不能為了能動就繞過去</a></li><li><a href="#section-4">健康檢查比開頁成功更重要</a></li><li><a href="#section-5">第二個線索：tab 其實是 wrapper</a></li><li><a href="#section-6">第三個線索：finalize 會收掉控制權</a></li><li><a href="#section-7">Helium 也讓事情更容易被誤會</a></li><li><a href="#section-8">後來我把它寫進 skill</a></li><li><a href="#section-9">這次留下來的判斷</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

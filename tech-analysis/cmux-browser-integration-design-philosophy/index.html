@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -204,11 +220,11 @@
 <p>我也關掉了同一個設定，理由一模一樣。</p>
 <p>然後我們都以為這個功能就沒什麼意思了。</p>
 <hr>
-<h2>Theo 想要的其實是另一件事</h2>
+<h2 id="section-1">Theo 想要的其實是另一件事</h2>
 <p>Theo 在影片裡對瀏覽器整合有一個更大的想像：<strong>把真實的 Chrome 嵌進來</strong>——帶入你現有的 Chrome 設定檔、Cookie、擴充功能，讓 1Password 能用，讓你已登入的所有網站都能直接用。他覺得如果能做到這個，終端機、瀏覽器、IDE 就真的可以在同一個 app 裡共存。</p>
 <p>這個想像是對的，但 cmux 現在的瀏覽器不是在做這件事。cmux 用的是 WKWebView，User Agent 硬編碼成 Safari 的字串，目的是避免被 Google 這類網站擋掉——它本來就不是設計來給你瀏覽網頁用的。</p>
 <hr>
-<h2>它到底在解決什麼問題</h2>
+<h2 id="section-2">它到底在解決什麼問題</h2>
 <p>後來我請 Claude Code 去挖 cmux 的設計思路，才發現我搞錯了層次。</p>
 <p>cmux 的內建瀏覽器 API 是從 <a href="https://github.com/vercel-labs/agent-browser">vercel-labs/agent-browser</a> 移植過來的。agent-browser 的定位很清楚：<strong>讓 AI agent 能用簡潔的 CLI 介面操作瀏覽器</strong>，不需要學 Playwright 或 Puppeteer 的複雜 API。流程是 snapshot → 拿到 element refs → 用 <code>@ref</code> 點擊或填表。</p>
 <p>所以 cmux 的瀏覽器不是給你用的，是給 agent 用的。</p>
@@ -220,7 +236,7 @@ cmux browser get url
 </code></pre>
 <p>Claude Code 在終端機裡，透過這幾個指令，可以直接控制旁邊的瀏覽器 pane，看自己剛改的 UI 有沒有跑通，讀 console 錯誤，填表測試。</p>
 <hr>
-<h2>跟 Claude in Chrome 有什麼不同</h2>
+<h2 id="section-3">跟 Claude in Chrome 有什麼不同</h2>
 <p>聽起來跟 Claude Code 官方的 Chrome 整合（<code>/chrome</code>）做的事差不多，但有一個關鍵差異：<strong>隔離性</strong>。</p>
 <p>Claude Code 的 Chrome 整合共用你的單一 Chrome 實例。你同時跑三個 CC session 各自負責不同專案，三個都想看自己的 dev server——<code>localhost:3000</code>、<code>3001</code>、<code>3002</code>——Chrome 整合沒辦法給每個 session 一個獨立的瀏覽器。</p>
 <p>cmux 的瀏覽器是每個 workspace 一個獨立 pane，天然隔離。這正是 cmux 的核心場景：多個 agent 平行工作，每個看自己的東西。</p>
@@ -254,7 +270,7 @@ cmux browser get url
 </tr>
 </tbody></table>
 <hr>
-<h2>「primitive，不是 solution」</h2>
+<h2 id="section-4">「primitive，不是 solution」</h2>
 <p>cmux 的 README 有一段話我覺得說得準：</p>
 <blockquote>
 <p>cmux is a primitive, not a solution. It gives you a terminal, a browser, notifications, workspaces, splits, tabs, and a CLI to control all of it.</p>
@@ -262,7 +278,7 @@ cmux browser get url
 <p>Theo 在影片裡說的「我只想要它把終端機這側收攏」，其實就是他在用自己的語言表達同一件事——他拿走了對他有用的 primitive，把對他沒用的先放著。他批評的是那個預設攔截連結的行為，不是功能本身。</p>
 <p>大部分工具都想做「完整解決方案」，cmux 反其道而行，只給你可組合的原件，怎麼用是你的事。瀏覽器不攔截你的連結（除非你選擇開啟那個設定），不強迫你用它的工作流，只是靜靜待在那裡，等 agent 需要的時候呼叫它。</p>
 <hr>
-<h2>實際情況</h2>
+<h2 id="section-5">實際情況</h2>
 <p>我關掉的是「終端機連結用 cmux 瀏覽器開啟」這個設定，不是瀏覽器本身。</p>
 <p>瀏覽器功能還在。Claude Code 跑完測試後，可以直接呼叫 <code>cmux browser snapshot</code> 看頁面狀態，這條路徑是通的，而且我已經把操作指南寫進 <code>~/.claude/agents/cmux-browser.md</code>，未來每個 CC session 都能自動取用。</p>
 <p>有時候誤解一個功能，不是因為功能本身設計不好，而是因為接觸它的方式不對。那個彈出殘廢瀏覽器的體驗太差，讓我以為整個功能都是如此——但那個體驗只是一個可以關掉的選項，不是功能的本體。</p>
@@ -276,15 +292,20 @@ cmux browser get url
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">Theo 想要的其實是另一件事</a></li><li><a href="#section-2">它到底在解決什麼問題</a></li><li><a href="#section-3">跟 Claude in Chrome 有什麼不同</a></li><li><a href="#section-4">「primitive，不是 solution」</a></li><li><a href="#section-5">實際情況</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

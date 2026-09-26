@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -213,7 +229,7 @@
 <p>後來才確認問題在 Windows VM 的 VirtIO / NIC offload 路徑。Discovery、start session、stop session、音效都可以，壞的是 UDP 影像串流那條資料路徑。</p>
 <p>那次讓我先修正一個判斷：同一台主機，不等於同一條資料路徑。</p>
 <p>這次 Tailscale HA 又把這件事演了一次。</p>
-<h2>昨天修的是 route 的形狀</h2>
+<h2 id="section-1">昨天修的是 route 的形狀</h2>
 <p>昨天真正不對勁的是 MT6000 的 advertise route 設定。</p>
 <p>OpenWRT 上的 Tailscale 設定裡同時有幾組東西：</p>
 <pre><code class="language-text">advertiseRoutes=&#39;10.0.0.0/24&#39;
@@ -233,7 +249,7 @@ tailscale up failed.
 <p>修完後，MT6000 的 Tailscale 起來了。Web console approve 之後，Mac 也看得到 MT6000 可以 advertise <code>10.0.0.0/24</code>。</p>
 <p>到這裡，我以為事情大概結束了。</p>
 <p>結果沒有。</p>
-<h2>今天 route 真的切了，但 LAN 還是不通</h2>
+<h2 id="section-2">今天 route 真的切了，但 LAN 還是不通</h2>
 <p>今天早上症狀回來的時候，第一件事不是重開服務。</p>
 <p>我先看 Mac 現在到底怎麼走：</p>
 <pre><code class="language-text">route get 10.0.0.172
@@ -259,7 +275,7 @@ ping 10.0.0.192  # 不通
 <p><code>10.0.0.1</code> 是 MT6000 自己，所以它會回。<br><code>10.0.0.172</code> 和 <code>10.0.0.192</code> 是 LAN 後面的機器，它們不回。</p>
 <p>所以問題不是「Mac 到 MT6000 不通」。</p>
 <p>問題是 MT6000 收到 Tailscale 來的封包之後，沒有成功把整段 LAN 連線完成。</p>
-<h2>讓每一層只回答一個問題</h2>
+<h2 id="section-3">讓每一層只回答一個問題</h2>
 <p>接下來要分層確認。</p>
 <p>第一層：MT6000 自己能不能打到 LAN 主機？</p>
 <pre><code class="language-text">MT6000 -&gt; 10.0.0.172
@@ -284,7 +300,7 @@ lan -&gt; tailscale
 <p>封包有出去。</p>
 <p>但 reply 回不來。</p>
 <p>這才是今天真正的問題。</p>
-<h2>少的是 SNAT</h2>
+<h2 id="section-4">少的是 SNAT</h2>
 <p>這時候最合理的猜測是回程。</p>
 <p>如果 MT6000 把 Tailscale 來的封包直接轉進 LAN，LAN 主機看到的來源可能是 Mac 的 Tailscale IP，例如 <code>100.89.162.36</code>。</p>
 <p>理論上，如果 LAN 主機的 default gateway 是 <code>10.0.0.1</code>，它應該可以回去。但實際網路常常不是這麼乾淨。PVE、VM、旁邊的 mesh、不同 router、不同 route table，只要有一段不照你想像走，reply 就回不來。</p>
@@ -317,7 +333,7 @@ lan -&gt; tailscale
 <pre><code class="language-text">MT6000 primary route: 10.0.0.0/24
 </code></pre>
 <p>這次是真的走 MT6000，也是真的通。</p>
-<h2><code>running</code> 不等於這條路可以用</h2>
+<h2 id="section-5"><code>running</code> 不等於這條路可以用</h2>
 <p>這次最容易誤判的地方，是 router Tailscale 確實 running。</p>
 <p>甚至更精確一點，<code>tailscaled</code> 本體是 running，MT6000 也 online，route 也被選成 primary。</p>
 <p>但 OpenWRT 上 <code>/etc/init.d/tailscale status</code> 是：</p>
@@ -332,7 +348,7 @@ instance2: /usr/sbin/tailscale_helper --advertise-routes=10.0.0.0/24  not runnin
 <p>如果只看「Tailscale running」，會以為這層已經排除了。</p>
 <p>但它其實只回答「daemon 有沒有活著」。<br>它沒有回答「這台 router 當 subnet router 時，LAN 回程有沒有接好」。</p>
 <p>這兩件事差很多。</p>
-<h2>這次改掉的判斷</h2>
+<h2 id="section-6">這次改掉的判斷</h2>
 <p>昨天修的是 route 的定義。</p>
 <p>今天修的是 route 切過去以後，封包真的要怎麼回來。</p>
 <p>這兩件事很容易混在一起，因為症狀都像「Tailscale 又不通」。但它們不是同一個問題。</p>
@@ -364,15 +380,20 @@ reply 是不是回得來
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">昨天修的是 route 的形狀</a></li><li><a href="#section-2">今天 route 真的切了，但 LAN 還是不通</a></li><li><a href="#section-3">讓每一層只回答一個問題</a></li><li><a href="#section-4">少的是 SNAT</a></li><li><a href="#section-5">running 不等於這條路可以用</a></li><li><a href="#section-6">這次改掉的判斷</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

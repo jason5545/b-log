@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -199,15 +215,15 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">在 KDE Wayland 上實現語音輸入：一段痛苦又有趣的偵錯之旅</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>前言</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">前言</h2>
 <p>最近我在開發 XVoice——一個跨平台的語音輸入系統。這個專案的核心功能很簡單：用麥克風錄音，透過 Whisper 辨識成文字，然後自動輸入到當前視窗。在 Windows 上一切順利，但當我切換到 Linux 的 KDE Plasma Wayland 環境時，噩夢開始了。</p>
-<h2>問題浮現</h2>
+<h2 id="section-2">問題浮現</h2>
 <p>語音辨識的部分運作正常，Whisper 成功地把我說的「你好」轉換成文字。但是，文字就是打不出來。終端機顯示「已輸入: 你好」，可是目標視窗什麼都沒有。</p>
 <p>一開始我以為是程式碼的問題，花了不少時間 debug，後來才發現——這是 Wayland 的「特色」。</p>
-<h2>Wayland 的安全模型：福還是禍？</h2>
+<h2 id="section-3">Wayland 的安全模型：福還是禍？</h2>
 <p>Wayland 為了安全性，移除了 X11 時代大部分的輸入模擬 API。在 X11 上，xdotool 可以輕鬆模擬鍵盤輸入，但 Wayland 認為這是安全漏洞——惡意程式可能會偷偷打字或竊取輸入。</p>
 <p>理念很好，但對我這種需要模擬輸入的開發者來說，簡直是災難。</p>
-<h2>嘗試一：wtype</h2>
+<h2 id="section-4">嘗試一：wtype</h2>
 <p>我首先嘗試了 wtype，這是專門為 Wayland 設計的輸入工具：</p>
 <pre><code class="language-bash">wtype &quot;測試&quot;
 </code></pre>
@@ -215,14 +231,14 @@
 <pre><code>Compositor does not support the virtual keyboard protocol
 </code></pre>
 <p>原來 wtype 依賴 <code>virtual-keyboard</code> 協議，但 KDE 的 KWin 不支援這個協議。GG。</p>
-<h2>嘗試二：ydotool</h2>
+<h2 id="section-5">嘗試二：ydotool</h2>
 <p>接著我試了 ydotool，它透過 Linux 核心的 uinput 模擬輸入裝置：</p>
 <pre><code class="language-bash">sudo usermod -aG input $USER  # 加入 input 群組
 # 重新登入
 ydotool type &quot;測試&quot;
 </code></pre>
 <p>結果：指令執行了，但中文字沒出現。後來查到 <a href="https://github.com/ReimuNotMoe/ydotool/issues/249">GitHub Issue</a> 才知道，ydotool 只能模擬鍵盤按鍵，無法直接輸入 Unicode 字元。它會把「測」拆成鍵盤按鍵，但中文根本不在鍵盤上啊！</p>
-<h2>嘗試三：dotool</h2>
+<h2 id="section-6">嘗試三：dotool</h2>
 <p>dotool 是另一個類似的工具：</p>
 <pre><code class="language-bash">echo &quot;type 測試中文&quot; | dotool
 </code></pre>
@@ -231,19 +247,19 @@ ydotool type &quot;測試&quot;
 dotool: WARNING: impossible character for layout: 試
 </code></pre>
 <p>一樣的問題——這些工具都是在鍵盤層級運作，不是字元層級。</p>
-<h2>嘗試四：剪貼簿模式</h2>
+<h2 id="section-7">嘗試四：剪貼簿模式</h2>
 <p>既然直接輸入不行，那就用剪貼簿吧：</p>
 <pre><code class="language-bash">echo &quot;你好&quot; | wl-copy  # 複製到剪貼簿
 echo &quot;key ctrl+v&quot; | dotool  # 模擬 Ctrl+V
 </code></pre>
 <p><code>wl-copy</code> 成功了，但 <code>dotool</code> 的 Ctrl+V 似乎沒有效果。我懷疑是 KDE 的問題，但沒有深究。</p>
 <p>這個方案勉強可用——文字會複製到剪貼簿，使用者手動按 Ctrl+V 貼上。但這不是我想要的體驗。</p>
-<h2>深入研究：Fcitx5 D-Bus</h2>
+<h2 id="section-8">深入研究：Fcitx5 D-Bus</h2>
 <p>我開始研究 Fcitx5 輸入法的 D-Bus 介面，想說或許可以直接透過輸入法提交文字：</p>
 <pre><code class="language-bash">busctl --user introspect org.fcitx.Fcitx5 /controller
 </code></pre>
 <p>結果發現 Fcitx5 的標準 D-Bus 介面沒有 <code>CommitString</code> 方法。有人為舊版 Fcitx 寫過 <a href="https://github.com/amosbird/fcitx-dbus-commit-string">fcitx-dbus-commit-string</a> 插件，但 Fcitx5 沒有對應的版本。</p>
-<h2>轉機：發現 KWtype</h2>
+<h2 id="section-9">轉機：發現 KWtype</h2>
 <p>就在我快要放棄的時候，搜尋到了 <a href="https://github.com/Sporif/KWtype">KWtype</a>——一個專門為 KDE Wayland 設計的虛擬鍵盤工具。</p>
 <p>它使用 KWin 的 Fake Input 協議，這是 KDE 專屬的特權協議。編譯安裝：</p>
 <pre><code class="language-bash">git clone https://github.com/Sporif/KWtype.git
@@ -255,7 +271,7 @@ sudo ninja -C build install
 <pre><code class="language-bash">kwtype &quot;測試中文輸入&quot;
 </code></pre>
 <p>成功了！文字直接出現在游標位置，包括中文！</p>
-<h2>最終解決方案</h2>
+<h2 id="section-10">最終解決方案</h2>
 <p>我更新了 XVoice 的 Wayland 輸出模組，優先使用 KWtype：</p>
 <pre><code class="language-python">def _detect_tool(self) -&gt; str | None:
     # 優先使用 kwtype（KDE Wayland 專用，支援中文）
@@ -284,7 +300,7 @@ sudo ninja -C build install
         self.type_with_clipboard(text)
         return
 </code></pre>
-<h2>心得總結</h2>
+<h2 id="section-11">心得總結</h2>
 <p>這次偵錯經歷讓我深刻體會到：</p>
 <ol>
 <li><p><strong>Wayland 生態還不成熟</strong>：雖然 Wayland 的安全模型很好，但配套工具還跟不上。不同桌面環境各自為政，沒有統一的輸入模擬方案。</p>
@@ -298,7 +314,7 @@ sudo ninja -C build install
 <li><p><strong>記錄很重要</strong>：我把整個調查過程記錄在 <code>docs/WAYLAND_INPUT_ISSUE.md</code>，下次遇到類似問題可以快速回顧。</p>
 </li>
 </ol>
-<h2>工具總結</h2>
+<h2 id="section-12">工具總結</h2>
 <table>
 <thead>
 <tr>
@@ -345,7 +361,7 @@ sudo ninja -C build install
 <td>KDE 專用，推薦</td>
 </tr>
 </tbody></table>
-<h2>後記</h2>
+<h2 id="section-13">後記</h2>
 <p>如果你也在 KDE Wayland 上開發需要模擬輸入的應用，希望這篇文章能幫你少走一些彎路。記住：<strong>先找 KWtype</strong>！</p>
 <p>專案連結：<a href="https://github.com/jason5545/xvoice">XVoice on GitHub</a></p>
 <hr>
@@ -357,15 +373,20 @@ sudo ninja -C build install
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#61758b"><a href="/ai-analysis/theo-voice-computer-use-everyday-limits/"><span class="side-row__meta">16SEP26 · <span>AI 分析</span></span><span class="side-row__title">Theo 開始把電腦操作交給 AI，我已經這樣很久了</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#61758b"><a href="/ai-analysis/theo-voice-computer-use-everyday-limits/"><span class="side-row__meta">16SEP26 · <span>AI 分析</span></span><span class="side-row__title">Theo 開始把電腦操作交給 AI，我已經這樣很久了</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">前言</a></li><li><a href="#section-2">問題浮現</a></li><li><a href="#section-3">Wayland 的安全模型：福還是禍？</a></li><li><a href="#section-4">嘗試一：wtype</a></li><li><a href="#section-5">嘗試二：ydotool</a></li><li><a href="#section-6">嘗試三：dotool</a></li><li><a href="#section-7">嘗試四：剪貼簿模式</a></li><li><a href="#section-8">深入研究：Fcitx5 D-Bus</a></li><li><a href="#section-9">轉機：發現 KWtype</a></li><li><a href="#section-10">最終解決方案</a></li><li><a href="#section-11">心得總結</a></li><li><a href="#section-12">工具總結</a></li><li><a href="#section-13">後記</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

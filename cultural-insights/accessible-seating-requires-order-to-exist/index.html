@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -205,7 +221,7 @@
 <p>4/11，BanG Dream Special LIVE in TAIPEI DAY1，MyGO!!!!! × Ave Mujica 在大佳河濱公園演出。演唱會還沒開始，就已經出事了。</p>
 <p>官定 16:30 開場、18:30 開演。C 區的隊伍一路排到基隆河畔，直到接近 19:00 前後大部分人才終於進場，工作人員表示要等所有人進去才開演。官方事後在 Threads 道歉，承諾改善 DAY2 流程。</p>
 <p>入場亂象本身是另一個討論。我想說的是另一件事。</p>
-<h2>三個短語構成的免責結構</h2>
+<h2 id="section-1">三個短語構成的免責結構</h2>
 <p>售票頁面上，票種列表長這樣：</p>
 <table>
 <thead>
@@ -237,17 +253,17 @@
 </blockquote>
 <p>我是輪椅使用者。這行字我看了不只一次。</p>
 <p>「工作人員引導至指定位置」、「無法指定具體位置」、「敬請諒解」——三個短語，構成了一個完整的免責結構。你不知道你會在哪裡。主辦也不知道。你在買票的時候就已經同意了這件事。</p>
-<h2>薄，但至少有一個人</h2>
+<h2 id="section-2">薄，但至少有一個人</h2>
 <p>在正常情況下，這個設計就已經很薄。</p>
 <p>你要去的「指定位置」在哪裡？視角好不好？有沒有遮擋？周圍人流的密度是多少？緊急出口在哪？這些問題在購票前都無從回答，你只能到場碰運氣。</p>
 <p>但是，在正常情況下，至少還有一個人陪你走這段路。那個「工作人員」的存在，是整個機制裡唯一的具體支撐。</p>
 <p>4/11 發生的事，是那個前提也崩了。</p>
-<h2>當秩序本身不在了</h2>
+<h2 id="section-3">當秩序本身不在了</h2>
 <p>現場工作人員連一般觀眾的分流都顧不住。C 區沒人整隊，B 區的人混進 D 區，整隊序號形同虛設。工作人員被分散到每個破口去堵漏，沒有人有餘裕去想那個應該負責引導輪椅使用者的人在哪裡。</p>
 <p>這時候如果你買了身障席，你面對的狀況是：有票，但沒有引導；有引導的承諾，但承諾建立在現場秩序正常這個前提上，而那個前提已經不存在了。</p>
 <p>更直接的問題是人流安全。露天萬人站席，人群在入場時是壓縮推擠的狀態。一般觀眾被擠到，可以用腳調整；輪椅不能。周圍的人不一定看得到輪椅，輪椅也沒辦法快速閃避。到了一定密度，輪椅就是一個固定在人群裡的障礙物，前後左右的人都往你身上壓。</p>
 <p>還有大佳河濱公園的地形：草地、坡度、臨時鋪設的走道、排水溝的接縫。輪椅在任何一個地方卡住，那個本來應該陪你的人，已經不知道去哪裡了。</p>
-<h2>這張票服務的是主辦，不是觀眾</h2>
+<h2 id="section-4">這張票服務的是主辦，不是觀眾</h2>
 <p>從法規面來看，主辦不能禁止身障者入場——這在法規上說不過去。所以他們必須「提供某種安排」。但「某種安排」的最低門檻是什麼，法規沒有說清楚。</p>
 <p>於是這張票就出現了：半票票種、一行引導說明、一句敬請諒解。合規。你買了票、你進了場、沒有人拒絕你。法規層面沒有任何問題。</p>
 <p>正因為不能拒絕你，所以才會有這種票。它存在的目的不是讓你好好看演出，是讓主辦在法規上站得住腳。身障席作為一個商品，服務的對象是主辦，不是觀眾。</p>
@@ -255,23 +271,23 @@
 <p>身障觀眾至少應該有最基本的安全保護：一個用圍欄隔開的區域，讓周圍的人潮不會直接壓過來。這不是奢求，是在一個你已經知道會擠滿萬人的場地裡，對一個無法用腳調整位置的人，應該做到的最低限度。</p>
 <p>演出結束後，我在 Threads 上看到有人分享，現場有人拄著拐杖、一拐一拐地往身障區走過去。沒有人知道他後來有沒有找到位置，有沒有在那個人群裡站穩。旁邊沒有任何工作人員引導。希望他沒事。</p>
 <p>票面上承諾的那個「工作人員引導」，在這個畫面裡是缺席的。它究竟存不存在、有沒有被執行，目前是一個問號。</p>
-<h2>一般的身障席，至少有個區域是你的</h2>
+<h2 id="section-5">一般的身障席，至少有個區域是你的</h2>
 <p>說到這裡有個對比值得講清楚。</p>
 <p>一般演唱會的身障席，就算位置差、就算視角不好、就算「被塞進去」——那個區域至少是劃給你的。周圍不會有一般人群流過來，沒有人會往你身上擠、推你、肘擊你。你是在一個有邊界的空間裡，安靜地待著，用你能接受的方式看演出。</p>
 <p>這個連那個都沒有。</p>
 <p>「工作人員引導至指定位置」，那個位置在哪裡？在人群裡面。在萬人站席的某個角落，沒有圍欄、沒有緩衝、沒有任何讓周圍的人意識到「這裡有人坐輪椅」的標示。一般身障席的最基本保護——<strong>你不會被人家擠</strong>——在這個設計裡根本不存在。</p>
-<h2>半票說明了什麼</h2>
+<h2 id="section-6">半票說明了什麼</h2>
 <p>身障席 1,440，是 Zone F（2,880）的一半。</p>
 <p>這個定價的邏輯是「你的位置不確定、可能比較差，所以打折」。用折扣來補償不確定性，而不是用不同的方式提供等值的服務。</p>
 <p>「補償不確定性」和「等值服務」是兩件完全不同的事。前者的意思是：我知道你的體驗可能更差，所以少收你一點錢。後者的意思是：我提供的服務讓你能跟其他人一樣好好看這場演出，只是方式不同。</p>
 <p>這張票是前者。</p>
-<h2>「無法指定具體位置」在失控現場的意思</h2>
+<h2 id="section-7">「無法指定具體位置」在失控現場的意思</h2>
 <p>身障席的設計，預設了現場秩序正常。只要現場秩序不正常，這個設計就會比一般觀眾的體驗更快瓦解。不是因為主辦惡意——我不知道他們的意——而是因為這個設計的結構本身就是這樣：它依賴人力、依賴秩序、依賴一個能照著計畫走的現場。任何一個環節崩掉，身障觀眾的處境就比其他人更脆弱、更難自救。</p>
 <p>我沒有去這場演唱會。4/11 當天，我是在 Threads 上看到有人在討論入場動線的問題——隊伍排到哪裡、哪個區還沒進、工作人員去哪了。因為那些討論，我才回頭仔細去看整個流程，結果就看到了那行身障席注意事項。</p>
 <p>我知道那個不確定性具體會長什麼樣子。</p>
 <p>「無法指定具體位置」，在一個失控的現場，意思是：<strong>你自己想辦法。</strong></p>
 <p>把「有提供身障席」當作終點而不是起點，這是台灣大型演唱會身障規劃的通病。但這次更嚴重——通病的前提，是現場至少還有個位置是你的；這次連那個前提都不存在。</p>
-<h2>日本怎麼做</h2>
+<h2 id="section-8">日本怎麼做</h2>
 <p>對比可以很直接。</p>
 <p>BanG Dream 的母公司 Bushiroad 在日本辦過大量野外演唱會，包括 2021 年在富士急科尼法露天場地（コニファーフォレスト）舉辦的 BanG Dream! 9th☆LIVE。日本野外演唱會的業界標準，是用臨時圍欄把輪椅區從一般站席物理隔離出來——那個區域有邊界，一般觀眾不會走進去，你在裡面不會被擠、不會被推、不會被肘擊。</p>
 <p>場地位置可以事前不確定，這點日本也一樣。但「有沒有一個物理屏障把你跟人潮隔開」，是完全不同的問題。</p>
@@ -283,15 +299,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">三個短語構成的免責結構</a></li><li><a href="#section-2">薄，但至少有一個人</a></li><li><a href="#section-3">當秩序本身不在了</a></li><li><a href="#section-4">這張票服務的是主辦，不是觀眾</a></li><li><a href="#section-5">一般的身障席，至少有個區域是你的</a></li><li><a href="#section-6">半票說明了什麼</a></li><li><a href="#section-7">「無法指定具體位置」在失控現場的意思</a></li><li><a href="#section-8">日本怎麼做</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

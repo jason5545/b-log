@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -200,11 +216,11 @@
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>今天早上想連 Proxmox，發現 Tailscale 完全沒回應。所有路徑都試過了：直連不行、透過 mt6000 Subnet Router 也不行。是首次遇到整個 tsnode 離線的情況。</p>
 <p>第一反應是懷疑路由器，但很快排除了。mt6000 本身沒問題，Subnet Router 也運作正常——它只是個中繼，封包進來了還是得靠 PVE 自己的 default route 回應，而 PVE 的 default route 指錯地方，Tailscale keepalive 就這樣靜悄悄斷掉。</p>
-<h2>根因</h2>
+<h2 id="section-1">根因</h2>
 <p>往前追，幾天前曾經觸發過一次 5G fallback。IK512 切了進來，舊版 watchdog 看到 <code>wwp10s0u1i3</code> 上有 IP 就當作連線正常，但實際上 bearer 根本沒建立，ModemManager 回的是 <code>NotOpened</code>。主線路恢復後，watchdog 沒有判斷「現在 5G 是假連線」的能力，就這樣永遠卡在那條路由上。</p>
-<h2>IK512 的另一個坑：USB autosuspend</h2>
+<h2 id="section-2">IK512 的另一個坑：USB autosuspend</h2>
 <p>在整理 IK512 的過程中另外發現，它之所以偶爾會出現 <code>NotOpened</code>，根本原因是 USB hub autosuspend 把 modem 給掛起來了。解法很乾脆：在 GRUB 加上 <code>usbcore.autosuspend=-1</code>，全域關掉 USB 省電。</p>
-<h2>Watchdog v2：重寫</h2>
+<h2 id="section-3">Watchdog v2：重寫</h2>
 <p>舊版邏輯只有一件事：interface 上有 IP → 連線正常。這在大多數情況夠用，但在 MBIM 模式下完全不可靠。</p>
 <p>v2 改成直接查 bearer 狀態：</p>
 <ul>
@@ -214,7 +230,7 @@
 <li>metric 管理確保主線路優先，5G 只在主線路真的掛掉時才上</li>
 <li>主線路恢復後主動切回，不需要人工介入</li>
 </ul>
-<h2>管理通道強化：NISS 跳板</h2>
+<h2 id="section-4">管理通道強化：NISS 跳板</h2>
 <p>這次事件讓我意識到一件事：如果 tsnode 是直接跑在 PVE 宿主上，一旦宿主的網路出問題，管理通道就一起斷了。</p>
 <p>解法是在 CT 106（NISS，10.0.0.172）裡另外裝一個 Tailscale，作為獨立的管理跳板。有一個細節要注意：CT 106 本身就在 mt6000 Subnet Router 的廣播範圍內，如果開了 <code>accept-routes</code> 會造成路由迴圈，所以只能用 point-to-point 模式，不開 subnet 廣播。Tailscale IP 規劃為 <code>100.64.10.172</code>，方便記憶。</p>
 <p>往後就算 PVE 宿主的 Tailscale 再次掉線，至少還有 CT 106 這條路可以進來處理。</p>
@@ -225,15 +241,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">根因</a></li><li><a href="#section-2">IK512 的另一個坑：USB autosuspend</a></li><li><a href="#section-3">Watchdog v2：重寫</a></li><li><a href="#section-4">管理通道強化：NISS 跳板</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

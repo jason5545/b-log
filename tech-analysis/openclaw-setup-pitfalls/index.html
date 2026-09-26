@@ -77,12 +77,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -95,19 +95,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -201,18 +217,18 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">OpenClaw 自架踩坑全紀錄：從 gateway.bind 到「關掉驗證反而壞掉」</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>為什麼要架 OpenClaw</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">為什麼要架 OpenClaw</h2>
 <p>我的主要開發環境靠 Claude Code，但 AI 服務終究是別人的——掛了就是掛了，你什麼都做不了。所以需要一個備案：平常用便宜的模型處理日常任務，真的需要強推理的時候再 fallback 回 Claude。</p>
 <p>OpenClaw 就是拿來做這件事的。它跑在 claws-iMac-Pro 這台 VM 上，主要模型用 MiniMax M2.5（走 Anthropic-compatible API），透過 Tailscale serve 暴露 HTTPS 給其他裝置連。架構本身很單純，但設定的過程一點都不單純。</p>
-<h2>第一關：gateway.bind</h2>
+<h2 id="section-2">第一關：gateway.bind</h2>
 <p>OpenClaw 的 gateway 預設綁定在 loopback，因為我要透過 Tailscale serve 做反向代理，這個設定是對的。但一開始我不知道新版的 <code>gateway.bind</code> 不接受 IP 地址了——你不能寫 <code>&quot;127.0.0.1&quot;</code> 或 <code>&quot;0.0.0.0&quot;</code>，要用模式名稱：<code>loopback</code>、<code>lan</code>、<code>custom</code>、<code>tailnet</code>、<code>auto</code>。</p>
 <p>寫了 IP 就直接報錯，錯誤訊息倒是很明確，只是文件裡完全沒提到這個改變。</p>
 <p>而且 Tailscale serve 模式下，bind <strong>必須</strong>是 <code>loopback</code>。這是因為 Tailscale serve 本身就是 reverse proxy，如果你把 bind 開到 <code>0.0.0.0</code>，等於繞過 Tailscale 直接暴露 gateway，安全模型就破了。</p>
-<h2>第二關：tools.profile</h2>
+<h2 id="section-3">第二關：tools.profile</h2>
 <p>設定好 gateway，連上 Web UI，發現 AI 什麼工具都沒有——不能讀檔案、不能執行命令、什麼都不能做。</p>
 <p>原因是 <code>tools.profile</code> 預設值是 <code>&quot;messaging&quot;</code>，只有聊天功能。要完整的工具權限得改成 <code>&quot;full&quot;</code>。因為這台是獨立 VM，沒有安全顧慮，直接開 full。</p>
 <p>但這個預設值的設計邏輯是對的：如果你把 OpenClaw 接到 Telegram 或 WhatsApp，你不會希望 AI 預設就能在你的機器上跑任意指令。只是對自架使用者來說，這個預設值會讓你以為系統壞了。</p>
-<h2>第三關：Tailscale serve 的存取方式</h2>
+<h2 id="section-4">第三關：Tailscale serve 的存取方式</h2>
 <p>Tailscale serve 設好了，HTTPS 代理到 port 8789，但連不上。</p>
 <p>踩了三個坑：</p>
 <ol>
@@ -221,7 +237,7 @@
 <li><strong>瀏覽器的 Secure DNS（DoH）要關掉。</strong> 開著的話 MagicDNS 域名解析不了，因為 DoH 會繞過 Tailscale 的 DNS resolver。</li>
 </ol>
 <p>第二點最坑。<code>&quot;requires device identity&quot;</code> 這個錯誤訊息會把你引到完全錯誤的方向，讓你去研究 device auth 怎麼設定，但問題根本不在那裡。</p>
-<h2>第四關：驗證設定的陷阱</h2>
+<h2 id="section-5">第四關：驗證設定的陷阱</h2>
 <p>這是整個過程最多坑的部分。</p>
 <p>最初的想法是：我都走 Tailscale 內網了，應該不需要額外驗證。所以設了 <code>gateway.auth.mode = &quot;none&quot;</code>。Gateway 本身確實接受了這個設定，也能正常啟動。</p>
 <p>但馬上就遇到問題了。</p>
@@ -248,11 +264,11 @@
 <p><code>allowTailscale: true</code> 讓 Tailscale 連線自動信任，裝置配對會自動批准。而 <code>mode</code> 必須是 <code>&quot;token&quot;</code>——不能是 <code>&quot;none&quot;</code>。</p>
 <p>這是我花最多時間才搞懂的一件事：<strong>整個 OpenClaw 生態系的 client app 都預期 token 驗證存在。</strong> GoClaw、ClawControl、Web UI，它們的 pairing protocol 裡包含 token exchange。你把 token 拿掉，握手流程就走不完，各種 app 都會報錯。</p>
 <p>設計上 <code>&quot;none&quot;</code> 是合法的選項，大概是留給純 CLI 使用或前面自己掛 reverse proxy 做驗證的場景。但只要你接任何第三方 client，就必須有 token。這件事文件裡完全沒寫。</p>
-<h2>第五關：改了設定之後的重啟</h2>
+<h2 id="section-6">第五關：改了設定之後的重啟</h2>
 <p>改 <code>auth.mode</code> 或 <code>auth.token</code> 之後，hot reload（SIGUSR1）不夠——socket 不會 rebind，auth middleware 也不會重新初始化。需要完整的 gateway restart。</p>
 <p>但 restart 之後還有一個坑：如果你只改了 <code>openclaw.json</code> 裡的 token，gateway 重啟後會繼續用 <strong>service 裡儲存的舊 token</strong>。必須跑 <code>openclaw gateway install --force</code> 才能把新 token 同步到 LaunchAgent。</p>
 <p>這個行為有道理——config file 和 service 的 token 分開管理可以防止意外修改。但如果你不知道這件事，就會遇到「明明改了 token 但怎麼還是舊的」的靈異現象。</p>
-<h2>第六關：裝置配對</h2>
+<h2 id="section-7">第六關：裝置配對</h2>
 <p>設定都搞定了，接下來要讓手機的 GoClaw app 連上來。</p>
 <p>第一次連的時候，GoClaw 顯示 <code>&quot;Device identity required&quot;</code>。查了 gateway log，看到連線從手機的 Tailscale IP 進來，但 WebSocket 在配對握手完成之前就斷了。<code>pending.json</code> 是空的，代表配對請求根本沒成功送出。</p>
 <p>後來發現是 pending 請求<strong>五分鐘後自動過期</strong>。你不能在手機上按連線，然後慢慢去 iMac 上找指令——等你準備好，請求早就過期了。</p>
@@ -263,20 +279,20 @@
 <li>馬上回終端機執行 <code>openclaw devices approve &lt;requestId&gt;</code></li>
 </ol>
 <p>時間窗口只有五分鐘，要快。</p>
-<h2>第七關：CORS 白名單</h2>
+<h2 id="section-8">第七關：CORS 白名單</h2>
 <p>Web UI 能開了，但 MCP 工具（像 blog connector、memory）全部報 CORS 錯誤。</p>
 <p><code>controlUi.allowedOrigins</code> 試了列出具體的 origin，包括 <code>file://</code>、<code>https://claws-imac-pro.tailb20be.ts.net:8789</code>，都不行。最後只有 wildcard <code>&quot;*&quot;</code> 才能讓所有 client 正常連線。</p>
 <p>另外，外部 MCP 服務（像我的 b-log-connector）也要在自己的 CORS 白名單裡加上 OpenClaw 的 origin，否則從 OpenClaw 呼叫也會被擋。</p>
-<h2>第八關：MiniMax 的文字消失 bug</h2>
+<h2 id="section-9">第八關：MiniMax 的文字消失 bug</h2>
 <p>以上全部搞定之後，在 Web UI 上跟 MiniMax M2.5 聊天，看起來一切正常。</p>
 <p>但換到 ClawControl app 或 WhatsApp channel，AI 回覆的文字就消失了——只看到 tool call 的結果，看不到 AI 的自然語言回覆。</p>
 <p>這是 MiniMax 的已知 bug（issue #9983）：它把文字和 tool call 打包在同一個 response block 裡，OpenClaw 解析時只提取 tool block，文字就被丟掉了。Web UI 不受影響是因為它直接讀 stream，不經過同樣的解析邏輯。</p>
 <p>目前無解，只能用 Web UI，或者在需要文字回覆的場景切到其他模型。</p>
-<h2>第九關：BOOTSTRAP.md 的無限迴圈</h2>
+<h2 id="section-10">第九關：BOOTSTRAP.md 的無限迴圈</h2>
 <p>OpenClaw 的 workspace 有一個 <code>BOOTSTRAP.md</code>，是 onboarding 腳本。新裝的時候它會跑一次引導流程。</p>
 <p>問題是：跑完之後你必須<strong>手動刪除</strong> <code>BOOTSTRAP.md</code>，否則每次開新 session 都會重跑 onboarding。系統不會自動標記為已完成。</p>
 <p>這個坑不大，但很煩——你以為哪裡設定壞了，其實只是忘了刪檔案。</p>
-<h2>教訓</h2>
+<h2 id="section-11">教訓</h2>
 <ol>
 <li><p><strong>名字裡有 &quot;dangerously&quot; 的設定，真的很 dangerous。</strong> 但不是你以為的那種 dangerous——不是「不安全但能用」，是「整個系統直接壞掉」。</p>
 </li>
@@ -289,7 +305,7 @@
 <li><p><strong>CORS 就設 wildcard。</strong> 在 Tailscale 內網的情境下，精確列出 origin 沒有額外的安全價值，反而會讓各種 client 莫名其妙連不上。</p>
 </li>
 </ol>
-<h2>目前狀態</h2>
+<h2 id="section-12">目前狀態</h2>
 <p>OpenClaw 跑在 claws-iMac-Pro 上，MiniMax M2.5 處理日常任務，Claude Code CLI 包裝成內建工具作為 fallback。Gateway 透過 Tailscale serve 暴露 HTTPS，auth 用 token 模式，allowTailscale 自動批准配對。</p>
 <p>已配對六台裝置：Web UI、ClawControl、Macbook Pro、GoClaw 手機、加上兩個內部 client。MCP 工具（blog connector、memory）都正常運作。</p>
 <p>MiniMax 的文字消失 bug 還在，等上游修。其他的坑都已經填完了。</p>
@@ -301,15 +317,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">為什麼要架 OpenClaw</a></li><li><a href="#section-2">第一關：gateway.bind</a></li><li><a href="#section-3">第二關：tools.profile</a></li><li><a href="#section-4">第三關：Tailscale serve 的存取方式</a></li><li><a href="#section-5">第四關：驗證設定的陷阱</a></li><li><a href="#section-6">第五關：改了設定之後的重啟</a></li><li><a href="#section-7">第六關：裝置配對</a></li><li><a href="#section-8">第七關：CORS 白名單</a></li><li><a href="#section-9">第八關：MiniMax 的文字消失 bug</a></li><li><a href="#section-10">第九關：BOOTSTRAP.md 的無限迴圈</a></li><li><a href="#section-11">教訓</a></li><li><a href="#section-12">目前狀態</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

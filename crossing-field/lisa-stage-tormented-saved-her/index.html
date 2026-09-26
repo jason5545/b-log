@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -228,7 +244,7 @@
 
 <hr>
 <p><a id="chapter-1"></a></p>
-<h2>多年來把單飛出道這件事想太多了</h2>
+<h2 id="section-1">多年來把單飛出道這件事想太多了</h2>
 <p><strong>——這次回顧 LiSA 的歷程，讓我深刻感受到她驚人的活動量。尤其是初期發行了許多作品並巡迴演出，在 2011 年從「Girls Dead Monster」的主唱轉為單飛時，您是以什麼樣的心情一路衝刺過來的？</strong></p>
 <p>從小我就有一個夢想，就是以歌手身份單飛出道。接了「Girls Dead Monster」的工作，我明白那是配合動畫的企畫，動畫結束後就不可能繼續那個活動，是有時限的。但是，眼前的人們因為我的歌聲而感到開心，這讓我非常高興，我全力以赴地去回應。然後就收到了單飛的邀約。只是，因為多年來把單飛出道這件事想太多，出道當天、直到 CD 真的陳列在店頭前，我絕對不肯相信（笑）。</p>
 <p><strong>——為什麼無法相信呢（笑）？</strong></p>
@@ -242,7 +258,7 @@
 <p>終於第一次在店頭看到自己的 CD 時，真的很感動。「是真的」。就在那個時刻，我才終於能夠相信來找我的那些人。印著我自己臉的 CD，真的陳列在店裡。看到那個畫面的瞬間，我才第一次真實感受到，自己以單飛藝人的身份出道了。</p>
 <hr>
 <p><a id="chapter-2"></a></p>
-<h2>LiSA 本人與「L・i・S・A」</h2>
+<h2 id="section-2">LiSA 本人與「L・i・S・A」</h2>
 <p><strong>——2011 年 4 月 20 日發行迷你專輯《Letters to U》，想必感慨萬千吧？</strong></p>
 <p>有「要賣得好才行」的壓力。尤其是《Letters to U》，是結束「ガルデモ」活動後的第一張迷你專輯，沒有合作綁定或是能吸引新聽眾的明確切入點，所以我覺得一開始大概只能傳到那些一起為這次出道感到高興的人那裡。我心裡有股氣魄，要自己去推廣、要透過演唱會把這些歌曲的美好傳遞出去。我以為，「ガルデモ」聚集的人是喜歡「ガルデモ」的，我變成「LiSA」之後，那並不一定是大家想要的東西，他們可能就不跟了。那樣的話，也許會讓我出道的人失望，也許會背叛那個相信我說「你要不要出道？」的團隊，比起別的，我更害怕這件事。</p>
 <p><strong>——就在那樣的情況下，2011 年 5 月 25 日到 8 月 3 日，您很快就展開了首次單飛巡演「LiVE is Smile Always〜Letters to U〜」。包含上海在內共九場演出，您是以什麼樣的感覺面對的？</strong></p>
@@ -254,7 +270,7 @@
 <p>出道當初，自己也能讓人開心、自己也可以唱歌、自己的歌也有能讓人高興的時候，這讓我很開心，快樂的事多於痛苦的事。開始變得痛苦，是初次的武道館（2014 年 1 月 3 日「LiVE is Smile Always〜今日もいい日だっ〜」）的時候。</p>
 <hr>
 <p><a id="chapter-3"></a></p>
-<h2>讓我覺得自己選擇的路沒有走錯</h2>
+<h2 id="section-3">讓我覺得自己選擇的路沒有走錯</h2>
 <p><strong>——2011 年 11 月 23 日發行的出道單曲〈oath sign〉締造了 Oricon 第 5 名的成績，您對這個反應是什麼感覺？</strong></p>
 <p>那是動畫《Fate/Zero》的合作曲，我和製作動畫的大家一起去傳遞這首歌，以團隊一員的身份演唱主題曲。關於如何面對動畫、如何把靈魂注入動畫，我在「ガルデモ」時代就學到了。也正因如此，即使〈oath sign〉受到許多人的喜愛，我也沒有把那認為是對自己的評價，而是覺得：我盡自己所能全力去做，和作品一起傳遞出去的東西，讓大家享受了。</p>
 <p><strong>——2011 年 12 月 27 日在澀谷公會堂舉辦了「LiVE is Smile Always〜peace sign〜」。2012 年 4 月 30 日在日比谷野外大音樂堂舉辦「LiVE is Smile Always〜LOVER&quot;S&quot;MiLE〜」，2012 年 12 月 23 日在 Zepp Tokyo 舉辦「LiVE is Smile Always〜LiSA NTALAND〜」。對於從單飛初期就有如此之高的人氣，您是如何看待的？</strong></p>
@@ -264,7 +280,7 @@
 <p>尤其是我被家人反對上京，然後離家出走來到東京，所以我想讓當時反對我的人好好說一句「你出去是對的」。雖然形式變了，但受到大家接受了。在那裡，我鬆了好大一口氣。</p>
 <hr>
 <p><a id="chapter-4"></a></p>
-<h2>大家都理解了我與「LiSA」</h2>
+<h2 id="section-4">大家都理解了我與「LiSA」</h2>
 <p><strong>——2014 年 1 月 3 日在日本武道館舉辦了「LiVE is Smile Always〜今日もいい日だっ〜」。聽說對您本人來說，那是一場不如預期的演唱會？</strong></p>
 <p>初次的武道館，對我來說，那個我一直以來追求的武道館，變成了和我描繪的不一樣的東西。那是我最害怕的事。我想展現的、那個為了讓大家高興的「L・i・S・A」以外的部分、軟弱的部分，那一天以非自願的形式被看見了。我一直努力只展示自己美好的一面，這件事被看穿了。「完了！我那些丟臉的地方，全部都被看穿了！」把這些藏起來、只展示帥氣的一面，但其實我心裡一直戰戰兢兢、緊張、膽小，我沒把這些展示出去，連受傷的這一面也「完了！被發現了」，那天就是那樣的感覺。我以為來那場武道館的所有人，如果演唱會搞砸了，就會直接把周邊全部扔掉然後回家（笑）。對不起，說到這個就會掉眼淚。</p>
 <p><strong>——但是歌迷們並沒有離開，對吧？</strong></p>
@@ -272,7 +288,7 @@
 <p>我覺得大家期待 LiSA、信任 LiSA 的，不是拿出 120 分完美演唱會的能力，而是我自己全力以赴這件事本身。但是，被人需要、讓人開心，這讓我非常高興，所以我不想辜負這一切。所以，我絕對說不出「對不起，我感冒了」。因為那是我自己管理的問題，我說我可以卻做不到，我覺得對方一定會說「你說可以的啊！」然後就不再相信我了，所以說不出口。但是，大家都懂了、都理解了。</p>
 <hr>
 <p><a id="chapter-5"></a></p>
-<h2>LiSA 和歌迷共同創造的演唱會，不是很厲害嗎？</h2>
+<h2 id="section-5">LiSA 和歌迷共同創造的演唱會，不是很厲害嗎？</h2>
 <p><strong>——也正因為有了那次經歷，才意識到不必一個人扛著，這一部分也有所影響吧？</strong></p>
 <p>之後誕生了〈Rising Hope〉（2014 年 5 月 7 日發行），但要把那一切落實到那首歌裡，在我心裡花了相當長的時間。不過，那場武道館裡，大家陪著我走到了最後、一起目睹了那一天。當然，也有很多嚴厲的聲音。但是，大家為了顧及我的心情而說的那些話，讓我非常得救，也治癒了我。</p>
 <p><strong>——2014 年 11 月 1 日在台灣 THE WALL 舉辦了「〜ANOTHER GREAT DAY in Taipei〜MiNi LiVE」，那是您首次在海外舉辦的個人演出。感覺如何？</strong></p>
@@ -284,7 +300,7 @@
 <p>果然我有非常多動畫歌曲，藉由演唱這些動畫歌曲，讓我有了海外歌迷用日語一起唱的經歷。透過那個體驗，我感受到日本動畫傳遞給了非常多人，而透過作品，我們所演唱的歌曲也受到了眾多人的喜愛。我非常深刻地感受到海外歌迷對日本動畫的尊重與愛有多深厚。也正因如此，讓實際聆聽的人們享受動畫歌曲，這是其中一件事。另一件事，是讓他們享受我的演唱會。不論國家、地點、語言，大家都在享受音樂，美好的東西能傳遞出去，有趣的東西能傳達到，帶著這樣非常單純的自信。</p>
 <hr>
 <p><a id="chapter-6"></a></p>
-<h2>能夠肯定迄今為止的自己的橫濱競技場</h2>
+<h2 id="section-6">能夠肯定迄今為止的自己的橫濱競技場</h2>
 <p><strong>——在 2015 年 4 月 29 日到 10 月 15 日的「LiVE is Smile Always〜Launcher〜」途中，發生了因急性支氣管炎而住院的事。當時的心境是？</strong></p>
 <p>那也是我終生的課題，在自己的能力範圍、自己做得到的事，以及「因為開心所以想做的事」之中，「因為開心所以想做的事」總是先行一步。那有時候會超出我自己的能力範圍、體力，情緒上的「痛苦」我能克服，但身體上的「痛苦」就沒辦法克服，只能讓大家看見「對不起，我倒下了」的一面。現在，我更加細膩地照顧自己了。在旅館的度過方式、為了在演出當天拿出好的表現的行程管理、在心裡建立一個讓自己安心的環境，我把這些看得很重要。演唱會前一天吃什麼、為了作為 LiSA 拿出好的舞台而做的準備和保養，在這 15 年裡，我才慢慢開始理解，並在每個當下去面對、去做到了。</p>
 <p><strong>——2016 年 4 月 20 日到 10 月 15 日的「LiVE is Smile Always〜Hi! FiVE〜」共有 19 場演出，此後也舉辦了許多次巡演。跑完漫長巡演，在身體和嗓子的保養上一定費盡心力吧？</strong></p>
@@ -300,15 +316,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc aside-toc--cf" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">多年來把單飛出道這件事想太多了</a></li><li><a href="#section-2">LiSA 本人與「L・i・S・A」</a></li><li><a href="#section-3">讓我覺得自己選擇的路沒有走錯</a></li><li><a href="#section-4">大家都理解了我與「LiSA」</a></li><li><a href="#section-5">LiSA 和歌迷共同創造的演唱會，不是很厲害嗎？</a></li><li><a href="#section-6">能夠肯定迄今為止的自己的橫濱競技場</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

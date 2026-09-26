@@ -3,6 +3,7 @@ import {
   createRandomPostHandler,
   createThemeManager,
   initSearchUI,
+  initTocHighlight,
   initWebMcpTools,
   syncFooterYear,
 } from './shared-ui.js';
@@ -28,6 +29,7 @@ window.goToRandomPost = goToRandomPost;
 document.addEventListener('DOMContentLoaded', () => {
   ThemeManager.init();
   syncFooterYear();
+  initTocHighlight();
   initSearchUI({ onSearch: redirectToHomeWithSearch });
   initWebMcpTools({ loadCategoryMapping });
   loadCategoryMapping().catch((error) => {

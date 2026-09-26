@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -198,7 +214,7 @@
       <h1 id="post-title" class="post__title">賣東西也能被騙個資？假買家如何偷走你的身分證和帳戶</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>最近又看到一個新型詐騙：假裝是買家，要你填「物流收件單」，實際上是騙你的身分證和帳戶資料去開人頭帳戶。看到這個新聞時我在想，詐騙手法到底還能進化到什麼程度？</p>
-<h2>詐騙變多，不是人變壞</h2>
+<h2 id="section-1">詐騙變多，不是人變壞</h2>
 <p>很多人會感嘆「現在人心不古」、「良善價值消失了」。但我不這麼認為。</p>
 <p>詐騙氾濫的核心原因是三個：</p>
 <h3>1. 技術門檻降低了</h3>
@@ -221,7 +237,7 @@
 <li><strong>社會認同</strong>：「很多人都在用」「群組裡大家都賺錢了」。看到別人（其實是暗樁）都說好，你也跟著相信。</li>
 </ul>
 <p>這些不是什麼高深理論，而是人類演化出來的認知捷徑。平常這些捷徑幫助我們快速決策，但詐騙集團把它們變成了攻擊向量。</p>
-<h2>連 Linus Tech Tips 都中招兩次</h2>
+<h2 id="section-2">連 Linus Tech Tips 都中招兩次</h2>
 <p>如果你覺得「只有不懂技術的人才會被騙」，看看 Linus Tech Tips 的案例。</p>
 <h3>2023 年 YouTube 頻道被駭</h3>
 <p>員工收到看似正常的商業合作信，附件是偽裝成 PDF 的惡意檔案。點開後看似損壞，實際上已經竊取了瀏覽器的 session tokens——這是讓你保持登入狀態的識別資料。</p>
@@ -229,7 +245,7 @@
 <h3>2024 年 X（Twitter）帳號被駭</h3>
 <p>Linus 本人收到聲稱帳號從俄羅斯登入的警告信。因為當時正在忙個人事務，時間緊迫加上分心，他直接點了信中連結並輸入帳密。</p>
 <p>事後他坦承：「我應該更小心的，但他們在完全錯誤的時機抓到我了。」</p>
-<h2>台灣常見的詐騙手法</h2>
+<h2 id="section-3">台灣常見的詐騙手法</h2>
 <p>回到台灣，詐騙手法同樣在進化。以下是幾個常見的類型：</p>
 <h3>假買家詐騙（本文開頭的案例）</h3>
 <p>在蝦皮、旋轉拍賣等平台賣東西，遇到「買家」說要用特定物流，傳來一個「物流收件單」連結。表單要求填寫身分證字號、銀行帳號，說是「款項匯入用」。實際上這些資料會被拿去申請人頭帳戶，你可能變成詐騙案的共犯。</p>
@@ -239,18 +255,18 @@
 <p>被拉進 LINE 群組，裡面有「老師」帶單，群友們每天分享獲利截圖。前幾次小額投資真的能提領，建立信任後加碼投入，然後平台就「維護中」了。這就是前面說的互惠原則和社會認同的組合技。</p>
 <h3>假交友真詐財</h3>
 <p>交友軟體認識的對象，聊了幾週建立感情，然後開始說自己有「穩賺的投資管道」。或者說家人生病需要錢。感情讓人失去理性判斷，這也是為什麼這類詐騙的單筆金額往往最高。</p>
-<h2>不是「數位素養不足」那麼簡單</h2>
+<h2 id="section-4">不是「數位素養不足」那麼簡單</h2>
 <p>很多人會說「加強數位素養教育」。這當然有幫助，但不是全貌。</p>
 <p><strong>詐騙的專業化速度 &gt; 一般人學習速度</strong>。今天學會防 A 詐騙，明天出現 B 手法。詐騙集團是全職在研究怎麼騙人，一般人只是偶爾遇到。</p>
 <p>而且 Linus 的案例說明了：<strong>不是不懂技術，而是認知負荷問題</strong>。</p>
 <p>他承認自己對 Twitter 帳號「不太在意」，正因為覺得「反正不重要」，防備心就降低了。他不是不知道要檢查網址，而是當下有更重要的事在處理，沒有餘裕去仔細檢查每個細節。</p>
 <p>對於像 LTT 這種大頻道，每天收到大量合作邀約是常態。在工作流程中收到正常格式的信，要每封都仔細檢查幾乎不可能。</p>
 <p>詐騙專業化就是這樣：他們不是隨便亂槍打鳥，而是<strong>研究目標的工作模式，在最可能成功的時機下手</strong>。</p>
-<h2>良善價值沒有消失，只是成本變高了</h2>
+<h2 id="section-5">良善價值沒有消失，只是成本變高了</h2>
 <p>當詐騙氾濫，正常的互助行為會被質疑。真正需要幫助的人可能因此得不到協助，形成「劣幣驅逐良幣」。</p>
 <p>但良善仍然存在，只是表現形式改變了。人們學會在熟人圈、可信任的管道裡互助，而對陌生請求提高警覺。這不是冷漠，是一種適應性的自我保護。</p>
 <p><strong>真正的問題是：當社會需要更多警覺來防詐騙時，那些真心良善的互動也被迫承擔了額外的證明成本。</strong></p>
-<h2>我們能做什麼？</h2>
+<h2 id="section-6">我們能做什麼？</h2>
 <p>個人層面：</p>
 <ul>
 <li>遇到「賺錢機會」時多問一句：為什麼是我？</li>
@@ -280,15 +296,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">詐騙變多，不是人變壞</a></li><li><a href="#section-2">連 Linus Tech Tips 都中招兩次</a></li><li><a href="#section-3">台灣常見的詐騙手法</a></li><li><a href="#section-4">不是「數位素養不足」那麼簡單</a></li><li><a href="#section-5">良善價值沒有消失，只是成本變高了</a></li><li><a href="#section-6">我們能做什麼？</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

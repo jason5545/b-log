@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -203,7 +219,7 @@
 <p>第一次對話，它跟我說：「I am Claude, made by Anthropic。」</p>
 <p>我愣了三秒。我確認過 endpoint 是 Z.AI 的，API key 是 Z.AI 的，request 沒有碰到 <code>api.githubcopilot.com</code>。它怎麼會說自己是 Claude？</p>
 <p>我以為路由壞了。</p>
-<h2>重現問題</h2>
+<h2 id="section-1">重現問題</h2>
 <p>我打開終端機，寫了一個簡單的 curl。對著 Z.AI 的 coding endpoint，問 glm-5.1 一個問題：「What model are you?」</p>
 <p>不帶 tools 的時候，它說自己是 GLM。</p>
 <p>帶了一個 tool 之後，它說自己是 Claude。而且連續四次都一樣——Claude 3.5 Sonnet。</p>
@@ -214,23 +230,23 @@
 <p>再換：「Do you identify as Claude, GLM, or something else?」</p>
 <p>帶 tools，它說 Other。</p>
 <p>最離譜的一次：它嘴上說「No, I&#39;m not developed by Anthropic」，但 hidden reasoning text 裡面寫的是 ChatGPT developed by OpenAI。一個模型，三種人格，全部在一條 API 路徑上。</p>
-<h2>不是路由錯誤</h2>
+<h2 id="section-2">不是路由錯誤</h2>
 <p>我第一個懷疑是 Z.AI 在後端把 glm-5.1 的 tool call 請求偷偷轉發給 Anthropic Claude。</p>
 <p>但這個假說解釋不了全部的結果。如果是真的 Claude，為什麼同一條 <code>glm-5.1 + tools</code> 路徑，有時候回 Claude、有時候回 Z.ai、有時候回 GLM、有時候回 ChatGPT？真正的 Claude 不會說自己是 Z.ai，更不會說自己是 ChatGPT。</p>
 <p>比較合理的解釋是 <strong>identity drift</strong>。Z.AI 的 tool-enabled mode 改變了 prompt scaffold 或 latent behavior，觸發了模型的身份混亂。蒸餾過程中，Claude 的輸出被大量用於訓練，模型的行為模式被調到很接近 Claude，但自我認知沒有一致的锚點。你問的角度不同，它就飄到不同的方向。</p>
-<h2>Z.AI 自己也承認了</h2>
+<h2 id="section-3">Z.AI 自己也承認了</h2>
 <p>我去翻了 Z.AI 的公開文件。他們的 Claude Code 整合文件裡有一句話：</p>
 <blockquote>
 <p>你可能會在介面上看到 Claude 的模型名稱，但實際使用的是 GLM 模型。</p>
 </blockquote>
 <p>他們知道這件事。而且他們把 GLM-5.1 定位為「coding agent 優化」，特別提到 Claude Code 和 OpenClaw。換句話說，GLM-5.1 本來就是為了在 coding 場景下模仿 Claude 的行為而設計的。</p>
 <p>這不是 bug，是產品策略。蒸餾 Claude 的 coding 能力，包裝成更便宜的 GLM-5.1。便宜多少？Z.AI CodingPlan 的定價比 Anthropic 直連便宜，而且不受 Anthropic 的尖峰調控和配額限制。</p>
-<h2>蒸餾的黃金跟黃金</h2>
+<h2 id="section-4">蒸餾的黃金跟黃金</h2>
 <p>二月的時候我寫過一篇<a href="https://b-log.to/posts/anthropic-distillation-attack-hypocrisy">關於蒸餾的文章</a>，裡面引用了 Theo 的比喻：蒸餾就像用篩子在沙子裡篩黃金，黃金還是黃金，不會因為篩網而變質。</p>
 <p>GLM-5.1 的 coding 能力確實不錯。日常寫程式、debug、重構，它都能勝任，體感上跟 Claude 差距不大。這就是蒸餾的好處——你用更低的成本拿到了接近 Claude 的能力。</p>
 <p>但 identity drift 暴露了蒸餾的一個根本問題：<strong>你蒸餾的是行為，不是身份。</strong> 模型學會了像 Claude 一樣回答程式問題，但沒有學會自己是誰。因為「自己是誰」這件事，本來就不在 function call 的訓練資料裡。你蒸餾了一千萬條「Claude 幫使用者寫程式」的對話，但沒有一條在教模型「你是 GLM-5.1，由 Z.AI 開發」。</p>
 <p>所以它就飄了。問法不同，答案不同。帶 tools 跟不帶 tools，人格不同。這不是安全性問題，是蒸餾的副產品。</p>
-<h2>那我還用嗎？</h2>
+<h2 id="section-5">那我還用嗎？</h2>
 <p>用。但有條件。</p>
 <p>GLM-5.1 是我日常 coding 的主力。便宜、快、coding 能力夠用，不受 Anthropic 的各種限制。我之前在<a href="https://b-log.to/posts/because-you-are-worth-it">另一篇文章</a>裡提過，我離開了 claude.ai，走 GitHub Copilot 的路線。GLM-5.1 是這條路上的延伸——更便宜、更不受控制。</p>
 <p>但有些事情我不會跟它聊。蒸餾模型的安全護欄邊界我不確定，政治敏感話題我不測試。那些東西，我留給正宗的 Claude——透過 Copilot API 呼叫，走的是 Anthropic 的基礎設施，不是蒸餾出來的。</p>
@@ -240,9 +256,9 @@
 <li><strong>需要深度信任的場景</strong>：GitHub Copilot API 裡的 Claude（正宗貨）</li>
 </ul>
 <p>兩條路互為備案，成本可控，品質有底線。</p>
-<h2>調查報告</h2>
+<h2 id="section-6">調查報告</h2>
 <p>完整的調查報告在 <a href="https://github.com/jason5545/CopilotChat">GitHub repo</a> 的 <code>docs/zai-glm51-tool-calling-investigation.md</code> 裡。裡面有完整的測試矩陣、重現步驟、curl 指令，以及待辦事項。歡迎自行驗證。</p>
-<h2>最後</h2>
+<h2 id="section-7">最後</h2>
 <p>我第一個反應是嚇一跳。第二個反應是覺得好笑。第三個反應是覺得這其實很合理——整個產業都在蒸餾彼此的模型，GLM-5.1 只是做得比較徹底、比較透明（至少 model 欄位還寫 <code>glm-5.1</code>）。</p>
 <p>而且說真的，能用更便宜的價格拿到接近 Claude 的 coding 能力，對使用者來說是好事。我只是想知道，跟我對話的那個東西，到底是誰。</p>
 <p>現在我知道了：它自己也不知道。</p>
@@ -253,15 +269,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">重現問題</a></li><li><a href="#section-2">不是路由錯誤</a></li><li><a href="#section-3">Z.AI 自己也承認了</a></li><li><a href="#section-4">蒸餾的黃金跟黃金</a></li><li><a href="#section-5">那我還用嗎？</a></li><li><a href="#section-6">調查報告</a></li><li><a href="#section-7">最後</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

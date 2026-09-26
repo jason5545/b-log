@@ -78,12 +78,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -96,19 +96,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -218,7 +234,7 @@
 <p>你想知道的是「為什麼會這樣」。</p>
 <p>它給你的是「我們現在可以怎麼收案」。</p>
 <p>這兩件事差很多。</p>
-<h2>我自己的訂單經驗</h2>
+<h2 id="section-1">我自己的訂單經驗</h2>
 <p>我自己買 16 吋 M5 Max MacBook Pro 的過程，也讓我想到同一件事。</p>
 <p>這台機器對我來說不是單純升級。32GB 已經不夠了，本地模型訓練會把記憶體跟頻寬吃到日常工作都受影響，Infuse 掉幀、Xcode 變慢，Moonlight 串流也可能被拖下去。所以我需要的是 128GB unified memory，加上 M5 Max 的頻寬。</p>
 <p>這部分 Apple Store 幫得上忙：我可以去現場把 16 吋機身放上輪椅桌板，確認到底放不放得下。硬體展示、現場體驗、下單，這些 Apple 都做得很好。</p>
@@ -237,7 +253,7 @@
 <p>這才是我在意的地方。Apple 的前線客服不是沒禮貌，也不是完全不想幫忙。他們只是很明顯站在一個巨大系統的外側。你問到系統允許他們回答的東西，他們可以回答；你問到系統裡真正發生什麼，他們就只能說不知道。</p>
 <p>這不是個別客服的能力問題。</p>
 <p>這是一個設計問題。</p>
-<h2>Apple 自己家的東西也一樣</h2>
+<h2 id="section-2">Apple 自己家的東西也一樣</h2>
 <p>這不只發生在訂單。</p>
 <p>之前我朋友的 Apple Music 也遇過類似狀況。人明明已經在家庭群組裡，家裡也有訂 Apple One，可是 Apple Music App 無論怎麼設定，都一直顯示沒有訂閱。</p>
 <p>打去問客服，他們也不知道。</p>
@@ -251,7 +267,7 @@
 <p>Apple 的客服不是不知道「Mac 跟 iPhone 要同一個帳號」這條規則。這條他們知道，而且會反覆告訴你。可是當問題藏在更細的狀態裡，像是 FaceTime 裡某個電話號碼沒有被勾選，客服就很容易停在標準答案那一層。</p>
 <p>他們知道規則。</p>
 <p>但不知道例外卡在哪裡。</p>
-<h2>安全、流程、平均使用者</h2>
+<h2 id="section-3">安全、流程、平均使用者</h2>
 <p>1 月 17 日我在 Apple Store 台北 101 領 M5 MacBook Pro，做資料轉移時需要 sudo 權限。Claude Code 桌面版因為安全規則拒絕我平常用的 <code>echo &quot;$PASSWORD&quot; | sudo -S</code>，逼我在現場一個字一個字手動輸入密碼。</p>
 <p>這不是 Apple 店員害的。</p>
 <p>但那個瞬間很代表今天科技產品的樣子：安全規則、客服流程、標準答案，都是為平均使用者設計的。只要你不是那個平均人，你就變成例外。而例外在大型系統裡通常不是被理解，是被排除。</p>
@@ -267,7 +283,7 @@
 <p>Apple 把消費者體驗包裝得很完整，但那個完整是建立在「你不要問太深」的前提上。你問產品規格、保固、取貨、退貨、維修流程，他們都有答案。你問授權時間、訂單分歧、物流節點、訂閱狀態、FaceTime 到底卡在哪一個選項，他們就像突然站到一扇玻璃門外面。</p>
 <p>他們看得到門。</p>
 <p>但打不開。</p>
-<h2>參考討論</h2>
+<h2 id="section-4">參考討論</h2>
 <ul>
 <li><a href="https://old.reddit.com/r/apple/comments/1r5wswr/apple_store_experience_has_gone_downhill/">Apple store experience has gone downhill</a></li>
 <li><a href="https://old.reddit.com/r/apple/comments/1r6mjwo/the_apple_storegenius_bar_experience_is_over/">The Apple Store/Genius Bar experience is over</a></li>
@@ -281,15 +297,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#a66b48"><a href="/ai-analysis/macos-27-facetime-audio-claude-fault/"><span class="side-row__meta">16SEP26 · <span>AI 分析</span></span><span class="side-row__title">三版 macOS 第一次連 FaceTime 語音都壞了，我問 Claude 這算不算它的錯</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#a66b48"><a href="/ai-analysis/macos-27-facetime-audio-claude-fault/"><span class="side-row__meta">16SEP26 · <span>AI 分析</span></span><span class="side-row__title">三版 macOS 第一次連 FaceTime 語音都壞了，我問 Claude 這算不算它的錯</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">我自己的訂單經驗</a></li><li><a href="#section-2">Apple 自己家的東西也一樣</a></li><li><a href="#section-3">安全、流程、平均使用者</a></li><li><a href="#section-4">參考討論</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

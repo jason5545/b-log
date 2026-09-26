@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -207,7 +223,7 @@
 <p>BLE 很誠實。能寫就是能寫，不能寫就回錯。真正麻煩的是 macOS：System Settings 顯示已經授權，程式卻還是拿不到權限；menu bar 顯示 grabbed，event tap 卻說 released；裝置看起來連上了，但 mode 還停在上一個狀態。</p>
 <p>這種問題最討厭的地方，是它看起來像已經好了。</p>
 <p>相關背景：<a href="https://b-log.to/tech-development/unified-remote-evo-development-journey/">Unified Remote Evo - 從遙控器到多功能輸入裝置的開發之旅</a></p>
-<h2>AES 過了，但 F80F 不能寫</h2>
+<h2 id="section-1">AES 過了，但 F80F 不能寫</h2>
 <p>最早的 log 是這樣：</p>
 <pre><code class="language-text">AES sent
 warn write f80f failed
@@ -223,7 +239,7 @@ write is not permitted
 </code></pre>
 <p>這一刻 BLE 主線其實已經活了。</p>
 <p>但 app 還沒有。</p>
-<h2>CLI 不該偷偷啟動 menu app</h2>
+<h2 id="section-2">CLI 不該偷偷啟動 menu app</h2>
 <p>我後來加了 CLI：</p>
 <pre><code class="language-bash">UnifiedRemoteEvoMac --cli scan
 UnifiedRemoteEvoMac --cli connect
@@ -236,7 +252,7 @@ UnifiedRemoteEvoMac --cli move --dx 0 --dy 20
 <p>所以後來把 <code>@main</code> 移到新的 entry point，先判斷 <code>--cli</code>。如果是 CLI，就只跑 BLE runner，不建立 SwiftUI app，不啟動 event tap，不碰 Accessibility。</p>
 <p>這一步很重要。</p>
 <p>因為測試不乾淨時，你會一直懷疑錯地方。你以為 BLE 還有問題，其實是另一條 input permission 流程一起進來亂。</p>
-<h2>System Settings 的 on，不等於 TCC 的 yes</h2>
+<h2 id="section-3">System Settings 的 on，不等於 TCC 的 yes</h2>
 <p>menu app 真正麻煩的是權限。</p>
 <p>System Settings 裡，Accessibility 顯示 <code>UnifiedRemoteEvoMac</code> 是 on。Input Monitoring 也看起來有一列。</p>
 <p>但同一個 app bundle 裡跑 CLI 查 API：</p>
@@ -265,7 +281,7 @@ tccutil reset ListenEvent com.jason5545.UnifiedRemoteEvo
 <p>這次 System Settings 裡那列變成 off。</p>
 <p>這其實是好消息。
 那表示它終於不是快取出來的假 on。</p>
-<h2>menu bar 沒出現，後來查到 bundle identity 混在一起</h2>
+<h2 id="section-4">menu bar 沒出現，後來查到 bundle identity 混在一起</h2>
 <p>這段是後來才真的確認。</p>
 <p>那時候最該被相信的，其實是這句話：</p>
 <pre><code class="language-text">our initial push was working
@@ -302,7 +318,7 @@ tccutil reset ListenEvent com.jason5545.UnifiedRemoteEvo
 <p>這也是為什麼後來不能只叫使用者去 System Settings 再打開一次。</p>
 <p>那只是把某一列開成 on。
 但真正要修的是：選定一個固定的正式 bundle id，清掉舊身份，讓 <code>/Applications</code> 裡那一份成為唯一被系統認得的 app。</p>
-<h2>權限要分兩段要求</h2>
+<h2 id="section-5">權限要分兩段要求</h2>
 <p>menu app 啟動時要自動把自己加進權限清單，但不能一次把 Accessibility 和 Input Monitoring 都丟出去。</p>
 <p>實際跑下來，macOS 比較像要這樣：</p>
 <ol>
@@ -323,7 +339,7 @@ tccutil reset ListenEvent com.jason5545.UnifiedRemoteEvo
 Input Monitoring trusted: yes
 </code></pre>
 <p>到這裡，macOS 才是真的把這個 app 當成被允許的程式。</p>
-<h2>Grabbed 不能只相信 UI</h2>
+<h2 id="section-6">Grabbed 不能只相信 UI</h2>
 <p>後面又遇到一個更小，但更容易讓人不信任 app 的問題。</p>
 <p>Grab section 顯示 grabbed。
 Status 裡 Input tap 卻顯示：</p>
@@ -343,7 +359,7 @@ Status 裡 Input tap 卻顯示：</p>
 <p>這裡表面上改的是 Combine。
 我要修的是狀態不要各說各話。</p>
 <p>UI 覺得 grabbed、event tap 覺得 released、BLE connection 又是另一個狀態，這種 app 很快就會變成「看起來有在動，但你不知道它現在到底在哪裡」。</p>
-<h2>連上後一定要回到鍵盤滑鼠</h2>
+<h2 id="section-7">連上後一定要回到鍵盤滑鼠</h2>
 <p>EmulStick 可以是 Xbox 360 mode，也可以是 keyboard / mouse composite mode。</p>
 <p>我原本以為連線後送一次 KB / Mouse 就夠了。CLI 也讀回成功。</p>
 <p>但 menu app 實際用起來，還是會遇到需要手動點 KB / Mouse 才同步的狀況。這代表「送出指令」跟「裝置真的進入那個模式」中間還有一段不可靠。</p>
@@ -364,7 +380,7 @@ Connected: EmulStick / mode=鍵盤/滑鼠
 <p>這才是我想要的狀態。</p>
 <p>不是按鈕看起來在 KB / Mouse。
 是 EmulStick 自己回報它在 KB / Mouse。</p>
-<h2>最後在確認的是「到底是不是真的」</h2>
+<h2 id="section-8">最後在確認的是「到底是不是真的」</h2>
 <p>這趟最花時間的地方，不在 AES，也不在 HID report。</p>
 <p>硬體那邊反而很乾脆。Android 版比對一下，補 <code>writeWithoutResponse</code> fallback，CLI 測一下，事情就往前走。</p>
 <p>麻煩集中在 macOS 這邊。</p>
@@ -389,15 +405,20 @@ AppModel 確認 UI 和 event tap 用同一個狀態。</p>
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">AES 過了，但 F80F 不能寫</a></li><li><a href="#section-2">CLI 不該偷偷啟動 menu app</a></li><li><a href="#section-3">System Settings 的 on，不等於 TCC 的 yes</a></li><li><a href="#section-4">menu bar 沒出現，後來查到 bundle identity 混在一起</a></li><li><a href="#section-5">權限要分兩段要求</a></li><li><a href="#section-6">Grabbed 不能只相信 UI</a></li><li><a href="#section-7">連上後一定要回到鍵盤滑鼠</a></li><li><a href="#section-8">最後在確認的是「到底是不是真的」</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -202,11 +218,11 @@
       <div id="post-content" class="post__body article-body" data-prerendered="true"><blockquote>
 <p>「勇敢去愛現在的當下」— LiSA</p>
 </blockquote>
-<h2>一切從質疑開始</h2>
+<h2 id="section-1">一切從質疑開始</h2>
 <p>「宗教到底是什麼意義？到頭來還不是得靠自己？」</p>
 <p>這個問題聽起來像是挑釁，但其實是很誠實的困惑。當你遇到困境時，禱告不會讓你的腿自己站起來，神明不會替你做決策，也不會代替你承受後果。該面對的困境，最後還是得自己扛。</p>
 <p>那宗教還有什麼意義？</p>
-<h2>宗教的實用功能</h2>
+<h2 id="section-2">宗教的實用功能</h2>
 <p>如果把宗教當作一種「工具」來看，它提供的不是解決問題的能力，而是幾種心理和社會功能：</p>
 <p><strong>心理支撐：意義框架的建構</strong></p>
 <p>在無力改變現實時，宗教給你一個「意義框架」來承受痛苦。這不是自我欺騙，而是認知重構。同樣失去親人，「他去了更好的地方」比「他就這樣消失了」更容易承受。同樣的困境，有框架解釋會比完全虛無好受一些。</p>
@@ -221,7 +237,7 @@
 <p>生老病死這些重大時刻，儀式幫助人標記轉折、處理情緒。婚禮不只是兩個人決定在一起，而是透過儀式讓這個決定變得「神聖」。葬禮不只是處理遺體，而是透過儀式讓生者完成告別。</p>
 <p>儀式創造了一個「特殊的時刻」，讓你能夠投入情感，然後繼續前進。</p>
 <p><strong>核心問題：這些功能一定要透過宗教才能取得嗎？</strong></p>
-<h2>非宗教的替代品：一個案例</h2>
+<h2 id="section-3">非宗教的替代品：一個案例</h2>
 <p>2015 年三月，我在 YouTube 上無意間點開了 LiSA 的日比谷 Live 影片。影片中的她一開口就把我吸住了。看到一半我就決定：有機會一定要去看一次現場。</p>
 <p>查了資料才發現，LiSA 在同年七月要來台灣開演唱會，而且是首次在台灣舉辦 full band 演出。</p>
 <p>說也奇怪，小時候的演唱會夢想拖了好幾年都未曾實現，這次居然有很大的動力去實現它。我打電話給售票公司，一開始因為「站位可能有危險」被拒絕，但我不甘心，隔天又打去煩了兩個多小時，終於買到票。</p>
@@ -237,7 +253,7 @@
 <strong>意義框架</strong> — 「奮不顧身」這句話讓所有付出和困難都有了價值
 <strong>儀式感</strong> — 演唱會本身就是儀式，全身心投入的證明是隔天的無力</p>
 <p><strong>但最關鍵的差別在於：宗教承諾「彼岸的救贖」，LiSA 給我的是「此刻的活著」。</strong></p>
-<h2>彼岸救贖的虛構性</h2>
+<h2 id="section-4">彼岸救贖的虛構性</h2>
 <p>LiSA 的演唱會有確切日期和地點，天堂沒有。這是關鍵差別。</p>
 <p>深入討論「彼岸救贖」，客觀來說極虛：</p>
 <h3>無法驗證的承諾</h3>
@@ -279,7 +295,7 @@
 <h3>與現實承諾的對比</h3>
 <p>追 LiSA 的過程裡，「三個多月的等待」也是延遲滿足，但我知道演唱會確定會發生。我可以看到票、看到宣傳、知道日期地點。這是可驗證的承諾。</p>
 <p>宗教承諾的是「不確定會不會發生的救贖」，而且驗證期限是「死後」。這兩者的性質完全不同。</p>
-<h2>現實主義的立場</h2>
+<h2 id="section-5">現實主義的立場</h2>
 <p>所以我的立場很清楚：我偏現實主義，而且是<strong>實用主義導向的現實主義</strong>。</p>
 <h3>此刻可驗證的真實</h3>
 <p>我的力量來自「此刻可驗證的事物」：</p>
@@ -304,7 +320,7 @@
 <li>每天和照顧者的互動，這是意義</li>
 </ul>
 <p><strong>意義不在彼岸，意義在此刻。</strong></p>
-<h2>但同時保持尊重</h2>
+<h2 id="section-6">但同時保持尊重</h2>
 <p>說完這些，我必須強調：<strong>我不看不起需要宗教的人。</strong></p>
 <h3>批判容易，尊重很難</h3>
 <p>批判虛構很容易，尊重需要虛構的人很難。很多現實主義者會陷入優越感 — 「我看穿了，你們還在被騙。」但這種態度本身就是傲慢。</p>
@@ -326,7 +342,7 @@
 <p>我仍然認為彼岸救贖很虛，我不會選擇這條路，我也會指出它的問題和風險。但我不會說「信宗教的人都是笨蛋」或「你們被洗腦了」。</p>
 <p><strong>人的處境不同，需要的工具就不同。</strong> 我有 LiSA 和開發專案，別人可能只有禱告。都是在各自的條件下，找到繼續活下去的理由。</p>
 <p>這種尊重不是虛偽的政治正確，而是真正理解到：我之所以能選擇現實主義，是因為我的現實條件允許。不是所有人都有這個選項。</p>
-<h2>結語：清醒且溫和</h2>
+<h2 id="section-7">結語：清醒且溫和</h2>
 <p>回到最初的問題：「宗教到底是什麼意義？到頭來還不是得靠自己？」</p>
 <p>答案是：對，最後確實得靠自己。但宗教提供的是心理工具，不是實際解決方案。它的意義在於：讓某些人能夠「靠自己」撐下去。</p>
 <p><strong>彼岸救贖客觀很虛，但主觀有用。</strong></p>
@@ -343,15 +359,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">一切從質疑開始</a></li><li><a href="#section-2">宗教的實用功能</a></li><li><a href="#section-3">非宗教的替代品：一個案例</a></li><li><a href="#section-4">彼岸救贖的虛構性</a></li><li><a href="#section-5">現實主義的立場</a></li><li><a href="#section-6">但同時保持尊重</a></li><li><a href="#section-7">結語：清醒且溫和</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

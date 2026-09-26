@@ -79,12 +79,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -97,19 +97,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -203,7 +219,7 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">一張 Logo 圖片擋了所有人兩年：逆向台北市復康巴士登入機制</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>背景</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">背景</h2>
 <p>我是重度身障者，日常出行靠台北市的復康巴士。訂車要透過一個 15 年以上的 JSP 網站：<code>0809080650.gov.taipei</code>。</p>
 <p>我做這件事的動機很單純：<strong>讓自己能順利去上班，而且不會忘記訂車。</strong> 沒有其他意圖，沒有要搶占資源，也沒有要破壞任何系統。</p>
 <p>理想情況下，這件事根本不需要自己動手。如果政府能提供批次預約或自動排程功能，我完全不需要走這條路。我也確實去問過——台北市目前的立場是，只有高中生有所謂的「特教專案」可以申請固定排車，其他身障者一律沒有，而且這項政策 20 年來從未改過。每次出行都要自己手動訂。</p>
@@ -212,7 +228,7 @@
 <p>所以我想做一件看起來很簡單的事：<strong>用 curl 或 Python 登入這個網站。</strong></p>
 <p>表單只有兩個欄位——帳號和密碼，POST 到 <code>/</code>。沒有 CSRF token，沒有隱藏欄位。前端 JS 只是 <code>setTimeout</code> 延遲兩秒後 <code>form.submit()</code>。看起來是隨便一個 <code>curl -d</code> 就能解決的事。</p>
 <p>事實證明不是。</p>
-<h2>12 種方法，全部失敗</h2>
+<h2 id="section-2">12 種方法，全部失敗</h2>
 <p>兩年前已經有人研究過這個問題，結論是放棄。我接手之後，又花了幾個月，試了以下所有方法：</p>
 <table>
 <thead>
@@ -284,14 +300,14 @@
 </tr>
 </tbody></table>
 <p>每一次「失敗」都長一樣：伺服器返回 7655 bytes 的登入頁面，<code>Server-Timing: total;dur=5.xxx</code>，連 SQL 查詢都沒跑到。密碼對或錯，回應完全一樣——<strong>伺服器在驗證密碼之前就把請求擋掉了。</strong></p>
-<h2>把所有人帶偏的線索</h2>
+<h2 id="section-3">把所有人帶偏的線索</h2>
 <p>這個問題最棘手的地方不是答案有多複雜，而是所有線索都指向錯誤的方向。</p>
 <p><strong>線索一：瀏覽器的 fetch() 也能成功。</strong> 在 Chrome console 裡執行最簡單的 <code>fetch(&#39;/&#39;, {method: &#39;POST&#39;, body: &#39;ac=...&amp;ps=...&#39;})</code> ，不加任何額外 header，100% 成功。這排除了「伺服器檢查特定 header」的可能性——至少看起來是這樣。</p>
 <p><strong>線索二：curl_cffi 也失敗。</strong> curl_cffi 可以模擬 Chrome 的 TLS 指紋（JA3），理論上能騙過 TLS 層的檢測。它也失敗了。這讓所有人都覺得問題不在 TLS 層。</p>
 <p><strong>線索三：Server-Timing 的誤導。</strong> 失敗時伺服器回傳 <code>total;dur=5.xxx</code>——整整 5 秒的處理時間。5 秒很長，讓人直覺以為伺服器在做某種複雜的驗證。但成功時只有不到 2 秒。失敗反而比成功慢，這不合理。</p>
 <p><strong>線索四：TLS 憑證本身就壞的。</strong> 這個網站的 SSL 憑證缺少 Subject Key Identifier，所有工具都需要 <code>--insecure</code> 或 <code>verify=False</code> 才連得上。一個連 TLS 憑證都搞不好的系統，怎麼可能有 TLS 指紋檢測？</p>
 <p>這四條線索把所有人的注意力都拉到了 TLS 層和 HTTP header 層。但答案不在那裡。</p>
-<h2>突破口</h2>
+<h2 id="section-4">突破口</h2>
 <p>在幾乎要放棄的時候，我決定試最笨的方法：<strong>完整模擬瀏覽器載入頁面的整個過程。</strong></p>
 <p>不只是 POST 登入表單，而是先 GET 首頁、載入所有 JS、CSS、圖片、等幾秒、然後再 POST。如果真實瀏覽器就是這樣做的，那我也照做。</p>
 <pre><code class="language-python">s = requests.Session()
@@ -312,7 +328,7 @@ r = s.post(&#39;https://0809080650.gov.taipei/&#39;,
 <p><strong>登入成功了。</strong></p>
 <p><code>Server-Timing</code> 第一次出現了 <code>desc=&quot;0 sql&quot;</code>——伺服器終於去查密碼了。回應從 7655 bytes 變成 2122 bytes，302 重定向到 <code>index2.jsp</code>，頁面上顯示我的名字。</p>
 <p>兩年的謎題，第一次看到曙光。</p>
-<h2>縮小範圍</h2>
+<h2 id="section-5">縮小範圍</h2>
 <p>知道「載入全部資源」能成功之後，下一步是找出最小必要條件。我把 13 個資源一個一個單獨測試：</p>
 <table>
 <thead>
@@ -388,7 +404,7 @@ r = s.post(&#39;https://0809080650.gov.taipei/&#39;,
 <li>Sec-Fetch-*：不需要。</li>
 <li><strong>Referer：必須。</strong></li>
 </ul>
-<h2>完整的機制</h2>
+<h2 id="section-6">完整的機制</h2>
 <p>伺服器的防機器人檢查有三道，缺一不可：</p>
 <ol>
 <li><strong>GET /img2.gif</strong> — 登入頁的 logo 是 server-side 的 web beacon。載入時在 session 設 flag 並記錄時間戳。</li>
@@ -405,13 +421,13 @@ curl -k -s -b cookies.txt -c cookies.txt \
   -L https://0809080650.gov.taipei/
 </code></pre>
 <p>四行。不需要 Selenium，不需要 Puppeteer，不需要真實瀏覽器。</p>
-<h2>為什麼它擋了所有人兩年</h2>
+<h2 id="section-7">為什麼它擋了所有人兩年</h2>
 <p>事後來看，這三道檢查在技術上極其簡單。一個寫死的檔名、一個計時器、一個 header。但它有效地擋住了所有人兩年以上，原因是：</p>
 <p><strong>它不在任何 checklist 上。</strong></p>
 <p>標準的逆向工程流程是：看 headers → 看 cookies → 看 TLS 指紋 → 看 JS 混淆。沒有人會想到「試試載入頁面上的圖片」。這不是任何 WAF 產品的功能，不是任何安全框架的模式，可能就是某個工程師十五年前隨手寫的。</p>
 <p>而且 Server-Timing 的 5 秒誤導非常致命。它讓人覺得伺服器在做複雜的驗證，把注意力拉到 TLS 和連線層。但那 5 秒大概只是 Tomcat 在等 timeout。</p>
 <p>最諷刺的是：一個連 TLS 憑證都搞不好的系統，用一張 logo 圖片擋住了 curl_cffi 這種專門模擬 TLS 指紋的工具。所有人都在研究高深的加密層差異，答案卻是最樸素的 HTTP GET。</p>
-<h2>對這個防護的看法</h2>
+<h2 id="section-8">對這個防護的看法</h2>
 <p>這不是好的安全設計。沒有隨機性、沒有 CSRF token、密碼是身分證後六碼。Server-Timing header 直接洩漏後端架構。一旦知道答案，永久失效。</p>
 <p>但它完成了它的任務。這個系統服務的是身障者訂車，它的威脅模型不是防駭客，是防有人寫 script 搶車位。從這個角度看，一個零成本、零維護、不增加使用者操作負擔的機制，擋了所有 casual 嘗試兩年以上——投資報酬率高得離譜。</p>
 <p>真正有趣的是，它的安全性不是來自設計的精巧，而是來自<strong>意外的非典型性</strong>。傳統的 security by obscurity 是刻意隱藏機制，這個是機制本身太平凡、太不起眼，以至於沒人想得到。</p>
@@ -423,15 +439,20 @@ curl -k -s -b cookies.txt -c cookies.txt \
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">背景</a></li><li><a href="#section-2">12 種方法，全部失敗</a></li><li><a href="#section-3">把所有人帶偏的線索</a></li><li><a href="#section-4">突破口</a></li><li><a href="#section-5">縮小範圍</a></li><li><a href="#section-6">完整的機制</a></li><li><a href="#section-7">為什麼它擋了所有人兩年</a></li><li><a href="#section-8">對這個防護的看法</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -213,7 +229,7 @@
 <p>我現在覺得，這句話沒有說錯。只是「幸運」很容易把整條路壓成一個偶然。</p>
 <p>我不能反過來宣稱「我救了她的命」。沒有人知道如果那天沒有做攝影，這顆腫瘤後來會怎麼發展。反事實永遠沒有答案。</p>
 <p>可以確定的是：沒有那次篩檢，它不會在 0.7 公分的時候被找到。而她本來就是沒有症狀不進醫院的人。</p>
-<h2>如果那天不在台北</h2>
+<h2 id="section-1">如果那天不在台北</h2>
 <p>她是菲律賓人，來台灣之前住在 Zamboanga del Sur 的 Pagadian。</p>
 <p>我後來一直在想：同一個人，同一顆腫瘤，如果那天她還住在 Pagadian，故事會怎麼走？</p>
 <p>菲律賓現在不是完全沒有資源。PhilHealth 在 2024 年把乳癌 Z Benefit 的最高給付從 ₱100,000 提高到 ₱1.4M，範圍從檢查、手術、化療、荷爾蒙治療到標靶治療與追蹤都有。其中最大的部分是 Trastuzumab 標靶治療，最多十八個療程。<a href="https://www.philhealth.gov.ph/news/up/article/2024/news_662705cc8e1ef.php">最高額度直接拉高了十三倍。</a></p>
@@ -225,13 +241,13 @@
 <p>給付是寫在規則裡的。院所也開始出現了。但是一個覺得自己沒病的人，會不會在沒有任何症狀時，自己去找到 YAKAP、查名單、掛號，然後走進攝影室？</p>
 <p>以她的習慣，答案很可能是不會。</p>
 <p>台北那輛車做的事，是把篩檢從「她應該自己去找」，變成「就在她經過的地方」。台灣目前的公費政策是 <a href="https://www.hpa.gov.tw/Pages/List.aspx?nodeid=199">40 至 74 歲女性每兩年一次乳房攝影</a>；巡迴車存在的理由，就是再把「知道可以做」和「真的做了」之間的距離縮短。</p>
-<h2>治療存在，不等於人到得了</h2>
+<h2 id="section-2">治療存在，不等於人到得了</h2>
 <p>如果在 Pagadian 確診後需要更完整的癌症治療，<a href="https://www.philhealth.gov.ph/partners/providers/facilities/contracted/ZBENEFITS_CONTRACTED_02282026.pdf">PhilHealth 合約名單</a>裡 Region IX 的乳癌 Z Benefit 院所是 Zamboanga City Medical Center。那裡不是沒有能力。<a href="https://www.pna.gov.ph/articles/1145008">2021 年就已經有直線加速器與近接治療設備</a>，可以接放射治療。</p>
 <p>但 Pagadian 到 Zamboanga City，<a href="https://www.rome2rio.com/s/Pagadian/Zamboanga-City">光是搭巴士單程就約六個半小時</a>。她沒有車。</p>
 <p>醫院在地圖上存在，PhilHealth 的 package 也存在，還是不會讓這段路變短。一次看診就可能吃掉一整天。如果是需要多次往返的治療，交通、住宿、陪病與沒辦法工作的時間，都會黏在每一次「已給付」的醫療服務上。</p>
 <p>這才是 ₱1.4M 不能自己解決的部分。</p>
 <p>它可以接住一個已經進入醫療系統的人。它不會自己找到那個說「我沒病」的人，也不會帶她走完六個多小時的路。</p>
-<h2>知道，還是會怕</h2>
+<h2 id="section-3">知道，還是會怕</h2>
 <p>她的妹妹 Emma 四十歲，現在還在菲律賓。</p>
 <p>姊姊確診後，我直接告訴 Emma 該去檢查。她說她知道，但她會怕。</p>
 <p>這句話又把問題往前推了一步。知識不是唯一的瓶頸。Emma 知道為什麼要檢查，而且她眼前就有一個早期發現的例子。她還是怕那張報告可能寫什麼。</p>
@@ -247,15 +263,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li><li style="--row-accent:#c0392b"><a href="/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/"><span class="side-row__meta">01JUL26 · <span>文化觀察</span></span><span class="side-row__title">我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li><li style="--row-accent:#c0392b"><a href="/cultural-insights/im-not-a-bad-guy-prompt-for-ai-safety/"><span class="side-row__meta">01JUL26 · <span>文化觀察</span></span><span class="side-row__title">我需要一份「我不是壞人」說明書：當身障者的技術需求被 AI 攔截</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">如果那天不在台北</a></li><li><a href="#section-2">治療存在，不等於人到得了</a></li><li><a href="#section-3">知道，還是會怕</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

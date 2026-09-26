@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -199,31 +215,31 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">TCL LINKKEY IK512 的 GPS 不實廣告：從技術驗證到代理商回應</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>事情的起點</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">事情的起點</h2>
 <p>我最近購入了 TCL LINKKEY IK512 5G USB 網卡，主要用途是作為 Proxmox 伺服器的備援網路。選這台的原因很單純：規格看起來符合需求，而且 PChome 商品頁面還特別標示具備「即時 GPS 追蹤」功能——對於需要在移動環境中使用的場景，這個功能理論上有加分。</p>
 <p>實際到手之後，才發現事情不對。</p>
-<h2>技術驗證過程</h2>
+<h2 id="section-2">技術驗證過程</h2>
 <p>我的測試環境是 Linux 6.17.4 搭配 ModemManager 1.24.0。IK512 的晶片是 Qualcomm Snapdragon X62（SDX62，代號 Olympic），這顆晶片在規格上確實支援 GPS、GLONASS、BeiDou、Galileo 和 NavIC，這是 Qualcomm 平台級的能力，白紙黑字寫在晶片規格表裡。</p>
 <p>但硬體能力要變成可用功能，需要三個條件同時成立：實體 GPS 天線走線、韌體層的 AT 指令和 QMI 介面實作，以及主機端能接收 NMEA 資料。</p>
 <p>我逐一測試了所有已知的 GPS 相關 AT 指令，包含 3GPP 標準的 <code>AT+CGPS=1</code>、Quectel 的 <code>AT+QGPS=1</code>、Qualcomm 的 <code>AT$GPSSTART=0</code> 等，全部回傳 <code>ERROR</code>。透過 ModemManager 嘗試啟用 GPS 定位，所有請求都以 QMI timeout 失敗。</p>
 <p>最關鍵的一步是執行 <code>AT+CLAC</code> 取出裝置支援的完整指令清單，然後過濾 GPS、GNSS、NMEA 等關鍵字——結果是零筆。唯二包含 GNSS 字串的指令是 <code>+C5GNSSAI</code> 和 <code>+C5GNSSAIRDP</code>，但那是 5G 網路切片相關的指令，GNSS 只是 N-SSAI 縮寫的一部分，與衛星定位毫無關係。</p>
 <p>也就是說，這台裝置在韌體層根本沒有實作任何 GPS 功能。目前唯一可用的定位方式是 3gpp-lac-ci 基地台定位，精度是數百公尺到數公里，和廣告所說的「即時 GPS 追蹤」是完全不同層次的東西。</p>
-<h2>為什麼會發生這種事</h2>
+<h2 id="section-3">為什麼會發生這種事</h2>
 <p>從技術角度來看，這個情況很可能是這樣形成的：SDX62 晶片規格表上有 GNSS，廣告文案直接把晶片能力當成產品功能寫進去，沒有人實際測試過。這在 B2B 導向的產品上不罕見，因為原本就不預期一般消費者會深挖到這個層次。</p>
 <p>另一個可能性是 TCL 存在不同地區版本，某個版本確實有 GPS 天線和韌體支援，台灣版本基於成本考量拿掉了，但廣告沒有同步修改。</p>
 <p><code>AT+CLAC</code> 完全空白這件事很能說明問題——這不像是「功能壞掉」，更像是韌體根本沒有實作，反推廠商從設計階段就沒打算讓這個功能上線。</p>
-<h2>向代理商查詢</h2>
+<h2 id="section-4">向代理商查詢</h2>
 <p>我保留了所有測試紀錄，整理成調查報告後，向代理商提出技術查詢。回覆比我預期的直接：</p>
 <blockquote>
 <p>經廠商技術單位與原廠（TCL）進一步核實，確認 TCL LINKKEY IK512 在目前的硬體設計與韌體設定中，確實不支援內建 GPS 硬體定位功能。針對商品頁面標示「即時 GPS 追蹤」一事，經查為文案人員誤植其他工業級模組規格，我們會盡快修正相關錯誤描述。</p>
 </blockquote>
 <p>這等於書面承認了三件事：硬體不支援、韌體也沒有、廣告是誤植。代理商也主動提出退貨選項。</p>
-<h2>幾個延伸的觀察</h2>
+<h2 id="section-5">幾個延伸的觀察</h2>
 <p>這件事讓我想到不同市場的消費者保護機制差異。台灣有消保法第 22 條和公平交易法第 21 條，個人要主張「商品不符廣告」相對直接，而且有本地代理商可以找，溝通成本低，這次拿到書面回覆的速度就是一個例子。</p>
 <p>美國的情況有趣的對比：集體訴訟文化讓廠商面對的嚇阻效果更大，FTC 也有直接開罰的權力，但個別消費者要快速解決一件小事，反而不如台灣方便。日本則是法規完整但個人行使權利的心理門檻高，類似這樣主動蒐證取得書面回覆的做法，在日本反而更必要。</p>
 <p>從廠商角度來說，「誤植其他工業級模組規格」這個說法在幫自己找台階，但也間接印證了廣告文案的產生方式：複製規格表，沒有人實際測試，沒有人對內容負責。這種做法在消費性硬體市場並不少見，只是通常不會被拆穿得這麼徹底。</p>
 <p>作為消費者，這次經驗讓我更確認一件事：對於技術性的功能聲明，唯一可信的是自己測試的結果。</p>
-<h2>後記：他們用什麼工具改的</h2>
+<h2 id="section-6">後記：他們用什麼工具改的</h2>
 <p>代理商承諾修正之後，我注意到廣告圖片確實更新了。「製造業應用」那張場景圖，底下的文案從原本的「具有即時 GPS 追蹤、WEB UI 和 AT 指令支援」，變成了只剩「WEB UI 和 AT 指令支援」。</p>
 <p>場景構圖完全沒動，文字消失了，背景填補得很自然。</p>
 <p>我用 Google Gemini（Nano Banana Pro）跑了同樣的操作——把原圖丟進去、叫它移除「即時 GPS 追蹤」那段文字——結果幾秒鐘出來，效果跟他們改完的版本幾乎一模一樣。Gemini 生成的圖片預設會帶一個 ◆ 浮水印，我沒有去掉，是為了留下對比的痕跡。他們的版本浮水印已經清除了。</p>
@@ -237,15 +253,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">事情的起點</a></li><li><a href="#section-2">技術驗證過程</a></li><li><a href="#section-3">為什麼會發生這種事</a></li><li><a href="#section-4">向代理商查詢</a></li><li><a href="#section-5">幾個延伸的觀察</a></li><li><a href="#section-6">後記：他們用什麼工具改的</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

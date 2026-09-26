@@ -77,12 +77,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -95,19 +95,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -205,12 +221,12 @@
 <p>但我也用 Mac。</p>
 <p>macOS 的觸控板體驗一直被認為是業界標杆——多點觸控流暢、手勢豐富、慣性捲動自然。問題是，這一切都建立在「你有兩根手指」的假設上。</p>
 <p>我只有一根。</p>
-<h2>KDE Plasma 記得</h2>
+<h2 id="section-1">KDE Plasma 記得</h2>
 <p>在開始講 macOS 之前，有個有趣的對比。</p>
 <p>Linux 的 KDE Plasma 到現在還保留著邊緣捲動的選項。就在觸控板設定裡面，一個勾選就開了。不需要裝第三方軟體，不需要改設定檔，不需要編譯任何東西。</p>
 <p>三大桌面平台裡，只有開放原始碼社群記得這件事。</p>
 <p>之前<a href="https://b-log.to/business-insights/modernization-vs-accessibility/">那篇文章</a>分析過 Microsoft 為什麼拿掉邊緣捲動——「現代化」「統一體驗」「簡化介面」。Apple 的理由大概也差不多，只是他們連說都懶得說。</p>
-<h2>反編譯 Scroll2：十美元的失望</h2>
+<h2 id="section-2">反編譯 Scroll2：十美元的失望</h2>
 <p>macOS 上有一個叫 Scroll2 的付費 App，賣十塊美金，號稱提供邊緣捲動功能。看到的時候真的有鬆一口氣的感覺——終於有人做了，不用自己來。買。</p>
 <p>垂直捲動沒問題——手指放在觸控板右側邊緣，上下滑，頁面跟著動。好，那水平捲動呢？</p>
 <p>完全不能用。</p>
@@ -236,7 +252,7 @@
 <p>但要加上水平邊緣捲動，不是改個參數的事。整個邊緣區域的偵測邏輯、座標映射、事件轉換都只考慮了左右兩側邊緣的垂直移動。要支援上下邊緣的水平移動，等於重寫觸控區域的核心——座標系、邊界判斷、捲動方向的映射邏輯全部要重新設計。</p>
 <p>而且它是商業軟體，閉源，我沒辦法 fork。</p>
 <p>十美元，買到了一個「幾乎」能用的東西。最讓人無力的不是它做得爛——它做得不錯，只是從來沒有想過我這種人的存在。</p>
-<h2>用 Apple 不想讓你碰的框架</h2>
+<h2 id="section-3">用 Apple 不想讓你碰的框架</h2>
 <p>既然沒有現成的方案，那就自己寫吧。又不是第一次了。</p>
 <p>macOS 上要實現邊緣捲動，第一個問題是：怎麼拿到觸控板的原始觸控座標？</p>
 <p>Apple 的公開 API 不提供這個資料。你能拿到的是已經處理過的手勢事件——兩指捲動、三指滑動、捏合縮放——但觸控板上每根手指的確切位置？沒有公開介面。<code>NSEvent</code> 給你的是游標座標和手勢類型，不是觸控點的原始位置。</p>
@@ -254,7 +270,7 @@
 <p>專案開放原始碼在 GitHub：<a href="https://github.com/jason5545/TrackPal">TrackPal</a></p>
 <p>Apple 要做這件事？大概就是在系統偏好設定裡加一個開關。他們不只有所有的 API——他們<strong>擁有</strong>這個框架。他們有所有的工程師，有所有的資源。</p>
 <p>他們只是不在乎。</p>
-<h2>貝葉斯意圖預測：讓邊緣捲動真正好用</h2>
+<h2 id="section-4">貝葉斯意圖預測：讓邊緣捲動真正好用</h2>
 <p>把手指放在觸控板底部邊緣，左右滑動來水平捲動——聽起來簡單。但實際上系統需要回答一個問題：</p>
 <p>你是真的想捲動，還是手指剛好經過那個位置？</p>
 <p>這不是用一個固定閾值就能解決的事。我的手指角度每天不一樣，疲勞的時候手會歪，坐姿換了角度也會變。今天偏右邊滑的角度可能跟昨天差十度。如果系統不能適應這些變化，那邊緣捲動就只是一個理論上能用的功能。</p>
@@ -282,7 +298,7 @@
 <li><strong>區域綁定</strong>：只在同一個邊緣區域生效，不會影響其他區域的判斷</li>
 </ol>
 <p>設計原則是：寧可第一次太嚴格，也不要平時太鬆。使用者對「多試一次就成功」的容忍度，遠高於「老是誤觸」。</p>
-<h2>Apple 的無障礙劇場</h2>
+<h2 id="section-5">Apple 的無障礙劇場</h2>
 <p>Apple 每年 WWDC 都有 Accessibility 專場。Global Accessibility Awareness Day 會發新聞稿。Tim Cook 會在 Twitter 上說「Technology should be for everyone」。</p>
 <p>他們做了不少真東西：</p>
 <ul>
@@ -303,7 +319,7 @@
 <p>這是他們的觸控板團隊根本沒有把「無法使用多點觸控的人」當成使用者。</p>
 <p>之前<a href="https://b-log.to/business-insights/modernization-vs-accessibility/">分析 Microsoft</a> 的時候講過，問題出在組織分工：無障礙部門做高調的創新產品，產品團隊移除基本功能，兩邊沒有交集。Apple 大概也是類似的結構——做 VoiceOver 的人不會去管觸控板設定，做觸控板的人不會去想「如果使用者只能用一根手指呢」。</p>
 <p>無障礙成為了行銷素材，而不是設計原則。</p>
-<h2>開放原始碼記得</h2>
+<h2 id="section-6">開放原始碼記得</h2>
 <p>兩個平台、兩個 App。Windows 上的 <a href="https://github.com/jason5545/Touchpad-Advanced-Tool">Touchpad Advanced Tool</a>，macOS 上的 <a href="https://github.com/jason5545/TrackPal">TrackPal</a>。</p>
 <p>不是什麼了不起的工程，任何寫過觸控相關程式的人都能做到。</p>
 <p>但我有時候會想，為什麼一個基本的無障礙需求，需要使用者自己在兩個平台上各寫一個 App 才能解決？我寫得動，所以我自己解決了。寫不動的人呢？</p>
@@ -318,15 +334,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">KDE Plasma 記得</a></li><li><a href="#section-2">反編譯 Scroll2：十美元的失望</a></li><li><a href="#section-3">用 Apple 不想讓你碰的框架</a></li><li><a href="#section-4">貝葉斯意圖預測：讓邊緣捲動真正好用</a></li><li><a href="#section-5">Apple 的無障礙劇場</a></li><li><a href="#section-6">開放原始碼記得</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

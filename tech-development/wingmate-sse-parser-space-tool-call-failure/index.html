@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -212,14 +228,14 @@
 <p>這個脈絡會直接影響後面怎麼讀這次事故。在 CopilotChat 那種純 chat client 上，tool call 掛掉大概就是少查一次網路、少讀一個檔案。在 Wingmate 上，tool call 是 build pipeline 的觸發器——agent 不呼叫 <code>build_gradle_project</code>，整個手機端編譯流程就不會啟動。所以「agent 看起來知道要用 tool 卻沒用」這個症狀，對 Wingmate 來說不是體驗問題，是核心功能斷線。</p>
 <p>6 月 29 號晚上推了一版 Android build 上去，裝完之後 agent 還能思考、能 stream 文字出來，但 tool call 不執行了。</p>
 <p>不是模型不決定呼叫 tool，也不是 executor 掛掉。Provider 那端 <code>finish_reason</code> 確實是 <code>tool_calls</code>，但我這邊重建不出一個完整可執行的 tool call——因為 SSE parser 把某些合法的 stream line 直接 skip 掉了。</p>
-<h2>症狀長什麼樣</h2>
+<h2 id="section-1">症狀長什麼樣</h2>
 <p>最直觀的感受是：agent 看起來知道要用 tool，講了一堆「我來查一下」「我用某個 tool」，然後什麼都沒發生。對 Wingmate 來說，這代表 <code>build_gradle_project</code>、<code>git_commit</code>、<code>web_fetch</code> 這些動作全部發不出來，builder companion 再閒也沒事幹。</p>
 <p>重現之後 logcat 裡看到的是這個：</p>
 <pre><code class="language-text">Provider finished with tool_calls but ToolCallLoop built no executable tool calls.
 pending=index=0 idLen=0 nameLen=0 argumentsLen=17
 </code></pre>
 <p><code>idLen=0</code>、<code>nameLen=0</code>，但 <code>argumentsLen=17</code>。意思是：arguments 有收到 17 個字元，但 tool 的 id 和 name 是空的。這種狀態下我不可能去執行一個不知道是誰的 tool，只能 abort 那一輪。</p>
-<h2>根因：parser 對 SSE 格式太嚴</h2>
+<h2 id="section-2">根因：parser 對 SSE 格式太嚴</h2>
 <p>原本的判斷是這樣寫的：</p>
 <pre><code class="language-kotlin">if (!line.startsWith(&quot;data: &quot;)) continue
 val payload = line.removePrefix(&quot;data: &quot;)
@@ -227,11 +243,11 @@ val payload = line.removePrefix(&quot;data: &quot;)
 <p>只接受 <code>data: </code> 開頭——<code>data</code> 後面要有冒號、還要有空白。問題是有些 OpenAI-compatible provider 回的是 <code>data:{...}</code>，冒號後面沒空白。</p>
 <p>這兩種寫法在 SSE 規範裡都是合法的 data framing，空白不是強制。我的 parser 把它當成強制了。</p>
 <p>而且 tool call 是分 chunk stream 進來的，漏掉一個 chunk 就可能整個 reconstruct 失敗。這次剛好漏掉的是帶 tool name 和 id 的那幾行，arguments 因為在別的 chunk 裡反而收到了。</p>
-<h2>為什麼以前沒事</h2>
+<h2 id="section-3">為什麼以前沒事</h2>
 <p>因為以前那個 provider / gateway 剛好回的就是 <code>data: {...}</code>，帶空白。我的 parser 跟它的格式對得上，就沒人發現我其實只認一種寫法。</p>
 <p>6 月 29 號 provider 那邊行為改了，stream 的 shape 變了，不是變成違規格式，只是變成我沒 cover 的那種合法格式。bug 一直在 Wingmate 這邊，是 provider 的改動把它暴露出來。</p>
 <p>所以正確的 framing 不是「provider 改壞了相容性」，而是「我的相容性本來就寫窄了，只是沒人踩到」。</p>
-<h2>修法</h2>
+<h2 id="section-4">修法</h2>
 <p><code>OpenAiSseParser</code> 現在用這個抽 payload：</p>
 <pre><code class="language-kotlin">private fun String.sseDataPayload(): String? {
     if (!startsWith(&quot;data:&quot;)) return null
@@ -241,10 +257,10 @@ val payload = line.removePrefix(&quot;data: &quot;)
 <p>只認 <code>data:</code> 開頭，後面有沒有空白都 <code>trimStart()</code> 吃掉。<code>data: {...}</code> 和 <code>data:{...}</code> 都進得來。</p>
 <p>另外 <code>ToolCallLoop</code> 也加了一層防禦：空的 tool id / name 不會再去覆蓋已經累積的 pending state，然後加了 diagnostic log，當 provider finish 在 <code>tool_calls</code> 但 reconstruct 不出可執行 tool call 時，會把 incomplete 狀態記下來。</p>
 <p>這 log 早該加。第一次發生時我花了不少時間才確定問題是出在 parser 跟 tool-call 之間，而不是 executor 或 model decision。</p>
-<h2>測試</h2>
+<h2 id="section-5">測試</h2>
 <p>補了 unit test 覆蓋這次 trigger 的 stream 格式，用 <code>./gradlew testDebugUnitTest assembleDebug</code> 驗過，debug build 裝上 device 確認 tool call 回來了，才推上 <code>main</code>。</p>
 <p>fix 本身很小，一個字串判斷的事。但暴露出來的問題是：我之前把 OpenAI-compatible API 當成 byte-for-byte 一樣在對，而不是 protocol-compatible 在對。協議相容不代表每個 provider 吐出來的 bytes 都長一樣。</p>
-<h2>還沒做的</h2>
+<h2 id="section-6">還沒做的</h2>
 <ul>
 <li>更多 parser fixture：id、name、arguments 分別在不同 chunk 進來的 fragment 情況。</li>
 <li>舊版 <code>function_call</code> streaming 如果要支援的話也要測。</li>
@@ -258,15 +274,20 @@ val payload = line.removePrefix(&quot;data: &quot;)
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">症狀長什麼樣</a></li><li><a href="#section-2">根因：parser 對 SSE 格式太嚴</a></li><li><a href="#section-3">為什麼以前沒事</a></li><li><a href="#section-4">修法</a></li><li><a href="#section-5">測試</a></li><li><a href="#section-6">還沒做的</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

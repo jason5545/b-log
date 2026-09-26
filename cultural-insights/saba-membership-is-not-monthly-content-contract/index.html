@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -201,24 +217,24 @@
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>最近 Saba 因為長時間沒有直播、社群也幾乎沒有更新，又被拿出來討論了一輪。</p>
 <p>我在意的不是有人想退會員。覺得不值得，就退掉，這沒有問題。</p>
 <p>我在意的是，有些人明明知道她是什麼樣的創作者，卻在這個時間點把事情講成騙錢、只想賣周邊、只在需要收入的時候才出現。</p>
-<h2>她不是突然變成這樣</h2>
+<h2 id="section-1">她不是突然變成這樣</h2>
 <p>很多會員，我相信是從她前世那邊跟過來的。那就很難說大家真的不知道她的節奏。</p>
 <p>她前世不是那種穩定排班的創作者。她以前也休過很久，大家也不是不知道。那時候很多人心甘情願地支持她，因為支持的不是「每個月保證幾場直播」，而是這個人本身。</p>
 <p>你訂閱的是這個創作者，不是她的排班表。</p>
-<h2>這真的只是新人不懂嗎</h2>
+<h2 id="section-2">這真的只是新人不懂嗎</h2>
 <p>現在一定也有新人。Saba 轉成個人勢之後，曝光變大，吸引到不知道她過去脈絡的人，新人用一般訂閱服務的邏輯看會員，會覺得「我付錢了，怎麼什麼都沒有」。</p>
 <p>但這個比例應該沒有高到足以解釋整場風向。</p>
 <p>如果真的只是新人不懂，老粉應該站出來幫她講話。老粉最清楚她以前就是這樣，可是現在看起來，比例上好像不是那麼一回事。</p>
 <p>連一部分老粉也在跟著起鬨——這才是我覺得最不舒服的地方。</p>
 <p>失望是真的，退訂也完全說得通，不管你跟她多久都一樣。</p>
 <p>但失望跟「她欠我一個交代」是兩件不同的事。前者是你自己的感受，後者是在要求她對你負責。這一步跳得有點快。</p>
-<h2>個人勢不代表她欠所有人一個新版本</h2>
+<h2 id="section-3">個人勢不代表她欠所有人一個新版本</h2>
 <p>很多人覺得，既然離開公司、變成個人勢了，那應該自由了。自由了，應該更常出現。</p>
 <p>但這是另一種投射。</p>
 <p>從公司勢變成個人勢，解決的是名字、角色、作品歸屬的問題。她曾經把那種「被很多人指點、被一個不完全屬於自己的名字覆蓋」的感覺寫進最後的告別裡。那不是小事。</p>
 <p>可是離開那個名字，不代表她會變成一個符合觀眾期待的新版本。個人勢讓她更像她自己——也因此，她原本的節奏、沉默、不穩定，會更直接地落在她自己身上，不是在公司那個名字上。</p>
 <p>個人勢讓她更像她自己——也包括那些你一開始就知道的、不那麼穩定的部分。</p>
-<h2>把支持包裝成債權</h2>
+<h2 id="section-4">把支持包裝成債權</h2>
 <p>YouTube 會員當然有福利。但在 VTuber 的圈子裡，很多會員費更接近的是支持的意思：我希望你可以繼續存在。你有開台很好，你休息也沒關係。</p>
 <p>這筆錢不是把創作者變成承包商的。</p>
 <p>她如果願意發一篇很短的公告說自己要休息，當然會少很多誤會，那是善意。但那不是群眾拿來追討行程、追討私人生活的欠條。</p>
@@ -238,15 +254,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">她不是突然變成這樣</a></li><li><a href="#section-2">這真的只是新人不懂嗎</a></li><li><a href="#section-3">個人勢不代表她欠所有人一個新版本</a></li><li><a href="#section-4">把支持包裝成債權</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

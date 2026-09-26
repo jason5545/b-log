@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -202,7 +218,7 @@
 <p>4 月底，16 吋 M5 Max 到手，14 吋正式進入待售狀態。</p>
 <p>去二手店詢價之前，我沒有特別做功課，就當走走看看。結果那一圈下來，我差點在某間店門口吐血。</p>
 <hr>
-<h2>報價現場</h2>
+<h2 id="section-1">報價現場</h2>
 <p>第一間開了 <strong>58,800</strong>，是這一圈裡最接近行情的報價。</p>
 <p>第二間驗了半天，然後翻開 Line，查了一下全新未拆 base model 的收購參考價，開了 <strong>25,000</strong>。我當場要求重新確認規格，他過了大約十五分鐘才改報 <strong>45,000</strong>。</p>
 <p>不是沒看，是看完之後拿去對一台完全不同的機器的行情——我這台二手 CTO，對到的是全新未拆 base model 的收購價。如果真的只是查錯了，修正不需要這麼久。</p>
@@ -213,7 +229,7 @@
 <p>包裝成「忘了提」，讓你更難直接感受到那是一個操作。這不是無差別的標準流程，是讀完情況、調整過說法的主動判斷。對我用了，不代表她沒有讀懂我，而是她評估過後認為値得試。</p>
 <p>第三間開了 <strong>45,000</strong>。</p>
 <hr>
-<h2>同一個黑盒子</h2>
+<h2 id="section-2">同一個黑盒子</h2>
 <p>第二間和第三間都落在 45,000，但性質其實不同。</p>
 <p>第二間的問題出在<strong>對照基準</strong>：他驗完機，翻 Line 查的是全新未拆 base model 的收購參考價——拿一台完全不同的機器的行情來對我這台二手 CTO。等於根本沒有在替這台機器定價，只是套用了一個錯誤基準下的數字。</p>
 <p>第三間的問題才是<strong>定價</strong>本身。台灣的連鎖二手 3C 通路，背後很可能共用同一套收購定價系統。你把型號、規格、外觀狀況輸入進去，系統吐出一個數字。不同店員、不同門市、不同品牌，輸出的是同一個結果——因為他們跑的是同一個演算法。</p>
@@ -221,7 +237,7 @@
 <p>我那台機器啟用不到四個月、幾乎全新，系統不在乎。AppleCare+ 還有將近兩年八個月效期（保固到 2029 年 1 月 17 日），系統沒有欄位輸入這項資訊。附贈的 UAG 保護殼，更是直接被忽略。</p>
 <p>在系統眼裡，我那台機器和一台用了兩年的同型號，價值是一樣的。</p>
 <hr>
-<h2>殘膠事件</h2>
+<h2 id="section-3">殘膠事件</h2>
 <p>驗機的時候發生了一個小插曲。</p>
 <p>我平常為了保持機器全新的狀態都有貼膜。店員幫我撕的時候，有一小角沒撕乾淨，留了一點殘膠。</p>
 <p>他看了看，跟我說：「這邊有<strong>損傷</strong>。」</p>
@@ -229,27 +245,27 @@
 <p>不過我沒有當場說什麼。回家之後，我用指甲摳了幾下，殘膠就下來了，底下的腕區完好無缺。</p>
 <p>我不確定那個店員是真的沒有辦法分辨殘膠和損傷，還是這本來就是驗機流程的一部分——找到任何一個可以讓報價往下移的理由，在心理上讓你覺得「這台機器有點問題」，然後你就比較容易接受一個更低的數字。</p>
 <hr>
-<h2>那個誠實的老闆</h2>
+<h2 id="section-4">那個誠實的老闆</h2>
 <p>唯一讓我覺得還算舒服的，是其中一個老闆。</p>
 <p>他報完價之後，主動說：「我知道這個價格很低，但優點是你不需要花時間自己賣，不用花時間跟人周旋，我可以直接轉帳給你。」</p>
 <p>這句話反而把二手店的價值講清楚了。<strong>他們賣的不是機器，是流動性</strong>——你用差價買的是「現在立刻結束這件事」的便利。</p>
 <p>在某些情況下，這是合理的交換。如果你的時間成本很高，或者你完全不想處理陌生人詢問的各種奇怪問題，那這個差價可能就是值得付的服務費。</p>
 <p>但他那句話裡有個隱含的前提：<strong>自售是麻煩的，耗時的，充滿不確定性的</strong>。</p>
 <hr>
-<h2>上架三十分鐘</h2>
+<h2 id="section-5">上架三十分鐘</h2>
 <p>我把機器帶回家，拍了幾張照片，寫了規格說明，上架。</p>
 <p>三十分鐘後，第一個人來詢問，當天成交。</p>
 <p>成交價：<strong>70,000 元</strong>。</p>
 <p>和 25,000 相差 45,000，和最高的店家報價 58,800 還多了 11,200，連那個老闆說的「省時間」也沒能成立——三十分鐘，我不覺得這算是需要特別省的時間。</p>
 <hr>
-<h2>差距從哪裡來</h2>
+<h2 id="section-6">差距從哪裡來</h2>
 <p>事後我想了一下，這 70,000 的背後有幾個具體的因素疊加在一起：</p>
 <p><strong>規格本身的稀缺性。</strong> 32GB/4TB 不是隨手可得的基本規格，在二手市場上本來就有一定溢價。</p>
 <p><strong>機器狀態的真實呈現。</strong> 啟用不到四個月、AppleCare+ 效期到 2029 年——這些對一個認真找機器的買家來說是可以核實的事實，不是賣家自說自話。保固可以轉移，買家等於用比新機便宜的價格，拿到一台幾乎全新、還附帶延伸保固的機器。</p>
 <p><strong>直接接觸到願意付合理價格的人。</strong> 二手店的商業模型要求他們在買入價和賣出價之間保留足夠的空間。我自售的時候，這個空間不需要存在——省下來的差價，買家和我各得一部分。</p>
 <p><strong>資訊不對稱這次站在我這邊。</strong> 通常是買家或消費者資訊不足，這次反過來：我比店家更清楚自己機器的真實狀況和市場位置。</p>
 <hr>
-<h2>那間開 25,000 的店</h2>
+<h2 id="section-7">那間開 25,000 的店</h2>
 <p>我不覺得他們是壞人。</p>
 <p>但那個 25,000 其實揭露了兩件事，不是一件。</p>
 <p>第一件：那個 25,000 看起來不像單純疏忽。那是驗了半天、翻 Line 查完參考價之後給的數字。問題是他查的是全新未拆 base model 的收購行情，拿來對我這台已啟用幾個月的二手 CTO。這種對照基準的選擇本身就值得懷疑——不是完全分不出兩台機器的差別，而是選擇用對自己有利的那個數字開口。而被挑戰後需要十五分鐘才能改口，讓「查錯了」這個解釋變得更難成立。</p>
@@ -269,15 +285,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li><li style="--row-accent:#4f6f68"><a href="/business-insights/counseling-clinic-legal-runway/"><span class="side-row__meta">08JUN26 · <span>商業觀察</span></span><span class="side-row__title">我以為心理諮商所是一座基地，後來發現它更像一條合法跑道</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li><li style="--row-accent:#4f6f68"><a href="/business-insights/counseling-clinic-legal-runway/"><span class="side-row__meta">08JUN26 · <span>商業觀察</span></span><span class="side-row__title">我以為心理諮商所是一座基地，後來發現它更像一條合法跑道</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">報價現場</a></li><li><a href="#section-2">同一個黑盒子</a></li><li><a href="#section-3">殘膠事件</a></li><li><a href="#section-4">那個誠實的老闆</a></li><li><a href="#section-5">上架三十分鐘</a></li><li><a href="#section-6">差距從哪裡來</a></li><li><a href="#section-7">那間開 25,000 的店</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

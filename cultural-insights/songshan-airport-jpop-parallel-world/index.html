@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -202,22 +218,22 @@
 <p>我推著輪椅到達入境大廳的時候，以為自己來得夠早了。結果一到現場才發現——大廳裡已經站了一整排人。而且還在增加。</p>
 <p>清一色女生。手裡拿著各種應援物，有的舉著手幅，有的抱著花束，低聲交談中帶著壓抑不住的興奮。</p>
 <p>我心想，這陣仗不對。</p>
-<h2>我不是來接她們的人</h2>
+<h2 id="section-1">我不是來接她們的人</h2>
 <p>先說清楚，我來松山機場，是為了接 LiSA。</p>
 <p>作為一個從 2015 年開始關注 LiSA 至今的 LiSAッ子，LiSA 每次來台灣我幾乎都會到場看演出。但接機這件事，我從來沒做過。這次是第一次，還特別請了特休。</p>
 <p>為什麼突然決定去接機？因為 2024 年林口那場演唱會，我在購票階段就被擋下來，最後沒能進場。詳細的經過之前寫過了，這裡不再多說。總之那次之後，我決定下一次 LiSA 來台灣，要從最早的環節開始參與。</p>
 <p>問題是，主辦方不會公布藝人的航班資訊。什麼時候到、哪個航班、從哪裡飛，全部都沒有。我們只能自己猜。根據演唱會的日期往前推，賭一個最可能的抵達時間。</p>
 <p>結果賭錯了。LiSA 是隔天 1/30 才到。</p>
 <p>但也因為早到了一天，讓我意外撞見了一場完全超出我認知的場面。</p>
-<h2>她們在等誰？</h2>
+<h2 id="section-2">她們在等誰？</h2>
 <p>那群女孩等的是 King &amp; Prince——日本 STARTO Entertainment（原傑尼斯事務所）旗下的偶像團體，現在只剩永瀬廉和髙橋海人兩位成員。他們這次來台灣，是為了錄製台視的除夕特別節目《超級巨星紅白藝能大賞》。</p>
 <p>說實話，我連他們的名字都不知道。</p>
 <p>這不是我的守備範圍。我聽的是 LiSA、是搖滾、是動漫音樂。偶像這條線，對我來說一直是一個存在但從未接觸過的世界。</p>
-<h2>我一直以為 J-POP 已經被 K-POP 徹底蓋過了</h2>
+<h2 id="section-3">我一直以為 J-POP 已經被 K-POP 徹底蓋過了</h2>
 <p>這幾年打開電視、滑社群，看到的海外藝人幾乎都是韓團。TWICE、BTS、SEVENTEEN⋯⋯版面被佔滿了。相對之下，日本藝人在台灣主流媒體上的能見度越來越低。</p>
 <p>我不自覺地形成了一個印象：J-POP 在台灣大概只剩下動漫歌手和少數搖滾團還有人追了吧？偶像圈？應該就剩小貓兩三隻了。</p>
 <p>那天清晨，松山機場用最直接的方式打了我的臉。</p>
-<h2>入境的那一刻</h2>
+<h2 id="section-4">入境的那一刻</h2>
 <p>人越聚越多。我坐在旁邊觀察，群組裡比較資深的後援會成員還笑著跟我說：「等一下他們到了，你可以跟著一起尖叫。」</p>
 <p>我當然沒有。</p>
 <p>但當 King &amp; Prince 兩人走出入境閘門的瞬間——</p>
@@ -225,12 +241,12 @@
 <p>幾十、上百人同時發出的尖叫聲，在機場封閉空間裡迴盪放大，直接灌進耳朵裡。我對突如其來的大音量本來就比較敏感，那一刻真的覺得耳膜快要沒了。</p>
 <p>但也正是這一刻，我的認知被徹底重寫了。</p>
 <p>J-POP 偶像圈沒有消失。她們一直都在。只是我從來沒有機會看見。</p>
-<h2>為什麼我會有這樣的誤區？</h2>
+<h2 id="section-5">為什麼我會有這樣的誤區？</h2>
 <p>事後想想，原因其實很清楚。</p>
 <p>我進入 J-POP 的入口是 LiSA，走的是動漫音樂和搖滾歌手這條線。這條線的粉絲結構、應援文化、社群生態，跟偶像圈是完全不重疊的平行世界。十年來我深耕在自己的圈子裡，自然以為 J-POP 整體都跟我看到的差不多。</p>
 <p>而且日系偶像粉絲的社群運作極度封閉。跟 K-POP 粉絲那種在公開平台大量產出內容、拼數據、衝榜單的模式完全不同。她們用鎖帳、私密群組、代購圈，資訊在圈內流通但幾乎不外溢。不是人少，是我看不到。</p>
 <p>那天的松山機場，是她們難得在公開場合集體現身的時刻。而我剛好撞見了。</p>
-<h2>兩種接機，兩種文化</h2>
+<h2 id="section-6">兩種接機，兩種文化</h2>
 <p>在那片尖叫聲逐漸散去之後，我不禁想到我們 LiSAッ子 接機的樣子。</p>
 <p>我們不會尖叫。</p>
 <p>我們會一起喊一句：「おかえりなさい。」</p>
@@ -239,7 +255,7 @@
 <p>她幾乎每年都來。台灣對她來說，大概已經不是「海外」，而是另一個可以回來的地方。所以我們不說「歡迎光臨」，我們說的是「你回來了」。</p>
 <p>沒有尖叫，沒有暴動。安靜地鋪好地毯，安靜地等她走過來。</p>
 <p>這就是我們的方式。</p>
-<h2>寫在最後</h2>
+<h2 id="section-7">寫在最後</h2>
 <p>那天早上，我沒接到 LiSA，耳膜差點報銷，但意外打破了一個持續多年的認知盲區。</p>
 <p>J-POP 在台灣從來沒有消失。偶像圈的火還在燒，只是燒在我看不到的地方。而我所在的搖滾/動漫音樂圈，也一樣用自己的方式安靜而堅定地存在著。</p>
 <p>不同的圈子，不同的文化，不同的表達方式。但共通的是那份對喜歡的人的心意。</p>
@@ -252,15 +268,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">我不是來接她們的人</a></li><li><a href="#section-2">她們在等誰？</a></li><li><a href="#section-3">我一直以為 J-POP 已經被 K-POP 徹底蓋過了</a></li><li><a href="#section-4">入境的那一刻</a></li><li><a href="#section-5">為什麼我會有這樣的誤區？</a></li><li><a href="#section-6">兩種接機，兩種文化</a></li><li><a href="#section-7">寫在最後</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

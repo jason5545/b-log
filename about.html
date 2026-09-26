@@ -112,6 +112,30 @@
       inset: 0;
     }
 
+    /* 寬螢幕：跟文章頁同一套，右欄最多 26rem 放 CONTENTS（generate-redirects.js 產生），其餘給閱讀欄 */
+    .about-shell > .aside-toc { display: none; }
+    @media (min-width: 1100px) {
+      .about-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 50.5rem, 26rem);
+        column-gap: 3.5rem;
+        align-items: start;
+      }
+      /* body 是 16px 固定值，這裡改成 1rem 才會跟著寬螢幕字級放大（1280px 以下一樣是 16px） */
+      .about-shell > .content {
+        max-width: none;
+        margin-inline: 0;
+        font-size: 1rem;
+      }
+      .about-shell > .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+        margin-top: 2rem;
+      }
+    }
     @media (max-width: 560px) {
       .content .credential {
         grid-template-columns: auto minmax(0, 1fr);
@@ -176,14 +200,14 @@
       </div>
     </div>
   </header>
-  <main id="content" class="wrap">
+  <main id="content" class="wrap about-shell">
     <section class="content">
       <h1>關於我</h1>
       <p>我用一根手指打字，坐在輪椅上，靠 AI 當義肢寫程式。</p>
       <p>我會反編譯別人的軟體看裡面在搞什麼、拆開加密格式研究它怎麼鎖你的資料、在虛擬機裡偽裝 Mac 然後讓 Apple ID 乖乖登入。Gemini 把我的輪椅標記成敏感資訊要幫我隱藏的時候，我寫了一篇文章罵它。LiSA 的官方鬧鐘 App 壞了下架了，我把它逆向重寫。</p>
       <p>這個部落格就是這些事情的紀錄。</p>
 
-      <h2>核心信念</h2>
+      <h2 id="section-1">核心信念</h2>
 
       <h3>技術中立</h3>
       <p>工具就是工具。VID/PID 是公開資訊、KVM 偽裝不等於作弊、逆向工程是理解系統的方式——這些是技術事實，不該因商業或政治壓力被迴避。</p>
@@ -197,19 +221,19 @@
       <h3>務實主義</h3>
       <p>重要的是<strong>決策對不對</strong>，不是<strong>決策怎麼產生的</strong>。重要的是<strong>觀點有沒有道理</strong>，不是<strong>觀點怎麼被表達的</strong>。</p>
 
-      <h2>這裡有什麼</h2>
+      <h2 id="section-2">這裡有什麼</h2>
 
       <p><strong>技術分析與開發</strong>——逆向工程、故障排除、系統修復、自己寫工具解決自己的問題。LINE 快取加密怎麼鎖你的照片、NAS 被駭之後怎麼救回來、macOS 觸控板不支援單指捲動所以我自己寫一個。</p>
       <p><strong>AI 觀察</strong>——不是產業預測，是使用者視角。內容過濾怎麼把身障者當嫌犯、AI 協作跟 AI 代筆的差別在哪、被 Reddit 罵 slop 之後我想到了什麼。</p>
       <p><strong>文化與商業觀察</strong>——購票系統對輪椅使用者的「公平」、身障票被拿去轉賣、VTuber 的情感陪伴商業模式、微軟到底在不在乎你盜版。</p>
       <p><strong>生活記事</strong>——追了十年的 LiSA、模擬飛行二十年、以及偶爾承認自己其實沒有想像中那麼冷。</p>
 
-      <h2>技術棧</h2>
+      <h2 id="section-3">技術棧</h2>
       <p><strong>開發</strong>: Next.js, TypeScript, Kotlin, Swift, Python<br>
       <strong>硬體</strong>: Proxmox VE (9950X3D + RTX 4070 Ti Super), Raspberry Pi, ESP32<br>
       <strong>協作</strong>: Claude Code (Fable 5.1), Codex, Kimi K3</p>
 
-      <h2>學習紀錄</h2>
+      <h2 id="section-4">學習紀錄</h2>
       <p>不是履歷裝飾，只是留個可以驗證的紀錄。</p>
 
       <!-- 新增徽章：複製一個 <li class="credential">，改標題、發證單位、日期與驗證連結即可 -->
@@ -241,11 +265,11 @@
         </li>
       </ul>
 
-      <h2>為什麼寫</h2>
+      <h2 id="section-5">為什麼寫</h2>
       <p>現實中偽裝的夠多了。這裡是我可以不裝的地方。</p>
       <p>不是勵志故事，不是正能量，不是「身障者做到某某事好厲害」。就是一個人在想事情，然後把想的東西寫下來。技術的、社會的、個人的，都有。</p>
 
-      <h2>興趣</h2>
+      <h2 id="section-6">興趣</h2>
       <p>MSFS 飛行模擬、LiSA（P0）、暗黑破壞神4、策略卡牌遊戲。</p>
 
       <p style="margin-top: 2rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -259,10 +283,13 @@
 
       <hr style="margin: 3rem 0; border: none; border-top: 1px solid var(--rule);">
 
-      <h2>關於這個網站</h2>
+      <h2 id="section-7">關於這個網站</h2>
       <p>(b)-log 是用一根手指打出來的部落格，完全存在於 GitHub 儲存庫中。技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。每篇文章都是一個 Markdown 檔案，一個在 <code>data/posts.json</code> 中的小型條目，僅此而已。</p>
       <p>純 HTML/CSS/JS + Markdown，部署在 GitHub Pages，使用 GitHub Actions 自動生成 WordPress 風格永久連結。</p>
     </section>
+    <!-- ABOUT_TOC_START -->
+    <nav id="about-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">核心信念</a></li><li><a href="#section-2">這裡有什麼</a></li><li><a href="#section-3">技術棧</a></li><li><a href="#section-4">學習紀錄</a></li><li><a href="#section-5">為什麼寫</a></li><li><a href="#section-6">興趣</a></li><li><a href="#section-7">關於這個網站</a></li></ol></nav>
+<!-- ABOUT_TOC_END -->
   </main>
   <footer class="foot site-footer">
     <div class="wrap">

@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -199,7 +215,7 @@
       <h1 id="post-title" class="post__title">修復音訊播放器點擊無反應：Promise 錯誤處理的重要性</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>在為部落格新增音訊播放器功能後不久，我遇到了一個看似簡單卻頗具啟發性的 bug：播放按鈕點擊後毫無反應。這篇文章記錄完整的偵錯過程，以及一個容易被忽略的 JavaScript 陷阱。</p>
-<h2>問題現象</h2>
+<h2 id="section-1">問題現象</h2>
 <p>使用者回報：「Claude nerf 文章的音訊播放器點擊播放沒有反應」。</p>
 <p>初步觀察：</p>
 <ul>
@@ -207,7 +223,7 @@
 <li>按鈕可以點擊，但沒有任何視覺或聽覺反饋</li>
 <li>沒有明顯的錯誤訊息彈出</li>
 </ul>
-<h2>偵錯過程</h2>
+<h2 id="section-2">偵錯過程</h2>
 <h3>第一步：使用 Chrome MCP 開啟網站</h3>
 <p>我使用 Chrome MCP（Model Context Protocol）直接在瀏覽器中進行偵錯：</p>
 <pre><code class="language-bash"># 開啟目標頁面
@@ -242,7 +258,7 @@ try {
 the user didn&#39;t interact with the document first.
 Error name: NotAllowedError
 </code></pre>
-<h2>根本原因分析</h2>
+<h2 id="section-3">根本原因分析</h2>
 <p>問題出在 <code>assets/main.js</code> 的第 243 行：</p>
 <pre><code class="language-javascript">// 播放/暫停
 playPauseBtn.addEventListener(&#39;click&#39;, () =&gt; {
@@ -261,7 +277,7 @@ playPauseBtn.addEventListener(&#39;click&#39;, () =&gt; {
 <li><strong>權限問題</strong>：使用者拒絕媒體播放權限</li>
 </ol>
 <p>在我的案例中，雖然使用者確實點擊了按鈕（符合互動要求），但 Promise 仍然可能因為其他原因被拒絕。<strong>未處理的 Promise rejection 會導致靜默失敗</strong>——程式碼不會崩潰，但功能完全無法運作。</p>
-<h2>解決方案</h2>
+<h2 id="section-4">解決方案</h2>
 <p>修復非常簡單，為所有 <code>audio.play()</code> 調用加上 <code>.catch()</code> 錯誤處理：</p>
 <p><strong>修復 1：播放/暫停按鈕</strong>（main.js:243）</p>
 <pre><code class="language-javascript">playPauseBtn.addEventListener(&#39;click&#39;, () =&gt; {
@@ -280,7 +296,7 @@ audio.play().catch(error =&gt; {
   console.error(&#39;自動播放失敗：&#39;, error);
 });
 </code></pre>
-<h2>技術要點總結</h2>
+<h2 id="section-5">技術要點總結</h2>
 <h3>1. Promise 必須處理錯誤</h3>
 <p>JavaScript 的 Promise 有三種狀態：pending、fulfilled、rejected。<strong>任何返回 Promise 的方法都應該處理 rejection</strong>，否則會導致：</p>
 <ul>
@@ -304,7 +320,7 @@ audio.play().catch(error =&gt; {
 <li><strong>Console 擷取</strong>：完整的錯誤記錄</li>
 </ul>
 <p>這類工具對於在生產環境中快速定位問題非常有幫助。</p>
-<h2>經驗教訓</h2>
+<h2 id="section-6">經驗教訓</h2>
 <ol>
 <li><p><strong>所有異步操作都應該有錯誤處理</strong></p>
 <ul>
@@ -331,7 +347,7 @@ audio.play().catch(error =&gt; {
 </ul>
 </li>
 </ol>
-<h2>修復驗證</h2>
+<h2 id="section-7">修復驗證</h2>
 <p>提交修復後（commit <code>51ce01e</code>），透過以下步驟驗證：</p>
 <ol>
 <li>清除快取並重新載入頁面</li>
@@ -340,7 +356,7 @@ audio.play().catch(error =&gt; {
 <li>檢查 console 無錯誤訊息</li>
 </ol>
 <p>✅ 播放器現已完全正常運作！</p>
-<h2>後續修復：自動略過內容問題（2025-10-19）</h2>
+<h2 id="section-8">後續修復：自動略過內容問題（2025-10-19）</h2>
 <p>在 Promise 錯誤處理修復後，又發現了一個更隱蔽的問題：播放時會自動略過一些內容，但進度條顯示正常，原始檔案也正常。這個問題源於多個時序競爭條件（race condition）和事件處理器衝突。</p>
 <h3>發現的核心問題</h3>
 <p>經過深度分析（commit <code>dde7489</code>），找出了 5 個相互關聯的問題：</p>
@@ -448,7 +464,7 @@ audio.addEventListener(&#39;ended&#39;, () =&gt; {
 <li>✅ 播放清單模式（多個片段）</li>
 <li>✅ 頁面重新載入</li>
 </ul>
-<h2>結語</h2>
+<h2 id="section-9">結語</h2>
 <p>這個看似簡單的 bug 揭示了一個重要教訓：<strong>JavaScript 的 Promise 機制要求開發者主動處理錯誤</strong>。在異步操作日益普遍的現代 Web 開發中，忽略 Promise rejection 就像忽略 try-catch 一樣危險。</p>
 <p>記住：<strong>如果一個函數返回 Promise，你就有責任處理它的 rejection</strong>。這不僅能讓程式碼更健壯，也能讓偵錯過程更加順暢。</p>
 <hr>
@@ -465,15 +481,20 @@ audio.addEventListener(&#39;ended&#39;, () =&gt; {
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">問題現象</a></li><li><a href="#section-2">偵錯過程</a></li><li><a href="#section-3">根本原因分析</a></li><li><a href="#section-4">解決方案</a></li><li><a href="#section-5">技術要點總結</a></li><li><a href="#section-6">經驗教訓</a></li><li><a href="#section-7">修復驗證</a></li><li><a href="#section-8">後續修復：自動略過內容問題（2025-10-19）</a></li><li><a href="#section-9">結語</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

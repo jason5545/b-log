@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -197,12 +213,12 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">何謂老歌？一個沒有標準答案的問題</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>一個下午，一台收音機</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">一個下午，一台收音機</h2>
 <p>小時候家裡強迫午睡，沒有手機，躺在床上睡不著，唯一的娛樂就是收音機。</p>
 <p>那時候每個週日下午兩點到四點，News98（FM98.1）有一個節目叫《音樂大街》，主持人是陳婧（Tracy），專門播老歌，可以 call in 點歌。有一次聽眾點了周杰倫的歌，主持人直接拒絕：「不好意思喔，這個歌還沒滿十年。」</p>
 <p>那是我第一次聽到有人明確定義「老歌」這件事——十年。</p>
 <p>這個節目大概在某次改版後就靜靜消失了。News98 的維基百科頁面沒有提到它，Google 搜不到任何相關資料，唯一的痕跡是 2007 年 PTT folkmusic 板上一篇<a href="https://www.ptt.cc/bbs/folkmusic/M.1169310040.A.124.html">零推文的分享文</a>。大概只剩我還記得了。</p>
-<h2>網路上怎麼定義？</h2>
+<h2 id="section-2">網路上怎麼定義？</h2>
 <p>查了一輪，沒有共識：</p>
 <ul>
 <li><strong>年份門檻派</strong>：最常見的說法是 20 到 30 年。美國廣播電台業界慣例大約 25 年。&quot;Oldies music&quot; 的涵蓋範圍則是從 1950 年代到距今 10 到 20 年前。</li>
@@ -211,12 +227,12 @@
 <li><strong>風格派</strong>：中國知乎上有人指出，一首歌被認定為老歌，主要是從曲調結構、唱詞風格和唱法來判斷，而不是從創作時間。</li>
 </ul>
 <p>每一派都有道理，但沒有任何一個定義能讓所有人同意。</p>
-<h2>用幾首歌來測試</h2>
+<h2 id="section-3">用幾首歌來測試</h2>
 <p><strong>Avicii — Hey Brother（2013）</strong>：距今 13 年，過了十年門檻。但 EDM 的製作品質不太會隨時代過時，加上這首歌從未離開過大眾的耳朵，心理上的距離感很小。Avicii 2018 年過世更把他的音樂凍結在一個時間點——感覺比較像是「被記住的歌」而不是「過去的歌」。</p>
 <p><strong>F.I.R. 飛兒樂團（2004 出道）</strong>：22 年，任何標準都過線。而且〈Lydia〉綁定了《鬥魚》那個偶像劇全盛期，時代錨點非常強烈。2018 年 Faye 退團更把「Faye 時期的 F.I.R.」封存成一個已經結束的章節。不管從哪個角度看，都很難不歸類為老歌。</p>
 <p><strong>中島美嘉、倖田來未（2001 前後出道）</strong>：超過 20 年。提到她們的時候，大部分人腦中浮現的是特定時期的形象——《雪の華》的中島美嘉、全盛期的倖田來未。那個畫面是定格的，離開 2000 年代日本流行文化的語境就很難不覺得「老」。</p>
 <p><strong>LiSA（2011 solo 出道）</strong>：最早那批歌超過 13 年了，十年門檻早就過線。但她一直在發新歌、一直開演唱會、一直有新的動畫主題曲，音樂沒有被「封存」。對還在現場聽的人來說，這些歌是活的。</p>
-<h2>我的定義</h2>
+<h2 id="section-4">我的定義</h2>
 <p>如果要我自己定義，我會說：一首歌變成老歌的瞬間，不是它滿了幾年，而是<strong>聽它的人開始用「那時候」來描述聽到它的場景</strong>。</p>
 <p>我講《音樂大街》的時候，我說的是「我們家以前都會強迫午睡」「那個時候也沒有手機」——句子裡的時態就是標記。我不是在描述一首歌，我是在描述一個已經不存在的生活方式。歌只是剛好在那個場景裡。</p>
 <p>所以老歌的本質可能不是音樂的屬性，而是記憶的屬性。同一首歌，對還在現場聽演唱會的你來說是活的，對一個只在 YouTube 推薦裡偶然點到的人來說就是老的。差別不在歌，在於你跟它之間還有沒有「現在」。</p>
@@ -230,15 +246,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">一個下午，一台收音機</a></li><li><a href="#section-2">網路上怎麼定義？</a></li><li><a href="#section-3">用幾首歌來測試</a></li><li><a href="#section-4">我的定義</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

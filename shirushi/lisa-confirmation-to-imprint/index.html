@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -209,7 +225,7 @@
 <p>我媽這週又問我了。</p>
 <p>「你喜歡她都幾年了，還是這麼瘋？」</p>
 <p>我當下沒有回答。不是不知道，是覺得我說的答案她一定聽不懂。她在問「理由」，但這件事早就超出理由的範圍了。</p>
-<h2>那個下午</h2>
+<h2 id="section-1">那個下午</h2>
 <p>時間要先拉回 2015 年 3 月 29 日。</p>
 <p>那天下午沒課，我在宿舍隨便翻 YouTube，推薦欄跳出一支影片——日比谷野外音楽堂，一架鋼琴，一個聲音。我也不知道為什麼點進去，就點了。</p>
 <p>前奏一起，我整個人就靜下來了。</p>
@@ -217,7 +233,7 @@
 <p>我沒有辦法用語言解釋那幾分鐘發生了什麼事。就是被停在那裡了。</p>
 <p>沒有通知，沒有儀式，某個完全沒有預期的普通下午，某件東西就這樣落下了。後來我才慢慢搞懂那是什麼感覺——那就是生根了。</p>
 <p>（同年七月，我打了兩個小時電話跟售票小姐磨，才買到了輪椅席。那是另一個故事了。）</p>
-<h2>我去演唱會是為了確認</h2>
+<h2 id="section-2">我去演唱會是為了確認</h2>
 <p>很多人看演唱會是為了嗨，為了應援，為了一起跟著唱。</p>
 <p>我去，是為了確認。</p>
 <p>確認她還在台上，確認我還能感受到那個連結，確認從日比谷那架鋼琴開始的東西還沒有斷掉。對一個日常生活本來就帶著張力的人來說，「確認基底還在」是非常具體的需要，不是什麼浪漫的說法。</p>
@@ -226,7 +242,7 @@
 <p>所以今年 6 月 19 日，我決定直接出現在現場。</p>
 <p>沒有票。就直接去。</p>
 <p>不是衝動，是因為我非常清楚那個確認對我意味著什麼。（迷之音：你說的這麼有道理，但搞不好真的進不去喔。）</p>
-<h2>LACE UP 讓我聽到了她走過來的樣子</h2>
+<h2 id="section-3">LACE UP 讓我聽到了她走過來的樣子</h2>
 <p>我承認，第一次串流 LACE UP 的時候，我沒有預期會那麼喜歡。</p>
 <p>十五週年的紀念專輯，我以為會是比較回顧型的東西。結果聽完整張，我就在想，這才是她現在真實的樣子。</p>
 <p>我一直是偏愛慢歌的人。但這張專輯最打中我的反而是快歌。不是因為口味變了，是因為在那些快歌裡，我聽到的不是「嗨」，是她十五年走過來的腳步聲。</p>
@@ -238,7 +254,7 @@
 <p>「わたしを忘れないでよ、ダーリン。」</p>
 <p>請不要忘記我。</p>
 <p>我當場就沉默了好幾秒。</p>
-<h2>後記</h2>
+<h2 id="section-4">後記</h2>
 <p>家人再問我為什麼還是那麼喜歡，我想我現在可以回答了。</p>
 <p>不是因為我每天早上醒來決定繼續喜歡她，就像我不是每天早上醒來決定繼續呼吸。是因為她的音樂嵌進了我 2015 年的三月、2017 年的夏天、2018 年的新莊，以及每一個說不清楚是哪一天但就是記得某首歌在放的夜晚。</p>
 <p>那不是「喜歡一個歌手」留下的。是我自己的人生。</p>
@@ -257,15 +273,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">那個下午</a></li><li><a href="#section-2">我去演唱會是為了確認</a></li><li><a href="#section-3">LACE UP 讓我聽到了她走過來的樣子</a></li><li><a href="#section-4">後記</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

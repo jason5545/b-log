@@ -77,12 +77,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -95,19 +95,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -204,30 +220,30 @@
       <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/first-hackathon-code-done-in-37-minutes-cover.webp" srcset="/content/img/2026/first-hackathon-code-done-in-37-minutes-cover-480w.webp 480w, /content/img/2026/first-hackathon-code-done-in-37-minutes-cover-828w.webp 828w, /content/img/2026/first-hackathon-code-done-in-37-minutes-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>9/20 下午四點四十七分，我在會場樓下的大門口，先跟 Claude Code 對時。</p>
 <p>然後我請它照飛機的 cockpit checklist 那樣，它唸一項、我檢查一項，能自動查的它自己查完回報。它是我的副駕駛。這是我人生第一場駭客松，Claude Community Taiwan 辦的 Claude Code Build Day，Everyday 賽道，單人。</p>
-<h2>題目是我自己的問題</h2>
+<h2 id="section-1">題目是我自己的問題</h2>
 <p>「我的輪椅進得去嗎」。</p>
 <p>每一個新地方都說「我們有電梯」。我的問題從來不是有沒有電梯，是那台電梯的車廂放不放得下我的 Leon。</p>
 <p>臺灣有一個全國昇降設備登記系統，每台電梯都有一串設備規格，例如 <code>P8 550-CO 90-14 S/B1-13</code>。P8 是載重等級，對上日本 JIS A 4301 的容量表，就能推出車廂大概是 1400 × 1030 毫米、門寬 800。Leon 的車長是 1060。</p>
 <p>1030 對 1060。差 30 毫米。</p>
 <p>這是我諮商診所那棟的電梯。每次去都要把腳踏板拆掉。工具算出來的答案，是我身體早就知道的事。差別是現在它旁邊有證據欄：門寬、車廂、設備編號、使用執照號碼。</p>
 <p>判定分五態：進得去且能迴轉、只能直進倒退、硬塞、進不去、沒有電梯。承德路二段 217 號是家人公司所在的大樓，七樓，P10 的車廂，判定是只能直進倒退。這跟我實際搭的經驗一樣。</p>
-<h2>賽前只准備 prompt，一行程式都不寫</h2>
+<h2 id="section-2">賽前只准備 prompt，一行程式都不寫</h2>
 <p>主辦的規則寫得很清楚：可以事先準備 prompt，不接受帶半成品，各賽道第一名會查 repo。</p>
 <p>所以 9/15 決定題目之後，我做的是研究，不是實作。用瀏覽器側錄那個登記系統的請求順序，查出驗證碼只在一個端點檢查、換頁不用重打、詳情頁不帶 seq 會回一個全空的模板。9/18 用 curl 把整串流程跑通。9/18 和 9/20 早上把五個 demo 地址的原始 HTML 抓下來當保險，網站當天掛掉也能離線做。</p>
 <p>9/18 我問過 Claude Code 一個問題：當天它對自己的把握有多高？要不要把 prompt 改成給本機模型那種一步一步的寫法？我自己也覺得那樣有點太對它沒信心。它的答案是不要，理由是那種寫法拿掉判斷空間，而當天最需要判斷的時刻，正是網站行為跟側錄不一樣的時候。</p>
 <p>當天早上我再問一次：one-shot 的機率多高？它估五成。</p>
-<h2>開賽</h2>
+<h2 id="section-3">開賽</h2>
 <p>17:43 開賽。Prompt 裡有一欄 KICKOFF TIME，貼上去之前我自己填。它感覺不到時間，只能靠 <code>date</code> 算，每次 commit 前印一次過了幾分鐘。</p>
 <p>第一個小坑是建公開 repo。這一步被 Claude Code 的自動模式擋下來，因為那是「建立公開介面」。它把指令印給我，我自己跑。</p>
 <p>+37 分鐘，三段 prompt 全部做完，含車廂俯視圖，第一次完整排練過。剩下五十分鐘。</p>
 <p>排練是一個 Playwright 腳本，照旁白的時間戳填地址、選輪椅、按查詢，最後印 TIMING OK 或不 OK。每個 commit 後都重跑一次，紅了就 checkout 回上一個綠的，不 debug。這條規則是當天早上才改的，原本 75 分鐘是停工線，改成 75 分鐘是第一次排練。</p>
 <p>之後加的東西：Karma 的產品照、空狀態的五態圖例、卡片頂端一句話結論、215 號到 217 號那條側向鏈的門牌示意圖、把輪椅從側視的兩個圓圈改成真的俯視。最後上台的是第 12 個 commit，tag 是 stage-build-8。十二次錄影排練全過。</p>
-<h2>為什麼台上不開口、不點</h2>
+<h2 id="section-4">為什麼台上不開口、不點</h2>
 <p>我的構音會隨場合的陌生程度下滑。這一場陌生程度是 100%。</p>
 <p>所以旁白全程用我自己聲音的 voice clone TTS，開頭第一句就講明這是複製的聲音，因為腦性麻痺讓我在台上講話和點擊都不可靠。連「Hi, I&#39;m Jason」和「Thank you」都不是我講的。</p>
 <p>點擊也不是我點的。台上由那個 Playwright 腳本操作 app，我只按一次 START。</p>
 <p>旁白當天改了兩次。第一次是結尾那句「with one finger and voice」，我發現當天全程都在打字，沒用語音，voice 兩個字要拿掉，只重生那一句。第二次是怕上台時間沒有彈性，把 69 秒縮到 59.4 秒，砍掉診所那段的最後一句和結尾兩句。句子重拼不重生，時間軸跟著平移。</p>
-<h2>出狀況的都在我要親手碰的地方</h2>
+<h2 id="section-5">出狀況的都在我要親手碰的地方</h2>
 <p>程式碼那邊沒有出過事。出事的是最後那幾下。</p>
 <p>19:11，控制頁開在瀏覽器裡，我按到 Enter，demo 提前跑掉一次。跑完之後視窗自己關了，半小時沒人發現。</p>
 <p>18:59，我問 Claude Code 能不能幫我操作 Teams 的分享，我怕在台上點錯。它試了 System Events，無障礙樹看得到「加入」那顆按鈕，下 click 指令回報成功，畫面完全沒反應。離 85 分鐘的停工線只剩 13 分鐘，放棄，分享那兩下我自己來。</p>
@@ -235,10 +251,10 @@
 <p>19:58:30，按下 START。59 秒，一次過，TIMING OK，零錯誤。我們是第三組。</p>
 <p>賽後查出來，三個視窗是 Chromium 的 kiosk 模式在 macOS 會把分頁列和工具列各開成一個獨立視窗，Teams 逐個列出來。Enter 誤觸是控制頁只要有焦點就吃鍵盤。跑完關視窗是 driver 沒有 keep-open。當晚四項都修了：kiosk 改成 app 模式只剩一個視窗，START 要先勾 READY 而且只吃滑鼠點擊，跑完視窗留著，旗標不再被吃掉。</p>
 <p>沒縮圖的原因還沒查證。下次如果還是沒有，直接分享整個螢幕。</p>
-<h2>公平證據</h2>
+<h2 id="section-6">公平證據</h2>
 <p>Repo 在 <a href="https://github.com/jason5545/can-my-wheelchair-fit">github.com/jason5545/can-my-wheelchair-fit</a>。README 寫明哪些是賽前準備的：prompt、請求順序、規格字串格式、原始 HTML、尺寸表。每一行程式碼都在賽中寫的，commit log 是公開的，第一個 commit 17:44，最後一個 18:38。</p>
 <p>當天從頭到尾沒有對登記系統真查，也沒有輸入驗證碼。五個地址的原始回應都在 fixtures 裡，快取從那裡種出來。比賽當下資料庫不會動，真查沒有意義。live 路徑照寫、9/18 驗過，README 寫明。</p>
-<h2>結果</h2>
+<h2 id="section-7">結果</h2>
 <p>大會特別獎。</p>
 <p>評審是 Anthropic 的 Japan Developer Community Lead Junichiro Tsuji 和另一位評審。</p>
 <p>我想這就是 Anthropic 希望看到的。AI 可以改變一個人。可以改變一個社會。可以讓整個社會更進步。</p>
@@ -251,15 +267,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#f07c2a"><a href="/ai-analysis/svg-cover-create-post-first-run/"><span class="side-row__meta">19SEP26 · <span>AI 分析</span></span><span class="side-row__title">讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">題目是我自己的問題</a></li><li><a href="#section-2">賽前只准備 prompt，一行程式都不寫</a></li><li><a href="#section-3">開賽</a></li><li><a href="#section-4">為什麼台上不開口、不點</a></li><li><a href="#section-5">出狀況的都在我要親手碰的地方</a></li><li><a href="#section-6">公平證據</a></li><li><a href="#section-7">結果</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

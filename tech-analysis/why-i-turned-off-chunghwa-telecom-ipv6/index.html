@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -199,24 +215,24 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">為什麼我最後還是關掉了中華電信的 IPv6</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>前言</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">前言</h2>
 <p>IPv6 推廣了這麼多年，我一直覺得身為一個搞技術的人，應該要跟上時代。而且對我來說，IPv6 有個很實際的好處：<strong>不用設 port forwarding</strong>。</p>
 <p>我因為身體限制，只能用一根手指打字，操作成本比一般人高很多。每少一個要點擊、要設定的步驟，對我來說都是有感的。IPv6 讓每個裝置都有公開位址，要遠端存取直接連就好，不用在路由器上一條一條設 NAT 規則。</p>
 <p>這不是為了追新技術而費事，是真的有需求。</p>
 <p>於是某天我決定認真把中華電信的 IPv6 打開來用。結果是一場災難。</p>
-<h2>問題的開始</h2>
+<h2 id="section-2">問題的開始</h2>
 <p>開啟 IPv6 之後，網路變得很不穩定。有時候網頁載入很慢，有時候圖片出不來，有時候連線直接卡住。最討厭的是那種「不是完全不能用，但就是怪怪的」狀態，你很難確定問題到底在哪裡。</p>
 <p>一開始我以為是華碩路由器的問題。爬了一些文，發現很多人說消費級路由器的 IPv6 支援不好，建議換 OpenWrt。</p>
 <p>但仔細想想，這其實很諷刺。華碩是台灣本土廠商，總部就在台灣，員工自己家裡用的大概也是中華電信。理論上他們應該最清楚 HiNet 的 PPPoE Dual Stack 怎麼運作，最有條件做出針對性的最佳化。</p>
 <p>結果呢？預設值還是踩雷，IPv6 一樣不穩。</p>
 <p>一個台灣使用者，買台灣品牌的路由器，接台灣最大的 ISP，結果 IPv6 還是爛。三方都是本土的，卻沒有人把這條路走通。</p>
 <p>好，那就換。</p>
-<h2>買了 GL.iNet 路由器</h2>
+<h2 id="section-3">買了 GL.iNet 路由器</h2>
 <p>我買了一台 GL.iNet 的路由器，它原生就是跑 OpenWrt，心想這下應該能解決問題了。OpenWrt 的設定彈性大，網路上也有很多針對中華電信的設定教學。</p>
 <p>結果呢？</p>
 <p><strong>跟華碩一模一樣爛。</strong></p>
 <p>這下我確定問題不在路由器了。</p>
-<h2>開始研究原因</h2>
+<h2 id="section-4">開始研究原因</h2>
 <p>既然換了路由器還是一樣，那問題只能在中華電信那端。我開始認真研究到底是怎麼回事。</p>
 <h3>MTU 黑洞</h3>
 <p>PPPoE 連線的 MTU 是 1492，但很多路由器預設是 1500。當封包太大又遇到中間路由器擋掉 ICMPv6「Packet Too Big」訊息時，PMTUD 就會失敗。</p>
@@ -234,16 +250,16 @@
 <p>更荒謬的是，連專業網路設備廠商都沒把 IPv6 當回事。apalrd 在影片裡提到，Ubiquiti 這麼大的廠牌，到現在都還沒有完整支援 IPv6。他們只做了最基本的支援，例如你想用 VPN 搭配 IPv6？抱歉，沒辦法。</p>
 <p>Ubiquiti 的 UniFi 系列是很多 home lab 玩家和中小企業的首選，結果 IPv6 還是半殘狀態。這代表大多數客戶根本不在乎這個功能，廠商也就沒有動力做完整。功能清單上有寫「支援 IPv6」就夠交差了，真正用到進階功能的人是少數。</p>
 <p>連做網路裝置的公司都這樣，更不用說一般消費級路由器了。</p>
-<h2>這是台灣獨有的問題嗎？</h2>
+<h2 id="section-5">這是台灣獨有的問題嗎？</h2>
 <p>我本來以為是中華電信特別爛，結果研究之後發現：<strong>全世界的 ISP 都差不多爛</strong>。</p>
 <p>德國使用者用 pfSense 配 PPPoE 也遇到頻繁斷線，阿聯酋使用者換了 TP-Link 路由器後一開 IPv6 就斷網。RIPE（歐洲網路協調中心）甚至專門為 ISP 客服寫了 IPv6 故障排除指南，因為太多使用者抱怨了。</p>
 <p>不過有些國家確實做得比較好。荷蘭的 XS4ALL 從 2002 年就開始佈建 IPv6，到 2012 年所有新使用者預設啟用，採用率超過 70%。差別在於他們起步早、有時間踩雷、而且給使用者足夠大的 prefix。</p>
 <p>有個做 home lab 的 YouTuber <a href="https://www.youtube.com/@apalrdsadventures">apalrd&#39;s adventures</a> 甚至因為網路環境的關係搬去了芬蘭。對於需要穩定 IPv6、要跑伺服器、做直播的人來說，搬家的成本搞不好比長期搞這些還划算。</p>
-<h2>為什麼行動網路沒這個問題？</h2>
+<h2 id="section-6">為什麼行動網路沒這個問題？</h2>
 <p>有趣的是，中華電信的行動網路 IPv6 使用率高達 75-80%，而且很穩定。</p>
 <p>原因是行動網路沒有 PPPoE、沒有 MTU 問題、沒有 72 小時重連、不需要 DHCPv6-PD。整個連線全程由電信商控制，所以反而沒事。</p>
 <p>固網的問題在於 PPPoE + DHCPv6-PD + 各種消費級路由器的組合，變數太多，中華電信無法控制用戶端裝置的行為。</p>
-<h2>我的下一步</h2>
+<h2 id="section-7">我的下一步</h2>
 <p>雖然知道問題在 ISP 端，但 OpenWrt 確實還有一些可以調整的空間，我之前都用預設值沒改。</p>
 <p>接下來我打算試試：</p>
 <ul>
@@ -254,7 +270,7 @@
 <li>確認防火牆允許 ICMPv6</li>
 </ul>
 <p>如果調完還是爛，那就真的死心了。</p>
-<h2>更新：測試結果</h2>
+<h2 id="section-8">更新：測試結果</h2>
 <p>用 Claude 的瀏覽器代理直接操作 OpenWrt LuCI 介面，調整了以下設定：</p>
 <p><strong>第一階段：基本設定</strong></p>
 <ul>
@@ -293,7 +309,7 @@ chmod +x /etc/hotplug.d/iface/99-ipv6-prefix-update
 </ul>
 <p>接下來觀察一週，看看長期穩定性如何。特別關注 72 小時後 PPPoE 重連、prefix 換掉時 Apple 裝置的行為。</p>
 <p>（待續：一週後更新長期穩定性結果）</p>
-<h2>結論</h2>
+<h2 id="section-9">結論</h2>
 <p>IPv6 的概念很好，但現階段在台灣固網環境要穩定使用，需要：</p>
 <ol>
 <li>ISP 端把基礎設施做好</li>
@@ -310,15 +326,20 @@ chmod +x /etc/hotplug.d/iface/99-ipv6-prefix-update
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">前言</a></li><li><a href="#section-2">問題的開始</a></li><li><a href="#section-3">買了 GL.iNet 路由器</a></li><li><a href="#section-4">開始研究原因</a></li><li><a href="#section-5">這是台灣獨有的問題嗎？</a></li><li><a href="#section-6">為什麼行動網路沒這個問題？</a></li><li><a href="#section-7">我的下一步</a></li><li><a href="#section-8">更新：測試結果</a></li><li><a href="#section-9">結論</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

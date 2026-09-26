@@ -6,6 +6,12 @@ const ROOT_DIR = path.join(__dirname, '..');
 const POSTS_PATH = path.join(ROOT_DIR, 'data/posts.json');
 const TEMPLATE_PATH = path.join(ROOT_DIR, 'post.html');
 const HOMEPAGE_PATH = path.join(ROOT_DIR, 'index.html');
+const ABOUT_PATH = path.join(ROOT_DIR, 'about.html');
+const ABOUT_TOC_START = '<!-- ABOUT_TOC_START -->';
+const ABOUT_TOC_END = '<!-- ABOUT_TOC_END -->';
+// CONTENTS 目錄：內文最外層至少 2 個 h2 才輸出
+const TOC_MIN_HEADINGS = 2;
+const VOID_TAGS = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
 // 頁尾年份要跟著產生時間走的根目錄頁面（文章靜態頁另外在產生時替換）
 const FOOTER_YEAR_PAGES = ['index.html', 'post.html', 'about.html', 'gadgets.html'];
 const FOOTER_YEAR_PATTERN = /(<span class="foot__year" data-footer-year>)\d{4}(<\/span>)/g;
@@ -257,8 +263,8 @@ function buildSideRowMarkup(post) {
 }
 
 // 選文規則跟 main.js 的 renderRelatedPosts 一樣：同分類或有共同標籤，新到舊取 3 篇
-function buildRelatedListMarkup(sortedPosts, currentPost) {
-  const related = sortedPosts
+function pickRelatedPosts(sortedPosts, currentPost) {
+  return sortedPosts
     .filter((post) => post.slug !== currentPost.slug)
     .filter((post) => {
       if (currentPost.category && post.category && post.category === currentPost.category) return true;
@@ -266,16 +272,92 @@ function buildRelatedListMarkup(sortedPosts, currentPost) {
       return currentPost.tags.some((tag) => post.tags.includes(tag));
     })
     .slice(0, 3);
+}
 
-  const items = related.length
-    ? related.map(buildSideRowMarkup).join('')
+// LATEST 排除目前這篇和已經列在 RELATED 的文章
+function pickLatestPosts(sortedPosts, currentPost, relatedPosts) {
+  const excluded = new Set([currentPost.slug, ...relatedPosts.map((post) => post.slug)]);
+  return sortedPosts.filter((post) => !excluded.has(post.slug)).slice(0, 3);
+}
+
+function buildRelatedListMarkup(relatedPosts) {
+  const items = relatedPosts.length
+    ? relatedPosts.map(buildSideRowMarkup).join('')
     : '<li class="row--empty">More posts arriving soon.</li>';
   return `<ol id="related-list" class="side-list" data-prerendered="true">${items}</ol>`;
 }
 
-function buildLatestListMarkup(sortedPosts, currentPost) {
-  const latest = sortedPosts.filter((post) => post.slug !== currentPost.slug).slice(0, 3);
-  return `<ol id="latest-sidebar" class="side-list" data-prerendered="true">${latest.map(buildSideRowMarkup).join('')}</ol>`;
+function buildLatestListMarkup(latestPosts) {
+  return `<ol id="latest-sidebar" class="side-list" data-prerendered="true">${latestPosts.map(buildSideRowMarkup).join('')}</ol>`;
+}
+
+// 找出最外層的 h2（不在 div、blockquote 等元素裡），缺 id 的補上 section-N（N 是第幾個 h2），
+// 已有的 id 與手寫的 <a id> 都不動。usedIds 是整頁已經用掉的 id，避免撞名。main.js 的 ensureHeadingIds 同一套規則
+function addTopLevelHeadingIds(bodyHtml, usedIds) {
+  const stack = [];
+  const headingIds = [];
+  let ordinal = 0;
+
+  // 註解整段跳過，註解裡寫的 <li> 之類不算標籤
+  const html = bodyHtml.replace(/<!--[\s\S]*?-->|<(\/?)([a-zA-Z][\w-]*)((?:[^>"']|"[^"]*"|'[^']*')*?)(\/?)>/g, (tag, closing, rawName, attrs, selfClosing) => {
+    if (rawName === undefined) return tag;
+    const name = rawName.toLowerCase();
+    if (closing) {
+      const index = stack.lastIndexOf(name);
+      if (index !== -1) stack.length = index;
+      return tag;
+    }
+
+    const isTopLevelH2 = name === 'h2' && stack.length === 0;
+    if (!VOID_TAGS.has(name) && !selfClosing) stack.push(name);
+    if (!isTopLevelH2) return tag;
+
+    ordinal += 1;
+    const existingId = attrs.match(/\sid\s*=\s*(?:"([^"]*)"|'([^']*)')/);
+    if (existingId) {
+      headingIds.push(existingId[1] ?? existingId[2]);
+      return tag;
+    }
+
+    const id = uniqueHeadingId(`section-${ordinal}`, usedIds);
+    headingIds.push(id);
+    return `<h2${attrs} id="${id}">`;
+  });
+
+  return { html, headingIds };
+}
+
+function uniqueHeadingId(candidate, usedIds) {
+  let id = candidate;
+  let suffix = 2;
+  while (usedIds.has(id)) {
+    id = `${candidate}-${suffix}`;
+    suffix += 1;
+  }
+  usedIds.add(id);
+  return id;
+}
+
+function collectIds(html) {
+  return new Set([...html.matchAll(/\sid\s*=\s*(?:"([^"]*)"|'([^']*)')/g)].map((match) => match[1] ?? match[2]));
+}
+
+function extractHeadingText(html, id) {
+  const match = html.match(new RegExp(`<h2\\b[^>]*\\sid="${escapeRegExp(id)}"[^>]*>([\\s\\S]*?)<\\/h2>`));
+  return match ? match[1].replace(/<[^>]*>/g, '').trim() : '';
+}
+
+// CONTENTS：跟 main.js 的 buildTocMarkup 同一個結構。Crossing Field 內文有自己的目錄時，顏色跟內文目錄一致
+function buildTocMarkup(html, headingIds, { idAttr = 'post-toc', isCrossingField = false } = {}) {
+  const items = headingIds
+    .map((id) => ({ id, text: extractHeadingText(html, id) }))
+    .filter((item) => item.text);
+  const className = isCrossingField ? 'aside-toc aside-toc--cf' : 'aside-toc';
+  if (items.length < TOC_MIN_HEADINGS) {
+    return `<nav id="${idAttr}" class="aside-toc" aria-labelledby="toc-label" hidden></nav>`;
+  }
+  const listMarkup = items.map(({ id, text }) => `<li><a href="#${escapeHtml(id)}">${text}</a></li>`).join('');
+  return `<nav id="${idAttr}" class="${className}" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list">${listMarkup}</ol></nav>`;
 }
 
 function buildAccentMarkup(post) {
@@ -692,6 +774,26 @@ function syncHomepage(posts) {
   }
 }
 
+// about.html：h2 補 id，CONTENTS 放在 ABOUT_TOC 標記之間（內容文字不動）
+function syncAboutToc() {
+  const aboutHtml = fs.readFileSync(ABOUT_PATH, 'utf8');
+  const contentMatch = aboutHtml.match(/(<section class="content">)([\s\S]*?)(<\/section>\s*\n\s*<!-- ABOUT_TOC_START -->)/);
+  if (!contentMatch) {
+    throw new Error('about.html 找不到 <section class="content"> 或 ABOUT_TOC 標記');
+  }
+
+  const [whole, open, content, close] = contentMatch;
+  const { html: contentWithIds, headingIds } = addTopLevelHeadingIds(content, collectIds(aboutHtml));
+  let updated = aboutHtml.replace(whole, () => `${open}${contentWithIds}${close}`);
+  const tocMarkup = buildTocMarkup(contentWithIds, headingIds, { idAttr: 'about-toc' });
+  updated = replaceMarkedBlock(updated, ABOUT_TOC_START, ABOUT_TOC_END, `    ${tocMarkup}`);
+
+  if (updated !== aboutHtml) {
+    fs.writeFileSync(ABOUT_PATH, updated, 'utf8');
+    console.log('📑 已同步 about.html 目錄');
+  }
+}
+
 function removeEmptyDirsUpward(startDir, stopDir) {
   let current = startDir;
   while (current.startsWith(stopDir) && current !== stopDir) {
@@ -770,7 +872,14 @@ function generatePostHTML(post, sortedPosts) {
 
   // 生成完整的 URL
   const fullUrl = `${SITE_BASE_URL}/${categorySlug}/${slug}/`;
-  const staticPostContent = renderMarkdownForStaticPage(post);
+  const renderedContent = renderMarkdownForStaticPage(post);
+  const { html: staticPostContent, headingIds } = addTopLevelHeadingIds(
+    renderedContent,
+    new Set([...collectIds(postTemplate), ...collectIds(renderedContent)])
+  );
+  const tocMarkup = buildTocMarkup(staticPostContent, headingIds, {
+    isCrossingField: staticPostContent.includes('class="crossing-field-toc"'),
+  });
   const hideCover = coverAppearsInBody(coverImage, staticPostContent);
   const heroPreload = hideCover ? '' : buildHeroPreload(coverImage);
   const heroMarkup = buildHeroMarkup(post, hideCover);
@@ -800,8 +909,10 @@ function generatePostHTML(post, sortedPosts) {
   html = replaceRequired(html, '<figure id="post-hero" class="post__cover" hidden></figure>', heroMarkup);
   html = replaceRequired(html, '<span id="breadcrumb-current"></span>', buildBreadcrumbMarkup(post));
   html = replaceRequired(html, '<div id="post-accent" class="post__accent" aria-hidden="true"></div>', buildAccentMarkup(post));
-  html = replaceRequired(html, '<ol id="related-list" class="side-list"></ol>', buildRelatedListMarkup(sortedPosts, post));
-  html = replaceRequired(html, '<ol id="latest-sidebar" class="side-list"></ol>', buildLatestListMarkup(sortedPosts, post));
+  const relatedPosts = pickRelatedPosts(sortedPosts, post);
+  html = replaceRequired(html, '<nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" hidden></nav>', tocMarkup);
+  html = replaceRequired(html, '<ol id="related-list" class="side-list"></ol>', buildRelatedListMarkup(relatedPosts));
+  html = replaceRequired(html, '<ol id="latest-sidebar" class="side-list"></ol>', buildLatestListMarkup(pickLatestPosts(sortedPosts, post, relatedPosts)));
   html = replaceRequired(html, '<p id="post-meta" class="meta"></p>', `<p id="post-meta" class="meta">${staticMetaMarkup}</p>`);
   html = replaceRequired(html, '<p id="post-catline" class="catline" hidden></p>', buildCatlineMarkup(post));
   html = replaceRequired(html, '<h1 id="post-title" class="post__title">Loading</h1>', `<h1 id="post-title" class="post__title">${safeTitle}</h1>`);
@@ -1002,6 +1113,7 @@ function syncGeneratedContent() {
 
   const posts = JSON.parse(fs.readFileSync(POSTS_PATH, 'utf8'));
   syncFooterYearPages();
+  syncAboutToc();
   postTemplate = fs.readFileSync(TEMPLATE_PATH, 'utf8');
   syncHomepage(posts);
 

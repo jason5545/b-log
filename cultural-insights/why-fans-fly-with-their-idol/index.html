@@ -78,12 +78,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -96,19 +96,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -202,36 +218,36 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">為什麼粉絲願意跟著偶像到處飛？——從一個 VTuber 的困惑聊起</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>一場意料之外的演唱會心得</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">一場意料之外的演唱會心得</h2>
 <p>今天看藤倉ウルカ的直播，拉完小提琴後的雜談環節，她聊到一件事：前陣子她在美國去看了一場韓國歌手的演唱會。</p>
 <p>她形容那個歌手的風格類似日本的演歌——聽起來就是韓國的 Trot（트로트）。歌手本人才三十六歲（韓國年齡），但觀眾席上除了她跟朋友以外，幾乎都是六十歲起跳的韓國人。粉絲們綁著頭帶、穿著 teal 色的衣服，氣氛非常熱烈。</p>
 <p>根據這些線索——韓國 Trot 歌手、三十六歲、在美國開演唱會、觀眾以六十歲以上韓國人為主、應援色是天藍色——後來她在直播中也確認了，她看的就是林英雄（임영웅，Lim Young-woong），2020 年 Mr. Trot 冠軍，目前韓國最頂級的 Trot 歌手。MelOn 串流量突破 135 億次，超越 BTS。</p>
 <p>她用了一個很厲害的形容：那場演出讓她感覺 out of her body——靈魂出竅。一個平常聽 J-pop、看 K-pop、自己拉小提琴的年輕 VTuber，被一個 Trot 歌手的現場震到這種程度。這其實就是最好的回答——那個讓她靈魂出竅的東西，就是那些韓國粉絲願意跟著飛的原因。</p>
 <p>但她聊的重點不是歌手本人，而是一個困惑：</p>
 <p><strong>那些韓國粉絲，為什麼要飛到美國來看自己國家的歌手？留在韓國看不是更方便嗎？</strong></p>
-<h2>我的 Super Chat</h2>
+<h2 id="section-2">我的 Super Chat</h2>
 <p>我在聊天室裡 Super Chat 了一段回覆。我告訴她，LiSA 的粉絲也是一樣的——很多日本人會跟著她到處飛。台灣、韓國、香港，都會看到日本粉絲的身影。今年 LiSA 要開歐洲巡演，那些日本粉絲也已經在計劃跟著去了。</p>
 <p>ウルカ回覆說，她並不反對這件事，只是覺得很奇怪。</p>
 <p>很合理的困惑。但仔細想想，這件事其實一點也不奇怪。</p>
-<h2>理性消費 vs. 不可複製的體驗</h2>
+<h2 id="section-3">理性消費 vs. 不可複製的體驗</h2>
 <p>ウルカ的邏輯是：「內容一樣，回本國看效率最高。」這是完全理性的消費者思維。買同一個商品，當然選最便宜最方便的通路。</p>
 <p>但現場不是商品。每一場演唱會都是一次性的。</p>
 <p>海外場和本國場是完全不同的東西。場地規模通常小很多，離舞台更近，氣氛也不一樣。很多歌手在海外場會特別放鬆，MC 環節講一些本國場不會講的話，甚至歌單可能不同。對深度粉絲來說，這不是「重複消費同一個商品」，而是完全不同的現場體驗。</p>
 <p>更重要的是：在不同的城市、不同的場館、跟不同組成的觀眾一起看，整個脈絡都不同了。東京巨蛋的三萬人跟台北小巨蛋的一萬人，產生的化學反應是兩回事。</p>
-<h2>六十歲粉絲的邏輯</h2>
+<h2 id="section-4">六十歲粉絲的邏輯</h2>
 <p>ウルカ提到觀眾幾乎都是六十歲以上。這個資訊反而解釋了一切。</p>
 <p>六十歲代表什麼？第一，經濟能力。這個年齡層通常是可支配收入最高的族群，飛一趟美國的機票和住宿對他們來說不是負擔。第二，時間自由。退休或半退休狀態，不需要跟公司請假。第三，情感深度。他們支持 Trot 音樂可能已經幾十年了，這不是一時的衝動，是生活的一部分。</p>
 <p>而且有一個ウルカ可能沒想到的面向：美國的韓國僑民社群非常龐大，尤其是洛杉磯和紐澤西一帶。那些「跟飛」的人裡面，有相當比例可能本身就住在美國。他們平常在美國很少有機會看到這種等級的 Trot 歌手現場，好不容易來一場，當然傾巢而出。</p>
-<h2>稀缺性才是重點</h2>
+<h2 id="section-5">稀缺性才是重點</h2>
 <p>跟飛的核心動機其實不是「我要多看一場」，而是「這一場我不看就沒了」。</p>
 <p>林英雄在韓國的場次雖然多，但全部秒殺。搶不到票是常態。美國場反而可能更容易入手。加上海外場的稀缺性——可能幾年才來一次——錯過這一場，下一次不知道要等多久。</p>
 <p>這個邏輯放在任何一個有死忠粉絲的歌手身上都成立。LiSA 六月要在台北小巨蛋開兩天，我 6/20 透過抽選拿到了身障席的票，但 6/19 沒有票。我的計劃是當天直接去現場想辦法。</p>
 <p>你問我為什麼？因為不去會後悔。跟那些飛到美國看林英雄的韓國粉絲，底層邏輯完全一樣。</p>
-<h2>ウルカ自己其實也是這個結構的一部分</h2>
+<h2 id="section-6">ウルカ自己其實也是這個結構的一部分</h2>
 <p>最有趣的是，ウルカ 作為一個 VTuber，她的觀眾也不只來自她所在的國家。她的直播觀眾來自世界各地，有人為了她的直播調整自己的作息時間，有人花錢 Super Chat 跟她互動。</p>
 <p>如果有一天 Phase Connect 辦線下活動，我敢保證會有人從地球另一端飛過去。到時候旁邊的人可能也會問：「你為什麼不在家看直播就好？」</p>
 <p>答案是一樣的：因為直播跟現場是兩回事。</p>
-<h2>不是「值不值得」的問題</h2>
+<h2 id="section-7">不是「值不值得」的問題</h2>
 <p>ウルカ說她不反對，只是覺得奇怪。我覺得那個「奇怪」的感覺，來自她還沒有經歷過那個強度的連結。</p>
 <p>當你跟一個歌手的關係只停留在「我喜歡聽他的歌」，跟飛確實看起來很瘋狂。但當那個關係變成「這個人的音樂陪我走過了某段人生」，飛一趟的成本就變得微不足道了。</p>
 <p>那些六十歲的韓國粉絲，跟著林英雄從首爾飛到洛杉磯。LiSA 的日本粉絲，從東京飛到台北、飛到首爾、計劃飛到歐洲。結構完全一樣，差別只在歌手的名字和飛機的目的地。</p>
@@ -245,15 +261,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">一場意料之外的演唱會心得</a></li><li><a href="#section-2">我的 Super Chat</a></li><li><a href="#section-3">理性消費 vs. 不可複製的體驗</a></li><li><a href="#section-4">六十歲粉絲的邏輯</a></li><li><a href="#section-5">稀缺性才是重點</a></li><li><a href="#section-6">ウルカ自己其實也是這個結構的一部分</a></li><li><a href="#section-7">不是「值不值得」的問題</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

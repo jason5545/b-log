@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -207,20 +223,20 @@
 <p>我看到她的時候，覺得很安心、很安定。像是確認了一件很重要的事情——她還在那裡。</p>
 <hr>
 <p>追了超過十年了，我一直知道自己跟其他粉絲不太一樣，但一直沒有認真去想過為什麼。直到最近才把這件事好好拆開來看，才發現差異的根源，其實從第一天就種下了。</p>
-<h2>2015年3月29日，下午5點</h2>
+<h2 id="section-1">2015年3月29日，下午5點</h2>
 <p>我記得很清楚。那個下午我一個人在家，在 YouTube 上隨便翻。先是翻到了シルシ的現場版，然後右邊推薦了一支 2012 年日比谷野外大音楽堂的演唱會影片。</p>
 <p>我也不知道哪根筋不對，就點了下去。</p>
 <p>那場演唱會的歌單裡有一首歌，叫ナミダ流星群。那個版本的編曲被拆到只剩一架鋼琴和她的聲音。沒有樂團、沒有鼓、沒有吉他——什麼都沒有。日比谷的露天夜空下，就是一個人站在那裡，唱著一個關於等待的故事。</p>
 <p>我被攔下來了。</p>
 <p>不是被什麼華麗的表演震到，是被那個最安靜的版本抓住的。鋼琴響起來的時候，我整個人就靜下來了。那是一種很難描述的感覺——不是興奮，不是激動，是一種「啊，找到了」的感覺。</p>
 <p>當時我不知道自己找到了什麼。十年後回頭看，我找到的是一個錨。</p>
-<h2>ナミダ流星群：一首冷門到 AI 都搜不到的歌</h2>
+<h2 id="section-2">ナミダ流星群：一首冷門到 AI 都搜不到的歌</h2>
 <p>後來我才知道，這首歌有多冷門。</p>
 <p>它是 oath sign 單曲的 coupling track，收錄在 2011 年的那張單曲裡。在 LiSA 十幾年、幾百場演唱會的紀錄裡，這首歌的演奏率只有 1%。2024 年的巡迴雖然每場 SOUR 公演都有放，但也只是メドレー串燒裡的一小段，不算完整演出。</p>
 <p>冷門到什麼程度？我跟 AI 聊到這首歌的時候，它連搜都搜不到。因為我是用語音輸入軟體 Typeless 打字的，說出「なみだ」的時候，軟體自動轉成了漢字的「涙」，而不是原本曲名裡的片假名「ナミダ」。AI 拿著「涙流星群」去查，只會找到吉田山田的同名歌曲。最後是我請它把 2012 年日比谷場的完整歌單列出來，才從 LiveFans 上找到正確的片假名寫法——ナミダ流星群。</p>
 <p>我在 2015 年就聽到了這首歌，然後記了十年。一首 1% 演奏率的 coupling track，被一個還不認識 LiSA 的人，從一支三年前的演唱會影片裡撈出來。</p>
 <p>但我不覺得這是巧合。</p>
-<h2>為什麼是慢歌</h2>
+<h2 id="section-3">為什麼是慢歌</h2>
 <p>如果你問我最喜歡 LiSA 的哪些歌，我可以列很多：</p>
 <p>いつかの手紙、白い吐息、シルシ、ナミダ流星群、変わらないの青、オレンジサイダー……</p>
 <p>你會發現，幾乎都是慢歌。</p>
@@ -230,14 +246,14 @@
 <p>我的日常本來就帶著張力。身體的不適、一根手指打字的成本、對未來不確定性的隱隱焦慮——我的基線狀態不是平穩的。我不需要被點燃，我需要被穩住。</p>
 <p>慢歌做的就是這件事。旋律是緩的、情緒是收的、LiSA 的聲音在慢歌裡不是在吶喊，是在靠近你耳邊說話。那些歌的共同語境是：靜靜地待在那裡、不會消失、溫柔地確認彼此的存在。</p>
 <p>那正是我需要的頻率。</p>
-<h2>少數例外的快歌</h2>
+<h2 id="section-4">少數例外的快歌</h2>
 <p>當然也有幾首快歌進了我的清單。罪人、Narrative、Psychedelic Drive。</p>
 <p>但原因跟別人完全不同。</p>
 <p>罪人——2018 年我 burnout 的時候靠它撐過去，那首歌吸收了我整段實習時期的重量。我不是覺得它嗨，我是跟它一起活過一段。</p>
 <p>Narrative——花了七年才發現歌詞在講自己的故事。「歩き出す音で消した」「怯える怒りがこの身体を支えてる」。澤野弘之寫的是鋼彈角色的故事，但 LiSA 唱出來就變成她自己的東西了，而那些詞剛好也對上了我的人生。</p>
 <p>我從來不是在選「快歌還是慢歌」。我選的是「這首歌有沒有在跟我講話」。</p>
 <p>別人的歌單是按「好不好聽」排的，我的歌單是按「跟我的人生有多少交集」排的。</p>
-<h2>F.I.R.：一段對照</h2>
+<h2 id="section-5">F.I.R.：一段對照</h2>
 <p>我小時候第一個喜歡的演藝團體是 F.I.R.。我老爸算是認識飛的，有天下午他去 Costco 買了他們的專輯回來，還幫我要到了 TO 簽。</p>
 <p>我嘴巴上說了好幾年「有一天要去看他們的演唱會」，但從來沒有去過。</p>
 <p>遇到 LiSA 的時候，我沒有說「有一天」。我查到她七月要來台灣，隔天一早就拿起電話打給售票。被拒絕了，隔天又打，纏了兩個多小時，終於肯賣給我。</p>
@@ -247,14 +263,14 @@
 <p>我的身體狀況決定了我做任何事的成本都比別人高。在這個前提下，一件事如果只是「想去」，它永遠會停在「有一天」。只有到了「不去不行」的程度，才會真的跨出那一步。</p>
 <p>F.I.R. 是別人帶進我生命的。LiSA 是我自己走進去的。</p>
 <p>對一個從小很多事情都需要別人協助的人來說，這個差別是決定性的。F.I.R. 的 TO 簽證明的是「老爸愛我」。LiSA 的票證明的是「我自己有能力做到」。</p>
-<h2>種子</h2>
+<h2 id="section-6">種子</h2>
 <p>不過有一件很有意思的事。</p>
 <p>入坑的兩年前，大概 2013 年左右，我的電腦裡不知道為什麼就瀏覽到了「極影動漫」，下載了 LiSA 的第一張專輯。我當時聽了，但沒有入坑。那些檔案就靜靜地躺在硬碟裡，等了兩年。</p>
 <p>等到 2015 年 3 月 29 日下午 5 點，我點開那支日比谷影片，一切才接上。</p>
 <p>到現在，就算我已經有了正版的串流來源，那個下載的檔案我還是留著。因為那是整個故事最早的第一頁。</p>
 <p>我的雷達在 2013 年就偵測到了什麼，只是當時訊號還不夠強。兩年後日比谷影片是那個訊號被放大到我無法忽視的瞬間。</p>
 <p>但種子，在更早之前就種下了。</p>
-<h2>回到原點</h2>
+<h2 id="section-7">回到原點</h2>
 <p>所以為什麼別人嗨、我安心？</p>
 <p>因為我跟她的連結，從第一秒鐘就不是建立在「刺激」上面的。</p>
 <p>我認識的 LiSA，不是那個拿著麥克風在台上吶喊的搖滾女歌手。我認識的是日比谷夜空下，只有一架鋼琴陪著，把聲音放到最輕最柔軟的那個人。</p>
@@ -272,15 +288,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#6f8f72"><a href="/cultural-insights/the-one-who-holds-me-is-held-too/"><span class="side-row__meta">29JUN26 · <span>文化觀察</span></span><span class="side-row__title">接住我的人，也被接住了</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-sounds-i-do-not-brace/"><span class="side-row__meta">24JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">跟她有關的聲音，我不防備</span></a></li><li style="--row-accent:var(--magenta)"><a href="/shirushi/lisa-believe-in-myself-2026/"><span class="side-row__meta">23JUN26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">夢想成真了，很好</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">2015年3月29日，下午5點</a></li><li><a href="#section-2">ナミダ流星群：一首冷門到 AI 都搜不到的歌</a></li><li><a href="#section-3">為什麼是慢歌</a></li><li><a href="#section-4">少數例外的快歌</a></li><li><a href="#section-5">F.I.R.：一段對照</a></li><li><a href="#section-6">種子</a></li><li><a href="#section-7">回到原點</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

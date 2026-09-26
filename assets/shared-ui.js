@@ -184,6 +184,63 @@ export function syncFooterYear() {
   });
 }
 
+// CONTENTS 目前章節：標題越過視窗上方 30% 那條線時，只切換目錄連結的 is-current
+export function initTocHighlight(tocEl = document.querySelector('.aside-toc:not([hidden])')) {
+  if (!tocEl || tocEl.dataset.highlightReady === 'true' || !('IntersectionObserver' in window)) return;
+
+  const pairs = Array.from(tocEl.querySelectorAll('a[href^="#"]'))
+    .map((link) => {
+      let id = link.getAttribute('href').slice(1);
+      try {
+        id = decodeURIComponent(id);
+      } catch (error) {
+        // 保留原字串
+      }
+      return { link, target: document.getElementById(id) };
+    })
+    .filter((pair) => pair.target);
+  if (!pairs.length) return;
+
+  tocEl.dataset.highlightReady = 'true';
+  let currentIndex = -1;
+
+  const keepVisible = (link) => {
+    if (tocEl.scrollHeight <= tocEl.clientHeight) return;
+    const top = link.offsetTop;
+    const bottom = top + link.offsetHeight;
+    if (top < tocEl.scrollTop || bottom > tocEl.scrollTop + tocEl.clientHeight) {
+      tocEl.scrollTop = Math.max(0, top - tocEl.clientHeight / 3);
+    }
+  };
+
+  const update = () => {
+    const line = window.innerHeight * 0.3;
+    let index = -1;
+    // 捲到底時最後幾個標題到不了那條線，改標畫面裡最後一個
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    const limit = atBottom ? window.innerHeight : line;
+    pairs.forEach((pair, i) => {
+      if (pair.target.getBoundingClientRect().top <= limit) index = i;
+    });
+    if (index === currentIndex) return;
+    if (pairs[currentIndex]) pairs[currentIndex].link.classList.remove('is-current');
+    currentIndex = index;
+    if (pairs[currentIndex]) {
+      pairs[currentIndex].link.classList.add('is-current');
+      keepVisible(pairs[currentIndex].link);
+    }
+  };
+
+  const observer = new IntersectionObserver(update, { rootMargin: '0px 0px -70% 0px', threshold: 0 });
+  pairs.forEach((pair) => observer.observe(pair.target));
+  // 頁尾整個露出來＝捲到底，補算一次（沒有 scrollend 的瀏覽器也吃得到）
+  const footer = document.querySelector('.site-footer');
+  if (footer) new IntersectionObserver(update, { threshold: [0, 1] }).observe(footer);
+  // 一次跳很遠（End 鍵、拖捲軸）時標題可能整段跳過上方那條帶，停下來再補算一次
+  window.addEventListener('scrollend', update, { passive: true });
+  update();
+}
+
 function clampToolLimit(value, fallback = 10, max = 20) {
   const parsed = Number.parseInt(value, 10);
   if (!Number.isFinite(parsed) || parsed <= 0) return fallback;

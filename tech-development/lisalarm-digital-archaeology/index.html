@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -199,11 +215,11 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">為愛發電的數位考古：重寫 LiSA 官方鬧鐘 APP</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>一切從一個無法使用的 APP 開始</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">一切從一個無法使用的 APP 開始</h2>
 <p>2016 年，LiSA 官方推出了一款主題鬧鐘 APP「LiSALARM」，內含 70 張專屬照片和 38 個語音音效。作為從 2015 年就開始追星的 LiSAッ子，我當然第一時間就買了。那時候每天早上被 LiSA 的聲音叫醒，看著手機上顯示的照片，是一天最幸福的開始。</p>
 <p>但好景不常。某次系統更新後，鬧鐘再也無法正常運作——時間到了，手機毫無反應。螢幕不會解鎖，音效不會播放，就像這個 APP 從來沒存在過一樣。</p>
 <p>更讓人絕望的是：<strong>這款 APP 已經從 Play Store 下架，官方也沒有任何更新計畫。</strong></p>
-<h2>可能是全球僅存的 APK</h2>
+<h2 id="section-2">可能是全球僅存的 APK</h2>
 <p>身為工程師，我做了大部分人不會做的事——從 Google 購買記錄裡挖出原版 APK，研究為什麼它會失效。</p>
 <p>這個動作後來才意識到有多重要：<strong>網路上完全找不到這個 APP 的存檔。</strong></p>
 <p>想想看這個時間線：</p>
@@ -213,7 +229,7 @@
 2025 年：除了我，還有誰記得這個 APP？
 </code></pre>
 <p>如果我不做點什麼，這 70 張照片和 38 個音效就會永遠消失。這些是專門為 APP 製作的素材，其他地方找不到。</p>
-<h2>為什麼原版會失效？</h2>
+<h2 id="section-3">為什麼原版會失效？</h2>
 <p>分析原版 APK 後，我發現了一堆「時代的眼淚」：</p>
 <h3>核心問題：過時的螢幕解鎖機制</h3>
 <pre><code class="language-kotlin">// 原版使用的方式 (已於 2011 年棄用)
@@ -252,7 +268,7 @@ keyguardLock.disableKeyguard()  // Android 6.0+ 完全無效
 </tr>
 </tbody></table>
 <p>這些問題層層疊加，讓 APP 在現代 Android 系統上完全無法運作。</p>
-<h2>修復？不，重寫</h2>
+<h2 id="section-4">修復？不，重寫</h2>
 <p>一開始我想「修一修應該就能用了吧」，但深入研究後發現：</p>
 <ol>
 <li><strong>依賴套件全部過時</strong>：ButterKnife、Universal Image Loader 這些當年的明星套件，早就沒人維護了</li>
@@ -260,7 +276,7 @@ keyguardLock.disableKeyguard()  // Android 6.0+ 完全無效
 <li><strong>Java 的歷史包袱</strong>：大量 boilerplate code</li>
 </ol>
 <p>與其修補一艘破船，不如用現代技術重造一艘新船，但保留最珍貴的貨物——那 70 張照片和 38 個音效。</p>
-<h2>技術選擇：從 2016 到 2025</h2>
+<h2 id="section-5">技術選擇：從 2016 到 2025</h2>
 <p>這次重寫，我選擇了完全現代化的技術棧：</p>
 <h3>UI 層：Jetpack Compose + Material 3</h3>
 <pre><code class="language-kotlin">// 原版：傳統 XML + findViewById
@@ -308,7 +324,7 @@ val notification = NotificationCompat.Builder(context, CHANNEL_ID)
     .setPriority(NotificationCompat.PRIORITY_MAX)
     .build()
 </code></pre>
-<h2>那些開發中的細節</h2>
+<h2 id="section-6">那些開發中的細節</h2>
 <h3>素材提取</h3>
 <p>從原版 APK 提取出所有照片和音效後，我發現了一些有趣的細節：</p>
 <ul>
@@ -348,7 +364,7 @@ val notification = NotificationCompat.Builder(context, CHANNEL_ID)
 <li>遇到問題時，我看終端機輸出、理解錯誤訊息、找出解決方向</li>
 </ol>
 <p>這種協作模式讓我能專注在「要做什麼」和「為什麼」，而不是糾結在語法細節上。</p>
-<h2>目前進度</h2>
+<h2 id="section-7">目前進度</h2>
 <p>核心功能都完成了：</p>
 <p>✅ 鬧鐘列表與開關
 ✅ 時間與重複日期設定
@@ -361,12 +377,12 @@ val notification = NotificationCompat.Builder(context, CHANNEL_ID)
 ✅ 啟動畫面</p>
 <p>最重要的目標已經達成：<strong>讓這些珍貴的素材能在現代 Android 系統上繼續使用。</strong></p>
 <p><img src="/content/img/2025/Screenshot_2025-11-24-16-43-21-161_com.jp.sma.lisalarm.webp" alt="重寫後的 LiSALARM APP 截圖"></p>
-<h2>這不只是技術專案</h2>
+<h2 id="section-8">這不只是技術專案</h2>
 <p>對我來說，這個專案的意義不只是「把舊 APP 改成能用」。</p>
 <p>從 2015 年開始，LiSA 陪伴我走過很多時刻。幾乎每年都會到現場看演唱會，2016 年甚至飛去日本。聽著熟悉的歌聲，看著台上那個全力以赴的身影，總能得到繼續前進的力量。</p>
 <p>這 70 張照片和 38 個音效，是那個時代留下的痕跡。如果不做這件事，它們就會隨著 Android 系統的更新而永遠消失，就像從來沒存在過一樣。</p>
 <p><strong>這是一個為愛發電的數位保存計畫。</strong></p>
-<h2>開放原始碼？不，私人珍藏</h2>
+<h2 id="section-9">開放原始碼？不，私人珍藏</h2>
 <p>有人可能會問：「為什麼不開放原始碼？」</p>
 <p>原因很簡單：</p>
 <ol>
@@ -376,7 +392,7 @@ val notification = NotificationCompat.Builder(context, CHANNEL_ID)
 </ol>
 <p>這個專案的目標受眾只有一個人：<strong>我自己。</strong></p>
 <p>如果有其他也買過原版 APP 的 LiSAッ子看到這篇文章，我很樂意分享技術細節。但完整的專案不會公開發布。</p>
-<h2>寫在最後</h2>
+<h2 id="section-10">寫在最後</h2>
 <p>當初買這個 APP 的時候，沒想過有一天會需要自己重寫它。</p>
 <p>但也因為有這次經驗，我更深刻體會到：<strong>數位內容的保存是多麼脆弱的事。</strong></p>
 <p>APP 可以下架，官方可以停止維護，購買記錄可能會消失，但只要還有人在乎、願意花時間，這些記憶就能繼續存在。</p>
@@ -404,15 +420,20 @@ val notification = NotificationCompat.Builder(context, CHANNEL_ID)
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">一切從一個無法使用的 APP 開始</a></li><li><a href="#section-2">可能是全球僅存的 APK</a></li><li><a href="#section-3">為什麼原版會失效？</a></li><li><a href="#section-4">修復？不，重寫</a></li><li><a href="#section-5">技術選擇：從 2016 到 2025</a></li><li><a href="#section-6">那些開發中的細節</a></li><li><a href="#section-7">目前進度</a></li><li><a href="#section-8">這不只是技術專案</a></li><li><a href="#section-9">開放原始碼？不，私人珍藏</a></li><li><a href="#section-10">寫在最後</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

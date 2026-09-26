@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -202,12 +218,12 @@
 <p>問題是：FCC Lock。</p>
 <p>Lenovo 有官方解鎖工具，但只支援特定機型，P15 Gen 2i 不在清單上。Windows 上用 Lenovo Vantage 可以解，但我主力系統是 Linux。</p>
 <hr>
-<h2>為什麼會有 FCC Lock</h2>
+<h2 id="section-1">為什麼會有 FCC Lock</h2>
 <p>FCC（美國聯邦通訊委員會）要求無線電發射設備必須經過認證，認證綁定特定硬體組態。OEM 用 FCC Lock 確保數據機只在認證過的筆電裡運作——數據機開機後預設禁用，要收到官方軟體的解鎖指令才會啟動射頻。</p>
 <p>理論上合理。</p>
 <p>問題是：我的數據機就裝在原廠認證的筆電裡，天線是原廠的，硬體組態完全沒變。Quectel EM160R-GL 是標準 M.2 模組，裝在其他 ThinkPad 型號都能正常解鎖。唯獨 P15 Gen 2i 不在支援清單上。</p>
 <hr>
-<h2>Lenovo 明確拒絕支援</h2>
+<h2 id="section-2">Lenovo 明確拒絕支援</h2>
 <p>這不是疏忽，是刻意的。</p>
 <p>有人在 GitHub 回報過這個問題（<a href="https://github.com/lenovo/lenovo-wwan-unlock/issues/12">lenovo/lenovo-wwan-unlock#12</a>），要求支援 P15s Gen 2i + EM160R-GL。Lenovo 的回應：</p>
 <blockquote>
@@ -217,7 +233,7 @@
 <p>Issue 最後被標記為 &quot;COMPLETED&quot; 關閉。不是 &quot;won&#39;t fix&quot;，是裝作已經解決了。</p>
 <p>硬體完全相同，其他型號都支援，就是不打算處理這個 SKU。純粹的商業決策。</p>
 <hr>
-<h2>這可是 P 系列</h2>
+<h2 id="section-3">這可是 P 系列</h2>
 <p>如果是 E 系列（入門款）不支援，我還能理解——預算導向，砍功能省成本，買的人心裡有數。</p>
 <p>但 P15 是旗艦工作站。售價六七萬起跳，目標客群是專業用戶：工程師、開發者、資料科學家。這群人跑 Linux 的比例遠高於一般消費者。</p>
 <p>而且 P15 是主力機型，銷量不小。「沒有測試機所以沒辦法驗證」這種藉口根本站不住腳。</p>
@@ -230,7 +246,7 @@
 </ul>
 <p>不管是哪個，都不是「合規要求」。是組織問題，外部用戶買單。</p>
 <hr>
-<h2>突破點：QMI 可以繞過 FCC Lock</h2>
+<h2 id="section-4">突破點：QMI 可以繞過 FCC Lock</h2>
 <p>翻了一堆文件和論壇，發現 QMI 介面可以直接啟動數據機，不需要官方工具：</p>
 <pre><code class="language-bash"># 透過 QMI 啟動數據機
 sudo qmicli -d /dev/wwan0qmi0 --dms-set-operating-mode=online
@@ -242,7 +258,7 @@ sudo qmicli -d /dev/wwan0qmi0 --wds-get-packet-service-status
 </code></pre>
 <p>顯示已連線。IP 也分配到了。</p>
 <hr>
-<h2>卡關：mhi_swip0 介面不通</h2>
+<h2 id="section-5">卡關：mhi_swip0 介面不通</h2>
 <p>QMI 層面一切正常，但實際網路流量走不出去。</p>
 <p>問題在 <code>mhi_swip0</code> 這個網路介面。有 IP，有路由，但 ping 不出去。tcpdump 看得到封包發出去，但沒有回應。</p>
 <p>試過的東西：</p>
@@ -254,19 +270,19 @@ sudo qmicli -d /dev/wwan0qmi0 --wds-get-packet-service-status
 </ul>
 <p>都沒用。</p>
 <hr>
-<h2>MBIM 介面：直接超時</h2>
+<h2 id="section-6">MBIM 介面：直接超時</h2>
 <p>另一個選項是 MBIM 介面（<code>/dev/cdc-wdm0</code>）。</p>
 <pre><code class="language-bash">sudo mbimcli -d /dev/cdc-wdm0 --query-device-caps
 </code></pre>
 <p>直接超時，完全沒回應。</p>
 <p>查了一下，這張卡的 MBIM 實作可能有問題，或者 FCC Lock 在 MBIM 層面還是有作用。</p>
 <hr>
-<h2>解法：重開機</h2>
+<h2 id="section-7">解法：重開機</h2>
 <p>折騰了一堆設定都沒用，最後試著重開機。</p>
 <p>通了。</p>
 <p>猜測是 kernel driver 需要完整重新初始化，或者某些設定要在開機時才會正確套用。總之，QMI 啟動數據機之後，重開機一次就好了。</p>
 <hr>
-<h2>最終狀態</h2>
+<h2 id="section-8">最終狀態</h2>
 <p>✅ QMI 繞過 FCC Lock
 ✅ 網路註冊成功（TWM LTE）
 ✅ IP 分配正常
@@ -281,15 +297,20 @@ sudo qmicli -d /dev/wwan0qmi0 --wds-get-packet-service-status
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">為什麼會有 FCC Lock</a></li><li><a href="#section-2">Lenovo 明確拒絕支援</a></li><li><a href="#section-3">這可是 P 系列</a></li><li><a href="#section-4">突破點：QMI 可以繞過 FCC Lock</a></li><li><a href="#section-5">卡關：mhi_swip0 介面不通</a></li><li><a href="#section-6">MBIM 介面：直接超時</a></li><li><a href="#section-7">解法：重開機</a></li><li><a href="#section-8">最終狀態</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

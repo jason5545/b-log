@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -205,11 +221,11 @@
 <p>Claude Code 現在有雲端版了，理論上能在手機上跑。但那還是要進去 Claude Code、下指令、確認結果——流程還是長的。而且每次都得先讓 Claude 了解 repo 結構，哪個檔案是什麼、要改哪裡，這些脈絡要自己建。</p>
 <p>接上 MCP connector 就不一樣了。工具本身就是介面，Claude 透過 list_posts、get_post 直接知道我的系統長什麼樣，我開口說「改最新那篇」，它就知道去哪裡找、改完要動哪些東西。脈絡不用我建，直接就在裡面了。</p>
 <p>所以我做了一個 MCP 伺服器。</p>
-<h2>MCP 是什麼</h2>
+<h2 id="section-1">MCP 是什麼</h2>
 <p>MCP（Model Context Protocol）是 Anthropic 推的開放標準，讓 AI 可以接工具。簡單說就是：你定義一組工具，告訴 AI 每個工具吃什麼參數、做什麼事，AI 就能幫你呼叫。</p>
 <p>Claude.ai 支援一種叫 Connector 的東西，就是遠端 MCP 伺服器。接上之後，Claude 就能直接用這些工具。</p>
 <p>手機也能用。這是關鍵。</p>
-<h2>架構</h2>
+<h2 id="section-2">架構</h2>
 <p>整個東西跑在 Cloudflare Workers 上，免費方案就夠了。背後透過 GitHub API 直接操作 repo，不需要 clone、不需要本地環境。</p>
 <p>一次「發文」在 GitHub 那邊是一個 atomic commit：用 Git Trees API 同時建立 Markdown 檔案和更新 <code>posts.json</code>。不會出現改了一半的中間狀態。</p>
 <p>工具清單：</p>
@@ -221,18 +237,18 @@
 <li><strong>save_draft</strong> / <strong>list_drafts</strong> / <strong>get_draft</strong> / <strong>publish_draft</strong> / <strong>delete_draft</strong>：草稿系統，存在私有 repo 裡</li>
 </ul>
 <p>總共 11 個工具。</p>
-<h2>為什麼不用 Hexo、Hugo 那些</h2>
+<h2 id="section-3">為什麼不用 Hexo、Hugo 那些</h2>
 <p>Hexo 有管理面板，Hugo 有 CMS 套件，Netlify CMS、Forestry，選擇很多。</p>
 <p>但它們都有同一個問題：它們是設計給「能操作鍵盤和滑鼠的人」用的。</p>
 <p>Web UI 的表單？我要用一根手指去點每個欄位、切換分頁、拖拉檔案。CMS 的介面再怎麼友善，對我來說每多一次點擊就是額外負擔。</p>
 <p>MCP 的做法不一樣。我只要用自然語言告訴 Claude：「幫我發一篇文章，標題是 XXX，分類放技術開發，內容是……」，剩下的事它全部處理。</p>
 <p>不用開任何介面。不用點任何按鈕。</p>
 <p>而且 Claude 知道我的寫作風格（Project instructions 裡有完整的風格指南），它可以在發文之前幫我修潤、調整格式、檢查用語。這不是一個笨的表單提交工具，這是一個理解上下文的協作者順便幫我推上去。</p>
-<h2>這篇文章就是用它發的</h2>
+<h2 id="section-4">這篇文章就是用它發的</h2>
 <p>對。</p>
 <p>你現在讀到的這篇文章，是我直接在 claude.ai 裡，叫 Claude 用 connector 發上來的。</p>
 <p>從寫內容到文章上線，中間沒有開過任何編輯器，沒有手動編輯過任何 JSON，沒有打過 <code>git push</code>。</p>
-<h2>有沒有人做過類似的事</h2>
+<h2 id="section-5">有沒有人做過類似的事</h2>
 <p>據我所知，沒有。</p>
 <p>準確一點說：有人做過靜態部落格的 MCP server。GitHub 上有 Hugo 的版本，npm 上有 Kronk 這類工具，支援 Hugo、Jekyll、Astro，可以讓 Claude 用自然語言管理部落格。但這些方案都有同一個前提：你得先打開電腦，跑本地 MCP server，透過 Claude Desktop 連進去。換句話說，你還是得開電腦。</p>
 <p>而且那些工具是針對標準框架設計的——Hugo 有 Hugo 的格式，Jekyll 有 Jekyll 的慣例。我的部落格系統是自己搭的，沒有任何現成工具能直接套用。整個 connector 是從零開始，對應的是這個 repo 的具體結構。</p>
@@ -248,15 +264,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">MCP 是什麼</a></li><li><a href="#section-2">架構</a></li><li><a href="#section-3">為什麼不用 Hexo、Hugo 那些</a></li><li><a href="#section-4">這篇文章就是用它發的</a></li><li><a href="#section-5">有沒有人做過類似的事</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

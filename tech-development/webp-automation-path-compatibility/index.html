@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -200,7 +216,7 @@
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>當你為靜態網站加入圖片時，是否曾遇到這些問題：每次都要手動壓縮、轉換格式、更新 Markdown 參照？更糟的是，當你實作了 WordPress 風格的 URL 後，發現所有圖片都破圖了？</p>
 <p>這篇文章記錄我如何從零打造一個完整的圖片處理自動化系統，解決了從格式轉換到路徑相容性的所有挑戰。</p>
-<h2>問題起源：靜態網站的圖片困境</h2>
+<h2 id="section-1">問題起源：靜態網站的圖片困境</h2>
 <h3>手動處理的痛點</h3>
 <p>在為舊文章補充圖片時，我面臨了典型的靜態網站圖片管理問題：</p>
 <ol>
@@ -222,7 +238,7 @@
 <li>在 <code>/category/slug/</code> 中卻破圖了</li>
 </ul>
 <p>問題在於<strong>不同的 URL 深度導致相對路徑解析錯誤</strong>。</p>
-<h2>技術選型：為何選擇這些工具</h2>
+<h2 id="section-2">技術選型：為何選擇這些工具</h2>
 <h3>WebP：現代化的圖片格式</h3>
 <p><strong>選擇理由</strong>：</p>
 <ul>
@@ -264,7 +280,7 @@
 <li>Netlify Build Plugins：綁定平台</li>
 <li>本地腳本：需要記得執行，容易遺忘</li>
 </ul>
-<h2>系統架構：三個腳本 + 一個 Workflow</h2>
+<h2 id="section-3">系統架構：三個腳本 + 一個 Workflow</h2>
 <h3>架構概覽</h3>
 <pre><code>使用者推送圖片
     ↓
@@ -394,7 +410,7 @@ async function convertToWebP(imagePath) {
 <li><code>paths</code> 過濾器：只在圖片變更時執行</li>
 <li>使用 HEREDOC 格式化 commit message</li>
 </ul>
-<h2>路徑相容性難題：深度調查與解決</h2>
+<h2 id="section-4">路徑相容性難題：深度調查與解決</h2>
 <h3>問題現象</h3>
 <p>系統上線後，發現 WordPress 風格 URL 的文章中所有圖片都破圖：</p>
 <ul>
@@ -494,7 +510,7 @@ contentEl.querySelectorAll(&#39;img, source&#39;).forEach(el =&gt; {
   &quot;coverImage&quot;: &quot;/content/img/2025/cover.jpg&quot;
 }
 </code></pre>
-<h2>效能成果：實測數據</h2>
+<h2 id="section-5">效能成果：實測數據</h2>
 <h3>檔案大小最佳化</h3>
 <p>實測 3 張演唱會照片的轉換結果：</p>
 <table>
@@ -555,7 +571,7 @@ contentEl.querySelectorAll(&#39;img, source&#39;).forEach(el =&gt; {
 <li>手動更新 Markdown 容易遺漏或格式錯誤</li>
 <li>自動化保證一致性</li>
 </ul>
-<h2>可複用性：如何套用到其他專案</h2>
+<h2 id="section-6">可複用性：如何套用到其他專案</h2>
 <h3>快速上手指南</h3>
 <ol>
 <li><p><strong>複製三個核心檔案</strong>：</p>
@@ -631,7 +647,7 @@ git push
 </ul>
 </li>
 </ol>
-<h2>結語：自動化的價值</h2>
+<h2 id="section-7">結語：自動化的價值</h2>
 <p>這個系統從無到有只花了幾小時，卻能在未來數年持續節省時間。更重要的是，它展示了幾個重要原則：</p>
 <ol>
 <li><strong>深度調查勝於盲目嘗試</strong>：使用 Task agent 系統性分析問題根源</li>
@@ -654,15 +670,20 @@ git push
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">問題起源：靜態網站的圖片困境</a></li><li><a href="#section-2">技術選型：為何選擇這些工具</a></li><li><a href="#section-3">系統架構：三個腳本 + 一個 Workflow</a></li><li><a href="#section-4">路徑相容性難題：深度調查與解決</a></li><li><a href="#section-5">效能成果：實測數據</a></li><li><a href="#section-6">可複用性：如何套用到其他專案</a></li><li><a href="#section-7">結語：自動化的價值</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

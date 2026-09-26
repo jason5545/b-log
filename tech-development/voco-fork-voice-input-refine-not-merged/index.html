@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -206,7 +222,7 @@
 <p>「報告先寄給怡安。」</p>
 <p>「句號」被轉成句號，這是我要的。但「等她回覆」整段不見了。換 seed 跑四次，四次都一樣。</p>
 <p>這一句大概就是 Voco 這個工具的全部問題，也是我到今天還在維護它的理由。</p>
-<h2>先講 Voco 是什麼</h2>
+<h2 id="section-1">先講 Voco 是什麼</h2>
 <p>我的部落格提過 Voco 好幾次，但從來沒有一篇是在講它。</p>
 <p>Voco 是我從 VoiceInk fork 出來的 macOS 語音輸入工具。VoiceInk 是 Pax 做的開放原始碼專案，語音辨識全部在本機跑。我用它之前是 Typeless，Typeless 出了隱私爭議之後換過去，後來乾脆自己改。</p>
 <p>會走到自己改，理由跟一般人不一樣。我是 CP，全身能穩定操作電腦的只有右手食指。語音輸入對我不是打字打累了換一下，是主要的輸入方式。而我的肌肉張力讓發音結構跟別人不同，一般模型聽我講話，錯的方式很固定：捲舌音會掉，ㄥ 跟 ㄣ 會混，英文技術詞有一半聽不出來。</p>
@@ -220,19 +236,19 @@
 <li>RNNoise 降噪、正體中文介面、拿掉付費授權。</li>
 </ul>
 <p>Voco 跟上游一樣是 GPL，<a href="https://github.com/jason5545/Voco">repo 是公開的</a>。但我從來沒有 PR 回去。那些改動只對我有意義，PR 回去只是製造 review 負擔，這件事我在<a href="https://b-log.to/tech-analysis/ai-breaking-open-source-social-contract/">講開放原始碼社會契約那篇</a>寫過。</p>
-<h2>聽這一層已經到邊界了</h2>
+<h2 id="section-2">聽這一層已經到邊界了</h2>
 <p>辨識這一層，adapter 能做的已經做完。日常國語句子的 CER 大約 0.02，錯的多半是標點跟簡繁。困難句的 CER 從 0.201 降到 0.174，之後再訓練幾版都降不下去。英文技術詞更慘：33 句困難句裡 35 個英文詞只認出 18 個，而且有些是聲學上就分不開的。我真的講 Brunch 的時候模型偏好 Branch，真的講 Branch 的時候模型偏好 Brunch。</p>
 <p>這種錯再訓練也沒用，只能靠規則。</p>
 <p>但規則要怎麼改字，才是 Voco 過去半年真正在處理的事。</p>
 <p>現在的分層是這樣。Qwen3-ASR 加 adapter 負責聽，聽完的 raw transcript 一定保留。上面一層是 deterministic 的 auto-apply 規則，每一條規則都要有證據，也就是我確認過的錯誤紀錄，要有 context 鎖、有負例 guard，而且在動 app 之前先對整個資料庫 replay 一遍。再上面才是 LLM，而 LLM 的 prompt 六月就從「幫我修 ASR 錯誤」降級成「保守的排版器」。</p>
 <p>六月那時我跟 Codex 講明的一件事：新的模型不能因為比較新就拿到比較高的優先權。優先權給證據跟 replay gate。</p>
-<h2>實驗室</h2>
+<h2 id="section-3">實驗室</h2>
 <p>證據跟 replay 不在 Voco 裡，在另一個 repo：VocoReplayLab。它是 private 的，裡面是我的錄音跟資料庫 snapshot，不會公開。</p>
 <p>它做的事很單純：把 Voco 的資料庫 snapshot 拿出來，用現在的模型跟規則重跑一遍，看哪些字被改了、誰改的、改對還是改錯。有幾組固定的關卡：33 句我親自標過的困難句、22 句代名詞句、493 句日常句，加上幾筆我指定的關鍵錄音。任何 adapter 或規則要進 Voco，先過這幾關。</p>
 <p>過不了就留在實驗室。六月那個文字清理 LoRA，有一版 held-out 分數更好，卻把「吉他譜」改成「GitHub 譜」，那一版直接擋掉；最後留下來的版本也只在實驗室做 shadow，沒有進 app。9/6 兩組新的 adapter 各只修好一句，其中一組把原本對的一句改錯，兩組都不裝。</p>
 <p>規則也會死。9/7 發現一條規則是為了一個已經拿掉的第二次解碼路徑寫的，前後段都零觸發，就 tombstone 掉。目前 active 的規則有八百多條，每一條都能查到當初是哪一筆紀錄撐起來的。</p>
 <p>實驗室的意義是：Voco 本體不用相信任何一個模型，它只要相信 replay 的結果。</p>
-<h2>然後上游加了 Refine</h2>
+<h2 id="section-4">然後上游加了 Refine</h2>
 <p>回到今天。</p>
 <p>VoiceInk 上游這幾個月更新很多。我先把穩定性修補挑進來：錄音生命週期、音訊佇列的背壓、Esc 取消的競態、詞界判斷的 Unicode 修正。這些跟我的客製沒衝突，Codex 分兩批做完，測試過了，部署，重開。</p>
 <p>比較難決定的是 Refine。上游用 Qwen3.5-2B 微調了一個本機文字整理模型，接在 ASR 後面，處理標點、贅詞、自我更正、口述換行。聽起來就是我要的東西。</p>
@@ -241,11 +257,11 @@
 <p>後來換了一個做法：模型不准重寫，只准判斷。程式先把「句號」「換行」「我我」這種可疑片段圈出來，模型回答每一段是格式指令、口吃還是正文，最後由程式在原文那個位置替換。這樣模型就沒有機會刪掉「等她回覆」。</p>
 <p>漏文確實沒了。但判斷還是會錯。「不要換行，這是一條正文規則」被它做成真的換行；「下一段程式碼需要原樣保存」的「下一段」被吃掉；「等等，那其實」變成「等，那其實」。同一組保留測試，整段重寫反而保住 18 句，局部判斷只保住 14 句。</p>
 <p>所以今天的結論是：不接。4B 6-bit 的模型留在硬碟上。</p>
-<h2>今天真的進 Voco 的東西</h2>
+<h2 id="section-5">今天真的進 Voco 的東西</h2>
 <p>只有一個很小的改動：句子邊界的「我我」「你你」會被刪成一個。「那個那個」不動，「等等」「看看」不動，引述跟改口不動。</p>
 <p>連這個都在 review 時抓到一個反例。Codex 原本把「可以」也加進去，Claude review 時丟了一句「可可可以喝」，「可可」被刪掉了。拿掉。</p>
 <p>316 個測試過了才部署。</p>
-<h2>為什麼這麼保守</h2>
+<h2 id="section-6">為什麼這麼保守</h2>
 <p>因為改錯的成本不對稱。</p>
 <p>一個沒刪掉的「那個」，我看到會有點煩，但意思還在。一個被刪掉的「等她回覆」，我要用右手食指把它打回來，而且要先發現它不見了。發現這件事本身就要成本，因為整句讀起來是通的。</p>
 <p>所以 Voco 的規則從來不是輸出要多乾淨，是每一個被改的字，都要說得出是哪一層改的、憑什麼改。adapter 改的，有 gold-33 的數字；規則改的，有 replay 紀錄跟證據 ID；LLM 改的，只准動排版。</p>
@@ -258,15 +274,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">先講 Voco 是什麼</a></li><li><a href="#section-2">聽這一層已經到邊界了</a></li><li><a href="#section-3">實驗室</a></li><li><a href="#section-4">然後上游加了 Refine</a></li><li><a href="#section-5">今天真的進 Voco 的東西</a></li><li><a href="#section-6">為什麼這麼保守</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

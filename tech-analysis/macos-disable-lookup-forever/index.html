@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -200,7 +216,7 @@
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>最近我有個很煩的問題：Mac 的「查詢（Look Up）」視窗會突然跳出來，有時甚至直接冒出字典。</p>
 <p>我平常根本不需要用系統字典。要查中英字典或 Wikipedia，我會直接開瀏覽器，或用我常用的工具。這個功能對我來說不是效率加成，反而是干擾。</p>
 <p>這篇是我實際處理這件事的完整紀錄：我怎麼判斷觸發來源、怎麼關掉、怎麼做到「登入後自動維持 disabled」。</p>
-<h2>問題長相</h2>
+<h2 id="section-1">問題長相</h2>
 <p>我遇到的狀況有兩類：</p>
 <ul>
 <li>文字附近突然彈出「查詢」面板</li>
@@ -210,7 +226,7 @@
 <ul>
 <li><code>Control + Command + D</code></li>
 </ul>
-<h2>我做的第一層處理：先封掉常見入口</h2>
+<h2 id="section-2">我做的第一層處理：先封掉常見入口</h2>
 <p>我先做了三件事：</p>
 <ul>
 <li>關閉 <code>Look Up &amp; data detectors</code> 手勢（避免點按誤觸）</li>
@@ -227,7 +243,7 @@
 }
 </code></pre>
 <p>這樣就算我誤按該組合鍵，也不會再跳字典。</p>
-<h2>關鍵認知：不是 Dictionary.app，而是系統 XPC 服務</h2>
+<h2 id="section-3">關鍵認知：不是 Dictionary.app，而是系統 XPC 服務</h2>
 <p>我本來也想過「乾脆把 App 刪掉」，但實際上觸發這件事的不是單一 App，而是系統服務。</p>
 <p>我查到主要是兩個服務：</p>
 <ul>
@@ -235,7 +251,7 @@
 <li><code>com.apple.DictionaryServiceHelper</code>（字典資料服務）</li>
 </ul>
 <p>所以真正有效的方式不是刪 App，而是把服務層停用。</p>
-<h2>我最後採用的方案</h2>
+<h2 id="section-4">我最後採用的方案</h2>
 <p>我的目標很明確：</p>
 <ul>
 <li>保留 <code>Force Click</code> 在其他場景可用（例如預覽）</li>
@@ -247,7 +263,7 @@
 <li>保持 <code>Control + Command + D</code> 為 <code>noop</code></li>
 <li>重新啟用 Force Click（不讓它影響其他功能）</li>
 </ul>
-<h2>長期方案：登入自動維持 disabled</h2>
+<h2 id="section-5">長期方案：登入自動維持 disabled</h2>
 <p>我不想每次更新後手動重做，所以加了一層自動化。</p>
 <p>我建立了：</p>
 <ul>
@@ -266,7 +282,7 @@
 <li>確保 <code>Control + Command + D</code> 還是 <code>noop</code></li>
 <li>保持 Force Click 為可用</li>
 </ul>
-<h2>我怎麼驗證</h2>
+<h2 id="section-6">我怎麼驗證</h2>
 <p>我用這行確認服務狀態：</p>
 <pre><code class="language-bash">launchctl print-disabled gui/$(id -u) | rg &#39;LookupViewService|DictionaryServiceHelper&#39;
 </code></pre>
@@ -280,14 +296,14 @@
 <li><code>Control + Command + D</code> 不再有反應</li>
 <li>Force Click 在預覽等用途仍可用</li>
 </ul>
-<h2>這樣做的取捨</h2>
+<h2 id="section-7">這樣做的取捨</h2>
 <p>我接受的取捨是：</p>
 <ul>
 <li>我放棄系統層的文字查詢入口</li>
 <li>我換回乾淨、不中斷的操作流程</li>
 </ul>
 <p>對我來說這是明顯正收益，因為我本來就不會用系統字典。我查東西寧可去瀏覽器或其他工具。</p>
-<h2>結論</h2>
+<h2 id="section-8">結論</h2>
 <p>這次我學到一件事：</p>
 <p>Mac 的「Look Up」不是單一 App 功能，而是系統服務鏈的一部分。要徹底關閉，不能只在 UI 裡關手勢，必須連服務層一起處理，最好再加登入自動維護。</p>
 <p>現在我的狀態是：</p>
@@ -304,15 +320,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">問題長相</a></li><li><a href="#section-2">我做的第一層處理：先封掉常見入口</a></li><li><a href="#section-3">關鍵認知：不是 Dictionary.app，而是系統 XPC 服務</a></li><li><a href="#section-4">我最後採用的方案</a></li><li><a href="#section-5">長期方案：登入自動維持 disabled</a></li><li><a href="#section-6">我怎麼驗證</a></li><li><a href="#section-7">這樣做的取捨</a></li><li><a href="#section-8">結論</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

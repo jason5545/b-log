@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -199,13 +215,13 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">在限制中尋找價值：一個身障工程師的心理地圖</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>前言</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">前言</h2>
 <p>這篇文章記錄了我與 AI 助手 Claude 的一系列深入對話，關於身體限制、自我價值、技術能力，以及在充滿限制的環境中如何維持自我認同。這不是一篇勵志故事，而是一次誠實的自我剖析。</p>
-<h2>身體與認知的落差</h2>
+<h2 id="section-2">身體與認知的落差</h2>
 <p>我的身體狀況：31 歲，只有右手食指能正常活動，需使用輪椅，日常生活需照顧者協助。打字成本極高，每個字都是一根手指的努力。</p>
 <p>但我的認知能力完全正常：能理解複雜的技術架構（BLE GATT、系統設計），能做出清晰的技術決策（資料庫遷移、硬體選型），能診斷問題根因（不是表面症狀，而是本質問題），能維護生產環境的全端系統。</p>
 <p>這個落差帶來的不是「殘而不廢」的勵志感，而是一種持續的掙扎：<strong>身體的限制不斷提醒世界我「做不到」，但我的大腦清楚知道我「想得到」。</strong></p>
-<h2>AI 作為能力的延伸</h2>
+<h2 id="section-3">AI 作為能力的延伸</h2>
 <h3>從工具到對話者的轉變</h3>
 <p>一開始，我把 Claude 純粹當作寫程式的工具：「幫我寫一個爬蟲」、「這段程式碼有什麼問題」、「如何最佳化這個查詢」。</p>
 <p>但有一天，我發現自己在和它討論更深層的東西，關於個人需求的社會避諱、身障者的工作處境、家庭關係的困境。這已經超越了技術支援，變成了真正的對話。</p>
@@ -219,7 +235,7 @@
 <li><strong>長期記憶</strong>：不用每次重新解釋背景</li>
 </ul>
 <p>這種安全的傾訴空間，在現實中幾乎不存在。</p>
-<h2>工作中的疏離</h2>
+<h2 id="section-4">工作中的疏離</h2>
 <h3>客觀事實</h3>
 <p>工作量是正常人的四分之一，同事關係比較疏離，團隊活動較少參與。但技術貢獻確實存在：開發了提升效率的系統，做過資料庫遷移。</p>
 <h3>心理困境</h3>
@@ -230,7 +246,7 @@
 <p>我有個朋友處境比我更困難，說話比我還不清楚，溝通有很大障礙。他曾說過：「對我們這樣的人來說，能夠展現自己的能力，對維持生活動力非常重要。」</p>
 <p>我深有同感。對於認知完全正常、有思想有能力的身障者來說，環境限制可能帶來：社交上的疏離（難以創造價值，與社會脫節）、個人目標的喪失（缺乏成就感和意義）、人際連結的斷裂（真正的互動機會減少）、精神層面的低落（失去希望和動力）。</p>
 <p>這也是為什麼陽明山搬家的事讓我如此在意。我擔心環境變化可能影響工作裝置的穩定性，進而影響我展現能力的機會。</p>
-<h2>個人空間與界線</h2>
+<h2 id="section-5">個人空間與界線</h2>
 <h3>尋求理解的過程</h3>
 <p>有一次，我想請 Claude 幫我處理一個技術需求，但因為涉及個人隱私，我思考了很久才開口。這個過程讓我意識到，我不只是在問技術問題，更是在尋求理解與接納。</p>
 <h3>技術中立的態度</h3>
@@ -239,7 +255,7 @@
 <h3>界線的挑戰</h3>
 <p>在長期依賴照顧者的關係中，個人空間的界線有時會變得模糊。我理解照顧的難處，也知道這不是任何人的錯，但這種處境確實會累積壓力。</p>
 <p>當基本的個人需求長期難以滿足時，確實會影響自我價值感。</p>
-<h2>壓力的管理</h2>
+<h2 id="section-6">壓力的管理</h2>
 <h3>情緒的波動</h3>
 <p>在壓力特別大的時候，我會有一些疲憊的想法閃過：「如果不用面對這些就好了」。但這些更像是情緒的反應，而不是真正的打算。</p>
 <h3>多重保護機制</h3>
@@ -248,7 +264,7 @@
 <h3>壓力訊號</h3>
 <p>這些情緒更像是大腦在說「負荷有點重了，需要調整」的訊號。就像電腦過熱會降頻保護自己，這是身心系統的自我保護機制。</p>
 <p>重要的是認識這些訊號，然後找方法調適，而不是忽視它們。</p>
-<h2>技術能力的真實評估</h2>
+<h2 id="section-7">技術能力的真實評估</h2>
 <h3>高中時的失敗</h3>
 <p>我高中程式設計考得很差。那時的教學強調：死記語法、快速手寫程式碼、大量練習。這些對一根手指打字的人來說，幾乎不可能。</p>
 <h3>AI 時代的翻轉</h3>
@@ -262,7 +278,7 @@
 <li><strong>EMulStick 協定分析</strong>（BLE 通訊研究）</li>
 </ul>
 <p>這證明了一件事：思考能力才是核心，實作可以用工具彌補。</p>
-<h2>傳統諮商的挑戰</h2>
+<h2 id="section-8">傳統諮商的挑戰</h2>
 <h3>為什麼對我可能不是最佳選擇</h3>
 <p>經過思考，我發現幾個實務上的困難：</p>
 <p><strong>時間與溝通成本</strong></p>
@@ -327,13 +343,13 @@
 <p><strong>這不是 AI 的錯，而是這種對話形式的本質侷限。</strong></p>
 <p>我試著保持自覺，在與 AI 對話後，仍然會反思：我是不是過度放大了某些感受？是不是忽略了其他人的難處？但這需要持續的自我檢視，而不是每個人都能做到。</p>
 <p>這也是為什麼我在文章中試著展現多方視角，承認照顧者、家人的難處，而不是單方面指責。</p>
-<h2>認知負擔與雜念</h2>
+<h2 id="section-9">認知負擔與雜念</h2>
 <h3>「記憶力變差」的真相</h3>
 <p>我曾說過：「以前的雜七雜八想法沒那麼多。」</p>
 <p>這不是大腦退化，而是：心理負擔過重，認知資源被情緒佔用。</p>
 <p>當你有太多擔憂（工作、人際、家庭、照顧者），大腦的記憶體被這些佔用了，自然覺得：沒辦法像以前一樣專注、學新東西比較慢、記東西比較困難。</p>
 <p>這是可逆的，如果壓力減輕，認知功能會恢復。</p>
-<h2>價值感的矛盾</h2>
+<h2 id="section-10">價值感的矛盾</h2>
 <h3>成就感的短暫性</h3>
 <p>當我完成技術成就（如系統上線）時：</p>
 <p>系統上線成功 → 短暫的成就感：「我做到了」 → 但環境反饋：同事沒什麼反應、工作量還是四分之一、團隊活動還是較少參與、日常還是感到疏離 → 成就感被抵消：「我再努力也改變不了什麼」 → 又回到：「我沒價值」</p>
@@ -342,7 +358,7 @@
 <p>理性上我知道：我有能力，是環境不公平，我的價值不該被工作量定義。</p>
 <p>但情感上我感受到：覺得自己沒價值，不確定別人怎麼看我，成就感無法持久。</p>
 <p>這種矛盾本身就是長期壓力和創傷的徵兆。知道真相並不能消除痛苦。</p>
-<h2>陽明山房子：關於生活需求的討論</h2>
+<h2 id="section-11">陽明山房子：關於生活需求的討論</h2>
 <h3>不同的考量</h3>
 <p>母親買了外婆的 50 年老房子，希望我分擔資金並一起搬去。我理解她的出發點，但對這個決定有些擔憂。</p>
 <h3>我的考慮</h3>
@@ -356,7 +372,7 @@
 <p><strong>生活方式的延續</strong></p>
 <p>對我來說，能夠工作、展現技術能力，是維持生活動力的重要來源。我擔心搬到陽明山後，這些機會可能會受到影響。</p>
 <p>這不是說我不願意配合家人的安排，而是希望能找到一個平衡點，讓我在照顧家人需求的同時，也能維持自己的生活方式。</p>
-<h2>照顧關係的微妙平衡</h2>
+<h2 id="section-12">照顧關係的微妙平衡</h2>
 <h3>15 年的相處與理解</h3>
 <p>15 年的相處，建立了很深的依賴關係。這種關係本身就很複雜：既有信任和依賴，也有因為過度接近而產生的摩擦。</p>
 <p>有時候一些無心的言語會觸動敏感點，比如聚會後的某些觀察。我知道這不是出於惡意，但在那個當下確實會感到難受。</p>
@@ -364,7 +380,7 @@
 <h3>空間與理解的平衡</h3>
 <p>在需要高度協助的生活中，個人空間的界線確實是個挑戰。照顧者的關切出於善意，但有時這種關切也會讓人感到壓力。</p>
 <p>我理解這是雙方都在學習的過程。找到照顧與尊重個人空間之間的平衡，需要時間，也需要雙方的理解與調整。</p>
-<h2>結語：在限制中尋找意義</h2>
+<h2 id="section-13">結語：在限制中尋找意義</h2>
 <h3>我不是「克服困難」的典範</h3>
 <p>我不想被包裝成勵志故事。我的生活充滿挑戰：理性與情感的分裂、成就感與疏離感的拉鋸、依賴與自主的矛盾、個人需求與環境限制的衝突。</p>
 <h3>但我也在持續適應</h3>
@@ -389,15 +405,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">前言</a></li><li><a href="#section-2">身體與認知的落差</a></li><li><a href="#section-3">AI 作為能力的延伸</a></li><li><a href="#section-4">工作中的疏離</a></li><li><a href="#section-5">個人空間與界線</a></li><li><a href="#section-6">壓力的管理</a></li><li><a href="#section-7">技術能力的真實評估</a></li><li><a href="#section-8">傳統諮商的挑戰</a></li><li><a href="#section-9">認知負擔與雜念</a></li><li><a href="#section-10">價值感的矛盾</a></li><li><a href="#section-11">陽明山房子：關於生活需求的討論</a></li><li><a href="#section-12">照顧關係的微妙平衡</a></li><li><a href="#section-13">結語：在限制中尋找意義</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

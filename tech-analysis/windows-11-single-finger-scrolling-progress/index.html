@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -207,10 +223,10 @@
 <p>幾天後，我自己用 C# 寫了 <a href="https://b-log.to/tech-development/touchpad-advanced-tool/">Touchpad Advanced Tool</a>。今年 1 月換到 Mac，又寫了一個 <a href="https://b-log.to/tech-development/touchpal/">TrackPal</a>。</p>
 <p>微軟這邊，<a href="https://blogs.windows.com/windows-insider/2026/05/08/announcing-new-builds-for-8-may-2026/">5 月 8 日</a>先在 Experimental 通道的 Build 26300.8376 放進來，<a href="https://blogs.windows.com/windows-insider/2026/09/10/announcing-windows-11-release-preview-builds-26100-9539-26200-9539/">9 月 10 日</a>進到 Release Preview（24H2 是 26100.9539，25H2 是 26200.9539）。目前還是分批推送，升級到這個版本也不一定看得到。</p>
 <p>結果不是 checkbox，是下拉選單，還可以選左邊或右邊。</p>
-<h2>它放在哪裡</h2>
+<h2 id="section-1">它放在哪裡</h2>
 <p>它就在「捲動與縮放」裡，跟雙指捲動、捲動速度排在同一區。微軟 5 月的公告把它和捲動速度、加速捲動寫在同一段觸控板更新，這段沒有用到「無障礙」這個詞。</p>
 <p>去年那篇我抱怨的是，無障礙部門在做得獎的新產品，觸控板這邊卻把基本功能拿掉，兩邊好像沒在溝通。這次加回來的，是觸控板設定本身。</p>
-<h2>我自己寫的時候卡過的兩件事</h2>
+<h2 id="section-2">我自己寫的時候卡過的兩件事</h2>
 <p>第一件是方向。</p>
 <p>微軟寫的是垂直捲動，只有左右兩側。水平捲動，公告沒有提。</p>
 <p>這跟我在 Mac 上反編譯 Scroll2 看到的一樣，邊緣只定義了 <code>leftEdge</code> 和 <code>rightEdge</code>。我自己的兩個工具都有做水平捲動：Windows 版可以把上緣或下緣設成水平捲動區，TrackPal 是手指放在底部邊緣左右滑。</p>
@@ -218,11 +234,11 @@
 <p><a href="https://www.neowin.net/reports/you-can-scroll-with-one-finger-in-windows-11-but-it-feels-awkward/">Neowin 的 Ivan Jenic 在 9/16 寫了實測</a>。他想捲動，常常變成只有游標在動。游標還可能跑出他要捲的那個視窗，他得把游標找回來、移回視窗上，再試一次。</p>
 <p>這個我很熟。寫 TrackPal 的時候我遇過同樣的狀況，想捲動，系統判定成移動游標，再試一次還是一樣。我後來加了意圖判斷和重試偵測：被拒絕之後一兩秒內在同一個邊緣再做類似的動作，系統就稍微放寬門檻。</p>
 <p>用兩根手指的人碰到誤判，換回雙指就好。只有一根手指的人沒得換，每重來一次，都要先把游標找回來，移回視窗上，再滑一次。</p>
-<h2>誰會用這個功能</h2>
+<h2 id="section-3">誰會用這個功能</h2>
 <p>Neowin 那篇最後說，大家用雙指捲動用了這麼多年，他不確定這個功能會有多少人用。</p>
 <p>這個判斷的前提是讀者有兩根手指可以用。需要單指捲動的人，沒有雙指的肌肉記憶要改。</p>
 <p>同一批更新還有 Automatic scrolling：捲動時手指碰到觸控板上緣或下緣，頁面會繼續捲，不用抬起手指重來。Neowin 說這個反而順。單指在邊緣滑，很快就會滑到底，這個設定剛好補在那裡。</p>
-<h2>還沒完整的地方</h2>
+<h2 id="section-4">還沒完整的地方</h2>
 <p>微軟 5 月的公告寫著，用 WinUI 3 做的介面要等 Windows App SDK 1.8 和 2.0 更新，才會完整支援這批新手勢。微軟自家新框架寫的 App，暫時不一定完整。</p>
 <p>去年我問的是一個 checkbox。今年 9 月，Release Preview 裡有了一個下拉選單，還在分批推。</p>
 <p>就差水平捲動和右鍵了。Windows 現在的單指右鍵，要把觸控板右下角按下去；我的 Windows 版是在角落輕點一下就好。誤判的部分，我是在自己的工具裡處理的，微軟這版還沒看到。</p>
@@ -235,15 +251,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#f07c2a"><a href="/ai-analysis/svg-cover-create-post-first-run/"><span class="side-row__meta">19SEP26 · <span>AI 分析</span></span><span class="side-row__title">讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#f07c2a"><a href="/ai-analysis/svg-cover-create-post-first-run/"><span class="side-row__meta">19SEP26 · <span>AI 分析</span></span><span class="side-row__title">讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">它放在哪裡</a></li><li><a href="#section-2">我自己寫的時候卡過的兩件事</a></li><li><a href="#section-3">誰會用這個功能</a></li><li><a href="#section-4">還沒完整的地方</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

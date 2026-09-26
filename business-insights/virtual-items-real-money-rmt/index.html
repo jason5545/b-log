@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -199,10 +215,10 @@
       <h1 id="post-title" class="post__title">當虛擬道具變成真實收入:一個技術人對遊戲經濟的觀察</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>最近偶然接觸到遊戲 RMT (Real Money Trading，真實貨幣交易) 這個產業，讓我重新思考了一些關於「價值」和「效率」的問題。</p>
-<h2>一個存在已久的市場</h2>
+<h2 id="section-1">一個存在已久的市場</h2>
 <p>在某款熱門生存遊戲的第三方交易平台上，我看到數百筆商品在交易：異常物、稀有圖紙、代練服務。價格從幾十塊到上萬元不等。這不是新鮮事，從魔獸世界金幣到天堂裝備，這個市場已經存在二十年以上。</p>
 <p>讓我好奇的是：<strong>為什麼這個官方明令禁止、有封號風險的市場，依然如此活躍？</strong></p>
-<h2>核心問題：誰在買？為什麼買？</h2>
+<h2 id="section-2">核心問題：誰在買？為什麼買？</h2>
 <p>作為一個重視效率和自動化的人，我很快理解了這個市場的邏輯。</p>
 <h3>時間價值的理性計算</h3>
 <p>假設一個工程師時薪 NT$500，刷一個稀有道具需要 20 小時。他有兩個選擇：</p>
@@ -274,7 +290,7 @@
 </ul>
 <p><strong>這些都是合理的需求，但確實不是「遊戲體驗」。</strong></p>
 <p>更像是：遊戲已經變成一種「社交貨幣」或「身份象徵」，而不是娛樂活動本身。</p>
-<h2>玩家類型與付費動機</h2>
+<h2 id="section-3">玩家類型與付費動機</h2>
 <p>心理學研究將玩家分為四種類型(Bartle Taxonomy)：</p>
 <table>
 <thead>
@@ -319,7 +335,7 @@
 <li>RMT 買等級 = 跳過體驗，只要結果數字 ❌</li>
 </ul>
 <p>更像是：你想炫耀「我看過 LiSA 演唱會」，但沒真的去看，只是買了票根拍照發 IG。</p>
-<h2>供需平衡：一個完美的市場</h2>
+<h2 id="section-4">供需平衡：一個完美的市場</h2>
 <p>這個市場之所以成立，是因為完美的供需匹配：</p>
 <p><strong>供給方：</strong></p>
 <ul>
@@ -334,7 +350,7 @@
 <li>願意用金錢換取效率</li>
 </ul>
 <p>這本質上是「時間套利」— 有人時間多錢少，有人錢多時間少，交易成立。</p>
-<h2>與 AI 輔助開發的類比？其實不一樣</h2>
+<h2 id="section-5">與 AI 輔助開發的類比？其實不一樣</h2>
 <p>一開始我想到自己的工作方式，覺得 RMT 跟我用 AI 輔助開發很像。</p>
 <p>我的開發流程：</p>
 <ul>
@@ -374,7 +390,7 @@
 <p><strong>你想要一個完成的專案，所以花錢買了別人做好的程式碼，改個名字說是你寫的。</strong></p>
 <p>這顯然不是「用工具提升效率」，而是「跳過工作本身」。</p>
 <p>所以我一開始的類比是錯的。AI 輔助開發跟 RMT 完全不同。</p>
-<h2>商業模式的可持續性</h2>
+<h2 id="section-6">商業模式的可持續性</h2>
 <p>作為一個系統思考者，我也觀察到這個市場的脆弱性：</p>
 <h3>風險因素</h3>
 <ol>
@@ -395,7 +411,7 @@
 <li>沒有社會保障(不算正規就業)</li>
 <li>沒有晉升空間(時薪就是天花板)</li>
 </ul>
-<h2>理性的定位：副業而非主業</h2>
+<h2 id="section-7">理性的定位：副業而非主業</h2>
 <p>如果要在這個領域操作，理性的策略是：</p>
 <p><strong>短期(1-2年)：</strong></p>
 <ul>
@@ -416,7 +432,7 @@
 <li>社群經營、電競相關工作</li>
 </ul>
 <p><strong>核心原則：當副業開心賺，別當主業賭身家。</strong></p>
-<h2>更深層的思考：價值與倫理</h2>
+<h2 id="section-8">更深層的思考：價值與倫理</h2>
 <h3>這算「不勞而獲」嗎？</h3>
 <p>我認為不算。RMT 從業者提供的是：</p>
 <ul>
@@ -445,7 +461,7 @@
 <li>⚠️ 違反服務條款，有封號風險要自負</li>
 <li>❌ 盜帳號、詐騙、外掛絕對不行</li>
 </ul>
-<h2>結論：不是效率最佳化，是跳過體驗本身</h2>
+<h2 id="section-9">結論：不是效率最佳化，是跳過體驗本身</h2>
 <p>回到最初的問題：為什麼這個市場存在？</p>
 <p>一開始我以為這是「效率最佳化」，把 RMT 跟用 AI 寫程式、看演唱會類比。</p>
 <p><strong>但寫完這篇文章後，我發現我錯了。</strong></p>
@@ -505,15 +521,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li><li style="--row-accent:#4f6f68"><a href="/business-insights/counseling-clinic-legal-runway/"><span class="side-row__meta">08JUN26 · <span>商業觀察</span></span><span class="side-row__title">我以為心理諮商所是一座基地，後來發現它更像一條合法跑道</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li><li style="--row-accent:#4f6f68"><a href="/business-insights/counseling-clinic-legal-runway/"><span class="side-row__meta">08JUN26 · <span>商業觀察</span></span><span class="side-row__title">我以為心理諮商所是一座基地，後來發現它更像一條合法跑道</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">一個存在已久的市場</a></li><li><a href="#section-2">核心問題：誰在買？為什麼買？</a></li><li><a href="#section-3">玩家類型與付費動機</a></li><li><a href="#section-4">供需平衡：一個完美的市場</a></li><li><a href="#section-5">與 AI 輔助開發的類比？其實不一樣</a></li><li><a href="#section-6">商業模式的可持續性</a></li><li><a href="#section-7">理性的定位：副業而非主業</a></li><li><a href="#section-8">更深層的思考：價值與倫理</a></li><li><a href="#section-9">結論：不是效率最佳化，是跳過體驗本身</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

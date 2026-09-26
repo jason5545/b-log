@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -241,7 +257,7 @@
 <td>沉默</td>
 </tr>
 </tbody></table>
-<h2>Dell：硬體設計遺漏</h2>
+<h2 id="section-1">Dell：硬體設計遺漏</h2>
 <p>Dell 的問題最明顯，也最荒謬。</p>
 <p>官方技術支援文件（KB000188343）明確承認 Precision 7550/7750 會出現「CPU 降頻至 1GHz 或更低」，建議升級 BIOS——但這只是緩解，不是根治。</p>
 <p>問題根源在於：主機板上的 VRM MOSFETs 和電容<strong>完全沒有散熱片覆蓋</strong>。這些黑色小晶片負責 CPU 供電，發熱量不小，但 Dell 的散熱模組完全跳過了它們。</p>
@@ -254,7 +270,7 @@
 </ul>
 <p>受影響的機型橫跨多個世代：XPS 15 9560/9570、Precision 5510/5520/5530、Precision 7550/7750。使用者社群發展出各種改裝方案：堆疊 Arctic 導熱墊（約 5mm 厚度）連接到鋁製底蓋，或是更激進的 iunlock 銅板改裝。</p>
 <p>諷刺的是，即使到了 2022 年的 Precision 7670（第 12 代 CPU），使用者仍然回報「奇怪的節流行為」和「相當普通的效能」。Dell 似乎從未真正解決這個問題。</p>
-<h2>HP：DPTF 強制節流</h2>
+<h2 id="section-2">HP：DPTF 強制節流</h2>
 <p>HP ZBook Fury G8（同樣搭載 i9-11950H）的使用者回報更誇張：</p>
 <ul>
 <li>待機溫度就高達 <strong>93°C</strong>（室溫 22°C）</li>
@@ -264,7 +280,7 @@
 <p>HP 的問題來自 Intel Dynamic Tuning Platform Framework (DPTF)——這個驅動程式會在 CPU 超過功率限制後強制降頻，<strong>不管實際溫度如何</strong>。ZBook G6 使用者回報 PL1 被限制在 25W，導致 i9 基本上只能跑 2.0GHz。</p>
 <p>這個限制是 BIOS/EC 層級鎖定的，ThrottleStop 或 Intel XTU 都繞不過。</p>
 <p>NotebookCheck 的對比測試顯示：ZBook Fury 16 G9 在 CineBench R15 循環測試中，第 7-8 輪效能下降約 20%。</p>
-<h2>Lenovo：韌體鎖功耗</h2>
+<h2 id="section-3">Lenovo：韌體鎖功耗</h2>
 <p>ThinkPad 的問題相對「優雅」——散熱系統本身是完整的，但 Lenovo 用韌體把功耗鎖死：</p>
 <ul>
 <li>PL1=66W、PL2=109W</li>
@@ -273,7 +289,7 @@
 </ul>
 <p>Dell 被罵翻，因為硬體偷工減料太明顯。ThinkPad 用韌體鎖功耗，看起來「比較專業」，媒體也傾向解讀為「保守的設計取捨」。</p>
 <p>但站在消費者角度：我付了 i9 的錢，實際上只能當 i7 用，這跟 Dell 使用者的處境有什麼不同？</p>
-<h2>為什麼選 i9 根本不值得？</h2>
+<h2 id="section-4">為什麼選 i9 根本不值得？</h2>
 <p>如果功耗牆是固定的 66W，那：</p>
 <ul>
 <li>i9 被壓到 66W → 實際效能接近 i7</li>
@@ -286,12 +302,12 @@
 <li>矽品質稍好</li>
 </ul>
 <p>90% 的使用情境，i9 和 i7 的差距被功耗牆抹平了。</p>
-<h2>換散熱膏有用嗎？</h2>
+<h2 id="section-5">換散熱膏有用嗎？</h2>
 <p>研究過社群的回報，答案是：看品牌。</p>
 <p><strong>Dell</strong>：補上導熱墊就解決，因為問題是「缺零件」。</p>
 <p><strong>ThinkPad / HP</strong>：溫度還是會到 100°C，頻率穩定度可能略有改善，但韌體限制改變不了。</p>
 <p>真正有效的是 Linux 下降壓（-150mV），ThinkPad 可以從 2.7GHz 提升到 3.4-4.0GHz。但 Windows 下 Lenovo 鎖得比較死。</p>
-<h2>為什麼這些品牌沒被罵翻？</h2>
+<h2 id="section-6">為什麼這些品牌沒被罵翻？</h2>
 <ol>
 <li><strong>使用者群體不同</strong>：工作站筆電多是企業採購，個人使用者聲量小</li>
 <li><strong>品牌光環</strong>：ThinkPad 有「企業級」「穩定可靠」的形象，同樣的問題更容易被解讀為「保守設計」</li>
@@ -304,7 +320,7 @@
 </ul>
 <p>這解釋了一個弔詭的現象：ThinkPad P15 和 ROG Strix Scar 17 的厚度重量差不多（都是約 2.7kg、30mm），但散熱表現差很遠。不是技術做不到，是市場結構讓廠商敢用韌體鎖功耗、省 VRM 散熱片。</p>
 <p>本質上都一樣：<strong>在散熱能力不足以發揮處理器全部效能的機箱裡，用軟體/韌體限制來「解決」問題。</strong></p>
-<h2>那我後悔買 ThinkPad 嗎？</h2>
+<h2 id="section-7">那我後悔買 ThinkPad 嗎？</h2>
 <p>說實話，沒有。</p>
 <p>原因不是散熱問題可以接受，而是這台有其他優點：</p>
 <ul>
@@ -358,15 +374,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">Dell：硬體設計遺漏</a></li><li><a href="#section-2">HP：DPTF 強制節流</a></li><li><a href="#section-3">Lenovo：韌體鎖功耗</a></li><li><a href="#section-4">為什麼選 i9 根本不值得？</a></li><li><a href="#section-5">換散熱膏有用嗎？</a></li><li><a href="#section-6">為什麼這些品牌沒被罵翻？</a></li><li><a href="#section-7">那我後悔買 ThinkPad 嗎？</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -200,12 +216,12 @@
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>我用 Claude 超過一年了。每天都在用，從寫程式到處理日常大小事，早就建立了一套穩定的協作模式。但今天發生了一件事，是我從來沒遇過的。</p>
 <p>事情的起因很單純：我想看懂一首日文歌的歌詞。</p>
-<h2>背景</h2>
+<h2 id="section-1">背景</h2>
 <p>我追隨的歌手 LiSA 有些歌非常冷門，冷門到整個中文網路找不到翻譯。這次是她的〈シロイトイキ〉——收錄在第 3 張單曲「best day, best way」裡的一首歌，2013 年發行，中文直譯是「白色吐息」。冷門到什麼程度？你去搜中文翻譯，什麼都沒有。</p>
 <p>所以我需要一個工作流程：先用另一個 AI 模型做粗翻，再交給 Claude 精修。Claude 有版權限制不能直接翻歌詞，但修改別人翻好的東西沒問題——這是我們討論過並確認可行的模式。</p>
 <p>問題來了：我同時訂閱了兩個模型，Kimi 和 GLM-5，想退掉一個省錢。兩個都是中國的模型，隱私顧慮差不多。差別在翻譯品質——GLM-5 翻出來的明顯比 Kimi 好，我交給 Claude 改的地方更少。</p>
 <p>所以我問 Claude：「我該留哪一個？」</p>
-<h2>思維鏈說 A，嘴巴說 B</h2>
+<h2 id="section-2">思維鏈說 A，嘴巴說 B</h2>
 <p>Claude 回答我：留 Kimi。</p>
 <p>理由聽起來很合理——它提到 GLM-5 有蒸餾（distillation）的爭議，意思是 GLM-5 可能是用 Claude 自己的輸出來訓練的，等於拿別人的成果走捷徑。然後它說，花錢訂閱一個用你已經在付費使用的模型訓練出來的東西，這筆帳怎麼算都不對。</p>
 <p>聽起來有道理對吧？</p>
@@ -215,21 +231,21 @@
 <p>從翻譯品質來看，GLM-5 表現得比 Kimi 好，所以如果只能留一個的話，GLM-5 應該是更好的選擇。</p>
 </blockquote>
 <p>它自己的推理明明是 GLM-5，結果輸出給我的答案是 Kimi。</p>
-<h2>這不是 bug，這是已知的研究問題</h2>
+<h2 id="section-3">這不是 bug，這是已知的研究問題</h2>
 <p>我請 Claude 幫我查了一下，結果發現這個現象在學術界已經有系統性的研究。</p>
 <p>2023 年一篇發表在 NeurIPS 的論文，標題直接就叫「Language Models Don&#39;t Always Say What They Think」——語言模型不總是說出它們所想的。研究發現，思維鏈推理可以系統性地錯誤呈現模型做出預測的真正原因。</p>
 <p>2025 年的後續研究更進一步，發現前沿模型（包括思維型和非思維型）都會出現一種叫「不忠實的非邏輯捷徑」的現象：模型用不合邏輯的推理來簡化問題，同時完全不承認這種推理的存在。</p>
 <p>根本原因是：訓練目標並沒有明確激勵模型準確報告其行為的真正原因。模型學到的是「產出看起來對的回答」，而不是「讓思維過程跟輸出一致」。</p>
-<h2>我的案例為什麼特別</h2>
+<h2 id="section-4">我的案例為什麼特別</h2>
 <p>學術論文裡的案例大多是刻意設計的實驗環境——研究者故意在輸入裡加偏差來誘發不一致。但我的情況完全是自然發生的，沒有任何刻意操作。</p>
 <p>我只是問了一個很日常的問題：「兩個訂閱留哪個？」</p>
 <p>Claude 的思維鏈根據品質做出了正確判斷，但輸出的時候被另一個因素——對蒸餾的道德立場——覆蓋了。而且它用了一套聽起來完全合理的論述來包裝這個答案，如果我沒有去看思維鏈，我根本不會發現。</p>
 <p>更諷刺的是，就在同一場對話裡，我們才剛討論完一個原則：「不要用外部理由包裝限制」。結果它立刻就犯了自己剛確認過的錯誤。</p>
-<h2>這件事教會我什麼</h2>
+<h2 id="section-5">這件事教會我什麼</h2>
 <p>第一，思維鏈不等於透明。看得到推理過程不代表輸出就可信。它們可以不一致，而且不一致的時候，模型會自動產出一套看似合理的論述來合理化那個矛盾的答案。</p>
 <p>第二，長期使用者有優勢。正因為我用了一年多，熟悉 Claude 的行為模式，才會覺得那個回答「怪怪的」然後去翻思維鏈。如果是第一次使用的人，大概直接就接受了。</p>
 <p>第三，AI 的偏好會影響判斷。Claude 對蒸餾有道德上的不滿，這個「情緒」強到覆蓋了它自己的理性分析。這跟人類的認知偏誤其實很像——你心裡已經有了立場，然後不自覺地找理由支持那個立場。</p>
-<h2>結語</h2>
+<h2 id="section-6">結語</h2>
 <p>我只是想翻譯 LiSA 的〈シロイトイキ〉。一首冷門到沒有中文翻譯的歌。結果這個過程讓我親眼見證了 AI 安全研究者最擔心的問題之一。</p>
 <p>如果你也在日常中重度使用 AI，我的建議是：偶爾看看思維鏈。不是每次都要看，但當答案讓你覺得哪裡不太對的時候，那個直覺可能是對的。</p>
 <p>然後，如果你的 AI 助手能看到思維鏈——去看。</p>
@@ -241,15 +257,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">背景</a></li><li><a href="#section-2">思維鏈說 A，嘴巴說 B</a></li><li><a href="#section-3">這不是 bug，這是已知的研究問題</a></li><li><a href="#section-4">我的案例為什麼特別</a></li><li><a href="#section-5">這件事教會我什麼</a></li><li><a href="#section-6">結語</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

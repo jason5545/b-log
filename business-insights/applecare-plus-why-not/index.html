@@ -72,12 +72,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -90,19 +90,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -198,26 +214,26 @@
       <figure id="post-hero" class="post__cover" hidden></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>每年 iPhone 上市，同樣的劇情都會重演一次。</p>
 <p>有人花了四萬多買了最新的 iPhone Pro，用沒幾個月，螢幕摔裂了、鏡頭壞了，結果不找官方，跑去巷口手機行花三五千塊「修好」。修完沾沾自喜覺得省了錢，殊不知整台機器的體驗已經被降級了。</p>
-<h2>一個最近的案例</h2>
+<h2 id="section-1">一個最近的案例</h2>
 <p>前幾天看到一個 Facebook 貼文，是第三方維修店自己發的。一位 iPhone 17 Pro 使用者去看演唱會，鏡頭被舞台雷射光打壞了。去找 Apple，官方說這不在標準保固範圍內，於是他就找了第三方換鏡頭。</p>
 <p>維修店把這當成功案例貼出來，訊息很明確：「官方不幫你，我幫你。」</p>
 <p>但他們不會告訴你的是：如果這位使用者當初有買 AppleCare+，這就是一個標準的意外損壞案例，付個自付額，原廠零件、原廠維修，搞定。他不是「官方不修」，是他一開始就沒有給自己這個選項。</p>
-<h2>你知道你換掉了什麼嗎？</h2>
+<h2 id="section-2">你知道你換掉了什麼嗎？</h2>
 <p>以螢幕為例。iPhone Pro 系列用的是三星最頂級批次的 OLED 面板——ProMotion 120Hz、峰值亮度兩千 nits 以上、每一片都經過 Apple 逐片校色。你花四萬多，買的就是這塊螢幕帶來的視覺體驗。</p>
 <p>然後你摔了一下，去第三方換回來的是什麼？</p>
 <p>運氣好，是一片堪用的副廠 OLED，色偏明顯、亮度打折。運氣不好，有些店家甚至不給你 OLED，直接換一片低階面板上去。True Tone 失效、HDR 表現崩掉、原彩顯示消失。</p>
 <p>你每天盯著看最久的就是這塊螢幕，而你親手把它從旗艦降級成了中階機的水準。</p>
 <p>鏡頭也是同樣的道理。原廠的光學防手震校準、計算攝影的調校，這些都跟著原廠模組走。第三方換上去的鏡頭，硬體上能用，但軟硬體整合的那層精細度就沒了。</p>
-<h2>四千八，一個月兩百</h2>
+<h2 id="section-3">四千八，一個月兩百</h2>
 <p>AppleCare+ 兩年 4800 元。攤下來一個月 200 塊，一杯手搖飲的錢。</p>
 <p>能花四萬多買 iPhone 17 Pro 的人，不會是真的缺這 4800 塊。這不是經濟問題，是認知問題——要嘛覺得「應該不會那麼衰」，要嘛把 AppleCare+ 當成額外支出而不是裝置的一部分。</p>
 <p>然後等到真的壞了，第三方維修花三五千，價格跟 AppleCare+ 差不多甚至更貴，品質卻天差地遠。省了小錢，虧了大錢，還把後續的官方保障全部賠進去。</p>
-<h2>買的不只是維修，是安心</h2>
+<h2 id="section-4">買的不只是維修，是安心</h2>
 <p>有人會說，保險這門生意本來就是讓多數人「多付」的——統計上大部分人兩年內不會用到，所以不買的人平均來說省了錢。</p>
 <p>數學上這沒錯。但保險的價值從來不是期望值。</p>
 <p>你買了 AppleCare+，手機掉地上的那一秒，你的反應是「撿起來看一下，壞了就送修」。沒買的人，那一秒心臟是揪著的。這兩種心理狀態的差異，持續兩年，4800 買的其實是這個。</p>
 <p>更實際一點：有 AppleCare+ 的人用手機更自在。不用套上厚重醜陋的防摔殼，不用每次放桌上都提心吊膽。你花了四萬多買一台設計精美的手機，結果因為怕壞而把它包得跟磚頭一樣，這本身就是一種浪費。</p>
-<h2>結論</h2>
+<h2 id="section-5">結論</h2>
 <p>都願意花四萬多買這個體驗了，再多不到一成的錢去保護它，有什麼好猶豫的？</p>
 <p>不怕一萬，只怕萬一。而那個萬一真的來的時候，你會慶幸自己當初做了對的選擇。</p>
 </div>
@@ -227,15 +243,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#a66b48"><a href="/ai-analysis/macos-27-facetime-audio-claude-fault/"><span class="side-row__meta">16SEP26 · <span>AI 分析</span></span><span class="side-row__title">三版 macOS 第一次連 FaceTime 語音都壞了，我問 Claude 這算不算它的錯</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#a66b48"><a href="/ai-analysis/macos-27-facetime-audio-claude-fault/"><span class="side-row__meta">16SEP26 · <span>AI 分析</span></span><span class="side-row__title">三版 macOS 第一次連 FaceTime 語音都壞了，我問 Claude 這算不算它的錯</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">一個最近的案例</a></li><li><a href="#section-2">你知道你換掉了什麼嗎？</a></li><li><a href="#section-3">四千八，一個月兩百</a></li><li><a href="#section-4">買的不只是維修，是安心</a></li><li><a href="#section-5">結論</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

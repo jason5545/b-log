@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -198,9 +214,9 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">解決 PDF OCR 後頁面旋轉異常的問題：一個隱藏在 pdftk 書籤還原中的陷阱</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>前言</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">前言</h2>
 <p>最近在批次處理大量 PDF 文件的 OCR 工作時，遇到了一個非常棘手的問題：明明原始 PDF 頁面方向正常，OCR 處理後某些頁面卻莫名其妙地旋轉了。這個問題困擾了我好一陣子，最後發現罪魁禍首竟然是 pdftk 的書籤還原功能。在此記錄整個偵錯過程，希望能幫助遇到相同問題的人。</p>
-<h2>背景</h2>
+<h2 id="section-2">背景</h2>
 <p>我需要對大量 PDF 進行 OCR 處理，這些 PDF 包含中英文混合內容，且原始文件帶有書籤。我的處理流程是：</p>
 <ol>
 <li>使用 <code>pdftk dump_data</code> 提取原始書籤</li>
@@ -215,10 +231,10 @@
          --output-type pdf \
          input.pdf output.pdf
 </code></pre>
-<h2>問題發現</h2>
+<h2 id="section-3">問題發現</h2>
 <p>處理完成後，我發現某些 PDF 的第 4、5 頁方向不對，原本正常的頁面變成了旋轉 90 度的狀態。奇怪的是，原始檔案開啟完全正常。</p>
 <p>我首先懷疑是 <code>ocrmypdf</code> 的 <code>--rotate-pages</code> 參數造成的問題（雖然我沒有使用這個參數），於是開始了漫長的偵錯之旅。</p>
-<h2>偵錯過程</h2>
+<h2 id="section-4">偵錯過程</h2>
 <h3>第一步：檢查原始 PDF 的頁面資訊</h3>
 <p>使用 <code>pdftk dump_data</code> 檢查原始 PDF：</p>
 <pre><code class="language-bash">pdftk original.pdf dump_data | grep -E &quot;PageMedia&quot;
@@ -268,7 +284,7 @@ PageMediaRotation: 270
 <p><strong>第 4、5 頁的 rotation 又變回 270 了！</strong></p>
 <p>這時我才恍然大悟：<code>pdftk dump_data</code> 輸出的不只是書籤資訊，還包含了 <code>PageMedia</code> 資訊（包括 rotation）。當我使用 <code>pdftk update_info</code> 還原書籤時，它同時也把原始的 <code>PageMediaRotation: 270</code> 寫回去了。</p>
 <p>但此時 PDF 的實際內容已經是正確方向的（因為 ocrmypdf 已經處理過），再加上 rotation metadata 就導致頁面被「二次旋轉」，造成顯示異常。</p>
-<h2>解決方案</h2>
+<h2 id="section-5">解決方案</h2>
 <p>解決方法很簡單：<strong>在還原書籤時，過濾掉 PageMedia 相關的資訊，只保留 Info 和 Bookmark 資料</strong>。</p>
 <p>原本的書籤提取方式：</p>
 <pre><code class="language-bash">pdftk input.pdf dump_data &gt; bookmarks.txt
@@ -283,7 +299,7 @@ PageMediaRotation: 270
 <li><code>BookmarkBegin</code>, <code>BookmarkTitle:</code>, <code>BookmarkLevel:</code>, <code>BookmarkPageNumber:</code> - 書籤資訊</li>
 </ul>
 <p>排除了所有 <code>PageMedia</code> 開頭的行，包括 <code>PageMediaRotation</code>。</p>
-<h2>完整的處理腳本</h2>
+<h2 id="section-6">完整的處理腳本</h2>
 <p>最終的處理腳本如下：</p>
 <pre><code class="language-bash">#!/bin/bash
 
@@ -325,7 +341,7 @@ process_pdf() {
     rm -f /tmp/bookmarks.txt /tmp/ocr_output.pdf /tmp/compressed.pdf
 }
 </code></pre>
-<h2>技術要點總結</h2>
+<h2 id="section-7">技術要點總結</h2>
 <ol>
 <li><p><strong>PDF 的頁面旋轉有兩種方式</strong>：</p>
 <ul>
@@ -353,7 +369,7 @@ process_pdf() {
 </ul>
 </li>
 </ol>
-<h2>為什麼混用工具會出問題？</h2>
+<h2 id="section-8">為什麼混用工具會出問題？</h2>
 <p>這個問題的根本原因是<strong>混用不同工具</strong>，而每個工具對 metadata 的處理邏輯不同：</p>
 <table>
 <thead>
@@ -377,7 +393,7 @@ process_pdf() {
 </tbody></table>
 <p>如果全程使用同一個工具（例如 Wondershare PDFelement 從掃描、旋轉、OCR 到壓縮），它內部會保持一致性，知道自己的 metadata 狀態，應該不會出現這種問題。</p>
 <p>但當你像我一樣，用 PDFelement 編輯、ocrmypdf 做 OCR、pdftk 還原書籤時，每個工具各自為政，metadata 的不同步就會導致意外的結果。</p>
-<h2>結語</h2>
+<h2 id="section-9">結語</h2>
 <p>這個問題的根本原因是 <code>pdftk</code> 的 <code>dump_data</code> 和 <code>update_info</code> 功能設計上是處理所有 PDF metadata，而不只是書籤。在大多數情況下這不會造成問題，但當 PDF 經過 OCR 處理（內容被重新渲染）後，原始的 rotation metadata 就不再適用了。</p>
 <p>這次經驗讓我深刻體會到：<strong>在處理 PDF 時，要特別注意 metadata 和實際內容之間的一致性</strong>。看似簡單的「保留書籤」操作，如果沒有仔細過濾資料，可能會帶來意想不到的副作用。</p>
 <p>希望這篇文章能幫助到遇到類似問題的朋友。如果你也在進行 PDF OCR 處理並需要保留書籤，記得過濾掉 PageMedia 資訊！</p>
@@ -388,15 +404,20 @@ process_pdf() {
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">前言</a></li><li><a href="#section-2">背景</a></li><li><a href="#section-3">問題發現</a></li><li><a href="#section-4">偵錯過程</a></li><li><a href="#section-5">解決方案</a></li><li><a href="#section-6">完整的處理腳本</a></li><li><a href="#section-7">技術要點總結</a></li><li><a href="#section-8">為什麼混用工具會出問題？</a></li><li><a href="#section-9">結語</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

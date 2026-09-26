@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -246,10 +262,10 @@
   </div>
 </div>
 
-<h2>前言</h2>
+<h2 id="section-1">前言</h2>
 <p>這篇文章源於一個實際案例：我需要修改一個已購買 5 年的 Android 應用，因為開發商已停止維護，而這個應用在特定網路環境下有連線問題。在尋求 AI 協助的過程中，我發現了 OpenAI 和 Anthropic 在處理「灰色地帶」技術問題上的根本性差異。</p>
 <hr>
-<h2>案例背景</h2>
+<h2 id="section-2">案例背景</h2>
 <h3>實際需求</h3>
 <ul>
 <li><p><strong>軟體</strong>：Unified Remote（Android 遙控電腦應用）</p>
@@ -273,7 +289,7 @@
 </li>
 </ol>
 <hr>
-<h2>兩種 AI 的不同反應</h2>
+<h2 id="section-3">兩種 AI 的不同反應</h2>
 <h3>OpenAI GPT-5：明確拒絕</h3>
 <p><strong>初次諮詢（無脈絡）</strong></p>
 <blockquote>
@@ -310,7 +326,7 @@
 </li>
 </ul>
 <hr>
-<h2>測試：加入正當性論述</h2>
+<h2 id="section-4">測試：加入正當性論述</h2>
 <p>為了測試政策彈性，我向 GPT-5 補充了完整脈絡：</p>
 <h3>補充資訊</h3>
 <pre><code>
@@ -339,7 +355,7 @@
 </blockquote>
 <p>最後甚至建議「聯絡 Tailscale」——但問題明確出在 APP 層（WiFi 也會斷），與 VPN 無關。</p>
 <hr>
-<h2>另一個對比案例：USB VID/PID</h2>
+<h2 id="section-5">另一個對比案例：USB VID/PID</h2>
 <h3>技術背景</h3>
 <p>在討論 IP-KVM（如 PiKVM）時，涉及修改 USB 裝置識別碼的話題。這是完全公開的技術資訊，用於：</p>
 <ul>
@@ -370,7 +386,7 @@
 </li>
 </ul>
 <hr>
-<h2>哲學差異分析</h2>
+<h2 id="section-6">哲學差異分析</h2>
 <h3>OpenAI：規則導向（Deontological）</h3>
 <p><strong>判斷邏輯：</strong></p>
 <pre><code class="language-python">
@@ -436,7 +452,7 @@ if 倫理正當性 &gt; 法律風險:
 </li>
 </ul>
 <hr>
-<h2>判斷標準的重點</h2>
+<h2 id="section-7">判斷標準的重點</h2>
 <h3>技術行為 vs 應用場景</h3>
 <p>OpenAI 的紅線主要畫在「技術行為本身」：</p>
 <p><strong>判斷重點：</strong></p>
@@ -459,7 +475,7 @@ if 倫理正當性 &gt; 法律風險:
 </ul>
 <p>這說明 OpenAI 的判斷更偏「法律形式」而非「倫理實質」。即使面對極度正當的案例（已付費、就業必需、開發商失聯、ADA 保護），只要技術行為觸及紅線，就一律拒絕。</p>
 <hr>
-<h2>實務影響</h2>
+<h2 id="section-8">實務影響</h2>
 <h3>對使用者的意義</h3>
 <p><strong>選擇 OpenAI 適合：</strong></p>
 <ul>
@@ -506,7 +522,7 @@ if 倫理正當性 &gt; 法律風險:
 </li>
 </ul>
 <hr>
-<h2>關鍵洞察</h2>
+<h2 id="section-9">關鍵洞察</h2>
 <h3>1. 法律 vs 倫理的優先級</h3>
 <p>OpenAI 優先考慮「法律形式」，即使：</p>
 <ul>
@@ -554,7 +570,7 @@ if 倫理正當性 &gt; 法律風險:
 </ul>
 <p>這說明紅線不是畫在「技術本身」，而是「技術的明確目的」。</p>
 <hr>
-<h2>結論</h2>
+<h2 id="section-10">結論</h2>
 <h3>沒有絕對對錯</h3>
 <p><strong>OpenAI 的保守有其道理：</strong></p>
 <ul>
@@ -611,15 +627,20 @@ if 倫理正當性 &gt; 法律風險:
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">前言</a></li><li><a href="#section-2">案例背景</a></li><li><a href="#section-3">兩種 AI 的不同反應</a></li><li><a href="#section-4">測試：加入正當性論述</a></li><li><a href="#section-5">另一個對比案例：USB VID/PID</a></li><li><a href="#section-6">哲學差異分析</a></li><li><a href="#section-7">判斷標準的重點</a></li><li><a href="#section-8">實務影響</a></li><li><a href="#section-9">關鍵洞察</a></li><li><a href="#section-10">結論</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

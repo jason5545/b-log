@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -200,32 +216,32 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">每一條路都有代價——從翁曉玲的貼文想起國中歷史課</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>起因是一篇臉書貼文</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">起因是一篇臉書貼文</h2>
 <p>2026 年 3 月 15 日，國民黨立委翁曉玲在臉書上發了一篇文章。</p>
 <p>起因是賴清德總統前一天在「台灣總統直選三十週年與民主韌性研討會」上說了一句話：國民黨政府來到台灣之後，對待台灣人民比殖民統治的日本對台灣還要差。</p>
 <p>翁曉玲的回應裡，除了反問「如果台灣今天仍被日本統治，台灣人能與日本人平起平坐嗎？」這類還算可以討論的問題之外，她還引述了一段「網路傳言」——說台灣戰後留下的日本人後代有百萬人，其中不少人組成了民進黨派系「新潮流」，並暗示賴清德「可能真不是台灣人」。</p>
 <p>這段傳言，TFC 台灣事實查核中心在 2024 年 9 月就已經查核過了。戰後留台日本人僅約一千多名，絕大多數是與台灣人有婚姻關係的女性，目前在台日裔估算約六千人。新潮流是 1984 年創刊的黨外雜誌發展而來，部分重要成員還是外省第二代。</p>
 <p>一個留德法學博士、清大副教授、現任立法委員，公開引用早就被打臉的假訊息來攻擊國家元首的身分認同。更諷刺的是，根據她自己的維基百科，她的祖父翁鐘賜在日治時期出生於台南州東石郡，畢業於日本慶應大學。按照她自己轉發的那套邏輯，她家族跟日本的淵源恐怕比新潮流任何一個人都深。</p>
 <p>但這篇文章不是要罵翁曉玲。她的貼文只是一個觸發點，讓我重新想起了一件從國中開始就一直在想的事。</p>
-<h2>國中歷史課的版本</h2>
+<h2 id="section-2">國中歷史課的版本</h2>
 <p>民國 60 年左右，聯合國承認了中華人民共和國，蔣中正決定讓台灣退出聯合國，因為聯合國不能存在兩個中國。</p>
 <p>至少，那時候歷史老師是這樣教的。</p>
 <p>實際上呢？1971 年聯合國大會通過第 2758 號決議，承認中華人民共和國為中國在聯合國的唯一合法代表，並「驅逐蔣介石的代表」。美國有提出「雙重代表權」方案，但被否決。中華民國代表團是在表決前主動退席，但即使不退席，票數也已經輸了。</p>
 <p>「蔣中正決定退出」是面子敘事。實際上是被逐出的。</p>
 <p>而這背後最關鍵的推力，是大國博弈。1960 年代末中蘇關係破裂，美國看到機會，決定拉攏中國對付蘇聯。季辛吉秘密訪問北京，尼克森隔年正式訪中。美國要跟北京建立關係，就不能繼續在聯合國支持台北。台灣就是這筆交易的代價。</p>
 <p>歷史課把最重要的那層脈絡整個跳過了。</p>
-<h2>國中的我就在想的事</h2>
+<h2 id="section-3">國中的我就在想的事</h2>
 <p>那時候我就覺得：如果蔣中正在那個時間點決定改國號為台灣，放棄「代表全中國」這個主張，是不是後面的事情就全部不同了？</p>
 <p>後來慢慢理解了，這個假設在當時的時空背景下根本不可能。蔣中正的整個執政正當性建立在「中華民國是全中國唯一合法政府」的前提上，改國號等於自我否定法統。而且 1971 年的台灣，統治階層是跟著國民黨來的外省菁英，本省人在政治上幾乎沒有發言權。這不是一個人的決定問題，是整個體制的結構性限制。</p>
 <p>但這只是第一個錯過的節點。</p>
-<h2>每一個節點都差一點</h2>
+<h2 id="section-4">每一個節點都差一點</h2>
 <p>1979 年美中建交，台灣跟美國斷交。1991 年終止動員戡亂。1996 年台海危機。2000 年第一次政黨輪替。</p>
 <p>每一個點理論上都有可能走不同的路，但每一次都有各自的限制。</p>
 <p>1996 年，李登輝提出「中華民國在臺灣」，北京已經氣到發射飛彈。美國派了兩個航母戰鬥群過來，中國當時打不過，所以收手。那次「沒事」不是因為中國可以接受，是因為軍事上打不贏。如果在那個時間點直接改國號，美國未必會挺——因為美國的一中政策也不支持台灣單方面改變現狀。1996 年美國出手，是因為中國升級局勢；如果是台灣主動改變現狀，美國的立場就尷尬了。</p>
 <p>2000 年，陳水扁當選。民進黨第一次執政，黨綱有台獨主張。但他只拿了 39% 的選票，國會沒有過半，一上任就講了「四不一沒有」。到第二任有推一些動作，但已經深陷弊案，政治能量大幅下降。</p>
 <p>同一個模式反覆出現：<strong>有意願的時候條件不夠，條件好的時候其他因素又出了問題。</strong></p>
 <p>台灣最有籌碼的時候——中國還弱——恰好是內部還沒有共識的時候。等到內部共識逐漸成形，外部的窗口已經變窄了。</p>
-<h2>那如果一直是日本的呢？</h2>
+<h2 id="section-5">那如果一直是日本的呢？</h2>
 <p>翁曉玲的貼文裡有一個問題：如果台灣今天仍被日本統治會怎樣？</p>
 <p>網路上有人列了一份清單，我覺得很有意思：228 不會發生、台灣會成為日本列島的第四大島、日本最高峰不是富士山是玉山、WBC 我們跟大谷翔平是同一隊的。</p>
 <p>這些想像很吸引人，但有一個角度容易被忽略：如果台灣一直是日本領土，台灣不會是東京，比較可能是沖繩。</p>
@@ -233,11 +249,11 @@
 <p>有沖繩人直接用「殖民主義」來形容日本對沖繩的態度。</p>
 <p>殖民地的經濟發展邏輯跟獨立國家不同。日本在台灣蓋鐵路、建水利、發展製糖業，但目的是把資源送回本土，不是讓台灣人富起來。如果統治延續，台灣的產業可能被鎖定在服務日本本土需求的位置上。台積電這種東西不會出現在新竹，會在九州或東北。</p>
 <p>更讓人不舒服的一點：維持台灣事實獨立的最大力量——美日軍事同盟——恰好就是壓在沖繩人頭上的負擔。台灣跟沖繩是同一個地緣結構下的兩面。</p>
-<h2>國民黨贏了內戰呢？</h2>
+<h2 id="section-6">國民黨贏了內戰呢？</h2>
 <p>如果國共內戰國民黨贏了，台灣就不會變成「退守的基地」，而是回到一個邊陲省份的定位，大概跟福建或海南差不多。</p>
 <p>台灣後來的經濟奇蹟，有幾個關鍵條件：美國的大量援助、獨立的經濟決策權、國民黨把資源集中投入這個小島。如果國民黨贏了，這些資源會分散在整個中國大陸。台灣的經濟水準可能跟福建差不多，而不是亞洲四小龍。</p>
 <p>唯一明確變好的是：沒有主權爭議。但你也不會有自己的命運。不會有「台灣意識」這個東西存在，因為你就是一個中國的省。</p>
-<h2>每一條路都有代價</h2>
+<h2 id="section-7">每一條路都有代價</h2>
 <p>留在日本，變成沖繩——經濟邊緣、文化被同化、軍事基地壓在頭上。國民黨來了，得到了經濟發展的空間，但代價是 228、白色恐怖、三十八年戒嚴、以及到現在都解不開的主權困局。國民黨贏了內戰，沒有主權問題，但也沒有民主，沒有自己的路。</p>
 <p>每一條路都有代價，差別只是你付的是哪一種。</p>
 <p>如果硬要從這些選項裡找一個相對不那麼差的結論：台灣走到今天這個狀態——事實獨立、民主運作、經濟有一定實力、國際空間受限但還沒被吞掉——可能已經是所有可能路徑裡相對不壞的那一個了。不是因為這條路好，而是其他條路可能更慘。</p>
@@ -252,15 +268,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">起因是一篇臉書貼文</a></li><li><a href="#section-2">國中歷史課的版本</a></li><li><a href="#section-3">國中的我就在想的事</a></li><li><a href="#section-4">每一個節點都差一點</a></li><li><a href="#section-5">那如果一直是日本的呢？</a></li><li><a href="#section-6">國民黨贏了內戰呢？</a></li><li><a href="#section-7">每一條路都有代價</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

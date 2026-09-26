@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -201,7 +217,7 @@
 <p>不是一筆，是三筆。每筆 NT$22,422。</p>
 <p>看到那三筆的瞬間，心跳漏了一拍。</p>
 <p><strong>（劇透:週一商城部門上班後，變成四筆。而問題的根本原因，離譜到讓人想笑。）</strong></p>
-<h2>發生了什麼事</h2>
+<h2 id="section-1">發生了什麼事</h2>
 <p>事情是這樣的：我在 Lenovo 官網買延伸保固，填完資料、輸入信用卡號、按下送出，然後⋯⋯頁面轉啊轉，最後跳出「銀行拒刷」。</p>
 <p>「什麼？拒刷？」我確認了一下額度，明明是夠的。</p>
 <p>「可能是系統問題吧。」我想。</p>
@@ -215,7 +231,7 @@
 檢查 Email——沒有確認信。</p>
 <p><strong>網頁說「銀行拒刷」，銀行說「授權成功」。而且是三次。</strong></p>
 <p>這到底是哪裡出了問題？老實說，那一刻我真的慌了。</p>
-<h2>冷靜下來後，技術上到底發生了什麼</h2>
+<h2 id="section-2">冷靜下來後，技術上到底發生了什麼</h2>
 <p>花了點時間整理思緒，我開始從技術角度分析這個問題。</p>
 <p>這是一個典型的「前端誤判」問題。正常的線上付款流程應該是：</p>
 <pre><code>1. 網站 → 向銀行請求授權
@@ -235,7 +251,7 @@
 <p>很多時候是 payment gateway 的回傳訊號出問題，網站收不到確認，只好判定為失敗。但銀行那邊，授權早就通過了。</p>
 <p>這就是為什麼會出現「網頁說拒刷，銀行說成功」的詭異狀況。</p>
 <p>更糟的是，因為我試了三次，就產生了三筆授權。</p>
-<h2>我是怎麼處理的</h2>
+<h2 id="section-3">我是怎麼處理的</h2>
 <h3>第一步:確認狀況</h3>
 <p>先不要慌，也<strong>不要再繼續嘗試付款</strong>。每試一次就多一筆授權。</p>
 <p>我做了這些確認：</p>
@@ -286,7 +302,7 @@
 <li>通知我重新下單或確認訂單</li>
 </ol>
 <p><strong>理論上是這樣。但在確定之前，還是會擔心。</strong></p>
-<h2>如果你也遇到這種狀況</h2>
+<h2 id="section-4">如果你也遇到這種狀況</h2>
 <p>給個簡單的 SOP：</p>
 <h3>立即動作</h3>
 <ol>
@@ -321,7 +337,7 @@
 <p>萬一是系統 bug 呢？萬一後端其實有訂單呢？萬一商城部門說「我們查不到問題」呢？</p>
 <p>這些「萬一」在週末這兩天會反覆出現在腦海裡。</p>
 <p><strong>而且，「客服處理這種狀況很有經驗」這句話，在我被建議「再試一次」之後，已經不太相信了。</strong></p>
-<h2>為什麼這麼容易發生</h2>
+<h2 id="section-5">為什麼這麼容易發生</h2>
 <p>Payment gateway 的運作環節很多，任何一個環節出問題都可能導致這種狀況：</p>
 <ul>
 <li>網路延遲或中斷</li>
@@ -330,7 +346,7 @@
 <li>回傳訊號遺失</li>
 </ul>
 <p>對一般網站來說，這種問題發生率可能只有 0.1-1%，但當你的網站每天有上萬筆交易時，就會有數十到上百個人遇到。</p>
-<h2>技術上可以怎麼避免</h2>
+<h2 id="section-6">技術上可以怎麼避免</h2>
 <p>如果我是開發者，我會：</p>
 <ol>
 <li><strong>冪等性設計</strong> - 同一筆付款請求多次送出，只會產生一筆訂單</li>
@@ -340,7 +356,7 @@
 <li><strong>對帳機制</strong> - 定期比對銀行授權和訂單記錄，自動處理不一致</li>
 </ol>
 <p>但說實話，要做到完全避免很難。各種 edge case 防不勝防。</p>
-<h2>這次事件最大的問題:錯誤訊息</h2>
+<h2 id="section-7">這次事件最大的問題:錯誤訊息</h2>
 <p>技術問題難免會發生，但這次最離譜的是<strong>錯誤訊息完全牛頭不對馬嘴</strong>。</p>
 <p><strong>實際問題:</strong> 地址格式錯誤（鄉鎮市區填了郵遞區號）</p>
 <p><strong>系統顯示:</strong> 銀行拒刷</p>
@@ -363,7 +379,7 @@
 </ol>
 <p><strong>錯誤訊息不是小事。一個誤導性的錯誤訊息，讓我多花了兩天焦慮，多產生了三筆不必要的授權。</strong></p>
 <p>如果一開始就顯示「地址格式錯誤」，整件事五分鐘內就結束了。</p>
-<h2>後記</h2>
+<h2 id="section-8">後記</h2>
 <p>寫這篇文章的當下，是週一。那<strong>四筆</strong>授權還靜靜地躺在信用卡紀錄裡。</p>
 <p>NT$89,688。快九萬了。</p>
 <p>原本以為週一商城部門上班就能解決，結果第一個動作是叫我「再試一次」，然後又多了一筆授權。</p>
@@ -397,15 +413,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#dc2626"><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">發生了什麼事</a></li><li><a href="#section-2">冷靜下來後，技術上到底發生了什麼</a></li><li><a href="#section-3">我是怎麼處理的</a></li><li><a href="#section-4">如果你也遇到這種狀況</a></li><li><a href="#section-5">為什麼這麼容易發生</a></li><li><a href="#section-6">技術上可以怎麼避免</a></li><li><a href="#section-7">這次事件最大的問題:錯誤訊息</a></li><li><a href="#section-8">後記</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

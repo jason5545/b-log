@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -201,7 +217,7 @@
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>2024 年，當我花 NT$7,700 買下 96GB DDR5 記憶體時，心裡其實有點猶豫：「會不會買太貴了？」</p>
 <p>一年後的今天，同樣的記憶體要價 NT$11,499。</p>
 <p>漲幅 49%。</p>
-<h2>那些年，我們信仰的採購哲學</h2>
+<h2 id="section-1">那些年，我們信仰的採購哲學</h2>
 <p>「晚買享折扣」——這句話在 3C 圈流傳已久。邏輯很簡單：</p>
 <ul>
 <li>新品剛上市最貴</li>
@@ -210,7 +226,7 @@
 </ul>
 <p>過去十年，這個邏輯確實管用。DDR3 到 DDR4 的過渡期，記憶體價格一路下滑。SSD 從天價變成白菜價，也不過幾年光景。</p>
 <p>但 2024-2025 這一波，徹底顛覆了這個信仰。</p>
-<h2>我的採購清單</h2>
+<h2 id="section-2">我的採購清單</h2>
 <p>先看看我去年買了什麼：</p>
 <ul>
 <li><strong>美光 Crucial 96GB DDR5-5600 (48GBx2)</strong>：NT$7,700</li>
@@ -218,7 +234,7 @@
 </ul>
 <p><strong>總計：NT$20,396</strong></p>
 <p>當時的心態是：「96GB 好像有點多？兩支 4TB 會不會用不完?」</p>
-<h2>一年後的價格</h2>
+<h2 id="section-3">一年後的價格</h2>
 <p>翻開 2025 年 10/26 的報價：</p>
 <ul>
 <li><strong>美光 96GB DDR5-5600</strong>：NT$11,499（+49%）</li>
@@ -235,12 +251,12 @@
 <p>一年前 NT$7,700 的記憶體，現在要價 NT$25,999。</p>
 <p>這不是「晚買享折扣」，這是「晚買破產」。</p>
 <p>這還只是台灣市場的零售價。根據市場報告，記憶體成本比去年高 120%，部分廠商漲幅甚至達 30%。</p>
-<h2>到底發生了什麼事？</h2>
+<h2 id="section-4">到底發生了什麼事？</h2>
 <p>簡單說：<strong>AI 把記憶體吃光了</strong>。</p>
 <p>OpenAI 一家公司，就簽下每月 90 萬片 DRAM 晶圓的訂單——<strong>佔全球產能 40%</strong>。</p>
 <p>Samsung 的次世代 NAND 還沒正式量產就幾乎訂光。Micron 的 HBM 產能已經賣到 2026 年底。</p>
 <p>當 AI 資料中心以前所未有的規模吞噬硬體時，消費級市場只能排隊等料。</p>
-<h2>更糟的是：這可能才剛開始</h2>
+<h2 id="section-5">更糟的是：這可能才剛開始</h2>
 <p>產業分析師的預測讓人不安：</p>
 <blockquote>
 <p>「這波短缺可能持續到 2030 年代中期。」</p>
@@ -249,7 +265,7 @@
 <p>過去每次需求爆發，廠商就瘋狂擴產。結果需求一退，產能過剩，價格崩盤，大家一起虧錢。</p>
 <p>這次不一樣。Samsung、SK Hynix、Micron 都把產能優先轉向高利潤的 HBM（AI 專用記憶體）。消費級 DRAM 和 NAND？產能管控，供給吃緊，價格穩步上揚。</p>
 <p>這不是短期的供需失衡，而是<strong>產業結構的重組</strong>。</p>
-<h2>市場的傲慢與偏見</h2>
+<h2 id="section-6">市場的傲慢與偏見</h2>
 <p>還記得一個有趣的細節。</p>
 <p>當初原價屋在宣傳這組 96GB 記憶體特價時，底下一堆留言質疑：</p>
 <p>「時序不夠漂亮，是不是在清庫存？」
@@ -260,7 +276,7 @@
 <p>一年後同一條記憶體漲到 NT$25,999，漲幅 237%。</p>
 <p>那些當初嫌「時序不漂亮」的人，現在大概只能看著價格嘆氣。</p>
 <p>這就是市場最諷刺的地方：<strong>當所有人都在挑剔規格細節時，價格已經悄悄離開了</strong>。</p>
-<h2>週期的反諷</h2>
+<h2 id="section-7">週期的反諷</h2>
 <p>回頭看我 2024 年的猶豫，其實很荒謬。</p>
 <p>當時覺得「NT$7,700 買 96GB 會不會太貴」，現在看來根本是<strong>谷底價</strong>。</p>
 <p>這就是市場週期最殘酷的地方：</p>
@@ -269,7 +285,7 @@
 <li>在高點時，你覺得還會更高，急著追漲</li>
 <li>等你反應過來，週期已經翻轉了</li>
 </ul>
-<h2>我學到的三件事</h2>
+<h2 id="section-8">我學到的三件事</h2>
 <h3>1. 沒有「永遠的規律」</h3>
 <p>「晚買享折扣」在 DDR3/DDR4 時代是真理，但遇到 AI 需求爆發就失效了。</p>
 <p>市場不是線性的。外部衝擊（技術突破、地緣政治、疫情、產業整併）隨時會改寫遊戲規則。</p>
@@ -284,7 +300,7 @@
 <h3>3. 閒置硬體也是資產</h3>
 <p>我手上還有兩支閒置的 XPG DDR5 6000 64GB。</p>
 <p>去年買的時候沒多想，現在二手價還能賣 NT$5,500-6,100。記憶體在漲價週期裡，保值性比想像中高。</p>
-<h2>現在該怎麼辦？</h2>
+<h2 id="section-9">現在該怎麼辦？</h2>
 <p>如果你正在考慮升級：</p>
 <p><strong>短期（3-6 個月）</strong></p>
 <ul>
@@ -303,7 +319,7 @@
 </ul>
 <p>我的建議：<strong>別賭未來會更便宜</strong>。</p>
 <p>如果現在系統已經不夠用（記憶體不足、儲存空間爆滿），該升級就升級。等待的機會成本，可能比你省下的錢更高。</p>
-<h2>後記</h2>
+<h2 id="section-10">後記</h2>
 <p>當我在 2024 年猶豫「是不是花太多錢」時，沒想到一年後會寫這篇文章。</p>
 <p>更沒想到的是，<strong>就在這篇文章完成後十天</strong>（10/26 → 11/5），同一條記憶體從 NT$11,499 飆到 NT$25,999。</p>
 <p>十天漲 126%。</p>
@@ -333,15 +349,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li><li style="--row-accent:#4f6f68"><a href="/business-insights/counseling-clinic-legal-runway/"><span class="side-row__meta">08JUN26 · <span>商業觀察</span></span><span class="side-row__title">我以為心理諮商所是一座基地，後來發現它更像一條合法跑道</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/business-insights/reseller-just-say-it/"><span class="side-row__meta">17SEP26 · <span>商業觀察</span></span><span class="side-row__title">是店家也沒關係，直接說就好</span></a></li><li style="--row-accent:#647b60"><a href="/business-insights/mac-right-arrow-key-apple-repair/"><span class="side-row__meta">12SEP26 · <span>商業觀察</span></span><span class="side-row__title">Mac 右方向鍵失靈，這次 Apple 幫我處理好了</span></a></li><li style="--row-accent:#4f6f68"><a href="/business-insights/counseling-clinic-legal-runway/"><span class="side-row__meta">08JUN26 · <span>商業觀察</span></span><span class="side-row__title">我以為心理諮商所是一座基地，後來發現它更像一條合法跑道</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">那些年，我們信仰的採購哲學</a></li><li><a href="#section-2">我的採購清單</a></li><li><a href="#section-3">一年後的價格</a></li><li><a href="#section-4">到底發生了什麼事？</a></li><li><a href="#section-5">更糟的是：這可能才剛開始</a></li><li><a href="#section-6">市場的傲慢與偏見</a></li><li><a href="#section-7">週期的反諷</a></li><li><a href="#section-8">我學到的三件事</a></li><li><a href="#section-9">現在該怎麼辦？</a></li><li><a href="#section-10">後記</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

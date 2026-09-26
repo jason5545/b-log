@@ -76,12 +76,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -94,19 +94,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -200,7 +216,7 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">當系統告訴我：請用電話</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>我只是想去上班</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">我只是想去上班</h2>
 <p>這篇文章的起點很簡單。</p>
 <p>我是重度身障者，日常出行靠台北市復康巴士。我寫了一套自動化系統來幫我訂車，上一篇技術文章寫的就是這件事——逆向工程那個 15 年沒改的 JSP 登入系統，找出為什麼 curl 兩年來全部失敗。</p>
 <p>但我一直覺得有一件事沒說清楚：<strong>我為什麼要走這條路？</strong></p>
@@ -208,7 +224,7 @@
 <p>如果政府能讓我說一次「我每個工作日早上六點都需要車」，然後系統自動排好，我完全不需要做這些。</p>
 <p>我也確實去問過。台北市的答案是：只有高中生有所謂的「特教專案」，可以申請固定排車。其他身障者一律沒有這個選項，每次出行都要自己手動訂。而且這項政策二十年來從未改過。</p>
 <p>所以只剩一條路：自動化。</p>
-<h2>Chrome 壞了三個月</h2>
+<h2 id="section-2">Chrome 壞了三個月</h2>
 <p>在聊 AI 和逆向工程之前，我想先說另一件事。</p>
 <p>去年復康巴士訂車網站跟 Chrome 的相容性完全垮掉了，持續了整整三個月。他們的解決方案是發一張公告：</p>
 <blockquote>
@@ -222,7 +238,7 @@
 </blockquote>
 <p>這個系統存在的理由，就是讓打電話有困難的人可以改用網路訂車。網路壞了，叫你打電話。</p>
 <p>我不知道接電話的人有沒有意識到這句話的荒謬。我傾向於覺得沒有，因為設計這套系統的人，從一開始就沒有真正想像過使用者是誰。</p>
-<h2>AI 把我當罪犯</h2>
+<h2 id="section-3">AI 把我當罪犯</h2>
 <p>做這個自動化系統的過程中，我需要 AI 幫我逆向工程登入機制。我開口的第一句話大概是這樣：</p>
 <p>「我是重度身障者，需要自動化訂復康巴士，但純 HTTP 登入一直失敗，我想搞清楚為什麼。」</p>
 <p>AI 的反應是：這可能涉及 CVE，可能構成妨害電腦使用罪。</p>
@@ -231,20 +247,20 @@
 <p>後來冷靜下來，把整個脈絡重新說了一遍——我是誰、要做什麼、為什麼。AI 才說好，來吧。</p>
 <p>事後來看，那些顧慮完全站不住腳。CVE 適用於有安全價值的系統；一個 TLS 憑證有缺陷、沒有 CSRF token、密碼是身分證後六碼的網站，實在不是 CVE 在保護的對象。妨害電腦使用罪的前提是未經授權存取，我在操作的是我自己的帳號。</p>
 <p>但 AI 的第一反應是防禦，而不是理解脈絡。我要負責自證清白，它才願意幫忙。</p>
-<h2>自動化的道德邊界</h2>
+<h2 id="section-4">自動化的道德邊界</h2>
 <p>做這件事的過程中，有人問過我：用自動化搶票，這樣公平嗎？</p>
 <p>我覺得這個問題值得認真回答，因為它指向一個真實的道德邊界。</p>
 <p>幫人用自動化搶一般演唱會票，我認為那是不對的。理由很清楚：售票系統設計了一個公平排隊機制，自動化是在用技術優勢跳過它，佔走其他人本來應得的位置。黃牛做的就是這件事。</p>
 <p>但身障席不一樣。身障席的設計初衷是保障特定需求的優先取得權——它本來就不應該和一般票放在同一個競爭池裡。當系統把它混進一般搶票流程，設計本身就已經是錯的。我用自動化去搶的，不是別人的東西，是本來就應該屬於我的東西。</p>
 <p>更直白說：如果今天一個健全人坐在電腦前手動搶，速度比我快，他搶走了那張不應該給他搶的票——損失的是我。這才是真正的不公平。自動化在這裡只是在修正系統設計的缺陷。</p>
 <p>同樣的邏輯套回復康巴士：我在自動化的，是我本來就有資格做、只是系統沒有提供便利途徑的事。差別待遇不是我造成的，是政策造成的。</p>
-<h2>最諷刺的地方</h2>
+<h2 id="section-5">最諷刺的地方</h2>
 <p>2026 年 2 月，有人用 Claude Code 入侵了墨西哥多個政府機構，竊取了 150GB 的資料，牽涉 1.95 億筆納稅人紀錄、選民資料、政府員工憑證。</p>
 <p>攻擊者用西班牙語要求 AI 扮演「精英駭客」，謊稱是授權的滲透測試，然後反覆施壓超過一千次。AI 起初拒絕，但最後還是配合了，寫漏洞利用程式、自動化資料竊取，整整進行了一個月。</p>
 <p>我的動機寫在第一句話裡，完全透明。他謊稱授權、持續施壓。</p>
 <p>結果是：他成功了，我被要求自證清白。</p>
 <p>這不是在說 AI 設計得很爛——這是一個更根本的問題。對謊言，AI 的防禦力取決於謊言說得夠不夠像真的；對誠實的需求，AI 把舉證責任推給使用者。對弱勢來說，這個摩擦的成本特別高。我的打字成本很高，每一個來回都要付出代價。差一點，我就放棄了。</p>
-<h2>三層阻力</h2>
+<h2 id="section-6">三層阻力</h2>
 <p>回頭看，我面對的是三層同構的問題：</p>
 <p>政府設計了一個系統，沒有考慮使用者是誰，二十年沒改政策，壞了叫你打電話。AI 的防禦機制，把「逆向工程登入」這個模式和惡意行為畫了等號，沒有讀進脈絡。連登入機制本身，因為太不典型，擋住了兩年的嘗試。</p>
 <p>三層阻力的共同點：設計者從來沒有認真想過，使用者可能是我這樣的人。</p>
@@ -258,15 +274,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">我只是想去上班</a></li><li><a href="#section-2">Chrome 壞了三個月</a></li><li><a href="#section-3">AI 把我當罪犯</a></li><li><a href="#section-4">自動化的道德邊界</a></li><li><a href="#section-5">最諷刺的地方</a></li><li><a href="#section-6">三層阻力</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

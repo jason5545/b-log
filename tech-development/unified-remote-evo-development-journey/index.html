@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -202,7 +218,7 @@
 <p>這是一個關於如何為已停止維護的遙控軟體注入新生命的故事。透過協定研究、技術探索與創新實作，我打造了一個現代化的多功能遙控解決方案。</p>
 </blockquote>
 <hr>
-<h2>專案起源：為什麼要做這個專案?</h2>
+<h2 id="section-1">專案起源：為什麼要做這個專案?</h2>
 <p>這個專案源於我自己的特殊需求：由於我僅右手食指可活動，需要一個能透過 Android 平板遠端控制 PC 的解決方案。原本的 Unified Remote 和 EmulStick 雖然都是不錯的工具，但<strong>兩者都已停止維護和更新</strong>，且缺乏針對像我這樣有身體限制使用者的最佳化。</p>
 <h3>為什麼這些軟體停止更新很重要?</h3>
 <ul>
@@ -226,7 +242,7 @@
 <p><strong>EmulStick 接收器簡介</strong>:
 EmulStick 是一款創新的藍牙接收器，外觀類似小型USB隨身碟。插入PC後，會建立一個藍牙HID(人機介面裝置)連線，讓Android平板或手機能夠直接模擬成PC的鍵盤、滑鼠和遊戲手把。與傳統的軟體解決方案不同，EmulStick透過硬體層面的模擬，確保了極低的延遲和最高的相容性，幾乎所有PC遊戲和應用程式都能完美支援。</p>
 <p>於是我決定打造一個整合方案，讓自己能根據情境選擇最適合的連線模式。</p>
-<h2>第一個挑戰:研究 BLE HID 協定</h2>
+<h2 id="section-2">第一個挑戰:研究 BLE HID 協定</h2>
 <p><strong>背景</strong>：由於 EmulStick 官方已停止更新，無法從官方文件取得協定規格。我必須透過研究原廠 APP 的實作來了解 BLE 通訊協定。</p>
 <h3>掃描裝置:從完全失敗到成功</h3>
 <p>專案初期最大的挫折是 <strong>無法掃描到 EmulStick 裝置</strong>。當時的情況是:</p>
@@ -329,7 +345,7 @@ fun buildMouseReport(
 }
 </code></pre>
 <p>修正後，滑鼠終於能動了!</p>
-<h2>第二個挑戰:中文輸入的困境</h2>
+<h2 id="section-3">第二個挑戰:中文輸入的困境</h2>
 <p>HID 鍵盤只能傳送 ASCII 字元，那中文怎麼辦?我研究了三種方案:</p>
 <h3>方案 1: Big5 Alt 碼(⚠️ 有限制)</h3>
 <p><strong>原理</strong>:按住 Alt → 數字鍵台輸入十進制 → 釋放 Alt → Windows 轉換為字元</p>
@@ -429,7 +445,7 @@ fun buildMouseReport(
 <td>❌ <strong>已移除(曾最快)</strong></td>
 </tr>
 </tbody></table>
-<h2>第三個挑戰:遊戲手把模擬</h2>
+<h2 id="section-4">第三個挑戰:遊戲手把模擬</h2>
 <p>後來我想到一個有趣的想法:能否將平板變成遊戲手把來玩 PC 遊戲?</p>
 <p>研究 EmulStick 協定時，我發現它支援切換為 Xbox 360 控制器模式!</p>
 <h3>XInput 模式切換</h3>
@@ -516,7 +532,7 @@ TriggerSlider(
     }
 )
 </code></pre>
-<h2>技術亮點總結</h2>
+<h2 id="section-5">技術亮點總結</h2>
 <h3>1. 協定研究與實作</h3>
 <p><strong>BLE GATT 服務架構</strong>:</p>
 <pre><code>EmulStick Service (0xF800)
@@ -624,7 +640,7 @@ TriggerSlider(
 <li>❌ <strong>iOS RFCOMM 模式</strong>：技術上不可行</li>
 </ul>
 <p><strong>這也是為什麼原廠 Unified Remote iOS 版僅支援 Wi-Fi 模式的原因</strong>：Apple 的平台限制使得藍牙遙控變得極為複雜。</p>
-<h2>開發心得與反思</h2>
+<h2 id="section-6">開發心得與反思</h2>
 <h3>成功關鍵</h3>
 <ol>
 <li><strong>完全模仿原廠架構</strong>:不要過度最佳化，先求能動</li>
@@ -644,7 +660,7 @@ TriggerSlider(
 <li>✅ 問題解決過程中的思考比結果更重要</li>
 <li>✅ 完整的文件記錄對後續維護至關重要</li>
 </ul>
-<h2>專案成果</h2>
+<h2 id="section-7">專案成果</h2>
 <p><strong>程式碼規模</strong>:</p>
 <ul>
 <li>Kotlin 原始碼:約 50 個檔案</li>
@@ -669,7 +685,7 @@ TriggerSlider(
 </ul>
 </li>
 </ul>
-<h2>結語</h2>
+<h2 id="section-8">結語</h2>
 <p>這個專案從我個人的簡單需求出發，逐步演化為一個功能完整的多模式遙控解決方案。開發過程中遇到的每個技術挑戰，都成為學習和成長的機會。</p>
 <h3>為停更軟體注入新生命</h3>
 <p>當 Unified Remote 和 EmulStick 官方停止維護時，許多使用者面臨著「好用的工具逐漸不相容新系統」的困境。這個專案證明了:</p>
@@ -709,15 +725,20 @@ TriggerSlider(
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/voco-fork-voice-input-refine-not-merged/"><span class="side-row__meta">08SEP26 · <span>技術開發</span></span><span class="side-row__title">Voco 是我 fork 出來只給自己用的語音輸入工具，連上游的 Refine 我都沒直接接</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">專案起源：為什麼要做這個專案?</a></li><li><a href="#section-2">第一個挑戰:研究 BLE HID 協定</a></li><li><a href="#section-3">第二個挑戰:中文輸入的困境</a></li><li><a href="#section-4">第三個挑戰:遊戲手把模擬</a></li><li><a href="#section-5">技術亮點總結</a></li><li><a href="#section-6">開發心得與反思</a></li><li><a href="#section-7">專案成果</a></li><li><a href="#section-8">結語</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -199,11 +215,11 @@
       <h1 id="post-title" class="post__title">原來演唱會的票，是可以賣不完的</h1>
       <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/concert_tickets_unsold.webp" srcset="/content/img/2026/concert_tickets_unsold-480w.webp 480w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>追星追了十年，今天才第一次知道這件事。</p>
-<h2>起因</h2>
+<h2 id="section-1">起因</h2>
 <p>事情是這樣的。前幾天我在臉書上滑到一位朋友的貼文，說某位日系動漫歌手的台灣場「票一直賣不完」。我本來完全不認識這位歌手，純粹是朋友提到了才注意到。</p>
 <p>更有趣的是，主辦單位在開賣隔天發了一篇貼文，感謝大家「踴躍購票」。結果再隔一天，繼續販售中。</p>
 <p>這在我的認知裡是完全不可能發生的事。</p>
-<h2>我的參考框架</h2>
+<h2 id="section-2">我的參考框架</h2>
 <p>我從 2015 年開始追 LiSA，到現在十年了，幾乎每年必到台灣場。中間也看過 Kalafina（華麗菲娜），最近幾年加上了やなぎなぎ（nagi）。</p>
 <p>這三組藝人，在我的經驗裡，票從來都是「不夠搶」的：</p>
 <p>LiSA 不用說，從 Legacy 一路升級到今年的小巨蛋，場場秒殺。我有次想去接機，跟同事說「我要去接《鬼滅之刃》的那位」，結果他一個不看動畫的人，馬上就把 LiSA 的名字打出來了。這就是所謂的「穿透到主流市場」——她的名字已經變成一般人的通識。</p>
@@ -211,7 +227,7 @@
 <p>Kalafina 就更不用提了，梶浦由記的金字招牌加上 Fate 系列的粉絲基底，票房從來不是問題。</p>
 <p>十年來，我對「演唱會」這件事的認知就是：要搶、要抽、要排隊、要拼手速。</p>
 <p>然後今天我才知道，原來有的歌手，場地只有 500 人，票還是賣不完。</p>
-<h2>到底差多少</h2>
+<h2 id="section-3">到底差多少</h2>
 <p>好奇之下，我去查了一下這位歌手在日本的狀況。</p>
 <p>2024 年復出後，她在東京的個唱開在青山 RizM，容量大概 200-250 人，還是採兩部制。2019 年首次來台灣開在角落文創（500 人），七年後 2026 年再來，還是角落文創，票還是賣不完。</p>
 <p>拿來跟我認識的三位比：</p>
@@ -219,24 +235,24 @@
 <p>nagi 在日本開日本橋三井 Hall（300-400 人），規模不大但場場滿。在台灣穩穩填滿 Zepp，需要抽選。</p>
 <p>而這位歌手，日本 200 人兩部制，台灣 500 人賣不完。</p>
 <p>同樣都唱過知名動畫的主題曲，差距可以大到這種程度。</p>
-<h2>同期出道的對照組</h2>
+<h2 id="section-4">同期出道的對照組</h2>
 <p>後來我又想到另一個例子：有位歌手跟 LiSA 差不多同時期出道，兩人私交也不錯，常常互動。她唱過的作品在動漫圈知名度極高，是經典中的經典。</p>
 <p>但十幾年後的現在：</p>
 <p>LiSA 在日本是武道館常客，在台灣要開小巨蛋；她在日本巡演開的是 1,500 人的 Livehouse，20 週年紀念才升級到 5,000 人場地，台灣場則是 2,000 人左右的 Zepp。</p>
 <p>這已經比前面那位好很多了——至少她在圈內有穩定的地位，能維持 Zepp 等級的巡演。但跟 LiSA 比，還是完全不同的量級。</p>
 <p>而且說實話，我記得她的名字，不是因為她唱過的那些經典作品，是因為「她跟 LiSA 感情不錯」。</p>
 <p>這大概是最殘酷的部分：同期出道、都有大作品加持、實力也沒問題，但十幾年後被記住的方式是「某某的朋友」而不是「唱過某某歌的人」。</p>
-<h2>為什麼會差這麼多</h2>
+<h2 id="section-5">為什麼會差這麼多</h2>
 <p>一開始我也覺得奇怪：大家不都是「線上的藝人」嗎？都唱過大作品的主題曲，怎麼差距這麼離譜？</p>
 <p>後來想通了。「唱過知名作品」跟「被觀眾記住」是兩回事。</p>
 <p>LiSA 之所以能從動漫歌手升級成主流歌手，是因為她撞上了《鬼滅之刃》這種社會現象級的 IP。「紅蓮華」和「炎」的傳播力已經超出動漫圈，進入了一般人的日常生活。Spotify 全球 30 億次播放，Billboard 上榜——就像我同事，根本不看動畫，但聽到「鬼滅的那位」就馬上知道是誰。</p>
 <p>nagi 走的是另一條路。她沒有國民級 IP 加持，但她有獨立音樂圈的文青屬性，加上《俺ガイル》《物語系列》這些核心宅作的搭曲，精準打中了「願意花錢」的重度消費群。盤不大，但每個人都極度忠誠。</p>
 <p>而那位歌手的搭曲作品知名度其實不低，但問題是觀眾記住的是動畫，不是唱歌的人。你可能看過那些作品，但你不一定知道主題曲是誰唱的。十年下來，她既沒有 LiSA 那種跨圈的國民 IP 加持，也沒有 nagi 那種圈內的深度黏著，兩邊都沒抓住。</p>
 <p>還可以再加一層：「有實力」跟「爆紅」也是兩回事。那位跟 LiSA 同期的歌手，唱功絕對沒問題，搭曲的作品也是經典。但市場不是只看實力。LiSA 的爆發靠的是《鬼滅》這種時機，那是運氣加上準備好了的結果。沒遇到這種機會，不代表不夠好，只是「對的時機」沒有降臨。</p>
-<h2>不過</h2>
+<h2 id="section-6">不過</h2>
 <p>話說回來，就算是這樣的規模，也還是比地下偶像好上非常多。她有主流動畫的搭曲經歷、有大型音樂祭的出演紀錄、有海外公演的能力，這些都是地下偶像連門都摸不到的業界資源。200 人的場地配上完整的製作團隊和專業音響燈光，跟地下偶像在 50 人的小 Livehouse 賣手燒 CD-R，是完全不同的世界。</p>
 <p>如果用棒球來比喻：LiSA 是職棒明星，nagi 是穩定先發球員，那位歌手大概是一軍板凳或二軍主力，而地下偶像是社區棒球隊。在一軍裡面墊底，但至少還在職業體系內。</p>
-<h2>我學到的事</h2>
+<h2 id="section-7">我學到的事</h2>
 <p>追了十年的現場，今天才第一次站在「供過於求」那一邊看這個市場。</p>
 <p>原來我這十年接觸到的，全部都是金字塔頂端。LiSA 的秒殺、nagi 的抽選、Kalafina 的穩定滿座——這些不是常態，是極端值。真實的動漫歌手來台市場裡，大部分人的處境其實更接近那位歌手：幾百人的場地、不一定賣得完、主辦要在社群上催票、靠亞巡分攤成本才勉強打平。</p>
 <p>我一直覺得 nagi 的 Zepp 已經「夠小了」。現在才知道，那個「小」是穩定填滿、需要雙輪抽選的小，是非常健康的小。</p>
@@ -251,15 +267,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">起因</a></li><li><a href="#section-2">我的參考框架</a></li><li><a href="#section-3">到底差多少</a></li><li><a href="#section-4">同期出道的對照組</a></li><li><a href="#section-5">為什麼會差這麼多</a></li><li><a href="#section-6">不過</a></li><li><a href="#section-7">我學到的事</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

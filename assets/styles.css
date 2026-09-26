@@ -988,6 +988,59 @@
   margin: 0 0 3rem;
 }
 
+/* CONTENTS：本文目錄（寬螢幕文章頁右欄、about 右欄）。版面在 post.html／about.html 的關鍵 CSS */
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: toc;
+}
+
+.toc-list li {
+  counter-increment: toc;
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 1fr);
+  align-items: baseline;
+  padding-left: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.toc-list li::before {
+  content: counter(toc, decimal-leading-zero);
+  font: 400 0.74rem/1 var(--font-mono);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.toc-list a {
+  display: block;
+  min-height: 36px;
+  padding-block: 0.55rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--cyan);
+  text-decoration: none;
+}
+
+.toc-list a:hover {
+  text-decoration: underline;
+}
+
+/* 目前章節：IntersectionObserver 只切換 .is-current */
+.toc-list li:has(> a.is-current) {
+  box-shadow: inset 3px 0 0 var(--cyan);
+}
+
+.toc-list a.is-current {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.post__body > h2,
+.content > h2 {
+  scroll-margin-top: 1.5rem;
+}
+
 /* RELATED／LATEST：窄欄用的兩行列，第一行日期與分類，第二行標題（靜態頁已預先輸出） */
 .side-list {
   list-style: none;
@@ -1107,6 +1160,19 @@
 .topics a.her,
 .tag-cloud a.her {
   color: var(--magenta);
+}
+
+/* Crossing Field 的右欄目錄跟內文目錄同色：編號洋紅、連結 ink、hover 青色 */
+.aside-toc--cf .toc-list li::before {
+  color: var(--magenta);
+}
+
+.aside-toc--cf .toc-list a {
+  color: var(--ink);
+}
+
+.aside-toc--cf .toc-list a:hover {
+  color: var(--cyan);
 }
 
 .catline {

@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -208,7 +224,7 @@
 <p>而且不只一個平台——VS Code 插件壞、macOS app 也壞。有使用者確認這是退化，之前的版本是能用的。bug report 最後被關掉了，標了 &quot;not planned&quot;。</p>
 <p>更荒謬的是，<a href="https://www.threads.com/@fredbenenson/post/DKM_KUCxhB6">有人在 Threads 上寫了一段話</a>，大意是：「搜尋自己的對話歷史這件事，在 Claude 和 ChatGPT 上都爛到令人震驚。連搜一個單字都不行。考慮到這些公司擁有的算力，這很諷刺。」</p>
 <p>二十年前就解決的問題。全文搜尋。他們做不到。</p>
-<h2>不可靠比沒有更糟</h2>
+<h2 id="section-1">不可靠比沒有更糟</h2>
 <p>如果 Claude 從頭就沒有記憶功能，我早就自己想辦法了。</p>
 <p>問題是它有。它告訴你「我記得你」，它告訴你「你可以搜過去的對話」。所以你會依賴它。你花了一個小時跟它討論一個技術方案，想著「反正它記得，下次可以接著來」。</p>
 <p>然後下次搜不到。</p>
@@ -216,20 +232,20 @@
 <p>但我用一根手指打字。</p>
 <p>每次重新交代背景，對我來說是好幾分鐘。而且不是打一次——每個搜不到的對話都要重來。上週決定用 SQLite 不用 PostgreSQL 的理由？重新解釋。某個 bug 的除錯過程和最後的解法？重新描述。我的身體狀況、打字成本、工作流程偏好？一切從零開始。</p>
 <p>不可靠的搜尋比沒有搜尋更糟，因為它讓你誤判成本。你以為資訊存著了，結果要用的時候拿不出來。</p>
-<h2>自己蓋</h2>
+<h2 id="section-2">自己蓋</h2>
 <p>既然官方的方案不能信，那就自己來。</p>
 <p>架構很簡單：一個跑在 Cloudflare Workers 上的 MCP 伺服器，後面接 D1（Cloudflare 的 SQLite 服務）。Claude 透過 MCP 協定連上來，就能在對話中存記憶、搜記憶、讀記憶。</p>
 <p>跨對話。跨裝置。免費方案就夠用。</p>
 <p>接上 claude.ai 的 connector 之後，Claude 在對話過程中會自動判斷什麼時候該存東西——你確認了一個事實、做了一個決定、解決了一個技術問題，它就呼叫 <code>save_memory</code> 存下來。下次開新對話，它呼叫 <code>get_recent_context</code> 把最近的記憶拉回來，就知道你是誰、在做什麼、上次聊到哪。</p>
 <p>不用我打字提醒。這是關鍵。</p>
-<h2>原子事實，不是主題摘要</h2>
+<h2 id="section-3">原子事實，不是主題摘要</h2>
 <p>設計記憶格式的時候，我做了一個跟 claude.ai 內建記憶完全相反的決定。</p>
 <p>claude.ai 的記憶是摘要式的——它把你的對話濃縮成一份「這個人大概是做什麼的、偏好什麼」的 profile。這種東西在回答「這個人是誰」的時候有用，但在回答「上週那個 bug 的解法是什麼」的時候完全沒用。</p>
 <p>我的系統存的是原子事實。每筆記憶是一個自包含的、直接可搜的具體資訊。</p>
 <p>「yanaginagi 2026 台北演唱會抽選落選（初回+復活都沒中）」是一筆。「yanaginagi 演唱會日期 2026-05-17」是另一筆。「場地：小巨蛋」是第三筆。</p>
 <p>不做摘要。不做歸類。每筆都能獨立存在、獨立被搜到、獨立回答一個問題。</p>
 <p>這跟人類記憶的運作方式其實很像——你不會把「跟某個人相關的所有事」存成一個檔案。你是在不同時間點記住不同的事實，需要的時候各自提取。</p>
-<h2>原子事實要有重量，不只有結構</h2>
+<h2 id="section-4">原子事實要有重量，不只有結構</h2>
 <p>結構對了之後，我發現還有另一層問題：內容太薄。</p>
 <p>「某人抽了輪椅席卻沒去演唱會」是原子事實。「連續四次抽中、四次都沒去、特地去 7-11 把票領出來放進收藏匣、被指出來之後說『謝謝所有罵我的人』」也是原子事實。</p>
 <p>兩筆都符合格式，但只有後者讓事件有重量。前者你讀完只知道「有這件事」，後者你讀完知道這個人是什麼人、為什麼重要、下次提到相關話題時你需要哪些背景。</p>
@@ -237,7 +253,7 @@
 <p>差別在三件事：<strong>數字和頻率</strong>（一次還是四次，差的不只是量）、<strong>原話</strong>（對方說了什麼，比你描述他說了什麼更準確）、<strong>為什麼重要</strong>（這件事影響了什麼、跟哪些事有關聯）。</p>
 <p>不是寫故事。還是要精簡。但精簡不等於丟掉讓事件「撐得起來」的細節。</p>
 <p>今天把這個原則寫進了 Claude 的 system prompt，讓它在儲存記憶的時候自動套用。測試結果明顯——搜到的記憶不只是能找到，而且找到了就夠用，不需要再回頭翻對話。</p>
-<h2>搜尋：三條路同時跑</h2>
+<h2 id="section-5">搜尋：三條路同時跑</h2>
 <p>既然動機就是搜尋壞了，那搜尋架構得認真做。</p>
 <p>我用中文和日文生活，用英文寫程式碼，標籤是中英雙語的。一次搜尋可能同時涉及「抽選」「ballot」「yanaginagi」「落選」「failed」這些不同語言的詞彙。只做全文搜尋是不夠的。</p>
 <p>所以 <code>search_memory</code> 同時跑三條路：</p>
@@ -249,21 +265,21 @@
 <p>三路結果合併、加分、排序。同一筆記憶被多條路徑命中，分數疊加。</p>
 <p>Claude 搜的時候會自動把問題展開成多個變體。你問「yanaginagi 抽選怎樣了」，它展開成 <code>[&quot;yanaginagi&quot;, &quot;抽選&quot;, &quot;落選&quot;, &quot;沒中&quot;, &quot;ballot&quot;, &quot;concert&quot;]</code>，同時丟進三條路徑。</p>
 <p>不需要使用者自己想關鍵字。而且——這是重點——搜得到。每次都搜得到。因為資料就在我自己的 D1 裡面，SQL 查詢不會玄學失靈。</p>
-<h2>User Synthesis：自己的版本</h2>
+<h2 id="section-6">User Synthesis：自己的版本</h2>
 <p>claude.ai 的自動摘要是黑盒子。你不知道它記了什麼、什麼時候更新、有沒有漏掉重要的東西。</p>
 <p>我做了自己的版本，叫 User Synthesis，分成七個區段：工作脈絡、個人脈絡、當前關注、近期動態、早期背景、長期歷史、行為指令。</p>
 <p>格式參考了 claude.ai 的結構，但內容完全由我控制。我看得到裡面每一個字，我可以手動觸發整理，可以直接改任何一個區段。</p>
 <p>存在資料庫裡，key 是 <code>user-synthesis</code>，用 upsert 更新，不會重複。Claude 讀取它就能快速理解「這個人是誰」，不需要翻遍所有記憶。</p>
-<h2>安全</h2>
+<h2 id="section-7">安全</h2>
 <p>伺服器跑在公開的 Cloudflare Workers 上，安全不能馬虎。</p>
 <p>MCP 端點藏在 URL 路徑裡：<code>/mcp/{一串隨機密鑰}</code>。密鑰存在 Cloudflare Worker Secrets，不進版控。</p>
 <p>錯的密鑰？404。不是 403，是 404。連端點存在這件事都不讓你知道。</p>
 <p>密鑰比對用 constant-time comparison 防 timing attack。對個人專案來說有點 overkill，但寫都寫了。</p>
-<h2>為什麼不用現成的</h2>
+<h2 id="section-8">為什麼不用現成的</h2>
 <p>GitHub 上有幾個 MCP memory server 的開放原始碼專案。但它們幾乎都是跑在本地的——Claude Desktop 連本地 server，資料存本機。代表你得開電腦才能用。</p>
 <p>我的版本跑在 Cloudflare Workers 上，接的是 claude.ai 的遠端 connector。手機能用，躺在床上也能用。</p>
 <p>而且我需要的搜尋策略跟大部分人不同——中英日三語混用、需要同義詞展開、需要跨語言比對。這些不是現成方案能解決的。</p>
-<h2>實戰：5G 網卡凌晨又斷線了</h2>
+<h2 id="section-9">實戰：5G 網卡凌晨又斷線了</h2>
 <p>這套系統上線兩天後就碰到了一個完美的測試案例。</p>
 <p>我的 Proxmox 伺服器插了一張 TCL IK512 5G USB 網卡當備援線路。前一天晚上才花了好幾個小時把整個 failover 架構從「斷線才連」改成「always-on 常駐連線」——改了 systemd service、watchdog 腳本、MBIM static IP 設定，除錯過程中還發現了 USB rebind、<code>mmcli -m any</code>、bearer JSON 解析等一堆眉角。所有這些都存進了記憶資料庫。</p>
 <p>隔天早上，5G 又斷了。</p>
@@ -275,7 +291,7 @@
 <p>有了記憶系統，我只需要六個字。</p>
 <p>而且不只是「找到答案」——Claude 拿到的是完整脈絡。它知道這張網卡之前就有 GPS 廣告不實的問題，知道 always-on 架構的設計意圖，知道 watchdog 腳本的結構。所以它能直接往下挖到 USB autosuspend 這個根因，而不是停在「重連一下就好了」。</p>
 <p>這就是原子事實加上搜尋的價值：不只是記住答案，而是記住脈絡，讓下一次的除錯能從上一次結束的地方開始。</p>
-<h2>結局</h2>
+<h2 id="section-10">結局</h2>
 <p>claude.ai 的搜尋功能壞了。bug report 被標 &quot;not planned&quot;。</p>
 <p>所以我花了一個週末，在 Cloudflare Workers 上蓋了一個 300 行的 MCP 伺服器，接上 D1，寫了三路搜尋、FTS5 全文索引、自動同步的 trigger、原子事實的儲存架構。</p>
 <p>現在 Claude 記得我是誰。每次都記得。不是因為它變聰明了，是因為我給了它一個不會壞的地方放東西。</p>
@@ -287,15 +303,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">不可靠比沒有更糟</a></li><li><a href="#section-2">自己蓋</a></li><li><a href="#section-3">原子事實，不是主題摘要</a></li><li><a href="#section-4">原子事實要有重量，不只有結構</a></li><li><a href="#section-5">搜尋：三條路同時跑</a></li><li><a href="#section-6">User Synthesis：自己的版本</a></li><li><a href="#section-7">安全</a></li><li><a href="#section-8">為什麼不用現成的</a></li><li><a href="#section-9">實戰：5G 網卡凌晨又斷線了</a></li><li><a href="#section-10">結局</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

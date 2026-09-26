@@ -74,12 +74,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -92,19 +92,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -201,12 +217,12 @@
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>2025年10月19日，VTuber 圈發生了一件值得深思的事：為 AI VTuber Neuro-sama 繪製模型的藝術家 Anny 公開宣布，她結束了與創作者 Vedal 的合作關係。原因是她在長期合作中對 Vedal 產生了未被回應的感情，加上心理健康問題，讓她不得不選擇離開。</p>
 <p>她的聲明成熟而克制：「沒有戲劇，只是愚蠢的人類情感。我只祝他一切順利。」</p>
 <p>但這個看似個人的情感問題，背後揭露的是整個 VTuber 圈的結構性困境。</p>
-<h2>從玩笑到真情：一個典型的厄介 CP 案例</h2>
+<h2 id="section-1">從玩笑到真情：一個典型的厄介 CP 案例</h2>
 <p>Anny 和 Vedal 的故事一開始很單純。Vedal 創造了 AI VTuber Neuro-sama，Anny 負責繪製角色模型。粉絲看到他們的合作，開始玩「父母」梗 — Vedal 是「爸爸」，Anny 是「媽媽」，Neuro 是他們的「女兒」。</p>
 <p>這種 shipping 在 VTuber 圈太常見了。Hololive 有 TakaMori、OkaKoro，Nijisanji 有 ChroNoir，粉絲喜歡把互動好的 VTuber 配對，創作同人、刷梗、甚至寫小說。大部分時候，這只是娛樂，雙方配合演出，皆大歡喜。</p>
 <p><strong>但 Anny/Vedal 的情況不一樣：有一方弄假成真了。</strong></p>
 <p>很多觀眾都注意到，Anny 在直播中每次提到 Vedal 都「不太自然」。那種害羞、閃躲的反應，不是演技 — 是真的動心了。而粉絲看到這些反應後，刷得更起勁，把情況推得更遠。</p>
-<h2>為什麼繪師媽媽特別危險？</h2>
+<h2 id="section-2">為什麼繪師媽媽特別危險？</h2>
 <p>有人問：Vedal 身邊那麼多女性 VTuber，為什麼是 Anny 出事？</p>
 <p>答案在於<strong>角色投入的深度</strong>。</p>
 <p>Camila、Filian、Cerber 這些人跟 Vedal 的互動，停留在「偶爾 collab 的朋友」層面。結束直播，各過各的。但 Anny 不一樣：</p>
@@ -219,7 +235,7 @@
 <p>這種創作者與作品的深度綁定，很容易模糊工作與感情的界線。你每天跟同一個人討論你傾注心血的作品，看著它成功，社群又不斷說你們是「一家人」 — 不動心才奇怪。</p>
 <p>**而 Vedal 呢？對他來說，Anny 就是合作夥伴。**他跟每個人的互動都差不多，典型的理工男社交模式，專注在技術和專案上。他可能根本沒意識到 Anny 動真情了。</p>
 <p>沒人做錯什麼，但有人受傷了。</p>
-<h2>厄介粉絲：提油救火的共犯結構</h2>
+<h2 id="section-3">厄介粉絲：提油救火的共犯結構</h2>
 <p>「厄介」(やっかい)原本是日文「打擾別人」的意思，在 VTuber 圈衍生出特殊含義：過度 shipping、無視當事人感受的粉絲行為。</p>
 <p>Anny/Vedal 的悲劇，厄介粉絲扮演了關鍵角色：</p>
 <p><strong>循環是這樣的：</strong></p>
@@ -233,7 +249,7 @@
 <p><strong>最殘酷的是：所有人都看得出來。</strong></p>
 <p>作為長期觀眾，我很早就發現 Anny 每次講到 Vedal 都不太自然。那種害羞、閃躲，明顯不是演出來的。但我從來沒在聊天室說過什麼。</p>
 <p>我看 VTuber 都不說話。</p>
-<h2>沉默的多數與 5% 的暴政</h2>
+<h2 id="section-4">沉默的多數與 5% 的暴政</h2>
 <p>這才是問題核心。</p>
 <p>任何直播聊天室的組成大概是這樣：</p>
 <ul>
@@ -258,7 +274,7 @@
 <li>「大家都在玩」（群體壓力）</li>
 </ul>
 <p>更諷刺的是：**Anny 知道大家看得出來。**她每次不自然，觀眾更興奮；她更尷尬，觀眾更起鬨。這個正反饋循環根本停不下來。</p>
-<h2>整個 V 圈都是這樣</h2>
+<h2 id="section-5">整個 V 圈都是這樣</h2>
 <p>這不是個案。VTuber 圈的結構性問題包括：</p>
 <h3>1. 深度創作綁定</h3>
 <p>繪師不只畫一張圖就結束。要理解人設、持續迭代、天天溝通。投入的情感遠超一般委託。</p>
@@ -269,13 +285,13 @@
 <h3>4. 粉絲文化推波助瀾</h3>
 <p>V 圈本來就很曖昧，shipping 文化盛行。加上粉絲不斷強化敘事，很難不被影響。</p>
 <p>Anny 公開說明已經很罕見。**有多少類似情況根本沒浮出水面？**大部分人選擇安靜處理，或是企業勢有合約規範。個人勢更危險，因為沒有經紀公司當緩衝。</p>
-<h2>粉絲也是受害者？</h2>
+<h2 id="section-6">粉絲也是受害者？</h2>
 <p>有人說：「現實壓力太大了，來看 V 就是想放鬆，想看到甜甜的互動。」</p>
 <p>這能理解。我們都需要逃避現實的出口，shipping 給多巴胺，參與感讓人覺得自己在「見證」什麼美好。</p>
 <p><strong>但問題是：當「自己爽」跟「當事人的真實感受」衝突時，該怎麼辦？</strong></p>
 <p>「我來看 V 是為了逃避現實」，結果變成「我的行為造成他人的現實困擾」。這個矛盾很難解。</p>
 <p>粉絲不是惡意的，他們只是想開心。但無數個「只是想開心」累積起來，就變成了壓垮 Anny 的稻草。</p>
-<h2>有解嗎？</h2>
+<h2 id="section-7">有解嗎？</h2>
 <p>老實說，很難。</p>
 <p><strong>VTuber 能做的：</strong></p>
 <ul>
@@ -295,7 +311,7 @@
 <li>但言論自由和過度管制的界線在哪？</li>
 </ul>
 <p>或許最根本的問題是：<strong>我們太習慣把虛擬角色當真人，卻又太習慣把真人當虛擬角色。</strong></p>
-<h2>結語：沉默也是一種選擇</h2>
+<h2 id="section-8">結語：沉默也是一種選擇</h2>
 <p>Anny 的故事提醒我們：在網路狂歡背後，有真實的人在承受真實的情緒。</p>
 <p>你可能覺得自己「只是沒說話」，但沉默本身就是一種選擇 — 它讓那 5% 的聲音看起來像是 100%。</p>
 <p>下次當你在直播聊天室裡，看到有人被過度 shipping、看到當事人不自然的反應時，問問自己：</p>
@@ -309,15 +325,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#8a4f5d"><a href="/cultural-insights/hand-angel-service-stopped-after-two-year-wait/"><span class="side-row__meta">03SEP26 · <span>文化觀察</span></span><span class="side-row__title">我等了兩年多才輪到的那個服務，八月停了</span></a></li><li style="--row-accent:#9b5b65"><a href="/cultural-insights/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick/"><span class="side-row__meta">14AUG26 · <span>文化觀察</span></span><span class="side-row__title">₱1.4M 的乳癌給付，接不到那句「我沒病」</span></a></li><li style="--row-accent:#2e6b75"><a href="/cultural-insights/asian-sex-diary-no-longer-johns-diary/"><span class="side-row__meta">06AUG26 · <span>文化觀察</span></span><span class="side-row__title">Asian Sex Diary 已經不是 John 一個人的日記</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">從玩笑到真情：一個典型的厄介 CP 案例</a></li><li><a href="#section-2">為什麼繪師媽媽特別危險？</a></li><li><a href="#section-3">厄介粉絲：提油救火的共犯結構</a></li><li><a href="#section-4">沉默的多數與 5% 的暴政</a></li><li><a href="#section-5">整個 V 圈都是這樣</a></li><li><a href="#section-6">粉絲也是受害者？</a></li><li><a href="#section-7">有解嗎？</a></li><li><a href="#section-8">結語：沉默也是一種選擇</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

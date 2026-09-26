@@ -73,12 +73,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -91,19 +91,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -201,34 +217,34 @@
 <p>他用 WordPress 用了十年，累積了四百多篇文章。主機爛到靠北，前台慢、後台更慢，但他就是一直撐著。我跟他說，我這套靜態部落格系統可以給你用，部署在 GitHub Pages，速度快、不用錢、不怕主機掛。</p>
 <p>技術上完全沒問題。我已經在規劃遷移腳本了，四百篇文章批量轉過來，圖片也處理好，分類映射好，一次搞定。</p>
 <p>結果卡住的地方不是技術。</p>
-<h2>他不想讓 AI 碰他的文章</h2>
+<h2 id="section-1">他不想讓 AI 碰他的文章</h2>
 <p>我現在的寫作流程是這樣的：我用語音輸入把想法講出來，Claude 幫我追問、釐清、整理，最後我審閱修改，確認沒問題就發布。整個過程 AI 參與很深，但觀點和經歷全部是我的。</p>
 <p>我跟他介紹這個流程的時候，他的反應是抗拒。</p>
 <p>不是那種「我不會用」的抗拒，是「我不想讓 AI 介入我的思考」的抗拒。他覺得如果讓 AI 幫忙整理想法，那文章就不是他的了。</p>
 <p>我能理解這個擔心。但我自己跑了幾個月下來，八十幾篇文章，我的感受是完全相反的。</p>
-<h2>我的想法沒有變成 AI 的想法</h2>
+<h2 id="section-2">我的想法沒有變成 AI 的想法</h2>
 <p>這件事我想得很清楚。</p>
 <p>我跟 AI 的協作模式是這樣的：我講 A，AI 回 B，我再講 C，AI 再回 D。B 和 D 是追問、是釐清、是幫我把散亂的碎片排好。但 A 和 C——那些素材、那些經歷、那些判斷——全部是我的。</p>
 <p>AI 沒有我的經歷。它不知道凌晨五點在松山機場是什麼感覺，不知道被購票系統擋在門外的憤怒，不知道用一根手指打字的成本。這些東西只有我有，AI 能做的就是問我「然後呢」「你當時怎麼想」，然後幫我把回答整理成可讀的文章。</p>
 <p>觀點的方向、批判的力道、哪些話要說哪些不說，都是我在決定。AI 從來沒有改變過我的立場，因為它根本沒有立場可以塞給我。</p>
-<h2>折衷方案：Word 寫好，AI 只負責發布</h2>
+<h2 id="section-3">折衷方案：Word 寫好，AI 只負責發布</h2>
 <p>後來我跟他談了一個折衷：他在 Word 把文章寫好，AI 只負責轉成 Markdown 格式、更新元數據、推上去。完全不碰內容。</p>
 <p>這樣他的文章從第一個字到最後一個字都是他自己寫的，AI 就是個排版工具。</p>
 <p>他對這個方案比較能接受。</p>
 <p>但說實話，這跟我的流程差別只在「輸入端」。我是語音輸入 → AI 整理想法 → 我審閱修改。他是 Word 寫好 → AI 轉檔發布。最終都是人決定內容，AI 負責格式。只是我多了一個讓 AI 追問的步驟而已。</p>
-<h2>但正是那個「多出來的步驟」改變了我</h2>
+<h2 id="section-4">但正是那個「多出來的步驟」改變了我</h2>
 <p>他很驚訝我這幾個月能產出八十幾篇文章。如果是他，絕對做不到。</p>
 <p>速度是一個面向，但不是最重要的。</p>
 <p>真正改變的是：我開始會回頭思考了。</p>
 <p>今天下午我在整理 1 月 29 日<a href="https://b-log.to/cultural-insights/songshan-airport-jpop-parallel-world/">在松山機場的經歷</a>，距離事件發生已經快三週。以前這種事，過了就過了。但現在我會回去問自己：為什麼我會這樣想？原因是什麼？結果是什麼？下次可以怎麼做得更好？</p>
 <p>這個反思的習慣不是 AI 教我的。是跟 AI 協作的過程中，被問「為什麼」「然後呢」「你怎麼想」問多了，我自己也開始會這樣問自己。</p>
 <p>AI 沒有給我新的想法。它給了我一個結構化思考的習慣。</p>
-<h2>手動寫和 AI 協作各有好處</h2>
+<h2 id="section-5">手動寫和 AI 協作各有好處</h2>
 <p>我不會說手動寫不好。慢慢打字、慢慢想、慢慢修，有它的節奏。有些人就是在打字的過程中思考的，那對他們來說手動寫就是最好的方式。</p>
 <p>但對我來說，我只有一根手指能動，打字成本極高。語音輸入加 AI 整理，不是偷懶，是讓我能把想法表達出來的唯一合理方式。</p>
 <p>而且 AI 協作帶來了一個意想不到的副產品：因為 AI 會追問，我被迫把模糊的想法講清楚。講清楚的過程本身就是思考。以前很多想法在腦子裡轉一圈就散了，現在它們被記錄下來、被整理好、可以回頭看。</p>
 <p>八十幾篇文章不是 AI 幫我「生出來」的。是 AI 幫我把本來就存在但說不出來的東西挖出來了。</p>
-<h2>勉強不來</h2>
+<h2 id="section-6">勉強不來</h2>
 <p>回到我朋友的事。</p>
 <p>他的顧慮我理解，但光用講的沒用。他沒有跑過一次完整的「AI 追問 → 自己回答 → 發現自己其實有想法」的流程，他就不會知道那是什麼感覺。</p>
 <p>所以先讓他用 Word → AI 轉檔這條路跑起來。等他習慣了，等他某天發現「欸我好像可以讓 AI 幫我整理一下這段」，他自己就會往前走了。</p>
@@ -241,15 +257,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">他不想讓 AI 碰他的文章</a></li><li><a href="#section-2">我的想法沒有變成 AI 的想法</a></li><li><a href="#section-3">折衷方案：Word 寫好，AI 只負責發布</a></li><li><a href="#section-4">但正是那個「多出來的步驟」改變了我</a></li><li><a href="#section-5">手動寫和 AI 協作各有好處</a></li><li><a href="#section-6">勉強不來</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

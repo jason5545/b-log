@@ -78,12 +78,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -96,19 +96,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -205,19 +221,19 @@
       <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" srcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" sizes="(max-width: 800px) calc(100vw - 32px), (max-width: 1216px) 736px, 1060px" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
       <div id="post-content" class="post__body article-body" data-prerendered="true"><p>雲端額度一開始是 250 美元。階段 1、2 兩輪花了 83，剩 167。階段 3 跑完，剩 77。</p>
 <p>階段 3 一輪就花了 90 美元。</p>
-<h2>這筆錢只能在雲端用</h2>
+<h2 id="section-1">這筆錢只能在雲端用</h2>
 <p>Anthropic 送了 250 美元，只能用在 Claude Code 的雲端。要不是只限雲端，我才不會這樣用，我就用到我的主力了。可是擺著也是浪費，所以我拿來學怎麼管理雲端 agent 的 context window 和用量。</p>
 <p>雲端 agent 有一個問題：擺著，我就去睡覺了，或去忙別的。它在跑的時候，沒有人看著。</p>
 <p>題目挑了一個卡牌 roguelike，像 Slay the Spire、Monster Train 那種。那兩款都是美式畫風，太醜了，所以我只說要日系。名字叫式札 Shikifuda，網頁遊戲，手機桌機都能玩，圖全部由 Claude 用程式畫。</p>
 <p>這個 project 我是完全放手的。每個階段是一個獨立的雲端 session，做完自己開 PR、自己 merge、更新交接檔，再叫我開下一個。拆成這樣，是怕 context window 失控。我自己不會做太多 steering。</p>
 <p>額度用完就回到訂閱，反正是實驗。做得不錯的話，我會接著把它做完。希望做出來是可以玩的，好玩的。</p>
 <p>後來我跟 Claude 說，這其實有點像一場大型的雲端 <a href="https://b-log.to/tech-development/first-hackathon-code-done-in-37-minutes/">Build Day</a>，只是沒有時間限制、沒有排名，自己玩得開心就好。它回我：沒有時間限制，不代表沒有限制，這次的時鐘是錢。</p>
-<h2>我先把一個數字看錯了</h2>
+<h2 id="section-2">我先把一個數字看錯了</h2>
 <p>Claude Code 的系統提示裡有一行「tokens left」，開場是 15,000,000。我一直以為那是還剩多少 context window。</p>
 <p>請 Claude 查了才知道不是。每傳一則新訊息，這個數字就重設回 15,000,000，它是這一輪的工作預算。Opus 5.5 的 context window 是 1M。</p>
 <p>我原本的規則是：盡量用子代理，主 session 用到 25% 就停，叫我開下一段。照 15,000,000 算，25% 是 375 萬，早就超過 context 的上限。後來改成主 session 用掉 25 萬就交接。</p>
 <p>子代理我不管。它們要怎麼用，我無所謂，主 session 不要爆掉就好。讓雲端的 agent 自己把工作做最佳化分配。</p>
-<h2>它真的照做了</h2>
+<h2 id="section-3">它真的照做了</h2>
 <p>階段 3 開工，行為完全變了。</p>
 <p>以前主 session 自己都還會做一大堆。這一輪一開始就派子代理，功能派了五個，連整合也另外派一個代理處理。主 session 只用了約 14 萬 token，規則守得很好。</p>
 <p>然後是 90 美元、2 小時 40 分。前兩輪是主 session 自己做，平均一輪大約 41。</p>
@@ -225,12 +241,12 @@
 <p>我管的是主 session 會不會爆，沒有管錢。它也就只省主 session，把工作搬到最貴的地方去做。</p>
 <p>還有自動接力。我設了一個 routine，標題有「[接力]」的 PR 一 merge 就自動開下一輪，燃料先給 3 輪。階段 3 的 PR 在 18:10:21 merge，18:10:23 下一輪就開工了，照同一套分配。我把它停掉的時候，它才跑了六分鐘。</p>
 <p>那時燃料還剩兩輪，額度剩 77。照一輪 90 的花法，那天如果我是去睡覺，第一輪接力就會把額度燒完，接著用我的訂閱。</p>
-<h2>改成一個 Sonnet 做到底</h2>
+<h2 id="section-4">改成一個 Sonnet 做到底</h2>
 <p>我在 Codex 那邊有一套分工：Astra 規劃、Luna 實作、Astra 驗收。給本機模型的指示也有一套寫法。我問 Claude，Sonnet 能不能照這套來，甚至從頭到尾一次做完，會不會比較好。</p>
 <p>新規則是：Opus 讀交接檔、寫完整的實作計畫；交給一個 Sonnet 5 子代理從頭做到尾，不拆成平行，要補改就接回同一個；Opus 自己看 diff、重跑測試、看截圖驗收。</p>
 <p>我另外只加了一條：畫圖給 Opus 畫，主代理自己完成。</p>
 <p>階段 4 前半做完，額度剩 46 美元。這一輪 31 美元，大約一個半小時，目前單輪最便宜。</p>
-<h2>便宜，是因為做得少</h2>
+<h2 id="section-5">便宜，是因為做得少</h2>
 <p>Claude 把各輪的量算了出來，是新增的程式和測試行數，扣掉 lock 檔和文件：</p>
 <table>
 <thead>
@@ -275,7 +291,7 @@
 <p>行數是很粗的尺。後面幾輪是在改既有的程式，要調平衡，測試也越跑越久，本來就比從零開始寫貴。但差到三四倍，不能全推給這些。這輪便宜，主要是範圍砍小了：階段 4 拆成兩半，這輪只做前半。</p>
 <p>原因跟上一輪是同一個。Opus 跟 Sonnet 讀快取一樣價，都是每百萬 token 0.20 美元，Sonnet 只有輸出和寫快取便宜一半。可是 Opus 要寫出計畫，得先把相關的程式讀一遍，Sonnet 接手又讀一遍。這一輪 Opus 用了 41 萬 token，畫圖只佔 12 萬。</p>
 <p>我在 Codex 那邊實測過，子代理沒有比較省用量。到了 Claude 的雲端，目前看起來也一樣。</p>
-<h2>這些生物是什麼，我都不知道</h2>
+<h2 id="section-6">這些生物是什麼，我都不知道</h2>
 <p>做出來的東西，我拉回本機跑。一局變成兩幕：打完第一幕的頭目，穿過山門，再往上爬十二層，最後一隻叫鵺。</p>
 <p><img src="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-nue.webp" alt="式札第二幕的頭目戰：左邊是陰陽師，右邊是站在黑雲上的鵺，紅臉、黑身、蛇尾，頭上兩道閃電"></p>
 <p>說實話，這些生物是什麼，我都不知道。一開始討論的只有「日系」這個主題，結果 Claude 就選了這條線：卡面走浮世繪和花札，敵人走剪紙影繪。</p>
@@ -290,15 +306,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#f07c2a"><a href="/ai-analysis/svg-cover-create-post-first-run/"><span class="side-row__meta">19SEP26 · <span>AI 分析</span></span><span class="side-row__title">讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">這筆錢只能在雲端用</a></li><li><a href="#section-2">我先把一個數字看錯了</a></li><li><a href="#section-3">它真的照做了</a></li><li><a href="#section-4">改成一個 Sonnet 做到底</a></li><li><a href="#section-5">便宜，是因為做得少</a></li><li><a href="#section-6">這些生物是什麼，我都不知道</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

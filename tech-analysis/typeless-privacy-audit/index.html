@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -199,12 +215,12 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">我對 Typeless v1.0.0 進行了完整逆向分析——身為重度語音輸入使用者，這是我的發現</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>前言</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">前言</h2>
 <p>語音輸入是我的主要輸入方式，不是選配。我從今年 1 月開始用 Typeless，付費訂閱了 Pro 年費方案（144 美元）。中英混合的辨識準確率確實接近完美，一度是我的首選工具。</p>
 <p>然後日本工程師 @medmuspg 對 v0.9.3 做了逆向分析，發現嚴重的隱私問題，台灣科技媒體跟進報導。</p>
 <p>我決定對自己 Mac 上的 <strong>v1.0.0（build 79）</strong> 做一次獨立的完整審計。</p>
 <hr>
-<h2>審計環境</h2>
+<h2 id="section-2">審計環境</h2>
 <ul>
 <li><strong>裝置</strong>：MacBook Pro（Apple Silicon）</li>
 <li><strong>作業系統</strong>：macOS 26.2</li>
@@ -214,7 +230,7 @@
 <li><strong>審計工具</strong>：Claude Code + SQLite3 + npx asar + strings + otool</li>
 </ul>
 <hr>
-<h2>技術架構概述</h2>
+<h2 id="section-3">技術架構概述</h2>
 <p>Typeless 是一個 <strong>Electron 應用程式</strong>（<code>Info.plist</code> 中 <code>NSPrincipalClass</code> 為 <code>AtomApplication</code>，含 <code>ElectronAsarIntegrity</code>）。它的核心架構是：</p>
 <ul>
 <li><strong>前端</strong>：Electron 渲染程序（HTML/JS），包含浮動工具列、主介面、引導頁面</li>
@@ -250,7 +266,7 @@
 </tbody></table>
 <p>這些 dylib 直接呼叫 macOS 的 Accessibility API 和 Core Graphics API，是整個隱私問題的核心。</p>
 <hr>
-<h2>發現一：螢幕可見文字擷取（風險等級：極高）</h2>
+<h2 id="section-4">發現一：螢幕可見文字擷取（風險等級：極高）</h2>
 <h3>技術細節</h3>
 <p><code>libContextHelper.dylib</code> 暴露了以下函式：</p>
 <ul>
@@ -296,7 +312,7 @@
 <p>資料庫 schema 中有 <code>ax_text</code> 和 <code>ax_html</code> 兩個欄位，設計用來儲存透過 Accessibility API 擷取的文字和 HTML 內容。在我的 v1.0.0 資料庫中，這兩個欄位全部為空（0 筆有資料）。</p>
 <p>但 <code>audio_context</code> 欄位每筆記錄都有平均約 17KB 的<strong>加密資料</strong>（格式為 Base64 編碼的 IV + 密文，範圍從 1.5KB 到 57KB 不等）。螢幕文字很可能就包含在這個加密的 context 中，只是不再以明文儲存在本地。</p>
 <hr>
-<h2>發現二：完整瀏覽器 URL 追蹤（風險等級：高）</h2>
+<h2 id="section-5">發現二：完整瀏覽器 URL 追蹤（風險等級：高）</h2>
 <h3>資料庫證據</h3>
 <p>在我的約 2,100 筆記錄中，<strong>76 筆包含完整的瀏覽器 URL</strong>。以下是部分被記錄的 URL（已移除涉及個人帳號的項目）：</p>
 <pre><code>https://adguard.com/zh_tw/adguard-browser-extension/edge/overview.html
@@ -323,7 +339,7 @@ ON history (user_id, focused_app_name, focused_app_window_web_domain, status, cr
 </code></pre>
 <p>這不是偶然的資料收集——這是結構化的使用者行為分析。</p>
 <hr>
-<h2>發現三：全域鍵盤事件監控（風險等級：高）</h2>
+<h2 id="section-6">發現三：全域鍵盤事件監控（風險等級：高）</h2>
 <h3>技術細節</h3>
 <p><code>libKeyboardHelper.dylib</code> 暴露了以下函式：</p>
 <pre><code>startMonitor(callback)       // 開始監控全域鍵盤事件
@@ -348,7 +364,7 @@ setWatcherInterval(ms)       // 設定監控間隔（程式碼中設為 5ms）
 </code></pre>
 <p>鍵盤狀態會定期廣播到 Electron 的渲染程序中。即使目前的程式碼可能只篩選特定快捷鍵，這個基礎設施隨時可以擴展為完整的按鍵記錄器，而使用者不會收到任何通知。</p>
 <hr>
-<h2>發現四：完整應用程式使用行為記錄</h2>
+<h2 id="section-7">發現四：完整應用程式使用行為記錄</h2>
 <h3>資料庫統計</h3>
 <p>在 27 天的使用期間（2026/1/17–2026/2/12），Typeless 記錄了我在 <strong>35 個不同應用程式</strong>中的語音輸入行為：</p>
 <table>
@@ -424,7 +440,7 @@ setWatcherInterval(ms)       // 設定監控間隔（程式碼中設為 5ms）
 </ul>
 <p>光是這些 metadata，不需要看任何語音內容，就能建立出相當精確的使用者畫像。</p>
 <hr>
-<h2>發現五：100% 雲端處理，無本地模型</h2>
+<h2 id="section-8">發現五：100% 雲端處理，無本地模型</h2>
 <h3>驗證方式</h3>
 <ol>
 <li>搜尋整個 app bundle（186MB 的 app.asar + 原生模組），找不到任何 ASR 模型檔案（.bin、.onnx、whisper 相關檔案）</li>
@@ -448,7 +464,7 @@ audio_metadata     → 裝置名稱、音訊參數
 mode               → voice_transcript / voice_command / voice_translation
 </code></pre>
 <hr>
-<h2>發現六：使用者編輯行為追蹤</h2>
+<h2 id="section-9">發現六：使用者編輯行為追蹤</h2>
 <p>Typeless 不只追蹤你的語音輸入，還追蹤你之後<strong>怎麼修改 AI 的輸出</strong>。</p>
 <p><code>/user/traits</code> API 端點會傳送：</p>
 <table>
@@ -477,7 +493,7 @@ mode               → voice_transcript / voice_command / voice_translation
 </tbody></table>
 <p>這意味著 Typeless 能夠學習到：你在什麼 app 裡、AI 給了你什麼文字、你改成了什麼。這是一個完整的使用者行為回饋迴圈。</p>
 <hr>
-<h2>發現七：加密方式與金鑰管理</h2>
+<h2 id="section-10">發現七：加密方式與金鑰管理</h2>
 <h3>加密演算法</h3>
 <p>API 請求簽名和本地資料加密使用了兩套體系：</p>
 <ul>
@@ -495,7 +511,7 @@ HMAC Key: &quot;a55c8ee8615b1469a02e8acd36fd40397fd6e5f1b66b852222cc9fcd&quot;
 <h3>Sentry 錯誤追蹤</h3>
 <p>Sentry 的設定中，<code>sendDefaultPii</code> 設為 <code>false</code>（聲稱不傳送個人識別資訊），但 <code>sampleRate</code> 設為 <code>1</code>（100% 的錯誤都會上報）。錯誤報告中可能包含使用者環境資訊和部分程式執行上下文。</p>
 <hr>
-<h2>發現八：Info.plist 權限宣告</h2>
+<h2 id="section-11">發現八：Info.plist 權限宣告</h2>
 <p>Typeless 在 Info.plist 中宣告了以下權限：</p>
 <table>
 <thead>
@@ -524,7 +540,7 @@ HMAC Key: &quot;a55c8ee8615b1469a02e8acd36fd40397fd6e5f1b66b852222cc9fcd&quot;
 <p>麥克風權限是核心功能所必需的。但<strong>螢幕錄製</strong>和<strong>相機</strong>權限的用途就值得質疑了。程式碼中確實匯入了 Electron 的 <code>desktopCapturer</code> API，雖然在目前版本中沒有找到直接的截圖呼叫，但宣告了權限就代表隨時可以啟用。</p>
 <p>此外，<code>NSAppTransportSecurity</code> 設定了 <code>NSAllowsArbitraryLoads: true</code>（允許任意網路連線），以及 localhost 的 HTTP 例外——後者用於 Electron 的本地開發伺服器。</p>
 <hr>
-<h2>與 v0.9.3 的比較</h2>
+<h2 id="section-12">與 v0.9.3 的比較</h2>
 <p>日本工程師 @medmuspg 分析的是 v0.9.3，我分析的是 v1.0.0。主要差異：</p>
 <table>
 <thead>
@@ -567,7 +583,7 @@ HMAC Key: &quot;a55c8ee8615b1469a02e8acd36fd40397fd6e5f1b66b852222cc9fcd&quot;
 </tbody></table>
 <p><strong>結論</strong>：v1.0.0 並沒有根本性地改善隱私行為。主要改變是把一些敏感操作從 JavaScript 移入原生 dylib（更難被逆向分析），以及可能將螢幕文字從本地明文儲存改為加密儲存。核心的資料收集行為沒有改變。</p>
 <hr>
-<h2>對我個人的影響評估</h2>
+<h2 id="section-13">對我個人的影響評估</h2>
 <p>考慮到我的使用情境：</p>
 <ol>
 <li><strong>NDT 檢測報告系統</strong>：我日常開發和維護的是非破壞性檢測報告查詢系統（Next.js 全端應用）。用語音輸入時，螢幕上可能顯示檢測報告數據、客戶資訊、系統內部 API 等公司機密資料。</li>
@@ -576,7 +592,7 @@ HMAC Key: &quot;a55c8ee8615b1469a02e8acd36fd40397fd6e5f1b66b852222cc9fcd&quot;
 <li><strong>登入和授權流程</strong>：資料庫中記錄了 OAuth 授權頁面和客服系統的完整 URL，這些都是涉及身份驗證的敏感操作。</li>
 </ol>
 <hr>
-<h2>我的因應措施</h2>
+<h2 id="section-14">我的因應措施</h2>
 <h3>立即行動</h3>
 <ol>
 <li><strong>停用 Typeless</strong>：關閉應用程式</li>
@@ -595,7 +611,7 @@ HMAC Key: &quot;a55c8ee8615b1469a02e8acd36fd40397fd6e5f1b66b852222cc9fcd&quot;
 <li>在 Apple Silicon 上用 <strong>MLX Whisper</strong> 做語音辨識，效能完全足夠</li>
 </ul>
 <hr>
-<h2>給其他 Typeless 使用者的建議</h2>
+<h2 id="section-15">給其他 Typeless 使用者的建議</h2>
 <ol>
 <li><p><strong>如果你的工作涉及任何機密資料</strong>（公司內部系統、客戶資料、原始碼、財務資訊），請立即停用 Typeless。螢幕文字擷取功能意味著你的機密資料可能已經被傳送到 Typeless 的伺服器。</p>
 </li>
@@ -607,7 +623,7 @@ HMAC Key: &quot;a55c8ee8615b1469a02e8acd36fd40397fd6e5f1b66b852222cc9fcd&quot;
 </li>
 </ol>
 <hr>
-<h2>結語</h2>
+<h2 id="section-16">結語</h2>
 <p>Typeless 的語音辨識確實很好用——但我現在知道了原因不只是他們的 AI 模型好，更是因為他們把我螢幕上的一切都送上去了。</p>
 <p>一個語音輸入工具，需要知道我在瀏覽什麼網頁嗎？需要讀取我螢幕上的 10,000 個字嗎？需要記錄我用了哪些 app 嗎？需要追蹤我怎麼修改它的輸出嗎？</p>
 <p>如果你的答案也是「不需要」，那該是停用的時候了。</p>
@@ -620,15 +636,20 @@ HMAC Key: &quot;a55c8ee8615b1469a02e8acd36fd40397fd6e5f1b66b852222cc9fcd&quot;
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#61758b"><a href="/ai-analysis/theo-voice-computer-use-everyday-limits/"><span class="side-row__meta">16SEP26 · <span>AI 分析</span></span><span class="side-row__title">Theo 開始把電腦操作交給 AI，我已經這樣很久了</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li style="--row-accent:#61758b"><a href="/ai-analysis/theo-voice-computer-use-everyday-limits/"><span class="side-row__meta">16SEP26 · <span>AI 分析</span></span><span class="side-row__title">Theo 開始把電腦操作交給 AI，我已經這樣很久了</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">前言</a></li><li><a href="#section-2">審計環境</a></li><li><a href="#section-3">技術架構概述</a></li><li><a href="#section-4">發現一：螢幕可見文字擷取（風險等級：極高）</a></li><li><a href="#section-5">發現二：完整瀏覽器 URL 追蹤（風險等級：高）</a></li><li><a href="#section-6">發現三：全域鍵盤事件監控（風險等級：高）</a></li><li><a href="#section-7">發現四：完整應用程式使用行為記錄</a></li><li><a href="#section-8">發現五：100% 雲端處理，無本地模型</a></li><li><a href="#section-9">發現六：使用者編輯行為追蹤</a></li><li><a href="#section-10">發現七：加密方式與金鑰管理</a></li><li><a href="#section-11">發現八：Info.plist 權限宣告</a></li><li><a href="#section-12">與 v0.9.3 的比較</a></li><li><a href="#section-13">對我個人的影響評估</a></li><li><a href="#section-14">我的因應措施</a></li><li><a href="#section-15">給其他 Typeless 使用者的建議</a></li><li><a href="#section-16">結語</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">

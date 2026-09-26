@@ -75,12 +75,12 @@
     }
     .post { padding-top: 1rem; }
     .article-foot { padding-bottom: 4rem; }
-    /* 寬螢幕兩欄：文章欄最多 47 個全形字寬（內文 1.125rem × 47），
-       其餘寬度給右欄 RELATED／LATEST（最少 19rem）。文章與內文吃滿文章欄 */
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
     @media (min-width: 1100px) {
       .article-shell {
         display: grid;
-        grid-template-columns: minmax(0, 52.875rem) minmax(19rem, 1fr);
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
         grid-template-rows: auto 1fr;
         column-gap: 3.5rem;
         align-items: start;
@@ -93,19 +93,35 @@
       }
       /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
       .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
       .article-aside {
         grid-column: 2;
         grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         max-width: none;
         margin-inline: 0;
         padding-top: 1rem;
       }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
     }
-    /* 視窗裝得下整個側欄才固定，不然下半截會被切掉。
-       9/26 量 207 頁側欄最高：1100–1280px 寬 774px、1440 寬 728px、1920 寬 665px、2560 寬 740px */
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
     @media (min-width: 1100px) and (min-height: 820px),
-      (min-width: 1400px) and (min-height: 780px) {
-      .article-aside {
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
         position: sticky;
         top: 0.5rem;
       }
@@ -199,14 +215,14 @@
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">從平板換回筆電的旅程：當身體狀況遇上生態問題</h1>
       <figure id="post-hero" class="post__cover" hidden></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2>前言</h2>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><h2 id="section-1">前言</h2>
 <p>關於我的身體狀況，<a href="https://b-log.to/life-story/lisa-concert-believe-in-myself/">《Believe in myself》</a>中有詳細記錄。簡單來說：我只有右手食指能正常活動，使用輪椅。用單指打字的成本很高，所以特別重視效率和自動化。</p>
 <p>這篇文章記錄我從平板換回筆電的決策過程，以及背後的考量。</p>
-<h2>從筆電到平板：力氣的退化</h2>
+<h2 id="section-2">從筆電到平板：力氣的退化</h2>
 <p>幾年前，我發現力氣好像退化了。按實體鍵盤開始變得費力，每次打字都要用更多力氣按下按鍵。相比之下，戳平板玻璃螢幕輕鬆很多，只需要輕觸就能輸入。</p>
 <p>於是我買了 Tab S9 Ultra，想說這樣應該能減輕負擔。</p>
 <p>但換平板有個隱性成本：我從很早期就在用的<strong>小狼毫輸入法</strong>，在 Android 上沒有對應版本。平板上只能用 Gboard，雖然也堪用，但多年累積的個人詞庫、按鍵習慣、自訂設定，全部要重新適應。對單指打字來說，熟悉的輸入法效率差異很大。</p>
-<h2>Android 平板的生態困境</h2>
+<h2 id="section-3">Android 平板的生態困境</h2>
 <p>但用了一段時間後，我發現了更大的問題：Android 平板的生態。</p>
 <p><strong>硬體不斷升級，體驗卻沒改善：</strong></p>
 <ul>
@@ -248,7 +264,7 @@
 <li>連 SSH 到 Proxmox VM 都不太順</li>
 </ul>
 <p>Android 平板硬體再強，沒有完整開發環境就是廢。iPad Pro 硬體更強，但限制更多。</p>
-<h2>Windows 也不完美</h2>
+<h2 id="section-4">Windows 也不完美</h2>
 <p>必須說，Windows 也不是完美的解決方案。</p>
 <p><strong>Windows 的問題：</strong></p>
 <ul>
@@ -266,7 +282,7 @@
 <li><strong>TrackPoint + 實體鍵</strong>：ThinkPad 的硬體設計彌補了 OS 的不足</li>
 <li><strong>相對開放</strong>：至少還能裝第三方軟體、自己編譯工具</li>
 </ul>
-<h2>Windows 二合一設備：兩邊不討好</h2>
+<h2 id="section-5">Windows 二合一設備：兩邊不討好</h2>
 <p>我也考慮過 <strong>ROG Flow Z13</strong> 這類 Windows 二合一設備：</p>
 <ul>
 <li>可拆式鍵盤，既是筆電又是平板</li>
@@ -289,7 +305,7 @@
 <li><strong>傳統 Windows 筆電</strong>：OS 有問題，但開發環境完整 + 硬體設計友善</li>
 </ul>
 <p>對我的需求來說，傳統筆電是「最不壞的選擇」，不是「最好的選擇」。只是其他選項的問題更大。</p>
-<h2>重新嘗試實體鍵盤</h2>
+<h2 id="section-6">重新嘗試實體鍵盤</h2>
 <p>這個月，我決定再試一次實體鍵盤。</p>
 <p>意外發現：其實還行。</p>
 <p>力氣狀況可能沒有當初想的那麼差，或是已經適應了。加上 ThinkPad 鍵盤本身就比較友善：</p>
@@ -298,7 +314,7 @@
 <li>按鍵回饋明確</li>
 <li>TrackPoint 小紅點也比較省力（不用大範圍移動手指）</li>
 </ul>
-<h2>輸入法：重拾熟悉的工具</h2>
+<h2 id="section-7">輸入法：重拾熟悉的工具</h2>
 <p>換回筆電，還有一個重要收穫：又能用回<strong>小狼毫輸入法</strong>。</p>
 <p><strong>什麼是小狼毫？</strong></p>
 <p>小狼毫是 Rime 輸入法引擎在 Windows 上的版本。Rime 是一個開放原始碼的輸入法框架，跨平台支援 Windows（小狼毫）、macOS（鼠鬚管）、Linux（ibus-rime）。</p>
@@ -332,7 +348,7 @@
 </ul>
 <p>對單指打字來說，這種效率差異會累積成巨大的時間成本。</p>
 <p>現在換回筆電，熟悉的工具又回來了。這種「回到家」的感覺，對效率的提升是實實在在的。</p>
-<h2>ThinkPad P15 Gen 2：找到的解答</h2>
+<h2 id="section-8">ThinkPad P15 Gen 2：找到的解答</h2>
 <p>我在二手市場找到一台 ThinkPad P15 Gen 2：</p>
 <ul>
 <li><strong>CPU：</strong> i9-11950H</li>
@@ -350,7 +366,7 @@
 <li><strong>4K OLED 螢幕</strong>：看程式碼、資料更舒服</li>
 <li><strong>實體鍵盤</strong>：單指打字可能比戳平板更有效率</li>
 </ul>
-<h2>開發環境：回到完整的生產力</h2>
+<h2 id="section-9">開發環境：回到完整的生產力</h2>
 <p>換回 Windows 筆電後，開發環境完全不一樣：</p>
 <p><strong>完整的工具鏈：</strong></p>
 <ul>
@@ -371,7 +387,7 @@
 <li>NDT 偵測系統：前端 + 後端 + 資料庫同時跑</li>
 </ul>
 <p>這才是真正的「生產力工具」。</p>
-<h2>AI 輔助開發：完整環境的價值</h2>
+<h2 id="section-10">AI 輔助開發：完整環境的價值</h2>
 <p>必須坦白說：我的程式開發能力定位是「問題拆解與方案應用」，純程式碼撰寫是弱項。高中時程式設計很差，有 AI 之後才能有效開發。</p>
 <p><strong>我的開發模式：</strong></p>
 <ul>
@@ -408,7 +424,7 @@
 <p>這個流程在平板上幾乎做不到，但在筆電 128 GB RAM + 完整開發環境上很順暢。</p>
 <p><strong>AI + 完整環境 = 生產力最大化</strong></p>
 <p>單指打字成本高，更需要高效的工作流程。AI 輔助開發讓我能做全端開發，但前提是要有完整的測試環境。平板的限制不只是硬體，而是整個開發迭代流程都卡住了。</p>
-<h2>設備分工：桌機 + 筆電的協作</h2>
+<h2 id="section-11">設備分工：桌機 + 筆電的協作</h2>
 <p>我的桌機設定是 9950X3D + RTX 4070 Ti Super + 96 GB RAM，跑 Proxmox VE 虛擬化：</p>
 <ul>
 <li><strong>VM1：</strong> Windows（跑 Microsoft Flight Simulator）</li>
@@ -423,11 +439,11 @@
 <li>不用承受高負載（省電、安靜、低溫）</li>
 </ul>
 <p>有趣的是，筆電的 128 GB RAM 比桌機的 96 GB 還多。這個設定有點反常識，但確實符合我的使用需求。</p>
-<h2>ThinkPad 的設計哲學</h2>
+<h2 id="section-12">ThinkPad 的設計哲學</h2>
 <p>ThinkPad 保留 TrackPoint 和實體三鍵，對單指使用者來說是救星。</p>
 <p>我在<a href="https://b-log.to/business-observation/modernization-vs-accessibility/">《當「現代化」成為無障礙的退步》</a>一文中提到過：有個電腦店老闆的客戶買了 MSI 筆電，因為只能單指操作連右鍵都按不到，老闆用 Claude 寫了小程式解決。相比之下，我用 ThinkPad 至少還保有 TrackPoint 和實體三鍵，右鍵不是問題，只是少了捲動功能。</p>
 <p>但諷刺的是，ThinkPad 在新版驅動中也移除了「邊緣捲動」功能。關於這個決策背後的邏輯、Microsoft 與觸控板廠商的產業連鎖反應，以及為什麼這是「設計傲慢」而非技術問題，詳見上述文章的完整分析。</p>
-<h2>力氣狀況的變化與應對</h2>
+<h2 id="section-13">力氣狀況的變化與應對</h2>
 <p>力氣狀況是動態的：</p>
 <ul>
 <li><strong>之前</strong>：力氣退化 → 按實體鍵費力 → 換平板</li>
@@ -441,7 +457,7 @@
 <li>或回到平板（但開發環境會受限）</li>
 </ul>
 <p>技術是工具，應該隨著需求調整，而不是被綁死。</p>
-<h2>效率與自動化的重要性</h2>
+<h2 id="section-14">效率與自動化的重要性</h2>
 <p>用單指打字，成本很高。任何能用程式解決的問題，我都優先考慮自動化。</p>
 <p>這台 P15 Gen 2 配上 128 GB RAM，讓我可以：</p>
 <ul>
@@ -452,7 +468,7 @@
 <li>提高整體效率</li>
 </ul>
 <p>效率提升 10%，對我來說就是減少 10% 的打字成本。這是值得投資的。</p>
-<h2>結語</h2>
+<h2 id="section-15">結語</h2>
 <p>從平板換回筆電，不是否定平板，而是找到更適合的工具。</p>
 <p><strong>關鍵因素：</strong></p>
 <ol>
@@ -476,15 +492,20 @@
       <div id="share-links" class="share"></div>
     </article>
 
-    <aside class="article-aside" aria-label="相關文章與最新文章">
-      <section class="related" aria-labelledby="related-label">
-        <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-        <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
-      </section>
-      <section class="related" aria-labelledby="latest-label">
-        <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-        <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
-      </section>
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">前言</a></li><li><a href="#section-2">從筆電到平板：力氣的退化</a></li><li><a href="#section-3">Android 平板的生態困境</a></li><li><a href="#section-4">Windows 也不完美</a></li><li><a href="#section-5">Windows 二合一設備：兩邊不討好</a></li><li><a href="#section-6">重新嘗試實體鍵盤</a></li><li><a href="#section-7">輸入法：重拾熟悉的工具</a></li><li><a href="#section-8">ThinkPad P15 Gen 2：找到的解答</a></li><li><a href="#section-9">開發環境：回到完整的生產力</a></li><li><a href="#section-10">AI 輔助開發：完整環境的價值</a></li><li><a href="#section-11">設備分工：桌機 + 筆電的協作</a></li><li><a href="#section-12">ThinkPad 的設計哲學</a></li><li><a href="#section-13">力氣狀況的變化與應對</a></li><li><a href="#section-14">效率與自動化的重要性</a></li><li><a href="#section-15">結語</a></li></ol></nav>
+      </div>
     </aside>
 
     <div class="article-foot">
