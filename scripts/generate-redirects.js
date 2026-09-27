@@ -31,8 +31,8 @@ const HOME_FEATURED_END = '<!-- HOME_FEATURED_END -->';
 const ARTICLE_TAGS_START = '<!-- ARTICLE_TAGS_START -->';
 const ARTICLE_TAGS_END = '<!-- ARTICLE_TAGS_END -->';
 const HERO_IMAGE_WIDTHS = [480, 828, 1200];
-// 首頁 LATEST：760px 以下封面滿版，760–960px 約半欄，1216px 以下約 400px，更寬時跟著左欄變寬（約 36vw）
-const HOME_HERO_SIZES = '(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, (max-width: 1216px) 400px, 36vw';
+// 首頁 LATEST：760px 以下封面滿版；以上封面欄佔 1/2.6（9/27 實測：800–960px 約 33.5vw，1216px 282px，1440–2560px 24.4–26.2vw）
+const HOME_HERO_SIZES = '(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 34vw, (max-width: 1216px) 290px, 26vw';
 // 文章頁封面：手機扣掉左右 16px；1216px 以下欄寬約 736px；更寬時文章欄最多 52.875rem（2560px 約 1060px）
 // 文章頁封面高度最多視窗一半、照原圖比例（post.html 關鍵 CSS），顯示寬度＝min(文章欄寬, 50vh × 寬高比)。
 // 文章欄寬：400px 以下 100vw − 32px、800px 以下 92vw、1099px 以下 736px（單欄 46rem）、

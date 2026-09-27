@@ -88,13 +88,21 @@
       /* 有篩選時 BRIEFING 隱藏，側欄直接頂上來 */
       .home-grid:has(> .brief[hidden]) .side { grid-area: 1 / 2 / 4 / 3; margin-top: 0; }
     }
+    /* 761px 以上標題橫跨整塊，摘要和封面排在下面（跟 styles.css 同一組規則） */
     .lead__link {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-      gap: 1.75rem;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: 0.9rem 1.75rem;
       align-items: start;
       color: inherit;
       text-decoration: none;
+    }
+    @media (min-width: 761px) {
+      .lead__text { display: contents; }
+      .lead__text > .meta,
+      .lead__title { grid-column: 1 / -1; }
+      .lead__sum { grid-column: 1; }
+      .lead__media { grid-column: 2; grid-row: 3; }
     }
     .lead--text-only .lead__link { grid-template-columns: minmax(0, 1fr); }
     .lead__title {
@@ -121,7 +129,7 @@
 
   <!-- 首頁 featured preload 會由生成腳本注入到這裡 -->
   <!-- HOME_FEATURED_PRELOAD_START -->
-  <link rel="preload" as="image" href="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" imagesrcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" imagesizes="(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, (max-width: 1216px) 400px, 36vw" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" imagesrcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" imagesizes="(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 34vw, (max-width: 1216px) 290px, 26vw" fetchpriority="high">
 <!-- HOME_FEATURED_PRELOAD_END -->
 
   <!-- 完整樣式表 -->
@@ -212,7 +220,7 @@
             <h3 class="lead__title" id="hero-title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</h3>
             <p class="lead__sum" id="hero-summary">Anthropic 送的 250 美元只能在雲端用，我拿來做一個完全放手的和風卡牌遊戲，順便學怎麼管雲端 agent 的用量。我只限制主 session 不要爆，它就把工作全派給子代理，一輪花掉 90 美元。改成一個 Sonnet 做到底只花 31，但做的量只有四分之一。</p>
           </div>
-          <div class="lead__media" id="hero-media"><img class="lead__img" src="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" srcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" sizes="(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 48vw, (max-width: 1216px) 400px, 36vw" alt="" aria-hidden="true" fetchpriority="high" decoding="sync"></div>
+          <div class="lead__media" id="hero-media"><img class="lead__img" src="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp" srcset="/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-480w.webp 480w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-828w.webp 828w, /content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover-1200w.webp 1200w" sizes="(max-width: 760px) calc(100vw - 32px), (max-width: 960px) 34vw, (max-width: 1216px) 290px, 26vw" alt="" aria-hidden="true" fetchpriority="high" decoding="sync"></div>
         </a>
       </section>
 <!-- HOME_FEATURED_END -->
