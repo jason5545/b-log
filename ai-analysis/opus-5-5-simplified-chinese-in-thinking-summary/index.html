@@ -220,7 +220,7 @@
     <article class="post" id="post-article" data-category-theme="ai-analysis">
       <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=AI%20%E5%88%86%E6%9E%90">AI 分析</a></span></nav>
       <div id="post-accent" class="post__accent" aria-hidden="true" style="--post-accent:#c2410c"></div>
-      <p id="post-meta" class="meta">23SEP26 · AI 分析 · 4 MIN · JASON CHIEN</p>
+      <p id="post-meta" class="meta">23SEP26 · AI 分析 · 6 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</h1>
       <figure id="post-hero" class="post__cover" style="--cover-w: 1344; --cover-h: 768"><img class="post__cover-img" src="/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover.webp" srcset="/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-480w.webp 480w, /content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-828w.webp 828w, /content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.75), (max-width: 800px) min(92vw, 50vh * 1.75), (max-width: 1099px) min(736px, 50vh * 1.75), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.75), min(calc(90.78vw - 434px), 50vh * 1.75)" width="1344" height="768" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
@@ -263,6 +263,22 @@
 <p>FB 上有人留言，說不要新模型一上線就切過去。</p>
 <p>也許吧。只是這次寫在文件裡，是設計，不是上線初期的 bug。</p>
 <p>而且 Opus 5.5 真的省很多。Max 方案裡 Fable 最多只能用掉每週額度的一半，換成 Opus 5.5，整份訂閱都能用上。就算跟 Opus 5 比，API 定價也只要八成。</p>
+<h2 id="section-5">9/27 更新：Opus 寫英文，摘要翻成簡體</h2>
+<p>上面那個 hook，當天晚上就拿掉了。掛上之後，兩個全新 session 的第一個回覆，都在 thinking 前面先吐出一個單字：「丰」和「訫」。9/20 以來、掛 hook 之前開的 36 個新 session，一次都沒有。</p>
+<p>改成另一個做法：thinking 和工具呼叫之間的說明用英文，最後給我的回覆才用正體。</p>
+<p>依據是 9/23 當天的紀錄。中文或中英混合的 thinking 有 160 則，整句簡體 2 則；英文的有 795 則，一則都沒有。</p>
+<p>今天改試 Claude Code 的 <code>language</code> 設定，設成「繁體中文」。Claude 太久沒回報時會收到一段提醒，預設是英文，也一起改成中文。</p>
+<p>設定一存就生效，同一個 session 裡的 Claude 馬上收到一段「Always respond in 繁體中文」。</p>
+<p>27 秒後，畫面中間出現：</p>
+<blockquote>
+<p>配置检查完成了，我该整理最终回复：……语言设置这次对话里立即生效了</p>
+</blockquote>
+<p>Claude 說，這段它原本是用英文寫的，只夾了一句準備回給我的正體中文。摘要出來整段變成中文，那句正體也跟著變成簡體。</p>
+<p>回頭看改用英文的那三天。9/24 到 9/26，Opus 5.5 的 thinking 有 6225 則，其中 5025 則一個中文字都沒有。扣掉日文漢字、引用，還有夾在英文裡的單一中文詞，整句簡體還剩 11 則。</p>
+<p>這 11 則裡有 7 則，都是準備回我之前的那一段：「我该用中文汇报了」「我需要用中文整理最终回复」「我打算用中文回复」。</p>
+<p>那幾則的原文看不到，我沒辦法證明它們本來都是英文。只是樣子跟今天這則一樣。</p>
+<p>叫 Opus 用英文想，摘要那一層沒有照著走。在設定裡寫明繁體中文，至少今天那一次也沒有。</p>
+<p>這次一樣用回報功能送給 Anthropic 了。動到 Claude 自己的東西，我都會回報。</p>
 </div>
 
       <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
@@ -282,7 +298,7 @@
             <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li><li style="--row-accent:#f07c2a"><a href="/ai-analysis/svg-cover-create-post-first-run/"><span class="side-row__meta">19SEP26 · <span>AI 分析</span></span><span class="side-row__title">讓 Claude 手畫部落格封面：重測晚了兩個月，封面欄位從 2 月就漏了</span></a></li></ol>
           </section>
         </div>
-        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">漏在哪裡</a></li><li><a href="#section-2">中間那些字，不是 Opus 寫的原文</a></li><li><a href="#section-3">同一個詞，九分鐘前後</a></li><li><a href="#section-4">hook 碰不到那一層</a></li></ol></nav>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">漏在哪裡</a></li><li><a href="#section-2">中間那些字，不是 Opus 寫的原文</a></li><li><a href="#section-3">同一個詞，九分鐘前後</a></li><li><a href="#section-4">hook 碰不到那一層</a></li><li><a href="#section-5">9/27 更新：Opus 寫英文，摘要翻成簡體</a></li></ol></nav>
       </div>
     </aside>
 
