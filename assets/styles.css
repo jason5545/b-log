@@ -197,9 +197,9 @@
 }
 
 .lead__media {
+  position: relative;
   aspect-ratio: 16 / 9;
   border-radius: 2px;
-  overflow: hidden;
   background: var(--surface);
 }
 
@@ -208,6 +208,30 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 2px;
+}
+
+/* 封面四角的 HUD 角標（Jason 9/27 選的方案 C）。畫在封面外側，不改封面尺寸，
+   所以 index.html 的關鍵 CSS 不用跟著改。平常灰色，滑過跟標題一起變青色（可以點） */
+.lead__media::before {
+  --c: var(--muted);
+  content: "";
+  position: absolute;
+  inset: -0.4rem;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--c), var(--c)) top left / 1rem 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) top left / 2px 1rem no-repeat,
+    linear-gradient(var(--c), var(--c)) top right / 1rem 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) top right / 2px 1rem no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom left / 1rem 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom left / 2px 1rem no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom right / 1rem 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom right / 2px 1rem no-repeat;
+}
+
+.lead__link:hover .lead__media::before {
+  --c: var(--cyan);
 }
 
 /* 要放在 .lead__text 的 display: grid 後面才蓋得過 */
