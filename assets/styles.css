@@ -155,13 +155,12 @@
    ==================================================================== */
 .side { display: grid; gap: 2.5rem; align-content: start; }
 
-/* LATEST：761px 以上標題橫跨整塊，摘要和封面排在下面（摘要 1.6 : 封面 1）。
-   2056 寬時標題一行 1089px 放得進 1403px，整塊高度跟之前左文右圖差不多（Jason 9/27 選的方案 C）。
-   760px 以下封面在上、文字在下，.lead__text 維持一個區塊 */
+/* LATEST：761px 以上左文右圖（文字 1.6 : 封面 1），760px 以下封面在上、文字在下。
+   封面高度跟左邊文字一樣（規則在下面的 min-width: 761px），版面規則見 AGENTS.md「首頁 LATEST」 */
 .lead__link {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  gap: 0.9rem 1.75rem;
+  gap: 1.75rem;
   align-items: start;
   color: inherit;
   text-decoration: none;
@@ -236,42 +235,23 @@
   --c: var(--cyan);
 }
 
-/* 摘要下面接的文章開頭：760px 以下不顯示，手機的捲動長度不變 */
-.lead__excerpt { display: none; }
-
-/* 要放在 .lead__text 的 display: grid 後面才蓋得過 */
+/* 封面不固定 16:9，撐到跟左邊文字一樣高，用 object-fit: cover 裁切。
+   文字下面不留白（Jason 9/27 選回改版前的做法；標題在左欄，2056 寬是兩行）。
+   最高只到 4:3：961–1216px 有側欄、文字欄窄排得長，不設上限會把 16:9 裁成直的（1000px 實測 0.63:1）；
+   封面欄寬 = (100cqw - 欄距) / 2.6。最矮 12rem，但不超過 4:3 的高度。
+   要放在 .lead__media 的 aspect-ratio 後面才蓋得過 */
 @media (min-width: 761px) {
-  .lead__text { display: contents; }
-  .lead__text > .meta,
-  .lead__title { grid-column: 1 / -1; }
-  .lead__media { grid-column: 2; grid-row: 3; }
-  .lead__body {
-    grid-column: 1;
-    grid-row: 3;
+  .lead__link { container-type: inline-size; }
+  .lead__media {
+    aspect-ratio: auto;
     align-self: stretch;
-    display: flex;
-    flex-direction: column;
+    max-height: calc((100cqw - 1.75rem) / 2.6 * 3 / 4);
+    min-height: min(12rem, calc((100cqw - 1.75rem) / 2.6 * 3 / 4));
   }
-  /* 文章開頭補滿摘要下面的留白（Jason 9/27 決定，不去拉長摘要）。
-     contain: size 讓它不撐高這一列，列高由封面決定，它只佔摘要下面剩下的空間，
-     所以任何寬度都剛好排到封面底部為止，最後兩行淡出。
-     跟摘要的間距用上下一正一負的 margin，不佔高度：摘要比封面高、文章開頭放不下時，
-     這一列不會被間距多撐高；多出封面底部的那 0.9rem 用 clip-path 裁掉 */
-  .lead__excerpt {
-    display: block;
-    flex: 1 1 0;
-    min-height: 0;
-    contain: size;
-    overflow: hidden;
-    margin: 0.9rem 0 -0.9rem;
-    clip-path: inset(0 0 0.9rem 0);
-    font-size: 0.95rem;
-    line-height: 1.8;
-    color: var(--muted);
-    -webkit-mask-image: linear-gradient(#000 calc(100% - 0.9rem - 3.6em), transparent calc(100% - 0.9rem));
-    mask-image: linear-gradient(#000 calc(100% - 0.9rem - 3.6em), transparent calc(100% - 0.9rem));
+  .lead__img {
+    position: absolute;
+    inset: 0;
   }
-  .lead--text-only .lead__excerpt { display: none; }
 }
 
 /* BRIEFING */

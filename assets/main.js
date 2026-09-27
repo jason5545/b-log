@@ -8,7 +8,6 @@ import {
   initWebMcpTools,
   syncFooterYear,
 } from './shared-ui.js';
-import { markdownToLeadExcerpt } from './lead-excerpt.js';
 
 const POSTS_ROOT = '/content/posts/';
 const SITE_BASE_URL = 'https://b-log.to';
@@ -1692,37 +1691,6 @@ function renderFeaturedPost(post) {
   if (heroSummary) {
     heroSummary.textContent = post.summary || '';
   }
-
-  const heroExcerpt = document.querySelector('#hero-excerpt');
-  if (heroExcerpt) {
-    updateLeadExcerpt(heroExcerpt, post.slug);
-  }
-}
-
-// LATEST 摘要下面的文章開頭：靜態首頁已經寫好這一篇時不動，分類、標籤、搜尋換篇時才讀原文。
-// 760px 以下不顯示（styles.css），也就不去讀
-const LEAD_EXCERPT_MEDIA = '(min-width: 761px)';
-const leadExcerptCache = new Map();
-
-function updateLeadExcerpt(excerptEl, slug) {
-  if (excerptEl.dataset.slug === slug) return;
-  excerptEl.dataset.slug = slug;
-  excerptEl.textContent = '';
-  if (!window.matchMedia(LEAD_EXCERPT_MEDIA).matches) return;
-
-  loadLeadExcerpt(slug).then((text) => {
-    if (excerptEl.dataset.slug === slug) excerptEl.textContent = text;
-  });
-}
-
-function loadLeadExcerpt(slug) {
-  if (!leadExcerptCache.has(slug)) {
-    leadExcerptCache.set(slug, fetch(`${POSTS_ROOT}${slug}.md`)
-      .then((response) => (response.ok ? readUtf8Text(response) : ''))
-      .then((markdown) => markdownToLeadExcerpt(markdown))
-      .catch(() => ''));
-  }
-  return leadExcerptCache.get(slug);
 }
 
 function hasActiveHomeFilter() {
