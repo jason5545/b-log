@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "super-computer-ai-unknown-answer",
+      "url": "https://b-log.to/ai-analysis/super-computer-ai-unknown-answer/",
+      "image": "https://b-log.to/content/img/2026/super-computer-ai-unknown-answer-cover.webp",
+      "title": "我說《超級電腦》預言了 AI，重讀後發現自己漏看了一句話",
+      "content_text": "2025/10/29 我把小敏寫成「全知助手」。重讀《超級電腦》才發現，她查不到資料會明說；今天的 AI 反而可能把缺口補成一個像樣的答案。作者猜中使用方式，沒猜中回答的風險。",
+      "date_published": "2026-09-27T00:00:00.000Z",
+      "date_modified": "2026-09-27T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "科幻",
+        "超級電腦",
+        "幻覺",
+        "語音輸入",
+        "程式設計"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "cloud-agent-main-session-cap-90-usd-round",
       "url": "https://b-log.to/ai-analysis/cloud-agent-main-session-cap-90-usd-round/",
       "image": "https://b-log.to/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp",
