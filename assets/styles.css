@@ -194,6 +194,8 @@
   font-size: 0.95rem;
   line-height: 1.8;
   color: var(--text);
+  /* 最後一行不留單獨一個字（跟標題一樣） */
+  text-wrap: pretty;
 }
 
 .lead__media {
