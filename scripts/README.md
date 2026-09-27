@@ -201,3 +201,17 @@ const categoryMapping = {
 - `FB_GRAPH_API_VERSION`：Meta Graph API 版本，預設 `v25.0`
 
 第一次執行時，若 `data/facebook-published.json` 不存在，腳本只會建立既有文章 baseline，不會把舊文章全部發出去。之後 `data/posts.json` 出現新的 slug 時才會自動發文。
+
+## 首頁 LATEST 版面檢查
+
+改首頁 LATEST 的版面前後各跑一次：
+
+```bash
+npm run check:layout
+```
+
+- 自己開一個本機靜態伺服器，用 `playwright-core` 的無頭 Chromium 開首頁，不用另外開 `python -m http.server`。
+- 7 種寬度（375、820、1000、1216、1440、2056、2560）× 7 種內容：最新一篇、標題最長與最短、摘要最長與最短（都挑有封面的）、沒有封面、Crossing Field 分類頁。指定文章用站內搜尋完整標題換進 LATEST。
+- 每格截 LATEST 那一塊，量高度、封面尺寸與比例、標題行數，檢查 AGENTS.md「首頁 LATEST 的版面」的規則：沒有橫向捲動、標題不超出欄寬、手機版封面在上且是 16:9、寬螢幕封面不比 4:3 窄、封面底部切齊文字（到 4:3 上限或 12rem 最矮高度的例外會列成備註）。
+- 輸出到系統暫存資料夾（`--out <資料夾>` 可指定），裡面有一頁自帶圖片的比較板 `index.html` 和 `report.json`；`--open` 會直接用預設瀏覽器打開比較板。有格子沒通過時結束碼是 1。
+- 需要 `playwright-core` 對應版本的 Chromium（放在 `~/Library/Caches/ms-playwright`）。缺的話：`npx playwright-core install chromium-headless-shell`。
