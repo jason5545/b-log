@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我說《超級電腦》預言了 AI，重讀後發現自己漏看了一句話 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="2025/10/29 我把小敏寫成「全知助手」。重讀《超級電腦》才發現，她查不到資料會明說；今天的 AI 反而可能把缺口補成一個像樣的答案。作者猜中使用方式，沒猜中回答的風險。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/ai-analysis/super-computer-ai-unknown-answer/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/ai-analysis/super-computer-ai-unknown-answer/" id="og-url">
+  <meta property="og:title" content="我說《超級電腦》預言了 AI，重讀後發現自己漏看了一句話" id="og-title">
+  <meta property="og:description" content="2025/10/29 我把小敏寫成「全知助手」。重讀《超級電腦》才發現，她查不到資料會明說；今天的 AI 反而可能把缺口補成一個像樣的答案。作者猜中使用方式，沒猜中回答的風險。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/super-computer-ai-unknown-answer-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:published_time" content="2026-09-27T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-09-27T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="AI 分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="AI">
+  <meta property="article:tag" content="科幻">
+  <meta property="article:tag" content="超級電腦">
+  <meta property="article:tag" content="幻覺">
+  <meta property="article:tag" content="語音輸入">
+  <meta property="article:tag" content="程式設計">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/ai-analysis/super-computer-ai-unknown-answer/" id="twitter-url">
+  <meta property="twitter:title" content="我說《超級電腦》預言了 AI，重讀後發現自己漏看了一句話" id="twitter-title">
+  <meta property="twitter:description" content="2025/10/29 我把小敏寫成「全知助手」。重讀《超級電腦》才發現，她查不到資料會明說；今天的 AI 反而可能把缺口補成一個像樣的答案。作者猜中使用方式，沒猜中回答的風險。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/super-computer-ai-unknown-answer-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="AI, 科幻, 超級電腦, 幻覺, 語音輸入, 程式設計" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f4efe7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1114" media="(prefers-color-scheme: dark)">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- B612 / B612 Mono — heading and UI font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    /* 單欄：文章、RELATED／LATEST、上下篇與留言依序往下 */
+    .post,
+    .article-aside,
+    .article-foot {
+      max-width: 46rem;
+      margin-inline: auto;
+    }
+    .post { padding-top: 1rem; }
+    .article-foot { padding-bottom: 4rem; }
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
+    @media (min-width: 1100px) {
+      .article-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
+        grid-template-rows: auto 1fr;
+        column-gap: 3.5rem;
+        align-items: start;
+      }
+      .post,
+      .article-foot {
+        grid-column: 1;
+        max-width: none;
+        margin-inline: 0;
+      }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
+      .article-aside {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        max-width: none;
+        margin-inline: 0;
+        padding-top: 1rem;
+      }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
+    }
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
+        position: sticky;
+        top: 0.5rem;
+      }
+    }
+    .post__accent {
+      height: 4px;
+      margin: 0 0 1rem;
+      background: var(--post-accent, transparent);
+    }
+    .post__title {
+      margin: 0.8rem 0 1.75rem;
+      font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
+      color: var(--ink);
+    }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
+    .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
+      margin: 0 0 2.5rem;
+      background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
+    }
+    .post__body {
+      max-width: 35em;
+      font-size: 1.125rem;
+      line-height: 1.9;
+    }
+    /* 內容區域預留空間（未預先渲染時） */
+    #post-content:empty {
+      min-height: 400px;
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 33px, var(--rule) 33px, var(--rule) 34px);
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/super-computer-ai-unknown-answer-cover.webp" imagesrcset="/content/img/2026/super-computer-ai-unknown-answer-cover-480w.webp 480w, /content/img/2026/super-computer-ai-unknown-answer-cover-828w.webp 828w, /content/img/2026/super-computer-ai-unknown-answer-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"我說《超級電腦》預言了 AI，重讀後發現自己漏看了一句話","description":"2025/10/29 我把小敏寫成「全知助手」。重讀《超級電腦》才發現，她查不到資料會明說；今天的 AI 反而可能把缺口補成一個像樣的答案。作者猜中使用方式，沒猜中回答的風險。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-27T00:00:00Z","dateModified":"2026-09-27T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/super-computer-ai-unknown-answer/"},"url":"https://b-log.to/ai-analysis/super-computer-ai-unknown-answer/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/super-computer-ai-unknown-answer-cover.webp"],"keywords":"AI, 科幻, 超級電腦, 幻覺, 語音輸入, 程式設計","articleSection":"AI 分析"}</script>
+</head>
+<body class="post-page">
+  <a class="skip" href="#content">跳到內容</a>
+  <header class="site site-header">
+    <div class="wrap">
+      <div class="site__id">
+        <p class="site__title"><a class="wordmark" href="../../" aria-label="(b)-log 首頁"><span class="br" aria-hidden="true">(</span>b<span class="br" aria-hidden="true">)</span>-log</a></p>
+        <p class="tagline">世界的預設值不包含我，所以我自己定義</p>
+      </div>
+      <nav class="site__nav" aria-label="主選單">
+        <ul>
+          <li><a href="../../">HOME</a></li>
+          <li><a href="../../about.html">ABOUT</a></li>
+          <li><a href="../../gadgets.html">GADGETS</a></li>
+          <li><a href="../../feed.json">FEED</a></li>
+          <li><a href="#" id="random-post-link" onclick="goToRandomPost(event)">RANDOM</a></li>
+        </ul>
+      </nav>
+      <div class="site__tools">
+        <div class="search-toggle-container">
+          <button class="iconbtn search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" aria-controls="site-search" type="button">
+            <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </button>
+          <div class="search-box" id="site-search" hidden>
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5"></path>
+              </svg>
+              <input type="search" id="search-input" class="search-input" placeholder="搜尋文章" aria-label="搜尋文章" autocomplete="off">
+              <button type="button" id="search-clear" class="search-clear" aria-label="清除搜尋" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <button class="themebtn theme-toggle" type="button" onclick="ThemeManager.toggle()" aria-label="切換深淺色">
+          <span class="theme-toggle__icon"><i class="theme-dot" aria-hidden="true"></i></span>
+          <span class="theme-toggle__text">AUTO</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="content" class="wrap article-shell">
+    <article class="post" id="post-article" data-category-theme="ai-analysis">
+      <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=AI%20%E5%88%86%E6%9E%90">AI 分析</a></span></nav>
+      <div id="post-accent" class="post__accent" aria-hidden="true" style="--post-accent:#9b593e"></div>
+      <p id="post-meta" class="meta">27SEP26 · AI 分析 · 4 MIN · JASON CHIEN</p>
+      <p id="post-catline" class="catline" hidden></p>
+      <h1 id="post-title" class="post__title">我說《超級電腦》預言了 AI，重讀後發現自己漏看了一句話</h1>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1672; --cover-h: 941"><img class="post__cover-img" src="/content/img/2026/super-computer-ai-unknown-answer-cover.webp" srcset="/content/img/2026/super-computer-ai-unknown-answer-cover-480w.webp 480w, /content/img/2026/super-computer-ai-unknown-answer-cover-828w.webp 828w, /content/img/2026/super-computer-ai-unknown-answer-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" width="1672" height="941" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><p>2025/10/29，我寫過一篇<a href="https://b-log.to/ai-analysis/super-computer-prophecy-18-years/">《超級電腦》的文章</a>，說這本十幾年前的網路小說預言了 AI 助理。我把小敏叫作「全知助手」，還說自己某種程度上活成了書裡的主角。</p>
+<p>最近重新讀書裡跟 AI 有關的段落，我發現當時漏看了一句話。</p>
+<p>第七章明說：即使到了 2086 年，小說裡也還沒有真正的人工智能。小敏能流暢對話，靠的是龐大的資料庫；遇到不知道的事，她會回答：「對不起，資料庫中沒有此類問題的答案。」</p>
+<p>第九十九章有個更具體的例子。陳旭想查三聚氰胺為何出現在食品裡，小敏只能給他化學資料，沒有相關事件的記錄。他最後得自己上網找。</p>
+<p>我當年寫的「全知助手」，跟這個設定其實差得很遠。至少在這些段落裡，作者讓小敏把知識的缺口說出來。</p>
+<p>今天的 AI 助理先做到了另一件事：不必把每個問題預先寫進資料庫，也能用自然語言回答。代價是，模型缺少依據時，仍可能補出一個完整、聽起來有道理的答案。<a href="https://openai.com/index/why-language-models-hallucinate/">OpenAI 2025 年關於幻覺的研究</a>指出，常見的訓練與評測方式會獎勵猜對，卻很少獎勵模型承認不確定。這不是每次回答都會出錯，也不是模型永遠不肯說不知道；麻煩在於使用者不能只憑它講得順不順來判斷。</p>
+<p>這個差別對我很實際。我用語音講需求，讓 AI 幫我寫程式；它能讀懂辨識錯字，省掉大量打字。但它也可能把我沒說清楚的地方自己補完。小敏說「資料庫沒有」，我知道該去查。現在的助理如果把猜測接進程式碼，我得從結果裡反查它哪一步開始猜。</p>
+<p>書裡還有一套叫「漢語言」的中文程式語言。只要告訴電腦要做什麼，程式就能自動產生做法，甚至打錯字也不會整段失效。作者把這件事想成一套新的程式語法；我現在用的方式，是直接用日常中文跟 AI 說話。使用方式很接近，裡面的技術卻完全不同。</p>
+<p>所以我現在還是覺得《超級電腦》看得很遠。它看準了人會怎麼跟電腦說話，也看準了人會把多少事情交給它。只是我在 2025/10/29 那篇把「用起來像」寫得太滿，連它怎麼回答都當成預言應驗。</p>
+<p>重讀之後，我最在意的反而是那句很像舊式客服的回答：「資料庫中沒有此類問題的答案。」當模型缺少依據，我寧可看到這句話，也不想在一個流暢的答案裡猜它哪一步開始編。</p>
+</div>
+
+      <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
+      <div id="post-tags" class="tags"><span class="meta">TAGS</span><a href="/?tag=AI">AI</a><a href="/?tag=%E7%A7%91%E5%B9%BB">科幻</a><a href="/?tag=%E8%B6%85%E7%B4%9A%E9%9B%BB%E8%85%A6">超級電腦</a><a href="/?tag=%E5%B9%BB%E8%A6%BA">幻覺</a><a href="/?tag=%E8%AA%9E%E9%9F%B3%E8%BC%B8%E5%85%A5">語音輸入</a><a href="/?tag=%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88">程式設計</a></div>
+      <div id="share-links" class="share"></div>
+    </article>
+
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li style="--row-accent:#2f6b5b"><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li style="--row-accent:#0f766e"><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li><li style="--row-accent:#c2410c"><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li style="--row-accent:#e3a33a"><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li style="--row-accent:#0078d4"><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li style="--row-accent:#d9480f"><a href="/tech-development/first-hackathon-code-done-in-37-minutes/"><span class="side-row__meta">20SEP26 · <span>技術開發</span></span><span class="side-row__title">第一次駭客松：程式碼 37 分鐘寫完，出狀況的都在我要親手碰的那幾下</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" hidden></nav>
+      </div>
+    </aside>
+
+    <div class="article-foot">
+      <nav class="article-nav" aria-label="上一篇與下一篇">
+        <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+        <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+      </nav>
+
+      <section class="comments-section" id="comments" aria-labelledby="comments-label">
+        <h2 class="label" id="comments-label">COMMENTS <span>留言討論</span></h2>
+        <div id="giscus-container" class="giscus-container">
+          <div class="giscus-loading" id="giscus-loading">
+            <p>載入留言系統中...</p>
+          </div>
+          <div class="giscus-fallback" id="giscus-fallback" hidden>
+            <p>無法載入留言系統。您可以前往
+              <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                 target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot site-footer">
+    <div class="wrap">
+      <p>© <span class="foot__year" data-footer-year>2026</span> JASON CHIEN</p>
+      <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
