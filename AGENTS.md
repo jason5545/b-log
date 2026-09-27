@@ -76,3 +76,13 @@ Jason 2026/9/26 決定。文章頁頂部的封面（`#post-hero`）高度最多�
 - 原圖寬高由 `scripts/generate-redirects.js` 直接讀 webp／png 檔頭，寫進 figure 的 `style="--cover-w: …; --cover-h: …"`，img 也帶 `width`／`height`；`sizes` 依比例逐篇產生。
 - 版面規則在 `post.html` 的關鍵 CSS（`min(100%, 50svh × 寬高比)` 加 `aspect-ratio`）。`assets/styles.css` 的 `.post__cover` 不要再寫 `aspect-ratio`，會蓋掉逐篇比例。
 - 用 svh 不用 vh：手機網址列伸縮時 svh 不變，而且是網址列展開時的可見高度。
+
+## 首頁 LATEST 的版面與留白
+
+Jason 2026/9/27 決定。
+
+- 761px 以上，標題橫跨整塊（2056 寬一行），下面摘要在左、封面在右，欄寬 1.6 : 1。封面四角有 HUD 角標，平常灰色，滑過跟標題一起變青色。760px 以下封面在上、文字在下。
+- 標題與摘要用 `text-wrap: pretty`：排到最右邊才換行，最後一行不留單獨一個字。不要換回 `balance`，它把各行平均分，右邊會留白。文章頁標題也一樣，而且不限寬。
+- 摘要下面的留白用文章開頭填。[assets/lead-excerpt.js](assets/lead-excerpt.js) 把 Markdown 轉成純文字，`generate-redirects.js` 寫進靜態首頁，分類、標籤、搜尋換篇時由 `main.js` 讀原文補上。CSS 讓它剛好排到封面底部、最後兩行淡出，760px 以下不顯示。Crossing Field 從 `crossing-field-intro__lead` 導言開始，略過「翻譯報導／翻譯整理」出處。
+- 不要用拉長摘要來填這塊留白。9/27 實測：摘要要跟封面等高，1440 寬要 326 字、2056 寬 544 字、2560 寬 769 字（當時 207 篇中位數 100 字），寫長只會在某一種寬度剛好；手機上 544 字的摘要有 553px 高。摘要同時是 meta description、og／twitter 描述、`feed.json` 的 `content_text` 和 Facebook 發文內文，維持 160 字以內。
+- 也不要用放大摘要字級或縮小封面來填：2056 寬要填滿，摘要字級中位數得放到 41px，比標題的 39.6px 還大；縮封面就是當天沒選的縮圖方案。

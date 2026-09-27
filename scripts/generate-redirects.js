@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const marked = require('../assets/marked.min.js');
+const { markdownToLeadExcerpt } = require('../assets/lead-excerpt.js');
 
 const ROOT_DIR = path.join(__dirname, '..');
 const POSTS_PATH = path.join(ROOT_DIR, 'data/posts.json');
@@ -754,7 +755,10 @@ function buildHomepageFeaturedSection(post) {
           <div class="lead__text">
             <p class="meta" id="hero-meta"></p>
             <h3 class="lead__title" id="hero-title"></h3>
-            <p class="lead__sum" id="hero-summary"></p>
+            <div class="lead__body">
+              <p class="lead__sum" id="hero-summary"></p>
+              <p class="lead__excerpt" id="hero-excerpt" data-slug="" aria-hidden="true"></p>
+            </div>
           </div>
         </a>
       </section>`;
@@ -774,6 +778,11 @@ function buildHomepageFeaturedSection(post) {
   const audioIndicator = post.hasAudio ? buildAudioIndicatorMarkup(true) : '';
   const sectionClass = post.coverImage ? 'lead' : 'lead lead--text-only';
   const mediaBlock = post.coverImage ? `\n${buildHomepageHeroMedia(post)}` : '';
+  // 摘要下面接的文章開頭，排到封面底部為止（版面在 styles.css 的 .lead__excerpt）
+  const markdownPath = path.join(POSTS_DIR, `${post.slug}.md`);
+  const safeExcerpt = fs.existsSync(markdownPath)
+    ? escapeHtml(markdownToLeadExcerpt(fs.readFileSync(markdownPath, 'utf8')))
+    : '';
 
   return `      <section id="featured" class="${sectionClass}" aria-labelledby="lead-label" data-featured-slug="${safeSlug}" data-featured-cover="${safeCoverImage}">
         <h2 class="label" id="lead-label">LATEST <span>最新一篇</span></h2>
@@ -781,7 +790,10 @@ function buildHomepageFeaturedSection(post) {
           <div class="lead__text">
             <p class="meta" id="hero-meta">${safeMeta}</p>
             <h3 class="lead__title" id="hero-title">${safeTitle}${audioIndicator}</h3>
-            <p class="lead__sum" id="hero-summary">${safeSummary}</p>
+            <div class="lead__body">
+              <p class="lead__sum" id="hero-summary">${safeSummary}</p>
+              <p class="lead__excerpt" id="hero-excerpt" data-slug="${safeSlug}" aria-hidden="true">${safeExcerpt}</p>
+            </div>
           </div>${mediaBlock}
         </a>
       </section>`;

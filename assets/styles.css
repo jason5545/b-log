@@ -236,13 +236,42 @@
   --c: var(--cyan);
 }
 
+/* 摘要下面接的文章開頭：760px 以下不顯示，手機的捲動長度不變 */
+.lead__excerpt { display: none; }
+
 /* 要放在 .lead__text 的 display: grid 後面才蓋得過 */
 @media (min-width: 761px) {
   .lead__text { display: contents; }
   .lead__text > .meta,
   .lead__title { grid-column: 1 / -1; }
-  .lead__sum { grid-column: 1; }
   .lead__media { grid-column: 2; grid-row: 3; }
+  .lead__body {
+    grid-column: 1;
+    grid-row: 3;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+  }
+  /* 文章開頭補滿摘要下面的留白（Jason 9/27 決定，不去拉長摘要）。
+     contain: size 讓它不撐高這一列，列高由封面決定，它只佔摘要下面剩下的空間，
+     所以任何寬度都剛好排到封面底部為止，最後兩行淡出。
+     跟摘要的間距用上下一正一負的 margin，不佔高度：摘要比封面高、文章開頭放不下時，
+     這一列不會被間距多撐高；多出封面底部的那 0.9rem 用 clip-path 裁掉 */
+  .lead__excerpt {
+    display: block;
+    flex: 1 1 0;
+    min-height: 0;
+    contain: size;
+    overflow: hidden;
+    margin: 0.9rem 0 -0.9rem;
+    clip-path: inset(0 0 0.9rem 0);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--muted);
+    -webkit-mask-image: linear-gradient(#000 calc(100% - 0.9rem - 3.6em), transparent calc(100% - 0.9rem));
+    mask-image: linear-gradient(#000 calc(100% - 0.9rem - 3.6em), transparent calc(100% - 0.9rem));
+  }
+  .lead--text-only .lead__excerpt { display: none; }
 }
 
 /* BRIEFING */
