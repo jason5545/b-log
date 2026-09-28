@@ -1,17 +1,11 @@
 // Simple service worker for extended font caching
-const CACHE_NAME = 'b-log-fonts-v2';
-const FONT_CACHE_DAYS = 365;
+// v3: B612 / B612 Mono self-hosted under /assets/fonts/. Only woff2 files are
+// cached (their content never changes); fonts.css is left to the HTTP cache so
+// an edited stylesheet is never pinned by the worker. Nothing is precached on
+// install, so a first visit does not download fonts the page never uses.
+const CACHE_NAME = 'b-log-fonts-v3';
 
-const FONT_URLS = [
-  '/assets/fonts/inter-latin-400.woff2',
-  '/assets/fonts/inter-latin-700.woff2',
-  '/assets/css/fonts.css'
-];
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(FONT_URLS))
-  );
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
@@ -31,8 +25,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Only cache fonts and font CSS
-  if (url.pathname.startsWith('/assets/fonts/') || url.pathname.startsWith('/assets/css/fonts.css')) {
+  // Only cache same-origin font files
+  if (url.origin === self.location.origin && url.pathname.startsWith('/assets/fonts/') && url.pathname.endsWith('.woff2')) {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
         if (cachedResponse) {
