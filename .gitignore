@@ -39,3 +39,6 @@ build/
 
 # 其他
 gist_content.txt
+
+# 本機 MCP 設定（含 token）
+.perch/
