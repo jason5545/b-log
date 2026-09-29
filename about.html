@@ -109,6 +109,73 @@
       inset: 0;
     }
 
+    /* 發證單位小標題：ECAM 系統頁標題的寫法，白字加底線 */
+    .content .credential-group__issuer {
+      margin: 1.4rem 0 0;
+      font: 700 0.78rem/1.4 var(--font-mono);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.35em;
+      color: var(--ink);
+    }
+
+    .content .credential-group + .credential-group {
+      margin-top: 2rem;
+    }
+
+    /* 每組只露出最新 2 張，其餘收進溢出箭頭。改張數要連下面 script 的 VISIBLE 一起改 */
+    .content .credential-group[data-fold]:not([data-open]) .credential:nth-child(n+3) {
+      display: none;
+    }
+
+    /* ECAM 溢出箭頭：E/WD 訊息超過畫面時，底下那個綠色向下箭頭。箭頭對齊徽章那一欄 */
+    .content .credential-overflow {
+      display: grid;
+      grid-template-columns: 2.25rem minmax(0, 1fr);
+      align-items: center;
+      gap: 0.9rem;
+      width: 100%;
+      min-height: 44px;
+      margin: 0;
+      padding: 0 0.5rem;
+      border: 0;
+      border-bottom: 1px solid var(--rule);
+      background: none;
+      color: var(--green);
+      font: 700 0.76rem/1 var(--font-mono);
+      letter-spacing: 0.1em;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .content .credential-overflow[hidden] {
+      display: none;
+    }
+
+    .content .credential-overflow:hover,
+    .content .credential-overflow:focus-visible {
+      background: var(--row-hover);
+    }
+
+    .content .credential-overflow svg {
+      justify-self: center;
+      width: 1rem;
+      height: 1.25rem;
+      transition: transform 0.2s ease;
+    }
+
+    .content .credential-overflow[aria-expanded="true"] svg {
+      transform: rotate(180deg);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .content .credential-overflow svg {
+        transition: none;
+      }
+    }
+
     /* 寬螢幕：跟文章頁同一套，右欄最多 26rem 放 CONTENTS（generate-redirects.js 產生），其餘給閱讀欄 */
     .about-shell > .aside-toc { display: none; }
     @media (min-width: 1100px) {
@@ -145,6 +212,11 @@
       }
     }
   </style>
+  <!-- JS 沒跑時學習紀錄全部攤開，不留一個按不動的箭頭 -->
+  <noscript><style>
+    .content .credential-group[data-fold]:not([data-open]) .credential:nth-child(n+3) { display: grid; }
+    .content .credential-overflow { display: none; }
+  </style></noscript>
 
   <!-- 完整樣式表 -->
   <link rel="stylesheet" href="assets/styles.min.css">
@@ -233,109 +305,148 @@
       <h2 id="section-4">學習紀錄</h2>
       <p>不是履歷裝飾，只是留個可以驗證的紀錄。</p>
 
-      <!-- 新增徽章：複製一個 <li class="credential">，改標題、發證單位、日期與驗證連結即可 -->
-      <ul class="credentials">
-        <li class="credential">
-          <span class="credential__mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="9" r="6"></circle>
-              <path d="m9.5 9 1.8 1.8L15 7"></path>
-              <path d="M8.2 14.4 7 22l5-2.5L17 22l-1.2-7.6"></path>
-            </svg>
-          </span>
-          <span class="credential__body">
-            <span class="credential__title">AI Fluency for builders</span>
-            <span class="credential__meta">Claude Academy<span aria-hidden="true"> · </span><time datetime="2026-09-29">2026 年 9 月</time></span>
-          </span>
-          <a class="credential__verify"
-             href="https://academy.claude.com/verify/f3bbf328ef4816f228e502eef98660cf"
-             target="_blank"
-             rel="noopener noreferrer"
-             aria-label="驗證「AI Fluency for builders」完課徽章（Claude Academy，另開新視窗）">
-            驗證
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14 4h6v6"></path>
-              <path d="M20 4 11 13"></path>
-              <path d="M19 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 3 19V6a1.5 1.5 0 0 1 1.5-1.5H9"></path>
-            </svg>
-          </a>
-        </li>
-        <li class="credential">
-          <span class="credential__mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="9" r="6"></circle>
-              <path d="m9.5 9 1.8 1.8L15 7"></path>
-              <path d="M8.2 14.4 7 22l5-2.5L17 22l-1.2-7.6"></path>
-            </svg>
-          </span>
-          <span class="credential__body">
-            <span class="credential__title">Building effective human-agent teams (β)</span>
-            <span class="credential__meta">Claude Academy<span aria-hidden="true"> · </span><time datetime="2026-09-29">2026 年 9 月</time></span>
-          </span>
-          <a class="credential__verify"
-             href="https://academy.claude.com/verify/9a7541b22c1178c5a67053264ac63241"
-             target="_blank"
-             rel="noopener noreferrer"
-             aria-label="驗證「Building effective human-agent teams (beta)」完課徽章（Claude Academy，另開新視窗）">
-            驗證
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14 4h6v6"></path>
-              <path d="M20 4 11 13"></path>
-              <path d="M19 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 3 19V6a1.5 1.5 0 0 1 1.5-1.5H9"></path>
-            </svg>
-          </a>
-        </li>
-        <li class="credential">
-          <span class="credential__mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="9" r="6"></circle>
-              <path d="m9.5 9 1.8 1.8L15 7"></path>
-              <path d="M8.2 14.4 7 22l5-2.5L17 22l-1.2-7.6"></path>
-            </svg>
-          </span>
-          <span class="credential__body">
-            <span class="credential__title">AI capabilities and limitations</span>
-            <span class="credential__meta">Claude Academy<span aria-hidden="true"> · </span><time datetime="2026-09-29">2026 年 9 月</time></span>
-          </span>
-          <a class="credential__verify"
-             href="https://academy.claude.com/verify/5dcc2eca3bb109376ae1efbd468a334e"
-             target="_blank"
-             rel="noopener noreferrer"
-             aria-label="驗證「AI capabilities and limitations」完課徽章（Claude Academy，另開新視窗）">
-            驗證
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14 4h6v6"></path>
-              <path d="M20 4 11 13"></path>
-              <path d="M19 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 3 19V6a1.5 1.5 0 0 1 1.5-1.5H9"></path>
-            </svg>
-          </a>
-        </li>
-        <li class="credential">
-          <span class="credential__mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="9" r="6"></circle>
-              <path d="m9.5 9 1.8 1.8L15 7"></path>
-              <path d="M8.2 14.4 7 22l5-2.5L17 22l-1.2-7.6"></path>
-            </svg>
-          </span>
-          <span class="credential__body">
-            <span class="credential__title">AI Fluency: Framework &amp; Foundations</span>
-            <span class="credential__meta">Claude Academy<span aria-hidden="true"> · </span><time datetime="2026-09-16">2026 年 9 月</time></span>
-          </span>
-          <a class="credential__verify"
-             href="https://academy.claude.com/verify/0c3f3c7c2da298ae2a81f62083c7ec5d"
-             target="_blank"
-             rel="noopener noreferrer"
-             aria-label="驗證「AI Fluency: Framework &amp; Foundations」完課徽章（Claude Academy，另開新視窗）">
-            驗證
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14 4h6v6"></path>
-              <path d="M20 4 11 13"></path>
-              <path d="M19 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 3 19V6a1.5 1.5 0 0 1 1.5-1.5H9"></path>
-            </svg>
-          </a>
-        </li>
-      </ul>
+      <!-- 新增徽章：在對應發證單位的 <ul> 最上面複製一個 <li class="credential">，改標題、日期與驗證連結即可。
+           每組只露出最新 2 張，其餘自動收進綠色溢出箭頭，數字由下面的 script 算，不用手改。
+           新的發證單位：複製整個 <div class="credential-group">，改 h3 的文字和 id、ul 的 id 與 aria-labelledby、button 的 aria-controls。 -->
+      <div class="credential-group" data-fold>
+        <h3 class="credential-group__issuer" id="issuer-claude-academy">Claude Academy</h3>
+        <ul class="credentials" id="credentials-claude-academy" aria-labelledby="issuer-claude-academy">
+          <li class="credential">
+            <span class="credential__mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="9" r="6"></circle>
+                <path d="m9.5 9 1.8 1.8L15 7"></path>
+                <path d="M8.2 14.4 7 22l5-2.5L17 22l-1.2-7.6"></path>
+              </svg>
+            </span>
+            <span class="credential__body">
+              <span class="credential__title">AI Fluency for builders</span>
+              <span class="credential__meta"><time datetime="2026-09-29">2026 年 9 月</time></span>
+            </span>
+            <a class="credential__verify"
+               href="https://academy.claude.com/verify/f3bbf328ef4816f228e502eef98660cf"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="驗證「AI Fluency for builders」完課徽章（Claude Academy，另開新視窗）">
+              驗證
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 4h6v6"></path>
+                <path d="M20 4 11 13"></path>
+                <path d="M19 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 3 19V6a1.5 1.5 0 0 1 1.5-1.5H9"></path>
+              </svg>
+            </a>
+          </li>
+          <li class="credential">
+            <span class="credential__mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="9" r="6"></circle>
+                <path d="m9.5 9 1.8 1.8L15 7"></path>
+                <path d="M8.2 14.4 7 22l5-2.5L17 22l-1.2-7.6"></path>
+              </svg>
+            </span>
+            <span class="credential__body">
+              <span class="credential__title">Building effective human-agent teams (β)</span>
+              <span class="credential__meta"><time datetime="2026-09-29">2026 年 9 月</time></span>
+            </span>
+            <a class="credential__verify"
+               href="https://academy.claude.com/verify/9a7541b22c1178c5a67053264ac63241"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="驗證「Building effective human-agent teams (beta)」完課徽章（Claude Academy，另開新視窗）">
+              驗證
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 4h6v6"></path>
+                <path d="M20 4 11 13"></path>
+                <path d="M19 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 3 19V6a1.5 1.5 0 0 1 1.5-1.5H9"></path>
+              </svg>
+            </a>
+          </li>
+          <li class="credential">
+            <span class="credential__mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="9" r="6"></circle>
+                <path d="m9.5 9 1.8 1.8L15 7"></path>
+                <path d="M8.2 14.4 7 22l5-2.5L17 22l-1.2-7.6"></path>
+              </svg>
+            </span>
+            <span class="credential__body">
+              <span class="credential__title">AI capabilities and limitations</span>
+              <span class="credential__meta"><time datetime="2026-09-29">2026 年 9 月</time></span>
+            </span>
+            <a class="credential__verify"
+               href="https://academy.claude.com/verify/5dcc2eca3bb109376ae1efbd468a334e"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="驗證「AI capabilities and limitations」完課徽章（Claude Academy，另開新視窗）">
+              驗證
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 4h6v6"></path>
+                <path d="M20 4 11 13"></path>
+                <path d="M19 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 3 19V6a1.5 1.5 0 0 1 1.5-1.5H9"></path>
+              </svg>
+            </a>
+          </li>
+          <li class="credential">
+            <span class="credential__mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="9" r="6"></circle>
+                <path d="m9.5 9 1.8 1.8L15 7"></path>
+                <path d="M8.2 14.4 7 22l5-2.5L17 22l-1.2-7.6"></path>
+              </svg>
+            </span>
+            <span class="credential__body">
+              <span class="credential__title">AI Fluency: Framework &amp; Foundations</span>
+              <span class="credential__meta"><time datetime="2026-09-16">2026 年 9 月</time></span>
+            </span>
+            <a class="credential__verify"
+               href="https://academy.claude.com/verify/0c3f3c7c2da298ae2a81f62083c7ec5d"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="驗證「AI Fluency: Framework &amp; Foundations」完課徽章（Claude Academy，另開新視窗）">
+              驗證
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 4h6v6"></path>
+                <path d="M20 4 11 13"></path>
+                <path d="M19 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 3 19V6a1.5 1.5 0 0 1 1.5-1.5H9"></path>
+              </svg>
+            </a>
+          </li>
+        </ul>
+        <button type="button" class="credential-overflow" aria-expanded="false" aria-controls="credentials-claude-academy">
+          <svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 2v15"></path>
+            <path d="m3 12 5 5 5-5"></path>
+          </svg>
+          <span class="credential-overflow__label"></span>
+        </button>
+      </div>
+      <script>
+        // 學習紀錄的溢出箭頭：每組超過 VISIBLE 張才出現，按了展開，再按收合
+        (() => {
+          const VISIBLE = 2; // 跟 CSS 的 nth-child(n+3) 一起改
+          document.querySelectorAll('.credential-group[data-fold]').forEach((group) => {
+            const button = group.querySelector('.credential-overflow');
+            const label = group.querySelector('.credential-overflow__label');
+            const issuer = group.querySelector('.credential-group__issuer').textContent.trim();
+            const extra = group.querySelectorAll('.credential').length - VISIBLE;
+            if (extra < 1) {
+              button.hidden = true;
+              return;
+            }
+            const render = () => {
+              const open = group.hasAttribute('data-open');
+              button.setAttribute('aria-expanded', String(open));
+              button.setAttribute('aria-label', open ? `收合 ${issuer} 徽章` : `+${extra}，展開其餘 ${extra} 張 ${issuer} 徽章`);
+              label.textContent = open ? '收合' : `+${extra}`;
+            };
+            button.addEventListener('click', () => {
+              group.toggleAttribute('data-open');
+              render();
+            });
+            render();
+          });
+        })();
+      </script>
 
       <h2 id="section-5">為什麼寫</h2>
       <p>現實中偽裝的夠多了。這裡是我可以不裝的地方。</p>
