@@ -101,3 +101,41 @@ Hugging Face 要分析超過 17,000 筆 agent actions。他們先使用商業 fr
 我付錢不是為了買一個 benchmark 上的 frontier model。我付的是任務能不能做完。
 
 如果那份能力前面一直擋著一個我看不到的開關，它再強，也不是我真正拿得到的能力。
+
+## 9/29 更新：狀態終於顯示了，工作還是被擋
+
+寫完這篇兩個多月後，Codex 設定的最上面多了一個區塊。
+
+![Codex 設定 → 一般，最上面是「Daybreak 存取權限」，下面一張 Daybreak Blue 的卡片](/content/img/2026/daybreak-access-settings.webp)
+
+卡片上寫的是「為經核准的安全性工作提供擴充的網路能力」。
+
+我 7/20 要的第一件事就是這個。OpenAI 的疑難排解文件現在也自己指向這一頁：Codex 的使用者可以在 Settings → General 的「Daybreak Access」確認自己有沒有被 workspace 開通。
+
+文章裡那個網址還在，標題已經換成 OpenAI Daybreak - Common Issues and Troubleshooting。Trusted Access 現在叫 Daybreak Access，文件的 Overview 開頭就寫：Daybreak Access is OpenAI's Trusted Access for Cyber program。裡面分成 Blue 和 Red 兩個層級，Blue 是主線模型降低拒絕，Red 是專門的 cyber 模型，要另外申請。
+
+設定頁有了。那個工作我後來再試，還是被擋。
+
+Blue 不等於每次都通過。文件寫，用 ChatGPT 登入 Codex 的話，還要在 model picker 把 Daybreak 的 toggle 打開，GPT-6 Sol 和 GPT-6 Luna 才會降低拒絕；Astra 在 Blue 之下維持標準防護，要讓 Astra 降低拒絕得申請 Red。
+
+App 那張卡把這件事講成「擴充的網路能力」，文件講的是「降低拒絕」。同一個資格，兩邊說的不是同一件事。
+
+個人用戶的條件寫得很硬：Advanced Account Security、至少一支相容的 FIDO 實體安全金鑰，而且硬體金鑰必須是帳號上唯一註冊的登入方式。既有個人用戶要在 2026 年 10 月 1 日前符合，否則失去存取。
+
+金鑰我 9/4 在 PChome 買了 GoTrust Idem Key Type C，1,480 元，9/5 到貨註冊。ChatGPT 帳號裡的名字是「GoTrust Idem Key」，新增日期 2026 年 9 月 5 日。
+
+插哪裡也花了一點時間。金鑰直接插 MacBook Pro 左側的 USB-C 孔，不用延長線。右側的孔我碰不到，本來想用公對母延長線拉到掌托，後來沒做。
+
+比較順的是，9/5 那天 OpenAI 的真人專員講清楚：Daybreak 只要求 configure 一把金鑰，不要求每次登入都使用。所以我日常還是拿密碼管理員裡的 passkey 登入，兩種方式在帳號上並存。
+
+文件今天寫的是「硬體金鑰必須是帳號上唯一註冊的登入方式」。專員那天講的跟這一句不太一樣。
+
+同一段還要求 eligible paid plan，文件沒有列出哪些方案算。Plus 算在裡面，我降級之後資格還在。
+
+7/20 我要的是兩件事：資格有沒有生效，這一次為什麼還是被擋。
+
+第一件現在有答案了。第二件還沒有。
+
+文件倒是先往前走了一步。它說，已經配發 Daybreak 的使用者如果還是收到 cyber_policy，聯絡 Support。7/20 的時候我連自己是不是在名單裡都不知道，Support 只能叫我登出、登入、重新開機。
+
+現在名單這件事不用問人了。剩下的是：工作照樣被擋，App 還是不會講這一次是哪裡超出範圍。
