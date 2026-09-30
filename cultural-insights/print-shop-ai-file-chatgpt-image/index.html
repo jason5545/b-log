@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>印刷廠要 AI 檔，客人交來的是 AI 生的圖 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="印刷廠講的 AI 檔是 Illustrator 的 .ai，客人交來的是 ChatGPT 生的名片圖。兩個英文字母念出來一樣，交出來的東西八竿子打不著。最後中文版真正用上的，是我們自己做的英文版 .ai。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/cultural-insights/print-shop-ai-file-chatgpt-image/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/cultural-insights/print-shop-ai-file-chatgpt-image/" id="og-url">
+  <meta property="og:title" content="印刷廠要 AI 檔，客人交來的是 AI 生的圖" id="og-title">
+  <meta property="og:description" content="印刷廠講的 AI 檔是 Illustrator 的 .ai，客人交來的是 ChatGPT 生的名片圖。兩個英文字母念出來一樣，交出來的東西八竿子打不著。最後中文版真正用上的，是我們自己做的英文版 .ai。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/print-shop-ai-file-chatgpt-image-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:published_time" content="2026-09-30T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-09-30T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="文化觀察" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="AI">
+  <meta property="article:tag" content="ChatGPT">
+  <meta property="article:tag" content="Illustrator">
+  <meta property="article:tag" content="印刷">
+  <meta property="article:tag" content="名片">
+  <meta property="article:tag" content="向量檔">
+  <meta property="article:tag" content="文化觀察">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/cultural-insights/print-shop-ai-file-chatgpt-image/" id="twitter-url">
+  <meta property="twitter:title" content="印刷廠要 AI 檔，客人交來的是 AI 生的圖" id="twitter-title">
+  <meta property="twitter:description" content="印刷廠講的 AI 檔是 Illustrator 的 .ai，客人交來的是 ChatGPT 生的名片圖。兩個英文字母念出來一樣，交出來的東西八竿子打不著。最後中文版真正用上的，是我們自己做的英文版 .ai。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/print-shop-ai-file-chatgpt-image-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="AI, ChatGPT, Illustrator, 印刷, 名片, 向量檔, 文化觀察" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f4efe7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1114" media="(prefers-color-scheme: dark)">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- B612 / B612 Mono — heading and UI font（自架在 /assets/fonts/，不走 Google Fonts） -->
+  <link rel="stylesheet" href="/assets/css/fonts.css?v=3">
+  <link rel="stylesheet" href="/assets/css/critical-shared.css">
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    /* 單欄：文章、RELATED／LATEST、上下篇與留言依序往下 */
+    .post,
+    .article-aside,
+    .article-foot {
+      max-width: 46rem;
+      margin-inline: auto;
+    }
+    .post { padding-top: 1rem; }
+    .article-foot { padding-bottom: 4rem; }
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
+    @media (min-width: 1100px) {
+      .article-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
+        grid-template-rows: auto 1fr;
+        column-gap: 3.5rem;
+        align-items: start;
+      }
+      .post,
+      .article-foot {
+        grid-column: 1;
+        max-width: none;
+        margin-inline: 0;
+      }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
+      .article-aside {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        max-width: none;
+        margin-inline: 0;
+        padding-top: 1rem;
+      }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
+    }
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
+        position: sticky;
+        top: 0.5rem;
+      }
+    }
+    .post__accent {
+      height: 4px;
+      margin: 0 0 1rem;
+      background: var(--post-accent, transparent);
+    }
+    .post__title {
+      margin: 0.8rem 0 1.75rem;
+      font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
+      color: var(--ink);
+    }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
+    .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
+      margin: 0 0 2.5rem;
+      background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
+    }
+    .post__body {
+      max-width: 35em;
+      font-size: 1.125rem;
+      line-height: 1.9;
+    }
+    /* 內容區域預留空間（未預先渲染時） */
+    #post-content:empty {
+      min-height: 400px;
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 33px, var(--rule) 33px, var(--rule) 34px);
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/print-shop-ai-file-chatgpt-image-cover.webp" imagesrcset="/content/img/2026/print-shop-ai-file-chatgpt-image-cover-480w.webp 480w, /content/img/2026/print-shop-ai-file-chatgpt-image-cover-828w.webp 828w, /content/img/2026/print-shop-ai-file-chatgpt-image-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.75), (max-width: 800px) min(92vw, 50vh * 1.75), (max-width: 1099px) min(736px, 50vh * 1.75), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.75), min(calc(90.78vw - 434px), 50vh * 1.75)" fetchpriority="high">
+<!-- 完整樣式表 -->
+  <link rel="stylesheet" href="../../assets/styles.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"印刷廠要 AI 檔，客人交來的是 AI 生的圖","description":"印刷廠講的 AI 檔是 Illustrator 的 .ai，客人交來的是 ChatGPT 生的名片圖。兩個英文字母念出來一樣，交出來的東西八竿子打不著。最後中文版真正用上的，是我們自己做的英文版 .ai。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-09-30T00:00:00Z","dateModified":"2026-09-30T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/cultural-insights/print-shop-ai-file-chatgpt-image/"},"url":"https://b-log.to/cultural-insights/print-shop-ai-file-chatgpt-image/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/print-shop-ai-file-chatgpt-image-cover.webp"],"keywords":"AI, ChatGPT, Illustrator, 印刷, 名片, 向量檔, 文化觀察","articleSection":"文化觀察"}</script>
+</head>
+<body class="post-page">
+  <a class="skip" href="#content">跳到內容</a>
+  <header class="site site-header">
+    <div class="wrap">
+      <div class="site__id">
+        <p class="site__title"><a class="wordmark" href="../../" aria-label="(b)-log 首頁"><span class="br" aria-hidden="true">(</span>b<span class="br" aria-hidden="true">)</span>-log</a></p>
+        <p class="tagline">世界的預設值不包含我，所以我自己定義</p>
+      </div>
+      <nav class="site__nav" aria-label="主選單">
+        <ul>
+          <li><a href="../../">HOME</a></li>
+          <li><a href="../../about.html">ABOUT</a></li>
+          <li><a href="../../gadgets.html">GADGETS</a></li>
+          <li><a href="../../feed.json">FEED</a></li>
+          <li><a href="#" id="random-post-link" onclick="goToRandomPost(event)">RANDOM</a></li>
+        </ul>
+      </nav>
+      <div class="site__tools">
+        <div class="search-toggle-container">
+          <button class="iconbtn search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" aria-controls="site-search" type="button">
+            <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </button>
+          <div class="search-box" id="site-search" hidden>
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5"></path>
+              </svg>
+              <input type="search" id="search-input" class="search-input" placeholder="搜尋文章" aria-label="搜尋文章" autocomplete="off">
+              <button type="button" id="search-clear" class="search-clear" aria-label="清除搜尋" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <button class="themebtn theme-toggle" type="button" onclick="ThemeManager.toggle()" aria-label="切換深淺色">
+          <span class="theme-toggle__icon"><i class="theme-dot" aria-hidden="true"></i></span>
+          <span class="theme-toggle__text">AUTO</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="content" class="wrap article-shell">
+    <article class="post" id="post-article" data-category-theme="cultural-insights">
+      <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=%E6%96%87%E5%8C%96%E8%A7%80%E5%AF%9F">文化觀察</a></span></nav>
+      <div id="post-accent" class="post__accent" aria-hidden="true" style="--post-accent:#005998"></div>
+      <p id="post-meta" class="meta">30SEP26 · 文化觀察 · 3 MIN · JASON CHIEN</p>
+      <p id="post-catline" class="catline" hidden></p>
+      <h1 id="post-title" class="post__title">印刷廠要 AI 檔，客人交來的是 AI 生的圖</h1>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1344; --cover-h: 768"><img class="post__cover-img" src="/content/img/2026/print-shop-ai-file-chatgpt-image-cover.webp" srcset="/content/img/2026/print-shop-ai-file-chatgpt-image-cover-480w.webp 480w, /content/img/2026/print-shop-ai-file-chatgpt-image-cover-828w.webp 828w, /content/img/2026/print-shop-ai-file-chatgpt-image-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.75), (max-width: 800px) min(92vw, 50vh * 1.75), (max-width: 1099px) min(736px, 50vh * 1.75), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.75), min(calc(90.78vw - 434px), 50vh * 1.75)" width="1344" height="768" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><p>家裡爸爸開印刷公司。</p>
+<p>這次有一張名片，英文版是我們做的。客人拿回去，自己用 ChatGPT 轉成中文，再把那張圖交回來。</p>
+<p>家人要的是 AI 檔。</p>
+<p>印刷廠講的 AI 檔，是 Adobe Illustrator 的原生檔，副檔名 .ai。裡面是向量，放大不會糊，每個物件都能單獨改。</p>
+<p>客人交來的，也可以叫「AI 的檔」。只是這個 AI 是 ChatGPT。</p>
+<p>兩個英文字母，念出來一樣，交出來的東西八竿子打不著。</p>
+<p>現在很多人都這樣做，印刷廠一個頭兩個大。</p>
+<p>那張圖是一張 1581×995 的 PNG。</p>
+<p>名片是 9×5.4 公分，長寬比 1.667。這張圖是 1.589，整張拿去印，比例就不對。圖裡有一圈紅框，框內的比例是 1.677，紅框才是名片的裁切線。這是我丟給 Claude 之後，它量出來的。</p>
+<p>上面的字全是像素。要改一個字，只能整張重排。</p>
+<p>家人最原始的要求是 Illustrator 檔。我不確定 Claude 做不做得到，所以先請它轉成 SVG。</p>
+<p>家裡開印刷公司，我自己其實不熟 Illustrator。我知道 PSD 有圖層的概念，Illustrator 是印刷的專業，有沒有圖層，我也沒辦法知道。</p>
+<p>問了才知道，Illustrator 可以直接開 SVG 和 PDF，也有圖層。真正的 .ai 要有 Illustrator 才存得出來，交 SVG 過去，家人自己開、自己另存就好。</p>
+<p>後來我跟 Claude 提到，英文版是我們做的。它說那份才是真正的依據。</p>
+<p>那份 .ai 丟給它，讀得出來。名片尺寸、標誌的向量、CMYK 色值，全部都在裡面。</p>
+<p>最後的中文版，標誌、地址、電話、email 都是從英文版原樣搬過來的。ChatGPT 那張圖，真正用上的只有中文字。</p>
+<p>爸爸公司比較特別的一點是，校對基本上他們會負責。但太 out of scope 的，就請客人自己處理。</p>
+<p>這張名片剛好兩種都有。</p>
+<p>英文版裡有一所大學的名字，少了一個字母。這種拼字錯誤查得到、改得了，是校對該抓的。</p>
+<p>中文名字用哪幾個字、委員會的官方中文名稱是什麼，只有客人自己知道。中文名字甚至有可能是 ChatGPT 從英文拼音猜的。AI 生的圖看起來很完整，錯的地方反而不好找，這件事我之前被<a href="https://b-log.to/ai-analysis/ai-generated-image-lesson/">一架引擎掛反的飛機</a>教過一次。</p>
+<p>翻譯名稱的部分，我們照 ChatGPT 的版本排，丟給客人跟秘書，請他們自己去處理。</p>
+</div>
+
+      <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
+      <div id="post-tags" class="tags"><span class="meta">TAGS</span><a href="/?tag=AI">AI</a><a href="/?tag=ChatGPT">ChatGPT</a><a href="/?tag=Illustrator">Illustrator</a><a href="/?tag=%E5%8D%B0%E5%88%B7">印刷</a><a href="/?tag=%E5%90%8D%E7%89%87">名片</a><a href="/?tag=%E5%90%91%E9%87%8F%E6%AA%94">向量檔</a><a href="/?tag=%E6%96%87%E5%8C%96%E8%A7%80%E5%AF%9F">文化觀察</a></div>
+      <div id="share-links" class="share"></div>
+    </article>
+
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/ai-analysis/super-computer-ai-unknown-answer/"><span class="side-row__meta">27SEP26 · <span>AI 分析</span></span><span class="side-row__title">我說《超級電腦》預言了 AI，重讀後發現自己漏看了一句話</span></a></li><li><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li><a href="/ai-analysis/opus-5-5-simplified-chinese-in-thinking-summary/"><span class="side-row__meta">23SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5.5 冒出的整句簡體，都在畫面中間的摘要裡</span></a></li><li><a href="/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/"><span class="side-row__meta">21SEP26 · <span>AI 分析</span></span><span class="side-row__title">Opus 5 寫的規格，被 DeepSeek V4.1 Flash 抓到矛盾</span></a></li><li><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" hidden></nav>
+      </div>
+    </aside>
+
+    <div class="article-foot">
+      <nav class="article-nav" aria-label="上一篇與下一篇">
+        <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+        <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+      </nav>
+
+      <section class="comments-section" id="comments" aria-labelledby="comments-label">
+        <h2 class="label" id="comments-label">COMMENTS <span>留言討論</span></h2>
+        <div id="giscus-container" class="giscus-container">
+          <div class="giscus-loading" id="giscus-loading">
+            <p>載入留言系統中...</p>
+          </div>
+          <div class="giscus-fallback" id="giscus-fallback" hidden>
+            <p>無法載入留言系統。您可以前往
+              <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                 target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot site-footer">
+    <div class="wrap">
+      <p>© <span class="foot__year" data-footer-year>2026</span> JASON CHIEN</p>
+      <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
