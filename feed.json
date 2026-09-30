@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "print-shop-ai-file-chatgpt-image",
+      "url": "https://b-log.to/cultural-insights/print-shop-ai-file-chatgpt-image/",
+      "image": "https://b-log.to/content/img/2026/print-shop-ai-file-chatgpt-image-cover.webp",
+      "title": "印刷廠要 AI 檔，客人交來的是 AI 生的圖",
+      "content_text": "印刷廠講的 AI 檔是 Illustrator 的 .ai，客人交來的是 ChatGPT 生的名片圖。兩個英文字母念出來一樣，交出來的東西八竿子打不著。最後中文版真正用上的，是我們自己做的英文版 .ai。",
+      "date_published": "2026-09-30T00:00:00.000Z",
+      "date_modified": "2026-09-30T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "ChatGPT",
+        "Illustrator",
+        "印刷",
+        "名片",
+        "向量檔",
+        "文化觀察"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "super-computer-ai-unknown-answer",
       "url": "https://b-log.to/ai-analysis/super-computer-ai-unknown-answer/",
       "image": "https://b-log.to/content/img/2026/super-computer-ai-unknown-answer-cover.webp",
