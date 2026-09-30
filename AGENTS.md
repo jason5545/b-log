@@ -32,7 +32,8 @@ Jason 2026/9/26 指定的硬規則。外觀改版方向是 Airbus ECAM 的色彩
 - `npm run validate`（[scripts/validate-content.js](scripts/validate-content.js)）會擋兩件事，判準都是色相 285–350°、HSL 飽和度 > 35%：
   - (a) `data/posts.json` 的 `accentColor` 落在這個範圍的，只准出現在她的文章。
   - (b) `assets/styles.css`、`assets/css/*.css`，以及 `index.html`、`post.html`、`about.html`、`gadgets.html` 的 inline style（`<style>` 與 `style=""`），這個範圍的色碼只准出現在 `--magenta:` 宣告。
-- 她的文章＝シルシ、Crossing Field 兩個分類，加上白名單兩篇：`songshan-airport-jpop-parallel-world`、`birthday-avatar-ai-barrier`（分類是文化觀察，Jason 9/26 確認算她的）。這些文章的 accentColor 在列表左緣色條與文章頁標題色條一律顯示 `var(--magenta)`，不用存的色碼。
+- 她的文章＝シルシ、Crossing Field 兩個分類，加上白名單兩篇：`songshan-airport-jpop-parallel-world`、`birthday-avatar-ai-barrier`（分類是文化觀察，Jason 9/26 確認算她的）。這些文章的 accentColor 在 LOG、BRIEFING 的左緣色籤與文章頁標題色條一律顯示 `var(--magenta)`，不用存的色碼。
+- accentColor 的份量（Jason 9/30 定）：文章頁標題上方 4px 整條；LOG、BRIEFING 只在列左緣畫 3px 短色籤，高度跟第一行一樣（LOG 是日期、BRIEFING 是分類行），不蓋滿整列，連續的列才不會接成彩色柵欄；文章頁右欄的 RELATED、LATEST 不畫，右欄的左緣色條只留給 CONTENTS 的目前章節。
 - 白名單在 `assets/main.js`、`scripts/generate-redirects.js`、`scripts/validate-content.js` 三處的 `HER_POST_SLUGS`，validate 會比對三處是否一致；要加減文章，三處一起改。
 - 她的文章在文章頁麵包屑的分類（シルシ、Crossing Field）顯示洋紅，靜態頁與 CSR 一致。
 - 文章頁右欄的 CONTENTS（本文目錄）：Crossing Field 文章內文有 `crossing-field-toc` 的，右欄目錄照它的配色，編號洋紅、連結墨色、目前章節的左緣洋紅；其他文章編號灰色、連結青色、目前章節左緣青色。

@@ -1366,10 +1366,9 @@ function buildLogRow(post) {
   return li;
 }
 
-// RELATED／LATEST 側欄列：第一行「日期 · 分類」，第二行標題
+// RELATED／LATEST 側欄列：第一行「日期 · 分類」，第二行標題（不畫 accentColor 色籤）
 function buildSideRow(post) {
   const li = document.createElement('li');
-  applyRowAccent(li, post);
 
   const link = document.createElement('a');
   link.href = slugToPath(post.slug, post.category);
@@ -1396,7 +1395,7 @@ function buildSideRow(post) {
   return li;
 }
 
-// 列左緣的 accentColor 色條：她的文章一律洋紅，其他用存的色碼，沒有就不畫
+// LOG、BRIEFING 左緣的 accentColor 色籤：她的文章一律洋紅，其他用存的色碼，沒有就不畫
 function applyRowAccent(element, post) {
   const accent = resolveAccent(post);
   if (accent) element.style.setProperty('--row-accent', accent);

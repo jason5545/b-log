@@ -291,15 +291,13 @@ function resolveAccent(post) {
 }
 
 // RELATED／LATEST 側欄列（跟 main.js 的 buildSideRow 同一個結構）。
-// 靜態輸出，側欄在第一屏時不會因為 JS 補內容而把 LATEST 往下推
+// 靜態輸出，側欄在第一屏時不會因為 JS 補內容而把 LATEST 往下推。不畫 accentColor 色籤
 function buildSideRowMarkup(post) {
-  const accent = resolveAccent(post);
-  const styleAttr = accent ? ` style="--row-accent:${escapeHtml(accent)}"` : '';
   const categoryMarkup = post.category
     ? ` · <span${isHerCategory(post.category) ? ' class="her-cat"' : ''}>${escapeHtml(post.category)}</span>`
     : '';
   const audioIndicator = post.hasAudio ? buildAudioIndicatorMarkup() : '';
-  return `<li${styleAttr}><a href="${escapeHtml(slugToPath(post.slug, post.category))}"><span class="side-row__meta">${escapeHtml(formatEcamDate(post.publishedAt))}${categoryMarkup}</span><span class="side-row__title">${escapeHtml(post.title || post.slug)}${audioIndicator}</span></a></li>`;
+  return `<li><a href="${escapeHtml(slugToPath(post.slug, post.category))}"><span class="side-row__meta">${escapeHtml(formatEcamDate(post.publishedAt))}${categoryMarkup}</span><span class="side-row__title">${escapeHtml(post.title || post.slug)}${audioIndicator}</span></a></li>`;
 }
 
 // 選文規則跟 main.js 的 renderRelatedPosts 一樣：同分類或有共同標籤，新到舊取 3 篇
