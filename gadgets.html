@@ -327,8 +327,11 @@
 
     .session { scroll-margin-top: 96px; }
 
+    /* 裝置名稱是 h2（h1 下一層），.content h2 的底線與內距在這裡拿掉 */
     .session .term__name {
       margin: 0 0 0.65rem;
+      padding-bottom: 0;
+      border-bottom: 0;
       font-size: 1.05rem;
       line-height: 1.45;
       color: #f2f4f8;
@@ -622,7 +625,7 @@
 
                 <section class="session active" id="dev-pve-host" data-host="pve-host" data-state="running" data-tags="Proxmox,Tailscale,HomeLab" style="--device-color:#8a8a8a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch pve-host --all</span></p>
-                  <h3 class="term__name">Proxmox VE 虛擬化主機 <span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name">Proxmox VE 虛擬化主機 <span class="tag tag--run">running</span></h2>
                   <dl class="spec">
                     <div><dt>cpu</dt><dd><a href="https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x3d.html" target="_blank" rel="noopener">AMD Ryzen 9 9950X3D</a></dd></div>
                     <div><dt>gpu</dt><dd><a href="https://www.asus.com/us/motherboards-components/graphics-cards/dual/dual-rtx4070tis-o16g/" target="_blank" rel="noopener">ASUS DUAL RTX 4070 Ti Super</a></dd></div>
@@ -636,7 +639,7 @@
 
                 <section class="session" id="dev-mbp16" data-host="mbp16-m5max" data-state="running" data-tags="MacBook,M5 Max,macOS,cmux,EdgeLink" style="--device-color:#b8bcc4;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch mbp16-m5max</span></p>
-                  <h3 class="term__name"><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 16"（M5 Max）</a> <span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name"><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 16"（M5 Max）</a> <span class="tag tag--run">running</span></h2>
                   <dl class="spec">
                     <div><dt>chip</dt><dd>Apple M5 Max</dd></div>
                     <div><dt>gpu</dt><dd>40 核心</dd></div>
@@ -649,7 +652,7 @@
 
                 <section class="session" id="dev-f8u" data-host="f8u-denim" data-state="running" data-tags="POCO F8 Ultra,myron,GhostLock,HyperOS,小米,EdgeLink" style="--device-color:#46648c;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch f8u-denim</span></p>
-                  <h3 class="term__name"><a href="https://www.po.co/global/product/poco-f8-ultra/" target="_blank" rel="noopener">POCO F8 Ultra</a> <span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name"><a href="https://www.po.co/global/product/poco-f8-ultra/" target="_blank" rel="noopener">POCO F8 Ultra</a> <span class="tag tag--run">running</span></h2>
                   <dl class="spec">
                     <div><dt>soc</dt><dd>Snapdragon 8 Elite Gen 5</dd></div>
                     <div><dt>panel</dt><dd>6.9 吋 AMOLED</dd></div>
@@ -662,7 +665,7 @@
 
                 <section class="session" id="dev-sam-m7" data-host="samsung-m7" data-state="running" style="--device-color:#cfcfcf;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch samsung-m7</span></p>
-                  <h3 class="term__name"><a href="https://www.samsung.com/us/computing/monitors/smart-monitors/32-m70b-uhd-usb-c-smart-monitor-streaming-tv-ls32bm702unxgo/" target="_blank" rel="noopener">Samsung Smart Monitor M7 32"</a> <span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name"><a href="https://www.samsung.com/us/computing/monitors/smart-monitors/32-m70b-uhd-usb-c-smart-monitor-streaming-tv-ls32bm702unxgo/" target="_blank" rel="noopener">Samsung Smart Monitor M7 32"</a> <span class="tag tag--run">running</span></h2>
                   <dl class="spec">
                     <div><dt>panel</dt><dd>VA，4K UHD（3,840 × 2,160）</dd></div>
                     <div><dt>refresh</dt><dd>60Hz</dd></div>
@@ -674,7 +677,7 @@
 
                 <section class="session" id="dev-mbp14" data-host="macbook14-m5" data-state="stopped" data-tags="MacBook" style="--device-color:#b8bcc4;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch macbook14-m5</span></p>
-                  <h3 class="term__name"><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 14"（M5）</a> <span class="tag tag--stop">stopped</span></h3>
+                  <h2 class="term__name"><a href="https://www.apple.com/macbook-pro/" target="_blank" rel="noopener">MacBook Pro 14"（M5）</a> <span class="tag tag--stop">stopped</span></h2>
                   <dl class="spec">
                     <div><dt>chip</dt><dd>Apple M5</dd></div>
                     <div><dt>ram</dt><dd>32GB</dd></div>
@@ -685,7 +688,7 @@
 
                 <section class="session" id="dev-p15" data-host="thinkpad-p15" data-state="stopped" data-tags="ThinkPad,工作站" style="--device-color:#8a8a8a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch thinkpad-p15</span></p>
-                  <h3 class="term__name"><a href="https://www.lenovo.com/us/en/p/laptops/thinkpad/thinkpadp/thinkpad-p15-gen-2-(15-inch-intel)/wmd00000487" target="_blank" rel="noopener">Lenovo ThinkPad P15 Gen 2</a> <span class="tag tag--stop">stopped</span></h3>
+                  <h2 class="term__name"><a href="https://www.lenovo.com/us/en/p/laptops/thinkpad/thinkpadp/thinkpad-p15-gen-2-(15-inch-intel)/wmd00000487" target="_blank" rel="noopener">Lenovo ThinkPad P15 Gen 2</a> <span class="tag tag--stop">stopped</span></h2>
                   <dl class="spec">
                     <div><dt>cpu</dt><dd>Intel i9-11950H</dd></div>
                     <div><dt>gpu</dt><dd>RTX A5000 16GB</dd></div>
@@ -697,7 +700,7 @@
 
                 <section class="session" id="dev-nh55" data-host="clevo-nh55" data-state="stopped" style="--device-color:#9a9a9a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch clevo-nh55</span></p>
-                  <h3 class="term__name"><a href="https://www.notebookcheck.net/Clevo-NH55.491701.0.html" target="_blank" rel="noopener">Clevo NH55JNR</a>（神舟 HASEE ZX9-DA5DA）<span class="tag tag--stop">stopped</span></h3>
+                  <h2 class="term__name"><a href="https://www.notebookcheck.net/Clevo-NH55.491701.0.html" target="_blank" rel="noopener">Clevo NH55JNR</a>（神舟 HASEE ZX9-DA5DA）<span class="tag tag--stop">stopped</span></h2>
                   <dl class="spec">
                     <div><dt>cpu</dt><dd>Intel i5-12400（桌面版）</dd></div>
                     <div><dt>gpu</dt><dd>RTX 3070 Mobile 8GB（140W）</dd></div>
@@ -709,7 +712,7 @@
 
                 <section class="session" id="dev-ip17pm" data-host="iphone17pm" data-state="stopped" data-tags="iPhone,iOS,AirDrop,iCloud" style="--device-color:#e8802a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch iphone17pm</span></p>
-                  <h3 class="term__name"><a href="https://www.apple.com/iphone-17-pro/" target="_blank" rel="noopener">iPhone 17 Pro Max</a> <span class="tag tag--stop">stopped</span></h3>
+                  <h2 class="term__name"><a href="https://www.apple.com/iphone-17-pro/" target="_blank" rel="noopener">iPhone 17 Pro Max</a> <span class="tag tag--stop">stopped</span></h2>
                   <dl class="spec">
                     <div><dt>chip</dt><dd>A19 Pro</dd></div>
                     <div><dt>panel</dt><dd>6.9 吋</dd></div>
@@ -721,7 +724,7 @@
 
                 <section class="session" id="dev-f7u" data-host="poco-f7u" data-state="stopped" data-tags="POCO,小米" style="--device-color:#8a8a8a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch poco-f7u</span></p>
-                  <h3 class="term__name"><a href="https://www.po.co/global/product/poco-f7-ultra/" target="_blank" rel="noopener">POCO F7 Ultra</a> <span class="tag tag--stop">stopped</span></h3>
+                  <h2 class="term__name"><a href="https://www.po.co/global/product/poco-f7-ultra/" target="_blank" rel="noopener">POCO F7 Ultra</a> <span class="tag tag--stop">stopped</span></h2>
                   <dl class="spec">
                     <div><dt>ram</dt><dd>16GB</dd></div>
                     <div><dt>storage</dt><dd>512GB</dd></div>
@@ -731,7 +734,7 @@
 
                 <section class="session" id="dev-akg-n9" data-host="akg-n9" data-state="stopped" style="--device-color:#8a8a8a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch akg-n9</span></p>
-                  <h3 class="term__name"><a href="https://www.akg.com/headphones/over-ear-and-on-ear/AKG-N9-HYBRID.html" target="_blank" rel="noopener">AKG N9 Hybrid</a> <span class="tag tag--stop">stopped</span></h3>
+                  <h2 class="term__name"><a href="https://www.akg.com/headphones/over-ear-and-on-ear/AKG-N9-HYBRID.html" target="_blank" rel="noopener">AKG N9 Hybrid</a> <span class="tag tag--stop">stopped</span></h2>
                   <dl class="spec">
                     <div><dt>type</dt><dd>無線降噪耳機</dd></div>
                     <div><dt>color</dt><dd>黑色</dd></div>
@@ -740,7 +743,7 @@
 
                 <section class="session" id="dev-ipad11" data-host="ipad11-m1" data-state="stopped" data-tags="iPadOS,平板" style="--device-color:#b8bcc4;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch ipad11-m1</span></p>
-                  <h3 class="term__name"><a href="https://support.apple.com/en-us/111897" target="_blank" rel="noopener">iPad Pro M1 11"</a> <span class="tag tag--stop">stopped</span></h3>
+                  <h2 class="term__name"><a href="https://support.apple.com/en-us/111897" target="_blank" rel="noopener">iPad Pro M1 11"</a> <span class="tag tag--stop">stopped</span></h2>
                   <dl class="spec">
                     <div><dt>chip</dt><dd>Apple M1</dd></div>
                     <div><dt>ram</dt><dd>8GB</dd></div>
@@ -753,7 +756,7 @@
 
                 <section class="session" id="dev-ipad129" data-host="ipad129-m2" data-state="stopped" data-tags="iPadOS,平板" style="--device-color:#b8bcc4;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch ipad129-m2</span></p>
-                  <h3 class="term__name"><a href="https://support.apple.com/en-us/111841" target="_blank" rel="noopener">iPad Pro M2 12.9"</a> <span class="tag tag--stop">stopped</span></h3>
+                  <h2 class="term__name"><a href="https://support.apple.com/en-us/111841" target="_blank" rel="noopener">iPad Pro M2 12.9"</a> <span class="tag tag--stop">stopped</span></h2>
                   <dl class="spec">
                     <div><dt>chip</dt><dd>Apple M2</dd></div>
                     <div><dt>ram</dt><dd>8GB</dd></div>
@@ -766,7 +769,7 @@
 
                 <section class="session" id="dev-tab-s9u" data-host="tabs9-ultra" data-state="stopped" data-tags="平板,Samsung" style="--device-color:#8a8a8a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch tabs9-ultra</span></p>
-                  <h3 class="term__name"><a href="https://www.samsung.com/us/tablets/galaxy-tab-s9/all-galaxy-tab-s9/" target="_blank" rel="noopener">Samsung Galaxy Tab S9 Ultra</a> <span class="tag tag--stop">stopped</span></h3>
+                  <h2 class="term__name"><a href="https://www.samsung.com/us/tablets/galaxy-tab-s9/all-galaxy-tab-s9/" target="_blank" rel="noopener">Samsung Galaxy Tab S9 Ultra</a> <span class="tag tag--stop">stopped</span></h2>
                   <dl class="spec">
                     <div><dt>soc</dt><dd>Snapdragon 8 Gen 2</dd></div>
                     <div><dt>panel</dt><dd>14.6 吋 Super AMOLED</dd></div>
@@ -780,7 +783,7 @@
 
                 <section class="session" id="dev-arc3" data-host="cleer-arc3" data-state="running">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch cleer-arc3</span></p>
-                  <h3 class="term__name"><a href="https://cleeraudio.com/earbuds/arc-3/" target="_blank" rel="noopener">CLEER ARC 3</a> <span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name"><a href="https://cleeraudio.com/earbuds/arc-3/" target="_blank" rel="noopener">CLEER ARC 3</a> <span class="tag tag--run">running</span></h2>
                   <dl class="spec">
                     <div><dt>type</dt><dd>開放式真無線耳機</dd></div>
                     <div><dt>count</dt><dd>× 2</dd></div>
@@ -789,7 +792,7 @@
 
                 <section class="session" id="dev-hd6xx" data-host="hd6xx" data-state="running">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch hd6xx</span></p>
-                  <h3 class="term__name"><a href="https://drop.com/buy/massdrop-sennheiser-hd6xx" target="_blank" rel="noopener">Sennheiser HD 6XX（HD 650）</a> <span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name"><a href="https://drop.com/buy/massdrop-sennheiser-hd6xx" target="_blank" rel="noopener">Sennheiser HD 6XX（HD 650）</a> <span class="tag tag--run">running</span></h2>
                   <dl class="spec">
                     <div><dt>type</dt><dd>開放式耳罩耳機</dd></div>
                   </dl>
@@ -797,7 +800,7 @@
 
                 <section class="session" id="dev-lite-se" data-host="8bitdo-litese" data-state="running" data-tags="8BitDo,模擬飛行" style="--device-color:#9d7bb8;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch 8bitdo-litese</span></p>
-                  <h3 class="term__name"><a href="https://www.8bitdo.com/lite-se/" target="_blank" rel="noopener">8BitDo Lite SE</a> <span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name"><a href="https://www.8bitdo.com/lite-se/" target="_blank" rel="noopener">8BitDo Lite SE</a> <span class="tag tag--run">running</span></h2>
                   <dl class="spec">
                     <div><dt>host</dt><dd>Switch／Switch Lite／Android／Raspberry Pi</dd></div>
                     <div><dt>a11y</dt><dd>低阻力按鍵、高靈敏搖桿</dd></div>
@@ -810,7 +813,7 @@
 
                 <section class="session" id="dev-iine" data-host="iine-l1032" data-state="running" style="--device-color:#8a8a8a;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch iine-l1032</span></p>
-                  <h3 class="term__name"><a href="https://www.iine.top/products/fu-gu-ka-pian-you-xi-shou-bing" target="_blank" rel="noopener">IINE 復古卡片遊戲手柄</a>（L1032）<span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name"><a href="https://www.iine.top/products/fu-gu-ka-pian-you-xi-shou-bing" target="_blank" rel="noopener">IINE 復古卡片遊戲手柄</a>（L1032）<span class="tag tag--run">running</span></h2>
                   <dl class="spec">
                     <div><dt>host</dt><dd>Switch／iOS／Android／PC</dd></div>
                     <div><dt>stick</dt><dd>霍爾搖桿，1,000Hz 回報率</dd></div>
@@ -822,7 +825,7 @@
 
                 <section class="session" id="dev-mt6000" data-host="glmt6000" data-state="running" data-tags="OpenWrt,OpenWRT,路由器">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch glmt6000</span></p>
-                  <h3 class="term__name"><a href="https://www.gl-inet.com/products/gl-mt6000/" target="_blank" rel="noopener">GL.iNet GL-MT6000（Flint 2）</a> <span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name"><a href="https://www.gl-inet.com/products/gl-mt6000/" target="_blank" rel="noopener">GL.iNet GL-MT6000（Flint 2）</a> <span class="tag tag--run">running</span></h2>
                   <dl class="spec">
                     <div><dt>wifi</dt><dd>WiFi 6 AX6000</dd></div>
                     <div><dt>soc</dt><dd>MediaTek MT7986</dd></div>
@@ -834,7 +837,7 @@
 
                 <section class="session" id="dev-mx4200" data-host="linksys-mx4200" data-state="running" style="--device-color:#cfcfcf;">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch linksys-mx4200</span></p>
-                  <h3 class="term__name"><a href="https://store.linksys.com/support-product?sku=MX4200" target="_blank" rel="noopener">Linksys MX4200</a> <span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name"><a href="https://store.linksys.com/support-product?sku=MX4200" target="_blank" rel="noopener">Linksys MX4200</a> <span class="tag tag--run">running</span></h2>
                   <dl class="spec">
                     <div><dt>wifi</dt><dd>Velop AX4200 Mesh</dd></div>
                     <div><dt>color</dt><dd>白色</dd></div>
@@ -844,7 +847,7 @@
 
                 <section class="session" id="dev-ups" data-host="apc-ups" data-state="running">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch apc-ups</span></p>
-                  <h3 class="term__name"><a href="https://www.se.com/us/en/product/BR1500MS/" target="_blank" rel="noopener">APC Back-UPS 1500MS</a> <span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name"><a href="https://www.se.com/us/en/product/BR1500MS/" target="_blank" rel="noopener">APC Back-UPS 1500MS</a> <span class="tag tag--run">running</span></h2>
                   <dl class="spec">
                     <div><dt>capacity</dt><dd>1500VA / 900W</dd></div>
                   </dl>
@@ -852,13 +855,13 @@
 
                 <section class="session" id="dev-rm1" data-host="comet-rm1" data-state="running" data-tags="KVM">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch comet-rm1</span></p>
-                  <h3 class="term__name"><a href="https://www.gl-inet.com/products/gl-rm1/" target="_blank" rel="noopener">GL.iNet Comet RM1</a> <span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name"><a href="https://www.gl-inet.com/products/gl-rm1/" target="_blank" rel="noopener">GL.iNet Comet RM1</a> <span class="tag tag--run">running</span></h2>
                   <p class="term__note">KVM 遠端控制</p>
                 </section>
 
                 <section class="session" id="dev-stream" data-host="moonlight" data-state="running" data-tags="Sunshine,串流">
                   <p class="term__cmd"><span class="term__ps">❯</span> <span class="cmd">edgefetch moonlight</span></p>
-                  <h3 class="term__name"><a href="https://moonlight-stream.org/" target="_blank" rel="noopener">Moonlight</a> + <a href="https://github.com/LizardByte/Sunshine" target="_blank" rel="noopener">Sunshine</a> <span class="tag tag--run">running</span></h3>
+                  <h2 class="term__name"><a href="https://moonlight-stream.org/" target="_blank" rel="noopener">Moonlight</a> + <a href="https://github.com/LizardByte/Sunshine" target="_blank" rel="noopener">Sunshine</a> <span class="tag tag--run">running</span></h2>
                   <p class="term__note">遊戲串流方案</p>
                 </section>
 
