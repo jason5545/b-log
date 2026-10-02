@@ -1269,7 +1269,9 @@
 .crumb a.her-cat,
 .crumb a.her-cat:hover,
 .topics a.her,
-.tag-cloud a.her {
+.tag-cloud a.her,
+.links a.her,
+.links a.her:hover .links__ext {
   color: var(--magenta);
 }
 
