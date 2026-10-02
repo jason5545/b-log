@@ -224,9 +224,10 @@ npm run check:layout
 npm run generate:traffic
 ```
 
-- 重寫 `index.html` 裡 `<!-- TRAFFIC_START -->` 到 `<!-- TRAFFIC_END -->` 之間的畫面與清單，以及 `assets/styles.css` 裡 `TRAFFIC_HOVER_START` 到 `TRAFFIC_HOVER_END` 之間「滑過清單第 n 列亮第 n 個菱形」的選擇器，接著重新產生 `styles.min.css` 並內嵌進四個 HTML（見下一節）。這兩段不要手改。
+- 重寫 `index.html` 裡 `<!-- TRAFFIC_START -->` 到 `<!-- TRAFFIC_END -->` 之間的畫面與清單，以及 `assets/styles.css` 裡 `TRAFFIC_HOVER_START` 到 `TRAFFIC_HOVER_END` 之間「鍵盤移到清單第 n 項就亮、框起第 n 個目標」的選擇器，接著重新產生 `styles.min.css` 並內嵌進四個 HTML（見下一節）。這兩段不要手改。
 - 每個站：`theta` 是偏離正前方的角度（左負右正，±50° 內），`r` 是離本機的距離（外圈 170），越重要越近；`label` 決定識別碼放在菱形左邊（`L`）或右邊（`R`）；`her: 'her'` 是 LiSA 本人（實心洋紅），`her: 'fan'` 是跟她有關的站（空心洋紅）。
-- 識別碼、菱形、那圈點、本機符號彼此重疊或超出畫面時，腳本列出哪兩個撞在一起，結束碼 1，不寫檔。
+- 畫面上只有 TCAS；清單視覺隱藏，給螢幕閱讀器與鍵盤。鍵盤移到清單第 n 項時第 n 個目標會亮、框起來（選擇器在 `TRAFFIC_HOVER`）。每個目標的 `<title>` 是站名與簡介，滑過時顯示。
+- 腳本會檢查：識別碼、菱形、那圈點、本機符號彼此重疊或超出畫面；識別碼、菱形壓到外圈、中圈弧線或刻度；點擊範圍重疊，或以範圍中心畫直徑 24px 的圓會碰到別的目標（WCAG 2.5.8，以側欄最窄 304px 換算）。有問題就列出來，結束碼 1，不寫檔。識別碼寬度照 11px B612 Mono 實際字寬算（0.65em 加 0.02em 字距）。
 
 ## 樣式表內嵌（build:assets）
 

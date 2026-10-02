@@ -573,56 +573,35 @@
   letter-spacing: 0.08em;
 }
 
-/* TRAFFIC：同一片空域的站與社群，站外連結開新分頁。站名青色（可以點），簡介灰色 */
-.links {
-  list-style: none;
-  margin: 0;
+/* TRAFFIC：同一片空域的站與社群。畫面上只有下面的 TCAS，清單視覺隱藏，給螢幕閱讀器與鍵盤用
+   （位置留在原處，鍵盤移到清單時頁面捲到畫面這裡） */
+.traffic .links {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
   padding: 0;
-}
-
-.links a {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.1rem;
-  min-height: 44px;
-  padding-block: 0.45rem;
-  text-decoration: none;
-}
-
-.links__name {
-  font-size: 0.92rem;
-  line-height: 1.45;
-}
-
-.links__ext {
-  margin-left: 0.3em;
-  font-size: 0.8em;
-  color: var(--muted);
-}
-
-.links__desc {
-  font-size: 0.78rem;
-  line-height: 1.5;
-  color: var(--muted);
-}
-
-.links a:hover .links__name {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-}
-
-.links a:hover .links__ext {
-  color: var(--cyan);
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* TRAFFIC 的 TCAS 畫面：空心菱形是一般目標（青色，可以點），LiSA 是實心洋紅、最近。
-   --hot 是菱形填色，滑過菱形或清單對應那一列時亮起 */
+   --hot 是菱形填色，滑過目標或鍵盤移到清單對應那一項時亮起 */
 .tcas {
   display: block;
   width: 100%;
   height: auto;
-  margin: 0 0 0.75rem;
+  margin: 0;
+}
+
+/* 點擊範圍：菱形加識別碼的透明方框，空心菱形中間也點得到。鍵盤焦點時描上 --focus 當焦點框
+   （選擇器在 TRAFFIC_HOVER） */
+.tcas__hit {
+  fill: transparent;
+  stroke: none;
+  stroke-width: 2;
 }
 
 .tcas__arc {
@@ -670,23 +649,38 @@
 
 /* TRAFFIC_HOVER_START */
 /* 由 scripts/generate-traffic.js 產生，不要手改 */
-.tcas a:is(:hover, :focus-visible),
-.traffic:has(.links li:nth-child(3) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(3),
-.traffic:has(.links li:nth-child(4) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(4),
-.traffic:has(.links li:nth-child(5) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(5),
-.traffic:has(.links li:nth-child(6) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(6),
-.traffic:has(.links li:nth-child(7) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(7),
-.traffic:has(.links li:nth-child(8) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(8),
-.traffic:has(.links li:nth-child(9) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(9),
-.traffic:has(.links li:nth-child(10) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(10),
-.traffic:has(.links li:nth-child(11) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(11),
-.traffic:has(.links li:nth-child(12) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(12) {
+.tcas a:hover,
+.traffic:has(.links li:nth-child(3) > a:focus-visible) .tcas__tfc > a:nth-child(3),
+.traffic:has(.links li:nth-child(4) > a:focus-visible) .tcas__tfc > a:nth-child(4),
+.traffic:has(.links li:nth-child(5) > a:focus-visible) .tcas__tfc > a:nth-child(5),
+.traffic:has(.links li:nth-child(6) > a:focus-visible) .tcas__tfc > a:nth-child(6),
+.traffic:has(.links li:nth-child(7) > a:focus-visible) .tcas__tfc > a:nth-child(7),
+.traffic:has(.links li:nth-child(8) > a:focus-visible) .tcas__tfc > a:nth-child(8),
+.traffic:has(.links li:nth-child(9) > a:focus-visible) .tcas__tfc > a:nth-child(9),
+.traffic:has(.links li:nth-child(10) > a:focus-visible) .tcas__tfc > a:nth-child(10),
+.traffic:has(.links li:nth-child(11) > a:focus-visible) .tcas__tfc > a:nth-child(11),
+.traffic:has(.links li:nth-child(12) > a:focus-visible) .tcas__tfc > a:nth-child(12) {
   --hot: var(--cyan);
   --hot-text: var(--cyan);
 }
 
-.traffic:has(.links li:nth-child(2) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(2) {
+.traffic:has(.links li:nth-child(2) > a:focus-visible) .tcas__tfc > a:nth-child(2) {
   --hot: var(--magenta);
+}
+
+.traffic:has(.links li:nth-child(1) > a:focus-visible) .tcas__tfc > a:nth-child(1) .tcas__hit,
+.traffic:has(.links li:nth-child(2) > a:focus-visible) .tcas__tfc > a:nth-child(2) .tcas__hit,
+.traffic:has(.links li:nth-child(3) > a:focus-visible) .tcas__tfc > a:nth-child(3) .tcas__hit,
+.traffic:has(.links li:nth-child(4) > a:focus-visible) .tcas__tfc > a:nth-child(4) .tcas__hit,
+.traffic:has(.links li:nth-child(5) > a:focus-visible) .tcas__tfc > a:nth-child(5) .tcas__hit,
+.traffic:has(.links li:nth-child(6) > a:focus-visible) .tcas__tfc > a:nth-child(6) .tcas__hit,
+.traffic:has(.links li:nth-child(7) > a:focus-visible) .tcas__tfc > a:nth-child(7) .tcas__hit,
+.traffic:has(.links li:nth-child(8) > a:focus-visible) .tcas__tfc > a:nth-child(8) .tcas__hit,
+.traffic:has(.links li:nth-child(9) > a:focus-visible) .tcas__tfc > a:nth-child(9) .tcas__hit,
+.traffic:has(.links li:nth-child(10) > a:focus-visible) .tcas__tfc > a:nth-child(10) .tcas__hit,
+.traffic:has(.links li:nth-child(11) > a:focus-visible) .tcas__tfc > a:nth-child(11) .tcas__hit,
+.traffic:has(.links li:nth-child(12) > a:focus-visible) .tcas__tfc > a:nth-child(12) .tcas__hit {
+  stroke: var(--focus);
 }
 /* TRAFFIC_HOVER_END */
 
@@ -1343,16 +1337,14 @@
 .crumb a.her-cat,
 .crumb a.her-cat:hover,
 .topics a.her,
-.tag-cloud a.her,
-.links a.her,
-.links a.her:hover .links__ext {
+.tag-cloud a.her {
   color: var(--magenta);
 }
 
 /* TRAFFIC 的 TCAS 畫面：她是實心洋紅菱形，一直亮著；台灣後援會是空心洋紅，滑過才填滿
-   （滑過清單那一列的選擇器在 TRAFFIC_HOVER，由 scripts/generate-traffic.js 產生） */
+   （鍵盤移到清單那一項的選擇器在 TRAFFIC_HOVER，由 scripts/generate-traffic.js 產生） */
 .tcas a.her,
-.tcas a.her-fan:is(:hover, :focus-visible) {
+.tcas a.her-fan:hover {
   --hot: var(--magenta);
   --hot-text: var(--magenta);
 }
