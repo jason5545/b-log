@@ -573,6 +573,49 @@
   letter-spacing: 0.08em;
 }
 
+/* TRAFFIC：同一片空域的站與社群，站外連結開新分頁。站名青色（可以點），簡介灰色 */
+.links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.links a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.1rem;
+  min-height: 44px;
+  padding-block: 0.45rem;
+  text-decoration: none;
+}
+
+.links__name {
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.links__ext {
+  margin-left: 0.3em;
+  font-size: 0.8em;
+  color: var(--muted);
+}
+
+.links__desc {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.links a:hover .links__name {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+.links a:hover .links__ext {
+  color: var(--cyan);
+}
+
 /* BEHIND THE SCENES */
 .behind p {
   margin: 0;
