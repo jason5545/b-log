@@ -215,3 +215,15 @@ npm run check:layout
 - 每格截 LATEST 那一塊，量高度、封面尺寸與比例、標題行數，檢查 AGENTS.md「首頁 LATEST 的版面」的規則：沒有橫向捲動、標題不超出欄寬、手機版封面在上且是 16:9、寬螢幕封面不比 4:3 窄、封面底部切齊文字（到 4:3 上限或 12rem 最矮高度的例外會列成備註）。
 - 輸出到系統暫存資料夾（`--out <資料夾>` 可指定），裡面有一頁自帶圖片的比較板 `index.html` 和 `report.json`；`--open` 會直接用預設瀏覽器打開比較板。有格子沒通過時結束碼是 1。
 - 需要 `playwright-core` 對應版本的 Chromium（放在 `~/Library/Caches/ms-playwright`）。缺的話：`npx playwright-core install chromium-headless-shell`。
+
+## 首頁 TRAFFIC 側欄
+
+首頁側欄的 TRAFFIC（TCAS 畫面加站點清單）由 `scripts/generate-traffic.js` 產生。要加減站點、改簡介或調菱形位置，改腳本開頭的 `TRAFFIC` 陣列，再執行：
+
+```bash
+npm run generate:traffic
+```
+
+- 重寫 `index.html` 裡 `<!-- TRAFFIC_START -->` 到 `<!-- TRAFFIC_END -->` 之間的畫面與清單，以及 `assets/styles.css` 裡 `TRAFFIC_HOVER_START` 到 `TRAFFIC_HOVER_END` 之間「滑過清單第 n 列亮第 n 個菱形」的選擇器，接著重新產生 `styles.min.css`。這兩段不要手改。
+- 每個站：`theta` 是偏離正前方的角度（左負右正，±50° 內），`r` 是離本機的距離（外圈 170），越重要越近；`label` 決定識別碼放在菱形左邊（`L`）或右邊（`R`）；`her: 'her'` 是 LiSA 本人（實心洋紅），`her: 'fan'` 是跟她有關的站（空心洋紅）。
+- 識別碼、菱形、那圈點、本機符號彼此重疊或超出畫面時，腳本列出哪兩個撞在一起，結束碼 1，不寫檔。

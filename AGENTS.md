@@ -79,6 +79,15 @@ Jason 2026/9/26 決定。文章頁頂部的封面（`#post-hero`）高度最多�
 - 版面規則在 `post.html` 的關鍵 CSS（`min(100%, 50svh × 寬高比)` 加 `aspect-ratio`）。`assets/styles.css` 的 `.post__cover` 不要再寫 `aspect-ratio`，會蓋掉逐篇比例。
 - 用 svh 不用 vh：手機網址列伸縮時 svh 不變，而且是網址列展開時的可見高度。
 
+## 首頁 TRAFFIC 側欄
+
+2026/10/2 加的。側欄的 TRAFFIC（同一片空域）是 Jason 指定的站與社群，上面一張 TCAS 畫面（ND ARC 模式），本機在下方中央，越重要越近。
+
+- 清單和畫面都由 `scripts/generate-traffic.js` 產生，改站點只改腳本開頭的 `TRAFFIC`，再跑 `npm run generate:traffic`。`index.html` 與 `assets/styles.css` 裡兩組 `TRAFFIC_*` 標記之間的內容不要手改。用法見 `scripts/README.md`。
+- 順序是 Jason 定的：LiSA 官方網站第一個（他說最重要），跟她有關的接在後面，其他照他給的順序。
+- 跟她有關的站用洋紅：本人實心、其他空心；其餘站空心青色。站名和簡介取自各站自己的標題與描述，不自己編。
+- 只放首頁，不放文章頁：文章頁右欄的高度是算過的（`post.html` 關鍵 CSS 裡 RELATED、LATEST 固定在畫面上的高度門檻），Jason 10/2 同意不放。
+
 ## 首頁 LATEST 的版面
 
 Jason 2026/9/27 決定，當天試過三種做法才定案。

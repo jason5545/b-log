@@ -5,7 +5,8 @@
     "build:assets": "node scripts/build-assets.js",
     "fix:updatedat": "node scripts/strip-redundant-updatedat.js",
     "validate": "node scripts/validate-content.js",
-    "check:layout": "node scripts/layout-check.mjs"
+    "check:layout": "node scripts/layout-check.mjs",
+    "generate:traffic": "node scripts/generate-traffic.js && node scripts/build-assets.js"
   },
   "dependencies": {
     "sharp": "^0.34.4"

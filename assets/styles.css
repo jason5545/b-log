@@ -668,6 +668,8 @@
   transition: fill 0.15s;
 }
 
+/* TRAFFIC_HOVER_START */
+/* 由 scripts/generate-traffic.js 產生，不要手改 */
 .tcas a:is(:hover, :focus-visible),
 .traffic:has(.links li:nth-child(3) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(3),
 .traffic:has(.links li:nth-child(4) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(4),
@@ -682,6 +684,11 @@
   --hot: var(--cyan);
   --hot-text: var(--cyan);
 }
+
+.traffic:has(.links li:nth-child(2) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(2) {
+  --hot: var(--magenta);
+}
+/* TRAFFIC_HOVER_END */
 
 /* BEHIND THE SCENES */
 .behind p {
@@ -1342,10 +1349,10 @@
   color: var(--magenta);
 }
 
-/* TRAFFIC 的 TCAS 畫面：她是實心洋紅菱形，一直亮著；台灣後援會是空心洋紅，滑過才填滿 */
+/* TRAFFIC 的 TCAS 畫面：她是實心洋紅菱形，一直亮著；台灣後援會是空心洋紅，滑過才填滿
+   （滑過清單那一列的選擇器在 TRAFFIC_HOVER，由 scripts/generate-traffic.js 產生） */
 .tcas a.her,
-.tcas a.her-fan:is(:hover, :focus-visible),
-.traffic:has(.links li:nth-child(2) > a:is(:hover, :focus-visible)) .tcas__tfc > a:nth-child(2) {
+.tcas a.her-fan:is(:hover, :focus-visible) {
   --hot: var(--magenta);
   --hot-text: var(--magenta);
 }
