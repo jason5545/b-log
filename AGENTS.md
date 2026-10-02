@@ -14,7 +14,25 @@
 ## 送出前要同步產物
 
 - 改動文章或 `data/posts.json` 之後，跑 `node scripts/sync-feed.js`、`node scripts/generate-redirects.js`、`node scripts/generate-sitemap.js`，最後 `npm run validate` 要通過。
+- 改 `assets/css/*.css`、`assets/styles.css` 之後跑 `npm run build:assets`（會把 CSS 寫進四個根目錄 HTML），再跑 `node scripts/generate-redirects.js` 帶到文章頁。見下面「CSS 內嵌在 HTML」。
 - 產物沒同步，PR 檢查會直接失敗（`.github/workflows/content-pipeline.yml`）。推送 `main` 之後，內容資料管線與 Facebook 發文管線會自動接手。
+
+## CSS 內嵌在 HTML
+
+2026/10/2 改的。`index.html`、`post.html`、`about.html`、`gadgets.html`（和文章頁）不用 `<link>` 載入樣式表，`fonts.css`、`critical-shared.css`、`styles.css` 壓縮後直接寫在 `<head>`，由 `npm run build:assets` 產生（`scripts/inline-css.js`），`npm run validate` 會擋沒同步的頁面。原檔照舊改，HTML 裡兩組 `INLINE_CSS_*` 標記之間不要手改。
+
+- 為什麼：PageSpeed 手機版首頁效能 97，Speed Index 3.8 s 是唯一不到綠燈的指標。濾鏡條前 6 格全白、2.4 s 整頁一次出現；實際載入 0.5～0.8 s 就完成，主執行緒在中間閒著，Chrome 卻到 1.3 s 才排第一個畫格、2.3 s 才呈現。PSI 與本機 Lighthouse 13.5（Chrome 153）都重現，首頁和文章頁有、about 和 gadgets 沒有。
+- 逐一擋掉 Service Worker、main.min.js、封面圖、posts.json、字型、Cloudflare beacon，拿掉 view-transition、theme-color、manifest，都還是卡；只有三個樣式表全部不走 `<link>` 才消失。Chrome 內部為什麼這樣沒查清楚。
+- 效果（同一套本機 Lighthouse，把線上首頁換成新 HTML）：效能 0.93 → 0.99～1.00，FCP 2.0 → 1.2 s，LCP 2.6 → 1.8 s，SI 4.0 → 1.2 s，CLS 0 → 0。
+- 代價：每頁 HTML gzip 後多約 8 KB，CSS 不再跨頁快取。GitHub Pages 的 `max-age=600` 本來就讓外部 CSS 每 10 分鐘要重新驗證一次，那一趟一樣擋算繪。
+- 不要改回 `<link>`。也不要只內嵌 fonts.css、critical-shared.css，把 styles 留在外部：實測兩次有一次照樣卡到 2.3 s。styles 改成非阻塞載入會先閃一次沒樣式的版面。
+
+內嵌之後畫面提早出現，原本被蓋住的換字型位移就浮出來了（about、gadgets 一直都有）。所以 `fonts.css` 同時加了 `B612 Mono Fallback`：
+
+- B612 Mono 每個字 0.65em，Mac 的 ui-monospace（SF Mono）是 0.618em。換字型時頁首 AUTO 按鈕寬 2.2px，412 寬的標語被擠成兩行；360 寬的導覽列從一行變兩行，整頁往下推 48px（字型晚到時 CLS 0.244）。
+- 備用字型用 `local()` 指到系統的等寬字型，`size-adjust` 調到跟 B612 Mono 等寬：Menlo、DejaVu Sans Mono 107.96%，Liberation Mono、Droid Sans Mono、Courier New 108.32%。字型晚到 1.5 秒的實測：360、412 寬五種頁面 CLS 都是 0。Linux、Android 那幾個字型的字寬照字型規格算，沒在那兩個平台實測。
+- 換掉 B612 Mono 或改它的 unicode-range 時，備用字型的 `size-adjust` 與 unicode-range 要跟著重算。
+- B612（標題用的比例字）沒做：820 寬首頁標題換字型還有 0.0025 的位移，手機與 1440 寬是 0。
 
 ## 洋紅只給 LiSA
 

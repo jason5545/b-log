@@ -224,6 +224,17 @@ npm run check:layout
 npm run generate:traffic
 ```
 
-- 重寫 `index.html` 裡 `<!-- TRAFFIC_START -->` 到 `<!-- TRAFFIC_END -->` 之間的畫面與清單，以及 `assets/styles.css` 裡 `TRAFFIC_HOVER_START` 到 `TRAFFIC_HOVER_END` 之間「滑過清單第 n 列亮第 n 個菱形」的選擇器，接著重新產生 `styles.min.css`。這兩段不要手改。
+- 重寫 `index.html` 裡 `<!-- TRAFFIC_START -->` 到 `<!-- TRAFFIC_END -->` 之間的畫面與清單，以及 `assets/styles.css` 裡 `TRAFFIC_HOVER_START` 到 `TRAFFIC_HOVER_END` 之間「滑過清單第 n 列亮第 n 個菱形」的選擇器，接著重新產生 `styles.min.css` 並內嵌進四個 HTML（見下一節）。這兩段不要手改。
 - 每個站：`theta` 是偏離正前方的角度（左負右正，±50° 內），`r` 是離本機的距離（外圈 170），越重要越近；`label` 決定識別碼放在菱形左邊（`L`）或右邊（`R`）；`her: 'her'` 是 LiSA 本人（實心洋紅），`her: 'fan'` 是跟她有關的站（空心洋紅）。
 - 識別碼、菱形、那圈點、本機符號彼此重疊或超出畫面時，腳本列出哪兩個撞在一起，結束碼 1，不寫檔。
+
+## 樣式表內嵌（build:assets）
+
+`index.html`、`post.html`、`about.html`、`gadgets.html` 不用 `<link>` 載入樣式表，CSS 直接寫在 `<head>` 裡（原因見 AGENTS.md「CSS 內嵌在 HTML」）。原檔照舊改，改完執行：
+
+```bash
+npm run build:assets
+```
+
+- `assets/css/fonts.css` 加 `assets/css/critical-shared.css` 壓縮後寫進 `<!-- INLINE_CSS_CRITICAL_START -->` 到 `<!-- INLINE_CSS_CRITICAL_END -->` 之間；`assets/styles.css` 壓縮後（跟 `styles.min.css` 同一份）寫進 `INLINE_CSS_SITE_START` 到 `INLINE_CSS_SITE_END` 之間。兩段的位置就是原本兩組 `<link>` 的位置，各頁關鍵 `<style>` 夾在中間，cascade 順序不變。這兩段不要手改。
+- 邏輯在 `scripts/inline-css.js`，`build-assets.js` 寫入、`validate-content.js` 比對。文章頁由 `generate-redirects.js` 從 `post.html` 複製，改了 `post.html` 的 CSS 之後要再跑一次；`npm run validate` 會列出沒同步的頁面。

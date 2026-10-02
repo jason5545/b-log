@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { buildInlineCssBlocks, findStaleInlineCssPages } = require('./inline-css');
 
 const ROOT_DIR = path.join(__dirname, '..');
 const SITE_BASE_URL = 'https://b-log.to';
@@ -323,6 +324,41 @@ function validateHerPostSlugSources() {
     if (JSON.stringify(slugs) !== expected) {
       addError(`${file} 的 HER_POST_SLUGS 跟 validate-content.js 不一致：${slugs.join('、')}`);
     }
+  }
+}
+
+// 內嵌 CSS 要跟原檔同步：四個根目錄 HTML 由 npm run build:assets 寫入，文章頁再由 generate-redirects.js 從 post.html 複製
+function validateInlineCss(posts, categoryMapping) {
+  let blocks;
+  try {
+    blocks = buildInlineCssBlocks();
+  } catch (error) {
+    addError(`無法產生內嵌 CSS：${error.message}`);
+    return;
+  }
+
+  try {
+    for (const page of findStaleInlineCssPages(blocks)) {
+      addError(`${page} 內嵌的 CSS 跟 assets/css/*.css、assets/styles.css 不同步，請執行 npm run build:assets`);
+    }
+  } catch (error) {
+    addError(error.message);
+    return;
+  }
+
+  const expected = Object.values(blocks).map((css) => `<style>${css}</style>`);
+  const stale = [];
+  for (const post of posts) {
+    const routePath = buildSitePath(post, categoryMapping);
+    const indexPath = path.join(ROOT_DIR, routePath, 'index.html');
+    if (!fs.existsSync(indexPath)) continue;
+    const html = fs.readFileSync(indexPath, 'utf8');
+    if (!expected.every((block) => html.includes(block))) {
+      stale.push(`${routePath}index.html`);
+    }
+  }
+  if (stale.length > 0) {
+    addError(`${stale.length} 個文章頁內嵌的 CSS 跟 post.html 不同步（例如 ${stale[0]}），請執行 node scripts/generate-redirects.js`);
   }
 }
 
@@ -736,6 +772,7 @@ function main() {
   }
 
   validateGeneratedRoutes(posts, categoryMapping);
+  validateInlineCss(posts, categoryMapping);
 
   if (Array.isArray(posts)) {
     validateAccentColors(posts);

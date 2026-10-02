@@ -43,12 +43,55 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+/* B612 Mono 還沒下載完之前的備用字型，字寬調成跟 B612 Mono 一樣，換字型時版面不會動（CLS）。
+   B612 Mono 每個字 0.65em；ui-monospace（Mac 的 SF Mono）是 0.618em，換字型時頁首的 AUTO 按鈕
+   寬 2.2px，412 寬的標語被擠成兩行、360 寬的導覽列變兩行，整頁往下推。
+   常見等寬字型只有兩種字寬，各用一組：Menlo、DejaVu Sans Mono 是 1233/2048em（放大 107.96%），
+   Liberation Mono、Courier New、Droid Sans Mono 是 1229/2048em（放大 108.32%）。
+   unicode-range 跟 B612 Mono 一樣，範圍外的字照舊交給 ui-monospace。 */
+@font-face {
+  font-family: "B612 Mono Fallback";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Menlo Regular"), local("Menlo-Regular"), local("DejaVu Sans Mono"), local("DejaVuSansMono");
+  size-adjust: 107.96%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "B612 Mono Fallback";
+  font-style: normal;
+  font-weight: 700;
+  src: local("Menlo Bold"), local("Menlo-Bold"), local("DejaVu Sans Mono Bold"), local("DejaVuSansMono-Bold");
+  size-adjust: 107.96%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "B612 Mono Fallback Alt";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Liberation Mono"), local("LiberationMono-Regular"), local("Droid Sans Mono"), local("DroidSansMono"), local("Courier New"), local("CourierNewPSMT");
+  size-adjust: 108.32%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "B612 Mono Fallback Alt";
+  font-style: normal;
+  font-weight: 700;
+  src: local("Liberation Mono Bold"), local("LiberationMono-Bold"), local("Droid Sans Mono"), local("DroidSansMono"), local("Courier New Bold"), local("CourierNewPS-BoldMT");
+  size-adjust: 108.32%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   --font-body: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC",
                "Microsoft JhengHei", "Heiti TC", system-ui, sans-serif;
   --font-head: "B612", -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC",
                "Microsoft JhengHei", system-ui, sans-serif;
-  --font-mono: "B612 Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-mono: "B612 Mono", "B612 Mono Fallback", "B612 Mono Fallback Alt",
+               ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --font-serif: "Songti TC", "Noto Serif TC", "Noto Serif CJK TC", "Source Han Serif TC",
                 "PMingLiU", "MingLiU", serif;
 }

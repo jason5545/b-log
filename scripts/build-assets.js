@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const esbuild = require('esbuild');
 const CleanCSS = require('clean-css');
+const { INLINE_CSS_PAGES, writeInlineCss } = require('./inline-css');
 
 const ROOT_DIR = path.join(__dirname, '..');
 const JS_TARGETS = [
@@ -56,6 +57,9 @@ async function main() {
   for (const [inputPath, outputPath] of CSS_TARGETS) {
     minifyCss(inputPath, outputPath);
   }
+
+  writeInlineCss();
+  console.log(`✅ 已內嵌 CSS 到 ${INLINE_CSS_PAGES.join('、')}`);
 }
 
 main().catch((error) => {

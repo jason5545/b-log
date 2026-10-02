@@ -265,6 +265,19 @@ img {
   display: inline-flex;
 }
 
+/* 按鈕的名稱以看得到的 AUTO／LIGHT／DARK 開頭，後面這段只給螢幕閱讀器（WCAG 2.5.3 Label in Name） */
+.theme-toggle__hint {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .theme-dot {
   display: block;
   width: 8px;
