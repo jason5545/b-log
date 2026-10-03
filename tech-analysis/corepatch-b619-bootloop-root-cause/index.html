@@ -222,7 +222,7 @@
     <article class="post" id="post-article" data-category-theme="tech-analysis">
       <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=%E6%8A%80%E8%A1%93%E5%88%86%E6%9E%90">技術分析</a></span></nav>
       <div id="post-accent" class="post__accent" aria-hidden="true" style="--post-accent:#dc2626"></div>
-      <p id="post-meta" class="meta">26AUG26 · 技術分析 · 20 MIN · JASON CHIEN · UPDATED 03OCT26</p>
+      <p id="post-meta" class="meta">26AUG26 · 技術分析 · 15 MIN · JASON CHIEN · UPDATED 03OCT26</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</h1>
       <figure id="post-hero" class="post__cover" style="--cover-w: 1672; --cover-h: 941"><img class="post__cover-img" src="/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp" srcset="/content/img/2026/corepatch-b619-bootloop-root-cause-cover-480w.webp 480w, /content/img/2026/corepatch-b619-bootloop-root-cause-cover-828w.webp 828w, /content/img/2026/corepatch-b619-bootloop-root-cause-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" width="1672" height="941" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
@@ -350,7 +350,7 @@
 <p>我也查了上游 issue tracker：9 張 open、完全沒有 packages.xml 污染或 B619 相關回報，最接近的 #132 是 crDroid A13 bootloop，但無下文，沒人給出根因。</p>
 <p>這讓這條問題很難靠一般回報被修掉：</p>
 <ol>
-<li><strong>你大概率不會炸。</strong> CorePatch 主力用途是覆蓋安裝 <code>/data/app</code> 的異簽章 APK，那種情況 fallback 即使寫入，下次開機 LSPosed 已接管、bypass 繼續放行，永遠無症狀。只有「系統分割區＋shared UID」組合才會在裸開機時 fatal，而正常 ROM 的系統 APK 簽章一致，<code>verifyV1</code> 根本不失敗。</li>
+<li><strong>你大概率不會炸。</strong> CorePatch 主力用途是覆蓋安裝 <code>/data/app</code> 的異簽章 APK，那種情況 fallback 即使寫入，下次開機 LSPosed 已接管、bypass 繼續放行，永遠無症狀。只有「系統分割區＋shared UID」組合才會在裸開機時 fatal（10/3 更正：「裸開機」建立在 LSPosed 還沒接管的錯誤前提上，見文末更新），而正常 ROM 的系統 APK 簽章一致，<code>verifyV1</code> 根本不失敗。</li>
 <li><strong>炸了也很難查到原因。</strong> CorePatch 日誌只進 LSPosed 私有 log，logcat 沒有；crash 點在 system_server reconcile，一般人不抓 boot trace；<code>packages.xml</code> 是 ABX 二進位，要 root + parser 才能看見 B619；看到 B619 hex 還不算完，要比對 CorePatch dex 內嵌憑證才知道來源。</li>
 <li><strong>就算查到，也很可能先停在個人 fork。</strong> 我自己的 patch 推在 fork <code>6e9afdb</code>，目前不打算發 PR。這條鏈需要特定 ROM、特定 APK 狀態和可比對的 <code>packages.xml</code>；沒有可重現證據，上游很難判斷要改哪一層。#132 那張 open issue 就是這個結構的樣板：有現象、無證據、上游無從修起。</li>
 </ol>
