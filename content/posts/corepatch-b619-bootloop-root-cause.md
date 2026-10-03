@@ -4,6 +4,8 @@
 
 你如果沒在跑 Xiaomi.eu ROM、沒裝 CorePatch，這篇仍然值得看。它記錄的是一個 fail-open 設計，怎麼在特定條件下把暫時的驗證失敗寫成下一次冷開機的致命狀態。
 
+> **2026/10/3 更新**：升級到 Xiaomi.eu 310 時，system_server 在第一次開機連死兩次，LSPosed 停掉模組後才開起來。查下去發現兩件事：CorePatch 還有另一個會讓系統 APK 驗證失敗的 bug，而文中「冷開機時 LSPosed 還沒接管」這個說法是錯的。補充寫在文末。
+
 ## TL; DR
 
 CorePatch 的 `ApkSignatureVerifierHook` 有一段 fail-open 邏輯：當 APK 簽章驗證失敗、又拿不到「已安裝簽章」或「略過摘要驗證」救援時，它會**硬塞一顆 Google 平台 release key 當占位符**（SHA-256 開頭是 `b6198a8d…`，我通稱它 B619）。
@@ -16,7 +18,7 @@ CorePatch 的 `ApkSignatureVerifierHook` 有一段 fail-open 邏輯：當 APK �
 
 1. CorePatch 掃描時驗證失敗，塞 B619
 2. `packages.xml` 把 B619 寫進去
-3. 冷開機時 LSPosed 還沒接管，PackageManager 看到 B619 跟其他成員的 E443 簽章不一致
+3. 冷開機時 PackageManager 看到 B619 跟其他成員的 E443 簽章不一致（原本這裡寫「LSPosed 還沒接管」，這個說法不對，見文末 10/3 更新）
 4. system_server reconcile 階段 fatal
 5. 開機循環
 
@@ -170,6 +172,8 @@ fail-open 用的占位符應該是「**明確標記為不可信**」的東西，
 
 ### 3. 開機早期不可信原則
 
+> 10/3 更正：這一節的前提「LSPosed 還沒接管」不成立。10/3 的 log 顯示，CorePatch 在 PackageManager 啟動前就已經載入 system_server。原文保留，更正見文末。
+
 system_server 在 LSPosed 還沒接管的階段做 reconcile，是 Android 安全模型的一環：開機早期任何 hook 都還沒生效，此時的 PackageManager 看到的就是「真實世界」的狀態。
 
 任何在這個階段寫入的狀態（不管是 `packages.xml` 還是別的）都會被當成 ground truth，後續的 hook 只能選擇覆寫或放行。CorePatch 在這個階段塞 B619，就是在用 hook 階段的計算結果污染 ground truth，後面要再用 hook 去救，邏輯上就不可能每個情境都閉合。
@@ -203,3 +207,54 @@ system_server 在 LSPosed 還沒接管的階段做 reconcile，是 Android 安�
 ---
 
 如果你也在 EU ROM 跑 CorePatch，而且曾經 bootloop 過，留下 logcat 和 `packages.xml` 的 B619 片段。這條鏈要有第二個案例，才知道它是不是只在我這台手機上成立。
+
+---
+
+## 2026/10/3 更新：升級 310 時，system_server 收不到 framework-res 的憑證
+
+10/3 我把 Xiaomi.eu 從 309 升到 310，沒有清資料，CorePatch 用的是 8/26 那個 fail-closed 版（`6e9afdb`）。手機開起來了，只是不是一次就開起來：升級後的第一次開機，system_server 在 15:19:30 和 15:19:38 各死了一次，兩次都死在 PackageManager 掃描系統目錄的時候。
+
+```
+W PackageManager: Failed to scan /system/framework/framework-res.apk: Failed to collect certificates from /system/framework/framework-res.apk
+E AndroidRuntime: java.lang.IllegalStateException: Failed to load frameworks package; check log for warnings
+```
+
+第三次能開，是因為 LSPosed 放棄了。15:19:39 它記下 `System server crashed too many times, stop all modules and enter safe mode`，第三次 system_server 沒有載入任何模組，framework-res 正常載入，開機完成。`packages.xml` 沒有被污染，B619 只出現在本來就由 Google 簽章的 TrichromeLibrary 上，fail-closed 那層 patch 有發揮作用。可是 system_server 連兩次死在同一個地方，要不是 LSPosed 停掉模組，我很可能又要面對一次開機循環。
+
+310 被拿掉 v2/v3 的系統 APK 不只 ContactsProvider。我用 apksigner 檢查 framework-res.apk、ContactsProvider.apk，加上同一次掃描失敗的 6 個 overlay，8 個全部是 `DOES NOT VERIFY`：v1 簽章還在，v2/v3 被拿掉，`.SF` 還宣告 `X-Android-APK-Signed: 2, 3`。309 的 framework-res 是不是本來就這樣，我沒有回頭查。
+
+### 更正：LSPosed 其實早就接管了
+
+前面 TL;DR 第 3 點和「開機早期不可信原則」那一節，都建立在「冷開機時 LSPosed 還沒接管」上。這次的 log 推翻了這個說法：CorePatch 在 15:19:30.50 就已經在 system_server 裡初始化，PackageManager 到 15:19:30.68 才啟動。所以八月那兩次因為 B619 讓 shared UID 簽章不一致而 fatal 的時候，LSPosed 很可能也已經載入了。根因還是 B619 被寫進 `packages.xml`，錯的是「為什麼 LSPosed 救不了」那段解釋。八月的開機時序我沒有回頭驗證。
+
+### 新找到的 bug：verifyBytes 回傳了錯的型別
+
+LSPosed 既然在場，CorePatch 的 hook 就會碰到 framework-res 的驗證。我回頭讀 CorePatch 的原始碼，`StrictJarVerifierHook` 在「略過摘要驗證」開、「使用已安裝簽章」關的時候，會改寫 `StrictJarVerifier.verifyBytes` 的結果，這正是我手機 10/3 的設定：
+
+```kotlin
+val certs = getCertificateChainMethod.invoke(signer, block)
+callback.result = certs
+callback.throwable = null
+```
+
+`verifyBytes` 必須回傳 `Certificate[]`，`SignerInfo.getCertificateChain()` 回傳的卻是 `ArrayList`。這兩個型別我用 dexdump 從手機的 `framework.jar` 和 `core-oj.jar` 確認過。型別不合時，呼叫端會丟出 `ClassCastException`，`verifyV1Signature` 接到例外後回報 `Failed to collect certificates`，跟這次的 log 一致。
+
+只剩 v1 簽章的 APK 才會走到 `verifyBytes`；平常開機時，PackageManager 也不會重新收集系統 APK 的憑證。所以這個 bug 只會在 OTA 後第一次開機、而且剛好遇到 EU 這種被拿掉 v2/v3 的系統 APK 時發作。沒有模組的時候，AOSP 對系統分割區的 APK 本來就比較寬鬆，只要求 v1 憑證、不管 `.SF` 那行宣告，所以第三次可以開機。
+
+這段寫法來自上游：2024 年 3 月的 [`e713a68`](https://github.com/LSPosed/CorePatch/commit/e713a68423af8b51f3bd177e66e3db5ed8ec7201) 拿掉了原本的 `as Array<*>`，2026 年 7 月的 [`f84aa3b`](https://github.com/LSPosed/CorePatch/commit/f84aa3b1e4f8705041c198b32588bacc73655a74) 又加上 `callback.throwable = null`。到 10/3 為止，上游 main（`af7b1de`）還是這樣寫。
+
+還有一環我沒有實測：LSPosed 在 hook 回傳錯誤型別時，是否真的會丟出 `ClassCastException`。要確認這一點，得讓 PackageManager 以為剛升級完，分別用舊版和新版 CorePatch 開機各一次。
+
+這個 bug 能不能解釋八月 ContactsProvider 那次驗證失敗，我不知道。照我八月寫下的設定，「略過摘要驗證」是關的，這段 hook 根本不會執行；10/3 的 log 裡它是開的，什麼時候打開的，我沒有留下紀錄。
+
+### 修正：fork 的 `8e55ee0`
+
+我在 fork 推了 [`8e55ee0`](https://github.com/jason5545/CorePatch/commit/8e55ee0fa6d8a077b32917d92d550defb55c6475)：
+
+- `verifyBytes` 改成回傳 `Certificate[]`。
+- 在 `ApkSignatureVerifier` 的入口記下目前在驗證哪個 APK。`StrictJarVerifier`、`ApkSigningBlockUtils`、`MessageDigest` 的 bypass 只對 `/data/app` 底下的 APK 作用，`ScanPackageUtils` 改看套件路徑，系統分割區一律走原生驗證。
+- 以前只要開著 bypass，整個 system_server 裡的 `MessageDigest.isEqual` 都會直接回傳 true，現在只限驗證 `/data/app` 的 APK 時。
+
+`6e9afdb` 只替 `ApkSignatureVerifierHook` 加了 `/data/app` 的限制，這次把其他會碰到系統 APK 驗證的 hook 都補齊。用 APK 取代系統 app（例如拿別人給的相機 APK 蓋掉系統相機）不受影響，因為安裝時 APK 暫存在 `/data/app/vmdl….tmp/`，bypass 照樣作用。受影響的是用 KSU 模組直接掛到系統路徑、改過內容卻沒有正確重新簽名的 APK，這種 APK 現在會被原生驗證擋下。
+
+裝上新版後我重開機一次：17 個 hook 都正常初始化，system_server 沒有崩潰，`packages.xml` 也乾淨。不過那次開機沒有重新收集系統 APK 的憑證，修正的那條路還沒真正走過。要確認它有效，得等下一次 ROM 更新，或者先做上面說的重現。

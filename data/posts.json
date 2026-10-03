@@ -408,7 +408,7 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2026-08-26T00:00:00Z",
-    "readingTime": "17 min",
+    "readingTime": "20 min",
     "tags": [
       "Android",
       "CorePatch",
@@ -420,7 +420,8 @@
       "根因分析"
     ],
     "accentColor": "#dc2626",
-    "coverImage": "/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp"
+    "coverImage": "/content/img/2026/corepatch-b619-bootloop-root-cause-cover.webp",
+    "updatedAt": "2026-10-03T00:00:00Z"
   },
   {
     "slug": "edgelink-kde-connect-xiaomi-lyra-mac",
