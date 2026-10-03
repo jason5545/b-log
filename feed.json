@@ -453,7 +453,7 @@
       "title": "CorePatch 的 B619 是怎麼炸掉我兩次開機的",
       "content_text": "CorePatch 用真實的 Google platform key 當 fail-open 占位符，碰上 Xiaomi.eu ContactsProvider 的矛盾簽章，最後把 B619 寫進 packages.xml，讓 shared UID 群組在冷開機時 fatal。這篇追出觸發條件、fork patch，以及不用先 format data 的驗證方法。",
       "date_published": "2026-08-26T00:00:00.000Z",
-      "date_modified": "2026-08-26T00:00:00.000Z",
+      "date_modified": "2026-10-03T00:00:00.000Z",
       "tags": [
         "Android",
         "CorePatch",
