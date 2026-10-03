@@ -112,7 +112,7 @@ signaturesBefore ?: arrayOf(Signature(Constant.SIGNATURE)),
 
 這讓這條問題很難靠一般回報被修掉：
 
-1. **你大概率不會炸。** CorePatch 主力用途是覆蓋安裝 `/data/app` 的異簽章 APK，那種情況 fallback 即使寫入，下次開機 LSPosed 已接管、bypass 繼續放行，永遠無症狀。只有「系統分割區＋shared UID」組合才會在裸開機時 fatal，而正常 ROM 的系統 APK 簽章一致，`verifyV1` 根本不失敗。
+1. **你大概率不會炸。** CorePatch 主力用途是覆蓋安裝 `/data/app` 的異簽章 APK，那種情況 fallback 即使寫入，下次開機 LSPosed 已接管、bypass 繼續放行，永遠無症狀。只有「系統分割區＋shared UID」組合才會在裸開機時 fatal（10/3 更正：「裸開機」建立在 LSPosed 還沒接管的錯誤前提上，見文末更新），而正常 ROM 的系統 APK 簽章一致，`verifyV1` 根本不失敗。
 2. **炸了也很難查到原因。** CorePatch 日誌只進 LSPosed 私有 log，logcat 沒有；crash 點在 system_server reconcile，一般人不抓 boot trace；`packages.xml` 是 ABX 二進位，要 root + parser 才能看見 B619；看到 B619 hex 還不算完，要比對 CorePatch dex 內嵌憑證才知道來源。
 3. **就算查到，也很可能先停在個人 fork。** 我自己的 patch 推在 fork `6e9afdb`，目前不打算發 PR。這條鏈需要特定 ROM、特定 APK 狀態和可比對的 `packages.xml`；沒有可重現證據，上游很難判斷要改哪一層。#132 那張 open issue 就是這個結構的樣板：有現象、無證據、上游無從修起。
 
