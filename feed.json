@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-sophilia-billboard-japan-interview",
+      "url": "https://b-log.to/crossing-field/lisa-sophilia-billboard-japan-interview/",
+      "title": "LiSA「ソフィリア」專訪｜抒情曲成了新武器",
+      "content_text": "我翻譯了 Billboard JAPAN 的 LiSA「ソフィリア」專訪。電影《Matching TRUE LOVE》要的是抒情歌，她說自己不是唱功型歌手，只是搖滾歌手；出道 15 年，終於覺得可以為了自己唱歌。最後她說，想在明年 40 歲那年站上臺北大巨蛋。",
+      "date_published": "2026-10-06T00:00:00.000Z",
+      "date_modified": "2026-10-06T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "ソフィリア",
+        "Matching TRUE LOVE",
+        "抒情曲",
+        "YES",
+        "Patch Walk",
+        "臺北大巨蛋",
+        "專訪翻譯",
+        "Billboard JAPAN"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-sophilia-billboard-japan-interview-cover.webp"
+    },
+    {
       "id": "print-shop-ai-file-chatgpt-image",
       "url": "https://b-log.to/cultural-insights/print-shop-ai-file-chatgpt-image/",
       "image": "https://b-log.to/content/img/2026/print-shop-ai-file-chatgpt-image-cover.webp",

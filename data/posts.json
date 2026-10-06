@@ -1,5 +1,27 @@
 [
   {
+    "slug": "lisa-sophilia-billboard-japan-interview",
+    "title": "LiSA「ソフィリア」專訪｜抒情曲成了新武器",
+    "summary": "我翻譯了 Billboard JAPAN 的 LiSA「ソフィリア」專訪。電影《Matching TRUE LOVE》要的是抒情歌，她說自己不是唱功型歌手，只是搖滾歌手；出道 15 年，終於覺得可以為了自己唱歌。最後她說，想在明年 40 歲那年站上臺北大巨蛋。",
+    "category": "Crossing Field",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-06T00:00:00Z",
+    "tags": [
+      "LiSA",
+      "ソフィリア",
+      "Matching TRUE LOVE",
+      "抒情曲",
+      "YES",
+      "Patch Walk",
+      "臺北大巨蛋",
+      "專訪翻譯",
+      "Billboard JAPAN"
+    ],
+    "accentColor": "#b3262f",
+    "coverImage": "/content/img/2026/lisa-sophilia-billboard-japan-interview-cover.webp",
+    "readingTime": "12 min"
+  },
+  {
     "slug": "print-shop-ai-file-chatgpt-image",
     "title": "印刷廠要 AI 檔，客人交來的是 AI 生的圖",
     "summary": "印刷廠講的 AI 檔是 Illustrator 的 .ai，客人交來的是 ChatGPT 生的名片圖。兩個英文字母念出來一樣，交出來的東西八竿子打不著。最後中文版真正用上的，是我們自己做的英文版 .ai。",
