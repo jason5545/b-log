@@ -17,6 +17,15 @@
 - 改 `assets/css/*.css`、`assets/styles.css` 之後跑 `npm run build:assets`（會把 CSS 寫進四個根目錄 HTML），再跑 `node scripts/generate-redirects.js` 帶到文章頁。見下面「CSS 內嵌在 HTML」。
 - 產物沒同步，PR 檢查會直接失敗（`.github/workflows/content-pipeline.yml`）。推送 `main` 之後，內容資料管線與 Facebook 發文管線會自動接手。
 
+## 訪談翻譯照發
+
+Jason 2026/9/7 定，10/6 要求寫進來。Crossing Field 刊登 LiSA 訪談的全文中譯和原文照片，延續的是台灣 LiSA 翻譯組的做法，不是 b-log 自己開的先例。
+
+- 先例：後援會翻譯組長 Dr.K（巴哈姆特帳號 player303260）從 2014 年起在巴哈發 LiSA 專訪翻譯，日文原文整段對照，照片重新上傳到巴哈圖床，到現在十二年沒有被要求撤文。10/6 確認這四篇都還在：[印記（2014）](https://home.gamer.com.tw/creationDetail.php?sn=2686254)、[BEST -Day-／-Way-](https://home.gamer.com.tw/artwork.php?sn=3990049)、[晨星／白銀（2021）](https://home.gamer.com.tw/artwork.php?sn=5326925)、[VOCE 專訪](https://home.gamer.com.tw/artwork.php?sn=5949246)。
+- b-log 的做法比 Dr.K 保守：只放中文，標明出處、採訪撰文與攝影者，並連回原文。
+- Jason 9/7 已評估過著作權風險，決定照發。同一個論點不要每篇重提；有新事實（例如收到撤文通知、原媒體公開表態）才提出。9/7 Claude Code 說過「日本媒體對這種事會出手」，查了 Dr.K 的先例後收回；這段脈絡在記憶系統裡也查得到。
+- 要守的只有署名：原文連結、採訪撰文、攝影者都要寫在文章開頭。
+
 ## CSS 內嵌在 HTML
 
 2026/10/2 改的。`index.html`、`post.html`、`about.html`、`gadgets.html`（和文章頁）不用 `<link>` 載入樣式表，`fonts.css`、`critical-shared.css`、`styles.css` 壓縮後直接寫在 `<head>`，由 `npm run build:assets` 產生（`scripts/inline-css.js`），`npm run validate` 會擋沒同步的頁面。原檔照舊改，HTML 裡兩組 `INLINE_CSS_*` 標記之間不要手改。
