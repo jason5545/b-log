@@ -10,7 +10,7 @@
 >
 > 原文：[Billboard JAPAN〈＜インタビュー＞LiSA　バラードという新たな武器を与える新曲「ソフィリア」でたどり着いた境地〉](https://www.billboard-japan.com/special/detail/5466)
 >
-> 發佈：2026 年 9 月 25 日前後（原文頁面未標示日期）
+> 發佈：2026 年 10 月 3 日 12:00
 >
 > 採訪：小栁大輔（Interview inc.）
 >
