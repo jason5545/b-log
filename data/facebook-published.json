@@ -1471,6 +1471,13 @@
       "postUrl": "https://b-log.to/crossing-field/lisa-sophilia-billboard-japan-interview/",
       "facebookPostId": "1026818047191304_122116376295290922",
       "publishedAt": "2026-10-06T00:27:54.040Z"
+    },
+    "patchmd-reinventing-wheel": {
+      "status": "published",
+      "title": "agent 讓重造輪子變便宜，我選擇 fork，再把改過的地方寫進 PATCHES.md",
+      "postUrl": "https://b-log.to/dev-philosophy/patchmd-reinventing-wheel/",
+      "facebookPostId": "1026818047191304_122116725273290922",
+      "publishedAt": "2026-10-09T12:09:36.223Z"
     }
   }
 }
