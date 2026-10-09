@@ -6,6 +6,33 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "patchmd-reinventing-wheel",
+      "url": "https://b-log.to/dev-philosophy/patchmd-reinventing-wheel/",
+      "title": "agent 讓重造輪子變便宜，我選擇 fork，再把改過的地方寫進 PATCHES.md",
+      "content_text": "agent 讓自己寫比找套件還快，代價是同一個功能被寫了一遍又一遍。Theo 在四月提出 patch.md：fork 現成的 app，再用白話寫下改了什麼。我的 oMLX、T3 Code、DroidDeck 三個 fork 已經各有一份這樣的檔案，而且多寫了行為底線、合併衝突清單，還有每一條什麼時候可以刪。",
+      "date_published": "2026-10-09T00:00:00.000Z",
+      "date_modified": "2026-10-09T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Agentic Coding",
+        "重複造輪子",
+        "fork",
+        "PATCHES.md",
+        "PatchMD",
+        "Theo",
+        "oMLX",
+        "T3 Code",
+        "DroidDeck",
+        "開放原始碼"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/patchmd-reinventing-wheel-cover.svg"
+    },
+    {
       "id": "lisa-sophilia-billboard-japan-interview",
       "url": "https://b-log.to/crossing-field/lisa-sophilia-billboard-japan-interview/",
       "title": "LiSA「ソフィリア」專訪｜抒情曲成了新武器",
