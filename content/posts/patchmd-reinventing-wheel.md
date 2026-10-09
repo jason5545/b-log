@@ -80,9 +80,9 @@ PATCHES.md 會從 AGENTS.md 獨立出來，是因為 AGENTS.md 那時已經超�
 
 > AGENTS.md total … KB exceeds the recommended 32 KB. Large instruction files increase cost and may impact performance; consider trimming.
 
-它不會截斷，內容照樣全部交給模型，只是提醒你修剪。OpenAI 的 Codex CLI 也是 [32 KiB](https://developers.openai.com/codex/guides/agents-md)，但那邊是硬上限，超過的部分就不讀了。所以我把本地 patch 清單搬出去，替 AGENTS.md 減肥。
+它不會截斷，內容照樣全部交給模型，只是提醒你修剪。所以我把本地 patch 清單搬出去，替 AGENTS.md 減肥。順帶一提，OpenAI 的 Codex CLI 也是 [32 KiB](https://developers.openai.com/codex/guides/agents-md)，但那邊是硬上限，超過的部分就不讀了。
 
-這幾份檔案也不會讓 fork 變小。oMLX 那份在九天內從十一條長到三十一條。但不少條目都寫了自己什麼時候可以刪。DroidDeck 觸控那條的最後一句是：
+這幾份檔案不會讓 fork 變小。oMLX 那份在九天內從十一條長到三十一條。但不少條目都寫了自己什麼時候可以刪。DroidDeck 觸控那條的最後一句是：
 
 > 合併後整條改取 upstream 版，這裡和檢查清單對應的那行一起拿掉。
 
