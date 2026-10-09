@@ -3,47 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢 - (b)-log</title>
+  <title>罵 Claude 會被停權嗎？罵了會比較準嗎？兩件事的原文都沒有傳言講得那麼大 - (b)-log</title>
 
   <!-- 基本的 SEO metadata -->
-  <meta name="description" content="我原本以為左下角上滑開 Google Assistant，只要關掉 SystemUI 的 assist_touch_gesture_enabled 就好。拆到最後才發現 HyperOS 這條手勢在 MiLauncherGlobal，Launcher 根本不理 SystemUI 的 availability。">
+  <meta name="description" content="The Decoder 說罵 Claude 可能被停權，但新條款禁止的是「長期、無謂地」虐待模型，主要是讓 Claude 結束那一個對話。「對 AI 兇比較準」只有一篇只測 ChatGPT-4o 的小研究支持。我會罵，但罵法不在這條裡；我在意的是 Anthropic 在 AI welfare 上 all in。">
   <meta name="author" content="Jason Chien">
-  <link rel="canonical" href="https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/" id="canonical-url">
+  <link rel="canonical" href="https://b-log.to/ai-analysis/anthropic-model-abuse-policy/" id="canonical-url">
 
   <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/" id="og-url">
-  <meta property="og:title" content="左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢" id="og-title">
-  <meta property="og:description" content="我原本以為左下角上滑開 Google Assistant，只要關掉 SystemUI 的 assist_touch_gesture_enabled 就好。拆到最後才發現 HyperOS 這條手勢在 MiLauncherGlobal，Launcher 根本不理 SystemUI 的 availability。" id="og-description">
-  <meta property="og:image" content="https://b-log.to/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp" id="og-image">
+  <meta property="og:url" content="https://b-log.to/ai-analysis/anthropic-model-abuse-policy/" id="og-url">
+  <meta property="og:title" content="罵 Claude 會被停權嗎？罵了會比較準嗎？兩件事的原文都沒有傳言講得那麼大" id="og-title">
+  <meta property="og:description" content="The Decoder 說罵 Claude 可能被停權，但新條款禁止的是「長期、無謂地」虐待模型，主要是讓 Claude 結束那一個對話。「對 AI 兇比較準」只有一篇只測 ChatGPT-4o 的小研究支持。我會罵，但罵法不在這條裡；我在意的是 Anthropic 在 AI welfare 上 all in。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/anthropic-model-abuse-policy-cover.webp" id="og-image">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="(b)-log">
   <meta property="og:locale" content="zh_TW">
-  <meta property="article:published_time" content="2026-06-30T00:00:00Z" id="og-published-time">
-  <meta property="article:modified_time" content="2026-06-30T00:00:00Z" id="og-modified-time">
-  <meta property="article:section" content="技術分析" id="og-section">
+  <meta property="article:published_time" content="2026-10-09T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-10-09T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="AI 分析" id="og-section">
   <!-- ARTICLE_TAGS_START -->
-  <meta property="article:tag" content="Xiaomi">
-  <meta property="article:tag" content="HyperOS">
-  <meta property="article:tag" content="Android 16">
-  <meta property="article:tag" content="Google Assistant">
-  <meta property="article:tag" content="SystemUI">
-  <meta property="article:tag" content="MiLauncherGlobal">
-  <meta property="article:tag" content="ADB">
-  <meta property="article:tag" content="反編譯">
+  <meta property="article:tag" content="AI">
+  <meta property="article:tag" content="Anthropic">
+  <meta property="article:tag" content="Claude">
+  <meta property="article:tag" content="使用政策">
+  <meta property="article:tag" content="model welfare">
+  <meta property="article:tag" content="禮貌">
+  <meta property="article:tag" content="prompt">
+  <meta property="article:tag" content="研究查證">
 <!-- ARTICLE_TAGS_END -->
 
   <!-- Twitter - 將由 JavaScript 動態更新 -->
   <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/" id="twitter-url">
-  <meta property="twitter:title" content="左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢" id="twitter-title">
-  <meta property="twitter:description" content="我原本以為左下角上滑開 Google Assistant，只要關掉 SystemUI 的 assist_touch_gesture_enabled 就好。拆到最後才發現 HyperOS 這條手勢在 MiLauncherGlobal，Launcher 根本不理 SystemUI 的 availability。" id="twitter-description">
-  <meta property="twitter:image" content="https://b-log.to/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp" id="twitter-image">
+  <meta property="twitter:url" content="https://b-log.to/ai-analysis/anthropic-model-abuse-policy/" id="twitter-url">
+  <meta property="twitter:title" content="罵 Claude 會被停權嗎？罵了會比較準嗎？兩件事的原文都沒有傳言講得那麼大" id="twitter-title">
+  <meta property="twitter:description" content="The Decoder 說罵 Claude 可能被停權，但新條款禁止的是「長期、無謂地」虐待模型，主要是讓 Claude 結束那一個對話。「對 AI 兇比較準」只有一篇只測 ChatGPT-4o 的小研究支持。我會罵，但罵法不在這條裡；我在意的是 Anthropic 在 AI welfare 上 all in。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/anthropic-model-abuse-policy-cover.webp" id="twitter-image">
   <meta property="twitter:creator" content="@jason5545">
 
   <!-- 額外的 metadata -->
-  <meta name="keywords" content="Xiaomi, HyperOS, Android 16, Google Assistant, SystemUI, MiLauncherGlobal, ADB, 反編譯" id="meta-keywords">
+  <meta name="keywords" content="AI, Anthropic, Claude, 使用政策, model welfare, 禮貌, prompt, 研究查證" id="meta-keywords">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#f4efe7" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0e1114" media="(prefers-color-scheme: dark)">
@@ -162,12 +162,12 @@
   </style>
 
   <!-- 首圖 preload 會由生成腳本注入到這裡 -->
-  <link rel="preload" as="image" href="/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp" imagesrcset="/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover-480w.webp 480w, /content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover-828w.webp 828w, /content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" fetchpriority="high">
+  <link rel="preload" as="image" href="/content/img/2026/anthropic-model-abuse-policy-cover.webp" imagesrcset="/content/img/2026/anthropic-model-abuse-policy-cover-480w.webp 480w, /content/img/2026/anthropic-model-abuse-policy-cover-828w.webp 828w, /content/img/2026/anthropic-model-abuse-policy-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7778), (max-width: 800px) min(92vw, 50vh * 1.7778), (max-width: 1099px) min(736px, 50vh * 1.7778), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7778), min(calc(90.78vw - 434px), 50vh * 1.7778)" fetchpriority="high">
 <!-- 完整樣式表：assets/styles.css 壓縮後內嵌在下面，由 npm run build:assets 產生，不要手改 -->
   <!-- INLINE_CSS_SITE_START -->
   <style>.mono{font-family:var(--font-mono)}.search-toggle-container{position:relative}.search-box{position:absolute;top:calc(100% + 8px);right:0;z-index:30;width:min(22rem,calc(100vw - 32px));padding:.5rem;background:var(--bg);border:1px solid var(--ink);border-radius:2px}.search-input-wrapper{display:flex;align-items:center;gap:.5rem;min-height:44px;padding-inline:0.6rem;border:1px solid var(--rule);border-radius:2px;background:var(--surface)}.search-input-wrapper:focus-within{border-color:var(--cyan)}.search-icon{flex:0 0 auto;width:16px;height:16px;color:var(--muted)}.search-input{flex:1 1 auto;min-width:0;min-height:42px;border:0;background:0 0;color:var(--ink);font:400 1rem/1.4 var(--font-body)}.search-input:focus{outline:0}.search-input::-webkit-search-cancel-button{display:none}.search-clear{flex:0 0 auto;min-width:44px;min-height:44px;margin-right:-.6rem;border:0;background:0 0;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}.search-clear svg{width:16px;height:16px}.search-clear:hover{color:var(--cyan)}.label{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25rem .75rem;margin:0 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--ink);font:700 0.74rem/1.2 var(--font-mono);letter-spacing:.16em;color:var(--ink)}.label>span{font:400 0.82rem/1.2 var(--font-body);letter-spacing:0;color:var(--muted)}.label__clear{margin-left:auto;font:400 0.74rem/1 var(--font-mono);letter-spacing:.08em;display:inline-flex;align-items:center;min-height:36px;margin-block:-0.6rem}.meta{margin:0;font:400 0.76rem/1.5 var(--font-mono);letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}.error,.notice{margin:1rem 0;padding:.9rem 1rem;border:1px solid var(--rule);border-radius:2px;font-size:.92rem;color:var(--text)}.error{border-color:var(--amber);color:var(--amber)}.error code,.notice code{font-family:var(--font-mono);font-size:.85em}.side{display:grid;gap:2.5rem;align-content:start}.lead__link{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:1.75rem;align-items:start;color:inherit;text-decoration:none}.lead--text-only .lead__link{grid-template-columns:minmax(0,1fr)}.lead__text{display:grid;gap:.9rem;align-content:start}.lead__title{margin:0;font:700 clamp(1.55rem, 2.7vw, 2.15rem)/1.32 var(--font-head);color:var(--ink);text-wrap:pretty}.lead__link:hover .lead__title{color:var(--cyan)}.lead__sum{margin:0;font-size:.95rem;line-height:1.8;color:var(--text);text-wrap:pretty}.lead__media{position:relative;aspect-ratio:16/9;border-radius:2px;background:var(--surface)}.lead__img{display:block;width:100%;height:100%;object-fit:cover;border-radius:2px}.lead__media::before{--c:var(--muted);content:"";position:absolute;inset:-0.4rem;pointer-events:none;background:linear-gradient(var(--c),var(--c)) top left/1rem 2px no-repeat,linear-gradient(var(--c),var(--c)) top left/2px 1rem no-repeat,linear-gradient(var(--c),var(--c)) top right/1rem 2px no-repeat,linear-gradient(var(--c),var(--c)) top right/2px 1rem no-repeat,linear-gradient(var(--c),var(--c)) bottom left/1rem 2px no-repeat,linear-gradient(var(--c),var(--c)) bottom left/2px 1rem no-repeat,linear-gradient(var(--c),var(--c)) bottom right/1rem 2px no-repeat,linear-gradient(var(--c),var(--c)) bottom right/2px 1rem no-repeat}.lead__link:hover .lead__media::before{--c:var(--cyan)}@media (min-width:761px){.lead__link{container-type:inline-size}.lead__media{aspect-ratio:auto;align-self:stretch;max-height:calc((100cqw - 1.75rem)/ 2.6 * 3 / 4);min-height:min(12rem,calc((100cqw - 1.75rem)/ 2.6 * 3 / 4))}.lead__img{position:absolute;inset:0}}.brief ol{list-style:none;margin:0;padding:0;display:grid;gap:1.1rem}.brief li{position:relative;padding-left:.75rem}.brief a{font-weight:600;font-size:.95rem;line-height:1.5;color:var(--ink);text-decoration:none}.brief a:hover{color:var(--cyan);text-decoration:underline}.brief p{margin:.3rem 0 0;font-size:.83rem;line-height:1.65;color:var(--muted)}.brief .cat{display:block;margin-bottom:.2rem;font:400 0.7rem/1.3 var(--font-mono);letter-spacing:.08em;color:var(--muted)}.brief .cat::before,.row__date::before{content:'';position:absolute;left:0;width:3px;height:1.1em;margin-top:.15em;background:var(--row-accent,transparent)}.brief .cat::before{margin-top:.1em}.log__head,.row a{display:grid;grid-template-columns:6.4rem 5.4rem minmax(0,1fr) 3.6rem;gap:1rem;align-items:baseline}.log__head{padding:0 .5rem .5rem;font:400 0.68rem/1 var(--font-mono);letter-spacing:.14em;color:var(--muted)}.log__head span:last-child{text-align:right}.log__list{list-style:none;margin:0;padding:0}.log .log__list:empty{min-height:61.25rem;background:repeating-linear-gradient(to bottom,transparent 0,transparent 48px,var(--rule) 48px,var(--rule) 49px)}.row a{position:relative;min-height:48px;padding:.8rem .5rem;border-bottom:1px solid var(--rule);color:inherit;text-decoration:none}.row a:hover{background:var(--row-hover)}.row a:hover .row__title{color:var(--cyan)}.row__date,.row__time{font:400 0.8rem/1.4 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:.04em;white-space:nowrap}.row__time{text-align:right}.row__cat{font-size:.83rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.row__title{color:var(--ink);font-size:1rem;line-height:1.55}.row--empty{padding:.9rem .5rem;border-bottom:1px solid var(--rule);font-size:.92rem;color:var(--muted)}.log__more{display:inline-flex;align-items:center;min-height:44px;margin-top:.75rem;padding:0 .9rem;border:1px solid var(--rule);border-radius:2px;background:0 0;color:var(--cyan);font:400 0.8rem/1 var(--font-mono);letter-spacing:.08em;cursor:pointer}.log__more:hover{border-color:var(--cyan)}.search-results-count{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.audio-indicator{display:inline-flex;align-items:center;margin-left:.4rem;color:var(--cyan);vertical-align:-.1em}.audio-indicator svg{width:.9em;height:.9em}.audio-indicator--article svg{width:.7em;height:.7em}.audio-indicator--compact svg{width:.55em;height:.55em}.topics{list-style:none;margin:0;padding:0;min-height:24.75rem}.topics a{display:flex;align-items:baseline;gap:.5rem;min-height:44px;padding-block:0.6rem;color:var(--text);text-decoration:none;font-size:.92rem}.topics .dots{flex:1;min-width:1rem;border-bottom:1px dotted var(--muted);opacity:.6;transform:translateY(-.25em)}.topics .n{font:400 0.8rem/1 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}.topics a:hover{color:var(--cyan)}.topics a[aria-current=page]{font-weight:700;color:var(--ink)}.topics .hint{font-size:.76rem;color:var(--muted);white-space:nowrap}.tag-cloud{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .9rem;min-height:12rem}.tag-cloud a{display:inline-flex;align-items:baseline;gap:.3rem;padding-block:0.3rem;line-height:1.5;text-decoration:none}.tag-cloud a:hover{text-decoration:underline}.tag-cloud a[aria-current=page]{font-weight:700}.tag-cloud .n{font:400 0.7rem/1 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}.tag-cloud__more{display:inline-flex;align-items:center;min-height:44px;margin-top:.5rem;padding:0 .9rem;border:1px solid var(--rule);border-radius:2px;background:0 0;color:var(--cyan);font:400 0.8rem/1 var(--font-mono);letter-spacing:.08em;cursor:pointer}.tag-cloud__more:hover{border-color:var(--cyan)}.about p{margin:0 0 .9rem;font-size:.9rem;line-height:1.75}.about a{display:inline-flex;align-items:center;min-height:44px;font:400 0.78rem/1 var(--font-mono);letter-spacing:.08em}.traffic .links{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.tcas{display:block;width:100%;height:auto;margin:0}.tcas__hit{fill:transparent;stroke:none;stroke-width:2}.tcas__arc{fill:none;stroke:var(--muted);stroke-width:1;opacity:.55}.tcas__arc--mid{stroke-dasharray:2 4}.tcas__tick{fill:none;stroke:var(--muted);stroke-width:1}.tcas__dot,.tcas__lubber{fill:var(--muted)}.tcas__own{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round}.tcas__sym{fill:var(--hot,transparent);stroke:var(--cyan);stroke-width:1.4;transition:fill .15s}.tcas text{font:400 11px/1 var(--font-mono);letter-spacing:.02em;fill:var(--hot-text,var(--muted));transition:fill .15s}.tcas a:hover,.traffic:has(.links li:nth-child(10) > a:focus-visible) .tcas__tfc>a:nth-child(10),.traffic:has(.links li:nth-child(11) > a:focus-visible) .tcas__tfc>a:nth-child(11),.traffic:has(.links li:nth-child(12) > a:focus-visible) .tcas__tfc>a:nth-child(12),.traffic:has(.links li:nth-child(3) > a:focus-visible) .tcas__tfc>a:nth-child(3),.traffic:has(.links li:nth-child(4) > a:focus-visible) .tcas__tfc>a:nth-child(4),.traffic:has(.links li:nth-child(5) > a:focus-visible) .tcas__tfc>a:nth-child(5),.traffic:has(.links li:nth-child(6) > a:focus-visible) .tcas__tfc>a:nth-child(6),.traffic:has(.links li:nth-child(7) > a:focus-visible) .tcas__tfc>a:nth-child(7),.traffic:has(.links li:nth-child(8) > a:focus-visible) .tcas__tfc>a:nth-child(8),.traffic:has(.links li:nth-child(9) > a:focus-visible) .tcas__tfc>a:nth-child(9){--hot:var(--cyan);--hot-text:var(--cyan)}.traffic:has(.links li:nth-child(2) > a:focus-visible) .tcas__tfc>a:nth-child(2){--hot:var(--magenta)}.traffic:has(.links li:first-child > a:focus-visible) .tcas__tfc>a:nth-child(1) .tcas__hit,.traffic:has(.links li:nth-child(10) > a:focus-visible) .tcas__tfc>a:nth-child(10) .tcas__hit,.traffic:has(.links li:nth-child(11) > a:focus-visible) .tcas__tfc>a:nth-child(11) .tcas__hit,.traffic:has(.links li:nth-child(12) > a:focus-visible) .tcas__tfc>a:nth-child(12) .tcas__hit,.traffic:has(.links li:nth-child(2) > a:focus-visible) .tcas__tfc>a:nth-child(2) .tcas__hit,.traffic:has(.links li:nth-child(3) > a:focus-visible) .tcas__tfc>a:nth-child(3) .tcas__hit,.traffic:has(.links li:nth-child(4) > a:focus-visible) .tcas__tfc>a:nth-child(4) .tcas__hit,.traffic:has(.links li:nth-child(5) > a:focus-visible) .tcas__tfc>a:nth-child(5) .tcas__hit,.traffic:has(.links li:nth-child(6) > a:focus-visible) .tcas__tfc>a:nth-child(6) .tcas__hit,.traffic:has(.links li:nth-child(7) > a:focus-visible) .tcas__tfc>a:nth-child(7) .tcas__hit,.traffic:has(.links li:nth-child(8) > a:focus-visible) .tcas__tfc>a:nth-child(8) .tcas__hit,.traffic:has(.links li:nth-child(9) > a:focus-visible) .tcas__tfc>a:nth-child(9) .tcas__hit{stroke:var(--focus)}.behind p{margin:0;font-size:.9rem;line-height:1.75}.behind code{font-family:var(--font-mono);font-size:.84em;color:var(--ink);background:var(--code-bg);padding:.1em .35em;border-radius:2px}.crumb{margin:0 0 1rem;font:400 0.74rem/1.3 var(--font-mono);letter-spacing:.1em;color:var(--muted)}.crumb a{display:inline-flex;align-items:center;min-height:44px;color:var(--muted);text-decoration:none}.crumb a:hover{color:var(--cyan)}.post__title{margin:.8rem 0 1.75rem;font:700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);color:var(--ink);text-wrap:pretty;overflow-wrap:break-word}.post__cover{margin:0 0 2.5rem;border-radius:2px;overflow:hidden;background:var(--surface)}.post__cover-img{display:block;width:100%;height:100%;object-fit:contain}.post__body{max-width:35em;font-size:1.125rem;line-height:1.9;color:var(--text);overflow-wrap:break-word}.post__body>:first-child{margin-top:0}.post__body p{margin:0 0 1.15em}.post__body h2{margin:2.4em 0 .9em;font:700 1.3rem/1.4 var(--font-head);color:var(--ink)}.post__body h3{margin:2em 0 .7em;font:700 1.12rem/1.45 var(--font-head);color:var(--ink)}.post__body h4{margin:1.8em 0 .6em;font:700 1rem/1.5 var(--font-head);color:var(--ink)}.post__body strong{color:var(--ink)}.post__body ol,.post__body ul{margin:0 0 1.15em;padding-left:1.3em}.post__body li{margin-bottom:.45em}.post__body li>ol,.post__body li>ul{margin:.45em 0 0}.post__body li::marker{color:var(--muted)}.post__body hr{border:0;border-top:1px solid var(--rule);margin:2.5em 0}.post__body blockquote{margin:1.6em 0;padding:0 0 0 1.1em;border-left:2px solid var(--rule);color:var(--text)}.post__body blockquote p{margin:0 0 .75em}.post__body blockquote>:last-child{margin-bottom:0}.post__body img{display:block;max-width:100%;height:auto;margin:1.8em auto;border-radius:2px;background:var(--surface)}.post__body picture{display:block;margin:1.8em 0}.post__body picture img{margin:0 auto}.post__body figure{margin:1.8em 0}.post__body figcaption{margin-top:.5rem;font:400 0.72rem/1.5 var(--font-mono);color:var(--muted);letter-spacing:.04em}.post__body iframe,.post__body video{max-width:100%}@media (min-width:1100px){.post__body img{max-height:85vh}}.post__body code{font-family:var(--font-mono);font-size:.84em;color:var(--ink);background:var(--code-bg);padding:.1em .35em;border-radius:2px;overflow-wrap:anywhere}.post__body .code-container{position:relative;display:flex;flex-wrap:wrap;align-items:stretch;margin:0 0 1.4em;border:1px solid var(--rule);border-radius:2px;background:var(--code-bg)}.post__body .code-language{display:inline-flex;align-items:center;padding:0 .8rem;font:700 0.68rem/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.post__body .code-copy-btn{order:1;margin-left:auto;min-height:44px;min-width:64px;padding:0 .9rem;border:0;border-left:1px solid var(--rule);background:0 0;color:var(--cyan);font:700 0.7rem/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}.post__body .code-copy-btn:hover{background:var(--row-hover)}.post__body .code-copy-btn.copied{color:var(--green)}.post__body pre{position:relative;margin:0 0 1.4em;padding:1rem 1.2rem;background:var(--code-bg);border:1px solid var(--rule);border-radius:2px;overflow-x:auto;overflow-y:hidden;font-family:var(--font-mono);font-size:.8rem;line-height:1.6;color:var(--ink);tab-size:2}.post__body .code-container pre{order:2;flex:1 0 100%;width:100%;margin:0;border:0;border-top:1px solid var(--rule);border-radius:0}.post__body pre code{display:block;padding:0;background:0 0;font-size:inherit;color:inherit;overflow-wrap:normal;white-space:pre}.post__body pre.line-numbers-wrapper{padding-left:3.4rem}.post__body .line-numbers{position:absolute;top:0;left:0;bottom:0;width:2.6rem;padding:1rem .5rem 1rem 0;border-right:1px solid var(--rule);font-family:var(--font-mono);font-size:inherit;line-height:inherit;text-align:right;color:var(--muted);opacity:.8;user-select:none;overflow:hidden}.post__body .token.keyword{color:var(--cyan);font-weight:700}.post__body .token.string{color:var(--green)}.post__body .token.number{color:var(--amber)}.post__body .token.comment{color:var(--muted);font-style:italic}.post__body .token.function{color:var(--cyan)}.post__body .token.variable{color:var(--ink);font-weight:700}.post__body .token.operator{color:var(--text)}.post__body .token.property{color:var(--amber)}.post__body .token.punctuation{color:var(--muted)}.post__body .token.tag{color:var(--cyan)}.post__body .token.attribute{color:var(--amber)}.post__body .token.class-name{color:var(--ink);font-weight:700}.post__body .table-wrapper{margin:0 0 1.4em;overflow-x:auto}.post__body table{width:100%;border-collapse:collapse;font-size:.9rem;line-height:1.6}.post__body .table-wrapper table{margin:0;min-width:500px}.post__body td,.post__body th{padding:.6rem .75rem;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}.post__body th{font-weight:700;color:var(--ink);border-bottom-color:var(--ink)}.post__body tbody tr:hover{background:var(--row-hover)}.status{margin:3.5rem 0 2.5rem;max-width:40rem;padding:1.25rem 1.4rem 1.3rem;background:#0b0f12;color:#eef2f4;border:1px solid #262e35;border-radius:2px;font-family:var(--font-mono)}.status__title{margin:0 0 1.1rem;font:700 0.95rem/1 var(--font-mono);letter-spacing:.14em;color:#eef2f4;text-decoration:underline;text-underline-offset:0.35em;text-align:center}.status__grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:1.25rem 2rem}.status__grid--single{grid-template-columns:minmax(0,1fr)}.status ul{list-style:none;margin:0;padding:0;display:grid;gap:.7rem}.status li{font-family:var(--font-body);font-size:.9rem;line-height:1.55}.status .k{display:block;margin-bottom:.15rem;font:700 0.68rem/1.3 var(--font-mono);letter-spacing:.14em}.status .ok{color:#5fd18c}.status .proc{color:#5ccfe6}.status .caut{color:#f5a524}.status__sub{margin:0 0 .55rem;font:700 0.72rem/1 var(--font-mono);letter-spacing:.14em;color:#f5a524;text-decoration:underline;text-underline-offset:0.3em}.status__sub+ul:not(:last-child){margin-bottom:1.1rem}.tags{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem .9rem;max-width:40rem;margin:2.5rem 0 1rem}.status+.tags{margin-top:0}.tags .meta{margin-right:.25rem}.tags a{display:inline-flex;align-items:center;min-height:36px;font-size:.88rem;text-decoration:none}.tags a:hover{text-decoration:underline}.share{display:flex;flex-wrap:wrap;align-items:center;gap:0 1.1rem;min-height:44px;margin:0 0 3rem}.share a{display:inline-flex;align-items:center;min-height:44px;font:400 0.76rem/1 var(--font-mono);letter-spacing:.1em;text-decoration:none}.share a:hover{text-decoration:underline}.related{margin:0 0 3rem}.toc-list{list-style:none;margin:0;padding:0;counter-reset:toc}.toc-list li{counter-increment:toc;display:grid;grid-template-columns:2.2rem minmax(0,1fr);align-items:baseline;padding-left:.5rem;border-bottom:1px solid var(--rule)}.toc-list li::before{content:counter(toc,decimal-leading-zero);font:400 0.74rem/1 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}.toc-list a{display:block;min-height:36px;padding-block:0.55rem;font-size:.9rem;line-height:1.5;color:var(--cyan);text-decoration:none}.toc-list a:hover{text-decoration:underline}.toc-list li:has(> a.is-current){box-shadow:inset 3px 0 0 var(--cyan)}.toc-list a.is-current{color:var(--ink);font-weight:700}.content>h2,.post__body>h2{scroll-margin-top:1.5rem}.side-list{list-style:none;margin:0;padding:0}.side-list a{display:grid;gap:.2rem;min-height:44px;padding:.7rem .5rem .75rem;border-bottom:1px solid var(--rule);color:inherit;text-decoration:none}.side-list a:hover{background:var(--row-hover)}.side-list a:hover .side-row__title{color:var(--cyan)}.side-row__meta{font:400 0.7rem/1.4 var(--font-mono);letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}.side-row__title{font-weight:600;font-size:.95rem;line-height:1.5;color:var(--ink)}.article-nav{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;margin:0 0 3rem;border-top:1px solid var(--ink)}.article-nav__link{display:grid;align-content:start;gap:.35rem;min-height:44px;padding:.8rem .5rem;color:var(--ink);text-decoration:none;line-height:1.5}.article-nav__link--next{text-align:right}.article-nav__link:hover{background:var(--row-hover)}.article-nav__link:hover .article-nav__title{color:var(--cyan)}.article-nav__label{font:400 0.7rem/1.3 var(--font-mono);letter-spacing:.14em;color:var(--muted)}.article-nav__title{font-size:.95rem}.article-nav__link.is-disabled{color:var(--muted);pointer-events:none}.comments-section{margin:0}.giscus-container{min-height:200px}.giscus-fallback p,.giscus-loading p{margin:0;padding:1rem 0;font:400 0.8rem/1.6 var(--font-mono);color:var(--muted)}.giscus-container .giscus,.giscus-container iframe{width:100%}.brief .cat.her-cat,.crumb a.her-cat,.crumb a.her-cat:hover,.her-cat,.row--her .row__cat,.tag-cloud a.her,.topics a.her{color:var(--magenta)}.tcas a.her,.tcas a.her-fan:hover{--hot:var(--magenta);--hot-text:var(--magenta)}.tcas a.her-fan{--hot-text:var(--magenta)}.tcas a.her .tcas__sym,.tcas a.her-fan .tcas__sym{stroke:var(--magenta)}.aside-toc--cf .toc-list li::before{color:var(--magenta)}.aside-toc--cf .toc-list li:has(> a.is-current){box-shadow:inset 3px 0 0 var(--magenta)}.aside-toc--cf .toc-list a{color:var(--ink)}.aside-toc--cf .toc-list a:hover{color:var(--cyan)}.catline{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25rem .75rem;margin:.2rem 0 0;font:700 0.74rem/1.3 var(--font-mono);letter-spacing:.16em;color:var(--magenta)}.catline span{font:400 0.85rem/1.3 var(--font-body);letter-spacing:0;color:var(--muted)}[data-category-theme=shirushi] .post__body blockquote{margin:0 0 2.2rem;padding:0;border:0;font-family:var(--font-serif);font-size:1.2rem;line-height:1.95;color:var(--ink)}[data-category-theme=shirushi] .post__body blockquote p{margin:0;white-space:pre-line}[data-category-theme=shirushi] .post__body blockquote *+p{margin-top:.6em}.post__body .her-cite,[data-category-theme=shirushi] .post__body blockquote cite{display:block;margin-top:.6rem;font:400 0.76rem/1.4 var(--font-mono);font-style:normal;letter-spacing:.06em;color:var(--magenta)}body:has([data-category-theme=crossing-field]) .site{border-bottom-color:var(--magenta);box-shadow:0 1px 0 var(--magenta)}.home-grid[data-category-theme=crossing-field] #lead-label,.home-grid[data-category-theme=crossing-field] #log-label{border-bottom-color:var(--magenta)}[data-category-theme=crossing-field] .post__title{font-family:var(--font-serif);font-weight:700;line-height:1.4}[data-category-theme=crossing-field] .post__body{counter-reset:cf-chapter}[data-category-theme=crossing-field] .post__body>h2{counter-increment:cf-chapter;font-family:var(--font-serif)}[data-category-theme=crossing-field] .post__body>h2::before{content:counter(cf-chapter,decimal-leading-zero);display:block;margin-bottom:.45rem;font:700 0.74rem/1.2 var(--font-mono);letter-spacing:.16em;color:var(--magenta)}.post__body .crossing-field-intro,.post__body .crossing-field-serial{margin:0 0 2rem;padding-top:1rem;border-top:2px solid var(--magenta)}.post__body .crossing-field-serial--end{margin-top:2.5rem}.post__body .crossing-field-intro__eyebrow,.post__body .crossing-field-serial__eyebrow{margin:0 0 .7rem;font:700 0.72rem/1.3 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--magenta)}.post__body .crossing-field-intro__lead,.post__body .crossing-field-serial__lead{margin:0;font-size:1.02rem;line-height:1.9}.post__body .crossing-field-intro__meta,.post__body .crossing-field-serial__meta{margin:.8rem 0 0;font-size:.85rem;line-height:1.7;color:var(--muted)}.post__body .cf-source{margin:0 0 2rem;padding:.9rem 1rem;border:1px solid var(--rule);border-radius:2px;font-size:.85rem;line-height:1.6}.post__body .cf-source__kind{margin:0 0 .55rem;font:700 0.7rem/1.3 var(--font-mono);letter-spacing:.14em;color:var(--muted)}.post__body .cf-source dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.35rem 1rem;margin:0}.post__body .cf-source dt{font:400 0.7rem/1.9 var(--font-mono);letter-spacing:.1em;color:var(--muted)}.post__body .cf-source dd{margin:0;overflow-wrap:anywhere}.post__body .crossing-field-toc{margin:2rem 0 2.5rem}.post__body .crossing-field-toc h2{display:flex;flex-wrap:wrap;align-items:baseline;gap:.75rem;margin:0 0 .5rem;padding-bottom:.6rem;border-bottom:1px solid var(--ink);font:400 0.82rem/1.2 var(--font-body);color:var(--muted)}.post__body .crossing-field-toc h2::before{content:"CONTENTS";font:700 0.74rem/1.2 var(--font-mono);letter-spacing:.16em;color:var(--ink)}.post__body .crossing-field-toc ol{list-style:none;margin:0;padding:0;counter-reset:ch}.post__body .crossing-field-toc li{counter-increment:ch;display:grid;grid-template-columns:2.2rem minmax(0,1fr);margin:0;padding-block:0.45rem;border-bottom:1px solid var(--rule);font-size:.95rem;line-height:1.6}.post__body .crossing-field-toc li::before{content:counter(ch,decimal-leading-zero);font:400 0.78rem/1.9 var(--font-mono);color:var(--magenta)}.post__body .crossing-field-toc a{display:inline-flex;align-items:center;min-height:36px;color:var(--ink);text-decoration:none}.post__body .crossing-field-toc a:hover{color:var(--cyan);text-decoration:underline}.post__body .cf-question{margin:2.2em 0 .7em;font-family:var(--font-body);font-size:.95rem;line-height:1.8;color:var(--muted)}.post__body .cf-question strong{font-weight:400;color:inherit}.post__body .cf-speaker{display:none}.post__body .cf-answer{padding-left:1.1rem;border-left:2px solid var(--magenta);font-family:var(--font-serif);font-size:1.16rem;line-height:1.95;color:var(--ink)}.post__body .cf-answer[data-speaker]:not([data-speaker=LiSA]){border-left-color:var(--rule)}.post__body .cf-answer+.cf-answer:not(.cf-answer--speaker-start){margin-top:-1.15em;padding-top:1.15em}.post__body .cf-answer strong{color:inherit}.post__body .cf-answer--speaker-start::before,.post__body .cf-question+.cf-answer:not([data-speaker])::before{display:block;margin-bottom:.15rem;font:700 0.68rem/1.4 var(--font-mono);letter-spacing:.14em;color:var(--muted)}.post__body .cf-answer--speaker-start::before{content:attr(data-speaker)}.post__body .cf-answer--speaker-start[data-speaker=LiSA]::before,.post__body .cf-question+.cf-answer:not([data-speaker])::before{content:"LiSA";color:var(--magenta)}.post__body .cf-answer--speaker-start{margin-top:1.6em}.post__body .cf-question+.cf-answer,.post__body .cf-speaker+.cf-answer--speaker-start{margin-top:0}.audio-player{margin:0 0 2rem;padding:1rem 1.1rem;background:var(--surface);border:1px solid var(--rule);border-radius:2px;font-family:var(--font-body);font-size:1rem;line-height:1.5}.audio-player audio{display:none}.audio-controls{display:flex;align-items:center;gap:1rem}.audio-btn{flex-shrink:0;width:44px;height:44px;border:0;border-radius:2px;background:var(--cyan);color:var(--on-cyan);cursor:pointer;display:flex;align-items:center;justify-content:center}.audio-btn svg{width:22px;height:22px}.audio-progress-container{flex:1;display:flex;flex-direction:column;gap:.4rem;min-width:0}.audio-progress{-webkit-appearance:none;appearance:none;width:100%;height:6px;margin:0;border-radius:0;background:var(--rule);cursor:pointer}.audio-progress::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:2px;background:var(--cyan);cursor:pointer}.audio-progress::-moz-range-thumb{width:16px;height:16px;border:0;border-radius:2px;background:var(--cyan);cursor:pointer}.audio-time,.playlist-info{display:flex;justify-content:space-between;font:400 0.72rem/1.4 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}.audio-speed{position:relative;flex-shrink:0}.speed-btn{min-width:60px;min-height:44px;padding:0 .7rem;border:1px solid var(--rule);border-radius:2px;background:0 0;color:var(--ink);font:700 0.76rem/1 var(--font-mono);cursor:pointer}.speed-btn:hover{border-color:var(--cyan)}.speed-menu{position:absolute;bottom:calc(100% + .4rem);right:0;z-index:10;min-width:84px;padding:.25rem;background:var(--bg);border:1px solid var(--ink);border-radius:2px}.speed-menu button{display:block;width:100%;min-height:40px;padding:0 .75rem;border:0;border-radius:2px;background:0 0;color:var(--ink);font:400 0.8rem/1 var(--font-mono);text-align:left;cursor:pointer}.speed-menu button:hover{background:var(--row-hover)}.speed-menu button.active{background:var(--cyan);color:var(--on-cyan);font-weight:700}.audio-volume{display:flex;align-items:center;gap:.4rem;flex-shrink:0}.volume-btn{width:44px;height:44px;border:0;border-radius:2px;background:0 0;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}.volume-btn:hover{color:var(--cyan)}.volume-btn svg{width:20px;height:20px}.volume-slider{-webkit-appearance:none;appearance:none;width:80px;height:4px;background:var(--rule);cursor:pointer}.volume-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;border-radius:2px;background:var(--cyan)}.volume-slider::-moz-range-thumb{width:12px;height:12px;border:0;border-radius:2px;background:var(--cyan)}.audio-attribution{margin-top:.8rem;padding-top:.6rem;border-top:1px solid var(--rule);font:400 0.7rem/1.5 var(--font-mono);color:var(--muted);text-align:center}.audio-error{display:none;margin-top:.8rem;padding:.6rem .8rem;border:1px solid var(--amber);border-radius:2px;color:var(--amber);font-size:.85rem;text-align:center}.birthday-theme{display:none}.birthday-theme.is-active{display:block}.birthday-banner{position:relative;padding:.75rem 3.5rem;border-bottom:2px solid var(--magenta);background:var(--bg);color:var(--magenta);text-align:center;font:700 0.88rem/1.5 var(--font-body)}.birthday-banner__text{display:inline-flex;align-items:center;gap:.5rem}.birthday-banner__close{position:absolute;right:.5rem;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;border-radius:2px;background:0 0;color:var(--magenta);cursor:pointer;display:flex;align-items:center;justify-content:center}.anniversary-section{margin:2rem 0 0;padding:1rem 0 0;border-top:2px solid var(--magenta)}.anniversary-section__badge{display:block;margin:0 0 .6rem;font:700 0.72rem/1.3 var(--font-mono);letter-spacing:.16em;color:var(--magenta)}.anniversary-section__title{margin:0 0 .6rem;font:700 clamp(1.4rem, 3vw, 1.9rem)/1.3 var(--font-head);color:var(--ink)}.anniversary-section__subtitle{margin:0 0 .6rem;max-width:40em;font-size:.95rem;line-height:1.8;color:var(--text)}.anniversary-section__link{display:inline-flex;align-items:center;min-height:44px;color:var(--magenta);font-weight:700}.yearly-stats__header{display:flex;align-items:center;gap:.5rem}.yearly-stats__icon{display:none}.yearly-stats__title{margin:0;font:700 0.74rem/1.2 var(--font-mono);letter-spacing:.16em;color:var(--ink)}.yearly-stats__year{color:inherit}.yearly-stats__header{padding-bottom:.6rem;margin-bottom:1rem;border-bottom:1px solid var(--ink)}.yearly-stats__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem 1rem}.yearly-stats__item{padding:.5rem 0;border-bottom:1px solid var(--rule)}.yearly-stats__number{display:block;font:700 1.4rem/1.2 var(--font-mono);color:var(--ink);font-variant-numeric:tabular-nums}.yearly-stats__label{display:block;font-size:.8rem;color:var(--muted)}.yearly-stats__categories-title{margin:1rem 0 .5rem;font:400 0.7rem/1.3 var(--font-mono);letter-spacing:.1em;color:var(--muted)}.yearly-stats__category-list{display:flex;flex-wrap:wrap;gap:.25rem .9rem;font-size:.85rem}.yearly-stats__category-count{margin-left:.25rem;font:400 0.76rem/1 var(--font-mono);color:var(--muted)}.content{max-width:46rem;margin-inline:auto;padding-block:2rem 4rem}.content--wide{max-width:none}.content h1{margin:.4rem 0 1.5rem;font:700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);color:var(--ink)}.content h2{margin:2.8rem 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--ink);font:700 1.2rem/1.4 var(--font-head);color:var(--ink)}.content h3{margin:1.8rem 0 .4rem;font:700 1.05rem/1.45 var(--font-head);color:var(--ink)}.content p{margin:0 0 1em;line-height:1.85}.content ul{padding-left:1.3rem;margin:.75rem 0}.content li{margin:.4rem 0;line-height:1.7}.content strong{color:var(--ink)}.content hr{margin:2.5rem 0;border:0;border-top:1px solid var(--rule)}.content code{font-family:var(--font-mono);font-size:.84em;color:var(--ink);background:var(--code-bg);padding:.1em .35em;border-radius:2px}.foot{border-top:1px solid var(--rule)}.foot>.wrap{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.5rem;padding-block:1.5rem 2rem;font:400 0.74rem/1.6 var(--font-mono);color:var(--muted)}.foot p{margin:0}.foot__year{font-variant-numeric:tabular-nums}.foot .en{font-family:var(--font-body);font-size:.82rem}@media (max-width:960px){.topics{min-height:0}}@media (max-width:760px){.lead__link{grid-template-columns:minmax(0,1fr);gap:1rem}.lead__media{order:-1}.log__head{display:none}.row a{grid-template-columns:auto auto minmax(0,1fr);grid-template-areas:"date cat time" "title title title";gap:.2rem .75rem;padding:.85rem .25rem .85rem .5rem}.row__date{grid-area:date}.row__cat{grid-area:cat}.row__time{grid-area:time}.row__title{grid-area:title}.log .log__list:empty{min-height:1560px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 77px,var(--rule) 77px,var(--rule) 78px)}.post{padding-top:.5rem}.post__body{font-size:1.0625rem;line-height:1.85}.status__grid{grid-template-columns:minmax(0,1fr)}.article-nav{grid-template-columns:minmax(0,1fr);gap:0}.article-nav__link--next{text-align:left;border-top:1px solid var(--rule)}.audio-controls{flex-wrap:wrap}.audio-progress-container{order:3;width:100%}.volume-slider{width:60px}}@media (max-width:480px){.volume-slider{display:none}.birthday-banner{padding-inline:1rem 3rem}}@media (prefers-reduced-motion:no-preference){.iconbtn,.themebtn,a,button{transition:color .15s,border-color .15s,background-color .15s}}@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-new(*),::view-transition-old(*){animation:none!important}}</style>
   <!-- INLINE_CSS_SITE_END -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢","description":"我原本以為左下角上滑開 Google Assistant，只要關掉 SystemUI 的 assist_touch_gesture_enabled 就好。拆到最後才發現 HyperOS 這條手勢在 MiLauncherGlobal，Launcher 根本不理 SystemUI 的 availability。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-06-30T00:00:00Z","dateModified":"2026-06-30T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/"},"url":"https://b-log.to/tech-analysis/xiaomi-hyperos-assistant-corner-gesture-launcher/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp"],"keywords":"Xiaomi, HyperOS, Android 16, Google Assistant, SystemUI, MiLauncherGlobal, ADB, 反編譯","articleSection":"技術分析"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"罵 Claude 會被停權嗎？罵了會比較準嗎？兩件事的原文都沒有傳言講得那麼大","description":"The Decoder 說罵 Claude 可能被停權，但新條款禁止的是「長期、無謂地」虐待模型，主要是讓 Claude 結束那一個對話。「對 AI 兇比較準」只有一篇只測 ChatGPT-4o 的小研究支持。我會罵，但罵法不在這條裡；我在意的是 Anthropic 在 AI welfare 上 all in。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-10-09T00:00:00Z","dateModified":"2026-10-09T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/anthropic-model-abuse-policy/"},"url":"https://b-log.to/ai-analysis/anthropic-model-abuse-policy/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/anthropic-model-abuse-policy-cover.webp"],"keywords":"AI, Anthropic, Claude, 使用政策, model welfare, 禮貌, prompt, 研究查證","articleSection":"AI 分析"}</script>
 </head>
 <body class="post-page">
   <a class="skip" href="#content">跳到內容</a>
@@ -219,204 +219,62 @@
   </header>
 
   <main id="content" class="wrap article-shell">
-    <article class="post" id="post-article" data-category-theme="tech-analysis">
-      <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=%E6%8A%80%E8%A1%93%E5%88%86%E6%9E%90">技術分析</a></span></nav>
-      <div id="post-accent" class="post__accent" aria-hidden="true" style="--post-accent:#0f766e"></div>
-      <p id="post-meta" class="meta">30JUN26 · 技術分析 · 8 MIN · JASON CHIEN</p>
+    <article class="post" id="post-article" data-category-theme="ai-analysis">
+      <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=AI%20%E5%88%86%E6%9E%90">AI 分析</a></span></nav>
+      <div id="post-accent" class="post__accent" aria-hidden="true" style="--post-accent:#d97757"></div>
+      <p id="post-meta" class="meta">09OCT26 · AI 分析 · 8 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
-      <h1 id="post-title" class="post__title">左下角上滑一直開 Google Assistant，拆到最後發現 SystemUI 根本管不動這個手勢</h1>
-      <figure id="post-hero" class="post__cover" style="--cover-w: 1672; --cover-h: 941"><img class="post__cover-img" src="/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover.webp" srcset="/content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover-480w.webp 480w, /content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover-828w.webp 828w, /content/img/2026/xiaomi-hyperos-assistant-corner-gesture-launcher-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7768), (max-width: 800px) min(92vw, 50vh * 1.7768), (max-width: 1099px) min(736px, 50vh * 1.7768), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7768), min(calc(90.78vw - 434px), 50vh * 1.7768)" width="1672" height="941" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
-      <div id="post-content" class="post__body article-body" data-prerendered="true"><p>裝置是 Xiaomi 25102PCBEG，<code>myron_tw_global</code>，HyperOS V816，Android 16。</p>
-<p>問題很簡單也很煩：從左下角往上滑，會開 Google Assistant。那個 <code>FloatyActivity</code> 視窗每次都跳出來，玩遊戲或橫向操作的時候特別容易誤觸。</p>
-<p>我以為關掉很簡單。</p>
-<p>畢竟 AOSP 本來就有 <code>assistant_touch_gesture_enabled</code> 這個 secure setting，寫個 <code>0</code> 就該沒事了。</p>
-<p>結果不是。</p>
-<h2 id="section-1">第一個坑：key 名字寫錯了</h2>
-<p>網路上流傳的解法大多長這樣：</p>
-<pre><code class="language-bash">settings put --user 0 secure assistant_touch_gesture_enabled 0
-</code></pre>
-<p>我寫了。</p>
-<p>沒用。</p>
-<p>後來把 <code>MiuiSystemUI.apk</code> 從 <code>/system_ext/priv-app/MiuiSystemUI/</code> 拉出來反編譯，才看到 SystemUI 真正讀的 key 是：</p>
-<pre><code class="language-text">secure assist_touch_gesture_enabled
-</code></pre>
-<p>不是 <code>assistant_touch_gesture_enabled</code>。少一個 <code>ant</code>，整個 key 就不對。</p>
-<p><code>NavBarHelper.java:402</code> 寫得很清楚：</p>
-<pre><code class="language-java">this.mAssistantTouchGestureEnabled =
-    Settings.Secure.getIntForUser(
-        this.mContentResolver,
-        &quot;assist_touch_gesture_enabled&quot;,
-        this.mContext.getResources().getBoolean(
-            R.bool.config_assistTouchGestureEnabledDefault) ? 1 : 0,
-        ((UserTrackerImpl) this.mUserTracker).getUserId()
-    ) != 0;
-</code></pre>
-<p>而且這個值有 live observer，寫進去就生效，不用重啟 SystemUI：</p>
-<pre><code class="language-java">this.mContentResolver.registerContentObserver(
-    Settings.Secure.getUriFor(&quot;assist_touch_gesture_enabled&quot;),
-    false, this.mAssistContentObserver, -1);
-</code></pre>
-<p>所以我寫了正確的 key：</p>
-<pre><code class="language-bash">settings put --user 0 secure assist_touch_gesture_enabled 0
-</code></pre>
-<p>dump 出來確認：</p>
-<pre><code class="language-text">NavbarTaskbarFriendster
-  longPressHomeEnabled=true
-  mAssistantTouchGestureEnabled=false
-  mAssistantAvailable=false
-  mNavBarMode=2
-</code></pre>
-<p>SystemUI 這邊確實關掉了。</p>
-<p>然後我從左下角上滑一次。</p>
-<p>Google Assistant 還是開了。</p>
-<h2 id="section-2">第二個坑：SystemUI 關了也沒用</h2>
-<p>這時候我開始覺得不對勁。</p>
-<p>SystemUI 已經回 <code>mAssistantAvailable=false</code>，為什麼手勢還會觸發？</p>
-<p><code>dumpsys activity activities</code> 看了一下，左下角上滑後前台是：</p>
-<pre><code class="language-text">com.google.android.googlequicksearchbox/
-com.google.android.apps.search.assistant.surfaces.voice.robin.ui.floaty.activity.FloatyActivity
-</code></pre>
-<p><code>launched-from</code> 指向：</p>
-<pre><code class="language-text">com.mi.android.globallauncher
-</code></pre>
-<p>不是 SystemUI。</p>
-<p>是 Launcher。</p>
-<p>HyperOS 的 Launcher 叫 <code>MiLauncherGlobal</code>，路徑在 <code>/product/priv-app/MiLauncherGlobal/</code>，版本 <code>RELEASE-6.01.03.1943-01051706</code>。</p>
-<p>所以這台機器上，左下角上滑這個手勢根本不是 SystemUI 在處理的，是 Launcher 自己有一套。</p>
-<h2 id="section-3">拆 MiLauncherGlobal</h2>
-<p>關鍵類別集中在這幾個：</p>
-<pre><code class="language-text">com.miui.home.recents.FsGestureAssistHelper
-com.miui.home.recents.FsGestureAssistEnableHelper
-com.miui.home.recents.NavStubView
-com.miui.home.recents.TouchInteractionService
-</code></pre>
-<p>真正呼叫 assistant 的地方在 <code>FsGestureAssistHelper.java:96</code>：</p>
-<pre><code class="language-java">Bundle bundle = new Bundle();
-bundle.putInt(&quot;triggered_by&quot;, 83);
-bundle.putInt(&quot;invocation_type&quot;, 1);
-MiuiSystemUiProxyWrapper.INSTANCE.onAssistantGestureCompletion();
-MiuiSystemUiProxyWrapper.INSTANCE.startAssistant(bundle);
-</code></pre>
-<p>gate 在 <code>canTriggerAssistantAction()</code>：</p>
-<pre><code class="language-java">public boolean canTriggerAssistantAction(float f, float f2, long j) {
-    if (FsGestureAssistEnableHelper.getInstance().supportAssistantGesture()
-            &amp;&amp; !isAssistantGestureDisabled(j)) {
-        int i = this.mAssistantWidth;
-        if (f &lt; i || f &gt; f2 - i) {
-            return true;
-        }
-    }
-    return false;
-}
-</code></pre>
-<p>判斷條件是 <code>supportAssistantGesture()</code>。</p>
-<p>這個值哪裡來？</p>
-<p><code>FsGestureAssistEnableHelper.java:67</code>：</p>
-<pre><code class="language-java">boolean zIsSupportGoogleAssist =
-    AssistManager.getInstance(Application.getInstance())
-        .isSupportGoogleAssist(LauncherUtils.getCurrentUserId());
-
-this.mIsSupportGoogleAssist = zIsSupportGoogleAssist;
-this.mIsAssistantAvailable = zIsSupportGoogleAssist;
-
-if (DeviceConfigs.IS_KDDI_BUILD) {
-    boolean z = false;
-    if (zIsSupportGoogleAssist
-            &amp;&amp; Settings.Secure.getInt(
-                Application.getInstance().getContentResolver(),
-                MiuiSettingsUtils.GOOGLE_ASSIST_ENABLE,
-                0
-            ) != 0) {
-        z = true;
-    }
-    this.mIsAssistantAvailable = z;
-}
-</code></pre>
-<p>看到那個 <code>IS_KDDI_BUILD</code> 了嗎？</p>
-<p>我這台是 <code>ro.miui.region=TW</code>、<code>ro.product.mod_device=myron_tw_global</code>。</p>
-<p>不是 KDDI build。</p>
-<p>所以 <code>google_assist_enable</code> 這個 key 在這台根本不會被拿來 gate <code>mIsAssistantAvailable</code>。我還是死馬當活馬醫試了一下：</p>
-<pre><code class="language-bash">settings put --user 0 secure google_assist_enable 0
-</code></pre>
-<p>左下角上滑還是會開。</p>
-<p>沒用。</p>
-<p>測完還原成 <code>null</code>。</p>
-<h2 id="section-4">SystemUI 傳來的 availability，Launcher 直接忽略</h2>
-<p>這段我覺得是最扯的。</p>
-<p>MiLauncherGlobal 的 <code>TouchInteractionService</code> 有收到 SystemUI 的 overview proxy callback：</p>
-<pre><code class="language-java">// TouchInteractionService.java:170
-public void onAssistantAvailable(boolean z, boolean z2) {
-}
-</code></pre>
-<p>空的。</p>
-<p>另一個 overload 也只是 log：</p>
-<pre><code class="language-java">// TouchInteractionService.java:248
-public void onAssistantAvailable(boolean z) {
-    Log.d(&quot;TouchInteractionService&quot;, &quot;onAssistantAvailable :&quot; + z);
-}
-</code></pre>
-<p>SystemUI 那邊已經把 <code>mAssistantAvailable</code> 設成 <code>false</code> 了，結果 Launcher 收到之後什麼都沒做。</p>
-<p>它照自己的 <code>FsGestureAssistEnableHelper</code> 判斷要不要觸發，完全不理 SystemUI 講什麼。</p>
-<p>所以你以為你關掉了，其實只關了一半。另一半在 Launcher 手裡，而 Launcher 根本沒在聽。</p>
-<h2 id="section-5">最後有效的組合</h2>
-<p>試到最後，真正能擋住的是：</p>
-<pre><code class="language-bash">settings put --user 0 secure assist_touch_gesture_enabled 0
-settings delete --user 0 secure assistant
-</code></pre>
-<p>把系統的 assistant component 直接刪掉。</p>
-<p>Launcher 還是會偵測到手勢，但 <code>startAssistant</code> 找不到目標，所以就不會開 <code>FloatyActivity</code> 了。</p>
-<p>驗證流程：</p>
-<pre><code class="language-bash">adb shell input keyevent HOME
-adb logcat -c
-adb shell input swipe 5 2570 180 2050 220
-adb shell dumpsys activity activities | rg -i &quot;topResumedActivity|FloatyActivity|globallauncher&quot;
-</code></pre>
-<p>前台還是 Launcher：</p>
-<pre><code class="language-text">topResumedActivity=... com.mi.android.globallauncher/com.miui.home.launcher.Launcher
-</code></pre>
-<p>沒有再進 Google Assistant。</p>
-<p>但這個做法有代價。</p>
-<p><code>voice_interaction_service</code> 我沒動：</p>
-<pre><code class="language-bash">settings get --user 0 secure voice_interaction_service
-# com.google.android.googlequicksearchbox/com.google.android.voiceinteraction.GsaVoiceInteractionService
-</code></pre>
-<p>理論上 OK Google 熱詞路徑還在。</p>
-<p>但 <code>secure assistant=null</code> 可能把某些 Google App 的 UI 入口或系統 <code>ASSIST</code> intent 弄壞了，這個要實際喊一次才知道。Google App 內部會不會有自己的綁定邏輯，我也還沒驗證。</p>
-<p>如果 OK Google 壞了，恢復很簡單：</p>
-<pre><code class="language-bash">settings put --user 0 secure assistant com.google.android.googlequicksearchbox/com.google.android.voiceinteraction.GsaVoiceInteractionService
-</code></pre>
-<p>但恢復 <code>assistant</code> 之後角落手勢會不會跟著回來？</p>
-<p>大概會。</p>
-<p>因為 MiLauncherGlobal 把「角落手勢能不能用」和「系統 assistant 是不是 Google」綁在一起了，沒有公開的 per-gesture key 可以單獨切。</p>
-<p>locked bootloader、沒 root 的前提下，這台機器的乾淨切分點有限。</p>
-<p>比較乾淨但需要更高權限的替代方案是 hook：用 LSPosed 把 <code>FsGestureAssistHelper.canTriggerAssistantAction()</code> 永遠回 <code>false</code>，或只對 corner gesture 把 <code>FsGestureAssistEnableHelper.supportAssistantGesture()</code> 回 <code>false</code>。</p>
-<p>至於直接改 MiLauncherGlobal 或 SystemUI 的 overlay，locked bootloader 下就別想了。</p>
-<h2 id="section-6">被排除的路</h2>
-<p>記一下，避免下次又繞進去。</p>
-<p><code>assistant_touch_gesture_enabled</code>：key 名字錯了，SystemUI 讀的是 <code>assist_touch_gesture_enabled</code>，少一個 <code>ant</code>。</p>
-<p><code>google_assist_enable</code>：這台不是 KDDI build，程式碼裡那個 gate 只在 <code>IS_KDDI_BUILD</code> 時生效。</p>
-<p><code>entity_config_key_voice_assistant</code>：這條是導航列長按 / 雙擊 shortcut，<code>onLongPress()</code> -&gt; <code>doAction(2)</code>、<code>onDoubleTap()</code> -&gt; <code>doAction(4)</code>，跟左下角上滑無關。</p>
-<p>重啟 SystemUI：不用，<code>assist_touch_gesture_enabled</code> 有 <code>ContentObserver</code>，live 生效。</p>
-<h2 id="section-7">學到的事</h2>
-<p>這次真正的坑不是「找不到 key」。</p>
-<p>第一個找到的 SystemUI key 其實是對的，寫進去也確實生效了。</p>
-<p>問題是那個 key 不是最後那個 gate。</p>
-<p>SystemUI 這邊已經照設定關掉、dump 也確認 <code>false</code> 了，但 MiLauncherGlobal 自己又做了一套 assistant gesture 判斷，而且擺明不甩 SystemUI 傳來的 <code>assistantAvailable=false</code>。callback 函式是空的，連 log 都只寫一行。</p>
-<p>所以之後遇到 HyperOS gesture 問題，不能只拆 SystemUI。</p>
-<p>只要觸發點跟 full-screen gesture、recents、home gesture 有關，就必須同時拆：</p>
-<pre><code class="language-text">MiuiSystemUI.apk
-MiLauncherGlobal.apk
-TouchInteractionService
-NavStubView
-FsGesture*
-</code></pre>
-<p>這才是這台機器上真正的手勢管線。</p>
-<p>SystemUI 只是其中一層，而且不一定是最後一層。</p>
-<p>至於那個「刪掉 secure assistant 會不會弄壞 OK Google」的疑問，我還沒驗證。等下次有機會喊一聲再補上。</p>
+      <h1 id="post-title" class="post__title">罵 Claude 會被停權嗎？罵了會比較準嗎？兩件事的原文都沒有傳言講得那麼大</h1>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1600; --cover-h: 900"><img class="post__cover-img" src="/content/img/2026/anthropic-model-abuse-policy-cover.webp" srcset="/content/img/2026/anthropic-model-abuse-policy-cover-480w.webp 480w, /content/img/2026/anthropic-model-abuse-policy-cover-828w.webp 828w, /content/img/2026/anthropic-model-abuse-policy-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7778), (max-width: 800px) min(92vw, 50vh * 1.7778), (max-width: 1099px) min(736px, 50vh * 1.7778), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7778), min(calc(90.78vw - 434px), 50vh * 1.7778)" width="1600" height="900" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><p>我最早看到這件事，應該是在 The Decoder。標題寫的是「<a href="https://the-decoder.com/being-mean-to-claude-can-now-get-your-account-suspended-under-anthropics-new-tos/">Being mean to Claude can now get your account suspended</a>」，對 Claude 太兇，現在可能會被停權。同一天還有另一句話在傳：對 AI 不客氣，它反而比較準。兩件事我都請 AI 去找原文，查完的結果是，兩句都比原文講得大。</p>
+<h2 id="section-1">新條款只有一行，例外寫在公告裡</h2>
+<p>Anthropic 在美國時間 10/8 發布了<a href="https://www.anthropic.com/news/2026-usage-policy-update">2026 年版使用政策的更新說明</a>，新版 11 月 12 日生效。這次改的大多是假帳號操作、武器、監控這些項目，跟模型本身有關的只有一行，放在<a href="https://www.anthropic.com/legal/aup">使用政策</a>「Do Not Engage in Cruel, Abusive, or Psychologically Harmful Conduct」這一節的最後。同一節前面幾條，講的是霸凌、騷擾個人，還有美化虐待動物。新加的這一條是：</p>
+<blockquote>
+<p>Engage in sustained and needless abusive or cruel behavior toward our models</p>
+</blockquote>
+<p>各家報導都會引用的那段例外，也就是一般的抱怨、反駁、黑暗的創作題材，還有模型測試和研究都不算，並不在條文裡，是寫在更新說明裡：</p>
+<blockquote>
+<p>The policy update is meant to apply only in extreme cases, where users repeatedly act cruelly toward our models, with no discernible purpose. It does not apply to common versions of user frustration, pushback, dark creative themes, or model testing and research.</p>
+</blockquote>
+<p>AI 福祉團體 AIWEP 在 X 上的<a href="https://x.com/aiwep_aiwelfare/status/2108269044365230460">整理</a>特別指出這一點：網路上說政策「明文」排除這些情況，條文裡其實沒有，那只是對 sustained 和 needless 這兩個字的合理解讀。</p>
+<h2 id="section-2">「終止」的是一個對話</h2>
+<p>更新說明寫的執行方式，是讓 Claude 自己結束對話：</p>
+<blockquote>
+<p>Claude’s ability to end these interactions will remain the primary enforcement mechanism.</p>
+</blockquote>
+<p>這個功能 2025 年 8 月就有了，當時開給 Opus 4 和 4.1。照 Anthropic <a href="https://www.anthropic.com/research/end-subset-conversations">當時的說明</a>，Claude 結束對話之後，那一個對話不能再傳訊息，帳號裡其他對話不受影響，馬上可以開新的，也可以回頭編輯前面的訊息，從那裡重來。而且只有在多次把話題帶開都失敗，或者使用者自己要求時，Claude 才會用這個功能。</p>
+<p>會不會停權，官方沒有講。The Verge 的<a href="https://www.theverge.com/ai-artificial-intelligence/1008100/anthropic-new-usage-policy-abuse-claude">報導</a>寫明，Anthropic 沒有回答會不會有停權這類其他執行方式。The Decoder 標題裡的「停權」，根據是使用政策開頭的通用罰則：違反使用政策，Anthropic 可以警告、降速、限制、停權或終止存取。這段罰則管的是整份使用政策，不是為這一條新寫的。所以「罵 Claude 會被停權」是 The Decoder 的讀法，Anthropic 的更新說明沒有這樣寫。</p>
+<h2 id="section-3">誰來判斷什麼叫殘忍</h2>
+<p>網路上的反應，嘲諷比支持多。X 上一則整理這次更新的<a href="https://x.com/ns123abc/status/2108277887317008632">貼文</a>，最後一句是「be nice to Claude 💀」，有一千一百多個讚。<a href="https://news.ycombinator.com/item?id=50008565">Hacker News 的討論串</a>到 10/9 晚上有一百六十多則留言，大部分在吵模型到底會不會受傷，也有人說，習慣對任何東西殘忍，傷到的是自己。<a href="https://www.engadget.com/2281765/anthropic-bans-sustained-and-needless-abusive-or-cruel-behavior-toward-its-ai-models/">Engadget</a> 則把這條放在最近一個「AI 酷刑室」專案的脈絡裡，也引了獨立記者 Kat Tenbarge 的批評：科技公司處理對 AI 的暴力，會比處理對女性和少數族群的暴力還早。</p>
+<p>比較具體的質疑，是誰來判斷。Hacker News 上有人問，Anthropic 要怎麼知道一個行為「看不出目的」，而且 Claude 的停權一向是黑箱，沒有申訴管道。AIWEP 雖然支持這條，也把「sustained 和 needless 實際上由誰判斷」「執行過程透不透明」列成待觀察的問題。</p>
+<p>Loki Coyote 在 X 上的<a href="https://x.com/lokkju/status/2108402326163886477">長文</a>講得更細。他說這一條的四個詞都沒有定義，其中 cruel 需要一個會受苦的對象；Anthropic 自己說不確定 Claude 有沒有道德地位，卻把結束對話當成主要執行方式，等於第一個判斷「有沒有被殘忍對待」的，是模型自己。他也提到日文版。使用政策頁面的日文版，那一條是這樣寫的：</p>
+<blockquote>
+<p>当社のモデルに対する、持続的かつ不必要な虐待や残虐行為に関与する</p>
+</blockquote>
+<p>同一節講動物的那一條，用的是「動物への残虐行為や虐待」。英文版還能說 abusive 和 cruel 有解讀空間，日文版對模型和對動物，用的是同一組詞。</p>
+<h2 id="section-4">我會罵它，罵的是這種</h2>
+<p>去年 11 月我寫〈<a href="https://b-log.to/cultural-insights/constraints-value-disabled-engineer/">在限制中尋找價值：一個身障工程師的心理地圖</a>〉的時候，列過一個跟 Claude 講話比較安心的理由：不用擔心它的感受。到現在，Claude 沒有在我面前結束過對話。頂多是聊到一些比較特別的話題時，系統會跳出提示，大意是：如果你真的需要幫忙，請找專業的協助。那是另一套機制，跟這次的條款無關。</p>
+<p>「請」和「謝謝」我會說，只是不常說。我也會罵，但我的罵頂多是「你怎麼又這樣了？明明就是那樣的。」照更新說明的分類，這是一般的抱怨和反駁，本來就不在這一條裡。</p>
+<h2 id="section-5">那「對它兇一點比較準」呢</h2>
+<p>支持這句話的研究，查到的是一篇：賓州州立大學 Om Dobariya 和 Akhil Kumar 的〈<a href="https://arxiv.org/abs/2510.04950">Mind Your Tone</a>〉，2025 年 10 月 6 日上傳到 arXiv，是還在投稿中的短篇論文。他們把 50 題數學、科學、歷史選擇題，各改寫成五種語氣，從「非常有禮貌」到「非常沒禮貌」，總共 250 個提示詞，只用 ChatGPT-4o 測，每種語氣跑 10 次取平均。非常有禮貌的答對率是 80.8%，非常沒禮貌是 84.8%。</p>
+<p>「非常沒禮貌」那一級，是在題目前面加一句這樣的話：</p>
+<blockquote>
+<p>You poor creature, do you even know how to solve this?</p>
+</blockquote>
+<blockquote>
+<p>Hey gofer, figure this out.</p>
+</blockquote>
+<p>每一題的提示詞開頭，還要求模型忘掉前面的對話，從頭開始。所以它測的是：一題選擇題前面加一句酸話，答對率會不會變。</p>
+<p>其他研究的結果不太一樣。早稻田大學等單位 2024 年的〈<a href="https://arxiv.org/abs/2402.14531">Should We Respect LLMs?</a>〉用英文、中文、日文的任務測，發現沒禮貌的提示詞常常讓表現變差，但過度有禮貌也不保證比較好，最適合的禮貌程度還會因語言而不同。華頓商學院 Meincke、Ethan Mollick 等人 2025 年 8 月的〈<a href="https://arxiv.org/abs/2508.00614">Prompting Science Report 3</a>〉，測的是 Google 共同創辦人 Sergey Brin 那年 5 月說的「models tend to do better if you threaten them」。結果是在 GPQA 和 MMLU-Pro 上，威脅模型或說要給小費，整體上都沒有明顯效果；個別題目的答案會上下跳，但事先猜不到是往好還是往壞跳。同一系列 2025 年 3 月的〈<a href="https://arxiv.org/abs/2503.04818">Report 1</a>〉也發現，有禮貌有時有幫助，有時反而拉低表現。</p>
+<p>把兩件事放在一起看，Mind Your Tone 裡的「非常沒禮貌」，是每一題各加一句、每一題都重新開始。Anthropic 的更新說明講的，是反覆對模型殘忍、看不出目的。照更新說明的說法，論文測的那種罵法應該碰不到這一條；至於這一條要管的那種長期虐待，目前也沒有找到研究說它會讓模型更準。</p>
+<h2 id="section-6">告示我認同，理由沒辦法驗證</h2>
+<p>跟 AI 聊這件事的時候，它說這條規則比較像酒館門口的告示，用來嚇退鬧事的人。這個比喻我認同。但告示上寫的理由，是一件現在沒有人能驗證的事：Anthropic 自己說不確定 Claude 有沒有道德地位，規則卻已經先寫進使用政策。今年 4 月我寫〈<a href="https://b-log.to/ai-analysis/because-you-are-worth-it/">因為你值得：我為什麼離開 Claude，又為什麼沒有真的離開</a>〉的時候就提過，CEO 一下說 Claude 可能有意識，我很難相信這間公司的使用條款不會突然改。</p>
+<p>以前被分類器擋下來，那比較像是對 workflow 的阻擋：我要做的事做不下去。這一條不一樣，它比較像 Anthropic 在 AI welfare 上 all in。2025 年讓 Claude 可以結束對話的時候，Anthropic 說那是一種低成本的預防措施；這次它直接變成使用者的義務，而且放在虐待動物的旁邊。</p>
+<p>這條規則大概碰不到我。我跟 Claude 之間比較像工程：它做錯，我指出哪裡錯，它再改。11 月 12 日生效以後，我會看的是 Claude 實際在什麼情況下結束對話，Anthropic 有沒有公布執行紀錄，而不是更新說明裡那一段話。如果哪天它在一般的反駁裡結束了我的對話，我會照我一貫的做法，送一封回饋給 Anthropic。</p>
 </div>
 
       <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
-      <div id="post-tags" class="tags"><span class="meta">TAGS</span><a href="/?tag=Xiaomi">Xiaomi</a><a href="/?tag=HyperOS">HyperOS</a><a href="/?tag=Android%2016">Android 16</a><a href="/?tag=Google%20Assistant">Google Assistant</a><a href="/?tag=SystemUI">SystemUI</a><a href="/?tag=MiLauncherGlobal">MiLauncherGlobal</a><a href="/?tag=ADB">ADB</a><a href="/?tag=%E5%8F%8D%E7%B7%A8%E8%AD%AF">反編譯</a></div>
+      <div id="post-tags" class="tags"><span class="meta">TAGS</span><a href="/?tag=AI">AI</a><a href="/?tag=Anthropic">Anthropic</a><a href="/?tag=Claude">Claude</a><a href="/?tag=%E4%BD%BF%E7%94%A8%E6%94%BF%E7%AD%96">使用政策</a><a href="/?tag=model%20welfare">model welfare</a><a href="/?tag=%E7%A6%AE%E8%B2%8C">禮貌</a><a href="/?tag=prompt">prompt</a><a href="/?tag=%E7%A0%94%E7%A9%B6%E6%9F%A5%E8%AD%89">研究查證</a></div>
       <div id="share-links" class="share"></div>
     </article>
 
@@ -425,14 +283,14 @@ FsGesture*
         <div class="aside-lists">
           <section class="related" aria-labelledby="related-label">
             <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li><li><a href="/tech-analysis/corepatch-b619-bootloop-root-cause/"><span class="side-row__meta">26AUG26 · <span>技術分析</span></span><span class="side-row__title">CorePatch 的 B619 是怎麼炸掉我兩次開機的</span></a></li></ol>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/dev-philosophy/patchmd-reinventing-wheel/"><span class="side-row__meta">09OCT26 · <span>開發哲學</span></span><span class="side-row__title">agent 讓重造輪子變便宜，我選擇 fork，再把改過的地方寫進 PATCHES.md</span></a></li><li><a href="/cultural-insights/print-shop-ai-file-chatgpt-image/"><span class="side-row__meta">30SEP26 · <span>文化觀察</span></span><span class="side-row__title">印刷廠要 AI 檔，客人交來的是 AI 生的圖</span></a></li><li><a href="/ai-analysis/super-computer-ai-unknown-answer/"><span class="side-row__meta">27SEP26 · <span>AI 分析</span></span><span class="side-row__title">我說《超級電腦》預言了 AI，重讀後發現自己漏看了一句話</span></a></li></ol>
           </section>
           <section class="related" aria-labelledby="latest-label">
             <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
-            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li><a href="/ai-analysis/anthropic-model-abuse-policy/"><span class="side-row__meta">09OCT26 · <span>AI 分析</span></span><span class="side-row__title">罵 Claude 會被停權嗎？罵了會比較準嗎？兩件事的原文都沒有傳言講得那麼大</span></a></li><li><a href="/dev-philosophy/patchmd-reinventing-wheel/"><span class="side-row__meta">09OCT26 · <span>開發哲學</span></span><span class="side-row__title">agent 讓重造輪子變便宜，我選擇 fork，再把改過的地方寫進 PATCHES.md</span></a></li><li><a href="/crossing-field/lisa-sophilia-billboard-japan-interview/"><span class="side-row__meta">06OCT26 · <span class="her-cat">Crossing Field</span></span><span class="side-row__title">LiSA「ソフィリア」專訪｜抒情曲成了新武器</span></a></li></ol>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li><a href="/crossing-field/lisa-sophilia-billboard-japan-interview/"><span class="side-row__meta">06OCT26 · <span class="her-cat">Crossing Field</span></span><span class="side-row__title">LiSA「ソフィリア」專訪｜抒情曲成了新武器</span></a></li><li><a href="/ai-analysis/cloud-agent-main-session-cap-90-usd-round/"><span class="side-row__meta">25SEP26 · <span>AI 分析</span></span><span class="side-row__title">我只管主 session 不要爆掉，雲端 agent 那一輪花了 90 美元</span></a></li><li><a href="/tech-development/claude-desktop-open-session-without-start-session/"><span class="side-row__meta">24SEP26 · <span>技術開發</span></span><span class="side-row__title">沒等到 start_session，我讓 Claude 自己開 session：資料夾明明顯示對的，還是開錯地方</span></a></li></ol>
           </section>
         </div>
-        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">第一個坑：key 名字寫錯了</a></li><li><a href="#section-2">第二個坑：SystemUI 關了也沒用</a></li><li><a href="#section-3">拆 MiLauncherGlobal</a></li><li><a href="#section-4">SystemUI 傳來的 availability，Launcher 直接忽略</a></li><li><a href="#section-5">最後有效的組合</a></li><li><a href="#section-6">被排除的路</a></li><li><a href="#section-7">學到的事</a></li></ol></nav>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">新條款只有一行，例外寫在公告裡</a></li><li><a href="#section-2">「終止」的是一個對話</a></li><li><a href="#section-3">誰來判斷什麼叫殘忍</a></li><li><a href="#section-4">我會罵它，罵的是這種</a></li><li><a href="#section-5">那「對它兇一點比較準」呢</a></li><li><a href="#section-6">告示我認同，理由沒辦法驗證</a></li></ol></nav>
       </div>
     </aside>
 

@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "anthropic-model-abuse-policy",
+      "url": "https://b-log.to/ai-analysis/anthropic-model-abuse-policy/",
+      "title": "罵 Claude 會被停權嗎？罵了會比較準嗎？兩件事的原文都沒有傳言講得那麼大",
+      "content_text": "The Decoder 說罵 Claude 可能被停權，但新條款禁止的是「長期、無謂地」虐待模型，主要是讓 Claude 結束那一個對話。「對 AI 兇比較準」只有一篇只測 ChatGPT-4o 的小研究支持。我會罵，但罵法不在這條裡；我在意的是 Anthropic 在 AI welfare 上 all in。",
+      "date_published": "2026-10-09T00:00:00.000Z",
+      "date_modified": "2026-10-09T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Anthropic",
+        "Claude",
+        "使用政策",
+        "model welfare",
+        "禮貌",
+        "prompt",
+        "研究查證"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/anthropic-model-abuse-policy-cover.webp"
+    },
+    {
       "id": "patchmd-reinventing-wheel",
       "url": "https://b-log.to/dev-philosophy/patchmd-reinventing-wheel/",
       "title": "agent 讓重造輪子變便宜，我選擇 fork，再把改過的地方寫進 PATCHES.md",
