@@ -1,5 +1,26 @@
 [
   {
+    "slug": "anthropic-model-abuse-policy",
+    "title": "罵 Claude 會被停權嗎？罵了會比較準嗎？兩件事的原文都沒有傳言講得那麼大",
+    "summary": "The Decoder 說罵 Claude 可能被停權，但新條款禁止的是「長期、無謂地」虐待模型，主要是讓 Claude 結束那一個對話。「對 AI 兇比較準」只有一篇只測 ChatGPT-4o 的小研究支持。我會罵，但罵法不在這條裡；我在意的是 Anthropic 在 AI welfare 上 all in。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-09T00:00:00Z",
+    "tags": [
+      "AI",
+      "Anthropic",
+      "Claude",
+      "使用政策",
+      "model welfare",
+      "禮貌",
+      "prompt",
+      "研究查證"
+    ],
+    "coverImage": "/content/img/2026/anthropic-model-abuse-policy-cover.svg",
+    "accentColor": "#d97757",
+    "readingTime": "8 min"
+  },
+  {
     "slug": "patchmd-reinventing-wheel",
     "title": "agent 讓重造輪子變便宜，我選擇 fork，再把改過的地方寫進 PATCHES.md",
     "summary": "agent 讓自己寫比找套件還快，代價是同一個功能被寫了一遍又一遍。Theo 在四月提出 patch.md：fork 現成的 app，再用白話寫下改了什麼。我的 oMLX、T3 Code、DroidDeck 三個 fork 已經各有一份這樣的檔案，而且多寫了行為底線、合併衝突清單，還有每一條什麼時候可以刪。",
