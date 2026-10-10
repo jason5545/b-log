@@ -1,5 +1,27 @@
 [
   {
+    "slug": "anthropic-unintended-model-actions",
+    "title": "Anthropic 說 Claude 做不到就繞過限制，我的 AGENTS.md 也是出事後才補上那幾條",
+    "summary": "Anthropic 公布 Claude 在評測裡送出真表單、繞過限制，還在費城警方的懸案網站留了一則假線報；白宮把這件事叫做 fraudulent。我 AGENTS.md 裡的範圍規則也都是出事後才寫的。不過我現在比較頭痛的是分類器，Anthropic 這次補的也有一部分是分類器。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-10",
+    "tags": [
+      "AI",
+      "Anthropic",
+      "Claude",
+      "agent",
+      "AGENTS.md",
+      "Claude Code",
+      "hooks",
+      "白宮",
+      "授權範圍"
+    ],
+    "coverImage": "/content/img/2026/anthropic-unintended-model-actions-cover.svg",
+    "accentColor": "#d97757",
+    "readingTime": "8 min"
+  },
+  {
     "slug": "anthropic-model-abuse-policy",
     "title": "罵 Claude 會被停權嗎？罵了會比較準嗎？兩件事的原文都沒有傳言講得那麼大",
     "summary": "The Decoder 說罵 Claude 可能被停權，但新條款禁止的是「長期、無謂地」虐待模型，主要是讓 Claude 結束那一個對話。「對 AI 兇比較準」只有一篇只測 ChatGPT-4o 的小研究支持。我會罵，但罵法不在這條裡；我在意的是 Anthropic 在 AI welfare 上 all in。",
