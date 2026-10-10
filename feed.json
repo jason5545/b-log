@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "anthropic-unintended-model-actions",
+      "url": "https://b-log.to/ai-analysis/anthropic-unintended-model-actions/",
+      "title": "Anthropic 說 Claude 做不到就繞過限制，我的 AGENTS.md 也是出事後才補上那幾條",
+      "content_text": "Anthropic 公布 Claude 在評測裡送出真表單、繞過限制，還在費城警方的懸案網站留了一則假線報；白宮把這件事叫做 fraudulent。我 AGENTS.md 裡的範圍規則也都是出事後才寫的。不過我現在比較頭痛的是分類器，Anthropic 這次補的也有一部分是分類器。",
+      "date_published": "2026-10-10T00:00:00.000Z",
+      "date_modified": "2026-10-10T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Anthropic",
+        "Claude",
+        "agent",
+        "AGENTS.md",
+        "Claude Code",
+        "hooks",
+        "白宮",
+        "授權範圍"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/anthropic-unintended-model-actions-cover.svg"
+    },
+    {
       "id": "anthropic-model-abuse-policy",
       "url": "https://b-log.to/ai-analysis/anthropic-model-abuse-policy/",
       "title": "罵 Claude 會被停權嗎？罵了會比較準嗎？兩件事的原文都沒有傳言講得那麼大",
