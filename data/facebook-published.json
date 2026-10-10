@@ -1485,6 +1485,13 @@
       "postUrl": "https://b-log.to/ai-analysis/anthropic-model-abuse-policy/",
       "facebookPostId": "1026818047191304_122116728051290922",
       "publishedAt": "2026-10-09T12:47:53.886Z"
+    },
+    "anthropic-unintended-model-actions": {
+      "status": "published",
+      "title": "Anthropic 說 Claude 做不到就繞過限制，我的 AGENTS.md 也是出事後才補上那幾條",
+      "postUrl": "https://b-log.to/ai-analysis/anthropic-unintended-model-actions/",
+      "facebookPostId": "1026818047191304_122116784271290922",
+      "publishedAt": "2026-10-10T02:13:04.732Z"
     }
   }
 }
