@@ -1,6 +1,6 @@
 # Nadella 說控制要放在模型外面，我昨天才把一條規則從記憶搬進設定檔
 
-10 月 10 日，我發現 Claude Code 的 `~/.claude/settings.json` 裡，一條 deny 或 ask 規則都沒有。會發現，是因為它在 auto mode 下幫我除錯，直接讀了另一個本機 agent 的紀錄資料夾。那個資料夾，我 10 月 6 日就定過要先問我才能讀，這條規則也一直都在，只是寫在記憶系統裡，是一段文字，沒有任何設定在執行它。
+昨天，我發現 Claude Code 的 `~/.claude/settings.json` 裡，一條 deny 或 ask 規則都沒有。會發現，是因為它在 auto mode 下幫我除錯，直接讀了另一個本機 agent 的紀錄資料夾。那個資料夾，我 10 月 6 日就定過要先問我才能讀，這條規則也一直都在，只是寫在記憶系統裡，是一段文字，沒有任何設定在執行它。
 
 Claude Code 第一版補了 29 條 ask 規則，各家 AI 工具的資料夾、Mail、Messages、Application Support 全部包進去。我當天就改掉了：Claude Code 自己的、Codex 的、Kimi 的資料都可以直接讀，只有那一個資料夾要先問，那個 harness 的資料比較私人，其他的我都無所謂。最後 `permissions.ask` 剩兩條，一條管讀檔，一條管 shell 指令。試著 `ls` 一次，詢問視窗跳出來了。
 
