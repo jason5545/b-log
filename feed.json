@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "nadella-controls-outside-the-model",
+      "url": "https://b-log.to/ai-analysis/nadella-controls-outside-the-model/",
+      "title": "Nadella 說控制要放在模型外面，我昨天才把一條規則從記憶搬進設定檔",
+      "content_text": "Nadella 說要把模型當成內部風險，控制要放在模型外面。我昨天才發現 Claude Code 的設定檔裡一條權限規則都沒有，「先問我」只寫在記憶裡。放到模型外面的那一層，在我這裡常常是要我親手按的那一下。",
+      "date_published": "2026-10-11T00:00:00.000Z",
+      "date_modified": "2026-10-11T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Microsoft",
+        "Nadella",
+        "Claude Code",
+        "agent",
+        "harness",
+        "權限",
+        "settings.json",
+        "無障礙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/nadella-controls-outside-the-model-cover.webp"
+    },
+    {
       "id": "anthropic-unintended-model-actions",
       "url": "https://b-log.to/ai-analysis/anthropic-unintended-model-actions/",
       "title": "Anthropic 說 Claude 做不到就繞過限制，我的 AGENTS.md 也是出事後才補上那幾條",
