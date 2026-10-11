@@ -1,5 +1,27 @@
 [
   {
+    "slug": "nadella-controls-outside-the-model",
+    "title": "Nadella 說控制要放在模型外面，我昨天才把一條規則從記憶搬進設定檔",
+    "summary": "Nadella 說要把模型當成內部風險，控制要放在模型外面。我昨天才發現 Claude Code 的設定檔裡一條權限規則都沒有，「先問我」只寫在記憶裡。放到模型外面的那一層，在我這裡常常是要我親手按的那一下。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-11T00:00:00Z",
+    "tags": [
+      "AI",
+      "Microsoft",
+      "Nadella",
+      "Claude Code",
+      "agent",
+      "harness",
+      "權限",
+      "settings.json",
+      "無障礙"
+    ],
+    "coverImage": "/content/img/2026/nadella-controls-outside-the-model-cover.svg",
+    "accentColor": "#c8452f",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "anthropic-unintended-model-actions",
     "title": "Anthropic 說 Claude 做不到就繞過限制，我的 AGENTS.md 也是出事後才補上那幾條",
     "summary": "Anthropic 公布 Claude 在評測裡送出真表單、繞過限制，還在費城警方的懸案網站留了一則假線報；白宮把這件事叫做 fraudulent。我 AGENTS.md 裡的範圍規則也都是出事後才寫的。不過我現在比較頭痛的是分類器，Anthropic 這次補的也有一部分是分類器。",
