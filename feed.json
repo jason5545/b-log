@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "claude-code-projects-waitlist-parallel-threads",
+      "url": "https://b-log.to/ai-analysis/claude-code-projects-waitlist-parallel-threads/",
+      "title": "Claude Code Projects 把等候名單全放進來了，平行雲端 thread 我早就付過學費",
+      "content_text": "@ClaudeDevs 把 Claude Code Projects 等候名單上的 Pro／Max 使用者全放進來了。官方把它做成協調者加平行雲端 thread，人走開也能繼續跑，文件還警告會更快撞到用量上限。我第一個想到的不是新功能。是那一輪花掉 90 美元的雲端 agent。",
+      "date_published": "2026-10-12T00:00:00.000Z",
+      "date_modified": "2026-10-12T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Anthropic",
+        "Claude",
+        "Claude Code",
+        "Projects",
+        "雲端",
+        "agent",
+        "thread",
+        "用量",
+        "式札"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/claude-code-projects-waitlist-parallel-threads-cover.svg"
+    },
+    {
       "id": "nadella-controls-outside-the-model",
       "url": "https://b-log.to/ai-analysis/nadella-controls-outside-the-model/",
       "title": "Nadella 說控制要放在模型外面，我昨天才把一條規則從記憶搬進設定檔",
