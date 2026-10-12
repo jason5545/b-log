@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "pi-openrouter-opus-4-1-bill-overclaimed",
+      "url": "https://b-log.to/ai-analysis/pi-openrouter-opus-4-1-bill-overclaimed/",
+      "title": "有人說 pi 偷用 OpenRouter 額度，我叫 Claude 讀原始碼查：帳單對得上，結論講太滿",
+      "content_text": "有人發文說 pi agent 偷用 OpenRouter 額度，用的還是 Opus 4.1。我叫 Claude 讀原始碼、翻 issue：16 萬 tokens 的 context 一輪一輪重送，6 分鐘 5.14 美元。偷用沒有證據，不聲不響換模型的 bug 倒是有。Claude 的結論講太滿，被 Sol 挑了出來。",
+      "date_published": "2026-10-12T00:00:00.000Z",
+      "date_modified": "2026-10-12T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "pi",
+        "oh-my-pi",
+        "OpenRouter",
+        "Claude Code",
+        "Opus 4.1",
+        "Sol",
+        "prompt cache",
+        "原始碼",
+        "查證"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover.webp"
+    },
+    {
       "id": "claude-code-projects-waitlist-parallel-threads",
       "url": "https://b-log.to/ai-analysis/claude-code-projects-waitlist-parallel-threads/",
       "title": "Claude Code Projects 把等候名單全放進來了，平行雲端 thread 我早就付過學費",

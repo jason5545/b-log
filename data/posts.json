@@ -1,5 +1,28 @@
 [
   {
+    "slug": "pi-openrouter-opus-4-1-bill-overclaimed",
+    "title": "有人說 pi 偷用 OpenRouter 額度，我叫 Claude 讀原始碼查：帳單對得上，結論講太滿",
+    "summary": "有人發文說 pi agent 偷用 OpenRouter 額度，用的還是 Opus 4.1。我叫 Claude 讀原始碼、翻 issue：16 萬 tokens 的 context 一輪一輪重送，6 分鐘 5.14 美元。偷用沒有證據，不聲不響換模型的 bug 倒是有。Claude 的結論講太滿，被 Sol 挑了出來。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-12T00:00:00Z",
+    "tags": [
+      "AI",
+      "pi",
+      "oh-my-pi",
+      "OpenRouter",
+      "Claude Code",
+      "Opus 4.1",
+      "Sol",
+      "prompt cache",
+      "原始碼",
+      "查證"
+    ],
+    "coverImage": "/content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover.webp",
+    "accentColor": "#b24a32",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "claude-code-projects-waitlist-parallel-threads",
     "title": "Claude Code Projects 把等候名單全放進來了，平行雲端 thread 我早就付過學費",
     "summary": "@ClaudeDevs 把 Claude Code Projects 等候名單上的 Pro／Max 使用者全放進來了。官方把它做成協調者加平行雲端 thread，人走開也能繼續跑，文件還警告會更快撞到用量上限。我第一個想到的不是新功能。是那一輪花掉 90 美元的雲端 agent。",
