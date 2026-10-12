@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2e3438"/>
+      <stop offset="1" stop-color="#22282b"/>
+    </linearGradient>
+    <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a3f2c"/>
+      <stop offset="1" stop-color="#3f2c1f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <g stroke="#283033" stroke-width="3" opacity="0.9">
+    <line x1="0" y1="120" x2="1600" y2="120"/><line x1="0" y1="260" x2="1600" y2="260"/>
+    <line x1="0" y1="400" x2="1600" y2="400"/><line x1="0" y1="540" x2="1600" y2="540"/>
+  </g>
+  <!-- night window with moon (background) -->
+  <rect x="120" y="70" width="230" height="200" rx="10" fill="#1a1f22" stroke="#4a5458" stroke-width="8"/>
+  <line x1="235" y1="74" x2="235" y2="266" stroke="#4a5458" stroke-width="6"/>
+  <line x1="124" y1="170" x2="346" y2="170" stroke="#4a5458" stroke-width="6"/>
+  <circle cx="300" cy="118" r="30" fill="#efe3c8"/>
+  <circle cx="314" cy="108" r="28" fill="#1a1f22"/>
+  <g fill="#efe3c8"><circle cx="160" cy="110" r="3"/><circle cx="200" cy="215" r="3"/><circle cx="290" cy="225" r="2.5"/><circle cx="175" cy="235" r="2"/></g>
+
+  <!-- desk -->
+  <rect x="0" y="650" width="1600" height="250" fill="url(#desk)"/>
+  <rect x="0" y="642" width="1600" height="14" fill="#6e4d35"/>
+
+  <!-- empty chair + closed laptop (nobody watching) -->
+  <g>
+    <rect x="285" y="395" width="130" height="165" rx="28" fill="#3c4548" stroke="#56615f" stroke-width="6"/>
+    <rect x="270" y="556" width="160" height="28" rx="12" fill="#56615f"/>
+    <rect x="342" y="582" width="16" height="52" fill="#4a5458"/>
+    <rect x="290" y="628" width="120" height="12" rx="6" fill="#4a5458"/>
+  </g>
+  <g>
+    <rect x="455" y="622" width="170" height="20" rx="5" fill="#9aa59c"/>
+    <rect x="462" y="612" width="156" height="12" rx="5" fill="#b9c3ba"/>
+  </g>
+  <!-- phone face down on desk -->
+  <rect x="1250" y="668" width="92" height="40" rx="10" fill="#2a3134" stroke="#56615f" stroke-width="4"/>
+
+  <g transform="translate(0 40)">
+  <!-- cloud -->
+  <g fill="#efe3c8">
+    <circle cx="690" cy="270" r="70"/>
+    <circle cx="790" cy="238" r="88"/>
+    <circle cx="895" cy="265" r="75"/>
+    <rect x="620" y="260" width="350" height="80" rx="40"/>
+  </g>
+  <g fill="#d8c59c">
+    <rect x="640" y="318" width="310" height="22" rx="11"/>
+  </g>
+
+  <!-- parallel threads down to workers -->
+  <g fill="none" stroke="#d97757" stroke-width="7" stroke-linecap="round">
+    <path d="M665 338 C650 380 670 410 630 452"/>
+    <path d="M755 338 C740 380 760 410 735 452"/>
+    <path d="M835 338 C850 380 820 410 840 452"/>
+    <path d="M925 338 C940 380 915 410 945 452"/>
+  </g>
+  <g>
+    <g transform="translate(630 500)">
+      <rect x="-42" y="-48" width="84" height="84" rx="16" fill="#d97757"/>
+      <g fill="#f6ead2"><rect x="-5" y="-26" width="10" height="44" rx="5" transform="translate(0 -6)"/><rect x="-5" y="-26" width="10" height="44" rx="5" transform="translate(0 -6) rotate(60 0 -4)"/><rect x="-5" y="-26" width="10" height="44" rx="5" transform="translate(0 -6) rotate(120 0 -4)"/></g>
+      <rect x="-42" y="52" width="84" height="12" rx="6" fill="#3c4548"/><rect x="-42" y="52" width="60" height="12" rx="6" fill="#e0a83c"/>
+    </g>
+    <g transform="translate(735 500)">
+      <rect x="-42" y="-48" width="84" height="84" rx="16" fill="#d97757"/>
+      <g fill="#f6ead2"><rect x="-5" y="-26" width="10" height="44" rx="5" transform="translate(0 -6)"/><rect x="-5" y="-26" width="10" height="44" rx="5" transform="translate(0 -6) rotate(60 0 -4)"/><rect x="-5" y="-26" width="10" height="44" rx="5" transform="translate(0 -6) rotate(120 0 -4)"/></g>
+      <rect x="-42" y="52" width="84" height="12" rx="6" fill="#3c4548"/><rect x="-42" y="52" width="34" height="12" rx="6" fill="#e0a83c"/>
+    </g>
+    <g transform="translate(840 500)">
+      <rect x="-42" y="-48" width="84" height="84" rx="16" fill="#d97757"/>
+      <g fill="#f6ead2"><rect x="-5" y="-26" width="10" height="44" rx="5" transform="translate(0 -6)"/><rect x="-5" y="-26" width="10" height="44" rx="5" transform="translate(0 -6) rotate(60 0 -4)"/><rect x="-5" y="-26" width="10" height="44" rx="5" transform="translate(0 -6) rotate(120 0 -4)"/></g>
+      <rect x="-42" y="52" width="84" height="12" rx="6" fill="#3c4548"/><rect x="-42" y="52" width="72" height="12" rx="6" fill="#e0a83c"/>
+    </g>
+    <g transform="translate(945 500)">
+      <rect x="-42" y="-48" width="84" height="84" rx="16" fill="#d97757"/>
+      <g fill="#f6ead2"><rect x="-5" y="-26" width="10" height="44" rx="5" transform="translate(0 -6)"/><rect x="-5" y="-26" width="10" height="44" rx="5" transform="translate(0 -6) rotate(60 0 -4)"/><rect x="-5" y="-26" width="10" height="44" rx="5" transform="translate(0 -6) rotate(120 0 -4)"/></g>
+      <rect x="-42" y="52" width="84" height="12" rx="6" fill="#3c4548"/><rect x="-42" y="52" width="20" height="12" rx="6" fill="#e0a83c"/>
+    </g>
+  </g>
+
+  <!-- usage meter -->
+  <g transform="translate(1185 470)">
+    <rect x="-150" y="-150" width="300" height="230" rx="24" fill="#3c4548" stroke="#56615f" stroke-width="6"/>
+    <path d="M-105 30 A105 105 0 0 1 -52 -61" fill="none" stroke="#8fae7a" stroke-width="26"/>
+    <path d="M-52 -61 A105 105 0 0 1 52 -61" fill="none" stroke="#e0a83c" stroke-width="26"/>
+    <path d="M52 -61 A105 105 0 0 1 105 30" fill="none" stroke="#c8452f" stroke-width="26"/>
+    <line x1="0" y1="30" x2="78" y2="-36" stroke="#efe3c8" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="0" cy="30" r="16" fill="#efe3c8"/>
+    <rect x="-90" y="54" width="180" height="10" rx="5" fill="#2a3134"/>
+  </g>
+  <!-- cable from cloud to meter -->
+  <path d="M975 300 C1050 300 1060 330 1110 330" fill="none" stroke="#9aa59c" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>

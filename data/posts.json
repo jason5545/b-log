@@ -1,5 +1,28 @@
 [
   {
+    "slug": "claude-code-projects-waitlist-parallel-threads",
+    "title": "Claude Code Projects 把等候名單全放進來了，平行雲端 thread 我早就付過學費",
+    "summary": "@ClaudeDevs 把 Claude Code Projects 等候名單上的 Pro／Max 使用者全放進來了。官方把它做成協調者加平行雲端 thread，人走開也能繼續跑，文件還警告會更快撞到用量上限。我第一個想到的不是新功能。是那一輪花掉 90 美元的雲端 agent。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-12T00:00:00Z",
+    "tags": [
+      "AI",
+      "Anthropic",
+      "Claude",
+      "Claude Code",
+      "Projects",
+      "雲端",
+      "agent",
+      "thread",
+      "用量",
+      "式札"
+    ],
+    "coverImage": "/content/img/2026/claude-code-projects-waitlist-parallel-threads-cover.svg",
+    "accentColor": "#d97757",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "nadella-controls-outside-the-model",
     "title": "Nadella 說控制要放在模型外面，我昨天才把一條規則從記憶搬進設定檔",
     "summary": "Nadella 說要把模型當成內部風險，控制要放在模型外面。我昨天才發現 Claude Code 的設定檔裡一條權限規則都沒有，「先問我」只寫在記憶裡。放到模型外面的那一層，在我這裡常常是要我親手按的那一下。",
