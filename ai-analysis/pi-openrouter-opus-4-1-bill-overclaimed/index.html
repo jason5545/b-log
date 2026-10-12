@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>有人說 pi 偷用 OpenRouter 額度，我叫 Claude 讀原始碼查：帳單對得上，結論講太滿 - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="有人發文說 pi agent 偷用 OpenRouter 額度，用的還是 Opus 4.1。我叫 Claude 讀原始碼、翻 issue：16 萬 tokens 的 context 一輪一輪重送，6 分鐘 5.14 美元。偷用沒有證據，不聲不響換模型的 bug 倒是有。Claude 的結論講太滿，被 Sol 挑了出來。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/ai-analysis/pi-openrouter-opus-4-1-bill-overclaimed/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/ai-analysis/pi-openrouter-opus-4-1-bill-overclaimed/" id="og-url">
+  <meta property="og:title" content="有人說 pi 偷用 OpenRouter 額度，我叫 Claude 讀原始碼查：帳單對得上，結論講太滿" id="og-title">
+  <meta property="og:description" content="有人發文說 pi agent 偷用 OpenRouter 額度，用的還是 Opus 4.1。我叫 Claude 讀原始碼、翻 issue：16 萬 tokens 的 context 一輪一輪重送，6 分鐘 5.14 美元。偷用沒有證據，不聲不響換模型的 bug 倒是有。Claude 的結論講太滿，被 Sol 挑了出來。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover.webp" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:published_time" content="2026-10-12T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-10-12T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="AI 分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="AI">
+  <meta property="article:tag" content="pi">
+  <meta property="article:tag" content="oh-my-pi">
+  <meta property="article:tag" content="OpenRouter">
+  <meta property="article:tag" content="Claude Code">
+  <meta property="article:tag" content="Opus 4.1">
+  <meta property="article:tag" content="Sol">
+  <meta property="article:tag" content="prompt cache">
+  <meta property="article:tag" content="原始碼">
+  <meta property="article:tag" content="查證">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/ai-analysis/pi-openrouter-opus-4-1-bill-overclaimed/" id="twitter-url">
+  <meta property="twitter:title" content="有人說 pi 偷用 OpenRouter 額度，我叫 Claude 讀原始碼查：帳單對得上，結論講太滿" id="twitter-title">
+  <meta property="twitter:description" content="有人發文說 pi agent 偷用 OpenRouter 額度，用的還是 Opus 4.1。我叫 Claude 讀原始碼、翻 issue：16 萬 tokens 的 context 一輪一輪重送，6 分鐘 5.14 美元。偷用沒有證據，不聲不響換模型的 bug 倒是有。Claude 的結論講太滿，被 Sol 挑了出來。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover.webp" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="AI, pi, oh-my-pi, OpenRouter, Claude Code, Opus 4.1, Sol, prompt cache, 原始碼, 查證" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f4efe7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1114" media="(prefers-color-scheme: dark)">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- 字型（B612 自架在 /assets/fonts/）與共用關鍵 CSS：assets/css/fonts.css、critical-shared.css 內嵌在下面，
+       由 npm run build:assets 產生，不要手改。不用 <link> 的原因見 AGENTS.md「CSS 內嵌在 HTML」 -->
+  <!-- INLINE_CSS_CRITICAL_START -->
+  <style>@font-face{font-family:B612;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/fonts/b612-latin-400.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:B612;font-style:normal;font-weight:700;font-display:swap;src:url("/assets/fonts/b612-latin-700.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"B612 Mono";font-style:normal;font-weight:400;font-display:swap;src:url("/assets/fonts/b612-mono-latin-400.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"B612 Mono";font-style:normal;font-weight:700;font-display:swap;src:url("/assets/fonts/b612-mono-latin-700.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"B612 Mono Fallback";font-style:normal;font-weight:400;src:local("Menlo Regular"),local("Menlo-Regular"),local("DejaVu Sans Mono"),local("DejaVuSansMono");size-adjust:107.96%;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"B612 Mono Fallback";font-style:normal;font-weight:700;src:local("Menlo Bold"),local("Menlo-Bold"),local("DejaVu Sans Mono Bold"),local("DejaVuSansMono-Bold");size-adjust:107.96%;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"B612 Mono Fallback Alt";font-style:normal;font-weight:400;src:local("Liberation Mono"),local("LiberationMono-Regular"),local("Droid Sans Mono"),local("DroidSansMono"),local("Courier New"),local("CourierNewPSMT");size-adjust:108.32%;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"B612 Mono Fallback Alt";font-style:normal;font-weight:700;src:local("Liberation Mono Bold"),local("LiberationMono-Bold"),local("Droid Sans Mono"),local("DroidSansMono"),local("Courier New Bold"),local("CourierNewPS-BoldMT");size-adjust:108.32%;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}:root{--font-body:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;--font-head:"B612",-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;--font-mono:"B612 Mono","B612 Mono Fallback","B612 Mono Fallback Alt",ui-monospace,"SF Mono",Menlo,Consolas,monospace;--font-serif:"Songti TC","Noto Serif TC","Noto Serif CJK TC","Source Han Serif TC","PMingLiU","MingLiU",serif}html[lang=zh-Hant-TW] body{font-family:var(--font-body)}h1,h2,h3,h4,h5,h6{font-family:var(--font-head)}:root{color-scheme:light;--bg:#f4efe7;--surface:#ebe4d8;--rule:#d8cfc1;--ink:#1a232c;--text:#2b333b;--muted:#6d675e;--cyan:#066a86;--green:#2d7a4c;--amber:#a94e0a;--magenta:#a3226f;--code-bg:#e8e0d2;--row-hover:rgba(26, 35, 44, 0.045);--focus:#066a86;--on-cyan:#f4efe7}@media (prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#0e1114;--surface:#161b20;--rule:#262e35;--ink:#eef2f4;--text:#d2d9de;--muted:#8a959d;--cyan:#5ccfe6;--green:#5fd18c;--amber:#f59e0b;--magenta:#ee7ad0;--code-bg:#141a1f;--row-hover:rgba(255, 255, 255, 0.035);--focus:#5ccfe6;--on-cyan:#0e1114}}:root[data-theme=dark]{color-scheme:dark;--bg:#0e1114;--surface:#161b20;--rule:#262e35;--ink:#eef2f4;--text:#d2d9de;--muted:#8a959d;--cyan:#5ccfe6;--green:#5fd18c;--amber:#f59e0b;--magenta:#ee7ad0;--code-bg:#141a1f;--row-hover:rgba(255, 255, 255, 0.035);--focus:#5ccfe6;--on-cyan:#0e1114}*,::after,::before{box-sizing:border-box}html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:clamp(100%, calc(100% + (100vw - 1280px) * .003125), 125%)}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}a{color:var(--cyan);text-underline-offset:0.22em;text-decoration-thickness:1px}a:hover{text-decoration-thickness:2px}:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}img{max-width:100%;height:auto}[hidden]{display:none!important}.wrap{margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}.skip{position:absolute;left:16px;top:-80px;z-index:50;background:var(--ink);color:var(--bg);font:700 0.85rem/1 var(--font-mono);padding:.9rem 1rem;text-decoration:none}.skip:focus{top:12px}.site{position:relative;border-bottom:1px solid var(--rule)}.site>.wrap{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"id nav tools";align-items:center;gap:.5rem 2rem;padding-block:1.1rem}.site__id{grid-area:id;display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;min-width:0}.site__title{margin:0;font-size:inherit;line-height:1}.wordmark{display:inline-flex;align-items:center;min-height:44px;font:700 1.65rem/1 var(--font-mono);color:var(--ink);text-decoration:none;letter-spacing:-.02em}.wordmark .br{color:var(--cyan)}.tagline{margin:0;font-size:.88rem;color:var(--muted)}.site__nav{grid-area:nav;justify-self:end}.site__nav ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.25rem}.site__nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:0.6rem;font:400 0.78rem/1 var(--font-mono);letter-spacing:.1em;color:var(--muted);text-decoration:none;white-space:nowrap}.site__nav a:hover{color:var(--cyan)}.site__nav a[aria-current=page]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--ink)}.site__tools{grid-area:tools;display:flex;align-items:center;gap:.25rem}.iconbtn,.themebtn{min-height:44px;min-width:44px;margin:0;border:1px solid var(--rule);background:0 0;color:var(--ink);border-radius:2px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font:inherit}.iconbtn svg{width:18px;height:18px}.themebtn{padding-inline:0.8rem;font:700 0.72rem/1 var(--font-mono);letter-spacing:.12em}.theme-toggle__icon{display:inline-flex}.theme-toggle__hint{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.theme-dot{display:block;width:8px;height:8px;border-radius:50%;background:var(--cyan)}.iconbtn:hover,.iconbtn[aria-expanded=true],.themebtn:hover{border-color:var(--cyan)}@media (max-width:1100px){.site>.wrap{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"id tools" "nav nav";padding-block:0.75rem 0.25rem;gap:.25rem 1rem}.site__nav{justify-self:start;margin-left:-.6rem}}@media (max-width:760px){.site__id{flex-direction:column;align-items:flex-start;gap:0}.tagline{font-size:.82rem}.site__nav a{padding-inline:0.5rem}}</style>
+  <!-- INLINE_CSS_CRITICAL_END -->
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    /* 單欄：文章、RELATED／LATEST、上下篇與留言依序往下 */
+    .post,
+    .article-aside,
+    .article-foot {
+      max-width: 46rem;
+      margin-inline: auto;
+    }
+    .post { padding-top: 1rem; }
+    .article-foot { padding-bottom: 4rem; }
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
+    @media (min-width: 1100px) {
+      .article-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
+        grid-template-rows: auto 1fr;
+        column-gap: 3.5rem;
+        align-items: start;
+      }
+      .post,
+      .article-foot {
+        grid-column: 1;
+        max-width: none;
+        margin-inline: 0;
+      }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
+      .article-aside {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        max-width: none;
+        margin-inline: 0;
+        padding-top: 1rem;
+      }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
+    }
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
+        position: sticky;
+        top: 0.5rem;
+      }
+    }
+    .post__accent {
+      height: 4px;
+      margin: 0 0 1rem;
+      background: var(--post-accent, transparent);
+    }
+    .post__title {
+      margin: 0.8rem 0 1.75rem;
+      font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
+      color: var(--ink);
+    }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
+    .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
+      margin: 0 0 2.5rem;
+      background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
+    }
+    .post__body {
+      max-width: 35em;
+      font-size: 1.125rem;
+      line-height: 1.9;
+    }
+    /* 內容區域預留空間（未預先渲染時） */
+    #post-content:empty {
+      min-height: 400px;
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 33px, var(--rule) 33px, var(--rule) 34px);
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover.webp" imagesrcset="/content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover-480w.webp 480w, /content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover-828w.webp 828w, /content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover-1200w.webp 1200w" imagesizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.75), (max-width: 800px) min(92vw, 50vh * 1.75), (max-width: 1099px) min(736px, 50vh * 1.75), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.75), min(calc(90.78vw - 434px), 50vh * 1.75)" fetchpriority="high">
+<!-- 完整樣式表：assets/styles.css 壓縮後內嵌在下面，由 npm run build:assets 產生，不要手改 -->
+  <!-- INLINE_CSS_SITE_START -->
+  <style>.mono{font-family:var(--font-mono)}.search-toggle-container{position:relative}.search-box{position:absolute;top:calc(100% + 8px);right:0;z-index:30;width:min(22rem,calc(100vw - 32px));padding:.5rem;background:var(--bg);border:1px solid var(--ink);border-radius:2px}.search-input-wrapper{display:flex;align-items:center;gap:.5rem;min-height:44px;padding-inline:0.6rem;border:1px solid var(--rule);border-radius:2px;background:var(--surface)}.search-input-wrapper:focus-within{border-color:var(--cyan)}.search-icon{flex:0 0 auto;width:16px;height:16px;color:var(--muted)}.search-input{flex:1 1 auto;min-width:0;min-height:42px;border:0;background:0 0;color:var(--ink);font:400 1rem/1.4 var(--font-body)}.search-input:focus{outline:0}.search-input::-webkit-search-cancel-button{display:none}.search-clear{flex:0 0 auto;min-width:44px;min-height:44px;margin-right:-.6rem;border:0;background:0 0;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}.search-clear svg{width:16px;height:16px}.search-clear:hover{color:var(--cyan)}.label{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25rem .75rem;margin:0 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--ink);font:700 0.74rem/1.2 var(--font-mono);letter-spacing:.16em;color:var(--ink)}.label>span{font:400 0.82rem/1.2 var(--font-body);letter-spacing:0;color:var(--muted)}.label__clear{margin-left:auto;font:400 0.74rem/1 var(--font-mono);letter-spacing:.08em;display:inline-flex;align-items:center;min-height:36px;margin-block:-0.6rem}.meta{margin:0;font:400 0.76rem/1.5 var(--font-mono);letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}.error,.notice{margin:1rem 0;padding:.9rem 1rem;border:1px solid var(--rule);border-radius:2px;font-size:.92rem;color:var(--text)}.error{border-color:var(--amber);color:var(--amber)}.error code,.notice code{font-family:var(--font-mono);font-size:.85em}.side{display:grid;gap:2.5rem;align-content:start}.lead__link{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:1.75rem;align-items:start;color:inherit;text-decoration:none}.lead--text-only .lead__link{grid-template-columns:minmax(0,1fr)}.lead__text{display:grid;gap:.9rem;align-content:start}.lead__title{margin:0;font:700 clamp(1.55rem, 2.7vw, 2.15rem)/1.32 var(--font-head);color:var(--ink);text-wrap:pretty}.lead__link:hover .lead__title{color:var(--cyan)}.lead__sum{margin:0;font-size:.95rem;line-height:1.8;color:var(--text);text-wrap:pretty}.lead__media{position:relative;aspect-ratio:16/9;border-radius:2px;background:var(--surface)}.lead__img{display:block;width:100%;height:100%;object-fit:cover;border-radius:2px}.lead__media::before{--c:var(--muted);content:"";position:absolute;inset:-0.4rem;pointer-events:none;background:linear-gradient(var(--c),var(--c)) top left/1rem 2px no-repeat,linear-gradient(var(--c),var(--c)) top left/2px 1rem no-repeat,linear-gradient(var(--c),var(--c)) top right/1rem 2px no-repeat,linear-gradient(var(--c),var(--c)) top right/2px 1rem no-repeat,linear-gradient(var(--c),var(--c)) bottom left/1rem 2px no-repeat,linear-gradient(var(--c),var(--c)) bottom left/2px 1rem no-repeat,linear-gradient(var(--c),var(--c)) bottom right/1rem 2px no-repeat,linear-gradient(var(--c),var(--c)) bottom right/2px 1rem no-repeat}.lead__link:hover .lead__media::before{--c:var(--cyan)}@media (min-width:761px){.lead__link{container-type:inline-size}.lead__media{aspect-ratio:auto;align-self:stretch;max-height:calc((100cqw - 1.75rem)/ 2.6 * 3 / 4);min-height:min(12rem,calc((100cqw - 1.75rem)/ 2.6 * 3 / 4))}.lead__img{position:absolute;inset:0}}.brief ol{list-style:none;margin:0;padding:0;display:grid;gap:1.1rem}.brief li{position:relative;padding-left:.75rem}.brief a{font-weight:600;font-size:.95rem;line-height:1.5;color:var(--ink);text-decoration:none}.brief a:hover{color:var(--cyan);text-decoration:underline}.brief p{margin:.3rem 0 0;font-size:.83rem;line-height:1.65;color:var(--muted)}.brief .cat{display:block;margin-bottom:.2rem;font:400 0.7rem/1.3 var(--font-mono);letter-spacing:.08em;color:var(--muted)}.brief .cat::before,.row__date::before{content:'';position:absolute;left:0;width:3px;height:1.1em;margin-top:.15em;background:var(--row-accent,transparent)}.brief .cat::before{margin-top:.1em}.log__head,.row a{display:grid;grid-template-columns:6.4rem 5.4rem minmax(0,1fr) 3.6rem;gap:1rem;align-items:baseline}.log__head{padding:0 .5rem .5rem;font:400 0.68rem/1 var(--font-mono);letter-spacing:.14em;color:var(--muted)}.log__head span:last-child{text-align:right}.log__list{list-style:none;margin:0;padding:0}.log .log__list:empty{min-height:61.25rem;background:repeating-linear-gradient(to bottom,transparent 0,transparent 48px,var(--rule) 48px,var(--rule) 49px)}.row a{position:relative;min-height:48px;padding:.8rem .5rem;border-bottom:1px solid var(--rule);color:inherit;text-decoration:none}.row a:hover{background:var(--row-hover)}.row a:hover .row__title{color:var(--cyan)}.row__date,.row__time{font:400 0.8rem/1.4 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:.04em;white-space:nowrap}.row__time{text-align:right}.row__cat{font-size:.83rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.row__title{color:var(--ink);font-size:1rem;line-height:1.55}.row--empty{padding:.9rem .5rem;border-bottom:1px solid var(--rule);font-size:.92rem;color:var(--muted)}.log__more{display:inline-flex;align-items:center;min-height:44px;margin-top:.75rem;padding:0 .9rem;border:1px solid var(--rule);border-radius:2px;background:0 0;color:var(--cyan);font:400 0.8rem/1 var(--font-mono);letter-spacing:.08em;cursor:pointer}.log__more:hover{border-color:var(--cyan)}.search-results-count{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.audio-indicator{display:inline-flex;align-items:center;margin-left:.4rem;color:var(--cyan);vertical-align:-.1em}.audio-indicator svg{width:.9em;height:.9em}.audio-indicator--article svg{width:.7em;height:.7em}.audio-indicator--compact svg{width:.55em;height:.55em}.topics{list-style:none;margin:0;padding:0;min-height:24.75rem}.topics a{display:flex;align-items:baseline;gap:.5rem;min-height:44px;padding-block:0.6rem;color:var(--text);text-decoration:none;font-size:.92rem}.topics .dots{flex:1;min-width:1rem;border-bottom:1px dotted var(--muted);opacity:.6;transform:translateY(-.25em)}.topics .n{font:400 0.8rem/1 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}.topics a:hover{color:var(--cyan)}.topics a[aria-current=page]{font-weight:700;color:var(--ink)}.topics .hint{font-size:.76rem;color:var(--muted);white-space:nowrap}.tag-cloud{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .9rem;min-height:12rem}.tag-cloud a{display:inline-flex;align-items:baseline;gap:.3rem;padding-block:0.3rem;line-height:1.5;text-decoration:none}.tag-cloud a:hover{text-decoration:underline}.tag-cloud a[aria-current=page]{font-weight:700}.tag-cloud .n{font:400 0.7rem/1 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}.tag-cloud__more{display:inline-flex;align-items:center;min-height:44px;margin-top:.5rem;padding:0 .9rem;border:1px solid var(--rule);border-radius:2px;background:0 0;color:var(--cyan);font:400 0.8rem/1 var(--font-mono);letter-spacing:.08em;cursor:pointer}.tag-cloud__more:hover{border-color:var(--cyan)}.about p{margin:0 0 .9rem;font-size:.9rem;line-height:1.75}.about a{display:inline-flex;align-items:center;min-height:44px;font:400 0.78rem/1 var(--font-mono);letter-spacing:.08em}.traffic .links{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.tcas{display:block;width:100%;height:auto;margin:0}.tcas__hit{fill:transparent;stroke:none;stroke-width:2}.tcas__arc{fill:none;stroke:var(--muted);stroke-width:1;opacity:.55}.tcas__arc--mid{stroke-dasharray:2 4}.tcas__tick{fill:none;stroke:var(--muted);stroke-width:1}.tcas__dot,.tcas__lubber{fill:var(--muted)}.tcas__own{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round}.tcas__sym{fill:var(--hot,transparent);stroke:var(--cyan);stroke-width:1.4;transition:fill .15s}.tcas text{font:400 11px/1 var(--font-mono);letter-spacing:.02em;fill:var(--hot-text,var(--muted));transition:fill .15s}.tcas a:hover,.traffic:has(.links li:nth-child(10) > a:focus-visible) .tcas__tfc>a:nth-child(10),.traffic:has(.links li:nth-child(11) > a:focus-visible) .tcas__tfc>a:nth-child(11),.traffic:has(.links li:nth-child(12) > a:focus-visible) .tcas__tfc>a:nth-child(12),.traffic:has(.links li:nth-child(3) > a:focus-visible) .tcas__tfc>a:nth-child(3),.traffic:has(.links li:nth-child(4) > a:focus-visible) .tcas__tfc>a:nth-child(4),.traffic:has(.links li:nth-child(5) > a:focus-visible) .tcas__tfc>a:nth-child(5),.traffic:has(.links li:nth-child(6) > a:focus-visible) .tcas__tfc>a:nth-child(6),.traffic:has(.links li:nth-child(7) > a:focus-visible) .tcas__tfc>a:nth-child(7),.traffic:has(.links li:nth-child(8) > a:focus-visible) .tcas__tfc>a:nth-child(8),.traffic:has(.links li:nth-child(9) > a:focus-visible) .tcas__tfc>a:nth-child(9){--hot:var(--cyan);--hot-text:var(--cyan)}.traffic:has(.links li:nth-child(2) > a:focus-visible) .tcas__tfc>a:nth-child(2){--hot:var(--magenta)}.traffic:has(.links li:first-child > a:focus-visible) .tcas__tfc>a:nth-child(1) .tcas__hit,.traffic:has(.links li:nth-child(10) > a:focus-visible) .tcas__tfc>a:nth-child(10) .tcas__hit,.traffic:has(.links li:nth-child(11) > a:focus-visible) .tcas__tfc>a:nth-child(11) .tcas__hit,.traffic:has(.links li:nth-child(12) > a:focus-visible) .tcas__tfc>a:nth-child(12) .tcas__hit,.traffic:has(.links li:nth-child(2) > a:focus-visible) .tcas__tfc>a:nth-child(2) .tcas__hit,.traffic:has(.links li:nth-child(3) > a:focus-visible) .tcas__tfc>a:nth-child(3) .tcas__hit,.traffic:has(.links li:nth-child(4) > a:focus-visible) .tcas__tfc>a:nth-child(4) .tcas__hit,.traffic:has(.links li:nth-child(5) > a:focus-visible) .tcas__tfc>a:nth-child(5) .tcas__hit,.traffic:has(.links li:nth-child(6) > a:focus-visible) .tcas__tfc>a:nth-child(6) .tcas__hit,.traffic:has(.links li:nth-child(7) > a:focus-visible) .tcas__tfc>a:nth-child(7) .tcas__hit,.traffic:has(.links li:nth-child(8) > a:focus-visible) .tcas__tfc>a:nth-child(8) .tcas__hit,.traffic:has(.links li:nth-child(9) > a:focus-visible) .tcas__tfc>a:nth-child(9) .tcas__hit{stroke:var(--focus)}.behind p{margin:0;font-size:.9rem;line-height:1.75}.behind code{font-family:var(--font-mono);font-size:.84em;color:var(--ink);background:var(--code-bg);padding:.1em .35em;border-radius:2px}.crumb{margin:0 0 1rem;font:400 0.74rem/1.3 var(--font-mono);letter-spacing:.1em;color:var(--muted)}.crumb a{display:inline-flex;align-items:center;min-height:44px;color:var(--muted);text-decoration:none}.crumb a:hover{color:var(--cyan)}.post__title{margin:.8rem 0 1.75rem;font:700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);color:var(--ink);text-wrap:pretty;overflow-wrap:break-word}.post__cover{margin:0 0 2.5rem;border-radius:2px;overflow:hidden;background:var(--surface)}.post__cover-img{display:block;width:100%;height:100%;object-fit:contain}.post__body{max-width:35em;font-size:1.125rem;line-height:1.9;color:var(--text);overflow-wrap:break-word}.post__body>:first-child{margin-top:0}.post__body p{margin:0 0 1.15em}.post__body h2{margin:2.4em 0 .9em;font:700 1.3rem/1.4 var(--font-head);color:var(--ink)}.post__body h3{margin:2em 0 .7em;font:700 1.12rem/1.45 var(--font-head);color:var(--ink)}.post__body h4{margin:1.8em 0 .6em;font:700 1rem/1.5 var(--font-head);color:var(--ink)}.post__body strong{color:var(--ink)}.post__body ol,.post__body ul{margin:0 0 1.15em;padding-left:1.3em}.post__body li{margin-bottom:.45em}.post__body li>ol,.post__body li>ul{margin:.45em 0 0}.post__body li::marker{color:var(--muted)}.post__body hr{border:0;border-top:1px solid var(--rule);margin:2.5em 0}.post__body blockquote{margin:1.6em 0;padding:0 0 0 1.1em;border-left:2px solid var(--rule);color:var(--text)}.post__body blockquote p{margin:0 0 .75em}.post__body blockquote>:last-child{margin-bottom:0}.post__body img{display:block;max-width:100%;height:auto;margin:1.8em auto;border-radius:2px;background:var(--surface)}.post__body picture{display:block;margin:1.8em 0}.post__body picture img{margin:0 auto}.post__body figure{margin:1.8em 0}.post__body figcaption{margin-top:.5rem;font:400 0.72rem/1.5 var(--font-mono);color:var(--muted);letter-spacing:.04em}.post__body iframe,.post__body video{max-width:100%}@media (min-width:1100px){.post__body img{max-height:85vh}}.post__body code{font-family:var(--font-mono);font-size:.84em;color:var(--ink);background:var(--code-bg);padding:.1em .35em;border-radius:2px;overflow-wrap:anywhere}.post__body .code-container{position:relative;display:flex;flex-wrap:wrap;align-items:stretch;margin:0 0 1.4em;border:1px solid var(--rule);border-radius:2px;background:var(--code-bg)}.post__body .code-language{display:inline-flex;align-items:center;padding:0 .8rem;font:700 0.68rem/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.post__body .code-copy-btn{order:1;margin-left:auto;min-height:44px;min-width:64px;padding:0 .9rem;border:0;border-left:1px solid var(--rule);background:0 0;color:var(--cyan);font:700 0.7rem/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}.post__body .code-copy-btn:hover{background:var(--row-hover)}.post__body .code-copy-btn.copied{color:var(--green)}.post__body pre{position:relative;margin:0 0 1.4em;padding:1rem 1.2rem;background:var(--code-bg);border:1px solid var(--rule);border-radius:2px;overflow-x:auto;overflow-y:hidden;font-family:var(--font-mono);font-size:.8rem;line-height:1.6;color:var(--ink);tab-size:2}.post__body .code-container pre{order:2;flex:1 0 100%;width:100%;margin:0;border:0;border-top:1px solid var(--rule);border-radius:0}.post__body pre code{display:block;padding:0;background:0 0;font-size:inherit;color:inherit;overflow-wrap:normal;white-space:pre}.post__body pre.line-numbers-wrapper{padding-left:3.4rem}.post__body .line-numbers{position:absolute;top:0;left:0;bottom:0;width:2.6rem;padding:1rem .5rem 1rem 0;border-right:1px solid var(--rule);font-family:var(--font-mono);font-size:inherit;line-height:inherit;text-align:right;color:var(--muted);opacity:.8;user-select:none;overflow:hidden}.post__body .token.keyword{color:var(--cyan);font-weight:700}.post__body .token.string{color:var(--green)}.post__body .token.number{color:var(--amber)}.post__body .token.comment{color:var(--muted);font-style:italic}.post__body .token.function{color:var(--cyan)}.post__body .token.variable{color:var(--ink);font-weight:700}.post__body .token.operator{color:var(--text)}.post__body .token.property{color:var(--amber)}.post__body .token.punctuation{color:var(--muted)}.post__body .token.tag{color:var(--cyan)}.post__body .token.attribute{color:var(--amber)}.post__body .token.class-name{color:var(--ink);font-weight:700}.post__body .table-wrapper{margin:0 0 1.4em;overflow-x:auto}.post__body table{width:100%;border-collapse:collapse;font-size:.9rem;line-height:1.6}.post__body .table-wrapper table{margin:0;min-width:500px}.post__body td,.post__body th{padding:.6rem .75rem;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}.post__body th{font-weight:700;color:var(--ink);border-bottom-color:var(--ink)}.post__body tbody tr:hover{background:var(--row-hover)}.status{margin:3.5rem 0 2.5rem;max-width:40rem;padding:1.25rem 1.4rem 1.3rem;background:#0b0f12;color:#eef2f4;border:1px solid #262e35;border-radius:2px;font-family:var(--font-mono)}.status__title{margin:0 0 1.1rem;font:700 0.95rem/1 var(--font-mono);letter-spacing:.14em;color:#eef2f4;text-decoration:underline;text-underline-offset:0.35em;text-align:center}.status__grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:1.25rem 2rem}.status__grid--single{grid-template-columns:minmax(0,1fr)}.status ul{list-style:none;margin:0;padding:0;display:grid;gap:.7rem}.status li{font-family:var(--font-body);font-size:.9rem;line-height:1.55}.status .k{display:block;margin-bottom:.15rem;font:700 0.68rem/1.3 var(--font-mono);letter-spacing:.14em}.status .ok{color:#5fd18c}.status .proc{color:#5ccfe6}.status .caut{color:#f5a524}.status__sub{margin:0 0 .55rem;font:700 0.72rem/1 var(--font-mono);letter-spacing:.14em;color:#f5a524;text-decoration:underline;text-underline-offset:0.3em}.status__sub+ul:not(:last-child){margin-bottom:1.1rem}.tags{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem .9rem;max-width:40rem;margin:2.5rem 0 1rem}.status+.tags{margin-top:0}.tags .meta{margin-right:.25rem}.tags a{display:inline-flex;align-items:center;min-height:36px;font-size:.88rem;text-decoration:none}.tags a:hover{text-decoration:underline}.share{display:flex;flex-wrap:wrap;align-items:center;gap:0 1.1rem;min-height:44px;margin:0 0 3rem}.share a{display:inline-flex;align-items:center;min-height:44px;font:400 0.76rem/1 var(--font-mono);letter-spacing:.1em;text-decoration:none}.share a:hover{text-decoration:underline}.related{margin:0 0 3rem}.toc-list{list-style:none;margin:0;padding:0;counter-reset:toc}.toc-list li{counter-increment:toc;display:grid;grid-template-columns:2.2rem minmax(0,1fr);align-items:baseline;padding-left:.5rem;border-bottom:1px solid var(--rule)}.toc-list li::before{content:counter(toc,decimal-leading-zero);font:400 0.74rem/1 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}.toc-list a{display:block;min-height:36px;padding-block:0.55rem;font-size:.9rem;line-height:1.5;color:var(--cyan);text-decoration:none}.toc-list a:hover{text-decoration:underline}.toc-list li:has(> a.is-current){box-shadow:inset 3px 0 0 var(--cyan)}.toc-list a.is-current{color:var(--ink);font-weight:700}.content>h2,.post__body>h2{scroll-margin-top:1.5rem}.side-list{list-style:none;margin:0;padding:0}.side-list a{display:grid;gap:.2rem;min-height:44px;padding:.7rem .5rem .75rem;border-bottom:1px solid var(--rule);color:inherit;text-decoration:none}.side-list a:hover{background:var(--row-hover)}.side-list a:hover .side-row__title{color:var(--cyan)}.side-row__meta{font:400 0.7rem/1.4 var(--font-mono);letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}.side-row__title{font-weight:600;font-size:.95rem;line-height:1.5;color:var(--ink)}.article-nav{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;margin:0 0 3rem;border-top:1px solid var(--ink)}.article-nav__link{display:grid;align-content:start;gap:.35rem;min-height:44px;padding:.8rem .5rem;color:var(--ink);text-decoration:none;line-height:1.5}.article-nav__link--next{text-align:right}.article-nav__link:hover{background:var(--row-hover)}.article-nav__link:hover .article-nav__title{color:var(--cyan)}.article-nav__label{font:400 0.7rem/1.3 var(--font-mono);letter-spacing:.14em;color:var(--muted)}.article-nav__title{font-size:.95rem}.article-nav__link.is-disabled{color:var(--muted);pointer-events:none}.comments-section{margin:0}.giscus-container{min-height:200px}.giscus-fallback p,.giscus-loading p{margin:0;padding:1rem 0;font:400 0.8rem/1.6 var(--font-mono);color:var(--muted)}.giscus-container .giscus,.giscus-container iframe{width:100%}.brief .cat.her-cat,.crumb a.her-cat,.crumb a.her-cat:hover,.her-cat,.row--her .row__cat,.tag-cloud a.her,.topics a.her{color:var(--magenta)}.tcas a.her,.tcas a.her-fan:hover{--hot:var(--magenta);--hot-text:var(--magenta)}.tcas a.her-fan{--hot-text:var(--magenta)}.tcas a.her .tcas__sym,.tcas a.her-fan .tcas__sym{stroke:var(--magenta)}.aside-toc--cf .toc-list li::before{color:var(--magenta)}.aside-toc--cf .toc-list li:has(> a.is-current){box-shadow:inset 3px 0 0 var(--magenta)}.aside-toc--cf .toc-list a{color:var(--ink)}.aside-toc--cf .toc-list a:hover{color:var(--cyan)}.catline{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25rem .75rem;margin:.2rem 0 0;font:700 0.74rem/1.3 var(--font-mono);letter-spacing:.16em;color:var(--magenta)}.catline span{font:400 0.85rem/1.3 var(--font-body);letter-spacing:0;color:var(--muted)}[data-category-theme=shirushi] .post__body blockquote{margin:0 0 2.2rem;padding:0;border:0;font-family:var(--font-serif);font-size:1.2rem;line-height:1.95;color:var(--ink)}[data-category-theme=shirushi] .post__body blockquote p{margin:0;white-space:pre-line}[data-category-theme=shirushi] .post__body blockquote *+p{margin-top:.6em}.post__body .her-cite,[data-category-theme=shirushi] .post__body blockquote cite{display:block;margin-top:.6rem;font:400 0.76rem/1.4 var(--font-mono);font-style:normal;letter-spacing:.06em;color:var(--magenta)}body:has([data-category-theme=crossing-field]) .site{border-bottom-color:var(--magenta);box-shadow:0 1px 0 var(--magenta)}.home-grid[data-category-theme=crossing-field] #lead-label,.home-grid[data-category-theme=crossing-field] #log-label{border-bottom-color:var(--magenta)}[data-category-theme=crossing-field] .post__title{font-family:var(--font-serif);font-weight:700;line-height:1.4}[data-category-theme=crossing-field] .post__body{counter-reset:cf-chapter}[data-category-theme=crossing-field] .post__body>h2{counter-increment:cf-chapter;font-family:var(--font-serif)}[data-category-theme=crossing-field] .post__body>h2::before{content:counter(cf-chapter,decimal-leading-zero);display:block;margin-bottom:.45rem;font:700 0.74rem/1.2 var(--font-mono);letter-spacing:.16em;color:var(--magenta)}.post__body .crossing-field-intro,.post__body .crossing-field-serial{margin:0 0 2rem;padding-top:1rem;border-top:2px solid var(--magenta)}.post__body .crossing-field-intro{position:relative}.post__body .crossing-field-intro__sticker{position:absolute;right:.25rem;bottom:calc(100% - .75rem);width:clamp(64px,14vw,96px);height:auto;margin:0;border-radius:0;background:0 0;transform:rotate(6deg);pointer-events:none}.post__body .crossing-field-serial--end{margin-top:2.5rem}.post__body .crossing-field-intro__eyebrow,.post__body .crossing-field-serial__eyebrow{margin:0 0 .7rem;font:700 0.72rem/1.3 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--magenta)}.post__body .crossing-field-intro__lead,.post__body .crossing-field-serial__lead{margin:0;font-size:1.02rem;line-height:1.9}.post__body .crossing-field-intro__meta,.post__body .crossing-field-serial__meta{margin:.8rem 0 0;font-size:.85rem;line-height:1.7;color:var(--muted)}.post__body .cf-source{margin:0 0 2rem;padding:.9rem 1rem;border:1px solid var(--rule);border-radius:2px;font-size:.85rem;line-height:1.6}.post__body .cf-source__kind{margin:0 0 .55rem;font:700 0.7rem/1.3 var(--font-mono);letter-spacing:.14em;color:var(--muted)}.post__body .cf-source dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.35rem 1rem;margin:0}.post__body .cf-source dt{font:400 0.7rem/1.9 var(--font-mono);letter-spacing:.1em;color:var(--muted)}.post__body .cf-source dd{margin:0;overflow-wrap:anywhere}.post__body .crossing-field-toc{margin:2rem 0 2.5rem}.post__body .crossing-field-toc h2{display:flex;flex-wrap:wrap;align-items:baseline;gap:.75rem;margin:0 0 .5rem;padding-bottom:.6rem;border-bottom:1px solid var(--ink);font:400 0.82rem/1.2 var(--font-body);color:var(--muted)}.post__body .crossing-field-toc h2::before{content:"CONTENTS";font:700 0.74rem/1.2 var(--font-mono);letter-spacing:.16em;color:var(--ink)}.post__body .crossing-field-toc ol{list-style:none;margin:0;padding:0;counter-reset:ch}.post__body .crossing-field-toc li{counter-increment:ch;display:grid;grid-template-columns:2.2rem minmax(0,1fr);margin:0;padding-block:0.45rem;border-bottom:1px solid var(--rule);font-size:.95rem;line-height:1.6}.post__body .crossing-field-toc li::before{content:counter(ch,decimal-leading-zero);font:400 0.78rem/1.9 var(--font-mono);color:var(--magenta)}.post__body .crossing-field-toc a{display:inline-flex;align-items:center;min-height:36px;color:var(--ink);text-decoration:none}.post__body .crossing-field-toc a:hover{color:var(--cyan);text-decoration:underline}.post__body .cf-question{margin:2.2em 0 .7em;font-family:var(--font-body);font-size:.95rem;line-height:1.8;color:var(--muted)}.post__body .cf-question strong{font-weight:400;color:inherit}.post__body .cf-speaker{display:none}.post__body .cf-answer{padding-left:1.1rem;border-left:2px solid var(--magenta);font-family:var(--font-serif);font-size:1.16rem;line-height:1.95;color:var(--ink)}.post__body .cf-answer[data-speaker]:not([data-speaker=LiSA]){border-left-color:var(--rule)}.post__body .cf-answer+.cf-answer:not(.cf-answer--speaker-start){margin-top:-1.15em;padding-top:1.15em}.post__body .cf-answer strong{color:inherit}.post__body .cf-answer--speaker-start::before,.post__body .cf-question+.cf-answer:not([data-speaker])::before{display:block;margin-bottom:.15rem;font:700 0.68rem/1.4 var(--font-mono);letter-spacing:.14em;color:var(--muted)}.post__body .cf-answer--speaker-start::before{content:attr(data-speaker)}.post__body .cf-answer--speaker-start[data-speaker=LiSA]::before,.post__body .cf-question+.cf-answer:not([data-speaker])::before{content:"LiSA";color:var(--magenta)}.post__body .cf-answer--speaker-start{margin-top:1.6em}.post__body .cf-question+.cf-answer,.post__body .cf-speaker+.cf-answer--speaker-start{margin-top:0}.audio-player{margin:0 0 2rem;padding:1rem 1.1rem;background:var(--surface);border:1px solid var(--rule);border-radius:2px;font-family:var(--font-body);font-size:1rem;line-height:1.5}.audio-player audio{display:none}.audio-controls{display:flex;align-items:center;gap:1rem}.audio-btn{flex-shrink:0;width:44px;height:44px;border:0;border-radius:2px;background:var(--cyan);color:var(--on-cyan);cursor:pointer;display:flex;align-items:center;justify-content:center}.audio-btn svg{width:22px;height:22px}.audio-progress-container{flex:1;display:flex;flex-direction:column;gap:.4rem;min-width:0}.audio-progress{-webkit-appearance:none;appearance:none;width:100%;height:6px;margin:0;border-radius:0;background:var(--rule);cursor:pointer}.audio-progress::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:2px;background:var(--cyan);cursor:pointer}.audio-progress::-moz-range-thumb{width:16px;height:16px;border:0;border-radius:2px;background:var(--cyan);cursor:pointer}.audio-time,.playlist-info{display:flex;justify-content:space-between;font:400 0.72rem/1.4 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}.audio-speed{position:relative;flex-shrink:0}.speed-btn{min-width:60px;min-height:44px;padding:0 .7rem;border:1px solid var(--rule);border-radius:2px;background:0 0;color:var(--ink);font:700 0.76rem/1 var(--font-mono);cursor:pointer}.speed-btn:hover{border-color:var(--cyan)}.speed-menu{position:absolute;bottom:calc(100% + .4rem);right:0;z-index:10;min-width:84px;padding:.25rem;background:var(--bg);border:1px solid var(--ink);border-radius:2px}.speed-menu button{display:block;width:100%;min-height:40px;padding:0 .75rem;border:0;border-radius:2px;background:0 0;color:var(--ink);font:400 0.8rem/1 var(--font-mono);text-align:left;cursor:pointer}.speed-menu button:hover{background:var(--row-hover)}.speed-menu button.active{background:var(--cyan);color:var(--on-cyan);font-weight:700}.audio-volume{display:flex;align-items:center;gap:.4rem;flex-shrink:0}.volume-btn{width:44px;height:44px;border:0;border-radius:2px;background:0 0;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}.volume-btn:hover{color:var(--cyan)}.volume-btn svg{width:20px;height:20px}.volume-slider{-webkit-appearance:none;appearance:none;width:80px;height:4px;background:var(--rule);cursor:pointer}.volume-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;border-radius:2px;background:var(--cyan)}.volume-slider::-moz-range-thumb{width:12px;height:12px;border:0;border-radius:2px;background:var(--cyan)}.audio-attribution{margin-top:.8rem;padding-top:.6rem;border-top:1px solid var(--rule);font:400 0.7rem/1.5 var(--font-mono);color:var(--muted);text-align:center}.audio-error{display:none;margin-top:.8rem;padding:.6rem .8rem;border:1px solid var(--amber);border-radius:2px;color:var(--amber);font-size:.85rem;text-align:center}.birthday-theme{display:none}.birthday-theme.is-active{display:block}.birthday-banner{position:relative;padding:.75rem 3.5rem;border-bottom:2px solid var(--magenta);background:var(--bg);color:var(--magenta);text-align:center;font:700 0.88rem/1.5 var(--font-body)}.birthday-banner__text{display:inline-flex;align-items:center;gap:.5rem}.birthday-banner__close{position:absolute;right:.5rem;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;border-radius:2px;background:0 0;color:var(--magenta);cursor:pointer;display:flex;align-items:center;justify-content:center}.anniversary-section{margin:2rem 0 0;padding:1rem 0 0;border-top:2px solid var(--magenta)}.anniversary-section__badge{display:block;margin:0 0 .6rem;font:700 0.72rem/1.3 var(--font-mono);letter-spacing:.16em;color:var(--magenta)}.anniversary-section__title{margin:0 0 .6rem;font:700 clamp(1.4rem, 3vw, 1.9rem)/1.3 var(--font-head);color:var(--ink)}.anniversary-section__subtitle{margin:0 0 .6rem;max-width:40em;font-size:.95rem;line-height:1.8;color:var(--text)}.anniversary-section__link{display:inline-flex;align-items:center;min-height:44px;color:var(--magenta);font-weight:700}.yearly-stats__header{display:flex;align-items:center;gap:.5rem}.yearly-stats__icon{display:none}.yearly-stats__title{margin:0;font:700 0.74rem/1.2 var(--font-mono);letter-spacing:.16em;color:var(--ink)}.yearly-stats__year{color:inherit}.yearly-stats__header{padding-bottom:.6rem;margin-bottom:1rem;border-bottom:1px solid var(--ink)}.yearly-stats__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem 1rem}.yearly-stats__item{padding:.5rem 0;border-bottom:1px solid var(--rule)}.yearly-stats__number{display:block;font:700 1.4rem/1.2 var(--font-mono);color:var(--ink);font-variant-numeric:tabular-nums}.yearly-stats__label{display:block;font-size:.8rem;color:var(--muted)}.yearly-stats__categories-title{margin:1rem 0 .5rem;font:400 0.7rem/1.3 var(--font-mono);letter-spacing:.1em;color:var(--muted)}.yearly-stats__category-list{display:flex;flex-wrap:wrap;gap:.25rem .9rem;font-size:.85rem}.yearly-stats__category-count{margin-left:.25rem;font:400 0.76rem/1 var(--font-mono);color:var(--muted)}.content{max-width:46rem;margin-inline:auto;padding-block:2rem 4rem}.content--wide{max-width:none}.content h1{margin:.4rem 0 1.5rem;font:700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);color:var(--ink)}.content h2{margin:2.8rem 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--ink);font:700 1.2rem/1.4 var(--font-head);color:var(--ink)}.content h3{margin:1.8rem 0 .4rem;font:700 1.05rem/1.45 var(--font-head);color:var(--ink)}.content p{margin:0 0 1em;line-height:1.85}.content ul{padding-left:1.3rem;margin:.75rem 0}.content li{margin:.4rem 0;line-height:1.7}.content strong{color:var(--ink)}.content hr{margin:2.5rem 0;border:0;border-top:1px solid var(--rule)}.content code{font-family:var(--font-mono);font-size:.84em;color:var(--ink);background:var(--code-bg);padding:.1em .35em;border-radius:2px}.foot{border-top:1px solid var(--rule)}.foot>.wrap{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.5rem;padding-block:1.5rem 2rem;font:400 0.74rem/1.6 var(--font-mono);color:var(--muted)}.foot p{margin:0}.foot__year{font-variant-numeric:tabular-nums}.foot .en{font-family:var(--font-body);font-size:.82rem}@media (max-width:960px){.topics{min-height:0}}@media (max-width:760px){.lead__link{grid-template-columns:minmax(0,1fr);gap:1rem}.lead__media{order:-1}.log__head{display:none}.row a{grid-template-columns:auto auto minmax(0,1fr);grid-template-areas:"date cat time" "title title title";gap:.2rem .75rem;padding:.85rem .25rem .85rem .5rem}.row__date{grid-area:date}.row__cat{grid-area:cat}.row__time{grid-area:time}.row__title{grid-area:title}.log .log__list:empty{min-height:1560px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 77px,var(--rule) 77px,var(--rule) 78px)}.post{padding-top:.5rem}.post__body{font-size:1.0625rem;line-height:1.85}.status__grid{grid-template-columns:minmax(0,1fr)}.article-nav{grid-template-columns:minmax(0,1fr);gap:0}.article-nav__link--next{text-align:left;border-top:1px solid var(--rule)}.audio-controls{flex-wrap:wrap}.audio-progress-container{order:3;width:100%}.volume-slider{width:60px}}@media (max-width:480px){.volume-slider{display:none}.birthday-banner{padding-inline:1rem 3rem}}@media (prefers-reduced-motion:no-preference){.iconbtn,.themebtn,a,button{transition:color .15s,border-color .15s,background-color .15s}}@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-new(*),::view-transition-old(*){animation:none!important}}</style>
+  <!-- INLINE_CSS_SITE_END -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"有人說 pi 偷用 OpenRouter 額度，我叫 Claude 讀原始碼查：帳單對得上，結論講太滿","description":"有人發文說 pi agent 偷用 OpenRouter 額度，用的還是 Opus 4.1。我叫 Claude 讀原始碼、翻 issue：16 萬 tokens 的 context 一輪一輪重送，6 分鐘 5.14 美元。偷用沒有證據，不聲不響換模型的 bug 倒是有。Claude 的結論講太滿，被 Sol 挑了出來。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-10-12T00:00:00Z","dateModified":"2026-10-12T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/ai-analysis/pi-openrouter-opus-4-1-bill-overclaimed/"},"url":"https://b-log.to/ai-analysis/pi-openrouter-opus-4-1-bill-overclaimed/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover.webp"],"keywords":"AI, pi, oh-my-pi, OpenRouter, Claude Code, Opus 4.1, Sol, prompt cache, 原始碼, 查證","articleSection":"AI 分析"}</script>
+</head>
+<body class="post-page">
+  <a class="skip" href="#content">跳到內容</a>
+  <header class="site site-header">
+    <div class="wrap">
+      <div class="site__id">
+        <p class="site__title"><a class="wordmark" href="../../" aria-label="(b)-log 首頁"><span class="br" aria-hidden="true">(</span>b<span class="br" aria-hidden="true">)</span>-log</a></p>
+        <p class="tagline">世界的預設值不包含我，所以我自己定義</p>
+      </div>
+      <nav class="site__nav" aria-label="主選單">
+        <ul>
+          <li><a href="../../">HOME</a></li>
+          <li><a href="../../about.html">ABOUT</a></li>
+          <li><a href="../../gadgets.html">GADGETS</a></li>
+          <li><a href="../../feed.json">FEED</a></li>
+          <li><a href="#" id="random-post-link" onclick="goToRandomPost(event)">RANDOM</a></li>
+        </ul>
+      </nav>
+      <div class="site__tools">
+        <div class="search-toggle-container">
+          <button class="iconbtn search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" aria-controls="site-search" type="button">
+            <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </button>
+          <div class="search-box" id="site-search" hidden>
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5"></path>
+              </svg>
+              <input type="search" id="search-input" class="search-input" placeholder="搜尋文章" aria-label="搜尋文章" autocomplete="off">
+              <button type="button" id="search-clear" class="search-clear" aria-label="清除搜尋" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <button class="themebtn theme-toggle" type="button" onclick="ThemeManager.toggle()">
+          <span class="theme-toggle__icon"><i class="theme-dot" aria-hidden="true"></i></span>
+          <span class="theme-toggle__text">AUTO</span><span class="theme-toggle__hint">，切換深淺色</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="content" class="wrap article-shell">
+    <article class="post" id="post-article" data-category-theme="ai-analysis">
+      <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=AI%20%E5%88%86%E6%9E%90">AI 分析</a></span></nav>
+      <div id="post-accent" class="post__accent" aria-hidden="true" style="--post-accent:#b24a32"></div>
+      <p id="post-meta" class="meta">12OCT26 · AI 分析 · 7 MIN · JASON CHIEN</p>
+      <p id="post-catline" class="catline" hidden></p>
+      <h1 id="post-title" class="post__title">有人說 pi 偷用 OpenRouter 額度，我叫 Claude 讀原始碼查：帳單對得上，結論講太滿</h1>
+      <figure id="post-hero" class="post__cover" style="--cover-w: 1344; --cover-h: 768"><img class="post__cover-img" src="/content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover.webp" srcset="/content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover-480w.webp 480w, /content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover-828w.webp 828w, /content/img/2026/pi-openrouter-opus-4-1-bill-overclaimed-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.75), (max-width: 800px) min(92vw, 50vh * 1.75), (max-width: 1099px) min(736px, 50vh * 1.75), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.75), min(calc(90.78vw - 434px), 50vh * 1.75)" width="1344" height="768" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><p>有人發文提醒大家小心 pi agent。原 PO 去 OpenRouter 看額度還剩多少，發現少了十幾美元，可是自己幾乎沒在用，都是拿來測模型；一查才發現是 pi 在用，而且用的是 Opus 4.1。原 PO 已經把 pi 移除，回去用 Claude Code、Codex 和 opencode。</p>
+<p>我沒在用 pi，我用的是 omp（oh-my-pi），從 pi fork 出來的 coding agent。omp 有一個叫 smol 的模型角色，會在背景幫對話取標題、做這類雜事。pi 有沒有，我沒印象。所以我叫 Claude Code 把 pi 的原始碼 clone 下來查。</p>
+<h2 id="section-1">原始碼裡沒有 smol</h2>
+<p>pi 的 repo 已經搬到 <a href="https://github.com/earendil-works/pi">earendil-works/pi</a>，Claude Code 讀的是 10/12 的 main。裡面沒有取標題的功能，也沒有寫死的副模型，整個 repo 只有一個測試檔提到 <code>claude-opus-4.1</code>。OpenRouter 的預設模型寫在 <code>defaultModelPerProvider</code>，是 <code>moonshotai/kimi-k2.6</code>。</p>
+<p>主對話以外，pi 自己會發的請求有三種：context 快滿時的自動 compaction、用 <code>/tree</code> 切換分支時的 branch summary（預設會先問），還有 cache warming。cache warming 是 agent 還在跑的時候，趕在 prompt cache 過期前把同一個請求重送一次，輸出只要 1 個 token，讓快取不要過期；預估能省 0.05 美元以上才會送。三種用的都是當下 session 選的模型，不會另外換一個。</p>
+<p>看到 Opus 4.1，我的第一個反應是：Opus 有 4.1？有。Anthropic 在 2025 年 8 月 5 日<a href="https://www.anthropic.com/news/claude-opus-4-1">發布 Opus 4.1</a>，是 Opus 4 的小改版。2026 年 1 月 16 日，它從 Claude app 和 Claude Code 的模型選單拿掉；Claude API 那邊，<a href="https://platform.claude.com/docs/en/release-notes/overview">release notes</a> 寫的是已經退役。</p>
+<h2 id="section-2">6 分鐘，5.14 美元</h2>
+<p>後來拿到原 PO 的 OpenRouter Logs 截圖，篩選條件是 Claude Opus 4.1。供應商欄寫 Amazon Bedrock，所以到 10/3，OpenRouter 還能透過 Bedrock 叫到 Opus 4.1。App 欄寫 pi。pi 打 OpenRouter 時會帶 <code>X-OpenRouter-Title: pi</code>，這些請求確實是 pi 送的。</p>
+<p>畫面上有 8 筆，時間是 10/3 晚上 9:20 到 9:26。大部分每筆的 input 都在 16 萬 tokens 上下，output 只有一百多到六百，9:20 那一分鐘就有三筆。這看起來是 agent 在連續呼叫工具：模型每發一次工具呼叫，pi 就把 16 萬 tokens 的整段 context 重送一次。</p>
+<p>用 9:24 那筆反推單價：27,359 個 input token 加 1,794 個 output token，收了 0.545 美元，剛好是 input 每百萬 token 15 美元、output 75 美元，而且完全沒吃到快取。16 萬那幾筆大約 0.25 美元一筆，用全價算要 2.38 美元左右，大部分吃到快取才付得出這個價錢。9:23 那筆 1.32 美元、9:26 那筆 2.20 美元，有一大段沒吃到快取，單筆就貴了好幾倍。</p>
+<p>8 筆加起來 5.14 美元，前後 6 分鐘。照這個速度，十幾美元大概 15 分鐘就燒完了。</p>
+<p>那幾筆 0.25 美元的也不會是背景請求。照 pi 的程式碼，compaction 和 branch summary 都把快取關掉，cache warming 的 output 固定 1 個 token，所以它們是一般的對話輪次。這點一樣是拿 10/12 的程式碼推的。</p>
+<h2 id="section-3">不聲不響換模型，pi 真的有</h2>
+<p>我又叫 Claude 用 gh 搜 pi 的 issue，先搜 open，再搜 closed。沒有人提到 Opus 4.1，也沒有人回報背景偷打請求。</p>
+<p>可是「啟動時不聲不響換掉模型」，從 8 月到 10 月至少有 6 筆。<a href="https://github.com/earendil-works/pi/issues/8810">#8810</a> 到現在還開著，10/7 有人補了一個 OpenRouter 的情況：pi 1.0.4，只用 <code>OPENROUTER_API_KEY</code> 環境變數，預設模型設成 <code>openrouter/z-ai/glm-5.3-flash</code>，大約 10/4 以前都正常，之後每次 <code>pi -p</code> 都跑在 <code>anthropic/claude-opus-4-8</code>。原因是啟動時 auth 狀態還沒建好，pi 判斷設定的模型沒有認證，就改走各 provider 的預設對照表。<a href="https://github.com/earendil-works/pi/issues/10812">#10812</a> 是 10/11 開的：存起來的預設模型從目錄消失之後，pi 直接改用另一個 input 單價貴 4.4 倍的模型，沒有任何警告，session 檔記成一筆普通的 <code>model_change</code>。回報的人是看到費用比平常高才發現。</p>
+<p>選模型的介面也容易出錯。<code>/model</code> 選單按 Enter 只套用到這個 session，要按 Ctrl+S 才會存成預設（<a href="https://github.com/earendil-works/pi/issues/10505">#10505</a>）。搜 <code>opus</code> 的時候，第一個結果是 sonnet（<a href="https://github.com/earendil-works/pi/issues/10552">#10552</a>）。</p>
+<p>所以「它跑了一個我沒選的模型」，在 pi 不是空穴來風。但這些回報裡被換上的，多半是各 provider 預設對照表裡的模型，OpenRouter 是 <code>kimi-k2.6</code>，Anthropic 是 <code>claude-opus-4-8</code>，對不到時才拿可用清單的第一個。目前看到的回報，沒有一筆是換成 OpenRouter 的 Opus 4.1；清單第一個會不會剛好是它，我沒查。</p>
+<h2 id="section-4">查的 AI 也講太滿</h2>
+<p>Claude Code 第一則回答，開頭就是「pi 沒有偷用額度」，原 PO 裝的是哪一版，放在後面才帶一句。截圖進來之後，它說「這張截圖把我前面說的推論證實了」。中間還有一句「pi 唯一不用你按 Enter 就會送出的請求是 cache warming」。</p>
+<p>我把這段 session 丟給 Sol 看。Sol 先重算，8 筆合計 5.14 美元、0.545 美元那筆的單價都對。然後挑出三個地方。截圖只證明標成 pi 的請求用了 Opus 4.1，沒證明它是怎麼被選上的。拿 10/12 的 main 替 10/3 的安裝版本下結論，開頭卻講得很肯定，前後的把握對不起來。不用按 Enter 的也不只 cache warming，自動 compaction 是 Claude 自己前面查到的，agent 連續呼叫工具，每一輪也不用按 Enter。</p>
+<p>Claude 四點都認了。</p>
+<p>上個月 Opus 5 寫的規格被 <a href="https://b-log.to/ai-analysis/opus-5-spec-caught-by-deepseek-v4-1-flash/">DeepSeek V4.1 Flash 抓到矛盾</a>，那次是驗收條件憑上一輪的印象填，沒有重算。這次的數字 Sol 重算過，都對，講過頭的是結論。</p>
+<p>截圖能證明的，是 pi 送了這些 Opus 4.1 的請求。原始碼能證明的，是 10/12 的 pi 沒有藏一個副模型。Opus 4.1 是怎麼被選上的，兩邊都證明不了。要查得看原 PO 的 <code>settings.json</code> 和那個 session 的 jsonl；而照 #10812 的說法，session 檔裡被換掉的模型跟自己選的長得一樣，只能拿 <code>settings.json</code> 的 <code>defaultModel</code> 來對照。</p>
+<p>Sol 的結論是：貴的模型加上很大的 context，就足以解釋這筆錢；偷偷切模型沒有證據，模型是怎麼被選上的也還沒查明。</p>
+<hr>
+<p>最後這件事跟我自己有關。我一開始只知道 omp 有 smol，pi 有沒有不確定。查下來，pi 沒有。</p>
+<p>可是 Claude 順手看了 omp 10/12 的程式碼。smol 沒有明確設定、default 有設定的時候，smol 會先繼承 default 的模型，不是直接用內建清單裡的 Haiku 5.5 或 Gemini 3.8 Flash。取標題實際上走不走這條路，Claude 沒有查到底。Sol 的說法是：角色叫 smol，不保證實際跑的是便宜模型。</p>
+<p>我的 omp 裡，smol 有沒有設，我還沒去看。</p>
+</div>
+
+      <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
+      <div id="post-tags" class="tags"><span class="meta">TAGS</span><a href="/?tag=AI">AI</a><a href="/?tag=pi">pi</a><a href="/?tag=oh-my-pi">oh-my-pi</a><a href="/?tag=OpenRouter">OpenRouter</a><a href="/?tag=Claude%20Code">Claude Code</a><a href="/?tag=Opus%204.1">Opus 4.1</a><a href="/?tag=Sol">Sol</a><a href="/?tag=prompt%20cache">prompt cache</a><a href="/?tag=%E5%8E%9F%E5%A7%8B%E7%A2%BC">原始碼</a><a href="/?tag=%E6%9F%A5%E8%AD%89">查證</a></div>
+      <div id="share-links" class="share"></div>
+    </article>
+
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/ai-analysis/claude-code-projects-waitlist-parallel-threads/"><span class="side-row__meta">12OCT26 · <span>AI 分析</span></span><span class="side-row__title">Claude Code Projects 把等候名單全放進來了，平行雲端 thread 我早就付過學費</span></a></li><li><a href="/ai-analysis/nadella-controls-outside-the-model/"><span class="side-row__meta">11OCT26 · <span>AI 分析</span></span><span class="side-row__title">Nadella 說控制要放在模型外面，我昨天才把一條規則從記憶搬進設定檔</span></a></li><li><a href="/ai-analysis/anthropic-unintended-model-actions/"><span class="side-row__meta">10OCT26 · <span>AI 分析</span></span><span class="side-row__title">Anthropic 說 Claude 做不到就繞過限制，我的 AGENTS.md 也是出事後才補上那幾條</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li><a href="/ai-analysis/anthropic-model-abuse-policy/"><span class="side-row__meta">09OCT26 · <span>AI 分析</span></span><span class="side-row__title">罵 Claude 會被停權嗎？罵了會比較準嗎？兩件事的原文都沒有傳言講得那麼大</span></a></li><li><a href="/dev-philosophy/patchmd-reinventing-wheel/"><span class="side-row__meta">09OCT26 · <span>開發哲學</span></span><span class="side-row__title">agent 讓重造輪子變便宜，我選擇 fork，再把改過的地方寫進 PATCHES.md</span></a></li><li><a href="/crossing-field/lisa-sophilia-billboard-japan-interview/"><span class="side-row__meta">06OCT26 · <span class="her-cat">Crossing Field</span></span><span class="side-row__title">LiSA「ソフィリア」專訪｜抒情曲成了新武器</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">原始碼裡沒有 smol</a></li><li><a href="#section-2">6 分鐘，5.14 美元</a></li><li><a href="#section-3">不聲不響換模型，pi 真的有</a></li><li><a href="#section-4">查的 AI 也講太滿</a></li></ol></nav>
+      </div>
+    </aside>
+
+    <div class="article-foot">
+      <nav class="article-nav" aria-label="上一篇與下一篇">
+        <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+        <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+      </nav>
+
+      <section class="comments-section" id="comments" aria-labelledby="comments-label">
+        <h2 class="label" id="comments-label">COMMENTS <span>留言討論</span></h2>
+        <div id="giscus-container" class="giscus-container">
+          <div class="giscus-loading" id="giscus-loading">
+            <p>載入留言系統中...</p>
+          </div>
+          <div class="giscus-fallback" id="giscus-fallback" hidden>
+            <p>無法載入留言系統。您可以前往
+              <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                 target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot site-footer">
+    <div class="wrap">
+      <p>© <span class="foot__year" data-footer-year>2026</span> JASON CHIEN</p>
+      <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
