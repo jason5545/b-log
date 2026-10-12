@@ -1,5 +1,26 @@
 [
   {
+    "slug": "lisa-oath-sign-mynavi-interview",
+    "title": "LiSA「oath sign」專訪｜希望成為讓人更相信現在的自己的理由",
+    "summary": "我翻譯了マイナビニュース 2011 年的 LiSA「oath sign」專訪。這是她以 LiSA 之名發行的第一張單曲，也是《Fate/Zero》片頭曲。她談第 1 話片尾響起時的雞皮疙瘩、「禁止左轉，我還是想左轉」的 confidence driver，最後希望這首歌成為讓人更相信現在的自己的理由。",
+    "category": "Crossing Field",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-13T00:00:00Z",
+    "tags": [
+      "LiSA",
+      "oath sign",
+      "Fate/Zero",
+      "confidence driver",
+      "ナミダ流星群",
+      "HANDS & SMiLE",
+      "專訪翻譯",
+      "マイナビニュース"
+    ],
+    "accentColor": "#3f4f7a",
+    "coverImage": "/content/img/2026/lisa-oath-sign-mynavi-interview-cover.webp",
+    "readingTime": "10 min"
+  },
+  {
     "slug": "pi-openrouter-opus-4-1-bill-overclaimed",
     "title": "有人說 pi 偷用 OpenRouter 額度，我叫 Claude 讀原始碼查：帳單對得上，結論講太滿",
     "summary": "有人發文說 pi agent 偷用 OpenRouter 額度，用的還是 Opus 4.1。我叫 Claude 讀原始碼、翻 issue：16 萬 tokens 的 context 一輪一輪重送，6 分鐘 5.14 美元。偷用沒有證據，不聲不響換模型的 bug 倒是有。Claude 的結論講太滿，被 Sol 挑了出來。",

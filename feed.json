@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-oath-sign-mynavi-interview",
+      "url": "https://b-log.to/crossing-field/lisa-oath-sign-mynavi-interview/",
+      "title": "LiSA「oath sign」專訪｜希望成為讓人更相信現在的自己的理由",
+      "content_text": "我翻譯了マイナビニュース 2011 年的 LiSA「oath sign」專訪。這是她以 LiSA 之名發行的第一張單曲，也是《Fate/Zero》片頭曲。她談第 1 話片尾響起時的雞皮疙瘩、「禁止左轉，我還是想左轉」的 confidence driver，最後希望這首歌成為讓人更相信現在的自己的理由。",
+      "date_published": "2026-10-13T00:00:00.000Z",
+      "date_modified": "2026-10-13T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "oath sign",
+        "Fate/Zero",
+        "confidence driver",
+        "ナミダ流星群",
+        "HANDS & SMiLE",
+        "專訪翻譯",
+        "マイナビニュース"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-oath-sign-mynavi-interview-cover.webp"
+    },
+    {
       "id": "pi-openrouter-opus-4-1-bill-overclaimed",
       "url": "https://b-log.to/ai-analysis/pi-openrouter-opus-4-1-bill-overclaimed/",
       "title": "有人說 pi 偷用 OpenRouter 額度，我叫 Claude 讀原始碼查：帳單對得上，結論講太滿",
