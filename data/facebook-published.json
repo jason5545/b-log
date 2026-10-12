@@ -1506,6 +1506,13 @@
       "postUrl": "https://b-log.to/ai-analysis/claude-code-projects-waitlist-parallel-threads/",
       "facebookPostId": "1026818047191304_122116981749290922",
       "publishedAt": "2026-10-12T01:09:01.182Z"
+    },
+    "pi-openrouter-opus-4-1-bill-overclaimed": {
+      "status": "published",
+      "title": "有人說 pi 偷用 OpenRouter 額度，我叫 Claude 讀原始碼查：帳單對得上，結論講太滿",
+      "postUrl": "https://b-log.to/ai-analysis/pi-openrouter-opus-4-1-bill-overclaimed/",
+      "facebookPostId": "1026818047191304_122117006163290922",
+      "publishedAt": "2026-10-12T07:54:49.108Z"
     }
   }
 }
