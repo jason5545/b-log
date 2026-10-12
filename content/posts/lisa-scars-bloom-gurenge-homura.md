@@ -1,6 +1,7 @@
 # 傷痕累累也要盛開
 
 <div class="crossing-field-intro">
+  <img class="crossing-field-intro__sticker" src="/content/img/stickers/lisa-10350702.webp" alt="" width="240" height="236" loading="lazy" decoding="async">
  <p class="crossing-field-intro__eyebrow">Crossing Field / PRiSM Dispatch</p>
  <p class="crossing-field-intro__lead">2017 年步入 30 歲的 LiSA，開始正視體力的變化。她在不為人知的情況下，內心承受著「這樣的演唱會或許是最後一次」的迫切感。在克服這些變化的過程中，2019 年「紅蓮華」大獲成功，她也首次登上《NHK 紅白歌合戰》。然而 2020 年，新冠疫情席捲日本。她一邊挑戰與現場演唱會截然不同的電視歌唱表演，一邊嚴格地持續創作，最終誕生了「炎」這首更大的熱門曲。</p>
  <p class="crossing-field-intro__meta">關鍵詞：LiSA、PRiSM、15週年、紅蓮華、炎、紅白歌合戰、專訪翻譯</p>

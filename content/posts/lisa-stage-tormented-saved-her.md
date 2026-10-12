@@ -1,6 +1,7 @@
 # 舞台折磨她，也拯救了她
 
 <div class="crossing-field-intro">
+  <img class="crossing-field-intro__sticker" src="/content/img/stickers/lisa-10350704.webp" alt="" width="228" height="240" loading="lazy" decoding="async">
   <p class="crossing-field-intro__eyebrow">Crossing Field / PRiSM Dispatch</p>
   <p class="crossing-field-intro__lead">2011 年，LiSA 雖然確定了單飛出道，卻說自己直到 CD 真正陳列在店頭的那一刻才相信這是真的。從「Girls Dead Monster」嶄露頭角、進而取得單飛出道機會的她，始終帶著「這一切隨時可能消失」的不安。這種恐懼在 2014 年的日本武道館公演中猛烈衝擊著她的精神。然而，在「デート（LiVE）」中獲得歌迷的歡呼聲支撐而重新振作，2015 年再度挑戰日本武道館、成功雪恥。2016 年也實現了橫濱競技場公演。在 LiSA 職涯的最初五年裡，折磨她的、拯救她的，一切都是演唱會。</p>
   <p class="crossing-field-intro__meta">關鍵詞：LiSA、PRiSM、15週年、武道館、橫濱競技場、專訪翻譯</p>

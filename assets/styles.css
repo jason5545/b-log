@@ -1470,6 +1470,24 @@ body:has([data-category-theme="crossing-field"]) .site {
   border-top: 2px solid var(--magenta);
 }
 
+/* LiSA LINE 貼圖：開頭介紹右上角一張，跟 LiSAFloatingCarousel 拍立得角落的貼紙一樣斜放 */
+.post__body .crossing-field-intro__sticker {
+  float: right;
+  width: clamp(72px, 16vw, 120px);
+  height: auto;
+  margin: -0.4rem 0 0.6rem 1rem;
+  border-radius: 0;
+  background: none;
+  transform: rotate(6deg);
+  shape-outside: margin-box;
+}
+
+.post__body .crossing-field-intro::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
 .post__body .crossing-field-serial--end {
   margin-top: 2.5rem;
 }

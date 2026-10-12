@@ -1,6 +1,7 @@
 # LiSA「ソフィリア」專訪｜抒情曲成了新武器
 
 <div class="crossing-field-intro">
+  <img class="crossing-field-intro__sticker" src="/content/img/stickers/lisa-353866105.webp" alt="" width="240" height="212" loading="lazy" decoding="async">
   <p class="crossing-field-intro__eyebrow">Crossing Field / Interview Dispatch</p>
   <p class="crossing-field-intro__lead">LiSA 發行了相隔 4 個月的新曲「ソフィリア」（Sophilia）。在這首為電影《Matching TRUE LOVE》量身打造的作品中，LiSA 唱的是不加修飾的「LiSA 自己」。那也是她歷經出道 15 年的生涯，終於抵達「可以為了自己而唱」這個境界的證明。透過這首以不同於以往的方式、將作為她武器的強悍歌聲發揮到極致的抒情曲，LiSA 面對的是什麼？全國 Arena 巡迴、睽違 2 年的亞洲巡迴，以及歐洲 & UK 巡迴——奔走於全世界，同時持續傳遞不變能量的 LiSA。7 月底，我們與她再次見面，她看起來已經握著開啟下一扇門的「鑰匙」。</p>
   <p class="crossing-field-intro__meta">關鍵詞：LiSA、ソフィリア、Matching TRUE LOVE、抒情曲、YES、Patch Walk、專訪翻譯</p>

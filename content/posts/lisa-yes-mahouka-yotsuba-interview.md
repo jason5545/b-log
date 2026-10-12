@@ -1,6 +1,7 @@
 # LiSA「YES」專訪｜120% 是深雪，也是過去的我
 
 <div class="crossing-field-intro">
+  <img class="crossing-field-intro__sticker" src="/content/img/stickers/lisa-353866114.webp" alt="" width="216" height="240" loading="lazy" decoding="async">
   <p class="crossing-field-intro__eyebrow">Crossing Field / Interview Dispatch</p>
   <p class="crossing-field-intro__lead">《魔法科高中的劣等生》回到「四葉繼承篇」，LiSA 也從當年推著達也往前衝的〈Rising Hope〉，轉向深雪那種壓在心裡太久、終於被允許說出口的感情。這次的「YES」不是單純的劇場版主題曲，而是她用 15 年後的自己，去唱一個以前可能還唱不出來的肯定。</p>
   <p class="crossing-field-intro__meta">關鍵詞：LiSA、YES、魔法科高中的劣等生、四葉繼承篇、Rising Hope、專訪翻譯</p>

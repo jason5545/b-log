@@ -1,6 +1,7 @@
 # LiSA「LACE UP」專訪｜將15年的思念一一編織而成的第7張專輯
 
 <div class="crossing-field-intro">
+  <img class="crossing-field-intro__sticker" src="/content/img/stickers/lisa-353866110.webp" alt="" width="237" height="240" loading="lazy" decoding="async">
   <p class="crossing-field-intro__eyebrow">Crossing Field / Opening Dispatch</p>
   <p class="crossing-field-intro__lead">這是 <strong>Crossing Field</strong> 分類的第一篇文章。不想寫成心得文，也不想把翻譯塞進普通卡片裡就算了。這裡的做法比較像一份翻譯報導：保留原文的訪談節奏，補上必要的來源資訊，讓翻譯在這個部落格裡也有自己的位置。</p>
   <p class="crossing-field-intro__meta">關鍵詞：LiSA、15週年、《LACE UP》、音楽ナタリー、專訪翻譯</p>

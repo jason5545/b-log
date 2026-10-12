@@ -1,6 +1,7 @@
 # 學會接受自己，才能接受愛
 
 <div class="crossing-field-intro">
+  <img class="crossing-field-intro__sticker" src="/content/img/stickers/lisa-353866103.webp" alt="" width="164" height="240" loading="lazy" decoding="async">
   <p class="crossing-field-intro__eyebrow">Crossing Field / PRiSM Dispatch</p>
   <p class="crossing-field-intro__lead">新冠疫情讓全世界陷入混亂。「紅蓮華」和「炎」的大熱餘溫猶存，LiSA 卻在 2022 年春天過後，給自己的現場演出安排了一段空白期。在那段期間，她開始累積全新的人生體驗。而與歌迷長達 15 年的深厚羈絆，也讓她成為一個能夠坦然接受愛意的 LiSA。如今，慶祝 15 週年的大型展覽「LiSA PRiSM 〜LiFE is Soulful Artworks〜」即將登場，她說，她對那些被稱為「LiSAっ子」的歌迷們，有一個願望。</p>
   <p class="crossing-field-intro__meta">關鍵詞：LiSA、PRiSM、15週年、Eve&Birth、LANDER、PATCH WALK、LiSAっ子、專訪翻譯</p>

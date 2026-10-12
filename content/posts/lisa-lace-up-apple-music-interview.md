@@ -1,6 +1,7 @@
 # LiSA「LACE UP」專訪 × Apple Music｜沒有偷懶地走到這裡，就是驕傲
 
 <div class="crossing-field-intro">
+  <img class="crossing-field-intro__sticker" src="/content/img/stickers/lisa-10350683.webp" alt="" width="209" height="240" loading="lazy" decoding="async">
   <p class="crossing-field-intro__eyebrow">Crossing Field / Radio Dispatch</p>
   <p class="crossing-field-intro__lead">同一張 <strong>《LACE UP》</strong>，換一個入口。音楽ナタリー那篇是完整文字專訪；這一篇來自 Apple Music《J-Pop Now Radio》，節奏更像坐在錄音室裡，一段對話、一段歌，再回到對話。整理時我沒有把它改成普通報導，而是保留廣播的呼吸：歌被放進訪談裡，LiSA 也被歌帶著說回自己的 15 年。</p>
   <p class="crossing-field-intro__meta">關鍵詞：LiSA、15週年、《LACE UP》、Apple Music、J-Pop Now Radio、專訪翻譯</p>
