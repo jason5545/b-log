@@ -1,6 +1,6 @@
 # Claude Code Projects 把等候名單全放進來了，平行雲端 thread 我早就付過學費
 
-台灣時間 10 月 10 日，[@ClaudeDevs](https://x.com/ClaudeDevs/status/2108621476538781878) 發推說：Claude Code Projects 等候名單上的 Pro 和 Max 使用者，全部放進來了。官方部落格〈[Projects redesigned: from folder to conversation](https://claude.com/blog/projects-redesigned)〉寫得更完整：你描述目標，Claude 拆範圍、委派工作、協調平行 threads、再把結果組起來；手機也能監督進度；離開電腦之後，它還可以繼續跑。
+臺灣時間 10 月 10 日，[@ClaudeDevs](https://x.com/ClaudeDevs/status/2108621476538781878) 發推說：Claude Code Projects 等候名單上的 Pro 和 Max 使用者，全部放進來了。官方部落格〈[Projects redesigned: from folder to conversation](https://claude.com/blog/projects-redesigned)〉寫得更完整：你描述目標，Claude 拆範圍、委派工作、協調平行 threads、再把結果組起來；手機也能監督進度；離開電腦之後，它還可以繼續跑。
 
 我第一個想到的，不是「終於可以用了」。
 
@@ -8,7 +8,7 @@
 
 ## 產品預設長成什麼樣
 
-Projects 裡有協調者，也有一堆做工的 thread。官方舉的例子很直白：降低 checkout 延遲，就平行開 thread 去量各端點、試優化、開 PR；要退掉一個舊 API，就每個 repo 一條 thread 去改呼叫端、跑測試、再告訴你哪個 PR 要先 merge。每個 thread 是獨立的 Claude Code 雲端 session，自己有 branch，也有一份 repo 副本；如果兩個 thread 動到同一段程式，最後用 PR 的 merge conflict 解。一個 thread 不夠，還可以再拆 subagents、loops、workflows。專案之間有共享 memory，也有 library 收檔案和產物。
+Projects 裡有協調者，也有一堆做工的 thread。官方舉的例子很直白：降低 checkout 延遲，就平行開 thread 去量各端點、試最佳化、開 PR；要退掉一個舊 API，就每個 repo 一條 thread 去改呼叫端、跑測試、再告訴你哪個 PR 要先 merge。每個 thread 是獨立的 Claude Code 雲端 session，自己有 branch，也有一份 repo 副本；如果兩個 thread 動到同一段程式，最後用 PR 的 merge conflict 解。一個 thread 不夠，還可以再拆 subagents、loops、workflows。專案之間有共享 memory，也有 library 收檔案和產物。
 
 官方自己寫了一句我很在意的話：專案會更快撞到用量上限。你可以查專案的用量，也可以替協調者和 worker 選不同的 model 跟 effort。Threads 目前跑在雲端；本機執行，官方寫的是很快就會支援。
 
