@@ -1470,22 +1470,23 @@ body:has([data-category-theme="crossing-field"]) .site {
   border-top: 2px solid var(--magenta);
 }
 
-/* LiSA LINE 貼圖：開頭介紹右上角一張，跟 LiSAFloatingCarousel 拍立得角落的貼紙一樣斜放 */
+/* LiSA LINE 貼圖：貼在開頭介紹上緣的洋紅線右端，跟 LiSAFloatingCarousel 拍立得角落的貼紙一樣斜放。
+   絕對定位，不佔版面，內文不重排 */
+.post__body .crossing-field-intro {
+  position: relative;
+}
+
 .post__body .crossing-field-intro__sticker {
-  float: right;
-  width: clamp(72px, 16vw, 120px);
+  position: absolute;
+  right: 0.25rem;
+  bottom: calc(100% - 0.75rem);
+  width: clamp(64px, 14vw, 96px);
   height: auto;
-  margin: -0.4rem 0 0.6rem 1rem;
+  margin: 0;
   border-radius: 0;
   background: none;
   transform: rotate(6deg);
-  shape-outside: margin-box;
-}
-
-.post__body .crossing-field-intro::after {
-  content: '';
-  display: block;
-  clear: both;
+  pointer-events: none;
 }
 
 .post__body .crossing-field-serial--end {
