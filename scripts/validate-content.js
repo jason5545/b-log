@@ -13,6 +13,7 @@ const paths = {
   categories: path.join(ROOT_DIR, 'config/categories.json'),
   postsDir: path.join(ROOT_DIR, 'content/posts'),
   audioDir: path.join(ROOT_DIR, 'content/audio'),
+  stickersDir: path.join(ROOT_DIR, 'content/img/stickers'),
 };
 
 const issues = {
@@ -754,6 +755,40 @@ function validateGeneratedRoutes(posts, categoryMapping) {
   }
 }
 
+// Crossing Field 一篇一張 LiSA 貼圖（AGENTS.md）：每篇的開頭介紹裡要有一張，檔案要存在；
+// content/img/stickers/ 只放有文章用到的貼圖，沒用到的不能進 repo
+function validateCrossingFieldStickers(posts) {
+  const referenced = new Set();
+  for (const post of posts) {
+    if (!isPlainObject(post) || post.category !== 'Crossing Field') continue;
+    const markdown = readText(path.join(paths.postsDir, `${post.slug}.md`), `content/posts/${post.slug}.md`);
+    if (!markdown) continue;
+    const intro = markdown.match(/<div class="crossing-field-intro">\n([\s\S]*?)<\/div>/);
+    if (!intro) {
+      addError(`Crossing Field 文章 ${post.slug} 沒有 crossing-field-intro，貼圖沒地方放`);
+      continue;
+    }
+    const stickers = [...intro[1].matchAll(/<img class="crossing-field-intro__sticker" src="\/content\/img\/stickers\/([^"]+\.webp)"/g)];
+    if (stickers.length !== 1) {
+      addError(`Crossing Field 文章 ${post.slug} 的開頭介紹要剛好一張貼圖，目前 ${stickers.length} 張（node scripts/add-cf-sticker.js ${post.slug} <stickerId>）`);
+    }
+    for (const [, file] of stickers) {
+      referenced.add(file);
+      if (!fs.existsSync(path.join(paths.stickersDir, file))) {
+        addError(`${post.slug} 的貼圖 content/img/stickers/${file} 不存在`);
+      }
+    }
+  }
+
+  const files = fs.existsSync(paths.stickersDir) ? fs.readdirSync(paths.stickersDir).filter((file) => !file.startsWith('.')) : [];
+  for (const file of files) {
+    if (!referenced.has(file)) {
+      addError(`content/img/stickers/${file} 沒有文章使用，貼圖只放用到的那幾張，請刪除`);
+    }
+  }
+  addNote(`Crossing Field 貼圖：${referenced.size} 張被使用，資料夾裡 ${files.length} 個檔案`);
+}
+
 function main() {
   const categoriesConfig = readJson(paths.categories, 'config/categories.json');
   const posts = readJson(paths.posts, 'data/posts.json') || [];
@@ -776,6 +811,7 @@ function main() {
 
   if (Array.isArray(posts)) {
     validateAccentColors(posts);
+    validateCrossingFieldStickers(posts);
   }
   validateMagentaInStyles();
   validateHerPostSlugSources();

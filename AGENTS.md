@@ -26,6 +26,16 @@ Jason 2026/9/7 定，10/6 要求寫進來。Crossing Field 刊登 LiSA 訪談的
 - Jason 9/7 已評估過著作權風險，決定照發。同一個論點不要每篇重提；有新事實（例如收到撤文通知、原媒體公開表態）才提出。9/7 Claude Code 說過「日本媒體對這種事會出手」，查了翻譯組的先例後收回。
 - 要守的只有署名：原文連結、採訪撰文、攝影者都要寫在文章開頭。
 
+## Crossing Field 一篇一張貼圖
+
+Jason 2026/10/12 定。每篇 Crossing Field 文章的開頭介紹（`crossing-field-intro`）放一張 LiSA LINE 貼圖，貼在上緣洋紅線的右端、斜 6 度，跟 LiSAFloatingCarousel 拍立得角落的貼紙同一個樣子。
+
+- 貼圖庫在 `~/GitHub/LiSAFloatingCarousel/Resources/Stickers`（私人 repo，只收貼圖組，不用 emoji 組）。挑一張跟文章主題對得上的，盡量不跟別篇重複。
+- 用腳本放：`node scripts/add-cf-sticker.js <slug> <stickerId>`，它會轉成最寬 240px 的 WebP 放進 `content/img/stickers/lisa-<id>.webp`，插進（或換掉）intro 第一行。`--list` 列出全部 ID 和已用過的。換掉的舊貼圖沒有別篇用就一起刪。
+- **只把用到的貼圖推上 repo**。那些是付費的 LINE 貼圖（© Sony Music Artists / LiSA），carousel 的 README 寫著只限私人使用；Jason 選的做法是少量裝飾，一篇一張，不整包搬。`content/img/stickers/` 裡不能有沒用到的檔案。
+- 貼圖用絕對定位，不佔版面，內文不能因為貼圖重排（Jason 10/12：「dont realign the post」）。樣式在 `assets/styles.css` 的 `.crossing-field-intro__sticker`，手機上貼圖會蓋到全寬封面的右下角，這是可以接受的。
+- `npm run validate` 會擋：Crossing Field 文章的 intro 沒有剛好一張貼圖、貼圖檔不存在、資料夾裡有沒用到的貼圖。
+
 ## CSS 內嵌在 HTML
 
 2026/10/2 改的。`index.html`、`post.html`、`about.html`、`gadgets.html`（和文章頁）不用 `<link>` 載入樣式表，`fonts.css`、`critical-shared.css`、`styles.css` 壓縮後直接寫在 `<head>`，由 `npm run build:assets` 產生（`scripts/inline-css.js`），`npm run validate` 會擋沒同步的頁面。原檔照舊改，HTML 裡兩組 `INLINE_CSS_*` 標記之間不要手改。
