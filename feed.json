@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "subscription-subsidy-fences",
+      "url": "https://b-log.to/business-insights/subscription-subsidy-fences/",
+      "title": "訂閱補貼沒有收回，它長出了圍籬",
+      "content_text": "Theo 把訂閱補貼算到 95–98%；我拿手上的 $200 額度實測，三小時只燒得掉 $100。補貼沒有收回，它長出了圍籬。",
+      "date_published": "2026-10-13T00:00:00.000Z",
+      "date_modified": "2026-10-13T00:00:00.000Z",
+      "tags": [
+        "Anthropic",
+        "Claude",
+        "OpenAI",
+        "Theo",
+        "訂閱制",
+        "補貼",
+        "API credit",
+        "Claude Code",
+        "AI產業",
+        "商業策略"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/subscription-subsidy-fences-cover.svg"
+    },
+    {
       "id": "public-commits-found-my-email",
       "url": "https://b-log.to/tech-analysis/public-commits-found-my-email/",
       "title": "我沒給他 email，他怎麼寄信給我？",
