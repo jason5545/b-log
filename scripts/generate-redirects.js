@@ -738,7 +738,8 @@ function buildArticleTagMetaBlock(tags = []) {
 
 function buildHomepageHeroMedia(post) {
   if (post.coverImage) {
-    return `          <div class="lead__media" id="hero-media"><img class="lead__img" ${buildHeroImageAttributes(post.coverImage, HOME_HERO_SIZES, 'sync')}></div>`;
+    const fitStyle = post.coverFit === 'contain' ? ' style="object-fit: contain"' : '';
+    return `          <div class="lead__media" id="hero-media"><img class="lead__img"${fitStyle} ${buildHeroImageAttributes(post.coverImage, HOME_HERO_SIZES, 'sync')}></div>`;
   }
   // 無封面：不輸出 media 區塊，LATEST 改用純文字版型
   return '';

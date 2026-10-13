@@ -1661,6 +1661,12 @@ function renderFeaturedPost(post) {
     heroSection.dataset.featuredCover = post.coverImage || '';
   }
 
+  // 方形唱片封面可逐篇完整顯示；篩選換篇時恢復預設裁切，保留原有欄位尺寸。
+  const featuredImage = heroMedia?.querySelector('.lead__img');
+  if (featuredImage) {
+    featuredImage.style.objectFit = post.coverFit === 'contain' ? 'contain' : '';
+  }
+
   heroLink.href = slugToPath(post.slug, post.category);
 
   if (heroTitle) {

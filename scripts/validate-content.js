@@ -551,6 +551,10 @@ function validatePosts(posts, categoryMapping) {
       addError(`${context} 的 coverImage 找不到檔案：${post.coverImage}`);
     }
 
+    if (post.coverFit !== undefined && !['cover', 'contain'].includes(post.coverFit)) {
+      addError(`${context} 的 coverFit 必須是 cover 或 contain`);
+    }
+
     const markdownPath = path.join(paths.postsDir, `${post.slug}.md`);
     if (!post.slug || !fs.existsSync(markdownPath)) {
       addError(`${context} 找不到 Markdown：content/posts/${post.slug}.md`);
