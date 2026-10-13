@@ -39,6 +39,7 @@ const AUDIO_ICON_SVG = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden
 </svg>`;
 let visibleCount = 0;
 let allFilteredPosts = [];
+let logSpaceFillFrame = null;
 
 const categoryMappingStore = createCategoryMappingStore();
 let postsCatalogCache = null;
@@ -1132,6 +1133,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (bodyClassList.contains('home')) {
     // 初始化 12 月生日特輯
     BirthdayTheme.init();
+    initLogSpaceFilling();
 
     // 瀏覽器上一頁／下一頁時重新渲染，讓篩選狀態（含 Start here 顯示）與 URL 同步
     window.addEventListener('popstate', () => {
@@ -1252,6 +1254,44 @@ async function renderHomepage() {
   postsListEl.innerHTML = '';
 
   appendNextPage();
+  scheduleLogSpaceFill();
+}
+
+// 桌機兩欄時用較早的文章填滿側欄留下的空間；逐列量實際高度，標題換行也算在內。
+function fillLogSpace() {
+  if (!window.matchMedia('(min-width: 961px)').matches) return;
+  const postsListEl = document.querySelector('#posts-list');
+  const sidebarEnd = document.querySelector('.home-grid > .side')?.lastElementChild;
+  if (!postsListEl?.firstElementChild || !sidebarEnd) return;
+
+  // .side 會被 grid 拉長，所以以最後一個區塊的底部量內容，避免互相撐高。
+  const targetBottom = sidebarEnd.getBoundingClientRect().bottom;
+  while (visibleCount < allFilteredPosts.length) {
+    const button = document.querySelector('#load-more-btn');
+    const logEnd = button && !button.hidden ? button : postsListEl;
+    if (logEnd.getBoundingClientRect().bottom >= targetBottom - 1) break;
+    appendNextPage(1);
+  }
+}
+
+function scheduleLogSpaceFill() {
+  if (logSpaceFillFrame !== null) return;
+  logSpaceFillFrame = requestAnimationFrame(() => {
+    logSpaceFillFrame = null;
+    fillLogSpace();
+  });
+}
+
+function initLogSpaceFilling() {
+  window.addEventListener('resize', scheduleLogSpaceFill);
+  if (typeof ResizeObserver !== 'undefined') {
+    const observer = new ResizeObserver(scheduleLogSpaceFill);
+    ['#featured', '.home-grid > .side'].forEach((selector) => {
+      const element = document.querySelector(selector);
+      if (element) observer.observe(element);
+    });
+  }
+  document.fonts.ready.then(scheduleLogSpaceFill);
 }
 
 function updateLogSummary(count, { filterTag, filterCategory, searchQuery } = {}) {
@@ -1288,11 +1328,11 @@ function updateLogSummary(count, { filterTag, filterCategory, searchQuery } = {}
   }
 }
 
-function appendNextPage() {
+function appendNextPage(count = POSTS_PER_PAGE) {
   const postsListEl = document.querySelector('#posts-list');
   if (!postsListEl) return;
 
-  const end = Math.min(visibleCount + POSTS_PER_PAGE, allFilteredPosts.length);
+  const end = Math.min(visibleCount + count, allFilteredPosts.length);
   const batch = allFilteredPosts.slice(visibleCount, end);
   const fragment = document.createDocumentFragment();
 
