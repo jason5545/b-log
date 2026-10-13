@@ -1,5 +1,28 @@
 [
   {
+    "slug": "subscription-subsidy-fences",
+    "title": "訂閱補貼沒有收回，它長出了圍籬",
+    "summary": "Theo 把訂閱補貼算到 95–98%；我拿手上的 $200 額度實測，三小時只燒得掉 $100。補貼沒有收回，它長出了圍籬。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-13T00:00:00Z",
+    "tags": [
+      "Anthropic",
+      "Claude",
+      "OpenAI",
+      "Theo",
+      "訂閱制",
+      "補貼",
+      "API credit",
+      "Claude Code",
+      "AI產業",
+      "商業策略"
+    ],
+    "coverImage": "/content/img/2026/subscription-subsidy-fences-cover.svg",
+    "accentColor": "#4a6fa5",
+    "readingTime": "3 min"
+  },
+  {
     "slug": "public-commits-found-my-email",
     "title": "我沒給他 email，他怎麼寄信給我？",
     "summary": "我沒給過那家公司 email，卻收到提到自己模型的推銷信。Hugging Face 的提交只有 noreply，同名 GitHub 帳號的 commit 卻公開了收件信箱。原本以為對方花了很多力氣找我，這幾步其實可以批次處理。那次找到我 Facebook、請教復康巴士訂車工具的人，又是怎麼找來的？",
