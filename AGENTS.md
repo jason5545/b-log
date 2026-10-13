@@ -17,6 +17,12 @@
 - 改 `assets/css/*.css`、`assets/styles.css` 之後跑 `npm run build:assets`（會把 CSS 寫進四個根目錄 HTML），再跑 `node scripts/generate-redirects.js` 帶到文章頁。見下面「CSS 內嵌在 HTML」。
 - 產物沒同步，PR 檢查會直接失敗（`.github/workflows/content-pipeline.yml`）。推送 `main` 之後，內容資料管線與 Facebook 發文管線會自動接手。
 
+## 草稿直接貼對話，不用草稿系統
+
+- 文章要給 Jason 先看的，直接在對話裡貼全文。審稿發生在對話裡，不進 b-log 的草稿系統。
+- b-log 草稿系統只在 Jason 明確說「存草稿」時才用。
+- 2026/10/13 定。發布〈訂閱補貼沒有收回，它長出了圍籬〉前先存了草稿，Jason：「不要用草稿」「要給我看就直接放在這邊」。
+
 ## 訪談翻譯照發
 
 Jason 2026/9/7 定，10/6 要求寫進來。Crossing Field 刊登 LiSA 訪談的全文中譯和原文照片，延續的是臺灣 LiSA 翻譯組的做法，不是 b-log 自己開的先例。
