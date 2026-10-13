@@ -1,5 +1,25 @@
 [
   {
+    "slug": "public-commits-found-my-email",
+    "title": "我沒給他 email，他怎麼寄信給我？",
+    "summary": "我沒給過那家公司 email，卻收到提到自己模型的推銷信。Hugging Face 的提交只有 noreply，同名 GitHub 帳號的 commit 卻公開了收件信箱。原本以為對方花了很多力氣找我，這幾步其實可以批次處理。那次找到我 Facebook、請教復康巴士訂車工具的人，又是怎麼找來的？",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-13T00:00:00Z",
+    "tags": [
+      "GitHub",
+      "Hugging Face",
+      "Git",
+      "電子郵件",
+      "公開資料",
+      "隱私",
+      "自動化"
+    ],
+    "accentColor": "#a56d3d",
+    "coverImage": "/content/img/2026/public-commits-found-my-email-cover.webp",
+    "readingTime": "3 min"
+  },
+  {
     "slug": "lisa-oath-sign-mynavi-interview",
     "title": "LiSA「oath sign」專訪｜希望成為讓人更相信現在的自己的理由",
     "summary": "我翻譯了マイナビニュース 2011 年的 LiSA「oath sign」專訪。這是她以 LiSA 之名發行的第一張單曲，也是《Fate/Zero》片頭曲。她談第 1 話片尾響起時的雞皮疙瘩、「禁止左轉，我還是想左轉」的 confidence driver，最後希望這首歌成為讓人更相信現在的自己的理由。",

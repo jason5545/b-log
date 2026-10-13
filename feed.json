@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "public-commits-found-my-email",
+      "url": "https://b-log.to/tech-analysis/public-commits-found-my-email/",
+      "title": "我沒給他 email，他怎麼寄信給我？",
+      "content_text": "我沒給過那家公司 email，卻收到提到自己模型的推銷信。Hugging Face 的提交只有 noreply，同名 GitHub 帳號的 commit 卻公開了收件信箱。原本以為對方花了很多力氣找我，這幾步其實可以批次處理。那次找到我 Facebook、請教復康巴士訂車工具的人，又是怎麼找來的？",
+      "date_published": "2026-10-13T00:00:00.000Z",
+      "date_modified": "2026-10-13T00:00:00.000Z",
+      "tags": [
+        "GitHub",
+        "Hugging Face",
+        "Git",
+        "電子郵件",
+        "公開資料",
+        "隱私",
+        "自動化"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/public-commits-found-my-email-cover.webp"
+    },
+    {
       "id": "lisa-oath-sign-mynavi-interview",
       "url": "https://b-log.to/crossing-field/lisa-oath-sign-mynavi-interview/",
       "title": "LiSA「oath sign」專訪｜希望成為讓人更相信現在的自己的理由",
