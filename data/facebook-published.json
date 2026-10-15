@@ -1541,6 +1541,13 @@
       "postUrl": "https://b-log.to/ai-analysis/anthropic-distillation-defenses-summary-and-classifier/",
       "facebookPostId": "1026818047191304_122117241249290922",
       "publishedAt": "2026-10-15T02:44:01.053Z"
+    },
+    "claude-code-idle-compaction-prompt-cache": {
+      "status": "published",
+      "title": "Claude Code 會在你離開時先壓縮長對話，搶在 prompt cache 過期前",
+      "postUrl": "https://b-log.to/ai-analysis/claude-code-idle-compaction-prompt-cache/",
+      "facebookPostId": "1026818047191304_122117241849290922",
+      "publishedAt": "2026-10-15T02:53:09.810Z"
     }
   }
 }
