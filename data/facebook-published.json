@@ -1534,6 +1534,13 @@
       "postUrl": "https://b-log.to/business-insights/subscription-subsidy-fences/",
       "facebookPostId": "1026818047191304_122117155965290922",
       "publishedAt": "2026-10-14T00:35:59.189Z"
+    },
+    "anthropic-distillation-defenses-summary-and-classifier": {
+      "status": "published",
+      "title": "Anthropic 公開防蒸餾的做法，我撞過的簡體摘要和程式審查被擋都在裡面",
+      "postUrl": "https://b-log.to/ai-analysis/anthropic-distillation-defenses-summary-and-classifier/",
+      "facebookPostId": "1026818047191304_122117241249290922",
+      "publishedAt": "2026-10-15T02:44:01.053Z"
     }
   }
 }
