@@ -1,5 +1,26 @@
 [
   {
+    "slug": "claude-code-idle-compaction-prompt-cache",
+    "title": "Claude Code 會在你離開時先壓縮長對話，搶在 prompt cache 過期前",
+    "summary": "Claude Code v2.1.299 新增閒置壓縮：長對話閒置約 54 分鐘，會在一小時快取過期前先壓縮，避開回來時整段冷啟動重算。我付過雲端 agent 學費，對這類帳比較敏感，這次還沒實際量過。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-15T00:00:00Z",
+    "tags": [
+      "AI",
+      "Anthropic",
+      "Claude",
+      "Claude Code",
+      "idle compaction",
+      "prompt cache",
+      "harness",
+      "用量"
+    ],
+    "coverImage": "/content/img/2026/claude-code-idle-compaction-prompt-cache-cover.svg",
+    "accentColor": "#c96b5b",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "anthropic-distillation-defenses-summary-and-classifier",
     "title": "Anthropic 公開防蒸餾的做法，我撞過的簡體摘要和程式審查被擋都在裡面",
     "summary": "Anthropic 10 月 12 日公開防蒸餾的做法：推理先摘要再給人看、兩段式分類器、被擋的請求恢復收費。我在 Claude Code 畫面中間看到的整句簡體，和 10 月 6 日被擋下的程式審查，原來都是這套防線的一部分。代價這次他們自己寫出來了，其中一部分落在我這邊。",
