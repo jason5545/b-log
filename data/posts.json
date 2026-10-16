@@ -1,5 +1,26 @@
 [
   {
+    "slug": "diceomancer-mobile-crowdin-zh-tw-98",
+    "title": "我以為 Diceomancer 被放棄了，結果它要出手機版，我沒翻完的繁中還停在 98%",
+    "summary": "我一直以為 Diceomancer 被放棄了，查了才知道它明年一月要出手機版，我會買來支持。以前參加過的 Crowdin 繁中翻譯顯示 98%，其中八成是機器預翻，原版選單也沒有繁中。我把 417 筆機翻換成校過的版本，再寫信請發行商把繁中放進手機版。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-16T00:00:00Z",
+    "tags": [
+      "Diceomancer",
+      "遊戲",
+      "繁體中文",
+      "在地化",
+      "Crowdin",
+      "OpenCC",
+      "志工翻譯",
+      "手機版"
+    ],
+    "coverImage": "/content/img/2026/diceomancer-mobile-crowdin-zh-tw-98-cover.webp",
+    "accentColor": "#b5651d",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "claude-desktop-context-band-mod",
     "title": "Claude 桌面版的 context 圓環改成顯示額度，我用 mod 補了一條回來",
     "summary": "Claude Code 桌面版輸入框旁的圓環，從 context 用量改成 5 小時額度。我叫 Claude 寫了 mod 補回來，再把 jack21 的額度條和 ctx-handoff 的自動交接搬進來，因為我的會自動重載。交接第一次失敗、第二次成功；門檻改成視窗的 85%，因為我測過長 context 沒明顯變差。",
