@@ -6,28 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
-      "id": "diceomancer-mobile-crowdin-zh-tw-98",
-      "url": "https://b-log.to/cultural-insights/diceomancer-mobile-crowdin-zh-tw-98/",
-      "title": "我以為 Diceomancer 被放棄了，結果它要出手機版，我沒翻完的繁中還停在 98%",
-      "content_text": "我一直以為 Diceomancer 被放棄了，查了才知道它明年一月要出手機版，我會買來支持。以前參加過的 Crowdin 繁中翻譯顯示 98%，其中八成是機器預翻，原版選單也沒有繁中。我把 417 筆機翻換成校過的版本，再寫信請發行商把繁中放進手機版。",
+      "id": "card-roguelike-mobile-port-wait",
+      "url": "https://b-log.to/cultural-insights/card-roguelike-mobile-port-wait/",
+      "title": "卡牌 roguelike 明明最適合手機，官方手機版卻總要等一兩年以上",
+      "content_text": "我以為 Diceomancer 等不到手機版，自己做了網頁版，四天後官方宣布 2027 年 1 月上市。對照 Slay the Spire、Monster Train、Balatro 等七款卡牌 roguelike，手機版大多晚一年半到三年。我自己做觸控不到兩天，所以拖這麼久應該不是技術，而是排序和人力。",
       "date_published": "2026-10-16T00:00:00.000Z",
       "date_modified": "2026-10-16T00:00:00.000Z",
       "tags": [
-        "Diceomancer",
         "遊戲",
-        "繁體中文",
-        "在地化",
-        "Crowdin",
-        "OpenCC",
-        "志工翻譯",
-        "手機版"
+        "卡牌 roguelike",
+        "手機版",
+        "移植",
+        "Diceomancer",
+        "Slay the Spire",
+        "Monster Train",
+        "Balatro"
       ],
       "authors": [
         {
           "name": "Jason Chien"
         }
       ],
-      "image": "https://b-log.to/content/img/2026/diceomancer-mobile-crowdin-zh-tw-98-cover.webp"
+      "image": "https://b-log.to/content/img/2026/card-roguelike-mobile-port-wait-cover.webp"
     },
     {
       "id": "claude-desktop-context-band-mod",
