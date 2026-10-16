@@ -14,11 +14,15 @@
 
 大部分落在一年半到三年。Android 有時又比 iOS 晚，Slay the Spire 晚了八個月，Monster Train 晚了兩年半。Astrea 和 Dicey Dungeons 都是先出主機版，手機排在後面。Balatro 是例外，七個月就上手機，觸控操作重新做過，iOS 版上市當天就進了 Apple Arcade。
 
-Balatro 還有一段插曲。PC 版上市不到一個月，就有玩家在 GitHub 開了 Balatro Mobile Maker，把自己 Steam 上買的那份轉成手機 app，3 月 22 日發了第一版，比官方手機版早了半年。能這麼快，是因為 Balatro 用的 LÖVE 引擎本來就能跨平台。
+Balatro 還有一段插曲。PC 版上市不到一個月，就有玩家在 GitHub 開了 [Balatro Mobile Maker](https://github.com/blake502/balatro-mobile-maker)，把自己 Steam 上買的那份轉成手機 app，3 月 22 日發了第一版，比官方手機版早了半年。能這麼快，是因為 Balatro 用的 LÖVE 引擎本來就能跨平台。
 
-GitHub 上類似的專案不少，而且官方手機版出了也擋不住。Slay the Spire 的官方手機版當年上市就沒有模組，今年 2 月還是有人開了 SlayTheAmethyst，讓 Android 也能跑桌面版的模組，到現在有 420 顆星。也有人做了一個包裝過的 APK，只為了能匯出 Slay the Spire 手機版的存檔。這類專案多半出現在引擎好搬的遊戲上，Balatro 是 LÖVE，Slay the Spire 是 Java。我做 Diceomancer 也是同一個念頭，只給自己玩，但 Unity 遊戲沒辦法這樣直接轉，只能一個畫面一個畫面重做。
+GitHub 上類似的專案不少，而且官方手機版出了也擋不住。Slay the Spire 的官方手機版當年上市就沒有模組，今年 2 月還是有人開了 [SlayTheAmethyst](https://github.com/ModinMobileSTS/SlayTheAmethystModded)，讓 Android 也能跑桌面版的模組，到現在有 420 顆星。也有人做了一個包裝過的 APK，只為了能匯出 Slay the Spire 手機版的存檔。
 
-還有一條路是不移植，直接在手機上跑 PC 版。DroidDeck 把 Proton 搬到 Android 上，Monster Train 2、Slay the Spire 2 都跑得動。在 PC 上，Proton 已經在取代 Linux 原生版：Last Epoch 2024 年拿掉原生 Linux 版，直接請玩家改用 Proton，說體驗好得多；Big Ambitions、Prodeus、The Falconeer 也都停了原生版，只支援 Proton。手機就不一樣了，轉譯的負擔還是太重：手機會燙、很耗電，FPS 掉得很誇張，PC 的介面縮到手機螢幕上，字也小到很難看清楚。所以在手機上，原生版還是有它的必要。
+Slay the Spire 2 更快。它今年 3 月 5 日開搶先體驗，官方手機版連時程都還沒有，一週後 GitHub 上就出現第一個 Android 啟動器。現在更新最勤的是 [Sts2MobileLauncher](https://github.com/ModinMobileSTS/Sts2MobileLauncher)，做 SlayTheAmethyst 的同一群人開的：匯入自己買的 PC 版，就能在 Android 上跑，模組和 Steam 雲端存檔都支援，手機操作也另外調過，到現在有 463 顆星。它不是靠轉譯硬跑。Slay the Spire 2 改用 Godot 引擎，Godot 本來就有 Android 版，遊戲檔直接拿來用，只補上 PC 跟手機不相容的地方。
+
+這類專案多半出現在引擎好搬的遊戲上，Balatro 是 LÖVE，Slay the Spire 是 Java，Slay the Spire 2 是 Godot。我做 Diceomancer 也是同一個念頭，只給自己玩，但 Unity 遊戲沒辦法這樣直接轉，只能一個畫面一個畫面重做。
+
+還有一條路是不移植，直接在手機上跑 PC 版。[DroidDeck](https://github.com/Droid-Deck/DroidDeck) 把 Proton 搬到 Android 上，Monster Train 2、Slay the Spire 2 都跑得動。在 PC 上，Proton 已經在取代 Linux 原生版：Last Epoch 2024 年拿掉原生 Linux 版，直接請玩家改用 Proton，說體驗好得多；Big Ambitions、Prodeus、The Falconeer 也都停了原生版，只支援 Proton。手機就不一樣了，轉譯的負擔還是太重：手機會燙、很耗電，FPS 掉得很誇張，PC 的介面縮到手機螢幕上，字也小到很難看清楚。所以在手機上，原生版還是有它的必要。
 
 為什麼要這麼久？網路上最常見的說法是介面。Loop Hero 的手機版交給移植公司 Playdigious 做，原版很多操作靠滑鼠懸停和拖放，手機版的介面整個改成觸控。Slay the Spire 剛上手機時，也有評論說 iPhone 上的字和介面都很小、拖牌不順手，雲端存檔也還沒有。可是它晚了一年多才上手機，介面還是沒怎麼為手機調整，時間看起來不是花在介面上。
 
