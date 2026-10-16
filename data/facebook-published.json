@@ -1548,6 +1548,13 @@
       "postUrl": "https://b-log.to/ai-analysis/claude-code-idle-compaction-prompt-cache/",
       "facebookPostId": "1026818047191304_122117241849290922",
       "publishedAt": "2026-10-15T02:53:09.810Z"
+    },
+    "claude-desktop-context-band-mod": {
+      "status": "published",
+      "title": "Claude 桌面版的 context 圓環改成顯示額度，我用 mod 補了一條回來",
+      "postUrl": "https://b-log.to/tech-development/claude-desktop-context-band-mod/",
+      "facebookPostId": "1026818047191304_122117316033290922",
+      "publishedAt": "2026-10-16T04:38:53.919Z"
     }
   }
 }
