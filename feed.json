@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "claude-desktop-nested-sessions-vs-deep-link",
+      "url": "https://b-log.to/ai-analysis/claude-desktop-nested-sessions-vs-deep-link/",
+      "title": "Claude Code 桌面版會自己開平行 session 了，我已經換過去，九月用 deep link 拼的那條路我刪了",
+      "content_text": "Claude Code 桌面版改版，平行任務會各開一個 nested session，做完把結果交回主 session。這個形狀我九月用 deep link 自己拼過，現在已經換成官方流程。用量我對過了：主模型是傳乾淨的提示詞，不是 fork session。舊的 script 我也刪了。",
+      "date_published": "2026-10-16T00:00:00.000Z",
+      "date_modified": "2026-10-16T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Anthropic",
+        "Claude",
+        "Claude Code",
+        "桌面版",
+        "nested session",
+        "平行 session",
+        "deep link",
+        "worktree",
+        "無障礙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/claude-desktop-nested-sessions-vs-deep-link-cover.svg"
+    },
+    {
       "id": "claude-code-idle-compaction-prompt-cache",
       "url": "https://b-log.to/ai-analysis/claude-code-idle-compaction-prompt-cache/",
       "title": "Claude Code 會在你離開時先壓縮長對話，搶在 prompt cache 過期前",
