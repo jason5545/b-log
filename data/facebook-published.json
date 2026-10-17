@@ -1576,6 +1576,13 @@
       "postUrl": "https://b-log.to/ai-analysis/claude-code-classifier-verdict-explicit-intent/",
       "facebookPostId": "1026818047191304_122117384331290922",
       "publishedAt": "2026-10-17T00:25:40.954Z"
+    },
+    "claude-desktop-nested-sessions-vs-deep-link": {
+      "status": "published",
+      "title": "Claude Code 桌面版會自己開平行 session 了，我已經換過去，九月用 deep link 拼的那條路我刪了",
+      "postUrl": "https://b-log.to/ai-analysis/claude-desktop-nested-sessions-vs-deep-link/",
+      "facebookPostId": "1026818047191304_122117384373290922",
+      "publishedAt": "2026-10-17T00:26:08.553Z"
     }
   }
 }
