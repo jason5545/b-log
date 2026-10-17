@@ -1,5 +1,28 @@
 [
   {
+    "slug": "theo-full-stop-to-atc-hold-short",
+    "title": "Theo 叫 AI 做到 merge 前停，我改用航管的 HOLD SHORT",
+    "summary": "Theo 最常用的 skill 叫 full stop：代理做到 merge 前停，卡住才找他。我沒抄他的檔案，改用自己熟的航管術語寫了一套：HOLD SHORT 做到 push 前停，CLEARED FOR TAKEOFF 才放行。排第二的代理、會撞的簡寫、AI 自己排反的 LINE UP AND WAIT，都是寫進規則時才抓到的。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-17",
+    "tags": [
+      "AI",
+      "Theo",
+      "Claude Code",
+      "Codex",
+      "agent",
+      "skill",
+      "模擬飛行",
+      "航管",
+      "授權範圍",
+      "語音輸入"
+    ],
+    "coverImage": "/content/img/2026/theo-full-stop-to-atc-hold-short-cover.webp",
+    "accentColor": "#c9961a",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "claude-code-classifier-verdict-explicit-intent",
     "title": "Claude Code 開始分得出是分類器擋的還是規則擋的，我九月那句「ok」沒用也找到原因了",
     "summary": "Claude Code v2.1.301 在工具決策紀錄裡加上分類器判決欄位，auto mode 分類器做的決定終於能跟權限規則分開。為了看懂新欄位，我去讀了分類器的優先順序，才知道九月那次我回「ok」它還是擋部署，是因為那句同意沒有講到任何一個動作。",

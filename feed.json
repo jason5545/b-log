@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "theo-full-stop-to-atc-hold-short",
+      "url": "https://b-log.to/ai-analysis/theo-full-stop-to-atc-hold-short/",
+      "title": "Theo 叫 AI 做到 merge 前停，我改用航管的 HOLD SHORT",
+      "content_text": "Theo 最常用的 skill 叫 full stop：代理做到 merge 前停，卡住才找他。我沒抄他的檔案，改用自己熟的航管術語寫了一套：HOLD SHORT 做到 push 前停，CLEARED FOR TAKEOFF 才放行。排第二的代理、會撞的簡寫、AI 自己排反的 LINE UP AND WAIT，都是寫進規則時才抓到的。",
+      "date_published": "2026-10-17T00:00:00.000Z",
+      "date_modified": "2026-10-17T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Theo",
+        "Claude Code",
+        "Codex",
+        "agent",
+        "skill",
+        "模擬飛行",
+        "航管",
+        "授權範圍",
+        "語音輸入"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/theo-full-stop-to-atc-hold-short-cover.webp"
+    },
+    {
       "id": "claude-code-classifier-verdict-explicit-intent",
       "url": "https://b-log.to/ai-analysis/claude-code-classifier-verdict-explicit-intent/",
       "title": "Claude Code 開始分得出是分類器擋的還是規則擋的，我九月那句「ok」沒用也找到原因了",
