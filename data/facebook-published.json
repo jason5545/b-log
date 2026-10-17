@@ -1569,6 +1569,13 @@
       "postUrl": "https://b-log.to/cultural-insights/card-roguelike-mobile-port-wait/",
       "facebookPostId": "1026818047191304_122117324601290922",
       "publishedAt": "2026-10-16T07:53:25.986Z"
+    },
+    "claude-code-classifier-verdict-explicit-intent": {
+      "status": "published",
+      "title": "Claude Code 開始分得出是分類器擋的還是規則擋的，我九月那句「ok」沒用也找到原因了",
+      "postUrl": "https://b-log.to/ai-analysis/claude-code-classifier-verdict-explicit-intent/",
+      "facebookPostId": "1026818047191304_122117384331290922",
+      "publishedAt": "2026-10-17T00:25:40.954Z"
     }
   }
 }
