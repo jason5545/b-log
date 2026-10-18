@@ -1,5 +1,28 @@
 [
   {
+    "slug": "anthropic-agents-waiting-t3code-server",
+    "title": "Anthropic 說 agent 有八成時間在等人，我在床上用 Telegram 叫了一天，隔天就換成自己架的 T3 Code",
+    "summary": "Anthropic 的報告說，互動 session 裡 Claude 大約八成時間在等人回話。我 10 月 13 日用 Telegram 讓手機在床上叫 agent，修了一天，改的都只是訊息怎麼叫我。隔天我換成自己架的 T3 Code，每個對話串自己標出在跑、在等我、卡在用量還是失敗了。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-18T00:00:00Z",
+    "tags": [
+      "AI",
+      "Anthropic",
+      "Claude",
+      "Claude Code",
+      "Codex",
+      "Kimi Code",
+      "agent",
+      "T3 Code",
+      "注意力",
+      "手機"
+    ],
+    "coverImage": "/content/img/2026/anthropic-agents-waiting-t3code-server-cover.svg",
+    "accentColor": "#e0a145",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "theo-full-stop-to-atc-hold-short",
     "title": "Theo 叫 AI 做到 merge 前停，我改用航管的 HOLD SHORT",
     "summary": "Theo 最常用的 skill 叫 full stop：代理做到 merge 前停，卡住才找他。我沒抄他的檔案，改用自己熟的航管術語寫了一套：HOLD SHORT 做到 push 前停，CLEARED FOR TAKEOFF 才放行。排第二的代理、會撞的簡寫、AI 自己排反的 LINE UP AND WAIT，都是寫進規則時才抓到的。",
