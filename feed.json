@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "anthropic-agents-waiting-t3code-server",
+      "url": "https://b-log.to/ai-analysis/anthropic-agents-waiting-t3code-server/",
+      "title": "Anthropic 說 agent 有八成時間在等人，我在床上用 Telegram 叫了一天，隔天就換成自己架的 T3 Code",
+      "content_text": "Anthropic 的報告說，互動 session 裡 Claude 大約八成時間在等人回話。我 10 月 13 日用 Telegram 讓手機在床上叫 agent，修了一天，改的都只是訊息怎麼叫我。隔天我換成自己架的 T3 Code，每個對話串自己標出在跑、在等我、卡在用量還是失敗了。",
+      "date_published": "2026-10-18T00:00:00.000Z",
+      "date_modified": "2026-10-18T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Anthropic",
+        "Claude",
+        "Claude Code",
+        "Codex",
+        "Kimi Code",
+        "agent",
+        "T3 Code",
+        "注意力",
+        "手機"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/anthropic-agents-waiting-t3code-server-cover.webp"
+    },
+    {
       "id": "theo-full-stop-to-atc-hold-short",
       "url": "https://b-log.to/ai-analysis/theo-full-stop-to-atc-hold-short/",
       "title": "Theo 叫 AI 做到 merge 前停，我改用航管的 HOLD SHORT",
