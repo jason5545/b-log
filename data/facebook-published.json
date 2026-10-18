@@ -1590,6 +1590,13 @@
       "postUrl": "https://b-log.to/ai-analysis/theo-full-stop-to-atc-hold-short/",
       "facebookPostId": "1026818047191304_122117429991290922",
       "publishedAt": "2026-10-17T12:52:23.496Z"
+    },
+    "anthropic-agents-waiting-t3code-server": {
+      "status": "published",
+      "title": "Anthropic 說 agent 有八成時間在等人，我在床上用 Telegram 叫了一天，隔天就換成自己架的 T3 Code",
+      "postUrl": "https://b-log.to/ai-analysis/anthropic-agents-waiting-t3code-server/",
+      "facebookPostId": "1026818047191304_122117480517290922",
+      "publishedAt": "2026-10-18T06:07:48.807Z"
     }
   }
 }
