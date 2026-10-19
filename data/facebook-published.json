@@ -1597,6 +1597,13 @@
       "postUrl": "https://b-log.to/ai-analysis/anthropic-agents-waiting-t3code-server/",
       "facebookPostId": "1026818047191304_122117480517290922",
       "publishedAt": "2026-10-18T06:07:48.807Z"
+    },
+    "grok-bot-muse-chatgpt-long-chat-memory": {
+      "status": "published",
+      "title": "Grok Bot、Muse、ChatGPT 長對話聊不爆，用的是差不多的原理",
+      "postUrl": "https://b-log.to/ai-analysis/grok-bot-muse-chatgpt-long-chat-memory/",
+      "facebookPostId": "1026818047191304_122117534373290922",
+      "publishedAt": "2026-10-19T00:37:02.555Z"
     }
   }
 }
