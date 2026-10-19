@@ -1,5 +1,28 @@
 [
   {
+    "slug": "grok-bot-muse-chatgpt-long-chat-memory",
+    "title": "Grok Bot、Muse、ChatGPT 長對話聊不爆，用的是差不多的原理",
+    "summary": "我跟 Grok Bot 在同一段對話裡聊了一兩週還沒撞到上限，問了才知道它會在背後摘要，重要的另外存成記憶。Meta 的 Muse 和 ChatGPT 我覺得是同一套：一條長對話，記憶存在對話外面。寫程式的代理也在壓，只是被壓掉的是原文。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-19T00:00:00Z",
+    "tags": [
+      "AI",
+      "Grok Bot",
+      "Muse",
+      "ChatGPT",
+      "context window",
+      "compaction",
+      "記憶",
+      "Claude Code",
+      "Codex",
+      "T3 Code"
+    ],
+    "coverImage": "/content/img/2026/grok-bot-muse-chatgpt-long-chat-memory-cover.svg",
+    "accentColor": "#2E8B7E",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "anthropic-agents-waiting-t3code-server",
     "title": "Anthropic 說 agent 有八成時間在等人，我在床上用 Telegram 叫了一天，隔天就換成自己架的 T3 Code",
     "summary": "Anthropic 的報告說，互動 session 裡 Claude 大約八成時間在等人回話。我 10 月 13 日用 Telegram 讓手機在床上叫 agent，修了一天，改的都只是訊息怎麼叫我。隔天我換成自己架的 T3 Code，每個對話串自己標出在跑、在等我、卡在用量還是失敗了。",
