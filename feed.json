@@ -6,6 +6,27 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "taiwan-church-decline-chapel",
+      "url": "https://b-log.to/cultural-insights/taiwan-church-decline-chapel/",
+      "title": "教會說年輕人看不到榜樣，我是當年被帶進去、又走出來的那一個",
+      "content_text": "報告說教會留不住年輕人，是因為他們看不到信仰的榜樣。十六歲那年，我就是被老師帶進禮拜堂、最後沒有留下來的那個年輕人。後來我才發現，宗教能給人的那些東西，我在別的地方找到了。",
+      "date_published": "2026-10-19T00:00:00.000Z",
+      "date_modified": "2026-10-19T00:00:00.000Z",
+      "tags": [
+        "宗教",
+        "基督教",
+        "教會普查",
+        "禮拜堂",
+        "LiSA"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/taiwan-church-decline-chapel-cover.svg"
+    },
+    {
       "id": "grok-bot-muse-chatgpt-long-chat-memory",
       "url": "https://b-log.to/ai-analysis/grok-bot-muse-chatgpt-long-chat-memory/",
       "title": "Grok Bot、Muse、ChatGPT 長對話聊不爆，用的是差不多的原理",
