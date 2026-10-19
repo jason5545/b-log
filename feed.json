@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "grok-bot-muse-chatgpt-long-chat-memory",
+      "url": "https://b-log.to/ai-analysis/grok-bot-muse-chatgpt-long-chat-memory/",
+      "title": "Grok Bot、Muse、ChatGPT 長對話聊不爆，用的是差不多的原理",
+      "content_text": "我跟 Grok Bot 在同一段對話裡聊了一兩週還沒撞到上限，問了才知道它會在背後摘要，重要的另外存成記憶。Meta 的 Muse 和 ChatGPT 我覺得是同一套：一條長對話，記憶存在對話外面。寫程式的代理也在壓，只是被壓掉的是原文。",
+      "date_published": "2026-10-19T00:00:00.000Z",
+      "date_modified": "2026-10-19T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Grok Bot",
+        "Muse",
+        "ChatGPT",
+        "context window",
+        "compaction",
+        "記憶",
+        "Claude Code",
+        "Codex",
+        "T3 Code"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/grok-bot-muse-chatgpt-long-chat-memory-cover.svg"
+    },
+    {
       "id": "anthropic-agents-waiting-t3code-server",
       "url": "https://b-log.to/ai-analysis/anthropic-agents-waiting-t3code-server/",
       "title": "Anthropic 說 agent 有八成時間在等人，我在床上用 Telegram 叫了一天，隔天就換成自己架的 T3 Code",
