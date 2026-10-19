@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "the-song-was-not-in-my-library",
+      "url": "https://b-log.to/shirushi/the-song-was-not-in-my-library/",
+      "title": "她在我的音樂庫裡躺了三年，那首歌卻不在裡面",
+      "content_text": "我曾經寫過，入坑的種子早就種下了。這次回頭對了一遍：2012 年那張專輯在我的音樂庫裡躺了兩三年，讓我停下來的那首歌卻根本不在裡面。同一場演唱會，2012 年就有人在現場被停住，我晚了三年才在螢幕前遇到它。",
+      "date_published": "2026-10-19T00:00:00.000Z",
+      "date_modified": "2026-10-19T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "ナミダ流星群",
+        "LOVER\"S\"MiLE",
+        "日比谷野外大音楽堂",
+        "山本健太",
+        "自我對話",
+        "シルシ"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/the-song-was-not-in-my-library-cover.webp"
+    },
+    {
       "id": "taiwan-church-decline-chapel",
       "url": "https://b-log.to/cultural-insights/taiwan-church-decline-chapel/",
       "title": "教會說年輕人看不到榜樣，我是當年被帶進去、又走出來的那一個",
