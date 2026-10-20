@@ -1,5 +1,27 @@
 [
   {
+    "slug": "claude-gemini-xinchuanghui-search",
+    "title": "只記得簡稱「心創會」，Claude 找不到，Gemini 一搜就有，最後是我在名單上認出親戚",
+    "summary": "我想找十幾歲時接觸過的一個藏傳團體，只記得簡稱「心創會」。Claude 換了快一個小時的關鍵字都找不到，Google 的 AI 摘要一搜就給了全名，最後確認答案的，是在理監事名單上認出親戚的我。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-20T00:00:00Z",
+    "tags": [
+      "AI",
+      "Claude",
+      "Gemini",
+      "Google",
+      "AI 摘要",
+      "搜尋",
+      "心創會",
+      "藏傳佛教",
+      "查證"
+    ],
+    "coverImage": "/content/img/2026/claude-gemini-xinchuanghui-search-cover.svg",
+    "accentColor": "#c0612b",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "the-song-was-not-in-my-library",
     "title": "她在我的音樂庫裡躺了三年，那首歌卻不在裡面",
     "summary": "我曾經寫過，入坑的種子早就種下了。這次回頭對了一遍：2012 年那張專輯在我的音樂庫裡躺了兩三年，讓我停下來的那首歌卻根本不在裡面。同一場演唱會，2012 年就有人在現場被停住，我晚了三年才在螢幕前遇到它。",
