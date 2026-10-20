@@ -1,5 +1,27 @@
 [
   {
+    "slug": "without-rea-unity-original-dll-port",
+    "title": "我沒有用 REA：原版 DLL 直接跑，Unity 遊戲移植只剩引擎要自己重做",
+    "summary": "REA 這陣子很紅，它的清單上有 .NET 組件。10/19 我沒裝 REA，用 AssetRipper、Mono.Cecil、自己寫的掃描器和網頁版當對照，讓兩款 Unity 遊戲的原版 DLL 直接跑在自己的引擎上，前後 28 小時。差在動刀的位置、修正留不留得住，還有網頁版先鋪好的兩週。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-20T00:00:00Z",
+    "tags": [
+      "遊戲",
+      "移植",
+      "逆向工程",
+      "REA",
+      "Unity",
+      ".NET",
+      "Mono.Cecil",
+      "CoreCLR",
+      "Claude Code"
+    ],
+    "coverImage": "/content/img/2026/without-rea-unity-original-dll-port-cover.svg",
+    "accentColor": "#cf5a24",
+    "readingTime": "8 min"
+  },
+  {
     "slug": "claude-gemini-xinchuanghui-search",
     "title": "只記得簡稱「心創會」，Claude 找不到，Gemini 一搜就有，最後是我在名單上認出親戚",
     "summary": "我想找十幾歲時接觸過的一個藏傳團體，只記得簡稱「心創會」。Claude 換了快一個小時的關鍵字都找不到，Google 的 AI 摘要一搜就給了全名，最後確認答案的，是在理監事名單上認出親戚的我。",
