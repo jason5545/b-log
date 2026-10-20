@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-budokan-2014-natalie-interview",
+      "url": "https://b-log.to/crossing-field/lisa-budokan-2014-natalie-interview/",
+      "title": "LiSA 首次武道館專訪｜感動、懊悔與發現，全都收進這場演唱會",
+      "content_text": "我翻譯了音楽ナタリー 2014 年的 LiSA 專訪，主題是她第一次日本武道館公演的 BD / DVD。那天她嗓子壞了，影像沒有補錄就發行。她談台下雙手合十喊加油的大家、側台遞毛巾的工作人員，還有從那天起，演唱會成了和大家一起享受的「約會」。",
+      "date_published": "2026-10-21T00:00:00.000Z",
+      "date_modified": "2026-10-21T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "日本武道館",
+        "LiVE is Smile Always",
+        "今日もいい日だっ",
+        "May'n",
+        "氣志團",
+        "LiSAMMERLAND",
+        "專訪翻譯",
+        "音楽ナタリー"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-budokan-2014-natalie-interview-cover.webp"
+    },
+    {
       "id": "without-rea-unity-original-dll-port",
       "url": "https://b-log.to/tech-development/without-rea-unity-original-dll-port/",
       "title": "我沒有用 REA：原版 DLL 直接跑，Unity 遊戲移植只剩引擎要自己重做",

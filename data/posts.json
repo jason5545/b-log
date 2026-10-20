@@ -1,5 +1,27 @@
 [
   {
+    "slug": "lisa-budokan-2014-natalie-interview",
+    "title": "LiSA 首次武道館專訪｜感動、懊悔與發現，全都收進這場演唱會",
+    "summary": "我翻譯了音楽ナタリー 2014 年的 LiSA 專訪，主題是她第一次日本武道館公演的 BD / DVD。那天她嗓子壞了，影像沒有補錄就發行。她談台下雙手合十喊加油的大家、側台遞毛巾的工作人員，還有從那天起，演唱會成了和大家一起享受的「約會」。",
+    "category": "Crossing Field",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-21T00:00:00Z",
+    "tags": [
+      "LiSA",
+      "日本武道館",
+      "LiVE is Smile Always",
+      "今日もいい日だっ",
+      "May'n",
+      "氣志團",
+      "LiSAMMERLAND",
+      "專訪翻譯",
+      "音楽ナタリー"
+    ],
+    "accentColor": "#b23a3a",
+    "coverImage": "/content/img/2026/lisa-budokan-2014-natalie-interview-cover.webp",
+    "readingTime": "12 min"
+  },
+  {
     "slug": "without-rea-unity-original-dll-port",
     "title": "我沒有用 REA：原版 DLL 直接跑，Unity 遊戲移植只剩引擎要自己重做",
     "summary": "REA 這陣子很紅，它的清單上有 .NET 組件。10/19 我沒裝 REA，用 AssetRipper、Mono.Cecil、自己寫的掃描器和網頁版當對照，讓兩款 Unity 遊戲的原版 DLL 直接跑在自己的引擎上，前後 28 小時。差在動刀的位置、修正留不留得住，還有網頁版先鋪好的兩週。",
