@@ -1618,6 +1618,13 @@
       "postUrl": "https://b-log.to/shirushi/the-song-was-not-in-my-library/",
       "facebookPostId": "1026818047191304_122117575449290922",
       "publishedAt": "2026-10-19T15:03:27.464Z"
+    },
+    "claude-gemini-xinchuanghui-search": {
+      "status": "published",
+      "title": "只記得簡稱「心創會」，Claude 找不到，Gemini 一搜就有，最後是我在名單上認出親戚",
+      "postUrl": "https://b-log.to/ai-analysis/claude-gemini-xinchuanghui-search/",
+      "facebookPostId": "1026818047191304_122117606613290922",
+      "publishedAt": "2026-10-20T01:30:34.462Z"
     }
   }
 }
