@@ -1625,6 +1625,13 @@
       "postUrl": "https://b-log.to/ai-analysis/claude-gemini-xinchuanghui-search/",
       "facebookPostId": "1026818047191304_122117606613290922",
       "publishedAt": "2026-10-20T01:30:34.462Z"
+    },
+    "without-rea-unity-original-dll-port": {
+      "status": "published",
+      "title": "我沒有用 REA：原版 DLL 直接跑，Unity 遊戲移植只剩引擎要自己重做",
+      "postUrl": "https://b-log.to/tech-development/without-rea-unity-original-dll-port/",
+      "facebookPostId": "1026818047191304_122117627043290922",
+      "publishedAt": "2026-10-20T09:25:39.279Z"
     }
   }
 }
