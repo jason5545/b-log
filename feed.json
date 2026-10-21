@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "why-port-cant-wait",
+      "url": "https://b-log.to/dev-philosophy/why-port-cant-wait/",
+      "title": "不是 agentic coding 的時代，我只能等官方手機版，然後呢？",
+      "content_text": "前兩篇寫了官方手機版為什麼慢、我怎麼移植，沒寫我為什麼等不了。官方手機版可能要等五年，時間卻沒有人保證，麻枝准 10/19 的公告講的也是這件事。AI 讓我做得到，但 1 到 3 月一樣用 AI 卻失敗了，差別不在 prompt。",
+      "date_published": "2026-10-21T00:00:00.000Z",
+      "date_modified": "2026-10-21T00:00:00.000Z",
+      "tags": [
+        "遊戲",
+        "移植",
+        "手機版",
+        "Agentic Coding",
+        "Claude Code",
+        "麻枝准",
+        "無障礙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/why-port-cant-wait-cover.webp"
+    },
+    {
       "id": "lisa-budokan-2014-natalie-interview",
       "url": "https://b-log.to/crossing-field/lisa-budokan-2014-natalie-interview/",
       "title": "LiSA 首次武道館專訪｜感動、懊悔與發現，全都收進這場演唱會",
