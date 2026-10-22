@@ -6,6 +6,58 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-taipei-arena-setlist-anime-ratio",
+      "url": "https://b-log.to/cultural-insights/lisa-taipei-arena-setlist-anime-ratio/",
+      "title": "我數了 LiSA 小巨蛋的歌單：動畫歌 13 比 7，日本場反而不到一半",
+      "content_text": "我在小巨蛋覺得動畫歌偏多，回頭把歌單數了一次：臺北 20 首裡 13 首是動畫歌，同一個巡迴的日本場卻只有 22 首裡的 10 首。亞洲各站只換第十首，臺北換到的是《Believe in myself》。",
+      "date_published": "2026-10-22T00:00:00.000Z",
+      "date_modified": "2026-10-22T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "演唱會",
+        "歌單",
+        "動畫歌",
+        "小巨蛋",
+        "LiVE is Smile Always",
+        "iCHiNiTSUiTE GO",
+        "Believe in myself",
+        "海外巡迴"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-taipei-arena-setlist-anime-ratio-cover.svg"
+    },
+    {
+      "id": "cve-week-zeabur-plaintext-keys",
+      "url": "https://b-log.to/dev-philosophy/cve-week-zeabur-plaintext-keys/",
+      "title": "這週一天一個 CVE，Zeabur 出事靠的卻是明文金鑰，我看不太像 vibe coding",
+      "content_text": "元新電腦的老闆在 FB 標記大家提醒 PHP 漏洞時，我正在看 Theo 的直播講一長串 CVE。真正讓我看不下去的是 Zeabur：管理權杖和 root 密碼都用明文放著。我只是個 QC 都知道不能這樣，而且我看這不太像 vibe coding。",
+      "date_published": "2026-10-22T00:00:00.000Z",
+      "date_modified": "2026-10-22T00:00:00.000Z",
+      "tags": [
+        "資安",
+        "Zeabur",
+        "明文金鑰",
+        "環境變數",
+        "PHP",
+        "CVE",
+        "Railway",
+        "Vibe Coding",
+        "Agentic Coding",
+        "Claude Code",
+        "Theo"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/cve-week-zeabur-plaintext-keys-cover.webp"
+    },
+    {
       "id": "why-port-cant-wait",
       "url": "https://b-log.to/dev-philosophy/why-port-cant-wait/",
       "title": "不是 agentic coding 的時代，我只能等官方手機版，然後呢？",
