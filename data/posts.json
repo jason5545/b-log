@@ -1,5 +1,27 @@
 [
   {
+    "slug": "lisa-taipei-arena-setlist-anime-ratio",
+    "title": "我數了 LiSA 小巨蛋的歌單：動畫歌 13 比 7，日本場反而不到一半",
+    "summary": "我在小巨蛋覺得動畫歌偏多，回頭把歌單數了一次：臺北 20 首裡 13 首是動畫歌，同一個巡迴的日本場卻只有 22 首裡的 10 首。亞洲各站只換第十首，臺北換到的是《Believe in myself》。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-22T00:00:00Z",
+    "tags": [
+      "LiSA",
+      "演唱會",
+      "歌單",
+      "動畫歌",
+      "小巨蛋",
+      "LiVE is Smile Always",
+      "iCHiNiTSUiTE GO",
+      "Believe in myself",
+      "海外巡迴"
+    ],
+    "coverImage": "/content/img/2026/lisa-taipei-arena-setlist-anime-ratio-cover.svg",
+    "accentColor": "#d6247a",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "why-port-cant-wait",
     "title": "不是 agentic coding 的時代，我只能等官方手機版，然後呢？",
     "summary": "前兩篇寫了官方手機版為什麼慢、我怎麼移植，沒寫我為什麼等不了。官方手機版可能要等五年，時間卻沒有人保證，麻枝准 10/19 的公告講的也是這件事。AI 讓我做得到，但 1 到 3 月一樣用 AI 卻失敗了，差別不在 prompt。",
