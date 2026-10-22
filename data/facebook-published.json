@@ -1646,6 +1646,13 @@
       "postUrl": "https://b-log.to/dev-philosophy/why-port-cant-wait/",
       "facebookPostId": "1026818047191304_122117684817290922",
       "publishedAt": "2026-10-21T05:04:09.586Z"
+    },
+    "cve-week-zeabur-plaintext-keys": {
+      "status": "published",
+      "title": "這週一天一個 CVE，Zeabur 出事靠的卻是明文金鑰，我看不太像 vibe coding",
+      "postUrl": "https://b-log.to/dev-philosophy/cve-week-zeabur-plaintext-keys/",
+      "facebookPostId": "1026818047191304_122117744613290922",
+      "publishedAt": "2026-10-22T01:30:02.296Z"
     }
   }
 }
