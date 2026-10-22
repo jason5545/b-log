@@ -25,7 +25,7 @@ const issues = {
 // 洋紅只給 LiSA（AGENTS.md）：她的兩個分類，加上分類不是她的、但 Jason 9/26 確認算她的文章。
 // HER_POST_SLUGS 在 main.js、generate-redirects.js、validate-content.js 三處要一致，下面會比對
 const HER_CATEGORIES = ['シルシ', 'Crossing Field'];
-const HER_POST_SLUGS = ['songshan-airport-jpop-parallel-world', 'birthday-avatar-ai-barrier'];
+const HER_POST_SLUGS = ['songshan-airport-jpop-parallel-world', 'birthday-avatar-ai-barrier', 'lisa-taipei-arena-setlist-anime-ratio'];
 const HER_POST_SLUG_SOURCES = ['assets/main.js', 'scripts/generate-redirects.js'];
 // 洋紅範圍：色相 285–350°、HSL 飽和度 > 35%
 const MAGENTA_HUE_MIN = 285;

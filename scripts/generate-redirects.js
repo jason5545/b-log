@@ -56,7 +56,7 @@ const HER_CATEGORY_HINTS = {
 };
 // 分類不是她的、但 Jason 9/26 確認算她的文章。accentColor 一律顯示洋紅。
 // 這份白名單在 main.js、generate-redirects.js、validate-content.js 三處要一致（validate 會比對）
-const HER_POST_SLUGS = ['songshan-airport-jpop-parallel-world', 'birthday-avatar-ai-barrier'];
+const HER_POST_SLUGS = ['songshan-airport-jpop-parallel-world', 'birthday-avatar-ai-barrier', 'lisa-taipei-arena-setlist-anime-ratio'];
 const STATUS_SECTIONS = {
   resolved: { key: '已修', className: 'ok' },
   procedures: { key: '程序', className: 'proc' },

@@ -29,7 +29,7 @@ const HER_CATEGORY_HINTS = {
 };
 // 分類不是她的、但 Jason 9/26 確認算她的文章。accentColor 一律顯示洋紅。
 // 這份白名單在 main.js、generate-redirects.js、validate-content.js 三處要一致（validate 會比對）
-const HER_POST_SLUGS = ['songshan-airport-jpop-parallel-world', 'birthday-avatar-ai-barrier'];
+const HER_POST_SLUGS = ['songshan-airport-jpop-parallel-world', 'birthday-avatar-ai-barrier', 'lisa-taipei-arena-setlist-anime-ratio'];
 const HER_TAG_PATTERN = /lisa|シルシ/i;
 const TAG_CLOUD_VISIBLE_LIMIT = 14;
 // CONTENTS 目錄：內文最外層至少 2 個 h2 才顯示（跟 generate-redirects.js 同一條）
