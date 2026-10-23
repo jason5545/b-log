@@ -1,5 +1,28 @@
 [
   {
+    "slug": "kcs-digital-digizon-thailand-next-year",
+    "title": "我爸的公司比 Slingbox 早一年多用 H.264，泰國卻一直是明年",
+    "summary": "我爸當過主要股東的合鼎科技，做的是讓人在國外看臺灣電視的盒子 DIGIZON，2007 年就用 H.264，比 Slingbox 早一年多。技術沒輸，公司還是在 2013 年收掉了。2015 年創辦人 Peter 把伺服器原始碼交給我，我把伺服器架起來了，最後卡在一組錯的網域密碼。十一年後，舊的 App 又連上了。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-23T00:00:00Z",
+    "tags": [
+      "KCS Digital",
+      "合鼎科技",
+      "DIGIZON",
+      "Slingbox",
+      "H.264",
+      "place-shift",
+      "硬體新創",
+      "商業模式",
+      "Mobile01",
+      "Android TV"
+    ],
+    "coverImage": "/content/img/2026/kcs-digital-digizon-thailand-next-year-cover.webp",
+    "accentColor": "#2f6f9f",
+    "readingTime": "8 min"
+  },
+  {
     "slug": "cve-week-zeabur-plaintext-keys",
     "title": "這週一天一個 CVE，Zeabur 出事靠的卻是明文金鑰，我看不太像 vibe coding",
     "summary": "元新電腦的老闆在 FB 標記大家提醒 PHP 漏洞時，我正在看 Theo 的直播講一長串 CVE。真正讓我看不下去的是 Zeabur：管理權杖和 root 密碼都用明文放著。我只是個 QC 都知道不能這樣，而且我看這不太像 vibe coding。",
