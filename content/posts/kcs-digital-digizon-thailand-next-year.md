@@ -24,7 +24,7 @@ DIGIZON 是一台放在臺灣家裡的盒子。接上電視訊號，它會把畫
 
 Slingbox 第一代 2005 年 7 月上市，用的是微軟的 VC-1，也就是一般說的 WMV。Slingbox 第一台出廠韌體就能編 H.264 的機種，是 2008 年 9 月開始出貨的 PRO-HD，而且還是跟 WMV 並存。DIGIZON 拿到 FCC 認證是 2007 年 7 月 5 日，出貨的韌體就是 H.264。算下來，KCS 在這類盒子上用 H.264，比 Slingbox 早了一年多。
 
-這件事在當時是有差的。家用網路的上傳頻寬很小，同樣的頻寬，H.264 能塞進比較好的畫質。DIGIZON 的畫質上限是 D1，也就是 720×480 的標準畫質，我記得當時的說法是「720i」。官網的公司介紹寫的是「[D1 video quality @ 768 kbps](https://kcsdigital.net/p1-company.asp)」。不是高畫質，但在那個上傳只有幾百 kbps 的年代，夠用了。
+這件事在當時是有差的。家用網路的上傳頻寬很小，同樣的頻寬，H.264 能塞進比較好的畫質。DIGIZON 的畫質上限是 D1，也就是 720×480 的標準畫質，我記得當時的說法是「720i」。最後一版中文官網的 [DIGIZON 211B 規格](https://kcsdigital.net/rebuild/KCS_web/product_211b.html)寫輸出是 D1（NTSC 720×480），連線速率從 64K 到 2048K。更早的 2009 到 2010 年英文官網，公司介紹寫的是「[D1 video quality @ 768 kbps](https://kcsdigital.net/p1-company.asp)」。不是高畫質，但在那個上傳只有幾百 kbps 的年代，夠用了。
 
 ## 一次賣斷的盒子
 
