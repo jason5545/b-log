@@ -1,5 +1,28 @@
 [
   {
+    "slug": "lisa-mixing-budokan-2014-singing",
+    "title": "混音救得了音準，救不了她武道館那天改過的唱法",
+    "summary": "入坑不到三個月，我在舊部落格轉了一篇 PTT 的混音文，為的是裡面那首〈Rising Hope〉。十年後我還是同意它，但我現在打開 2014 年武道館那片 BD，聽的已經不是混音，是她那天在聲音撐不住的時候，改了唱法把歌唱完。",
+    "category": "シルシ",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-24T00:00:00Z",
+    "tags": [
+      "LiSA",
+      "混音",
+      "Rising Hope",
+      "日本武道館",
+      "LiVE is Smile Always",
+      "PTT",
+      "LoveLive",
+      "岡村弦",
+      "LACE UP",
+      "シルシ"
+    ],
+    "coverImage": "/content/img/2026/lisa-mixing-budokan-2014-singing-cover.webp",
+    "accentColor": "#c0397f",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "kcs-digital-digizon-thailand-next-year",
     "title": "我爸的公司比 Slingbox 早一年多用 H.264，泰國卻一直是明年",
     "summary": "我爸當過主要股東的合鼎科技，做的是讓人在國外看臺灣電視的盒子 DIGIZON，2007 年就用 H.264，比 Slingbox 早一年多。技術沒輸，公司還是在 2013 年收掉了。2015 年創辦人 Peter 把伺服器原始碼交給我，我把伺服器架起來了，最後卡在一組錯的網域密碼。十一年後，舊的 App 又連上了。",
