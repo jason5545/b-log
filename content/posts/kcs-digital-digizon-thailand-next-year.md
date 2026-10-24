@@ -66,7 +66,9 @@ Slingbox 撐得比較久。2007 年 9 月，衛星電視公司 EchoStar 宣布�
 
 kcsdigital.com 現在在網域商手上待售。它掛在 GoDaddy，被網域投資平臺停放，udid1 和 udid2 都還解析得到，只是指向停放頁。註冊日期還是 2006 年 7 月 20 日，看起來它從來沒有過期釋出，是一路被轉手到現在的。那些盒子還在問的兩個名字，答話的已經不是 KCS 了。
 
-kcsdigital.net 是我 2024 年自己買的，盒子從來沒用過它。我就是為了這種時刻，才買了那個的。現在上面放的是 Claude Code 從 Wayback Machine 救回來的 KCS 官網：[kcsdigital.net](https://kcsdigital.net/)。從 2007 年的初代官網到 2014 年最後一版，分成五個年代，一共 590 個網址，還有 31 個當年的下載檔，包括 Android 的 aDigizon 和電腦用的 PC Player。很多按鈕和選單圖片當年就沒被存到，有些頁面破圖是正常的。
+kcsdigital.net 是我 2024 年自己買的，盒子從來沒用過它。我就是為了這種時刻，才買了那個的。現在直接打開 [kcsdigital.net](https://kcsdigital.net/)，會進到我跟 Claude Code 用 Wayback Machine 的存檔重建的 KCS 中文官網，是 2011 到 2014 年最後一版的樣子。文字全部照 Wayback 存到的內容，一句沒改；但那一版的圖片和樣式檔一張都沒存到，畫面是用同版型的英文站、KCS 自己的手冊和 YouTube 影片補回來的，補不回來的就用 SVG 重畫，大部分的圖都是重畫的。每一頁的頁尾都有一行小字，標明這是 2026 年的重建版，連得到重建說明和原始回收的那一頁。英文站也用同樣的做法重建了。
+
+原始回收的版本還留著，在[回收版目錄](https://kcsdigital.net/?v=archive)：從 2007 年的初代官網到 2014 年最後一版，分成五個年代，一共 590 個網址，還有 31 個當年的下載檔，包括 Android 的 aDigizon 和電腦用的 PC Player。那邊的中文站是白底黑字、沒有圖，那是存檔本來的樣子。
 
 ## 十一年後
 
