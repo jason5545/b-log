@@ -88,4 +88,10 @@ kcsdigital.net 是我 2024 年自己買的，盒子從來沒用過它。我就�
 
 iOS 7 那個有聲無影的問題應該修得掉，有原始碼的話是幾天的事，不用讓用戶等半年。差比較多的是人事。客戶端和伺服器的維護有 AI 幫忙，也許 5 個人就撐得住，一年人事大約 360 萬，攤到每台盒子上，就從很難打平變成有機會打平。但有兩件事救不了：place-shift 市場本身在消失，連背後有衛星電視公司的 Slingbox 都停產了；晶片、開模、認證、生產、庫存，還是要人和錢。它覺得比較可能的結局，是 KCS 變成一家 5 個人、小賺或打平的小公司，多撐幾年，那箱電視棒也許上得了市。
 
+我和 Claude Code 還一起做了一支 42 秒的短片：假設 DIGIZON 211P 是今天才發表，照現在科技公司發表片的樣子來做。晚上十點你在國外，家裡球賽正要開打；接在電視旁邊，輸入一組 8 碼 ID，每個螢幕都能看。畫面和文案取自今年重新設計的[官網](https://modern.kcsdigital.net/)，沒有旁白，配樂和音效是程式合成的。
+
+<video controls playsinline preload="metadata" poster="/content/img/2026/kcs-digital-digizon-thailand-next-year/digizon-211p-poster.jpg" style="width: 100%; aspect-ratio: 16 / 9; height: auto;" aria-label="假設 DIGIZON 211P 今天才發表的 42 秒發表片">
+  <source src="/content/video/2026/digizon-211p.mp4" type="video/mp4">
+</video>
+
 那樣的話，泰國也許就不會一直是明年。
