@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "maeda-news-back-to-yanaginagi",
+      "url": "https://b-log.to/cultural-insights/maeda-news-back-to-yanaginagi/",
+      "image": "https://b-log.to/content/img/2026/maeda-news-back-to-yanaginagi-cover.webp",
+      "title": "麻枝准的消息來了，我才知道自己有多在意他，也回頭聽起了やなぎなぎ",
+      "content_text": "10/19 麻枝准的公告出來之前，我不知道自己這麼在意他。循著他，我回去聽躲了兩年的やなぎなぎ，第一次把《終わりの惑星のLove Song》整張從頭聽到尾。「下次不是保證」以前只用在 LiSA 身上，這幾天變成所有還做得到的事。",
+      "date_published": "2026-10-25T00:00:00.000Z",
+      "date_modified": "2026-10-25T00:00:00.000Z",
+      "tags": [
+        "麻枝准",
+        "やなぎなぎ",
+        "yanaginagi",
+        "終わりの惑星のLove Song",
+        "Key",
+        "CLANNAD",
+        "LiSA",
+        "身心障礙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "lisa-mixing-budokan-2014-singing",
       "url": "https://b-log.to/shirushi/lisa-mixing-budokan-2014-singing/",
       "title": "混音救得了音準，救不了她武道館那天改過的唱法",
