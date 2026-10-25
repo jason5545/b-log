@@ -90,7 +90,7 @@ iOS 7 那個有聲無影的問題應該修得掉，有原始碼的話是幾天�
 
 我和 Claude Code 還一起做了一支 42 秒的短片：假設 DIGIZON 211P 是今天才發表，照現在科技公司發表片的樣子來做。晚上十點你在國外，家裡球賽正要開打；接在電視旁邊，輸入一組 8 碼 ID，每個螢幕都能看。畫面和文案取自今年重新設計的[官網](https://modern.kcsdigital.net/)，沒有旁白，配樂和音效是程式合成的。
 
-<video controls playsinline preload="metadata" poster="/content/img/2026/kcs-digital-digizon-thailand-next-year/digizon-211p-poster.jpg" style="width: 100%; aspect-ratio: 16 / 9; height: auto;" aria-label="假設 DIGIZON 211P 今天才發表的 42 秒發表片">
+<video controls playsinline preload="metadata" poster="/content/img/2026/kcs-digital-digizon-thailand-next-year/digizon-211p-poster.webp" style="width: 100%; aspect-ratio: 16 / 9; height: auto;" aria-label="假設 DIGIZON 211P 今天才發表的 42 秒發表片">
   <source src="/content/video/2026/digizon-211p.mp4" type="video/mp4">
 </video>
 
