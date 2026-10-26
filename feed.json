@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-shirushi-2014-natalie-interview",
+      "url": "https://b-log.to/crossing-field/lisa-shirushi-2014-natalie-interview/",
+      "title": "LiSA「シルシ」專訪｜脫下超人的盔甲，現在才唱得出的抒情歌",
+      "content_text": "我翻譯了音楽ナタリー 2014 年 12 月的 LiSA 專訪，主題是第七張單曲「シルシ」。她談年初武道館唱不出聲之後，怎麼脫下「完美超人」的盔甲；為什麼要在動畫裡偷偷先公開「No More Time Machine」；還有第一次用英文重唱「crossing field」。",
+      "date_published": "2026-10-26T00:00:00.000Z",
+      "date_modified": "2026-10-26T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "シルシ",
+        "刀劍神域",
+        "No More Time Machine",
+        "crossing field",
+        "日本武道館",
+        "專訪翻譯",
+        "音楽ナタリー"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-shirushi-2014-natalie-interview-cover.webp"
+    },
+    {
       "id": "viewpad-10s-kernel-build-never-zimage",
       "url": "https://b-log.to/tech-analysis/viewpad-10s-kernel-build-never-zimage/",
       "title": "當年我照著教學編 ViewPad 10s 的核心，一次也沒編出 zImage",

@@ -1,5 +1,26 @@
 [
   {
+    "slug": "lisa-shirushi-2014-natalie-interview",
+    "title": "LiSA「シルシ」專訪｜脫下超人的盔甲，現在才唱得出的抒情歌",
+    "summary": "我翻譯了音楽ナタリー 2014 年 12 月的 LiSA 專訪，主題是第七張單曲「シルシ」。她談年初武道館唱不出聲之後，怎麼脫下「完美超人」的盔甲；為什麼要在動畫裡偷偷先公開「No More Time Machine」；還有第一次用英文重唱「crossing field」。",
+    "category": "Crossing Field",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-26T00:00:00Z",
+    "tags": [
+      "LiSA",
+      "シルシ",
+      "刀劍神域",
+      "No More Time Machine",
+      "crossing field",
+      "日本武道館",
+      "專訪翻譯",
+      "音楽ナタリー"
+    ],
+    "accentColor": "#8f4436",
+    "coverImage": "/content/img/2026/lisa-shirushi-2014-natalie-interview-cover.webp",
+    "readingTime": "13 min"
+  },
+  {
     "slug": "viewpad-10s-kernel-build-never-zimage",
     "title": "當年我照著教學編 ViewPad 10s 的核心，一次也沒編出 zImage",
     "summary": "Jelly Bean 那時，我在 ViewPad 10s 上照著教學編 Android 核心，編了好幾次，連 zImage 都沒編出來。十幾年後回頭查，我那時會的只到 ROM 包這一層；那份教學沒寫出來的前提，這台平板到了 JB 時期偏偏不符合。",
