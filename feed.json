@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "viewpad-10s-kernel-build-never-zimage",
+      "url": "https://b-log.to/tech-analysis/viewpad-10s-kernel-build-never-zimage/",
+      "title": "當年我照著教學編 ViewPad 10s 的核心，一次也沒編出 zImage",
+      "content_text": "Jelly Bean 那時，我在 ViewPad 10s 上照著教學編 Android 核心，編了好幾次，連 zImage 都沒編出來。十幾年後回頭查，我那時會的只到 ROM 包這一層；那份教學沒寫出來的前提，這台平板到了 JB 時期偏偏不符合。",
+      "date_published": "2026-10-26T00:00:00.000Z",
+      "date_modified": "2026-10-26T00:00:00.000Z",
+      "tags": [
+        "Android 核心",
+        "ViewPad 10s",
+        "Advent Vega",
+        "Tegra 2",
+        "Jelly Bean",
+        "交叉編譯",
+        "defconfig",
+        "Device Tree",
+        "GKI",
+        "刷機"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/viewpad-10s-kernel-build-never-zimage-cover.svg"
+    },
+    {
       "id": "maeda-news-back-to-yanaginagi",
       "url": "https://b-log.to/cultural-insights/maeda-news-back-to-yanaginagi/",
       "image": "https://b-log.to/content/img/2026/maeda-news-back-to-yanaginagi-cover.webp",

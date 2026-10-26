@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>當年我照著教學編 ViewPad 10s 的核心，一次也沒編出 zImage - (b)-log</title>
+
+  <!-- 基本的 SEO metadata -->
+  <meta name="description" content="Jelly Bean 那時，我在 ViewPad 10s 上照著教學編 Android 核心，編了好幾次，連 zImage 都沒編出來。十幾年後回頭查，我那時會的只到 ROM 包這一層；那份教學沒寫出來的前提，這台平板到了 JB 時期偏偏不符合。">
+  <meta name="author" content="Jason Chien">
+  <link rel="canonical" href="https://b-log.to/tech-analysis/viewpad-10s-kernel-build-never-zimage/" id="canonical-url">
+
+  <!-- Open Graph / Facebook - 將由 JavaScript 動態更新 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://b-log.to/tech-analysis/viewpad-10s-kernel-build-never-zimage/" id="og-url">
+  <meta property="og:title" content="當年我照著教學編 ViewPad 10s 的核心，一次也沒編出 zImage" id="og-title">
+  <meta property="og:description" content="Jelly Bean 那時，我在 ViewPad 10s 上照著教學編 Android 核心，編了好幾次，連 zImage 都沒編出來。十幾年後回頭查，我那時會的只到 ROM 包這一層；那份教學沒寫出來的前提，這台平板到了 JB 時期偏偏不符合。" id="og-description">
+  <meta property="og:image" content="https://b-log.to/content/img/2026/viewpad-10s-kernel-build-never-zimage-cover.svg" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="(b)-log">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:published_time" content="2026-10-26T00:00:00Z" id="og-published-time">
+  <meta property="article:modified_time" content="2026-10-26T00:00:00Z" id="og-modified-time">
+  <meta property="article:section" content="技術分析" id="og-section">
+  <!-- ARTICLE_TAGS_START -->
+  <meta property="article:tag" content="Android 核心">
+  <meta property="article:tag" content="ViewPad 10s">
+  <meta property="article:tag" content="Advent Vega">
+  <meta property="article:tag" content="Tegra 2">
+  <meta property="article:tag" content="Jelly Bean">
+  <meta property="article:tag" content="交叉編譯">
+  <meta property="article:tag" content="defconfig">
+  <meta property="article:tag" content="Device Tree">
+  <meta property="article:tag" content="GKI">
+  <meta property="article:tag" content="刷機">
+<!-- ARTICLE_TAGS_END -->
+
+  <!-- Twitter - 將由 JavaScript 動態更新 -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://b-log.to/tech-analysis/viewpad-10s-kernel-build-never-zimage/" id="twitter-url">
+  <meta property="twitter:title" content="當年我照著教學編 ViewPad 10s 的核心，一次也沒編出 zImage" id="twitter-title">
+  <meta property="twitter:description" content="Jelly Bean 那時，我在 ViewPad 10s 上照著教學編 Android 核心，編了好幾次，連 zImage 都沒編出來。十幾年後回頭查，我那時會的只到 ROM 包這一層；那份教學沒寫出來的前提，這台平板到了 JB 時期偏偏不符合。" id="twitter-description">
+  <meta property="twitter:image" content="https://b-log.to/content/img/2026/viewpad-10s-kernel-build-never-zimage-cover.svg" id="twitter-image">
+  <meta property="twitter:creator" content="@jason5545">
+
+  <!-- 額外的 metadata -->
+  <meta name="keywords" content="Android 核心, ViewPad 10s, Advent Vega, Tegra 2, Jelly Bean, 交叉編譯, defconfig, Device Tree, GKI, 刷機" id="meta-keywords">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f4efe7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1114" media="(prefers-color-scheme: dark)">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 啟用 View Transition API（跨文件過渡） -->
+  <meta name="view-transition" content="same-origin">
+
+  <!-- 字型（B612 自架在 /assets/fonts/）與共用關鍵 CSS：assets/css/fonts.css、critical-shared.css 內嵌在下面，
+       由 npm run build:assets 產生，不要手改。不用 <link> 的原因見 AGENTS.md「CSS 內嵌在 HTML」 -->
+  <!-- INLINE_CSS_CRITICAL_START -->
+  <style>@font-face{font-family:B612;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/fonts/b612-latin-400.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:B612;font-style:normal;font-weight:700;font-display:swap;src:url("/assets/fonts/b612-latin-700.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"B612 Mono";font-style:normal;font-weight:400;font-display:swap;src:url("/assets/fonts/b612-mono-latin-400.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"B612 Mono";font-style:normal;font-weight:700;font-display:swap;src:url("/assets/fonts/b612-mono-latin-700.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"B612 Mono Fallback";font-style:normal;font-weight:400;src:local("Menlo Regular"),local("Menlo-Regular"),local("DejaVu Sans Mono"),local("DejaVuSansMono");size-adjust:107.96%;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"B612 Mono Fallback";font-style:normal;font-weight:700;src:local("Menlo Bold"),local("Menlo-Bold"),local("DejaVu Sans Mono Bold"),local("DejaVuSansMono-Bold");size-adjust:107.96%;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"B612 Mono Fallback Alt";font-style:normal;font-weight:400;src:local("Liberation Mono"),local("LiberationMono-Regular"),local("Droid Sans Mono"),local("DroidSansMono"),local("Courier New"),local("CourierNewPSMT");size-adjust:108.32%;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:"B612 Mono Fallback Alt";font-style:normal;font-weight:700;src:local("Liberation Mono Bold"),local("LiberationMono-Bold"),local("Droid Sans Mono"),local("DroidSansMono"),local("Courier New Bold"),local("CourierNewPS-BoldMT");size-adjust:108.32%;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}:root{--font-body:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;--font-head:"B612",-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;--font-mono:"B612 Mono","B612 Mono Fallback","B612 Mono Fallback Alt",ui-monospace,"SF Mono",Menlo,Consolas,monospace;--font-serif:"Songti TC","Noto Serif TC","Noto Serif CJK TC","Source Han Serif TC","PMingLiU","MingLiU",serif}html[lang=zh-Hant-TW] body{font-family:var(--font-body)}h1,h2,h3,h4,h5,h6{font-family:var(--font-head)}:root{color-scheme:light;--bg:#f4efe7;--surface:#ebe4d8;--rule:#d8cfc1;--ink:#1a232c;--text:#2b333b;--muted:#6d675e;--cyan:#066a86;--green:#2d7a4c;--amber:#a94e0a;--magenta:#a3226f;--code-bg:#e8e0d2;--row-hover:rgba(26, 35, 44, 0.045);--focus:#066a86;--on-cyan:#f4efe7}@media (prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#0e1114;--surface:#161b20;--rule:#262e35;--ink:#eef2f4;--text:#d2d9de;--muted:#8a959d;--cyan:#5ccfe6;--green:#5fd18c;--amber:#f59e0b;--magenta:#ee7ad0;--code-bg:#141a1f;--row-hover:rgba(255, 255, 255, 0.035);--focus:#5ccfe6;--on-cyan:#0e1114}}:root[data-theme=dark]{color-scheme:dark;--bg:#0e1114;--surface:#161b20;--rule:#262e35;--ink:#eef2f4;--text:#d2d9de;--muted:#8a959d;--cyan:#5ccfe6;--green:#5fd18c;--amber:#f59e0b;--magenta:#ee7ad0;--code-bg:#141a1f;--row-hover:rgba(255, 255, 255, 0.035);--focus:#5ccfe6;--on-cyan:#0e1114}*,::after,::before{box-sizing:border-box}html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:clamp(100%, calc(100% + (100vw - 1280px) * .003125), 125%)}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}a{color:var(--cyan);text-underline-offset:0.22em;text-decoration-thickness:1px}a:hover{text-decoration-thickness:2px}:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}img{max-width:100%;height:auto}[hidden]{display:none!important}.wrap{margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}.skip{position:absolute;left:16px;top:-80px;z-index:50;background:var(--ink);color:var(--bg);font:700 0.85rem/1 var(--font-mono);padding:.9rem 1rem;text-decoration:none}.skip:focus{top:12px}.site{position:relative;border-bottom:1px solid var(--rule)}.site>.wrap{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"id nav tools";align-items:center;gap:.5rem 2rem;padding-block:1.1rem}.site__id{grid-area:id;display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;min-width:0}.site__title{margin:0;font-size:inherit;line-height:1}.wordmark{display:inline-flex;align-items:center;min-height:44px;font:700 1.65rem/1 var(--font-mono);color:var(--ink);text-decoration:none;letter-spacing:-.02em}.wordmark .br{color:var(--cyan)}.tagline{margin:0;font-size:.88rem;color:var(--muted)}.site__nav{grid-area:nav;justify-self:end}.site__nav ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.25rem}.site__nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:0.6rem;font:400 0.78rem/1 var(--font-mono);letter-spacing:.1em;color:var(--muted);text-decoration:none;white-space:nowrap}.site__nav a:hover{color:var(--cyan)}.site__nav a[aria-current=page]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--ink)}.site__tools{grid-area:tools;display:flex;align-items:center;gap:.25rem}.iconbtn,.themebtn{min-height:44px;min-width:44px;margin:0;border:1px solid var(--rule);background:0 0;color:var(--ink);border-radius:2px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font:inherit}.iconbtn svg{width:18px;height:18px}.themebtn{padding-inline:0.8rem;font:700 0.72rem/1 var(--font-mono);letter-spacing:.12em}.theme-toggle__icon{display:inline-flex}.theme-toggle__hint{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.theme-dot{display:block;width:8px;height:8px;border-radius:50%;background:var(--cyan)}.iconbtn:hover,.iconbtn[aria-expanded=true],.themebtn:hover{border-color:var(--cyan)}@media (max-width:1100px){.site>.wrap{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"id tools" "nav nav";padding-block:0.75rem 0.25rem;gap:.25rem 1rem}.site__nav{justify-self:start;margin-left:-.6rem}}@media (max-width:760px){.site__id{flex-direction:column;align-items:flex-start;gap:0}.tagline{font-size:.82rem}.site__nav a{padding-inline:0.5rem}}</style>
+  <!-- INLINE_CSS_CRITICAL_END -->
+
+  <!-- 文章頁專屬關鍵 CSS -->
+  <style>
+    /* 單欄：文章、RELATED／LATEST、上下篇與留言依序往下 */
+    .post,
+    .article-aside,
+    .article-foot {
+      max-width: 46rem;
+      margin-inline: auto;
+    }
+    .post { padding-top: 1rem; }
+    .article-foot { padding-bottom: 4rem; }
+    /* 寬螢幕兩欄：右欄一欄、最多 26rem，其餘寬度都給文章欄，內文吃滿文章欄（9/26 Jason 決定放寬每行字數）。
+       1100–1440px 右欄是扣掉 47 字文章欄後剩下的寬度（19–26rem），跟之前一樣 */
+    @media (min-width: 1100px) {
+      .article-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) clamp(19rem, 100% - 56.375rem, 26rem);
+        grid-template-rows: auto 1fr;
+        column-gap: 3.5rem;
+        align-items: start;
+      }
+      .post,
+      .article-foot {
+        grid-column: 1;
+        max-width: none;
+        margin-inline: 0;
+      }
+      /* 權重高於 .post__body 的 35em（這裡與 styles.min.css 都有），寬螢幕內文吃滿文章欄 */
+      .article-shell .post__body { max-width: none; }
+      /* 右欄撐滿整個高度，CONTENTS 才有空間 sticky */
+      .article-aside {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        max-width: none;
+        margin-inline: 0;
+        padding-top: 1rem;
+      }
+      .aside-inner { flex: 1 0 auto; }
+      /* RELATED、LATEST 在上，CONTENTS 接在下面，捲過列表後黏在頂端，太長就在裡面捲 */
+      .aside-toc:not([hidden]) {
+        display: block;
+        position: sticky;
+        top: 0.5rem;
+        max-height: calc(100vh - 1rem);
+        overflow-y: auto;
+      }
+    }
+    /* 目錄只在寬螢幕的右欄出現 */
+    .aside-toc { display: none; }
+    /* 沒有目錄的文章：視窗裝得下 RELATED＋LATEST 才固定，不然下半截會被切掉。
+       有目錄時列表跟著捲走，由 CONTENTS 固定。
+       9/26 量 207 頁列表最高（含 top 0.5rem）：1100–1280px 719、1400 666、1920 731、2240 771、2560 813 */
+    @media (min-width: 1100px) and (min-height: 820px),
+      (min-width: 1400px) and (max-width: 2239px) and (min-height: 780px) {
+      .aside-inner:has(> .aside-toc[hidden]) > .aside-lists {
+        position: sticky;
+        top: 0.5rem;
+      }
+    }
+    .post__accent {
+      height: 4px;
+      margin: 0 0 1rem;
+      background: var(--post-accent, transparent);
+    }
+    .post__title {
+      margin: 0.8rem 0 1.75rem;
+      font: 700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);
+      color: var(--ink);
+    }
+    /* 封面：高度最多視窗一半，照原圖比例、不裁切、靠文章欄左緣。
+       原圖寬高由 generate-redirects.js 寫在 figure 的 style（--cover-w／--cover-h），沒有時當 16:9。
+       用 svh：手機網址列縮起來時 svh 不變，封面不會跟著變大變小；它是網址列展開時的可見高度，
+       一打開頁面封面就不超過看得到的一半。vh 在手機是網址列收起來的高度，會比可見高度大 */
+    .post__cover {
+      width: min(100%, 50vh * var(--cover-w, 16) / var(--cover-h, 9));
+      aspect-ratio: var(--cover-w, 16) / var(--cover-h, 9);
+      margin: 0 0 2.5rem;
+      background: var(--surface);
+    }
+    @supports (height: 1svh) {
+      .post__cover { width: min(100%, 50svh * var(--cover-w, 16) / var(--cover-h, 9)); }
+    }
+    .post__body {
+      max-width: 35em;
+      font-size: 1.125rem;
+      line-height: 1.9;
+    }
+    /* 內容區域預留空間（未預先渲染時） */
+    #post-content:empty {
+      min-height: 400px;
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 33px, var(--rule) 33px, var(--rule) 34px);
+    }
+  </style>
+
+  <!-- 首圖 preload 會由生成腳本注入到這裡 -->
+  <link rel="preload" as="image" href="/content/img/2026/viewpad-10s-kernel-build-never-zimage-cover.svg" fetchpriority="high">
+<!-- 完整樣式表：assets/styles.css 壓縮後內嵌在下面，由 npm run build:assets 產生，不要手改 -->
+  <!-- INLINE_CSS_SITE_START -->
+  <style>.mono{font-family:var(--font-mono)}.search-toggle-container{position:relative}.search-box{position:absolute;top:calc(100% + 8px);right:0;z-index:30;width:min(22rem,calc(100vw - 32px));padding:.5rem;background:var(--bg);border:1px solid var(--ink);border-radius:2px}.search-input-wrapper{display:flex;align-items:center;gap:.5rem;min-height:44px;padding-inline:0.6rem;border:1px solid var(--rule);border-radius:2px;background:var(--surface)}.search-input-wrapper:focus-within{border-color:var(--cyan)}.search-icon{flex:0 0 auto;width:16px;height:16px;color:var(--muted)}.search-input{flex:1 1 auto;min-width:0;min-height:42px;border:0;background:0 0;color:var(--ink);font:400 1rem/1.4 var(--font-body)}.search-input:focus{outline:0}.search-input::-webkit-search-cancel-button{display:none}.search-clear{flex:0 0 auto;min-width:44px;min-height:44px;margin-right:-.6rem;border:0;background:0 0;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}.search-clear svg{width:16px;height:16px}.search-clear:hover{color:var(--cyan)}.label{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25rem .75rem;margin:0 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--ink);font:700 0.74rem/1.2 var(--font-mono);letter-spacing:.16em;color:var(--ink)}.label>span{font:400 0.82rem/1.2 var(--font-body);letter-spacing:0;color:var(--muted)}.label__clear{margin-left:auto;font:400 0.74rem/1 var(--font-mono);letter-spacing:.08em;display:inline-flex;align-items:center;min-height:36px;margin-block:-0.6rem}.meta{margin:0;font:400 0.76rem/1.5 var(--font-mono);letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}.error,.notice{margin:1rem 0;padding:.9rem 1rem;border:1px solid var(--rule);border-radius:2px;font-size:.92rem;color:var(--text)}.error{border-color:var(--amber);color:var(--amber)}.error code,.notice code{font-family:var(--font-mono);font-size:.85em}.side{display:grid;gap:2.5rem;align-content:start}.lead__link{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:1.75rem;align-items:start;color:inherit;text-decoration:none}.lead--text-only .lead__link{grid-template-columns:minmax(0,1fr)}.lead__text{display:grid;gap:.9rem;align-content:start}.lead__title{margin:0;font:700 clamp(1.55rem, 2.7vw, 2.15rem)/1.32 var(--font-head);color:var(--ink);text-wrap:pretty}.lead__link:hover .lead__title{color:var(--cyan)}.lead__sum{margin:0;font-size:.95rem;line-height:1.8;color:var(--text);text-wrap:pretty}.lead__media{position:relative;aspect-ratio:16/9;border-radius:2px;background:var(--surface)}.lead__img{display:block;width:100%;height:100%;object-fit:cover;border-radius:2px}.lead__media::before{--c:var(--muted);content:"";position:absolute;inset:-0.4rem;pointer-events:none;background:linear-gradient(var(--c),var(--c)) top left/1rem 2px no-repeat,linear-gradient(var(--c),var(--c)) top left/2px 1rem no-repeat,linear-gradient(var(--c),var(--c)) top right/1rem 2px no-repeat,linear-gradient(var(--c),var(--c)) top right/2px 1rem no-repeat,linear-gradient(var(--c),var(--c)) bottom left/1rem 2px no-repeat,linear-gradient(var(--c),var(--c)) bottom left/2px 1rem no-repeat,linear-gradient(var(--c),var(--c)) bottom right/1rem 2px no-repeat,linear-gradient(var(--c),var(--c)) bottom right/2px 1rem no-repeat}.lead__link:hover .lead__media::before{--c:var(--cyan)}@media (min-width:761px){.lead__link{container-type:inline-size}.lead__media{aspect-ratio:auto;align-self:stretch;max-height:calc((100cqw - 1.75rem)/ 2.6 * 3 / 4);min-height:min(12rem,calc((100cqw - 1.75rem)/ 2.6 * 3 / 4))}.lead__img{position:absolute;inset:0}}.brief ol{list-style:none;margin:0;padding:0;display:grid;gap:1.1rem}.brief li{position:relative;padding-left:.75rem}.brief a{font-weight:600;font-size:.95rem;line-height:1.5;color:var(--ink);text-decoration:none}.brief a:hover{color:var(--cyan);text-decoration:underline}.brief p{margin:.3rem 0 0;font-size:.83rem;line-height:1.65;color:var(--muted)}.brief .cat{display:block;margin-bottom:.2rem;font:400 0.7rem/1.3 var(--font-mono);letter-spacing:.08em;color:var(--muted)}.brief .cat::before,.row__date::before{content:'';position:absolute;left:0;width:3px;height:1.1em;margin-top:.15em;background:var(--row-accent,transparent)}.brief .cat::before{margin-top:.1em}.log__head,.row a{display:grid;grid-template-columns:6.4rem 5.4rem minmax(0,1fr) 3.6rem;gap:1rem;align-items:baseline}.log__head{padding:0 .5rem .5rem;font:400 0.68rem/1 var(--font-mono);letter-spacing:.14em;color:var(--muted)}.log__head span:last-child{text-align:right}.log__list{list-style:none;margin:0;padding:0}.log .log__list:empty{min-height:61.25rem;background:repeating-linear-gradient(to bottom,transparent 0,transparent 48px,var(--rule) 48px,var(--rule) 49px)}.row a{position:relative;min-height:48px;padding:.8rem .5rem;border-bottom:1px solid var(--rule);color:inherit;text-decoration:none}.row a:hover{background:var(--row-hover)}.row a:hover .row__title{color:var(--cyan)}.row__date,.row__time{font:400 0.8rem/1.4 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:.04em;white-space:nowrap}.row__time{text-align:right}.row__cat{font-size:.83rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.row__title{color:var(--ink);font-size:1rem;line-height:1.55}.row--empty{padding:.9rem .5rem;border-bottom:1px solid var(--rule);font-size:.92rem;color:var(--muted)}.log__more{display:inline-flex;align-items:center;min-height:44px;margin-top:.75rem;padding:0 .9rem;border:1px solid var(--rule);border-radius:2px;background:0 0;color:var(--cyan);font:400 0.8rem/1 var(--font-mono);letter-spacing:.08em;cursor:pointer}.log__more:hover{border-color:var(--cyan)}.search-results-count{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.audio-indicator{display:inline-flex;align-items:center;margin-left:.4rem;color:var(--cyan);vertical-align:-.1em}.audio-indicator svg{width:.9em;height:.9em}.audio-indicator--article svg{width:.7em;height:.7em}.audio-indicator--compact svg{width:.55em;height:.55em}.topics{list-style:none;margin:0;padding:0;min-height:24.75rem}.topics a{display:flex;align-items:baseline;gap:.5rem;min-height:44px;padding-block:0.6rem;color:var(--text);text-decoration:none;font-size:.92rem}.topics .dots{flex:1;min-width:1rem;border-bottom:1px dotted var(--muted);opacity:.6;transform:translateY(-.25em)}.topics .n{font:400 0.8rem/1 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}.topics a:hover{color:var(--cyan)}.topics a[aria-current=page]{font-weight:700;color:var(--ink)}.topics .hint{font-size:.76rem;color:var(--muted);white-space:nowrap}.tag-cloud{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .9rem;min-height:12rem}.tag-cloud a{display:inline-flex;align-items:baseline;gap:.3rem;padding-block:0.3rem;line-height:1.5;text-decoration:none}.tag-cloud a:hover{text-decoration:underline}.tag-cloud a[aria-current=page]{font-weight:700}.tag-cloud .n{font:400 0.7rem/1 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}.tag-cloud__more{display:inline-flex;align-items:center;min-height:44px;margin-top:.5rem;padding:0 .9rem;border:1px solid var(--rule);border-radius:2px;background:0 0;color:var(--cyan);font:400 0.8rem/1 var(--font-mono);letter-spacing:.08em;cursor:pointer}.tag-cloud__more:hover{border-color:var(--cyan)}.about p{margin:0 0 .9rem;font-size:.9rem;line-height:1.75}.about a{display:inline-flex;align-items:center;min-height:44px;font:400 0.78rem/1 var(--font-mono);letter-spacing:.08em}.traffic .links{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.tcas{display:block;width:100%;height:auto;margin:0}.tcas__hit{fill:transparent;stroke:none;stroke-width:2}.tcas__arc{fill:none;stroke:var(--muted);stroke-width:1;opacity:.55}.tcas__arc--mid{stroke-dasharray:2 4}.tcas__tick{fill:none;stroke:var(--muted);stroke-width:1}.tcas__dot,.tcas__lubber{fill:var(--muted)}.tcas__own{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round}.tcas__sym{fill:var(--hot,transparent);stroke:var(--cyan);stroke-width:1.4;transition:fill .15s}.tcas text{font:400 11px/1 var(--font-mono);letter-spacing:.02em;fill:var(--hot-text,var(--muted));transition:fill .15s}.tcas a:hover,.traffic:has(.links li:nth-child(10) > a:focus-visible) .tcas__tfc>a:nth-child(10),.traffic:has(.links li:nth-child(11) > a:focus-visible) .tcas__tfc>a:nth-child(11),.traffic:has(.links li:nth-child(12) > a:focus-visible) .tcas__tfc>a:nth-child(12),.traffic:has(.links li:nth-child(3) > a:focus-visible) .tcas__tfc>a:nth-child(3),.traffic:has(.links li:nth-child(4) > a:focus-visible) .tcas__tfc>a:nth-child(4),.traffic:has(.links li:nth-child(5) > a:focus-visible) .tcas__tfc>a:nth-child(5),.traffic:has(.links li:nth-child(6) > a:focus-visible) .tcas__tfc>a:nth-child(6),.traffic:has(.links li:nth-child(7) > a:focus-visible) .tcas__tfc>a:nth-child(7),.traffic:has(.links li:nth-child(8) > a:focus-visible) .tcas__tfc>a:nth-child(8),.traffic:has(.links li:nth-child(9) > a:focus-visible) .tcas__tfc>a:nth-child(9){--hot:var(--cyan);--hot-text:var(--cyan)}.traffic:has(.links li:nth-child(2) > a:focus-visible) .tcas__tfc>a:nth-child(2){--hot:var(--magenta)}.traffic:has(.links li:first-child > a:focus-visible) .tcas__tfc>a:nth-child(1) .tcas__hit,.traffic:has(.links li:nth-child(10) > a:focus-visible) .tcas__tfc>a:nth-child(10) .tcas__hit,.traffic:has(.links li:nth-child(11) > a:focus-visible) .tcas__tfc>a:nth-child(11) .tcas__hit,.traffic:has(.links li:nth-child(12) > a:focus-visible) .tcas__tfc>a:nth-child(12) .tcas__hit,.traffic:has(.links li:nth-child(2) > a:focus-visible) .tcas__tfc>a:nth-child(2) .tcas__hit,.traffic:has(.links li:nth-child(3) > a:focus-visible) .tcas__tfc>a:nth-child(3) .tcas__hit,.traffic:has(.links li:nth-child(4) > a:focus-visible) .tcas__tfc>a:nth-child(4) .tcas__hit,.traffic:has(.links li:nth-child(5) > a:focus-visible) .tcas__tfc>a:nth-child(5) .tcas__hit,.traffic:has(.links li:nth-child(6) > a:focus-visible) .tcas__tfc>a:nth-child(6) .tcas__hit,.traffic:has(.links li:nth-child(7) > a:focus-visible) .tcas__tfc>a:nth-child(7) .tcas__hit,.traffic:has(.links li:nth-child(8) > a:focus-visible) .tcas__tfc>a:nth-child(8) .tcas__hit,.traffic:has(.links li:nth-child(9) > a:focus-visible) .tcas__tfc>a:nth-child(9) .tcas__hit{stroke:var(--focus)}.behind p{margin:0;font-size:.9rem;line-height:1.75}.behind code{font-family:var(--font-mono);font-size:.84em;color:var(--ink);background:var(--code-bg);padding:.1em .35em;border-radius:2px}.crumb{margin:0 0 1rem;font:400 0.74rem/1.3 var(--font-mono);letter-spacing:.1em;color:var(--muted)}.crumb a{display:inline-flex;align-items:center;min-height:44px;color:var(--muted);text-decoration:none}.crumb a:hover{color:var(--cyan)}.post__title{margin:.8rem 0 1.75rem;font:700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);color:var(--ink);text-wrap:pretty;overflow-wrap:break-word}.post__cover{margin:0 0 2.5rem;border-radius:2px;overflow:hidden;background:var(--surface)}.post__cover-img{display:block;width:100%;height:100%;object-fit:contain}.post__body{max-width:35em;font-size:1.125rem;line-height:1.9;color:var(--text);overflow-wrap:break-word}.post__body>:first-child{margin-top:0}.post__body p{margin:0 0 1.15em}.post__body h2{margin:2.4em 0 .9em;font:700 1.3rem/1.4 var(--font-head);color:var(--ink)}.post__body h3{margin:2em 0 .7em;font:700 1.12rem/1.45 var(--font-head);color:var(--ink)}.post__body h4{margin:1.8em 0 .6em;font:700 1rem/1.5 var(--font-head);color:var(--ink)}.post__body strong{color:var(--ink)}.post__body ol,.post__body ul{margin:0 0 1.15em;padding-left:1.3em}.post__body li{margin-bottom:.45em}.post__body li>ol,.post__body li>ul{margin:.45em 0 0}.post__body li::marker{color:var(--muted)}.post__body hr{border:0;border-top:1px solid var(--rule);margin:2.5em 0}.post__body blockquote{margin:1.6em 0;padding:0 0 0 1.1em;border-left:2px solid var(--rule);color:var(--text)}.post__body blockquote p{margin:0 0 .75em}.post__body blockquote>:last-child{margin-bottom:0}.post__body img{display:block;max-width:100%;height:auto;margin:1.8em auto;border-radius:2px;background:var(--surface)}.post__body picture{display:block;margin:1.8em 0}.post__body picture img{margin:0 auto}.post__body figure{margin:1.8em 0}.post__body figcaption{margin-top:.5rem;font:400 0.72rem/1.5 var(--font-mono);color:var(--muted);letter-spacing:.04em}.post__body iframe,.post__body video{max-width:100%}@media (min-width:1100px){.post__body img{max-height:85vh}}.post__body code{font-family:var(--font-mono);font-size:.84em;color:var(--ink);background:var(--code-bg);padding:.1em .35em;border-radius:2px;overflow-wrap:anywhere}.post__body .code-container{position:relative;display:flex;flex-wrap:wrap;align-items:stretch;margin:0 0 1.4em;border:1px solid var(--rule);border-radius:2px;background:var(--code-bg)}.post__body .code-language{display:inline-flex;align-items:center;padding:0 .8rem;font:700 0.68rem/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.post__body .code-copy-btn{order:1;margin-left:auto;min-height:44px;min-width:64px;padding:0 .9rem;border:0;border-left:1px solid var(--rule);background:0 0;color:var(--cyan);font:700 0.7rem/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}.post__body .code-copy-btn:hover{background:var(--row-hover)}.post__body .code-copy-btn.copied{color:var(--green)}.post__body pre{position:relative;margin:0 0 1.4em;padding:1rem 1.2rem;background:var(--code-bg);border:1px solid var(--rule);border-radius:2px;overflow-x:auto;overflow-y:hidden;font-family:var(--font-mono);font-size:.8rem;line-height:1.6;color:var(--ink);tab-size:2}.post__body .code-container pre{order:2;flex:1 0 100%;width:100%;margin:0;border:0;border-top:1px solid var(--rule);border-radius:0}.post__body pre code{display:block;padding:0;background:0 0;font-size:inherit;color:inherit;overflow-wrap:normal;white-space:pre}.post__body pre.line-numbers-wrapper{padding-left:3.4rem}.post__body .line-numbers{position:absolute;top:0;left:0;bottom:0;width:2.6rem;padding:1rem .5rem 1rem 0;border-right:1px solid var(--rule);font-family:var(--font-mono);font-size:inherit;line-height:inherit;text-align:right;color:var(--muted);opacity:.8;user-select:none;overflow:hidden}.post__body .token.keyword{color:var(--cyan);font-weight:700}.post__body .token.string{color:var(--green)}.post__body .token.number{color:var(--amber)}.post__body .token.comment{color:var(--muted);font-style:italic}.post__body .token.function{color:var(--cyan)}.post__body .token.variable{color:var(--ink);font-weight:700}.post__body .token.operator{color:var(--text)}.post__body .token.property{color:var(--amber)}.post__body .token.punctuation{color:var(--muted)}.post__body .token.tag{color:var(--cyan)}.post__body .token.attribute{color:var(--amber)}.post__body .token.class-name{color:var(--ink);font-weight:700}.post__body .table-wrapper{margin:0 0 1.4em;overflow-x:auto}.post__body table{width:100%;border-collapse:collapse;font-size:.9rem;line-height:1.6}.post__body .table-wrapper table{margin:0;min-width:500px}.post__body td,.post__body th{padding:.6rem .75rem;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}.post__body th{font-weight:700;color:var(--ink);border-bottom-color:var(--ink)}.post__body tbody tr:hover{background:var(--row-hover)}.status{margin:3.5rem 0 2.5rem;max-width:40rem;padding:1.25rem 1.4rem 1.3rem;background:#0b0f12;color:#eef2f4;border:1px solid #262e35;border-radius:2px;font-family:var(--font-mono)}.status__title{margin:0 0 1.1rem;font:700 0.95rem/1 var(--font-mono);letter-spacing:.14em;color:#eef2f4;text-decoration:underline;text-underline-offset:0.35em;text-align:center}.status__grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:1.25rem 2rem}.status__grid--single{grid-template-columns:minmax(0,1fr)}.status ul{list-style:none;margin:0;padding:0;display:grid;gap:.7rem}.status li{font-family:var(--font-body);font-size:.9rem;line-height:1.55}.status .k{display:block;margin-bottom:.15rem;font:700 0.68rem/1.3 var(--font-mono);letter-spacing:.14em}.status .ok{color:#5fd18c}.status .proc{color:#5ccfe6}.status .caut{color:#f5a524}.status__sub{margin:0 0 .55rem;font:700 0.72rem/1 var(--font-mono);letter-spacing:.14em;color:#f5a524;text-decoration:underline;text-underline-offset:0.3em}.status__sub+ul:not(:last-child){margin-bottom:1.1rem}.tags{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem .9rem;max-width:40rem;margin:2.5rem 0 1rem}.status+.tags{margin-top:0}.tags .meta{margin-right:.25rem}.tags a{display:inline-flex;align-items:center;min-height:36px;font-size:.88rem;text-decoration:none}.tags a:hover{text-decoration:underline}.share{display:flex;flex-wrap:wrap;align-items:center;gap:0 1.1rem;min-height:44px;margin:0 0 3rem}.share a{display:inline-flex;align-items:center;min-height:44px;font:400 0.76rem/1 var(--font-mono);letter-spacing:.1em;text-decoration:none}.share a:hover{text-decoration:underline}.related{margin:0 0 3rem}.toc-list{list-style:none;margin:0;padding:0;counter-reset:toc}.toc-list li{counter-increment:toc;display:grid;grid-template-columns:2.2rem minmax(0,1fr);align-items:baseline;padding-left:.5rem;border-bottom:1px solid var(--rule)}.toc-list li::before{content:counter(toc,decimal-leading-zero);font:400 0.74rem/1 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}.toc-list a{display:block;min-height:36px;padding-block:0.55rem;font-size:.9rem;line-height:1.5;color:var(--cyan);text-decoration:none}.toc-list a:hover{text-decoration:underline}.toc-list li:has(> a.is-current){box-shadow:inset 3px 0 0 var(--cyan)}.toc-list a.is-current{color:var(--ink);font-weight:700}.content>h2,.post__body>h2{scroll-margin-top:1.5rem}.side-list{list-style:none;margin:0;padding:0}.side-list a{display:grid;gap:.2rem;min-height:44px;padding:.7rem .5rem .75rem;border-bottom:1px solid var(--rule);color:inherit;text-decoration:none}.side-list a:hover{background:var(--row-hover)}.side-list a:hover .side-row__title{color:var(--cyan)}.side-row__meta{font:400 0.7rem/1.4 var(--font-mono);letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}.side-row__title{font-weight:600;font-size:.95rem;line-height:1.5;color:var(--ink)}.article-nav{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;margin:0 0 3rem;border-top:1px solid var(--ink)}.article-nav__link{display:grid;align-content:start;gap:.35rem;min-height:44px;padding:.8rem .5rem;color:var(--ink);text-decoration:none;line-height:1.5}.article-nav__link--next{text-align:right}.article-nav__link:hover{background:var(--row-hover)}.article-nav__link:hover .article-nav__title{color:var(--cyan)}.article-nav__label{font:400 0.7rem/1.3 var(--font-mono);letter-spacing:.14em;color:var(--muted)}.article-nav__title{font-size:.95rem}.article-nav__link.is-disabled{color:var(--muted);pointer-events:none}.comments-section{margin:0}.giscus-container{min-height:200px}.giscus-fallback p,.giscus-loading p{margin:0;padding:1rem 0;font:400 0.8rem/1.6 var(--font-mono);color:var(--muted)}.giscus-container .giscus,.giscus-container iframe{width:100%}.brief .cat.her-cat,.crumb a.her-cat,.crumb a.her-cat:hover,.her-cat,.row--her .row__cat,.tag-cloud a.her,.topics a.her{color:var(--magenta)}.tcas a.her,.tcas a.her-fan:hover{--hot:var(--magenta);--hot-text:var(--magenta)}.tcas a.her-fan{--hot-text:var(--magenta)}.tcas a.her .tcas__sym,.tcas a.her-fan .tcas__sym{stroke:var(--magenta)}.aside-toc--cf .toc-list li::before{color:var(--magenta)}.aside-toc--cf .toc-list li:has(> a.is-current){box-shadow:inset 3px 0 0 var(--magenta)}.aside-toc--cf .toc-list a{color:var(--ink)}.aside-toc--cf .toc-list a:hover{color:var(--cyan)}.catline{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25rem .75rem;margin:.2rem 0 0;font:700 0.74rem/1.3 var(--font-mono);letter-spacing:.16em;color:var(--magenta)}.catline span{font:400 0.85rem/1.3 var(--font-body);letter-spacing:0;color:var(--muted)}[data-category-theme=shirushi] .post__body blockquote{margin:0 0 2.2rem;padding:0;border:0;font-family:var(--font-serif);font-size:1.2rem;line-height:1.95;color:var(--ink)}[data-category-theme=shirushi] .post__body blockquote p{margin:0;white-space:pre-line}[data-category-theme=shirushi] .post__body blockquote *+p{margin-top:.6em}.post__body .her-cite,[data-category-theme=shirushi] .post__body blockquote cite{display:block;margin-top:.6rem;font:400 0.76rem/1.4 var(--font-mono);font-style:normal;letter-spacing:.06em;color:var(--magenta)}body:has([data-category-theme=crossing-field]) .site{border-bottom-color:var(--magenta);box-shadow:0 1px 0 var(--magenta)}.home-grid[data-category-theme=crossing-field] #lead-label,.home-grid[data-category-theme=crossing-field] #log-label{border-bottom-color:var(--magenta)}[data-category-theme=crossing-field] .post__title{font-family:var(--font-serif);font-weight:700;line-height:1.4}[data-category-theme=crossing-field] .post__body{counter-reset:cf-chapter}[data-category-theme=crossing-field] .post__body>h2{counter-increment:cf-chapter;font-family:var(--font-serif)}[data-category-theme=crossing-field] .post__body>h2::before{content:counter(cf-chapter,decimal-leading-zero);display:block;margin-bottom:.45rem;font:700 0.74rem/1.2 var(--font-mono);letter-spacing:.16em;color:var(--magenta)}.post__body .crossing-field-intro,.post__body .crossing-field-serial{margin:0 0 2rem;padding-top:1rem;border-top:2px solid var(--magenta)}.post__body .crossing-field-intro{position:relative}.post__body .crossing-field-intro__sticker{position:absolute;right:.25rem;bottom:calc(100% - .75rem);width:clamp(64px,14vw,96px);height:auto;margin:0;border-radius:0;background:0 0;transform:rotate(6deg);pointer-events:none}.post__body .crossing-field-serial--end{margin-top:2.5rem}.post__body .crossing-field-intro__eyebrow,.post__body .crossing-field-serial__eyebrow{margin:0 0 .7rem;font:700 0.72rem/1.3 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--magenta)}.post__body .crossing-field-intro__lead,.post__body .crossing-field-serial__lead{margin:0;font-size:1.02rem;line-height:1.9}.post__body .crossing-field-intro__meta,.post__body .crossing-field-serial__meta{margin:.8rem 0 0;font-size:.85rem;line-height:1.7;color:var(--muted)}.post__body .cf-source{margin:0 0 2rem;padding:.9rem 1rem;border:1px solid var(--rule);border-radius:2px;font-size:.85rem;line-height:1.6}.post__body .cf-source__kind{margin:0 0 .55rem;font:700 0.7rem/1.3 var(--font-mono);letter-spacing:.14em;color:var(--muted)}.post__body .cf-source dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.35rem 1rem;margin:0}.post__body .cf-source dt{font:400 0.7rem/1.9 var(--font-mono);letter-spacing:.1em;color:var(--muted)}.post__body .cf-source dd{margin:0;overflow-wrap:anywhere}.post__body .crossing-field-toc{margin:2rem 0 2.5rem}.post__body .crossing-field-toc h2{display:flex;flex-wrap:wrap;align-items:baseline;gap:.75rem;margin:0 0 .5rem;padding-bottom:.6rem;border-bottom:1px solid var(--ink);font:400 0.82rem/1.2 var(--font-body);color:var(--muted)}.post__body .crossing-field-toc h2::before{content:"CONTENTS";font:700 0.74rem/1.2 var(--font-mono);letter-spacing:.16em;color:var(--ink)}.post__body .crossing-field-toc ol{list-style:none;margin:0;padding:0;counter-reset:ch}.post__body .crossing-field-toc li{counter-increment:ch;display:grid;grid-template-columns:2.2rem minmax(0,1fr);margin:0;padding-block:0.45rem;border-bottom:1px solid var(--rule);font-size:.95rem;line-height:1.6}.post__body .crossing-field-toc li::before{content:counter(ch,decimal-leading-zero);font:400 0.78rem/1.9 var(--font-mono);color:var(--magenta)}.post__body .crossing-field-toc a{display:inline-flex;align-items:center;min-height:36px;color:var(--ink);text-decoration:none}.post__body .crossing-field-toc a:hover{color:var(--cyan);text-decoration:underline}.post__body .cf-question{margin:2.2em 0 .7em;font-family:var(--font-body);font-size:.95rem;line-height:1.8;color:var(--muted)}.post__body .cf-question strong{font-weight:400;color:inherit}.post__body .cf-speaker{display:none}.post__body .cf-answer{padding-left:1.1rem;border-left:2px solid var(--magenta);font-family:var(--font-serif);font-size:1.16rem;line-height:1.95;color:var(--ink)}.post__body .cf-answer[data-speaker]:not([data-speaker=LiSA]){border-left-color:var(--rule)}.post__body .cf-answer+.cf-answer:not(.cf-answer--speaker-start){margin-top:-1.15em;padding-top:1.15em}.post__body .cf-answer strong{color:inherit}.post__body .cf-answer--speaker-start::before,.post__body .cf-question+.cf-answer:not([data-speaker])::before{display:block;margin-bottom:.15rem;font:700 0.68rem/1.4 var(--font-mono);letter-spacing:.14em;color:var(--muted)}.post__body .cf-answer--speaker-start::before{content:attr(data-speaker)}.post__body .cf-answer--speaker-start[data-speaker=LiSA]::before,.post__body .cf-question+.cf-answer:not([data-speaker])::before{content:"LiSA";color:var(--magenta)}.post__body .cf-answer--speaker-start{margin-top:1.6em}.post__body .cf-question+.cf-answer,.post__body .cf-speaker+.cf-answer--speaker-start{margin-top:0}.audio-player{margin:0 0 2rem;padding:1rem 1.1rem;background:var(--surface);border:1px solid var(--rule);border-radius:2px;font-family:var(--font-body);font-size:1rem;line-height:1.5}.audio-player audio{display:none}.audio-controls{display:flex;align-items:center;gap:1rem}.audio-btn{flex-shrink:0;width:44px;height:44px;border:0;border-radius:2px;background:var(--cyan);color:var(--on-cyan);cursor:pointer;display:flex;align-items:center;justify-content:center}.audio-btn svg{width:22px;height:22px}.audio-progress-container{flex:1;display:flex;flex-direction:column;gap:.4rem;min-width:0}.audio-progress{-webkit-appearance:none;appearance:none;width:100%;height:6px;margin:0;border-radius:0;background:var(--rule);cursor:pointer}.audio-progress::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:2px;background:var(--cyan);cursor:pointer}.audio-progress::-moz-range-thumb{width:16px;height:16px;border:0;border-radius:2px;background:var(--cyan);cursor:pointer}.audio-time,.playlist-info{display:flex;justify-content:space-between;font:400 0.72rem/1.4 var(--font-mono);color:var(--muted);font-variant-numeric:tabular-nums}.audio-speed{position:relative;flex-shrink:0}.speed-btn{min-width:60px;min-height:44px;padding:0 .7rem;border:1px solid var(--rule);border-radius:2px;background:0 0;color:var(--ink);font:700 0.76rem/1 var(--font-mono);cursor:pointer}.speed-btn:hover{border-color:var(--cyan)}.speed-menu{position:absolute;bottom:calc(100% + .4rem);right:0;z-index:10;min-width:84px;padding:.25rem;background:var(--bg);border:1px solid var(--ink);border-radius:2px}.speed-menu button{display:block;width:100%;min-height:40px;padding:0 .75rem;border:0;border-radius:2px;background:0 0;color:var(--ink);font:400 0.8rem/1 var(--font-mono);text-align:left;cursor:pointer}.speed-menu button:hover{background:var(--row-hover)}.speed-menu button.active{background:var(--cyan);color:var(--on-cyan);font-weight:700}.audio-volume{display:flex;align-items:center;gap:.4rem;flex-shrink:0}.volume-btn{width:44px;height:44px;border:0;border-radius:2px;background:0 0;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}.volume-btn:hover{color:var(--cyan)}.volume-btn svg{width:20px;height:20px}.volume-slider{-webkit-appearance:none;appearance:none;width:80px;height:4px;background:var(--rule);cursor:pointer}.volume-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;border-radius:2px;background:var(--cyan)}.volume-slider::-moz-range-thumb{width:12px;height:12px;border:0;border-radius:2px;background:var(--cyan)}.audio-attribution{margin-top:.8rem;padding-top:.6rem;border-top:1px solid var(--rule);font:400 0.7rem/1.5 var(--font-mono);color:var(--muted);text-align:center}.audio-error{display:none;margin-top:.8rem;padding:.6rem .8rem;border:1px solid var(--amber);border-radius:2px;color:var(--amber);font-size:.85rem;text-align:center}.birthday-theme{display:none}.birthday-theme.is-active{display:block}.birthday-banner{position:relative;padding:.75rem 3.5rem;border-bottom:2px solid var(--magenta);background:var(--bg);color:var(--magenta);text-align:center;font:700 0.88rem/1.5 var(--font-body)}.birthday-banner__text{display:inline-flex;align-items:center;gap:.5rem}.birthday-banner__close{position:absolute;right:.5rem;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;border-radius:2px;background:0 0;color:var(--magenta);cursor:pointer;display:flex;align-items:center;justify-content:center}.anniversary-section{margin:2rem 0 0;padding:1rem 0 0;border-top:2px solid var(--magenta)}.anniversary-section__badge{display:block;margin:0 0 .6rem;font:700 0.72rem/1.3 var(--font-mono);letter-spacing:.16em;color:var(--magenta)}.anniversary-section__title{margin:0 0 .6rem;font:700 clamp(1.4rem, 3vw, 1.9rem)/1.3 var(--font-head);color:var(--ink)}.anniversary-section__subtitle{margin:0 0 .6rem;max-width:40em;font-size:.95rem;line-height:1.8;color:var(--text)}.anniversary-section__link{display:inline-flex;align-items:center;min-height:44px;color:var(--magenta);font-weight:700}.yearly-stats__header{display:flex;align-items:center;gap:.5rem}.yearly-stats__icon{display:none}.yearly-stats__title{margin:0;font:700 0.74rem/1.2 var(--font-mono);letter-spacing:.16em;color:var(--ink)}.yearly-stats__year{color:inherit}.yearly-stats__header{padding-bottom:.6rem;margin-bottom:1rem;border-bottom:1px solid var(--ink)}.yearly-stats__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem 1rem}.yearly-stats__item{padding:.5rem 0;border-bottom:1px solid var(--rule)}.yearly-stats__number{display:block;font:700 1.4rem/1.2 var(--font-mono);color:var(--ink);font-variant-numeric:tabular-nums}.yearly-stats__label{display:block;font-size:.8rem;color:var(--muted)}.yearly-stats__categories-title{margin:1rem 0 .5rem;font:400 0.7rem/1.3 var(--font-mono);letter-spacing:.1em;color:var(--muted)}.yearly-stats__category-list{display:flex;flex-wrap:wrap;gap:.25rem .9rem;font-size:.85rem}.yearly-stats__category-count{margin-left:.25rem;font:400 0.76rem/1 var(--font-mono);color:var(--muted)}.content{max-width:46rem;margin-inline:auto;padding-block:2rem 4rem}.content--wide{max-width:none}.content h1{margin:.4rem 0 1.5rem;font:700 clamp(1.7rem, 3.6vw, 2.45rem)/1.3 var(--font-head);color:var(--ink)}.content h2{margin:2.8rem 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--ink);font:700 1.2rem/1.4 var(--font-head);color:var(--ink)}.content h3{margin:1.8rem 0 .4rem;font:700 1.05rem/1.45 var(--font-head);color:var(--ink)}.content p{margin:0 0 1em;line-height:1.85}.content ul{padding-left:1.3rem;margin:.75rem 0}.content li{margin:.4rem 0;line-height:1.7}.content strong{color:var(--ink)}.content hr{margin:2.5rem 0;border:0;border-top:1px solid var(--rule)}.content code{font-family:var(--font-mono);font-size:.84em;color:var(--ink);background:var(--code-bg);padding:.1em .35em;border-radius:2px}.foot{border-top:1px solid var(--rule)}.foot>.wrap{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.5rem;padding-block:1.5rem 2rem;font:400 0.74rem/1.6 var(--font-mono);color:var(--muted)}.foot p{margin:0}.foot__year{font-variant-numeric:tabular-nums}.foot .en{font-family:var(--font-body);font-size:.82rem}@media (max-width:960px){.topics{min-height:0}}@media (max-width:760px){.lead__link{grid-template-columns:minmax(0,1fr);gap:1rem}.lead__media{order:-1}.log__head{display:none}.row a{grid-template-columns:auto auto minmax(0,1fr);grid-template-areas:"date cat time" "title title title";gap:.2rem .75rem;padding:.85rem .25rem .85rem .5rem}.row__date{grid-area:date}.row__cat{grid-area:cat}.row__time{grid-area:time}.row__title{grid-area:title}.log .log__list:empty{min-height:1560px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 77px,var(--rule) 77px,var(--rule) 78px)}.post{padding-top:.5rem}.post__body{font-size:1.0625rem;line-height:1.85}.status__grid{grid-template-columns:minmax(0,1fr)}.article-nav{grid-template-columns:minmax(0,1fr);gap:0}.article-nav__link--next{text-align:left;border-top:1px solid var(--rule)}.audio-controls{flex-wrap:wrap}.audio-progress-container{order:3;width:100%}.volume-slider{width:60px}}@media (max-width:480px){.volume-slider{display:none}.birthday-banner{padding-inline:1rem 3rem}}@media (prefers-reduced-motion:no-preference){.iconbtn,.themebtn,a,button{transition:color .15s,border-color .15s,background-color .15s}}@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-new(*),::view-transition-old(*){animation:none!important}}</style>
+  <!-- INLINE_CSS_SITE_END -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"當年我照著教學編 ViewPad 10s 的核心，一次也沒編出 zImage","description":"Jelly Bean 那時，我在 ViewPad 10s 上照著教學編 Android 核心，編了好幾次，連 zImage 都沒編出來。十幾年後回頭查，我那時會的只到 ROM 包這一層；那份教學沒寫出來的前提，這台平板到了 JB 時期偏偏不符合。","author":{"@type":"Person","name":"Jason Chien"},"publisher":{"@type":"Person","name":"Jason Chien"},"datePublished":"2026-10-26T00:00:00Z","dateModified":"2026-10-26T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://b-log.to/tech-analysis/viewpad-10s-kernel-build-never-zimage/"},"url":"https://b-log.to/tech-analysis/viewpad-10s-kernel-build-never-zimage/","inLanguage":"zh-Hant-TW","image":["https://b-log.to/content/img/2026/viewpad-10s-kernel-build-never-zimage-cover.svg"],"keywords":"Android 核心, ViewPad 10s, Advent Vega, Tegra 2, Jelly Bean, 交叉編譯, defconfig, Device Tree, GKI, 刷機","articleSection":"技術分析"}</script>
+</head>
+<body class="post-page">
+  <a class="skip" href="#content">跳到內容</a>
+  <header class="site site-header">
+    <div class="wrap">
+      <div class="site__id">
+        <p class="site__title"><a class="wordmark" href="../../" aria-label="(b)-log 首頁"><span class="br" aria-hidden="true">(</span>b<span class="br" aria-hidden="true">)</span>-log</a></p>
+        <p class="tagline">世界的預設值不包含我，所以我自己定義</p>
+      </div>
+      <nav class="site__nav" aria-label="主選單">
+        <ul>
+          <li><a href="../../">HOME</a></li>
+          <li><a href="../../about.html">ABOUT</a></li>
+          <li><a href="../../gadgets.html">GADGETS</a></li>
+          <li><a href="../../feed.json">FEED</a></li>
+          <li><a href="#" id="random-post-link" onclick="goToRandomPost(event)">RANDOM</a></li>
+        </ul>
+      </nav>
+      <div class="site__tools">
+        <div class="search-toggle-container">
+          <button class="iconbtn search-toggle-btn" aria-label="搜尋文章" aria-expanded="false" aria-controls="site-search" type="button">
+            <svg class="search-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </button>
+          <div class="search-box" id="site-search" hidden>
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5"></path>
+              </svg>
+              <input type="search" id="search-input" class="search-input" placeholder="搜尋文章" aria-label="搜尋文章" autocomplete="off">
+              <button type="button" id="search-clear" class="search-clear" aria-label="清除搜尋" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <button class="themebtn theme-toggle" type="button" onclick="ThemeManager.toggle()">
+          <span class="theme-toggle__icon"><i class="theme-dot" aria-hidden="true"></i></span>
+          <span class="theme-toggle__text">AUTO</span><span class="theme-toggle__hint">，切換深淺色</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="content" class="wrap article-shell">
+    <article class="post" id="post-article" data-category-theme="tech-analysis">
+      <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=%E6%8A%80%E8%A1%93%E5%88%86%E6%9E%90">技術分析</a></span></nav>
+      <div id="post-accent" class="post__accent" aria-hidden="true" style="--post-accent:#3f7d4e"></div>
+      <p id="post-meta" class="meta">26OCT26 · 技術分析 · 7 MIN · JASON CHIEN</p>
+      <p id="post-catline" class="catline" hidden></p>
+      <h1 id="post-title" class="post__title">當年我照著教學編 ViewPad 10s 的核心，一次也沒編出 zImage</h1>
+      <figure id="post-hero" class="post__cover"><img class="post__cover-img" src="/content/img/2026/viewpad-10s-kernel-build-never-zimage-cover.svg" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
+      <div id="post-content" class="post__body article-body" data-prerendered="true"><p>Jelly Bean 那時，我在 ViewSonic ViewPad 10s 上試著自己編 Android 核心。教學一行一行複製、貼上，編了好幾次，每次都失敗。我很清楚記得 make 跑完應該會印出 <code>Kernel: arch/arm/boot/zImage is ready</code> 這一行，因為我在自己的電腦上一次也沒看過它。連 zImage 都沒有，後面的打包、刷機根本輪不到。</p>
+<p>一直到 2026 年 10 月 2 日，我才第一次把自己編的核心刷進手機、正常跑起來。中間隔了十幾年。這陣子回頭查當年那次失敗，想弄清楚兩件事：我那時候的能力到哪裡為止，還有照著那種教學做，可能錯在哪裡。</p>
+<h2 id="section-1">舊站裡沒有這件事</h2>
+<p>這台平板是我爸當年讓我在 iPad 1 跟它之間選，我選的。2011 到 2013 年初，我在自己的舊站開了一個「Viewpad 10s 開發」分類，從 Wayback 撈回來的有五篇：VegaComb 3.2、Honey Ice、Vegacomb Build 9n、VegaCream RC2，最後是 2013 年 1 月 14 日我自己做的 CM10.1 Alpha 臺灣版。</p>
+<p>這五篇寫的都是同一層的事：把英文更新列表翻成中文，寫刷機步驟，從裝驅動、進 nvflash 模式、進 CWM 全部清除，一路寫到刷 zip。臺灣版改的東西是時區、日期格式、預設繁體中文、臺灣的 GPS 修正、刪程式省 /system 空間、換繁體版的超級使用者、改 build.prop。這些全部不用編譯，改文字設定檔、換 APK、刪 APK 就做得到。</p>
+<p>編核心的事，一篇都沒有。原因很簡單：以我那時候的個性，失敗的東西不會寫上去。所以舊站留下來的，剛好就是我能力範圍以內的那一塊。刷機流程、救磚模式、分割區在使用者這一端代表什麼、zip 裡的設定檔跟 APK，我都摸得到。再往下一層，從原始碼做出一個能開機的核心，舊文裡沒有任何一篇碰到。</p>
+<p>2011 年 8 月那篇有一個小地方：我寫這包 ROM「適用於 Viewpad 10s、Advent Vega、POV Mobile 等 p10 核心的平板電腦」，那裡的「核心」指的其實是主機板平台 P10AN01，不是 kernel。到了 2012 年 7 月 VegaCream 那篇，我寫的是「採用 3.1.10 核心」「基於新版 NVidia rel-15r7 核心」，詞抄對了。但 rel-15r7 是一棵 git 原始碼樹的分支名稱，而且社群已經把它放上 GitHub，這兩件事我那時大概沒有意識到。</p>
+<h2 id="section-2">我當時是怎麼編的</h2>
+<p>電腦是一台 ASUS F3U：AMD Athlon 64 X2、ATI Radeon X1250 內建顯示、Windows Vista，銀色上蓋。這台跟比特幣差不多是同一個時期，我還拿它挖過比特幣，沒多久就停了。我那時還不會切雙系統的分割區，所以 Ubuntu 大概是用 Wubi 裝的，在 Vista 裡跑一個安裝程式，Ubuntu 變成 Vista 裡的一個大檔案，開機多一個選單。</p>
+<p>教學主要照的是不分機型的通用版本：<code>export ARCH=arm</code>、<code>export CROSS_COMPILE=arm-eabi-</code>、<code>make menuconfig</code>，然後 make。另外我也看過 MoDaCo 跟 TabletROMs 上 Vega 社群的討論串，就是 Scanno、ejtagle 那一群人在的地方。打包跟拆 boot.img 的工具，mkbootimg、abootimg、split_bootimg.pl 我都用過。</p>
+<p>原始碼是從哪裡抓的、make 到底報了什麼錯，我已經想不起來了。下面講的卡點，都只能寫成「可能」。</p>
+<h2 id="section-3">那種教學沒寫出來的前提</h2>
+<p>當年這類教學長什麼樣，XDA 上有一篇很典型：2011 年 8 月 1 日一篇教人編原廠 Android 核心的指南，機型是 ASUS 的 TF101。步驟就這幾個：從 ASUS 官網下載核心原始碼；用 <code>adb pull /proc/config.gz</code> 從正在跑的機器拉出設定檔；<code>git clone git://android.git.kernel.org/platform/prebuilt.git</code> 抓工具鏈，設好 <code>ARCH</code>、<code>CROSS_COMPILE</code> 跟 PATH；<code>make -j4</code>，拿到 <code>arch/arm/boot/zImage</code>。打包成 boot.img，請你去看另一篇。作者自己也說他不是核心或編譯器的專家，是靠 Google 加上一次次試錯學會的。</p>
+<p>這篇背後有四個沒寫出來的前提：廠商公開的原始碼就是機器上在跑的那一份；機器上拉得到設定檔；那個 git 網址還活著；打包是另一回事，自己想辦法。</p>
+<p>TF101 跟 ViewPad 10s 一樣是 Tegra 2，同一個年代。後來社群做的 VegaBean 甚至借用了 TF101 的系統指紋。兩台看起來近到像是可以直接套用。</p>
+<h2 id="section-4">這台平板偏偏不符合</h2>
+<p>到了 Jelly Bean 時期，ViewPad 10s 上跑的核心已經不是 ViewSonic 原廠那一份。拆開 Scanno 的 VegaBean 刷機包，裡面的核心版本字串是 <code>3.1.10-VegaCream</code>，是社群自己做的。教學的第一個前提，在這台上一開始就不成立。</p>
+<p>這份社群核心的原始碼放在 Scanno 的 GitHub，倉庫叫 <code>rel-15r7</code>，2012 年 7 月 15 日建立，名字來自 NVIDIA 自己的 git 分支。麻煩在分支。GitHub 打開預設是 <code>master</code>，裡面的設定檔有 <code>tegra_android_defconfig</code> 這些，但沒有這台機器的。這台的板子代號叫 Shuttle，它的 <code>tegra_shuttle_defconfig</code> 只在另一個叫 <code>jb</code> 的分支裡，而且是 2012 年 12 月 3 日才加進去的。如果去 kernel.org 抓主線核心，情況更糟：v3.1 的主線根本沒有 <code>board-shuttle.c</code>，從一開始就是錯的那棵樹。</p>
+<p>通用教學預設你手上有一份對的設定檔。我手上這台，對的設定檔藏在非預設的分支裡，2012 年 12 月以前甚至還不存在。這條跟「照教學做，make 一直失敗」最對得上，但只是推測，我記不得當時的錯誤訊息。</p>
+<p>另一個可能更早就倒了。教學裡抓工具鏈那行 <code>git://android.git.kernel.org</code>，在 2011 年 kernel.org 出事之後停擺過，AOSP 後來搬到 Google 自己的 android.googlesource.com。如果我照抄的是 2011 年的教學，那一行 clone 很可能直接失敗，後面的交叉編譯器、PATH 也就跟著設不起來。</p>
+<p>工具鏈版本倒不太像主因。同一個 3.1.10，VegaBean Beta 6 用 gcc 4.4.3 編，RC2 換成 gcc 4.6，兩包都正式發布了。比較可能出事的，是根本沒有裝好 ARM 交叉編譯器，或 PATH 指錯地方。</p>
+<h2 id="section-5">就算編過了，後面還有好幾關</h2>
+<p>這些關我都沒走到，但回頭看，就算那時 make 真的過了，離能用還很遠。</p>
+<p>這台的 cmdline 要手動帶一整串 <code>mtdparts=tegra_nand:...</code>，寫著 NAND 上 7 個分割區的位置，還有 <code>mem=512M@0M nvmem=128M@512M</code>。重新打包時漏掉，核心就找不到 /system。系統分割區用的是 YAFFS2，VegaBean 為了把 4.1 塞進 155 MB 的 /system，又把好幾個目錄壓成 squashfs，開機時用 loop 掛上去，所以核心要內建 YAFFS2、SQUASHFS 跟 XZ 壓縮、loop 裝置，少一個就掛不起系統。Wi-Fi 驅動 <code>ar6000.ko</code> 是另外編的外部模組，核心的版本字串要跟它一字不差才載得進去；GitHub 上那份設定檔寫的版本字尾是 <code>-Shuttle_p10an01</code>，從 git 樹編核心還會自動在版本號後面多加一個「+」，Scanno 在 2013 年 2 月特地 commit 把它拿掉。這幾關，教學一個字都沒提。</p>
+<h2 id="section-6">當年不是沒有 Device Tree，是這台沒用</h2>
+<p>當年到底有沒有 Device Tree，我之前也好奇過。答案是有：ARM 的 Device Tree 支援在 Linux 3.0 就進了主線，Tegra 第一份 .dts 在 3.1 出現，主線到 3.7 才把 Tegra 的板級 C 檔刪光。這台的核心樹裡也有 .dts，只是都是別的板子的。Shuttle 用的是 <code>board-shuttle*.c</code> 這組 C 檔，核心設定裡 <code>CONFIG_MACH_TEGRA_DT</code> 沒有開。</p>
+<p>所以那時候一顆核心只服務一塊板子，換一塊板子就要換一組 C 檔重編。別台機器的教學寫得再清楚，搬到這台上，最關鍵的那份設定檔跟板級程式碼都得自己找。</p>
+<p>2026 年 10 月我編成功的，是 6.12.38 的 GKI 核心，一顆核心配很多機器，跟模組之間有統一的介面。當年還沒有 GKI，也沒有 KMI，每台機器都是自己一套。有一件事倒是當年就懂了：從上游 cherry-pick 修正，只動版本號最後一段。</p>
+<p>回頭看那次失敗，我那時會的到 ROM 包為止。往下一層要先知道的事，對的原始碼在哪一棵樹、哪一個分支，設定檔從哪裡來，工具鏈的網址還在不在，教學都沒寫。我也不知道該問哪裡，身邊也沒有人可以問。那行 <code>zImage is ready</code>，我在那台 ASUS F3U 上始終沒等到。</p>
+</div>
+
+      <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
+      <div id="post-tags" class="tags"><span class="meta">TAGS</span><a href="/?tag=Android%20%E6%A0%B8%E5%BF%83">Android 核心</a><a href="/?tag=ViewPad%2010s">ViewPad 10s</a><a href="/?tag=Advent%20Vega">Advent Vega</a><a href="/?tag=Tegra%202">Tegra 2</a><a href="/?tag=Jelly%20Bean">Jelly Bean</a><a href="/?tag=%E4%BA%A4%E5%8F%89%E7%B7%A8%E8%AD%AF">交叉編譯</a><a href="/?tag=defconfig">defconfig</a><a href="/?tag=Device%20Tree">Device Tree</a><a href="/?tag=GKI">GKI</a><a href="/?tag=%E5%88%B7%E6%A9%9F">刷機</a></div>
+      <div id="share-links" class="share"></div>
+    </article>
+
+    <aside class="article-aside" aria-label="相關文章、最新文章與本文目錄">
+      <div class="aside-inner">
+        <div class="aside-lists">
+          <section class="related" aria-labelledby="related-label">
+            <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/tech-analysis/public-commits-found-my-email/"><span class="side-row__meta">13OCT26 · <span>技術分析</span></span><span class="side-row__title">我沒給他 email，他怎麼寄信給我？</span></a></li><li><a href="/tech-analysis/windows-11-single-finger-scrolling-progress/"><span class="side-row__meta">21SEP26 · <span>技術分析</span></span><span class="side-row__title">Windows 11 終於把單指捲動放回觸控板設定，至少有進展了</span></a></li><li><a href="/tech-analysis/rg-home-scan-box-drive-download/"><span class="side-row__meta">17SEP26 · <span>技術分析</span></span><span class="side-row__title">一行 rg 在背景跑了 42 小時，把 1.2 TB 的 Box 檔案下載到我的 Mac</span></a></li></ol>
+          </section>
+          <section class="related" aria-labelledby="latest-label">
+            <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>
+            <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li><a href="/cultural-insights/maeda-news-back-to-yanaginagi/"><span class="side-row__meta">25OCT26 · <span>文化觀察</span></span><span class="side-row__title">麻枝准的消息來了，我才知道自己有多在意他，也回頭聽起了やなぎなぎ</span></a></li><li><a href="/shirushi/lisa-mixing-budokan-2014-singing/"><span class="side-row__meta">24OCT26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">混音救得了音準，救不了她武道館那天改過的唱法</span></a></li><li><a href="/business-insights/kcs-digital-digizon-thailand-next-year/"><span class="side-row__meta">23OCT26 · <span>商業觀察</span></span><span class="side-row__title">我爸的公司比 Slingbox 早一年多用 H.264，泰國卻一直是明年</span></a></li></ol>
+          </section>
+        </div>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">舊站裡沒有這件事</a></li><li><a href="#section-2">我當時是怎麼編的</a></li><li><a href="#section-3">那種教學沒寫出來的前提</a></li><li><a href="#section-4">這台平板偏偏不符合</a></li><li><a href="#section-5">就算編過了，後面還有好幾關</a></li><li><a href="#section-6">當年不是沒有 Device Tree，是這台沒用</a></li></ol></nav>
+      </div>
+    </aside>
+
+    <div class="article-foot">
+      <nav class="article-nav" aria-label="上一篇與下一篇">
+        <a id="post-nav-prev" class="article-nav__link article-nav__link--prev" href="#"></a>
+        <a id="post-nav-next" class="article-nav__link article-nav__link--next" href="#"></a>
+      </nav>
+
+      <section class="comments-section" id="comments" aria-labelledby="comments-label">
+        <h2 class="label" id="comments-label">COMMENTS <span>留言討論</span></h2>
+        <div id="giscus-container" class="giscus-container">
+          <div class="giscus-loading" id="giscus-loading">
+            <p>載入留言系統中...</p>
+          </div>
+          <div class="giscus-fallback" id="giscus-fallback" hidden>
+            <p>無法載入留言系統。您可以前往
+              <a id="comments-link" href="https://github.com/jason5545/b-log/discussions"
+                 target="_blank" rel="noopener noreferrer">GitHub Discussions</a> 參與討論。
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot site-footer">
+    <div class="wrap">
+      <p>© <span class="foot__year" data-footer-year>2026</span> JASON CHIEN</p>
+      <p class="en">Reverse engineering, AI gatekeeping, ticketing systems, and LiSA. Typed with one finger.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript - CSR 核心，延遲載入 -->
+  <script src="../../assets/marked.min.js" defer></script>
+  <script src="../../assets/main.min.js" type="module" defer></script>
+  <!-- Service Worker 註冊 - 延長字型快取 -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+  <!-- Cloudflare Web Analytics - 首屏後載入 -->
+  <script>
+    window.addEventListener('load',()=>{setTimeout(()=>{const script=document.createElement('script');script.defer=true;script.src='https://static.cloudflareinsights.com/beacon.min.js';script.setAttribute('data-cf-beacon','{"token":"4654c3d3db9e4f21b3640178e6f5bd09"}');document.head.appendChild(script);},1500);});
+  </script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>
