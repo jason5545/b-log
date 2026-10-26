@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f1a14"/><stop offset="1" stop-color="#16261c"/></linearGradient>
+<radialGradient id="glow" cx="0.45" cy="0.5" r="0.55"><stop offset="0" stop-color="#3f7d4e" stop-opacity="0.28"/><stop offset="1" stop-color="#3f7d4e" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<rect width="1600" height="900" fill="url(#glow)"/>
+<!-- laptop: screen -->
+<rect x="250" y="190" width="720" height="460" rx="14" fill="#c9ccc8" fill-opacity="0.16" stroke="#b9c2bb" stroke-opacity="0.55" stroke-width="4"/>
+<rect x="280" y="220" width="660" height="400" rx="4" fill="#07100b"/>
+<!-- terminal lines (no text, bars only) -->
+<g fill="#7fc492" fill-opacity="0.75">
+<rect x="310" y="250" width="380" height="12" rx="3"/>
+<rect x="310" y="278" width="520" height="12" rx="3"/>
+<rect x="310" y="306" width="300" height="12" rx="3"/>
+<rect x="330" y="334" width="460" height="12" rx="3"/>
+<rect x="330" y="362" width="410" height="12" rx="3"/>
+<rect x="330" y="390" width="540" height="12" rx="3"/>
+<rect x="330" y="418" width="350" height="12" rx="3"/>
+</g>
+<g fill="#e07a5f" fill-opacity="0.85">
+<rect x="310" y="458" width="470" height="12" rx="3"/>
+<rect x="310" y="486" width="290" height="12" rx="3"/>
+</g>
+<rect x="310" y="526" width="18" height="26" fill="#7fc492"/>
+<!-- the line that never came: dashed empty slot -->
+<rect x="350" y="526" width="420" height="26" rx="4" fill="none" stroke="#7fc492" stroke-opacity="0.45" stroke-width="3" stroke-dasharray="12 10"/>
+<!-- laptop base -->
+<path d="M230 660 L990 660 L1030 700 L190 700 Z" fill="#b9c2bb" fill-opacity="0.35"/>
+<rect x="540" y="666" width="140" height="10" rx="5" fill="#0f1a14" fill-opacity="0.6"/>
+<!-- cable -->
+<path d="M1010 690 C1080 760 1120 560 1160 500" fill="none" stroke="#b9c2bb" stroke-opacity="0.5" stroke-width="6" stroke-linecap="round"/>
+<!-- tablet (landscape 10 inch) -->
+<rect x="1110" y="300" width="300" height="200" rx="18" fill="#1d2a22" stroke="#b9c2bb" stroke-opacity="0.7" stroke-width="4"/>
+<rect x="1132" y="320" width="256" height="160" rx="4" fill="#07100b"/>
+<!-- empty slot on tablet: nothing flashed -->
+<rect x="1180" y="370" width="160" height="60" rx="6" fill="none" stroke="#3f7d4e" stroke-opacity="0.8" stroke-width="3" stroke-dasharray="10 8"/>
+<circle cx="1260" cy="400" r="9" fill="#3f7d4e" fill-opacity="0.8"/>
+</svg>

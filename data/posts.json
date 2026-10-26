@@ -1,5 +1,28 @@
 [
   {
+    "slug": "viewpad-10s-kernel-build-never-zimage",
+    "title": "當年我照著教學編 ViewPad 10s 的核心，一次也沒編出 zImage",
+    "summary": "Jelly Bean 那時，我在 ViewPad 10s 上照著教學編 Android 核心，編了好幾次，連 zImage 都沒編出來。十幾年後回頭查，我那時會的只到 ROM 包這一層；那份教學沒寫出來的前提，這台平板到了 JB 時期偏偏不符合。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-26T00:00:00Z",
+    "tags": [
+      "Android 核心",
+      "ViewPad 10s",
+      "Advent Vega",
+      "Tegra 2",
+      "Jelly Bean",
+      "交叉編譯",
+      "defconfig",
+      "Device Tree",
+      "GKI",
+      "刷機"
+    ],
+    "coverImage": "/content/img/2026/viewpad-10s-kernel-build-never-zimage-cover.svg",
+    "accentColor": "#3f7d4e",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "maeda-news-back-to-yanaginagi",
     "title": "麻枝准的消息來了，我才知道自己有多在意他，也回頭聽起了やなぎなぎ",
     "summary": "10/19 麻枝准的公告出來之前，我不知道自己這麼在意他。循著他，我回去聽躲了兩年的やなぎなぎ，第一次把《終わりの惑星のLove Song》整張從頭聽到尾。「下次不是保證」以前只用在 LiSA 身上，這幾天變成所有還做得到的事。",
