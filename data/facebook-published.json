@@ -1681,6 +1681,13 @@
       "postUrl": "https://b-log.to/cultural-insights/maeda-news-back-to-yanaginagi/",
       "facebookPostId": "1026818047191304_122118073593290922",
       "publishedAt": "2026-10-25T02:33:24.386Z"
+    },
+    "viewpad-10s-kernel-build-never-zimage": {
+      "status": "published",
+      "title": "當年我照著教學編 ViewPad 10s 的核心，一次也沒編出 zImage",
+      "postUrl": "https://b-log.to/tech-analysis/viewpad-10s-kernel-build-never-zimage/",
+      "facebookPostId": "1026818047191304_122118174135290922",
+      "publishedAt": "2026-10-26T00:37:39.796Z"
     }
   }
 }
