@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "otakutw-osfun-old-sites-pv",
+      "url": "https://b-log.to/cultural-insights/otakutw-osfun-old-sites-pv/",
+      "title": "我一直拿舊站的五、六百 PV 比 b-log，救回 243 篇之後才發現量的不是同一件事",
+      "content_text": "10 月我用 Wayback Machine 把 b-log 之前的舊站救回來，243 篇裡一大半是轉貼。我一直拿當年五、六百的 PV 當基準，覺得 b-log 沒人看。回頭看，那些流量多半是載點和新聞帶來的。放掉的 osfun.tw，現在掛著一家徵信社的網站。",
+      "date_published": "2026-10-27T00:00:00.000Z",
+      "date_modified": "2026-10-27T00:00:00.000Z",
+      "tags": [
+        "部落格",
+        "舊站",
+        "Wayback Machine",
+        "WordPress",
+        "網域",
+        "歐塔庫部落",
+        "歐搜Fun",
+        "K-ON",
+        "臺灣用語",
+        "PV"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/otakutw-osfun-old-sites-pv-cover.svg"
+    },
+    {
       "id": "lisa-shirushi-2014-natalie-interview",
       "url": "https://b-log.to/crossing-field/lisa-shirushi-2014-natalie-interview/",
       "title": "LiSA「シルシ」專訪｜脫下超人的盔甲，現在才唱得出的抒情歌",
