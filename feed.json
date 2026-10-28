@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "am-i-a-newbie-t3code-first-merged-fix",
+      "url": "https://b-log.to/dev-philosophy/am-i-a-newbie-t3code-first-merged-fix/",
+      "title": "我算是新手嗎？給 T3 Code 送了兩個 PR，第二個先被 Theo 合併了",
+      "content_text": "我給 T3 Code 上游送的第一個 PR 還沒有人回，送完我問 Claude Code：我算是新手嗎？隔天下午，我的第二個 PR 在 nightly 3766 壞掉之後，被 Theo 親手合併，成了我第一個被合併的程式碼修正。這篇照 GitHub 上查得到的紀錄，寫這兩個 PR 怎麼走到這一步。",
+      "date_published": "2026-10-28T01:15:00.000Z",
+      "date_modified": "2026-10-28T01:15:00.000Z",
+      "tags": [
+        "T3 Code",
+        "Theo",
+        "PR",
+        "開放原始碼",
+        "GitHub",
+        "vouch",
+        "Claude Code",
+        "新手"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/am-i-a-newbie-t3code-first-merged-fix-cover.webp"
+    },
+    {
       "id": "otakutw-osfun-old-sites-pv",
       "url": "https://b-log.to/cultural-insights/otakutw-osfun-old-sites-pv/",
       "title": "我一直拿舊站的五、六百 PV 比 b-log，救回 243 篇之後才發現量的不是同一件事",
