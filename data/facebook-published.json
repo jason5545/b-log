@@ -1702,6 +1702,13 @@
       "postUrl": "https://b-log.to/cultural-insights/otakutw-osfun-old-sites-pv/",
       "facebookPostId": "1026818047191304_122118286035290922",
       "publishedAt": "2026-10-27T01:49:33.077Z"
+    },
+    "am-i-a-newbie-t3code-first-merged-fix": {
+      "status": "published",
+      "title": "我算是新手嗎？給 T3 Code 送了兩個 PR，第二個先被 Theo 合併了",
+      "postUrl": "https://b-log.to/dev-philosophy/am-i-a-newbie-t3code-first-merged-fix/",
+      "facebookPostId": "1026818047191304_122118402591290922",
+      "publishedAt": "2026-10-28T01:17:42.718Z"
     }
   }
 }
