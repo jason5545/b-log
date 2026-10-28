@@ -1,5 +1,26 @@
 [
   {
+    "slug": "am-i-a-newbie-t3code-first-merged-fix",
+    "title": "我算是新手嗎？給 T3 Code 送了兩個 PR，第二個先被 Theo 合併了",
+    "summary": "我給 T3 Code 上游送的第一個 PR 還沒有人回，送完我問 Claude Code：我算是新手嗎？隔天下午，我的第二個 PR 在 nightly 3766 壞掉之後，被 Theo 親手合併，成了我第一個被合併的程式碼修正。這篇照 GitHub 上查得到的紀錄，寫這兩個 PR 怎麼走到這一步。",
+    "category": "開發哲學",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-28T01:15:00Z",
+    "tags": [
+      "T3 Code",
+      "Theo",
+      "PR",
+      "開放原始碼",
+      "GitHub",
+      "vouch",
+      "Claude Code",
+      "新手"
+    ],
+    "coverImage": "/content/img/2026/am-i-a-newbie-t3code-first-merged-fix-cover.svg",
+    "accentColor": "#2f8a5f",
+    "readingTime": "8 min"
+  },
+  {
     "slug": "otakutw-osfun-old-sites-pv",
     "title": "我一直拿舊站的五、六百 PV 比 b-log，救回 243 篇之後才發現量的不是同一件事",
     "summary": "10 月我用 Wayback Machine 把 b-log 之前的舊站救回來，243 篇裡一大半是轉貼。我一直拿當年五、六百的 PV 當基準，覺得 b-log 沒人看。回頭看，那些流量多半是載點和新聞帶來的。放掉的 osfun.tw，現在掛著一家徵信社的網站。",
