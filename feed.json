@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "terra-daybreak-hardware-key-error",
+      "url": "https://b-log.to/ai-analysis/terra-daybreak-hardware-key-error/",
+      "title": "請 Terra 審查我的輸入法被擋下，這次 OpenAI 的錯誤訊息說清楚了",
+      "content_text": "我請 Terra 審查輸入法，跑到一半被擋，這次的錯誤訊息把資格、原因和下一步都講清楚了，只差一件事沒說。",
+      "date_published": "2026-10-29T00:00:00.000Z",
+      "date_modified": "2026-10-29T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "OpenAI",
+        "Daybreak",
+        "Trusted Access",
+        "GPT-6.1 Terra",
+        "T3 Code",
+        "Claude Code",
+        "硬體金鑰",
+        "錯誤訊息"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/terra-daybreak-hardware-key-error-cover.svg"
+    },
+    {
       "id": "am-i-a-newbie-t3code-first-merged-fix",
       "url": "https://b-log.to/dev-philosophy/am-i-a-newbie-t3code-first-merged-fix/",
       "title": "我算是新手嗎？給 T3 Code 送了兩個 PR，第二個先被 Theo 合併了",
