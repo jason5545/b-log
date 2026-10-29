@@ -1,5 +1,27 @@
 [
   {
+    "slug": "terra-daybreak-hardware-key-error",
+    "title": "請 Terra 審查我的輸入法被擋下，這次 OpenAI 的錯誤訊息說清楚了",
+    "summary": "我請 Terra 審查輸入法，跑到一半被擋，這次的錯誤訊息把資格、原因和下一步都講清楚了，只差一件事沒說。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-29T00:00:00Z",
+    "tags": [
+      "AI",
+      "OpenAI",
+      "Daybreak",
+      "Trusted Access",
+      "GPT-6.1 Terra",
+      "T3 Code",
+      "Claude Code",
+      "硬體金鑰",
+      "錯誤訊息"
+    ],
+    "coverImage": "/content/img/2026/terra-daybreak-hardware-key-error-cover.svg",
+    "accentColor": "#4a5fc1",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "am-i-a-newbie-t3code-first-merged-fix",
     "title": "我算是新手嗎？給 T3 Code 送了兩個 PR，第二個先被 Theo 合併了",
     "summary": "我給 T3 Code 上游送的第一個 PR 還沒有人回，送完我問 Claude Code：我算是新手嗎？隔天下午，我的第二個 PR 在 nightly 3766 壞掉之後，被 Theo 親手合併，成了我第一個被合併的程式碼修正。這篇照 GitHub 上查得到的紀錄，寫這兩個 PR 怎麼走到這一步。",
