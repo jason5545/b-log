@@ -1,5 +1,28 @@
 [
   {
+    "slug": "ai-era-tiresome-holes-everywhere",
+    "title": "躲到哪都有洞：PHP 的洞之後換 Tailscale 的，我再開了 Tailnet Lock",
+    "summary": "一台我修不了的系統碰上 PHP 的洞，我把入口搬進 tailnet；同一週 Tailscale 也被報出洞，我再開了 Tailnet Lock，它擋掉加冒牌節點那一步。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-10-30T00:00:00Z",
+    "tags": [
+      "Tailscale",
+      "Tailnet Lock",
+      "Tailworm",
+      "PHP",
+      "PHP2Shell",
+      "CVE",
+      "Cloudflare",
+      "GhostLock",
+      "資安",
+      "agent"
+    ],
+    "coverImage": "/content/img/2026/ai-era-tiresome-holes-everywhere-cover.svg",
+    "accentColor": "#2f9e90",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "terra-daybreak-hardware-key-error",
     "title": "請 Terra 審查我的輸入法被擋下，這次 OpenAI 的錯誤訊息說清楚了",
     "summary": "我請 Terra 審查輸入法，跑到一半被擋，這次的錯誤訊息把資格、原因和下一步都講清楚了，只差一件事沒說。",
