@@ -48,3 +48,4 @@ Theo 說，側欄是 T3 Code 少數有主見的地方。打開一條對話串，
 
 Theo 列缺點的時候開玩笑說，T3 Code 最大的問題是「It's made by Theo」，它是 Theo 做的。還好它是開源的，受不了可以 fork。我 fork 是為了加 OMP 和正體中文介面，這在〈[agent 讓重造輪子變便宜，我選擇 fork，再把改過的地方寫進 PATCHES.md](https://b-log.to/dev-philosophy/patchmd-reinventing-wheel/)〉寫過。fork 的修正我也送回去過：10 月 27 日，Theo 合併了 #25841，經過寫在〈[我算是新手嗎？給 T3 Code 送了兩個 PR，第二個先被 Theo 合併了](https://b-log.to/dev-philosophy/am-i-a-newbie-t3code-first-merged-fix/)〉。
 
+
