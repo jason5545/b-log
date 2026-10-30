@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "ai-era-tiresome-holes-everywhere",
+      "url": "https://b-log.to/tech-analysis/ai-era-tiresome-holes-everywhere/",
+      "title": "躲到哪都有洞：PHP 的洞之後換 Tailscale 的，我再開了 Tailnet Lock",
+      "content_text": "一台我修不了的系統碰上 PHP 的洞，我把入口搬進 tailnet；同一週 Tailscale 也被報出洞，我再開了 Tailnet Lock，它擋掉加冒牌節點那一步。",
+      "date_published": "2026-10-30T00:00:00.000Z",
+      "date_modified": "2026-10-30T00:00:00.000Z",
+      "tags": [
+        "Tailscale",
+        "Tailnet Lock",
+        "Tailworm",
+        "PHP",
+        "PHP2Shell",
+        "CVE",
+        "Cloudflare",
+        "GhostLock",
+        "資安",
+        "agent"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/ai-era-tiresome-holes-everywhere-cover.webp"
+    },
+    {
       "id": "terra-daybreak-hardware-key-error",
       "url": "https://b-log.to/ai-analysis/terra-daybreak-hardware-key-error/",
       "title": "請 Terra 審查我的輸入法被擋下，這次 OpenAI 的錯誤訊息說清楚了",
