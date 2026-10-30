@@ -253,7 +253,7 @@
 <p>這些在同一個早上做完。Claude Code 改 DNS 和 App，另一個 agent 改 ACL，另一個 Claude Code thread 開 Tailnet Lock。我做的是下決定，用的是 CTO 和 AFFIRM 這兩個詞，CTO 是放行 CLEARED FOR TAKEOFF 的簡寫，<a href="https://b-log.to/ai-analysis/theo-full-stop-to-atc-hold-short/">HOLD SHORT 那篇</a>寫過。token 和 API key 都是當天才給，用完就撤銷。</p>
 <p>這種判斷每天都要做一次。agent 起來之後的累，我 9 月<a href="https://b-log.to/ai-analysis/agent-fatigue-touch-id-ungraded-judgment/">寫過一篇</a>。</p>
 <p>那台伺服器我到現在還是修不了。入口搬進 tailnet，改變的只是誰碰得到它：以前是任何人，只要過得了 Cloudflare 的 WAF；現在要先是我的裝置，而且從 10 月 27 日早上起，新加入 tailnet 的裝置要先被簽過。tailnet 這一層自己的洞，截至 10 月 27 日上午，官方還沒有出版號。</p>
-<p>隔天早上就有了。10 月 28 日上午（臺灣時間），GitHub 上出了正式版 1.104.4，安全公告頁也補上 TS-2026-014 到 TS-2026-017 四則。第一則就是 SSH 的 Unix socket 轉送，有用轉送的要更新到 1.104.4 以上，暫時沒辦法更新的，可以只關掉轉送，不用整個停掉 Tailscale SSH。Tailworm 報告也把 SSH 這幾項改標成已在 1.104.4 修好。我自己的節點，現在都已經更新到 1.104.4 了。</p>
+<p>隔天早上就有了。10 月 28 日上午（臺灣時間），GitHub 上出了正式版 1.104.4，安全公告頁也補上 TS-2026-014 到 TS-2026-017 四則。第一則就是 SSH 的 Unix socket 轉送，有用轉送的要更新到 1.104.4 以上，暫時沒辦法更新的，可以只關掉轉送，不用整個停掉 Tailscale SSH。Tailworm 報告也把 SSH 這幾項改標成已在 1.104.4 修好。我自己這邊，已經更新到 1.104.4 了。</p>
 <p>資料來源：</p>
 <ul>
 <li><a href="https://www.php.net/">PHP 官方網站：10/21 安全公告、10/23 資訊公告、10/26 Windows 版更新</a></li>
@@ -277,7 +277,7 @@
         <div class="aside-lists">
           <section class="related" aria-labelledby="related-label">
             <h2 class="label" id="related-label">RELATED <span>相關文章</span></h2>
-            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/tech-analysis/viewpad-10s-kernel-build-never-zimage/"><span class="side-row__meta">26OCT26 · <span>技術分析</span></span><span class="side-row__title">當年我照著教學編 ViewPad 10s 的核心，一次也沒編出 zImage</span></a></li><li><a href="/dev-philosophy/cve-week-zeabur-plaintext-keys/"><span class="side-row__meta">22OCT26 · <span>開發哲學</span></span><span class="side-row__title">這週一天一個 CVE，Zeabur 出事靠的卻是明文金鑰，我看不太像 vibe coding</span></a></li><li><a href="/ai-analysis/anthropic-agents-waiting-t3code-server/"><span class="side-row__meta">18OCT26 · <span>AI 分析</span></span><span class="side-row__title">Anthropic 說 agent 有八成時間在等人，我在床上用 Telegram 叫了一天，隔天就換成自己架的 T3 Code</span></a></li></ol>
+            <ol id="related-list" class="side-list" data-prerendered="true"><li><a href="/tech-development/theo-t3-code-video-my-fork/"><span class="side-row__meta">30OCT26 · <span>技術開發</span></span><span class="side-row__title">Theo 終於好好介紹了 T3 Code，我拿每天在用的 fork 一段一段對</span></a></li><li><a href="/tech-analysis/viewpad-10s-kernel-build-never-zimage/"><span class="side-row__meta">26OCT26 · <span>技術分析</span></span><span class="side-row__title">當年我照著教學編 ViewPad 10s 的核心，一次也沒編出 zImage</span></a></li><li><a href="/dev-philosophy/cve-week-zeabur-plaintext-keys/"><span class="side-row__meta">22OCT26 · <span>開發哲學</span></span><span class="side-row__title">這週一天一個 CVE，Zeabur 出事靠的卻是明文金鑰，我看不太像 vibe coding</span></a></li></ol>
           </section>
           <section class="related" aria-labelledby="latest-label">
             <h2 class="label" id="latest-label">LATEST <span>最新文章</span></h2>

@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "theo-t3-code-video-my-fork",
+      "url": "https://b-log.to/tech-development/theo-t3-code-video-my-fork/",
+      "title": "Theo 終於好好介紹了 T3 Code，我拿每天在用的 fork 一段一段對",
+      "content_text": "Theo 拍了第一支專門介紹 T3 Code 的影片。我每天用自己的 fork 派工，照他列的三大重點一段一段對，不一樣的有三處；其中一處是我以為 fork 不能用 T3 Connect，看了影片去查，才發現是自己沒開。",
+      "date_published": "2026-10-30T00:00:00.000Z",
+      "date_modified": "2026-10-30T00:00:00.000Z",
+      "tags": [
+        "T3 Code",
+        "Theo",
+        "fork",
+        "T3 Connect",
+        "Tailscale",
+        "子代理",
+        "MCP",
+        "Claude Code",
+        "Codex",
+        "PATCHES.md"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/theo-t3-code-video-my-fork-cover.svg"
+    },
+    {
       "id": "ai-era-tiresome-holes-everywhere",
       "url": "https://b-log.to/tech-analysis/ai-era-tiresome-holes-everywhere/",
       "title": "躲到哪都有洞：PHP 的洞之後換 Tailscale 的，我再開了 Tailnet Lock",
