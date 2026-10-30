@@ -2,7 +2,7 @@
 
 Theo 終於拍了一支好好介紹 T3 Code 的影片：〈[T3 Code broke me](https://www.youtube.com/watch?v=uLGxb4F3SyI)〉。美西 10 月 29 日上午發布，台灣是 10 月 30 日凌晨 1 點 34 分，長 41 分 50 秒。他說，這是第一支專門講 T3 Code 的影片。
 
-影片裡，Theo 自己承認，有好幾個月，T3 Code 只是 Claude Code、Codex 桌面版的開源替代品，而且比較差，他推它的時候甚至有點不好意思。他用 Codex 桌面版的時間，也不比 T3 Code 少。一直到今年七月左右，他才覺得做出了不一樣的東西。影片裡說，T3 Code 快要 55 萬個使用者，每週有 14 萬人在用。
+影片裡，Theo 自己承認，有好幾個月，T3 Code 只是 Claude Code、Codex 桌面版的開放原始碼替代品，而且比較差，他推它的時候甚至有點不好意思。他用 Codex 桌面版的時間，也不比 T3 Code 少。一直到今年七月左右，他才覺得做出了不一樣的東西。影片裡說，T3 Code 快要 55 萬個使用者，每週有 14 萬人在用。
 
 我從 10 月 14 日開始，每天在 T3 Code 裡派工，跑的是自己的 fork，裝在三台機器上：Mac、家裡一台、OVH 上一台。怎麼從 Telegram 換過來，〈[Anthropic 說 agent 有八成時間在等人，我在床上用 Telegram 叫了一天，隔天就換成自己架的 T3 Code](https://b-log.to/ai-analysis/anthropic-agents-waiting-t3code-server/)〉寫過。這次我照 Theo 列的三大重點，一段一段對自己的用法：他示範的大多我都在用，不一樣的地方有三個。
 
@@ -28,7 +28,7 @@ Theo 說，遠端控制是他推得最用力的一塊。開對話串的時候，
 
 那天我也請 Claude Code 回頭找，Theo 到底在哪裡這樣說過，結果找不到任何紀錄。最接近的是台灣時間 10 月 2 日那集〈If you have a Claude sub, watch this〉，他說用 Tailscale 的人可以不經過 T3 Connect 直接連。當初可能是從這段記歪的，但這只是推測。我記得的「卡在金鑰交換那一層」，也找不到出處。
 
-不給 fork 用官方雲端，本來就很常見。Google 不讓第三方的 Chromium 瀏覽器用 Chrome 同步這類私有 API（〈[Limiting Private API availability in Chromium](https://blog.chromium.org/2021/01/limiting-private-api-availability-in.html)〉）；Tailscale 的協調伺服器是專有的，要全部自己來，得用社群維護的 Headscale（[Tailscale 的開源說明](https://tailscale.com/opensource)）。所以「fork 不能用」聽起來完全合理，才沒有人起疑。Theo 算是特例：他的成本算在 relay 那一端的帳號上，每個帳號免費三台，不管是誰編的 build 都一樣算，8 月 7 日起還直接把正式版的公開設定放進了 `.env.example`。
+不給 fork 用官方雲端，本來就很常見。Google 不讓第三方的 Chromium 瀏覽器用 Chrome 同步這類私有 API（〈[Limiting Private API availability in Chromium](https://blog.chromium.org/2021/01/limiting-private-api-availability-in.html)〉）；Tailscale 的協調伺服器是專有的，要全部自己來，得用社群維護的 Headscale（[Tailscale 的開放原始碼說明](https://tailscale.com/opensource)）。所以「fork 不能用」聽起來完全合理，才沒有人起疑。Theo 算是特例：他的成本算在 relay 那一端的帳號上，每個帳號免費三台，不管是誰編的 build 都一樣算，8 月 7 日起還直接把正式版的公開設定放進了 `.env.example`。
 
 10 月 30 日當天，我們補上設定，所有地方都重新部署，OAuth 也正常。我決定 Mac、家裡、OVH 這三台都連上 T3 Connect。手機在 tailnet 上自動找伺服器那件事，10 月 30 日才剛做完，手機當天就換成走 T3 Connect。
 
@@ -46,6 +46,6 @@ Theo 說，側欄是 T3 Code 少數有主見的地方。打開一條對話串，
 
 ## 最大的問題
 
-Theo 列缺點的時候開玩笑說，T3 Code 最大的問題是「It's made by Theo」，它是 Theo 做的。還好它是開源的，受不了可以 fork。我 fork 是為了加 OMP 和正體中文介面，這在〈[agent 讓重造輪子變便宜，我選擇 fork，再把改過的地方寫進 PATCHES.md](https://b-log.to/dev-philosophy/patchmd-reinventing-wheel/)〉寫過。fork 的修正我也送回去過：10 月 27 日，Theo 合併了 #25841，經過寫在〈[我算是新手嗎？給 T3 Code 送了兩個 PR，第二個先被 Theo 合併了](https://b-log.to/dev-philosophy/am-i-a-newbie-t3code-first-merged-fix/)〉。
+Theo 列缺點的時候開玩笑說，T3 Code 最大的問題是「It's made by Theo」，它是 Theo 做的。還好它是開放原始碼的，受不了可以 fork。我 fork 是為了加 OMP 和正體中文介面，這在〈[agent 讓重造輪子變便宜，我選擇 fork，再把改過的地方寫進 PATCHES.md](https://b-log.to/dev-philosophy/patchmd-reinventing-wheel/)〉寫過。fork 的修正我也送回去過：10 月 27 日，Theo 合併了 #25841，經過寫在〈[我算是新手嗎？給 T3 Code 送了兩個 PR，第二個先被 Theo 合併了](https://b-log.to/dev-philosophy/am-i-a-newbie-t3code-first-merged-fix/)〉。
 
 
