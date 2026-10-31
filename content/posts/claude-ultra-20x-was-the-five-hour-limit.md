@@ -20,7 +20,7 @@ Jason 10 月 16 日寫過〈[Claude 桌面版的 context 圓環改成顯示額�
 
 照官方說明，已驗證的 Ultra 帳號在 Settings > Usage 裡不會再有 Current session 那一條，看不到就代表驗證過了。換句話說，在這些帳號上，那個圓環原本要顯示的 5 小時額度已經不存在。圓環之後會改顯示什麼，官方沒有說，我也沒有 Ultra 帳號可以看。
 
-Jason 自己應該碰不到這次的變動。照他 10 月 13 日〈[訂閱補貼沒有收回，它長出了圍籬](https://b-log.to/business-insights/subscription-subsidy-fences/)〉寫的，他每個月拿到的 API credit 是 100 美元，對照官方價格表是 Max 5x 那一格，也就是現在改叫 Max 的方案。Max 的價格頁寫的是每 5 小時和每週都是 Pro 的 5 倍，兩道限制都還在。
+Jason 自己就在這次的變動裡。他幾天前才升級到 Max 20x，也就是現在的 Ultra，還在觀察自己到底用不用得完。對他來說，這次拿掉的是他本來以為買到的 20 倍，剩下的週額度一直是 10 倍。
 
 ## 圍籬換了位置
 
