@@ -22,3 +22,6 @@ Allow: /dev-philosophy/
 Allow: /business-insights/
 Allow: /cultural-insights/
 Allow: /life-stories/
+Allow: /crossing-field/
+Allow: /shirushi/
+Allow: /ghostwritten/

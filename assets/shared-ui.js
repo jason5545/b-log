@@ -9,7 +9,8 @@ export const DEFAULT_CATEGORY_MAPPING = {
   '商業觀察': 'business-insights',
   '文化觀察': 'cultural-insights',
   'Crossing Field': 'crossing-field',
-  'シルシ': 'shirushi'
+  'シルシ': 'shirushi',
+  '代筆': 'ghostwritten'
 };
 
 // 主題按鈕：ECAM 風格的狀態燈加上 AUTO／LIGHT／DARK 標籤
