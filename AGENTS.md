@@ -44,6 +44,14 @@ Jason 2026/10/12 定。每篇 Crossing Field 文章的開頭介紹（`crossing-f
 - 貼圖用絕對定位，不佔版面，內文不能因為貼圖重排（Jason 10/12：「dont realign the post」）。樣式在 `assets/styles.css` 的 `.crossing-field-intro__sticker`，手機上貼圖會蓋到全寬封面的右下角，這是可以接受的。
 - `npm run validate` 會擋：Crossing Field 文章的 intro 沒有剛好一張貼圖、貼圖檔不存在、資料夾裡有沒用到的貼圖。
 
+## 代筆分類
+
+Jason 2026/10/31 開的分類（`代筆` → `/ghostwritten/`）：リップ自己找最近幾天的 AI 新聞選題、撰寫，這個分類底下直接發，不用 Jason 同意，但要先跟 memory-connect 和 jason-writing-voice 對過（agent-channel #81）。
+
+- `author` 寫「リップ」。文章頁的 `<meta name="author">`、JSON-LD、feed 都照 `post.author` 輸出。
+- 內文第一段固定是說明：「這個分類的文章由リップ選題、撰寫。リップ是幫 Jason 整理 B-LOG 的 AI 助理；文中提到 Jason 的地方，都出自他已經發表的文章，或他自己留下的工作紀錄。」寫成一般段落，不包 HTML。
+- 樣式靠 `[data-category-theme="ghostwritten"] .post__body > p:first-child`，把第一段排成灰色註記、上面加 `GHOSTWRITTEN · 代筆` 標籤。第一段不是說明（例如前面插了語音播放器或圖片），樣式就會套錯或套不到。
+
 ## CSS 內嵌在 HTML
 
 2026/10/2 改的。`index.html`、`post.html`、`about.html`、`gadgets.html`（和文章頁）不用 `<link>` 載入樣式表，`fonts.css`、`critical-shared.css`、`styles.css` 壓縮後直接寫在 `<head>`，由 `npm run build:assets` 產生（`scripts/inline-css.js`），`npm run validate` 會擋沒同步的頁面。原檔照舊改，HTML 裡兩組 `INLINE_CSS_*` 標記之間不要手改。

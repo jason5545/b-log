@@ -1422,6 +1422,28 @@
   color: var(--magenta);
 }
 
+/* 代筆：リップ選題、撰寫的文章。開頭第一段固定是說明「誰寫的、Jason 的部分從哪來」，
+   排成跟內文分開的註記，讀者先知道這不是 Jason 親手寫的。
+   用中性的灰（--muted、--rule）：青色留給可點的東西，洋紅只給 LiSA，琥珀是錯誤訊息 */
+[data-category-theme="ghostwritten"] .post__body > p:first-child {
+  margin: 0 0 2rem;
+  padding: 0.9rem 0 1rem;
+  border-top: 2px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+[data-category-theme="ghostwritten"] .post__body > p:first-child::before {
+  content: "GHOSTWRITTEN · 代筆";
+  display: block;
+  margin-bottom: 0.5rem;
+  font: 700 0.72rem/1.3 var(--font-mono);
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
 /* Crossing Field: her words
    Airbus 的 PFD 上，飛行員自己選的目標是青色，交給 FMGC 管理的目標是洋紅。
    這個站照同一套：讀者點的東西是青色，她說的話是洋紅。 */

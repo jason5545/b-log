@@ -944,6 +944,7 @@ function generatePostHTML(post, sortedPosts) {
   // 更新 meta tags
   html = html.replace(/<title>Reading - \(b\)-log<\/title>/, `<title>${safeTitle} - (b)-log</title>`);
   html = html.replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${safeSummary}"`);
+  html = html.replace(/<meta name="author" content="[^"]*">/, `<meta name="author" content="${escapeHtml(post.author || 'Jason Chien')}">`);
   html = html.replace(/<link rel="canonical" href="[^"]*" id="canonical-url">/, `<link rel="canonical" href="${fullUrl}" id="canonical-url">`);
   html = html.replace(/<meta name="keywords" content="" id="meta-keywords">/, `<meta name="keywords" content="${tagsString}" id="meta-keywords">`);
   html = html.replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="index, follow">');
