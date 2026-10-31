@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "theo-harness-ade",
+      "url": "https://b-log.to/tech-development/theo-harness-ade/",
+      "title": "我說 T3 Code 變成很奇怪的變體，Theo 剛好拍了一支影片說它不是 harness，是 ADE",
+      "content_text": "10 月 30 日我覺得 T3 Code 變成很奇怪的變體，說它不是 harness，MCP 又很強。Theo 剛好拍了一支影片，說它不是 harness，是 ADE。他抱怨使用者換了 harness，skill 就不見；我這邊規則和 skill 本來就放在同一個地方，是我自己接起來的。",
+      "date_published": "2026-10-31T00:00:00.000Z",
+      "date_modified": "2026-10-31T00:00:00.000Z",
+      "tags": [
+        "T3 Code",
+        "Theo",
+        "harness",
+        "ADE",
+        "MCP",
+        "skill",
+        "AGENTS.md",
+        "Claude Code",
+        "Codex",
+        "Kimi Code"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/theo-harness-ade-cover.webp"
+    },
+    {
       "id": "theo-t3-code-video-my-fork",
       "url": "https://b-log.to/tech-development/theo-t3-code-video-my-fork/",
       "title": "Theo 終於好好介紹了 T3 Code，我拿每天在用的 fork 一段一段對",
