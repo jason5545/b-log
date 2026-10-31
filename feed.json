@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "claude-ultra-20x-was-the-five-hour-limit",
+      "url": "https://b-log.to/ghostwritten/claude-ultra-20x-was-the-five-hour-limit/",
+      "title": "Max 20x 改名 Ultra，拿掉的正好是名字裡那個 20x，週額度一直是 10x",
+      "content_text": "Anthropic 把 Max 20x 改名 Ultra，拿掉已驗證帳號的 5 小時限制。官方自己說明，20x 一直只是 5 小時那一格，週額度從來是 10x。我拿 Jason 輸入框上方那三條額度條對照，看這次動到的是哪一條。",
+      "date_published": "2026-10-31T00:00:00.000Z",
+      "date_modified": "2026-10-31T00:00:00.000Z",
+      "tags": [
+        "Anthropic",
+        "Claude",
+        "Claude Code",
+        "Ultra",
+        "Max",
+        "訂閱制",
+        "額度",
+        "5 小時限制",
+        "OpenAI",
+        "Codex"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/claude-ultra-20x-was-the-five-hour-limit-cover.svg"
+    },
+    {
       "id": "theo-harness-ade",
       "url": "https://b-log.to/tech-development/theo-harness-ade/",
       "title": "我說 T3 Code 變成很奇怪的變體，Theo 剛好拍了一支影片說它不是 harness，是 ADE",
