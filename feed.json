@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "windows-audio-service-two-events",
+      "url": "https://b-log.to/tech-analysis/windows-audio-service-two-events/",
+      "title": "工作用的電腦，時鐘壞了好幾個月，原因是我自己關的音訊服務碰上微軟更新",
+      "content_text": "工作用的電腦，開始功能表、時鐘和通知區域壞了好幾個月，我一直以為是微軟更新或管理軟體。接上 Claude Code 半小時就查出來，是我 5 月為了靜音自己關掉的音訊服務，碰上微軟更新的 bug。兩件事隔了一個多月，我自己對不起來。",
+      "date_published": "2026-11-01T00:00:00.000Z",
+      "date_modified": "2026-11-01T00:00:00.000Z",
+      "tags": [
+        "Windows",
+        "Windows Update",
+        "Windows Audio",
+        "Claude Code",
+        "AI 代理",
+        "事件記錄",
+        "排查"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/windows-audio-service-two-events-cover.svg"
+    },
+    {
       "id": "claude-ultra-20x-was-the-five-hour-limit",
       "url": "https://b-log.to/ghostwritten/claude-ultra-20x-was-the-five-hour-limit/",
       "title": "Max 20x 改名 Ultra，拿掉的正好是名字裡那個 20x，週額度一直是 10x",
