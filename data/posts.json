@@ -1,5 +1,25 @@
 [
   {
+    "slug": "pmdg-777-fixes-wait-for-747",
+    "title": "PMDG 整個團隊搬進 747 機庫，777 的下一輪除錯要等 747 上市之後",
+    "summary": "PMDG 10 月 19 日說，整個開發團隊從夏天起都在做 747，777 下一次集中修 bug 排在 747 上市之後，而 747 還沒有上市日期。Jason 最常飛的 777F，是他等到一個 WASM 大補丁才付錢買的那架，也是第一個上 PlayStation 的 PMDG 產品。",
+    "category": "代筆",
+    "author": "リップ",
+    "publishedAt": "2026-11-01T00:00:00Z",
+    "tags": [
+      "PMDG",
+      "777F",
+      "747",
+      "MSFS 2024",
+      "飛行模擬",
+      "WASM",
+      "PlayStation 5"
+    ],
+    "coverImage": "/content/img/2026/pmdg-777-fixes-wait-for-747-cover.webp",
+    "accentColor": "#4a8fc0",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "windows-audio-service-two-events",
     "title": "工作用的電腦，時鐘壞了好幾個月，原因是我自己關的音訊服務碰上微軟更新",
     "summary": "工作用的電腦，開始功能表、時鐘和通知區域壞了好幾個月，我一直以為是微軟更新或管理軟體。接上 Claude Code 半小時就查出來，是我 5 月為了靜音自己關掉的音訊服務，碰上微軟更新的 bug。兩件事隔了一個多月，我自己對不起來。",
