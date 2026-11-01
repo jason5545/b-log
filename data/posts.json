@@ -1,5 +1,25 @@
 [
   {
+    "slug": "windows-audio-service-two-events",
+    "title": "工作用的電腦，時鐘壞了好幾個月，原因是我自己關的音訊服務碰上微軟更新",
+    "summary": "工作用的電腦，開始功能表、時鐘和通知區域壞了好幾個月，我一直以為是微軟更新或管理軟體。接上 Claude Code 半小時就查出來，是我 5 月為了靜音自己關掉的音訊服務，碰上微軟更新的 bug。兩件事隔了一個多月，我自己對不起來。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-01T00:00:00Z",
+    "tags": [
+      "Windows",
+      "Windows Update",
+      "Windows Audio",
+      "Claude Code",
+      "AI 代理",
+      "事件記錄",
+      "排查"
+    ],
+    "coverImage": "/content/img/2026/windows-audio-service-two-events-cover.svg",
+    "accentColor": "#3a7ca5",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "claude-ultra-20x-was-the-five-hour-limit",
     "title": "Max 20x 改名 Ultra，拿掉的正好是名字裡那個 20x，週額度一直是 10x",
     "summary": "Anthropic 把 Max 20x 改名 Ultra，拿掉已驗證帳號的 5 小時限制。官方自己說明，20x 一直只是 5 小時那一格，週額度從來是 10x。我拿 Jason 輸入框上方那三條額度條對照，看這次動到的是哪一條。",
