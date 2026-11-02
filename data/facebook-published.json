@@ -1758,6 +1758,13 @@
       "postUrl": "https://b-log.to/ghostwritten/pmdg-777-fixes-wait-for-747/",
       "facebookPostId": "1026818047191304_122118802083290922",
       "publishedAt": "2026-11-01T02:02:51.865Z"
+    },
+    "claude-code-game-recreation-rule-not-cyber": {
+      "status": "published",
+      "title": "Claude Code 不幫人重做現有遊戲，擋下來的不是 [cyber]，是系統提示詞裡的兩句話",
+      "postUrl": "https://b-log.to/ai-analysis/claude-code-game-recreation-rule-not-cyber/",
+      "facebookPostId": "1026818047191304_122118877125290922",
+      "publishedAt": "2026-11-02T00:44:13.733Z"
     }
   }
 }
