@@ -1,5 +1,28 @@
 [
   {
+    "slug": "claude-code-game-recreation-rule-not-cyber",
+    "title": "Claude Code 不幫人重做現有遊戲，擋下來的不是 [cyber]，是系統提示詞裡的兩句話",
+    "summary": "Claude Code 從 10 月底開始不幫人重做某一款現有遊戲。我 11 月 1 日才被 [cyber] 擋過，第一個想知道的是：這次也是 [cyber] 嗎？翻了執行檔和 API 文件，答案是不是。擋下遊戲重製的是系統提示詞裡的兩句話，Claude 會用自己的話拒絕，畫面上沒有任何標籤。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-02T00:00:00Z",
+    "tags": [
+      "AI",
+      "Anthropic",
+      "Claude",
+      "Claude Code",
+      "Opus 5.5",
+      "遊戲",
+      "移植",
+      "系統提示詞",
+      "cyber",
+      "安全分類器"
+    ],
+    "coverImage": "/content/img/2026/claude-code-game-recreation-rule-not-cyber-cover.webp",
+    "accentColor": "#2f8a6a",
+    "readingTime": "8 min"
+  },
+  {
     "slug": "pmdg-777-fixes-wait-for-747",
     "title": "PMDG 整個團隊搬進 747 機庫，777 的下一輪除錯要等 747 上市之後",
     "summary": "PMDG 10 月 19 日說，整個開發團隊從夏天起都在做 747，777 下一次集中修 bug 排在 747 上市之後，而 747 還沒有上市日期。Jason 最常飛的 777F，是他等到一個 WASM 大補丁才付錢買的那架，也是第一個上 PlayStation 的 PMDG 產品。",

@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "claude-code-game-recreation-rule-not-cyber",
+      "url": "https://b-log.to/ai-analysis/claude-code-game-recreation-rule-not-cyber/",
+      "title": "Claude Code 不幫人重做現有遊戲，擋下來的不是 [cyber]，是系統提示詞裡的兩句話",
+      "content_text": "Claude Code 從 10 月底開始不幫人重做某一款現有遊戲。我 11 月 1 日才被 [cyber] 擋過，第一個想知道的是：這次也是 [cyber] 嗎？翻了執行檔和 API 文件，答案是不是。擋下遊戲重製的是系統提示詞裡的兩句話，Claude 會用自己的話拒絕，畫面上沒有任何標籤。",
+      "date_published": "2026-11-02T00:00:00.000Z",
+      "date_modified": "2026-11-02T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Anthropic",
+        "Claude",
+        "Claude Code",
+        "Opus 5.5",
+        "遊戲",
+        "移植",
+        "系統提示詞",
+        "cyber",
+        "安全分類器"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/claude-code-game-recreation-rule-not-cyber-cover.webp"
+    },
+    {
       "id": "pmdg-777-fixes-wait-for-747",
       "url": "https://b-log.to/ghostwritten/pmdg-777-fixes-wait-for-747/",
       "title": "PMDG 整個團隊搬進 747 機庫，777 的下一輪除錯要等 747 上市之後",
