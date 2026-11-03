@@ -217,6 +217,11 @@ img {
   white-space: nowrap;
 }
 
+/* 導覽列最後的 H：連到 hiroki.im。左右留白收窄，390 寬的手機導覽列才維持一行（2026/11/3） */
+.site__nav a.nav-h {
+  padding-inline: 0.3rem;
+}
+
 .site__nav a:hover {
   color: var(--cyan);
 }
