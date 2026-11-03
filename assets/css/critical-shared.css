@@ -205,21 +205,29 @@ img {
   gap: 0.25rem;
 }
 
+/* 導覽列（2026/11/3 改版）：每項是線條圖示＋文字，手機只留圖示。
+   圖示 18px、currentColor，寫死尺寸，字型晚到也不會讓導覽列換行或位移。
+   目前所在頁照 Airbus FMA：剛接上的模式用方框框住。 */
 .site__nav a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
   min-height: 44px;
+  min-width: 44px;
   padding-inline: 0.6rem;
   font: 400 0.78rem/1 var(--font-mono);
   letter-spacing: 0.1em;
   color: var(--muted);
   text-decoration: none;
   white-space: nowrap;
+  border-radius: 2px;
 }
 
-/* 導覽列最後的 H：連到 hiroki.im。左右留白收窄，390 寬的手機導覽列才維持一行（2026/11/3） */
-.site__nav a.nav-h {
-  padding-inline: 0.3rem;
+.nav-ico {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
 }
 
 .site__nav a:hover {
@@ -228,7 +236,7 @@ img {
 
 .site__nav a[aria-current="page"] {
   color: var(--ink);
-  box-shadow: inset 0 -2px 0 var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
 }
 
 .site__tools {
@@ -297,7 +305,8 @@ img {
   border-color: var(--cyan);
 }
 
-@media (max-width: 1100px) {
+/* 頁首在 1280 以下分兩列（id＋tools／nav）。2026/11/3 導覽列加了圖示後一列要 1280 才放得下，原本是 1100 */
+@media (max-width: 1279px) {
   .site > .wrap {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
@@ -326,5 +335,28 @@ img {
 
   .site__nav a {
     padding-inline: 0.5rem;
+  }
+}
+
+/* 手機：導覽列只留圖示，文字留給螢幕閱讀器，六項一定排得進一行（640 以上才放得下文字） */
+@media (max-width: 640px) {
+  .site__nav ul {
+    gap: 0.125rem;
+  }
+
+  .site__nav a {
+    padding-inline: 0;
+  }
+
+  .nav-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
   }
 }
