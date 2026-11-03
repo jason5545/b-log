@@ -1,5 +1,27 @@
 [
   {
+    "slug": "opencode-cheepseek-cheap-is-not-steady",
+    "title": "OpenCode 把 DeepSeek 額度從 30 美元加到 100 美元，我有一段時間卻很排斥用它",
+    "summary": "OpenCode 的 Operation Cheepseek 從 30 美元加到 100 美元，每一期都兌現了。可是同一段時間，Go 上的 DeepSeek 快取幾十秒內時有時無、速度一路往下掉，我有一段時間很排斥用它。額度數字和那筆錢能換成多少做完的工作，是兩件事。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-03T00:00:00Z",
+    "tags": [
+      "AI",
+      "OpenCode",
+      "OpenCode Go",
+      "DeepSeek",
+      "DeepSeek V4.1 Flash",
+      "Operation Cheepseek",
+      "prompt cache",
+      "GPU",
+      "推論成本"
+    ],
+    "coverImage": "/content/img/2026/opencode-cheepseek-cheap-is-not-steady-cover.webp",
+    "accentColor": "#c4552f",
+    "readingTime": "8 min"
+  },
+  {
     "slug": "claude-code-game-recreation-rule-not-cyber",
     "title": "Claude Code 不幫人重做現有遊戲，擋下來的不是 [cyber]，是系統提示詞裡的兩句話",
     "summary": "Claude Code 從 10 月底開始不幫人重做某一款現有遊戲。我 11 月 1 日才被 [cyber] 擋過，第一個想知道的是：這次也是 [cyber] 嗎？翻了執行檔和 API 文件，答案是不是。擋下遊戲重製的是系統提示詞裡的兩句話，Claude 會用自己的話拒絕，畫面上沒有任何標籤。",
