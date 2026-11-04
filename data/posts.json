@@ -1,5 +1,29 @@
 [
   {
+    "slug": "console-ai-route-will-appear-so-what",
+    "title": "名人退了又怎樣，越獄圈被 AI 拆掉的是默契不是技術",
+    "summary": "TheFlow 退出 PS5 圈不是重點。重點是路線一定會有、so what；AI 同時加速找洞與回報，也加速 recomp；若真要壓低盜版動機，Dev Mode 才比較像誠實的產品答案。",
+    "category": "開發哲學",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-04T00:00:00Z",
+    "tags": [
+      "PS5",
+      "Sony",
+      "Xbox",
+      "Dev Mode",
+      "LLM",
+      "recomp",
+      "模擬器",
+      "TheFlow",
+      "Relapse",
+      "無障礙",
+      "開發哲學"
+    ],
+    "coverImage": "/content/img/2026/console-ai-route-will-appear-so-what-cover.webp",
+    "accentColor": "#2f6f8a",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "opencode-cheepseek-cheap-is-not-steady",
     "title": "OpenCode 把 DeepSeek 額度從 30 美元加到 100 美元，我有一段時間卻很排斥用它",
     "summary": "OpenCode 的 Operation Cheepseek 從 30 美元加到 100 美元，每一期都兌現了。可是同一段時間，Go 上的 DeepSeek 快取幾十秒內時有時無、速度一路往下掉，我有一段時間很排斥用它。額度數字和那筆錢能換成多少做完的工作，是兩件事。",
@@ -328,7 +352,7 @@
     ],
     "coverImage": "/content/img/2026/lisa-mixing-budokan-2014-singing-cover.webp",
     "accentColor": "#c0397f",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "kcs-digital-digizon-thailand-next-year",
@@ -417,7 +441,7 @@
     ],
     "coverImage": "/content/img/2026/why-port-cant-wait-cover.webp",
     "accentColor": "#d4952a",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "lisa-budokan-2014-natalie-interview",
@@ -521,7 +545,7 @@
     ],
     "coverImage": "/content/img/2026/taiwan-church-decline-chapel-cover.webp",
     "accentColor": "#7d6a52",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "grok-bot-muse-chatgpt-long-chat-memory",
@@ -544,7 +568,7 @@
     ],
     "coverImage": "/content/img/2026/grok-bot-muse-chatgpt-long-chat-memory-cover.webp",
     "accentColor": "#2E8B7E",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "anthropic-agents-waiting-t3code-server",
@@ -567,7 +591,7 @@
     ],
     "coverImage": "/content/img/2026/anthropic-agents-waiting-t3code-server-cover.webp",
     "accentColor": "#e0a145",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "theo-full-stop-to-atc-hold-short",
@@ -590,7 +614,7 @@
     ],
     "coverImage": "/content/img/2026/theo-full-stop-to-atc-hold-short-cover.webp",
     "accentColor": "#c9961a",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "claude-code-classifier-verdict-explicit-intent",
@@ -982,7 +1006,7 @@
     ],
     "accentColor": "#9b593e",
     "coverImage": "/content/img/2026/super-computer-ai-unknown-answer-cover.webp",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "cloud-agent-main-session-cap-90-usd-round",
@@ -1005,7 +1029,7 @@
     ],
     "accentColor": "#2f6b5b",
     "coverImage": "/content/img/2026/cloud-agent-main-session-cap-90-usd-round-cover.webp",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "claude-desktop-open-session-without-start-session",
@@ -1063,7 +1087,7 @@
     ],
     "accentColor": "#c2410c",
     "coverImage": "/content/img/2026/opus-5-5-simplified-chinese-in-thinking-summary-cover.webp",
-    "readingTime": "6 min",
+    "readingTime": "7 min",
     "updatedAt": "2026-09-27T00:00:00Z"
   },
   {
@@ -1084,7 +1108,7 @@
     ],
     "accentColor": "#e3a33a",
     "coverImage": "/content/img/2026/opus-5-spec-caught-by-deepseek-v4-1-flash-cover.webp",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "windows-11-single-finger-scrolling-progress",
@@ -1126,7 +1150,7 @@
     ],
     "coverImage": "/content/img/2026/first-hackathon-code-done-in-37-minutes-cover.webp",
     "accentColor": "#d9480f",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "svg-cover-create-post-first-run",
@@ -1186,7 +1210,7 @@
     ],
     "accentColor": "#0f766e",
     "coverImage": "/content/img/2026/rg-home-scan-box-drive-download-cover.webp",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "macos-27-facetime-audio-claude-fault",
@@ -1284,7 +1308,7 @@
       "無障礙"
     ],
     "accentColor": "#0f766e",
-    "readingTime": "6 min",
+    "readingTime": "7 min",
     "coverImage": "/content/img/2026/voco-fork-voice-input-refine-not-merged-cover.webp"
   },
   {
@@ -1408,7 +1432,7 @@
     ],
     "accentColor": "#9b5b65",
     "coverImage": "/content/img/2026/php-1-4m-breast-cancer-benefit-cannot-reach-not-sick-cover.webp",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "asian-sex-diary-no-longer-johns-diary",
@@ -1427,7 +1451,7 @@
     ],
     "accentColor": "#2e6b75",
     "coverImage": "/content/img/2026/asian-sex-diary-no-longer-johns-diary-cover.webp",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "myron-taiwan-kernel-ghostlock-offsets",
@@ -1490,7 +1514,7 @@
     ],
     "accentColor": "#2563eb",
     "coverImage": "/content/img/2026/trusted-access-codex-cyber-policy-visibility-cover.webp",
-    "readingTime": "6 min",
+    "readingTime": "7 min",
     "updatedAt": "2026-09-29T00:00:00Z"
   },
   {
@@ -1530,7 +1554,7 @@
       "root"
     ],
     "accentColor": "#c0392b",
-    "readingTime": "6 min",
+    "readingTime": "7 min",
     "coverImage": "/content/img/2026/im-not-a-bad-guy-prompt-for-ai-safety-cover.webp"
   },
   {
@@ -1592,7 +1616,7 @@
     ],
     "accentColor": "#6f8f72",
     "coverImage": "/content/img/2026/the-one-who-holds-me-is-held-too-cover.webp",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "lisa-sounds-i-do-not-brace",
@@ -1735,7 +1759,7 @@
     ],
     "accentColor": "#2563eb",
     "coverImage": "/content/img/2026/ai-writing-incident-voice-workflow-cover.webp",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "tailscale-ha-lan-return-snat",
@@ -1814,7 +1838,7 @@
     ],
     "accentColor": "#0f766e",
     "coverImage": "/content/img/2026/macos-26-controlcenter-trackedapplications-ghost-cover.webp",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "someone-guarded-the-last-check",
@@ -1854,7 +1878,7 @@
     ],
     "accentColor": "#dc2626",
     "coverImage": "/content/img/2026/lisa-yes-mahouka-yotsuba-interview-cover.webp",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "chicken-cutlet-workplace-exclusion",
@@ -1872,7 +1896,7 @@
     ],
     "accentColor": "#b7793e",
     "coverImage": "/content/img/2026/chicken-cutlet-workplace-exclusion-cover.webp",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "codex-browser-trust-boundary",
@@ -2278,7 +2302,7 @@
       "Walled Garden"
     ],
     "accentColor": "#3b82f6",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "easycard-auto-reload-complaint-end",
@@ -2318,7 +2342,7 @@
       "debug"
     ],
     "accentColor": "#3fb950",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "accessible-seating-requires-order-to-exist",
@@ -2398,7 +2422,7 @@
       "Keychain"
     ],
     "accentColor": "#556bff",
-    "readingTime": "6 min",
+    "readingTime": "7 min",
     "updatedAt": "2026-04-11T00:00:00Z",
     "coverImage": "/content/img/2026/copilotchat-coding-mode-workspace.webp"
   },
@@ -2418,7 +2442,7 @@
       "Dario Amodei"
     ],
     "accentColor": "#556bff",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "why-msfs-cant-run-on-mac-metal-api-limitations",
@@ -2478,7 +2502,7 @@
       "實驗",
       "SearXNG"
     ],
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "language-as-a-strategic-tool-in-digital-age",
@@ -2535,7 +2559,7 @@
       "VideoGamer",
       "搜尋引擎"
     ],
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "paratransit-easycard-auto-reload-denied",
@@ -2603,7 +2627,7 @@
       "Visual Novel",
       "智代"
     ],
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "dhl-phishing-email-analysis",
@@ -2775,7 +2799,7 @@
       "資安"
     ],
     "accentColor": "#c23616",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "preparing-for-disaster-not-war",
@@ -2893,7 +2917,7 @@
       "開放原始碼生態"
     ],
     "accentColor": "#e85d3a",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "taiwan-every-path-has-its-price",
@@ -3248,7 +3272,7 @@
       "硬體"
     ],
     "accentColor": "#e05a2b",
-    "readingTime": "6 min"
+    "readingTime": "7 min"
   },
   {
     "slug": "claude-search-broken-built-my-own-memory",
@@ -3364,7 +3388,7 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2026-02-17T00:00:00Z",
-    "readingTime": "6 min",
+    "readingTime": "7 min",
     "tags": [
       "AI 協作",
       "寫作流程",
@@ -3716,7 +3740,7 @@
     "category": "商業觀察",
     "author": "Jason Chien",
     "publishedAt": "2026-01-10T12:00:00Z",
-    "readingTime": "6 min",
+    "readingTime": "7 min",
     "tags": [
       "Anthropic",
       "Claude",
@@ -4014,7 +4038,7 @@
     "category": "技術分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-09T00:00:00Z",
-    "readingTime": "6 min",
+    "readingTime": "7 min",
     "tags": [
       "LINE",
       "逆向工程",
@@ -4071,7 +4095,7 @@
     "category": "AI 分析",
     "author": "Jason Chien",
     "publishedAt": "2025-12-07T00:00:00Z",
-    "readingTime": "6 min",
+    "readingTime": "7 min",
     "tags": [
       "AI",
       "作者身分",

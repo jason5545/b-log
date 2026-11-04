@@ -6,6 +6,33 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "console-ai-route-will-appear-so-what",
+      "url": "https://b-log.to/dev-philosophy/console-ai-route-will-appear-so-what/",
+      "title": "名人退了又怎樣，越獄圈被 AI 拆掉的是默契不是技術",
+      "content_text": "TheFlow 退出 PS5 圈不是重點。重點是路線一定會有、so what；AI 同時加速找洞與回報，也加速 recomp；若真要壓低盜版動機，Dev Mode 才比較像誠實的產品答案。",
+      "date_published": "2026-11-04T00:00:00.000Z",
+      "date_modified": "2026-11-04T00:00:00.000Z",
+      "tags": [
+        "PS5",
+        "Sony",
+        "Xbox",
+        "Dev Mode",
+        "LLM",
+        "recomp",
+        "模擬器",
+        "TheFlow",
+        "Relapse",
+        "無障礙",
+        "開發哲學"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/console-ai-route-will-appear-so-what-cover.webp"
+    },
+    {
       "id": "opencode-cheepseek-cheap-is-not-steady",
       "url": "https://b-log.to/ai-analysis/opencode-cheepseek-cheap-is-not-steady/",
       "title": "OpenCode 把 DeepSeek 額度從 30 美元加到 100 美元，我有一段時間卻很排斥用它",
