@@ -56,7 +56,7 @@ Android 上其實有 Rime 的前端，叫同文（trime）。我當年試用過�
 
 當年提的讀音意見，十多年後，我讓 agent 把大方向修好了。10 月 28 日那天留下的，還是同音詞的取捨。11 月 5 日，這條 fork 公開了。
 
-引擎叫蓬萊韻，方案叫蓬萊注音，macOS 上的輸入法叫貂毫（Sable）1.0.0。名稱照 Rime 的習慣取：中州韻對蓬萊韻，鼠鬚管、小狼毫對貂毫。官網在 [penglai.im](https://penglai.im)，下載在 GitHub 的 [v1.0.0](https://github.com/jason5545/rime-penglai/releases/tag/v1.0.0)，原始碼在 jason5545/rime-penglai，引擎的修改在 jason5545/librime 的 penglai 分支。
+引擎叫蓬萊韻，方案叫蓬萊注音，macOS 上的輸入法叫貂毫（Sable）1.0.0。名稱照 Rime 的習慣取：中州韻對蓬萊韻，鼠鬚管對貂毫，小狼毫對獾毫（Badger），Windows 版的獾毫還沒推出。官網在 [penglai.im](https://penglai.im)，下載在 GitHub 的 [v1.0.0](https://github.com/jason5545/rime-penglai/releases/tag/v1.0.0)，原始碼在 jason5545/rime-penglai，引擎的修改在 jason5545/librime 的 penglai 分支。
 
 蓬萊注音的詞典直接存注音。讀音有三種，打字時就能換，不用重新部署：蓬萊音是預設，臺灣讀音優先；中州音是大陸讀音優先；兼收並蓄是兩岸讀音同等。這剛好對上當年那幾個立場，只是現在不用誰同意，每個人自己選。
 
