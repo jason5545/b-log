@@ -1,5 +1,32 @@
 [
   {
+    "slug": "rime-agent-finally-moddable",
+    "title": "用了很多年的 Rime，一直到有 agent 才改得動",
+    "summary": "Rime 我大約從 2014、2015 年就在用，還和朋友一起開了臺灣的粉專，可是架構太難上手，十二年來引擎的骨架幾乎沒變。10 月 27 到 28 日有了 agent，我才改成自己的；11 月 5 日這條 fork 以蓬萊韻、蓬萊注音、貂毫公開了。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-05T00:00:00Z",
+    "tags": [
+      "Rime",
+      "鼠鬚管",
+      "Squirrel",
+      "librime",
+      "輸入法",
+      "agent",
+      "Claude Code",
+      "注音",
+      "唯音",
+      "Voco",
+      "蓬萊韻",
+      "蓬萊注音",
+      "貂毫",
+      "開發哲學"
+    ],
+    "coverImage": "/content/img/2026/rime-agent-finally-moddable-cover.webp",
+    "accentColor": "#2d6a5d",
+    "readingTime": "12 min"
+  },
+  {
     "slug": "console-ai-route-will-appear-so-what",
     "title": "名人退了又怎樣，越獄圈被 AI 拆掉的是默契不是技術",
     "summary": "TheFlow 退出 PS5 圈不是重點。重點是路線一定會有、so what；AI 同時加速找洞與回報，也加速 recomp；若真要壓低盜版動機，Dev Mode 才比較像誠實的產品答案。",
