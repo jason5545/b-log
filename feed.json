@@ -6,6 +6,34 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "claude-dispatch-thisbash-remote-control",
+      "url": "https://b-log.to/ai-analysis/claude-dispatch-thisbash-remote-control/",
+      "title": "Anthropic 說要退役 Dispatch，根因還在我用的 Remote Control",
+      "content_text": "Forever Security 公開 ThisBash：能控制 claude.ai 的擴充功能，可經 Dispatch 指揮 Claude Desktop 在本機執行程式。Anthropic 要退役 Dispatch，根因還在 Remote Control。",
+      "date_published": "2026-11-06T00:00:00.000Z",
+      "date_modified": "2026-11-06T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Anthropic",
+        "Claude",
+        "Claude Dispatch",
+        "Claude Desktop",
+        "Claude Code",
+        "Remote Control",
+        "ThisBash",
+        "Forever Security",
+        "Codex",
+        "瀏覽器擴充功能",
+        "信任邊界"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/claude-dispatch-thisbash-remote-control-cover.webp"
+    },
+    {
       "id": "rime-agent-finally-moddable",
       "url": "https://b-log.to/tech-analysis/rime-agent-finally-moddable/",
       "title": "用了很多年的 Rime，一直到有 agent 才改得動",

@@ -1,5 +1,30 @@
 [
   {
+    "slug": "claude-dispatch-thisbash-remote-control",
+    "title": "Anthropic 說要退役 Dispatch，根因還在我用的 Remote Control",
+    "summary": "Forever Security 公開 ThisBash：能控制 claude.ai 的擴充功能，可經 Dispatch 指揮 Claude Desktop 在本機執行程式。Anthropic 要退役 Dispatch，根因還在 Remote Control。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-06T00:00:00Z",
+    "tags": [
+      "AI",
+      "Anthropic",
+      "Claude",
+      "Claude Dispatch",
+      "Claude Desktop",
+      "Claude Code",
+      "Remote Control",
+      "ThisBash",
+      "Forever Security",
+      "Codex",
+      "瀏覽器擴充功能",
+      "信任邊界"
+    ],
+    "accentColor": "#3d5a80",
+    "coverImage": "/content/img/2026/claude-dispatch-thisbash-remote-control-cover.webp",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "rime-agent-finally-moddable",
     "title": "用了很多年的 Rime，一直到有 agent 才改得動",
     "summary": "Rime 我大約從 2014、2015 年就在用，還和朋友一起開了臺灣的粉專，可是架構太難上手，十二年來引擎的骨架幾乎沒變。10 月 27 到 28 日有了 agent，我才改成自己的；11 月 5 日這條 fork 以蓬萊韻、蓬萊注音、貂毫公開了。",
