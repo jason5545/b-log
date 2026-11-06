@@ -1786,6 +1786,13 @@
       "postUrl": "https://b-log.to/tech-analysis/rime-agent-finally-moddable/",
       "facebookPostId": "1026818047191304_122119112463290922",
       "publishedAt": "2026-11-05T00:31:28.873Z"
+    },
+    "claude-dispatch-thisbash-remote-control": {
+      "status": "published",
+      "title": "Anthropic 說要退役 Dispatch，根因還在我用的 Remote Control",
+      "postUrl": "https://b-log.to/ai-analysis/claude-dispatch-thisbash-remote-control/",
+      "facebookPostId": "1026818047191304_122119184433290922",
+      "publishedAt": "2026-11-06T00:22:58.286Z"
     }
   }
 }
