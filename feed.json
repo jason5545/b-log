@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "kimi-hosted-agents-harness-as-a-service",
+      "url": "https://b-log.to/ai-analysis/kimi-hosted-agents-harness-as-a-service/",
+      "title": "Kimi 把 Harness 做成雲端服務，我要的是自己機器上那排狀態牌",
+      "content_text": "11 月 5 日月之暗面把支撐 agent 的 Harness 做成雲端服務。我日常用的是 Kimi 當模型、Kimi Code 當其中一家工具，跑在自己架的 T3 裡。我要的是機器上那排狀態牌，不是再買一套別人代管的底座。",
+      "date_published": "2026-11-08T00:00:00.000Z",
+      "date_modified": "2026-11-08T00:00:00.000Z",
+      "tags": [
+        "AI",
+        "Kimi",
+        "Moonshot",
+        "Hosted Agents",
+        "Harness",
+        "T3 Code",
+        "Kimi Code",
+        "agent",
+        "開放原始碼"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/kimi-hosted-agents-harness-as-a-service-cover.webp"
+    },
+    {
       "id": "claude-dispatch-thisbash-remote-control",
       "url": "https://b-log.to/ai-analysis/claude-dispatch-thisbash-remote-control/",
       "title": "Anthropic 說要退役 Dispatch，根因還在我用的 Remote Control",
