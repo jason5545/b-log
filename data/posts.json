@@ -1,5 +1,28 @@
 [
   {
+    "slug": "claude-max-ruling-weekly-number",
+    "title": "法官說付月費的人把 20x 讀成一個月很合理，我現在看的是價格頁上那個 10x",
+    "summary": "美國法官裁定，Anthropic 拿「比 Pro 多 5 倍或 20 倍用量」賣 Max，付月費的人讀成一個月多 20 倍是合理的，案子可以繼續打。我 10 月底才升上 20x，幾天後它改名 Ultra，價格頁也改寫成每週 10 倍。對我來說，真正決定這週還能做多少事的，一直是那個週額度。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-10T00:00:00Z",
+    "tags": [
+      "Anthropic",
+      "Claude",
+      "Claude Max",
+      "Ultra",
+      "訂閱制",
+      "額度",
+      "週額度",
+      "集體訴訟",
+      "廣告",
+      "價格頁"
+    ],
+    "coverImage": "/content/img/2026/claude-max-ruling-weekly-number-cover.svg",
+    "accentColor": "#7a5c2e",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "jal-cargo-777f-ten-year-dream",
     "title": "十年的夢：在 X-Plane 做出一架從沒存在過的 JAL CARGO 777F",
     "summary": "11 月 8 日，我在 X-Plane 12 替 FlightFactor 777 v2 貨機版做了 JAL CARGO 塗裝。JAL 並沒有 777 貨機。大約 2015 年朋友在 Prepar3D 做過一套，我這次把他當年兩個版本重新放到這架想像中的貨機上。",
