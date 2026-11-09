@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "claude-max-ruling-weekly-number",
+      "url": "https://b-log.to/business-insights/claude-max-ruling-weekly-number/",
+      "title": "法官說付月費的人把 20x 讀成一個月很合理，我現在看的是價格頁上那個 10x",
+      "content_text": "美國法官裁定，Anthropic 拿「比 Pro 多 5 倍或 20 倍用量」賣 Max，付月費的人讀成一個月多 20 倍是合理的，案子可以繼續打。我 10 月底才升上 20x，幾天後它改名 Ultra，價格頁也改寫成每週 10 倍。對我來說，真正決定這週還能做多少事的，一直是那個週額度。",
+      "date_published": "2026-11-10T00:00:00.000Z",
+      "date_modified": "2026-11-10T00:00:00.000Z",
+      "tags": [
+        "Anthropic",
+        "Claude",
+        "Claude Max",
+        "Ultra",
+        "訂閱制",
+        "額度",
+        "週額度",
+        "集體訴訟",
+        "廣告",
+        "價格頁"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/claude-max-ruling-weekly-number-cover.svg"
+    },
+    {
       "id": "jal-cargo-777f-ten-year-dream",
       "url": "https://b-log.to/tech-analysis/jal-cargo-777f-ten-year-dream/",
       "title": "十年的夢：在 X-Plane 做出一架從沒存在過的 JAL CARGO 777F",
