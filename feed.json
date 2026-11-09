@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "jal-cargo-777f-ten-year-dream",
+      "url": "https://b-log.to/tech-analysis/jal-cargo-777f-ten-year-dream/",
+      "title": "十年的夢：在 X-Plane 做出一架從沒存在過的 JAL CARGO 777F",
+      "content_text": "11 月 8 日，我在 X-Plane 12 替 FlightFactor 777 v2 貨機版做了 JAL CARGO 塗裝。JAL 並沒有 777 貨機。大約 2015 年朋友在 Prepar3D 做過一套，我這次把他當年兩個版本重新放到這架想像中的貨機上。",
+      "date_published": "2026-11-09T00:00:00.000Z",
+      "date_modified": "2026-11-09T00:00:00.000Z",
+      "tags": [
+        "X-Plane",
+        "X-Plane 12",
+        "FlightFactor",
+        "777F",
+        "JAL CARGO",
+        "塗裝",
+        "飛行模擬",
+        "Prepar3D"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/jal-cargo-777f-ten-year-dream-cover.webp"
+    },
+    {
       "id": "kimi-hosted-agents-harness-as-a-service",
       "url": "https://b-log.to/ai-analysis/kimi-hosted-agents-harness-as-a-service/",
       "title": "Kimi 把 Harness 做成雲端服務，我要的是自己機器上那排狀態牌",
