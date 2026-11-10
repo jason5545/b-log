@@ -1,5 +1,29 @@
 [
   {
+    "slug": "lisa-overseas-shows-fan-recordings",
+    "title": "官方沒出的那幾場，只剩觀眾的手機記得",
+    "summary": "今天我看了 LiSA 倫敦場的整場錄影，是一位英國觀眾錄的。2024 年林口我坐輪椅進不了場，那輪巡迴也是靠首爾一位觀眾的錄影看完的。LiSA 的海外場到現在沒有一場出過完整的官方影像，盜錄沒有那一場的商品可以搶；如果連它都沒有，我是完全沒辦法的。",
+    "category": "シルシ",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-10T00:00:00Z",
+    "tags": [
+      "LiSA",
+      "盜錄",
+      "演唱會",
+      "海外場",
+      "林口體育館",
+      "首爾",
+      "倫敦",
+      "Troxy",
+      "天黑黑",
+      "LiVE is Smile Always",
+      "シルシ"
+    ],
+    "coverImage": "/content/img/2026/lisa-overseas-shows-fan-recordings-cover.webp",
+    "accentColor": "#b4467e",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "claude-max-ruling-weekly-number",
     "title": "法官說付月費的人把 20x 讀成一個月很合理，我現在看的是價格頁上那個 10x",
     "summary": "美國法官裁定，Anthropic 拿「比 Pro 多 5 倍或 20 倍用量」賣 Max，付月費的人讀成一個月多 20 倍是合理的，案子可以繼續打。我 10 月底才升上 20x，幾天後它改名 Ultra，價格頁也改寫成每週 10 倍。對我來說，真正決定這週還能做多少事的，一直是那個週額度。",
