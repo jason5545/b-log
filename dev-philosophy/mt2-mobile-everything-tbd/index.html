@@ -221,7 +221,7 @@
     <article class="post" id="post-article" data-category-theme="dev-philosophy">
       <nav class="crumb" aria-label="麵包屑"><a href="../../">HOME</a> › <span id="breadcrumb-current"><a href="/?category=%E9%96%8B%E7%99%BC%E5%93%B2%E5%AD%B8">開發哲學</a></span></nav>
       <div id="post-accent" class="post__accent" aria-hidden="true" style="--post-accent:#d9a441"></div>
-      <p id="post-meta" class="meta">11NOV26 · 開發哲學 · 4 MIN · JASON CHIEN</p>
+      <p id="post-meta" class="meta">11NOV26 · 開發哲學 · 5 MIN · JASON CHIEN</p>
       <p id="post-catline" class="catline" hidden></p>
       <h1 id="post-title" class="post__title">說好不等官方手機版，七天後 Monster Train 2 就宣布了</h1>
       <figure id="post-hero" class="post__cover" style="--cover-w: 1600; --cover-h: 900"><img class="post__cover-img" src="/content/img/2026/mt2-mobile-everything-tbd-cover.webp" srcset="/content/img/2026/mt2-mobile-everything-tbd-cover-480w.webp 480w, /content/img/2026/mt2-mobile-everything-tbd-cover-828w.webp 828w, /content/img/2026/mt2-mobile-everything-tbd-cover-1200w.webp 1200w" sizes="(max-width: 400px) min(calc(100vw - 32px), 50vh * 1.7778), (max-width: 800px) min(92vw, 50vh * 1.7778), (max-width: 1099px) min(736px, 50vh * 1.7778), (max-width: 1439px) min(calc(100vw - 440px), 873px, 50vh * 1.7778), min(calc(90.78vw - 434px), 50vh * 1.7778)" width="1600" height="900" alt="" aria-hidden="true" fetchpriority="high" decoding="async"></figure>
@@ -240,6 +240,13 @@
 <h2 id="section-3">回頭看 10/21 那篇</h2>
 <p>10/21 那篇最後，我寫 Diceomancer 的官方手機版 2027 年 1 月上架，我會去買；Monster Train 2 的官方手機版什麼時候出，我不知道，我也不打算等。那時候我手上只有一個自己的估計。七天後，官方給了一個大概的時間，今年稍晚，但沒有日期。我的啟動器在同一天出了 v0.1。</p>
 <p>11/10，DLC 上線，我先在手機上把它測過，再談公開。</p>
+<h2 id="section-4">測完了，也公開了</h2>
+<p>The Punished 上線的時候，遊戲本體也更新到 2.3.0。啟動器加了這個版本的支援。我在手機上從 2.2.1 用 Steam 直接更新，大約 11 分半裝好，兩個 DLC 都拿得到，遊戲頁顯示 DLC 2 / 2。</p>
+<p>新氏族叫「受罰者」，勇者是阿卡斯。打法是主動打傷自己的單位，把痛苦轉成戰力。氏族機制叫「巨石」：戰鬥中花 1 餘燻、棄一張牌獻貢，累積奉獻，讓之後召喚的單位更強。Steam 定價是 NT$175（<a href="https://store.steampowered.com/app/4739980/">Steam 商店頁</a>）。</p>
+<p>我一開始玩了一陣子，以為新 DLC 沒東西。受罰者其實已經在「出發 → 新遊戲 → 主要氏族」的列表裡解鎖了。只是我把氏族設成「隨機MT1」，這個選項只會抽一代的氏族，永遠抽不到受罰者。不是啟動器的問題。</p>
+<p>測試的時候抓到一個 bug，當場修掉了。在遊戲裡用返回手勢回到啟動器，再開遊戲會黑畫面，要強制停止才恢復。原因是 Android 16 的新返回手勢（預測返回）不再送返回鍵，系統直接把遊戲畫面關掉，背景裡的遊戲卻沒結束，第二次開遊戲就沿用了上一局的狀態。修好之後，返回手勢在遊戲裡改成跟 Esc 一樣，用來開選單、關對話框；要離開遊戲，用遊戲選單裡的「退出遊戲」，或按 Home。</p>
+<p>啟動器今天發了 v0.2，是官方簽章的預先發行版。原始碼也公開了，在 <a href="https://github.com/jason5545/mt2-mobile-launcher">GitHub</a>，Release 是 <a href="https://github.com/jason5545/mt2-mobile-launcher/releases/tag/v0.2">v0.2</a>。原創程式碼是 MIT 授權。APK 一樣不含任何遊戲檔，遊戲要自己在 Steam 買，在手機上用自己的帳號下載、轉換。</p>
+<p>Reddit 的英文宣傳文我還沒發。</p>
 </div>
 
       <section id="post-status" class="status" aria-labelledby="status-title" hidden></section>
@@ -259,7 +266,7 @@
             <ol id="latest-sidebar" class="side-list" data-prerendered="true"><li><a href="/shirushi/lisa-overseas-shows-fan-recordings/"><span class="side-row__meta">10NOV26 · <span class="her-cat">シルシ</span></span><span class="side-row__title">官方沒出的那幾場，只剩觀眾的手機記得</span></a></li><li><a href="/business-insights/claude-max-ruling-weekly-number/"><span class="side-row__meta">10NOV26 · <span>商業觀察</span></span><span class="side-row__title">法官說付月費的人把 20x 讀成一個月很合理，我現在看的是價格頁上那個 10x</span></a></li><li><a href="/tech-analysis/jal-cargo-777f-ten-year-dream/"><span class="side-row__meta">09NOV26 · <span>技術分析</span></span><span class="side-row__title">十年的夢：在 X-Plane 做出一架從沒存在過的 JAL CARGO 777F</span></a></li></ol>
           </section>
         </div>
-        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">官方變快，不能只算在 AI 頭上</a></li><li><a href="#section-2">我這邊做到哪裡</a></li><li><a href="#section-3">回頭看 10/21 那篇</a></li></ol></nav>
+        <nav id="post-toc" class="aside-toc" aria-labelledby="toc-label" data-prerendered="true"><h2 class="label" id="toc-label">CONTENTS <span>本文目錄</span></h2><ol class="toc-list"><li><a href="#section-1">官方變快，不能只算在 AI 頭上</a></li><li><a href="#section-2">我這邊做到哪裡</a></li><li><a href="#section-3">回頭看 10/21 那篇</a></li><li><a href="#section-4">測完了，也公開了</a></li></ol></nav>
       </div>
     </aside>
 
