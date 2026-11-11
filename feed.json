@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "mt2-mobile-everything-tbd",
+      "url": "https://b-log.to/dev-philosophy/mt2-mobile-everything-tbd/",
+      "title": "說好不等官方手機版，七天後 Monster Train 2 就宣布了",
+      "content_text": "10/21 我寫，自己移植的 Monster Train 2 官方手機版連公告都沒有，我估至少要等五年。七天後，官方宣布今年稍晚推出；Diceomancer 也是我開工四天後就宣布。",
+      "date_published": "2026-11-11T00:00:00.000Z",
+      "date_modified": "2026-11-11T00:00:00.000Z",
+      "tags": [
+        "遊戲",
+        "移植",
+        "手機版",
+        "Monster Train 2",
+        "Diceomancer",
+        "Claude Code"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/mt2-mobile-everything-tbd-cover.webp"
+    },
+    {
       "id": "lisa-overseas-shows-fan-recordings",
       "url": "https://b-log.to/shirushi/lisa-overseas-shows-fan-recordings/",
       "title": "官方沒出的那幾場，只剩觀眾的手機記得",
