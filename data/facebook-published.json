@@ -1828,6 +1828,13 @@
       "postUrl": "https://b-log.to/dev-philosophy/mt2-mobile-everything-tbd/",
       "facebookPostId": "1026818047191304_122119568871290922",
       "publishedAt": "2026-11-11T01:09:16.376Z"
+    },
+    "fable-52-fallback-switch-stays-off": {
+      "status": "published",
+      "title": "Fable 5.2 說誤擋少了一半，我那個「被擋就換模型」的開關還是不會打開",
+      "postUrl": "https://b-log.to/ai-analysis/fable-52-fallback-switch-stays-off/",
+      "facebookPostId": "1026818047191304_122119651479290922",
+      "publishedAt": "2026-11-12T00:14:08.381Z"
     }
   }
 }
