@@ -1835,6 +1835,13 @@
       "postUrl": "https://b-log.to/ai-analysis/fable-52-fallback-switch-stays-off/",
       "facebookPostId": "1026818047191304_122119651479290922",
       "publishedAt": "2026-11-12T00:14:08.381Z"
+    },
+    "wintop-gputaskman-why-not-existing-tool": {
+      "status": "published",
+      "title": "Windows 版的 top 早就有了，保哥應該比我清楚",
+      "postUrl": "https://b-log.to/dev-philosophy/wintop-gputaskman-why-not-existing-tool/",
+      "facebookPostId": "1026818047191304_122119652667290922",
+      "publishedAt": "2026-11-12T00:52:20.235Z"
     }
   }
 }
