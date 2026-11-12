@@ -1,5 +1,30 @@
 [
   {
+    "slug": "fable-52-fallback-switch-stays-off",
+    "title": "Fable 5.2 說誤擋少了一半，我那個「被擋就換模型」的開關還是不會打開",
+    "summary": "Fable 5.2 的公告說，被安全分類器擋下的次數比 5.1 少了大約 55%，被擋的資安類請求還是改由 Opus 4.8 回答。我 11 月 1 日被 Opus 5.5 以 [cyber] 誤擋三次，被擋就換模型的開關是我刻意關的。這個數字是誰跟誰比，換過去的那一步又有沒有變。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-12T00:00:00Z",
+    "tags": [
+      "AI",
+      "Anthropic",
+      "Claude",
+      "Fable 5.2",
+      "Opus 5.5",
+      "Opus 4.8",
+      "Claude Code",
+      "安全分類器",
+      "cyber",
+      "switchModelsOnFlag",
+      "FEX",
+      "無障礙"
+    ],
+    "coverImage": "/content/img/2026/fable-52-fallback-switch-stays-off-cover.svg",
+    "accentColor": "#8a5a2b",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "mt2-mobile-everything-tbd",
     "title": "說好不等官方手機版，七天後 Monster Train 2 就宣布了",
     "summary": "10/21 我寫，自己移植的 Monster Train 2 官方手機版連公告都沒有，我估至少要等五年。七天後，官方宣布今年稍晚推出；Diceomancer 也是我開工四天後就宣布。",
