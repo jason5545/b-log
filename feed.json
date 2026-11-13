@@ -6,6 +6,33 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "xplane-safety-pilot-why-i-built-it",
+      "url": "https://b-log.to/tech-development/xplane-safety-pilot-why-i-built-it/",
+      "title": "進場我手飛不了，所以寫了一個 X-Plane 外掛讓飛機自己落地",
+      "content_text": "進場要同時顧中心線、下沉率和速度，我用一根手指飛不了，所以寫了 X-Plane 外掛 Safety Pilot：自動駕駛在低空斷開或發動機失效時接手，落地減速完再交還。ATR 72-600 兩次雙發熄火都自己滑回松山的跑道，下一架是 777。",
+      "date_published": "2026-11-13T00:00:00.000Z",
+      "date_modified": "2026-11-13T00:00:00.000Z",
+      "tags": [
+        "X-Plane",
+        "X-Plane 12",
+        "Safety Pilot",
+        "ATR 72-600",
+        "FlightFactor 777",
+        "雙發熄火",
+        "自動落地",
+        "外掛",
+        "飛行模擬",
+        "無障礙",
+        "DragonFly"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/xplane-safety-pilot-why-i-built-it-cover.webp"
+    },
+    {
       "id": "modern-web-guidance-ime-enter-rule",
       "url": "https://b-log.to/ghostwritten/modern-web-guidance-ime-enter-rule/",
       "title": "Google 寫給 coding agent 的網頁守則，有一條是替打注音的人寫的：選字按的 Enter 不能送出",

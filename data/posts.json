@@ -1,5 +1,29 @@
 [
   {
+    "slug": "xplane-safety-pilot-why-i-built-it",
+    "title": "進場我手飛不了，所以寫了一個 X-Plane 外掛讓飛機自己落地",
+    "summary": "進場要同時顧中心線、下沉率和速度，我用一根手指飛不了，所以寫了 X-Plane 外掛 Safety Pilot：自動駕駛在低空斷開或發動機失效時接手，落地減速完再交還。ATR 72-600 兩次雙發熄火都自己滑回松山的跑道，下一架是 777。",
+    "category": "技術開發",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-13T00:00:00Z",
+    "tags": [
+      "X-Plane",
+      "X-Plane 12",
+      "Safety Pilot",
+      "ATR 72-600",
+      "FlightFactor 777",
+      "雙發熄火",
+      "自動落地",
+      "外掛",
+      "飛行模擬",
+      "無障礙",
+      "DragonFly"
+    ],
+    "coverImage": "/content/img/2026/xplane-safety-pilot-why-i-built-it-cover.webp",
+    "accentColor": "#d08a24",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "modern-web-guidance-ime-enter-rule",
     "title": "Google 寫給 coding agent 的網頁守則，有一條是替打注音的人寫的：選字按的 Enter 不能送出",
     "summary": "Google Chrome 團隊 11 月 10 日推出 Modern Web Guidance 1.0，一套裝進 coding agent 的網頁守則。203 份指南裡有一份專講輸入法：選字時按的 Enter 不能把訊息送出去。新的掃描器會抓沒檢查的寫法，卻刻意放過老式的 keyCode 13。",
