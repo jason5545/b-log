@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+  <rect width="1600" height="900" fill="#eef2ec"/>
+  <rect x="0" y="640" width="1600" height="260" fill="#dfe6dc"/>
+  <!-- chat input box -->
+  <rect x="300" y="250" width="760" height="150" rx="18" fill="#ffffff" stroke="#4f7a5a" stroke-width="6"/>
+  <rect x="340" y="300" width="120" height="50" rx="6" fill="#c9d8cc"/>
+  <rect x="475" y="300" width="90" height="50" rx="6" fill="#c9d8cc"/>
+  <rect x="580" y="300" width="150" height="50" rx="6" fill="#4f7a5a" opacity="0.35"/>
+  <line x1="580" y1="362" x2="730" y2="362" stroke="#4f7a5a" stroke-width="5" stroke-dasharray="10 8"/>
+  <rect x="745" y="296" width="6" height="58" fill="#2f4a37"/>
+  <!-- candidate window -->
+  <rect x="580" y="420" width="330" height="200" rx="12" fill="#2f4a37"/>
+  <rect x="605" y="445" width="280" height="36" rx="6" fill="#e9c46a"/>
+  <rect x="605" y="497" width="220" height="30" rx="6" fill="#6f9479"/>
+  <rect x="605" y="543" width="250" height="30" rx="6" fill="#6f9479"/>
+  <!-- send button blocked -->
+  <circle cx="1180" cy="325" r="62" fill="#ffffff" stroke="#b5c4b8" stroke-width="6"/>
+  <path d="M1150 325 L1210 325 M1185 300 L1210 325 L1185 350" stroke="#b5c4b8" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="1120" y1="385" x2="1240" y2="265" stroke="#c0574a" stroke-width="10" stroke-linecap="round"/>
+  <!-- enter key -->
+  <path d="M1000 470 H1260 V700 H1090 V590 H1000 Z" fill="#fbfaf6" stroke="#4f7a5a" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M1200 520 V620 H1120 M1145 595 L1120 620 L1145 645" stroke="#4f7a5a" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

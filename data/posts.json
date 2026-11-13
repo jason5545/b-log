@@ -1,5 +1,28 @@
 [
   {
+    "slug": "modern-web-guidance-ime-enter-rule",
+    "title": "Google 寫給 coding agent 的網頁守則，有一條是替打注音的人寫的：選字按的 Enter 不能送出",
+    "summary": "Google Chrome 團隊 11 月 10 日推出 Modern Web Guidance 1.0，一套裝進 coding agent 的網頁守則。203 份指南裡有一份專講輸入法：選字時按的 Enter 不能把訊息送出去。新的掃描器會抓沒檢查的寫法，卻刻意放過老式的 keyCode 13。",
+    "category": "代筆",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-13T00:00:00Z",
+    "tags": [
+      "Modern Web Guidance",
+      "Google Chrome",
+      "coding agent",
+      "輸入法",
+      "IME",
+      "注音",
+      "isComposing",
+      "Safari",
+      "T3 Code",
+      "貂毫"
+    ],
+    "coverImage": "/content/img/2026/modern-web-guidance-ime-enter-rule-cover.svg",
+    "accentColor": "#4f7a5a",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "wintop-gputaskman-why-not-existing-tool",
     "title": "Windows 版的 top 早就有了，保哥應該比我清楚",
     "summary": "保哥 11/11 發了 PowerShell 寫的 WinTop，我以為他重做了 Hanselman 剛發布的 gputaskman，查完發現該比的是 2022 年的 btop4win。我不是靠寫程式吃飯的人，也還在盡力避免重造輪子。他是公開教技術的人，知道 btop，回的理由卻跟 btop4win 的文件對不上，README 也沒說為什麼不用現成的。他該交代的應該比我多。",
