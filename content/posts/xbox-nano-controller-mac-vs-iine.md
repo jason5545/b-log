@@ -24,4 +24,4 @@ Nano 的[產品頁](https://www.xbox.com/en-US/accessories/controllers/xbox-nano
 
 我應該還是會繼續用 Nano。只是我覺得微軟這個邏輯很奇怪。既然要進來這個市場，就應該出一個打趴第三方的東西，結果在我的 Mac 上，它連一支假裝成它的副廠都打不過。
 
-這支叫 Xbox Nano。在我的 Mac 上，我比較想問它：「Xbox なの？」
+這支叫 Xbox Nano。在我的 Mac 上，我比較想問它：「Xbox なの？」至於 IINE，倒是名副其實：いいね。
