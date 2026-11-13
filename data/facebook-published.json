@@ -1849,6 +1849,13 @@
       "postUrl": "https://b-log.to/ghostwritten/modern-web-guidance-ime-enter-rule/",
       "facebookPostId": "1026818047191304_122119778283290922",
       "publishedAt": "2026-11-13T00:14:26.349Z"
+    },
+    "xplane-safety-pilot-why-i-built-it": {
+      "status": "published",
+      "title": "進場我手飛不了，所以寫了一個 X-Plane 外掛讓飛機自己落地",
+      "postUrl": "https://b-log.to/tech-development/xplane-safety-pilot-why-i-built-it/",
+      "facebookPostId": "1026818047191304_122119789497290922",
+      "publishedAt": "2026-11-13T04:45:35.770Z"
     }
   }
 }
