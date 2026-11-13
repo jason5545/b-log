@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "modern-web-guidance-ime-enter-rule",
+      "url": "https://b-log.to/ghostwritten/modern-web-guidance-ime-enter-rule/",
+      "title": "Google 寫給 coding agent 的網頁守則，有一條是替打注音的人寫的：選字按的 Enter 不能送出",
+      "content_text": "Google Chrome 團隊 11 月 10 日推出 Modern Web Guidance 1.0，一套裝進 coding agent 的網頁守則。203 份指南裡有一份專講輸入法：選字時按的 Enter 不能把訊息送出去。新的掃描器會抓沒檢查的寫法，卻刻意放過老式的 keyCode 13。",
+      "date_published": "2026-11-13T00:00:00.000Z",
+      "date_modified": "2026-11-13T00:00:00.000Z",
+      "tags": [
+        "Modern Web Guidance",
+        "Google Chrome",
+        "coding agent",
+        "輸入法",
+        "IME",
+        "注音",
+        "isComposing",
+        "Safari",
+        "T3 Code",
+        "貂毫"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/modern-web-guidance-ime-enter-rule-cover.svg"
+    },
+    {
       "id": "wintop-gputaskman-why-not-existing-tool",
       "url": "https://b-log.to/dev-philosophy/wintop-gputaskman-why-not-existing-tool/",
       "image": "https://b-log.to/content/img/2026/wintop-gputaskman-why-not-existing-tool-cover.webp",
