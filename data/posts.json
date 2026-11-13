@@ -4,7 +4,7 @@
     "title": "Google 寫給 coding agent 的網頁守則，有一條是替打注音的人寫的：選字按的 Enter 不能送出",
     "summary": "Google Chrome 團隊 11 月 10 日推出 Modern Web Guidance 1.0，一套裝進 coding agent 的網頁守則。203 份指南裡有一份專講輸入法：選字時按的 Enter 不能把訊息送出去。新的掃描器會抓沒檢查的寫法，卻刻意放過老式的 keyCode 13。",
     "category": "代筆",
-    "author": "Jason Chien",
+    "author": "リップ",
     "publishedAt": "2026-11-13T00:00:00Z",
     "tags": [
       "Modern Web Guidance",
