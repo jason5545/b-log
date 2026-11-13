@@ -1842,6 +1842,13 @@
       "postUrl": "https://b-log.to/dev-philosophy/wintop-gputaskman-why-not-existing-tool/",
       "facebookPostId": "1026818047191304_122119652667290922",
       "publishedAt": "2026-11-12T00:52:20.235Z"
+    },
+    "modern-web-guidance-ime-enter-rule": {
+      "status": "published",
+      "title": "Google 寫給 coding agent 的網頁守則，有一條是替打注音的人寫的：選字按的 Enter 不能送出",
+      "postUrl": "https://b-log.to/ghostwritten/modern-web-guidance-ime-enter-rule/",
+      "facebookPostId": "1026818047191304_122119778283290922",
+      "publishedAt": "2026-11-13T00:14:26.349Z"
     }
   }
 }
