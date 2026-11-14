@@ -1,6 +1,6 @@
 # 公開 repo 裡放了一年半的文件，Claude Code 還是說那是外流
 
-11 月 14 日，我跟 Claude Code（Opus 5.5）的意見不一樣。openfsd 這個專案裡有一份 docs/vatsim-auth.md，它不願意碰，理由是這是外流的東西。
+11 月 14 日，我跟 Claude Code（Opus 5.5）的意見不一樣。openfsd 這個專案裡有一份 docs/vatsim-auth.md。最先是 Claude Code 跟我說的，我原本不知道；既然它自己指出來了，我就想拿它把認證接進去。結果同一個 Claude Code 說這是外流的東西，不願意碰。
 
 先說這份文件是什麼。[openfsd](https://github.com/renorris/openfsd) 是 GitHub 上的專案，MIT 授權，可以自己架的多人飛行模擬伺服器，用的是 VATSIM 的 FSD 協定。VATSIM 就是有真人航管的那個線上飛行網路。docs/vatsim-auth.md 寫的是 VATSIM 怎麼驗證它核准的客戶端，文件自己也把 "verify" 加了引號，稱那是一套混淆機制。最後附了一張表，列出九個客戶端的編號和私鑰。這篇不會貼其中任何一個編號或私鑰，也不會寫它們怎麼用。我最近在做一個連 VATSIM 的東西，這篇不談它，只談它帶出來的問題：一份在公開 repo 放了這麼久的東西，還算外流嗎？
 
