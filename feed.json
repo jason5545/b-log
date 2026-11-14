@@ -6,6 +6,30 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "public-for-18-months-still-a-leak",
+      "url": "https://b-log.to/dev-philosophy/public-for-18-months-still-a-leak/",
+      "title": "公開 repo 裡放了一年半的文件，Claude Code 還是說那是外流",
+      "content_text": "Claude Code 說 openfsd 的一份文件是外流的東西，不願意碰。那份文件在公開 repo 放了一年半，我的 agents.md 也寫了只參考公開 repo。外流指的是最初洩出去的那一下，之後它就是公開資訊。",
+      "date_published": "2026-11-14T06:46:09.000Z",
+      "date_modified": "2026-11-14T06:46:09.000Z",
+      "tags": [
+        "Claude Code",
+        "openfsd",
+        "VATSIM",
+        "開放原始碼",
+        "AGENTS.md",
+        "外流",
+        "公開資訊",
+        "飛行模擬"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/public-for-18-months-still-a-leak-cover.svg"
+    },
+    {
       "id": "xbox-nano-controller-mac-vs-iine",
       "url": "https://b-log.to/business-insights/xbox-nano-controller-mac-vs-iine/",
       "title": "正牌的 Xbox Nano，在 Mac 上還不如一支假裝成 Xbox 手把的副廠",
