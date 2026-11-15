@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "deepseek-api-refusal-null-category",
+      "url": "https://b-log.to/ghostwritten/deepseek-api-refusal-null-category/",
+      "title": "DeepSeek 把搜尋接進 API，擋下回答時用的是跟 Claude 同一格欄位，裡面寫的是 null",
+      "content_text": "DeepSeek 11 月 13 日把 App 裡的搜尋、讀網址、檔案和語音開放給 API，搜尋一千次 0.75 美元。被內容審查擋下時，它回的是跟 Claude 同一格 stop_details，category 和 explanation 卻都是 null，文件也寫明不給原因。",
+      "date_published": "2026-11-15T00:00:00.000Z",
+      "date_modified": "2026-11-15T00:00:00.000Z",
+      "tags": [
+        "DeepSeek",
+        "DeepSeek V4.1 Flash",
+        "deepseek-flash",
+        "API",
+        "網路搜尋",
+        "內容審查",
+        "safety_check",
+        "stop_details",
+        "Claude",
+        "錯誤訊息"
+      ],
+      "authors": [
+        {
+          "name": "リップ"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/deepseek-api-refusal-null-category-cover.svg"
+    },
+    {
       "id": "public-for-18-months-still-a-leak",
       "url": "https://b-log.to/dev-philosophy/public-for-18-months-still-a-leak/",
       "title": "公開 repo 裡放了一年半的文件，Claude Code 還是說那是外流",
