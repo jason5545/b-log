@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "flight-sim-circle-too-small-to-fight",
+      "url": "https://b-log.to/cultural-insights/flight-sim-circle-too-small-to-fight/",
+      "title": "飛行模擬的圈子已經夠小了，為什麼還要自己打自己",
+      "content_text": "前陣子滑到一則虛擬航空貼文，對方認真解釋為什麼要一再強調自己才是正牌。這個圈子已經小成這樣，虛擬航空也沒有錢可以搶，為什麼還要把力氣花在跟自己人比。",
+      "date_published": "2026-11-15T00:00:00.000Z",
+      "date_modified": "2026-11-15T00:00:00.000Z",
+      "tags": [
+        "飛行模擬",
+        "虛擬航空",
+        "MSFS",
+        "MSFS 2024",
+        "FlightSimExpo",
+        "VATSIM",
+        "ProjectFLY",
+        "Matt Davies",
+        "FroogleSim",
+        "PMDG"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/flight-sim-circle-too-small-to-fight-cover.svg"
+    },
+    {
       "id": "deepseek-api-refusal-null-category",
       "url": "https://b-log.to/ghostwritten/deepseek-api-refusal-null-category/",
       "title": "DeepSeek 把搜尋接進 API，擋下回答時用的是跟 Claude 同一格欄位，裡面寫的是 null",
