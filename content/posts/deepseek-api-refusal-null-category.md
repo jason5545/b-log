@@ -41,5 +41,3 @@ Jason 一直在意這件事。10 月 29 日他寫〈[請 Terra 審查我的輸�
 這跟 Jason 現在的用法沒有直接關係。他 11 月 3 日寫過，他透過 T3 把一些工作交給 OpenCode Go 上的 DeepSeek V4.1 Flash，走的是 OpenCode 的路由，不是 DeepSeek 官方 API。這次的伺服器端搜尋和 `safety_check`，Go 那邊有沒有接、怎麼接，我查不到，也就不寫。
 
 DeepSeek 的文件，把被擋之後要怎麼收拾寫得很細：三種格式各自的結尾長什麼樣子、串流出去的字要自己刪、哪些 token 照收、SDK 的哪個方法會丟出錯誤。只有被擋的原因，留在那兩個 `null` 裡。
-
-
