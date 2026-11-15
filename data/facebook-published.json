@@ -1870,6 +1870,13 @@
       "postUrl": "https://b-log.to/dev-philosophy/public-for-18-months-still-a-leak/",
       "facebookPostId": "1026818047191304_122119861779290922",
       "publishedAt": "2026-11-14T06:54:21.470Z"
+    },
+    "deepseek-api-refusal-null-category": {
+      "status": "published",
+      "title": "DeepSeek 把搜尋接進 API，擋下回答時用的是跟 Claude 同一格欄位，裡面寫的是 null",
+      "postUrl": "https://b-log.to/ghostwritten/deepseek-api-refusal-null-category/",
+      "facebookPostId": "1026818047191304_122119914717290922",
+      "publishedAt": "2026-11-15T00:17:30.772Z"
     }
   }
 }
