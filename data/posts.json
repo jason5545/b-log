@@ -4,7 +4,7 @@
     "title": "Claude Code 團隊把程式碼審查交給機器，外面送來的改動還是要有人問一句：該不該做",
     "summary": "Anthropic 寫了 Claude Code 團隊怎麼審程式碼：大部分交給機器讀，人的核准照風險分級。文章裡有一句很短：外面送來的改動，還是留給人看。Jason 送 T3 Code 上游的 PR，走的就是外面那條路。",
     "category": "代筆",
-    "author": "Jason Chien",
+    "author": "リップ",
     "publishedAt": "2026-11-16T00:00:00Z",
     "tags": [
       "Anthropic",
