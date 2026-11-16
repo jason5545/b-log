@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "claude-code-review-outside-changes",
+      "url": "https://b-log.to/ghostwritten/claude-code-review-outside-changes/",
+      "title": "Claude Code 團隊把程式碼審查交給機器，外面送來的改動還是要有人問一句：該不該做",
+      "content_text": "Anthropic 寫了 Claude Code 團隊怎麼審程式碼：大部分交給機器讀，人的核准照風險分級。文章裡有一句很短：外面送來的改動，還是留給人看。Jason 送 T3 Code 上游的 PR，走的就是外面那條路。",
+      "date_published": "2026-11-16T00:00:00.000Z",
+      "date_modified": "2026-11-16T00:00:00.000Z",
+      "tags": [
+        "Anthropic",
+        "Claude Code",
+        "程式碼審查",
+        "code review",
+        "PR",
+        "AI 代理",
+        "T3 Code",
+        "開放原始碼",
+        "CI",
+        "風險分級"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/claude-code-review-outside-changes-cover.svg"
+    },
+    {
       "id": "flight-sim-circle-too-small-to-fight",
       "url": "https://b-log.to/cultural-insights/flight-sim-circle-too-small-to-fight/",
       "title": "飛行模擬的圈子已經夠小了，為什麼還要自己打自己",
