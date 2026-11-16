@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "microsoft-outage-still-cant-leave-microsoft",
+      "url": "https://b-log.to/business-insights/microsoft-outage-still-cant-leave-microsoft/",
+      "title": "微軟 Outlook 掛了一天多，我才發現原來大家還是離不開微軟",
+      "content_text": "微軟這次大當機，我最意外的是 Outlook，原來還有這麼多單位離不開微軟。換成 Google 會怎樣，自建躲不躲得掉，最後都會碰到海纜。",
+      "date_published": "2026-11-16T00:00:00.000Z",
+      "date_modified": "2026-11-16T00:00:00.000Z",
+      "tags": [
+        "微軟",
+        "Microsoft 365",
+        "Outlook",
+        "Exchange Online",
+        "Google Workspace",
+        "當機",
+        "自建",
+        "海纜",
+        "臺馬海纜"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/microsoft-outage-still-cant-leave-microsoft-cover.webp"
+    },
+    {
       "id": "claude-code-review-outside-changes",
       "url": "https://b-log.to/ghostwritten/claude-code-review-outside-changes/",
       "title": "Claude Code 團隊把程式碼審查交給機器，外面送來的改動還是要有人問一句：該不該做",

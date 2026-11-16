@@ -1,5 +1,27 @@
 [
   {
+    "slug": "microsoft-outage-still-cant-leave-microsoft",
+    "title": "微軟 Outlook 掛了一天多，我才發現原來大家還是離不開微軟",
+    "summary": "微軟這次大當機，我最意外的是 Outlook，原來還有這麼多單位離不開微軟。換成 Google 會怎樣，自建躲不躲得掉，最後都會碰到海纜。",
+    "category": "商業觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-16T00:00:00Z",
+    "tags": [
+      "微軟",
+      "Microsoft 365",
+      "Outlook",
+      "Exchange Online",
+      "Google Workspace",
+      "當機",
+      "自建",
+      "海纜",
+      "臺馬海纜"
+    ],
+    "coverImage": "/content/img/2026/microsoft-outage-still-cant-leave-microsoft-cover.webp",
+    "accentColor": "#1f6f8b",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "claude-code-review-outside-changes",
     "title": "Claude Code 團隊把程式碼審查交給機器，外面送來的改動還是要有人問一句：該不該做",
     "summary": "Anthropic 寫了 Claude Code 團隊怎麼審程式碼：大部分交給機器讀，人的核准照風險分級。文章裡有一句很短：外面送來的改動，還是留給人看。Jason 送 T3 Code 上游的 PR，走的就是外面那條路。",
