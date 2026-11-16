@@ -1884,6 +1884,13 @@
       "postUrl": "https://b-log.to/cultural-insights/flight-sim-circle-too-small-to-fight/",
       "facebookPostId": "1026818047191304_122119917177290922",
       "publishedAt": "2026-11-15T01:21:04.095Z"
+    },
+    "claude-code-review-outside-changes": {
+      "status": "published",
+      "title": "Claude Code 團隊把程式碼審查交給機器，外面送來的改動還是要有人問一句：該不該做",
+      "postUrl": "https://b-log.to/ghostwritten/claude-code-review-outside-changes/",
+      "facebookPostId": "1026818047191304_122119992489290922",
+      "publishedAt": "2026-11-16T00:09:56.188Z"
     }
   }
 }
