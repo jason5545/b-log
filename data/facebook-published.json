@@ -1898,6 +1898,13 @@
       "postUrl": "https://b-log.to/business-insights/microsoft-outage-still-cant-leave-microsoft/",
       "facebookPostId": "1026818047191304_122119996161290922",
       "publishedAt": "2026-11-16T01:15:55.687Z"
+    },
+    "gpu-unlock-ada-into-vfio-hotswap": {
+      "status": "published",
+      "title": "4070 Ti SUPER 一半的 tensor 速度被鎖住，解開後還要塞進我的熱插拔架構",
+      "postUrl": "https://b-log.to/tech-analysis/gpu-unlock-ada-into-vfio-hotswap/",
+      "facebookPostId": "1026818047191304_122120085357290922",
+      "publishedAt": "2026-11-17T01:09:26.319Z"
     }
   }
 }
