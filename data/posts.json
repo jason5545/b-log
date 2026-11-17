@@ -1,5 +1,27 @@
 [
   {
+    "slug": "gpu-unlock-ada-into-vfio-hotswap",
+    "title": "4070 Ti SUPER 一半的 tensor 速度被鎖住，解開後還要塞進我的熱插拔架構",
+    "summary": "我那張 4070 Ti SUPER 平常直通給 Windows，Linux 容器要用時再熱拔借走。把別人做好的 tensor 解鎖套進這套架構，先問的是順序對不對，結果是一次重開機就成功，cuBLAS 8192³ 的 FP16 從 88.2 變 159.4 TF/s。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-17T00:00:00Z",
+    "tags": [
+      "RTX 4070 Ti SUPER",
+      "tensor 核心",
+      "gpu-unlock-ada",
+      "Proxmox",
+      "VFIO",
+      "熱插拔",
+      "cuBLAS",
+      "開放原始碼",
+      "Claude Code"
+    ],
+    "coverImage": "/content/img/2026/gpu-unlock-ada-into-vfio-hotswap-cover.webp",
+    "accentColor": "#4a8f6a",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "microsoft-outage-still-cant-leave-microsoft",
     "title": "微軟 Outlook 掛了一天多，我才發現原來大家還是離不開微軟",
     "summary": "微軟這次大當機，我最意外的是 Outlook，原來還有這麼多單位離不開微軟。換成 Google 會怎樣，自建躲不躲得掉，最後都會碰到海纜。",

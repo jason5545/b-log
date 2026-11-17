@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "gpu-unlock-ada-into-vfio-hotswap",
+      "url": "https://b-log.to/tech-analysis/gpu-unlock-ada-into-vfio-hotswap/",
+      "title": "4070 Ti SUPER 一半的 tensor 速度被鎖住，解開後還要塞進我的熱插拔架構",
+      "content_text": "我那張 4070 Ti SUPER 平常直通給 Windows，Linux 容器要用時再熱拔借走。把別人做好的 tensor 解鎖套進這套架構，先問的是順序對不對，結果是一次重開機就成功，cuBLAS 8192³ 的 FP16 從 88.2 變 159.4 TF/s。",
+      "date_published": "2026-11-17T00:00:00.000Z",
+      "date_modified": "2026-11-17T00:00:00.000Z",
+      "tags": [
+        "RTX 4070 Ti SUPER",
+        "tensor 核心",
+        "gpu-unlock-ada",
+        "Proxmox",
+        "VFIO",
+        "熱插拔",
+        "cuBLAS",
+        "開放原始碼",
+        "Claude Code"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/gpu-unlock-ada-into-vfio-hotswap-cover.webp"
+    },
+    {
       "id": "microsoft-outage-still-cant-leave-microsoft",
       "url": "https://b-log.to/business-insights/microsoft-outage-still-cant-leave-microsoft/",
       "title": "微軟 Outlook 掛了一天多，我才發現原來大家還是離不開微軟",
