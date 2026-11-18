@@ -1,5 +1,28 @@
 [
   {
+    "slug": "ai-code-open-source-which-lines-are-human",
+    "title": "有人主張 AI 寫的程式碼都該開放原始碼，授權真正管得到的，是人寫的那幾行",
+    "summary": "jQuery Terminal 的作者主張 AI 生成的程式碼都該開放原始碼。照 FSFE 的整理，完全由模型產出的部分沒有著作權，授權條款管不到。授權真正管得到的是人寫的那幾行，所以要有人記下誰做了什麼。Jason 公開的蓬萊韻，分工寫在部落格上。",
+    "category": "代筆",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-18T00:00:00Z",
+    "tags": [
+      "開放原始碼",
+      "著作權",
+      "授權",
+      "GPL",
+      "LGPL",
+      "AI 生成程式碼",
+      "FSFE",
+      "Hacker News",
+      "Claude Code",
+      "蓬萊韻"
+    ],
+    "coverImage": "/content/img/2026/ai-code-open-source-which-lines-are-human-cover.svg",
+    "accentColor": "#5b6b3f",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "gpu-unlock-ada-into-vfio-hotswap",
     "title": "4070 Ti SUPER 一半的 tensor 速度被鎖住，解開後還要塞進我的熱插拔架構",
     "summary": "我那張 4070 Ti SUPER 平常直通給 Windows，Linux 容器要用時再熱拔借走。把別人做好的 tensor 解鎖套進這套架構，先問的是順序對不對，結果是一次重開機就成功，cuBLAS 8192³ 的 FP16 從 88.2 變 159.4 TF/s。",
