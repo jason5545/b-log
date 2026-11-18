@@ -1,5 +1,7 @@
 # 我把 Mac 的「查詢／字典」功能徹底關掉了（而且保留 Force Click）
 
+後來的做法：[〈Mac 的辭典一直跳出來，我 2 月的腳本每 10 分鐘就把「用力點按查詢」重新打開〉](https://b-log.to/tech-analysis/mac-dictionary-popup-force-click-script/)
+
 最近我有個很煩的問題：Mac 的「查詢（Look Up）」視窗會突然跳出來，有時甚至直接冒出字典。
 
 我平常根本不需要用系統字典。要查中英字典或 Wikipedia，我會直接開瀏覽器，或用我常用的工具。這個功能對我來說不是效率加成，反而是干擾。
