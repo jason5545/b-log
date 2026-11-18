@@ -1,5 +1,27 @@
 [
   {
+    "slug": "mac-dictionary-popup-force-click-script",
+    "title": "Mac 的辭典一直跳出來，我 2 月的腳本每 10 分鐘就把「用力點按查詢」重新打開",
+    "summary": "Mac 的辭典又跳出來，我叫 Claude Code 查日誌，才發現 2 月那支每 10 分鐘跑一次的腳本，一邊寫著要保留 Force Click，一邊把用力點按查詢重新打開。新的做法是辭典一啟動就關掉它。",
+    "category": "技術分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-18T00:00:00Z",
+    "tags": [
+      "macOS",
+      "辭典",
+      "查詢",
+      "用力點按",
+      "LaunchAgent",
+      "XPC",
+      "DictGuard",
+      "Claude Code",
+      "T3 Code"
+    ],
+    "coverImage": "/content/img/2026/mac-dictionary-popup-force-click-script-cover.svg",
+    "accentColor": "#3b7ea1",
+    "readingTime": "4 min"
+  },
+  {
     "slug": "ai-code-open-source-which-lines-are-human",
     "title": "有人主張 AI 寫的程式碼都該開放原始碼，授權真正管得到的，是人寫的那幾行",
     "summary": "jQuery Terminal 的作者主張 AI 生成的程式碼都該開放原始碼。照 FSFE 的整理，完全由模型產出的部分沒有著作權，授權條款管不到。授權真正管得到的是人寫的那幾行，所以要有人記下誰做了什麼。Jason 公開的蓬萊韻，分工寫在部落格上。",
