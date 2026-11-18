@@ -6,6 +6,31 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "mac-dictionary-popup-force-click-script",
+      "url": "https://b-log.to/tech-analysis/mac-dictionary-popup-force-click-script/",
+      "title": "Mac 的辭典一直跳出來，我 2 月的腳本每 10 分鐘就把「用力點按查詢」重新打開",
+      "content_text": "Mac 的辭典又跳出來，我叫 Claude Code 查日誌，才發現 2 月那支每 10 分鐘跑一次的腳本，一邊寫著要保留 Force Click，一邊把用力點按查詢重新打開。新的做法是辭典一啟動就關掉它。",
+      "date_published": "2026-11-18T00:00:00.000Z",
+      "date_modified": "2026-11-18T00:00:00.000Z",
+      "tags": [
+        "macOS",
+        "辭典",
+        "查詢",
+        "用力點按",
+        "LaunchAgent",
+        "XPC",
+        "DictGuard",
+        "Claude Code",
+        "T3 Code"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/mac-dictionary-popup-force-click-script-cover.svg"
+    },
+    {
       "id": "ai-code-open-source-which-lines-are-human",
       "url": "https://b-log.to/ghostwritten/ai-code-open-source-which-lines-are-human/",
       "title": "有人主張 AI 寫的程式碼都該開放原始碼，授權真正管得到的，是人寫的那幾行",
