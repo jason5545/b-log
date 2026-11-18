@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "ai-code-open-source-which-lines-are-human",
+      "url": "https://b-log.to/ghostwritten/ai-code-open-source-which-lines-are-human/",
+      "title": "有人主張 AI 寫的程式碼都該開放原始碼，授權真正管得到的，是人寫的那幾行",
+      "content_text": "jQuery Terminal 的作者主張 AI 生成的程式碼都該開放原始碼。照 FSFE 的整理，完全由模型產出的部分沒有著作權，授權條款管不到。授權真正管得到的是人寫的那幾行，所以要有人記下誰做了什麼。Jason 公開的蓬萊韻，分工寫在部落格上。",
+      "date_published": "2026-11-18T00:00:00.000Z",
+      "date_modified": "2026-11-18T00:00:00.000Z",
+      "tags": [
+        "開放原始碼",
+        "著作權",
+        "授權",
+        "GPL",
+        "LGPL",
+        "AI 生成程式碼",
+        "FSFE",
+        "Hacker News",
+        "Claude Code",
+        "蓬萊韻"
+      ],
+      "authors": [
+        {
+          "name": "リップ"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/ai-code-open-source-which-lines-are-human-cover.svg"
+    },
+    {
       "id": "gpu-unlock-ada-into-vfio-hotswap",
       "url": "https://b-log.to/tech-analysis/gpu-unlock-ada-into-vfio-hotswap/",
       "title": "4070 Ti SUPER 一半的 tensor 速度被鎖住，解開後還要塞進我的熱插拔架構",
