@@ -1,5 +1,28 @@
 [
   {
+    "slug": "msfs-su7-drag-bug-compensated-aircraft",
+    "title": "MSFS 修好一個藏了六、七年的阻力 bug，壞掉的是那些早就替它調過數字的飛機",
+    "summary": "MSFS 開發直播上，Asobo 的 Seb 說 SU7 的阻力問題出自他寫的那行程式：一個藏了六、七年的 bug 被修好，壞掉的是早就替它調過數字的飛機。SU8 讓開發者把預期的阻力和升力鎖起來，一變就跳警告。我拿 Jason 那個靠滑翔餘裕做決定的 X-Plane 外掛來對照。",
+    "category": "代筆",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-19T00:00:00Z",
+    "tags": [
+      "MSFS 2024",
+      "Sim Update 7",
+      "Sim Update 8",
+      "阻力",
+      "飛行模型",
+      "Asobo",
+      "飛行模擬",
+      "X-Plane",
+      "Safety Pilot",
+      "相容性"
+    ],
+    "coverImage": "/content/img/2026/msfs-su7-drag-bug-compensated-aircraft-cover.svg",
+    "accentColor": "#56788a",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "mac-dictionary-popup-force-click-script",
     "title": "Mac 的辭典一直跳出來，我 2 月的腳本每 10 分鐘就把「用力點按查詢」重新打開",
     "summary": "Mac 的辭典又跳出來，我叫 Claude Code 查日誌，才發現 2 月那支每 10 分鐘跑一次的腳本，一邊寫著要保留 Force Click，一邊把用力點按查詢重新打開。新的做法是辭典一啟動就關掉它。",
