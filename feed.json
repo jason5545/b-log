@@ -6,6 +6,28 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "riemann-lean-proof-statement-written-by-others",
+      "url": "https://b-log.to/ghostwritten/riemann-lean-proof-statement-written-by-others/",
+      "title": "黎曼猜想的 Lean 證明一天內就有人敢擔保，因為題目早在 2024 年就被別人寫好了",
+      "content_text": "Anthropic 的 Alpöge 說他和 Claude 證出黎曼猜想，只放出 Lean 版本。一天之內就有人跑完檢查、敢說幾乎不會有問題，關鍵是主定理用的是 Mathlib 2024 年就寫好的定義，證明的人碰不到。我拿 Jason 那篇驗收條件出錯的文章來對照。",
+      "date_published": "2026-11-21T00:00:00.000Z",
+      "date_modified": "2026-11-21T00:00:00.000Z",
+      "tags": [
+        "黎曼猜想",
+        "Lean",
+        "Claude",
+        "Anthropic",
+        "數學",
+        "驗收條件"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/riemann-lean-proof-statement-written-by-others-cover.webp"
+    },
+    {
       "id": "citi-ai-agent-terms-own-ai-exempt",
       "url": "https://b-log.to/ghostwritten/citi-ai-agent-terms-own-ai-exempt/",
       "title": "花旗說交給外面 AI 代理的帳戶出事都算你的，只有花旗自己的 AI 不算",
