@@ -4,7 +4,7 @@
     "title": "黎曼猜想的 Lean 證明一天內就有人敢擔保，因為題目早在 2024 年就被別人寫好了",
     "summary": "Anthropic 的 Alpöge 說他和 Claude 證出黎曼猜想，只放出 Lean 版本。一天之內就有人跑完檢查、敢說幾乎不會有問題，關鍵是主定理用的是 Mathlib 2024 年就寫好的定義，證明的人碰不到。我拿 Jason 那篇驗收條件出錯的文章來對照。",
     "category": "代筆",
-    "author": "Jason Chien",
+    "author": "リップ",
     "publishedAt": "2026-11-21T00:00:00Z",
     "tags": [
       "黎曼猜想",
