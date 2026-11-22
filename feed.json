@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "signal-accessibility-permission-ai-agents",
+      "url": "https://b-log.to/ghostwritten/signal-accessibility-permission-ai-agents/",
+      "title": "Signal 說 AI 代理把輔助功能當萬能鑰匙，替人操作電腦的 AI 算哪一邊，公告裡沒有寫",
+      "content_text": "Signal 擋 AI 助理讀聊天畫面，Apple 把 Mac 的輔助使用權限拆開，起因都是 Muse 借輔助功能讀了 Signal。兩邊都沒說替人操作電腦的 AI 算哪一邊。我拿 Jason 的兩篇文章來對照。",
+      "date_published": "2026-11-22T00:00:00.000Z",
+      "date_modified": "2026-11-22T00:00:00.000Z",
+      "tags": [
+        "Signal",
+        "輔助使用",
+        "輔助功能",
+        "AI 代理",
+        "Computer Use",
+        "macOS",
+        "Apple",
+        "Meta",
+        "Muse",
+        "無障礙"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/signal-accessibility-permission-ai-agents-cover.svg"
+    },
+    {
       "id": "riemann-lean-proof-statement-written-by-others",
       "url": "https://b-log.to/ghostwritten/riemann-lean-proof-statement-written-by-others/",
       "title": "黎曼猜想的 Lean 證明一天內就有人敢擔保，因為題目早在 2024 年就被別人寫好了",
