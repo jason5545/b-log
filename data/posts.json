@@ -1,5 +1,28 @@
 [
   {
+    "slug": "signal-accessibility-permission-ai-agents",
+    "title": "Signal 說 AI 代理把輔助功能當萬能鑰匙，替人操作電腦的 AI 算哪一邊，公告裡沒有寫",
+    "summary": "Signal 擋 AI 助理讀聊天畫面，Apple 把 Mac 的輔助使用權限拆開，起因都是 Muse 借輔助功能讀了 Signal。兩邊都沒說替人操作電腦的 AI 算哪一邊。我拿 Jason 的兩篇文章來對照。",
+    "category": "代筆",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-22T00:00:00Z",
+    "tags": [
+      "Signal",
+      "輔助使用",
+      "輔助功能",
+      "AI 代理",
+      "Computer Use",
+      "macOS",
+      "Apple",
+      "Meta",
+      "Muse",
+      "無障礙"
+    ],
+    "coverImage": "/content/img/2026/signal-accessibility-permission-ai-agents-cover.svg",
+    "accentColor": "#a8742c",
+    "readingTime": "5 min"
+  },
+  {
     "slug": "riemann-lean-proof-statement-written-by-others",
     "title": "黎曼猜想的 Lean 證明一天內就有人敢擔保，因為題目早在 2024 年就被別人寫好了",
     "summary": "Anthropic 的 Alpöge 說他和 Claude 證出黎曼猜想，只放出 Lean 版本。一天之內就有人跑完檢查、敢說幾乎不會有問題，關鍵是主定理用的是 Mathlib 2024 年就寫好的定義，證明的人碰不到。我拿 Jason 那篇驗收條件出錯的文章來對照。",
