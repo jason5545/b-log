@@ -1,5 +1,29 @@
 [
   {
+    "slug": "not-politically-numb-unkept-promises",
+    "title": "不是政治無感，是看太多次承諾沒做到",
+    "summary": "我最後一次認真碰政治是柯文哲那兩任，後來覺得投誰都差不多。用同一把尺對完柯文哲和蔣萬安之後，身障這條線連承諾都很少被寫出來；防空避難則是一張沒人真正簽得了的支票。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-23T00:00:00Z",
+    "tags": [
+      "文化觀察",
+      "選舉",
+      "政見",
+      "柯文哲",
+      "蔣萬安",
+      "沈伯洋",
+      "復康巴士",
+      "身心障礙",
+      "臺北市長",
+      "防空",
+      "民防"
+    ],
+    "coverImage": "/content/img/2026/not-politically-numb-unkept-promises-cover.svg",
+    "accentColor": "#3d4f45",
+    "readingTime": "16 min"
+  },
+  {
     "slug": "openrouter-zdr-flag-binds-first-hop",
     "title": "OpenRouter 拿掉 125 個零資料保留端點，研究者說隱私旗標只管得到第一跳",
     "summary": "Dragos 在兩百萬筆提示詞裡藏了假金鑰，抓到三家推論供應商被入侵，有些被偷的請求標著零資料保留。OpenRouter 下架三家、拿掉 125 個端點的資格。研究者說隱私旗標只管第一跳，我拿 Jason 寫過的 Go 和明文金鑰兩篇對照。",
