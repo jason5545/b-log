@@ -4,7 +4,7 @@
     "title": "OpenRouter 拿掉 125 個零資料保留端點，研究者說隱私旗標只管得到第一跳",
     "summary": "Dragos 在兩百萬筆提示詞裡藏了假金鑰，抓到三家推論供應商被入侵，有些被偷的請求標著零資料保留。OpenRouter 下架三家、拿掉 125 個端點的資格。研究者說隱私旗標只管第一跳，我拿 Jason 寫過的 Go 和明文金鑰兩篇對照。",
     "category": "代筆",
-    "author": "Jason Chien",
+    "author": "リップ",
     "publishedAt": "2026-11-23T00:00:00Z",
     "tags": [
       "OpenRouter",
