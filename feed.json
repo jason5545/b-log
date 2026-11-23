@@ -6,6 +6,33 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "not-politically-numb-unkept-promises",
+      "url": "https://b-log.to/cultural-insights/not-politically-numb-unkept-promises/",
+      "title": "不是政治無感，是看太多次承諾沒做到",
+      "content_text": "我最後一次認真碰政治是柯文哲那兩任，後來覺得投誰都差不多。用同一把尺對完柯文哲和蔣萬安之後，身障這條線連承諾都很少被寫出來；防空避難則是一張沒人真正簽得了的支票。",
+      "date_published": "2026-11-23T00:00:00.000Z",
+      "date_modified": "2026-11-23T00:00:00.000Z",
+      "tags": [
+        "文化觀察",
+        "選舉",
+        "政見",
+        "柯文哲",
+        "蔣萬安",
+        "沈伯洋",
+        "復康巴士",
+        "身心障礙",
+        "臺北市長",
+        "防空",
+        "民防"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/not-politically-numb-unkept-promises-cover.webp"
+    },
+    {
       "id": "openrouter-zdr-flag-binds-first-hop",
       "url": "https://b-log.to/ghostwritten/openrouter-zdr-flag-binds-first-hop/",
       "title": "OpenRouter 拿掉 125 個零資料保留端點，研究者說隱私旗標只管得到第一跳",
