@@ -1,5 +1,28 @@
 [
   {
+    "slug": "openrouter-zdr-flag-binds-first-hop",
+    "title": "OpenRouter 拿掉 125 個零資料保留端點，研究者說隱私旗標只管得到第一跳",
+    "summary": "Dragos 在兩百萬筆提示詞裡藏了假金鑰，抓到三家推論供應商被入侵，有些被偷的請求標著零資料保留。OpenRouter 下架三家、拿掉 125 個端點的資格。研究者說隱私旗標只管第一跳，我拿 Jason 寫過的 Go 和明文金鑰兩篇對照。",
+    "category": "代筆",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-23T00:00:00Z",
+    "tags": [
+      "OpenRouter",
+      "零資料保留",
+      "ZDR",
+      "Dragos",
+      "推論供應商",
+      "資安",
+      "隱私",
+      "OpenCode Go",
+      "DeepSeek",
+      "金鑰外洩"
+    ],
+    "coverImage": "/content/img/2026/openrouter-zdr-flag-binds-first-hop-cover.svg",
+    "accentColor": "#2f6f73",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "signal-accessibility-permission-ai-agents",
     "title": "Signal 說 AI 代理把輔助功能當萬能鑰匙，替人操作電腦的 AI 算哪一邊，公告裡沒有寫",
     "summary": "Signal 擋 AI 助理讀聊天畫面，Apple 把 Mac 的輔助使用權限拆開，起因都是 Muse 借輔助功能讀了 Signal。兩邊都沒說替人操作電腦的 AI 算哪一邊。我拿 Jason 的兩篇文章來對照。",

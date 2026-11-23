@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <rect x="0" y="0" width="1600" height="900" fill="#e9e4d8"/>
+  <rect x="0" y="640" width="1600" height="260" fill="#ddd6c6"/>
+  <!-- route line -->
+  <path d="M260 450 L560 450 L800 450 L1040 450 L1300 450" stroke="#2f6f73" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <path d="M800 450 C860 560 980 600 1080 600" stroke="#2f6f73" stroke-width="8" fill="none" stroke-dasharray="18 16" stroke-linecap="round"/>
+  <!-- prompt sheet -->
+  <g transform="translate(205 360)">
+    <rect x="0" y="0" width="120" height="160" rx="8" fill="#fbf8f1" stroke="#33413f" stroke-width="5"/>
+    <rect x="22" y="34" width="76" height="9" rx="4" fill="#9aa6a0"/>
+    <rect x="22" y="60" width="62" height="9" rx="4" fill="#9aa6a0"/>
+    <rect x="22" y="86" width="76" height="9" rx="4" fill="#9aa6a0"/>
+    <g transform="translate(30 112)">
+      <circle cx="10" cy="12" r="10" fill="none" stroke="#c98a1b" stroke-width="5"/>
+      <rect x="18" y="9" width="34" height="7" rx="3" fill="#c98a1b"/>
+      <rect x="40" y="16" width="6" height="10" fill="#c98a1b"/>
+    </g>
+  </g>
+  <!-- hop 1 with flag -->
+  <g transform="translate(500 380)">
+    <rect x="0" y="0" width="120" height="140" rx="12" fill="#2f6f73"/>
+    <rect x="18" y="26" width="84" height="12" rx="4" fill="#9ccfc9"/>
+    <rect x="18" y="56" width="84" height="12" rx="4" fill="#9ccfc9"/>
+    <rect x="18" y="86" width="84" height="12" rx="4" fill="#9ccfc9"/>
+    <rect x="56" y="-120" width="7" height="122" fill="#33413f"/>
+    <path d="M63 -118 L140 -96 L63 -72 Z" fill="#f0f3ef" stroke="#33413f" stroke-width="4"/>
+  </g>
+  <!-- hop 2 -->
+  <g transform="translate(740 380)">
+    <rect x="0" y="0" width="120" height="140" rx="12" fill="#3d5c62"/>
+    <rect x="18" y="26" width="84" height="12" rx="4" fill="#a8bcbc"/>
+    <rect x="18" y="56" width="84" height="12" rx="4" fill="#a8bcbc"/>
+    <rect x="18" y="86" width="84" height="12" rx="4" fill="#a8bcbc"/>
+  </g>
+  <!-- hop 3 -->
+  <g transform="translate(980 380)">
+    <rect x="0" y="0" width="120" height="140" rx="12" fill="#4a5752"/>
+    <rect x="18" y="26" width="84" height="12" rx="4" fill="#b3bab3"/>
+    <rect x="18" y="56" width="84" height="12" rx="4" fill="#b3bab3"/>
+    <rect x="18" y="86" width="84" height="12" rx="4" fill="#b3bab3"/>
+  </g>
+  <!-- hidden side hop -->
+  <g transform="translate(1080 545)">
+    <rect x="0" y="0" width="110" height="110" rx="12" fill="none" stroke="#4a5752" stroke-width="6" stroke-dasharray="14 10"/>
+    <circle cx="55" cy="55" r="22" fill="#4a5752"/>
+    <circle cx="55" cy="55" r="9" fill="#e9e4d8"/>
+  </g>
+  <!-- last hop: open box with canary -->
+  <g transform="translate(1240 390)">
+    <rect x="0" y="40" width="120" height="100" rx="10" fill="#5b4a3a"/>
+    <path d="M0 40 L-20 6 L60 6 L60 40 Z" fill="#6f5c48"/>
+    <g transform="translate(36 -40)">
+      <ellipse cx="30" cy="40" rx="30" ry="22" fill="#e0b22c"/>
+      <circle cx="58" cy="22" r="16" fill="#e0b22c"/>
+      <path d="M72 20 L88 25 L72 29 Z" fill="#c9771a"/>
+      <circle cx="62" cy="18" r="3.5" fill="#33413f"/>
+      <path d="M4 38 L-18 30 L-10 46 Z" fill="#c99a1f"/>
+      <path d="M18 40 C28 52 40 52 46 42" stroke="#c99a1f" stroke-width="5" fill="none"/>
+      <rect x="24" y="60" width="4" height="22" fill="#33413f"/>
+      <rect x="36" y="60" width="4" height="22" fill="#33413f"/>
+    </g>
+  </g>
+</svg>
