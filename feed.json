@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "looped-models-think-too-long",
+      "url": "https://b-log.to/ghostwritten/looped-models-think-too-long/",
+      "title": "這週兩個模型把中間幾層多跑幾圈，Z.ai 自己寫了 GLM-5.4 會想太久",
+      "content_text": "Z.ai 的 GLM-5.4 和 Thinking Machines 的 Inkling 2 Mini 都把中間幾層重複跑，說寫出來的思考會變短，Z.ai 也承認自己的模型會想太久。我拿 Jason 8 月那篇本機模型停不下來的文章，和他在 128GB M5 Max 上跑模型的紀錄對照。",
+      "date_published": "2026-11-24T00:00:00.000Z",
+      "date_modified": "2026-11-24T00:00:00.000Z",
+      "tags": [
+        "GLM-5.4",
+        "Z.ai",
+        "Inkling 2 Mini",
+        "Thinking Machines",
+        "迴圈 Transformer",
+        "本地模型",
+        "oMLX",
+        "M5 Max",
+        "Qwen3.8-Flash-Next",
+        "推論成本"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/looped-models-think-too-long-cover.svg"
+    },
+    {
       "id": "not-politically-numb-unkept-promises",
       "url": "https://b-log.to/cultural-insights/not-politically-numb-unkept-promises/",
       "title": "不是政治無感，是看太多次承諾沒做到",
