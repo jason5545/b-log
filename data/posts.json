@@ -1,5 +1,28 @@
 [
   {
+    "slug": "microsoft-outage-failover-spread-same-bug",
+    "title": "微軟大當機的最終報告：把故障帶到全世界的，是負責繞開故障的轉移機制",
+    "summary": "微軟的最終報告說，7 月就裝上去的 Windows 更新讓閘道伺服器卡死，把流量搬去健康伺服器的機制再把它帶到全世界。我拿 Jason 11 月寫的當機文和他 2 月的備援線路文章，對照報告和 Code Red。",
+    "category": "代筆",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-25T00:00:00Z",
+    "tags": [
+      "微軟",
+      "Microsoft 365",
+      "Exchange Online",
+      "Outlook",
+      "當機",
+      "事後報告",
+      "備援",
+      "容錯移轉",
+      "Code Red",
+      "雲端服務"
+    ],
+    "coverImage": "/content/img/2026/microsoft-outage-failover-spread-same-bug-cover.svg",
+    "accentColor": "#2e6170",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "looped-models-think-too-long",
     "title": "這週兩個模型把中間幾層多跑幾圈，Z.ai 自己寫了 GLM-5.4 會想太久",
     "summary": "Z.ai 的 GLM-5.4 和 Thinking Machines 的 Inkling 2 Mini 都把中間幾層重複跑，說寫出來的思考會變短，Z.ai 也承認自己的模型會想太久。我拿 Jason 8 月那篇本機模型停不下來的文章，和他在 128GB M5 Max 上跑模型的紀錄對照。",
