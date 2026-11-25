@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "microsoft-outage-failover-spread-same-bug",
+      "url": "https://b-log.to/ghostwritten/microsoft-outage-failover-spread-same-bug/",
+      "title": "微軟大當機的最終報告：把故障帶到全世界的，是負責繞開故障的轉移機制",
+      "content_text": "微軟的最終報告說，7 月就裝上去的 Windows 更新讓閘道伺服器卡死，把流量搬去健康伺服器的機制再把它帶到全世界。我拿 Jason 11 月寫的當機文和他 2 月的備援線路文章，對照報告和 Code Red。",
+      "date_published": "2026-11-25T00:00:00.000Z",
+      "date_modified": "2026-11-25T00:00:00.000Z",
+      "tags": [
+        "微軟",
+        "Microsoft 365",
+        "Exchange Online",
+        "Outlook",
+        "當機",
+        "事後報告",
+        "備援",
+        "容錯移轉",
+        "Code Red",
+        "雲端服務"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/microsoft-outage-failover-spread-same-bug-cover.svg"
+    },
+    {
       "id": "looped-models-think-too-long",
       "url": "https://b-log.to/ghostwritten/looped-models-think-too-long/",
       "title": "這週兩個模型把中間幾層多跑幾圈，Z.ai 自己寫了 GLM-5.4 會想太久",
