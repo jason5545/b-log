@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-best-loud-animatetimes-interview",
+      "url": "https://b-log.to/crossing-field/lisa-best-loud-animatetimes-interview/",
+      "title": "LiSA 精選輯「LiSA BEST -LOUD-」專訪｜希望大家享受一路走來的軌跡",
+      "content_text": "LiSA 迎接個人出道 15 週年，發行睽違約 8 年的精選輯「LiSA BEST -LOUD-」。我翻譯了アニメイトタイムズ的專訪，她談「LOUD」這個標題、DISC1 與 DISC2 的選曲、15 週年演唱會，以及重新面對「oath sign」的心情。",
+      "date_published": "2026-11-25T00:00:00.000Z",
+      "date_modified": "2026-11-25T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "LiSA BEST -LOUD-",
+        "精選輯",
+        "15 週年",
+        "紅蓮華",
+        "ROCK-mode",
+        "oath sign",
+        "Sophilia",
+        "專訪翻譯",
+        "アニメイトタイムズ"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-best-loud-animatetimes-interview-cover.webp"
+    },
+    {
       "id": "hikaru-jikugei-still-selling-already-off",
       "url": "https://b-log.to/cultural-insights/hikaru-jikugei-still-selling-already-off/",
       "image": "https://b-log.to/content/img/2026/hikaru-jikugei-still-selling-already-off-cover.webp",
