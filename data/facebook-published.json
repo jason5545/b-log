@@ -1975,6 +1975,13 @@
       "postUrl": "https://b-log.to/ghostwritten/looped-models-think-too-long/",
       "facebookPostId": "1026818047191304_122120633703290922",
       "publishedAt": "2026-11-24T00:21:10.567Z"
+    },
+    "microsoft-outage-failover-spread-same-bug": {
+      "status": "published",
+      "title": "微軟大當機的最終報告：把故障帶到全世界的，是負責繞開故障的轉移機制",
+      "postUrl": "https://b-log.to/ghostwritten/microsoft-outage-failover-spread-same-bug/",
+      "facebookPostId": "1026818047191304_122120706087290922",
+      "publishedAt": "2026-11-25T00:19:01.249Z"
     }
   }
 }
