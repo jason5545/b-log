@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "hikaru-jikugei-still-selling-already-off",
+      "url": "https://b-log.to/cultural-insights/hikaru-jikugei-still-selling-already-off/",
+      "image": "https://b-log.to/content/img/2026/hikaru-jikugei-still-selling-already-off-cover.webp",
+      "title": "我現在看到集藝跟「熱賣中」，就知道不太對了",
+      "content_text": "二月寫過綾野真白在角落文創賣不完。這次 Hikaru 的臺北首場，主辦還是集藝，場地還是那個房間，開賣一週後他們自己說門票還在熱賣中。我現在看到這兩個，就知道包裝不太對勁。距離演出還有二十四天，庫存沒公開，這是訊號，還不是判決。",
+      "date_published": "2026-11-25T00:00:00.000Z",
+      "date_modified": "2026-11-25T00:00:00.000Z",
+      "tags": [
+        "動漫音樂",
+        "Hikaru",
+        "Kalafina",
+        "集藝文化",
+        "綾野真白",
+        "演唱會",
+        "產業觀察"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ]
+    },
+    {
       "id": "microsoft-outage-failover-spread-same-bug",
       "url": "https://b-log.to/ghostwritten/microsoft-outage-failover-spread-same-bug/",
       "title": "微軟大當機的最終報告：把故障帶到全世界的，是負責繞開故障的轉移機制",

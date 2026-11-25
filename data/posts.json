@@ -1,5 +1,25 @@
 [
   {
+    "slug": "hikaru-jikugei-still-selling-already-off",
+    "title": "我現在看到集藝跟「熱賣中」，就知道不太對了",
+    "summary": "二月寫過綾野真白在角落文創賣不完。這次 Hikaru 的臺北首場，主辦還是集藝，場地還是那個房間，開賣一週後他們自己說門票還在熱賣中。我現在看到這兩個，就知道包裝不太對勁。距離演出還有二十四天，庫存沒公開，這是訊號，還不是判決。",
+    "category": "文化觀察",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-25T00:00:00Z",
+    "tags": [
+      "動漫音樂",
+      "Hikaru",
+      "Kalafina",
+      "集藝文化",
+      "綾野真白",
+      "演唱會",
+      "產業觀察"
+    ],
+    "accentColor": "#5c5348",
+    "coverImage": "/content/img/2026/hikaru-jikugei-still-selling-already-off-cover.webp",
+    "readingTime": "7 min"
+  },
+  {
     "slug": "microsoft-outage-failover-spread-same-bug",
     "title": "微軟大當機的最終報告：把故障帶到全世界的，是負責繞開故障的轉移機制",
     "summary": "微軟的最終報告說，7 月就裝上去的 Windows 更新讓閘道伺服器卡死，把流量搬去健康伺服器的機制再把它帶到全世界。我拿 Jason 11 月寫的當機文和他 2 月的備援線路文章，對照報告和 Code Red。",
