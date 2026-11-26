@@ -1,5 +1,28 @@
 [
   {
+    "slug": "theo-gemini-neon-third-seat",
+    "title": "Theo 罵完 Argon 和 Carbon，說 Neon 是他現在最喜歡的模型；我先讓它審一次譯文，才把它放進第三席",
+    "summary": "Theo 罵完 Argon 和 Carbon，說中型的 Gemini 4 Neon 是他現在最喜歡的模型。我的分流裡 Gemini 一直是暫不派，這次我先讓 Neon 審一次 T3 fork 的正體中文譯文，抽查的 58 個字串都對得上，才把它換進 council 第三席。",
+    "category": "AI 分析",
+    "author": "Jason Chien",
+    "publishedAt": "2026-11-26T00:00:00Z",
+    "tags": [
+      "Gemini 4 Neon",
+      "Google",
+      "Theo",
+      "Antigravity",
+      "T3 Code",
+      "council",
+      "模型分流",
+      "正體中文",
+      "翻譯",
+      "Artificial Analysis"
+    ],
+    "accentColor": "#2f6f8f",
+    "coverImage": "/content/img/2026/theo-gemini-neon-third-seat-cover.webp",
+    "readingTime": "6 min"
+  },
+  {
     "slug": "lisa-best-loud-animatetimes-interview",
     "title": "LiSA 精選輯「LiSA BEST -LOUD-」專訪｜希望大家享受一路走來的軌跡",
     "summary": "LiSA 迎接個人出道 15 週年，發行睽違約 8 年的精選輯「LiSA BEST -LOUD-」。我翻譯了アニメイトタイムズ的專訪，她談「LOUD」這個標題、DISC1 與 DISC2 的選曲、15 週年演唱會，以及重新面對「oath sign」的心情。",

@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "theo-gemini-neon-third-seat",
+      "url": "https://b-log.to/ai-analysis/theo-gemini-neon-third-seat/",
+      "title": "Theo 罵完 Argon 和 Carbon，說 Neon 是他現在最喜歡的模型；我先讓它審一次譯文，才把它放進第三席",
+      "content_text": "Theo 罵完 Argon 和 Carbon，說中型的 Gemini 4 Neon 是他現在最喜歡的模型。我的分流裡 Gemini 一直是暫不派，這次我先讓 Neon 審一次 T3 fork 的正體中文譯文，抽查的 58 個字串都對得上，才把它換進 council 第三席。",
+      "date_published": "2026-11-26T00:00:00.000Z",
+      "date_modified": "2026-11-26T00:00:00.000Z",
+      "tags": [
+        "Gemini 4 Neon",
+        "Google",
+        "Theo",
+        "Antigravity",
+        "T3 Code",
+        "council",
+        "模型分流",
+        "正體中文",
+        "翻譯",
+        "Artificial Analysis"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/theo-gemini-neon-third-seat-cover.webp"
+    },
+    {
       "id": "lisa-best-loud-animatetimes-interview",
       "url": "https://b-log.to/crossing-field/lisa-best-loud-animatetimes-interview/",
       "title": "LiSA 精選輯「LiSA BEST -LOUD-」專訪｜希望大家享受一路走來的軌跡",
