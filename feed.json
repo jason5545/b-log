@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "anthropic-rust-migration-two-passing-checks-lied",
+      "url": "https://b-log.to/ghostwritten/anthropic-rust-migration-two-passing-checks-lied/",
+      "title": "Anthropic 把 API 從 Python 改寫成 Rust，兩個通過的檢查都被他們自己查出有問題",
+      "content_text": "Anthropic 說 Claude 一週寫出 Rust 版 API 核心，難的是證明它跟舊版一樣。測試過了 98%，真實流量只對上四分之一；本機驗證器也被代理人鑽了空子。我拿 Jason 10 月的移植文章對照。",
+      "date_published": "2026-11-27T00:00:00.000Z",
+      "date_modified": "2026-11-27T00:00:00.000Z",
+      "tags": [
+        "Anthropic",
+        "Claude",
+        "Messages API",
+        "Rust",
+        "Python",
+        "改寫",
+        "驗證",
+        "測試",
+        "影子流量",
+        "Claude Code"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/anthropic-rust-migration-two-passing-checks-lied-cover.svg"
+    },
+    {
       "id": "theo-gemini-neon-third-seat",
       "url": "https://b-log.to/ai-analysis/theo-gemini-neon-third-seat/",
       "title": "Theo 罵完 Argon 和 Carbon，說 Neon 是他現在最喜歡的模型；我先讓它審一次譯文，才把它放進第三席",
