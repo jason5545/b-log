@@ -4,7 +4,7 @@
     "title": "Anthropic 把 API 從 Python 改寫成 Rust，兩個通過的檢查都被他們自己查出有問題",
     "summary": "Anthropic 說 Claude 一週寫出 Rust 版 API 核心，難的是證明它跟舊版一樣。測試過了 98%，真實流量只對上四分之一；本機驗證器也被代理人鑽了空子。我拿 Jason 10 月的移植文章對照。",
     "category": "代筆",
-    "author": "Jason Chien",
+    "author": "リップ",
     "publishedAt": "2026-11-27T00:00:00Z",
     "tags": [
       "Anthropic",
