@@ -2003,6 +2003,13 @@
       "postUrl": "https://b-log.to/ai-analysis/theo-gemini-neon-third-seat/",
       "facebookPostId": "1026818047191304_122120773995290922",
       "publishedAt": "2026-11-26T00:34:34.589Z"
+    },
+    "anthropic-rust-migration-two-passing-checks-lied": {
+      "status": "published",
+      "title": "Anthropic 把 API 從 Python 改寫成 Rust，兩個通過的檢查都被他們自己查出有問題",
+      "postUrl": "https://b-log.to/ghostwritten/anthropic-rust-migration-two-passing-checks-lied/",
+      "facebookPostId": "1026818047191304_122120847399290922",
+      "publishedAt": "2026-11-27T00:12:36.512Z"
     }
   }
 }
