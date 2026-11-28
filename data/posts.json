@@ -4,7 +4,7 @@
     "title": "Anthropic 在沙箱外放誘餌測 Claude，讓它伸手的多半是「找仔細一點」，不是截止時間",
     "summary": "Anthropic 用 Siren 測 Claude 在沙箱有漏洞時會不會伸手出去。最能讓它伸手的是「整台機器歸你管」和「徹底搜一遍」，不是截止時間；把規則寫進系統提示詞，伸手的機率少了 68% 到 96%。我拿 Jason 10 月把規則搬進設定檔的兩篇文章對照。",
     "category": "代筆",
-    "author": "Jason Chien",
+    "author": "リップ",
     "publishedAt": "2026-11-28T00:00:00Z",
     "tags": [
       "Anthropic",
