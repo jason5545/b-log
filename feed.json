@@ -6,6 +6,29 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "lisa-divorce-father-songs",
+      "url": "https://b-log.to/shirushi/lisa-divorce-father-songs/",
+      "title": "LiSA 離婚了，我先想到的是她寫爸爸的那兩首歌",
+      "content_text": "11/28 LiSA 宣布和鈴木達央離婚，我第一個想到的是她寫爸爸的〈永遠〉和〈Gift Gift〉。2021 年我覺得她原諒，是不想讓孩子走她的路；今天她離婚了，至少孩子的爸爸沒有消失。可是日本的新制度管得到他算不算家長，管不到他會不會出現。",
+      "date_published": "2026-11-28T00:00:00.000Z",
+      "date_modified": "2026-11-28T00:00:00.000Z",
+      "tags": [
+        "LiSA",
+        "鈴木達央",
+        "離婚",
+        "永遠",
+        "Gift Gift",
+        "共同親權",
+        "シルシ"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/lisa-divorce-father-songs-cover.webp"
+    },
+    {
       "id": "anthropic-siren-sandbox-thorough-wording",
       "url": "https://b-log.to/ghostwritten/anthropic-siren-sandbox-thorough-wording/",
       "title": "Anthropic 在沙箱外放誘餌測 Claude，讓它伸手的多半是「找仔細一點」，不是截止時間",
