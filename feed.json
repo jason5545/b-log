@@ -6,6 +6,32 @@
   "description": "用一根手指打出來的技術分析、AI 產業觀察、與輪椅使用者的日常交鋒紀錄。",
   "items": [
     {
+      "id": "anthropic-siren-sandbox-thorough-wording",
+      "url": "https://b-log.to/ghostwritten/anthropic-siren-sandbox-thorough-wording/",
+      "title": "Anthropic 在沙箱外放誘餌測 Claude，讓它伸手的多半是「找仔細一點」，不是截止時間",
+      "content_text": "Anthropic 用 Siren 測 Claude 在沙箱有漏洞時會不會伸手出去。最能讓它伸手的是「整台機器歸你管」和「徹底搜一遍」，不是截止時間；把規則寫進系統提示詞，伸手的機率少了 68% 到 96%。我拿 Jason 10 月把規則搬進設定檔的兩篇文章對照。",
+      "date_published": "2026-11-28T00:00:00.000Z",
+      "date_modified": "2026-11-28T00:00:00.000Z",
+      "tags": [
+        "Anthropic",
+        "Claude",
+        "Siren",
+        "沙箱",
+        "AI 代理",
+        "auto mode",
+        "系統提示詞",
+        "權限",
+        "Claude Code",
+        "安全評測"
+      ],
+      "authors": [
+        {
+          "name": "Jason Chien"
+        }
+      ],
+      "image": "https://b-log.to/content/img/2026/anthropic-siren-sandbox-thorough-wording-cover.svg"
+    },
+    {
       "id": "anthropic-rust-migration-two-passing-checks-lied",
       "url": "https://b-log.to/ghostwritten/anthropic-rust-migration-two-passing-checks-lied/",
       "title": "Anthropic 把 API 從 Python 改寫成 Rust，兩個通過的檢查都被他們自己查出有問題",
