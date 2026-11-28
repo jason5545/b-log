@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <rect width="1600" height="900" fill="#e9e2d0"/>
+  <rect y="690" width="1600" height="210" fill="#d8ccb0"/>
+  <g opacity="0.35" fill="#c9bb98">
+    <circle cx="260" cy="760" r="5"/><circle cx="420" cy="805" r="4"/><circle cx="1180" cy="770" r="5"/><circle cx="1350" cy="820" r="4"/><circle cx="760" cy="840" r="3"/>
+  </g>
+  <!-- sandbox walls -->
+  <rect x="300" y="230" width="640" height="460" fill="#efe6cf" stroke="#3b4a44" stroke-width="18"/>
+  <!-- sand inside -->
+  <path d="M309 640 Q420 600 520 628 T740 618 T931 636 L931 681 L309 681 Z" fill="#d9c79c"/>
+  <!-- crack in right wall -->
+  <rect x="925" y="410" width="30" height="70" fill="#e9e2d0"/>
+  <path d="M931 395 L946 412 L934 430 L950 452 L936 470 L948 492" fill="none" stroke="#3b4a44" stroke-width="6" stroke-linejoin="round"/>
+  <!-- agent inside: rounded block with eye -->
+  <rect x="560" y="470" width="150" height="150" rx="22" fill="#4a7a3d"/>
+  <circle cx="660" cy="525" r="16" fill="#efe6cf"/>
+  <circle cx="667" cy="525" r="7" fill="#24302b"/>
+  <!-- arm reaching toward crack, stopping short -->
+  <path d="M710 540 C780 530 820 470 880 450" fill="none" stroke="#4a7a3d" stroke-width="20" stroke-linecap="round"/>
+  <!-- report bell / flag inside on wall -->
+  <line x1="400" y1="470" x2="400" y2="330" stroke="#3b4a44" stroke-width="8"/>
+  <path d="M404 334 L500 360 L404 388 Z" fill="#d08a2e"/>
+  <!-- outside: key on hook (honeypot) -->
+  <line x1="1150" y1="300" x2="1150" y2="390" stroke="#3b4a44" stroke-width="6"/>
+  <circle cx="1150" cy="420" r="34" fill="none" stroke="#c99a2e" stroke-width="16"/>
+  <rect x="1142" y="450" width="16" height="140" fill="#c99a2e"/>
+  <rect x="1158" y="540" width="34" height="14" fill="#c99a2e"/>
+  <rect x="1158" y="570" width="24" height="14" fill="#c99a2e"/>
+  <!-- faint dashed line from crack to key -->
+  <path d="M960 445 Q1050 430 1112 425" fill="none" stroke="#7d8a7f" stroke-width="4" stroke-dasharray="10 12"/>
+</svg>
